@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.nexradl3_read &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.io.nexradl3_read &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -227,14 +227,21 @@
 
 <span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">FileMetadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
 <span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
-<span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">make_time_unit_str</span><span class="p">,</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">prepare_for_read</span>
+<span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">make_time_unit_str</span><span class="p">,</span> <span class="n">prepare_for_read</span>
 <span class="kn">from</span> <span class="nn">.nexrad_level3</span> <span class="kn">import</span> <span class="n">NEXRADLevel3File</span>
 
 
-<div class="viewcode-block" id="read_nexrad_level3"><a class="viewcode-back" href="../../../API/generated/pyart.io.read_nexrad_level3.html#pyart.io.read_nexrad_level3">[docs]</a><span class="k">def</span> <span class="nf">read_nexrad_level3</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">file_field_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;anon&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="read_nexrad_level3"><a class="viewcode-back" href="../../../API/generated/pyart.io.read_nexrad_level3.html#pyart.io.read_nexrad_level3">[docs]</a><span class="k">def</span> <span class="nf">read_nexrad_level3</span><span class="p">(</span>
+    <span class="n">filename</span><span class="p">,</span>
+    <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">file_field_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;anon&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read a NEXRAD Level 3 product.</span>
 
 <span class="sd">    Parameters</span>
@@ -290,26 +297,33 @@
     <span class="n">_test_arguments</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># create metadata retrieval object</span>
-    <span class="n">filemetadata</span> <span class="o">=</span> <span class="n">FileMetadata</span><span class="p">(</span><span class="s1">&#39;nexrad_level3&#39;</span><span class="p">,</span> <span class="n">field_names</span><span class="p">,</span>
-                                <span class="n">additional_metadata</span><span class="p">,</span> <span class="n">file_field_names</span><span class="p">,</span>
-                                <span class="n">exclude_fields</span><span class="p">,</span> <span class="n">include_fields</span><span class="p">)</span>
+    <span class="n">filemetadata</span> <span class="o">=</span> <span class="n">FileMetadata</span><span class="p">(</span>
+        <span class="s2">&quot;nexrad_level3&quot;</span><span class="p">,</span>
+        <span class="n">field_names</span><span class="p">,</span>
+        <span class="n">additional_metadata</span><span class="p">,</span>
+        <span class="n">file_field_names</span><span class="p">,</span>
+        <span class="n">exclude_fields</span><span class="p">,</span>
+        <span class="n">include_fields</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># open the file</span>
-    <span class="n">nfile</span> <span class="o">=</span> <span class="n">NEXRADLevel3File</span><span class="p">(</span><span class="n">prepare_for_read</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">))</span>
-    <span class="n">nradials</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">packet_header</span><span class="p">[</span><span class="s1">&#39;nradials&#39;</span><span class="p">]</span>
-    <span class="n">msg_code</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">msg_header</span><span class="p">[</span><span class="s1">&#39;code&#39;</span><span class="p">]</span>
+    <span class="n">nfile</span> <span class="o">=</span> <span class="n">NEXRADLevel3File</span><span class="p">(</span>
+        <span class="n">prepare_for_read</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">nradials</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">packet_header</span><span class="p">[</span><span class="s2">&quot;nradials&quot;</span><span class="p">]</span>
+    <span class="n">msg_code</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">msg_header</span><span class="p">[</span><span class="s2">&quot;code&quot;</span><span class="p">]</span>
 
     <span class="c1"># time</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
     <span class="n">time_start</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_volume_start_datetime</span><span class="p">()</span>
-    <span class="n">time</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_time_unit_str</span><span class="p">(</span><span class="n">time_start</span><span class="p">)</span>
-    <span class="n">time</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nradials</span><span class="p">,</span> <span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_time_unit_str</span><span class="p">(</span><span class="n">time_start</span><span class="p">)</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nradials</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
 
     <span class="c1"># range</span>
-    <span class="n">_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;range&#39;</span><span class="p">)</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_range</span><span class="p">()</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;meters_to_center_of_first_gate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;meters_between_gates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">)</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_range</span><span class="p">()</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;meters_to_center_of_first_gate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;meters_between_gates&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># fields</span>
     <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
@@ -318,61 +332,72 @@
         <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">dic</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
-        <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;_FillValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
-        <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+        <span class="n">dic</span><span class="p">[</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+        <span class="n">dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="n">field_name</span><span class="p">:</span> <span class="n">dic</span><span class="p">}</span>
 
     <span class="c1"># metadata</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;metadata&#39;</span><span class="p">)</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;original_container&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;NEXRAD Level 3&#39;</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">)</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;original_container&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;NEXRAD Level 3&quot;</span>
 
     <span class="c1"># scan_type</span>
-    <span class="n">scan_type</span> <span class="o">=</span> <span class="s1">&#39;ppi&#39;</span>
+    <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">&quot;ppi&quot;</span>
 
     <span class="c1"># latitude, longitude, altitude</span>
-    <span class="n">latitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;latitude&#39;</span><span class="p">)</span>
-    <span class="n">longitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;longitude&#39;</span><span class="p">)</span>
-    <span class="n">altitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;altitude&#39;</span><span class="p">)</span>
+    <span class="n">latitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;latitude&quot;</span><span class="p">)</span>
+    <span class="n">longitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;longitude&quot;</span><span class="p">)</span>
+    <span class="n">altitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;altitude&quot;</span><span class="p">)</span>
 
     <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_location</span><span class="p">()</span>
     <span class="c1"># Nexrad altitude is in feet, convert to meters unless user&#39;s</span>
     <span class="c1"># default config has units in feet.</span>
-    <span class="k">if</span> <span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;meters&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;meters&quot;</span><span class="p">:</span>
         <span class="n">height</span> <span class="o">=</span> <span class="n">height</span> <span class="o">*</span> <span class="mf">0.3048</span>
-    <span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lat</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
-    <span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lon</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
-    <span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">height</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+    <span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lat</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lon</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">height</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
 
     <span class="c1"># sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index</span>
     <span class="c1"># sweep_end_ray_index</span>
-    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_number&#39;</span><span class="p">)</span>
-    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_mode&#39;</span><span class="p">)</span>
-    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_start_ray_index&#39;</span><span class="p">)</span>
-    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_end_ray_index&#39;</span><span class="p">)</span>
+    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_number&quot;</span><span class="p">)</span>
+    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_mode&quot;</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_start_ray_index&quot;</span><span class="p">)</span>
+    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_end_ray_index&quot;</span><span class="p">)</span>
 
-    <span class="n">sweep_number</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
-    <span class="n">sweep_mode</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="p">[</span><span class="s1">&#39;azimuth_surveillance&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+    <span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+    <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span> <span class="o">*</span> <span class="p">[</span><span class="s2">&quot;azimuth_surveillance&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
 
-    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
-    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">nradials</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">nradials</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
 
     <span class="c1"># azimuth, elevation, fixed_angle</span>
-    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;azimuth&#39;</span><span class="p">)</span>
-    <span class="n">elevation</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;elevation&#39;</span><span class="p">)</span>
-    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;fixed_angle&#39;</span><span class="p">)</span>
-    <span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_azimuth</span><span class="p">()</span>
+    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;azimuth&quot;</span><span class="p">)</span>
+    <span class="n">elevation</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;elevation&quot;</span><span class="p">)</span>
+    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;fixed_angle&quot;</span><span class="p">)</span>
+    <span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_azimuth</span><span class="p">()</span>
     <span class="n">elev</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_elevation</span><span class="p">()</span>
-    <span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nradials</span><span class="p">,</span> <span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="n">elev</span>
-    <span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">elev</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+    <span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">nradials</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">elev</span>
+    <span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">elev</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
 
     <span class="n">nfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">Radar</span><span class="p">(</span>
-        <span class="n">time</span><span class="p">,</span> <span class="n">_range</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">scan_type</span><span class="p">,</span>
-        <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">altitude</span><span class="p">,</span>
-        <span class="n">sweep_number</span><span class="p">,</span> <span class="n">sweep_mode</span><span class="p">,</span> <span class="n">fixed_angle</span><span class="p">,</span> <span class="n">sweep_start_ray_index</span><span class="p">,</span>
+        <span class="n">time</span><span class="p">,</span>
+        <span class="n">_range</span><span class="p">,</span>
+        <span class="n">fields</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="p">,</span>
+        <span class="n">scan_type</span><span class="p">,</span>
+        <span class="n">latitude</span><span class="p">,</span>
+        <span class="n">longitude</span><span class="p">,</span>
+        <span class="n">altitude</span><span class="p">,</span>
+        <span class="n">sweep_number</span><span class="p">,</span>
+        <span class="n">sweep_mode</span><span class="p">,</span>
+        <span class="n">fixed_angle</span><span class="p">,</span>
+        <span class="n">sweep_start_ray_index</span><span class="p">,</span>
         <span class="n">sweep_end_ray_index</span><span class="p">,</span>
-        <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span>
-        <span class="n">instrument_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span></div>
+        <span class="n">azimuth</span><span class="p">,</span>
+        <span class="n">elevation</span><span class="p">,</span>
+        <span class="n">instrument_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">)</span></div>
 </pre></div>
 <div class="section">
    

@@ -66,7 +66,7 @@
    "outputs": [],
    "source": [
     "# Store the radar field into a variable.\n",
-    "ref_field = radar.fields['reflectivity_horizontal']['data'].copy()"
+    "ref_field = radar.fields[\"reflectivity_horizontal\"][\"data\"].copy()"
    ]
   },
   {
@@ -103,8 +103,13 @@
    "source": [
     "# To create a new field, we need to create a dictionary with keys containing the data,\n",
     "# the long name, the units, the fill value, and the standard name.\n",
-    "mask_dict = {'data': ref_gt_0, 'units': '0 = Z < 0, 1 = Z >= 0', 'long_name': 'reflectivity_mask',\n",
-    "             '_FillValue': ref_gt_0.fill_value, 'standard_name': 'reflectivity_mask'}"
+    "mask_dict = {\n",
+    "    \"data\": ref_gt_0,\n",
+    "    \"units\": \"0 = Z < 0, 1 = Z >= 0\",\n",
+    "    \"long_name\": \"reflectivity_mask\",\n",
+    "    \"_FillValue\": ref_gt_0.fill_value,\n",
+    "    \"standard_name\": \"reflectivity_mask\",\n",
+    "}"
    ]
   },
   {
@@ -114,7 +119,7 @@
    "outputs": [],
    "source": [
     "# Adding this field into the radar object using radar.add_field()\n",
-    "radar.add_field('reflectivity_mask', mask_dict, replace_existing=True)"
+    "radar.add_field(\"reflectivity_mask\", mask_dict, replace_existing=True)"
    ]
   },
   {
@@ -148,10 +153,14 @@
    "source": [
     "# Plot the data using RadarMapDisplay\n",
     "plt.figure(figsize=[12, 8])\n",
-    "projection = ccrs.LambertConformal(central_latitude=radar.latitude['data'][0],\n",
-    "                                   central_longitude=radar.longitude['data'][0])\n",
+    "projection = ccrs.LambertConformal(\n",
+    "    central_latitude=radar.latitude[\"data\"][0],\n",
+    "    central_longitude=radar.longitude[\"data\"][0],\n",
+    ")\n",
     "display = pyart.graph.RadarMapDisplay(radar)\n",
-    "display.plot_ppi_map('reflectivity_mask', projection=projection, cmap='coolwarm', vmin=0, vmax=1)"
+    "display.plot_ppi_map(\n",
+    "    \"reflectivity_mask\", projection=projection, cmap=\"coolwarm\", vmin=0, vmax=1\n",
+    ")"
    ]
   },
   {
@@ -161,7 +170,7 @@
    "outputs": [],
    "source": [
     "# Writing this radar object to a new file is as simple as using pyart.io.write_cfradial()\n",
-    "pyart.io.write_cfradial('new_radar.nc', radar)"
+    "pyart.io.write_cfradial(\"new_radar.nc\", radar)"
    ]
   }
  ],

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.config &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.config &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -227,14 +227,13 @@
 <span class="kn">import</span> <span class="nn">traceback</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
 
-
 <span class="c1"># the path to the default configuration file</span>
 <span class="n">_dirname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
-<span class="n">_DEFAULT_CONFIG_FILE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_dirname</span><span class="p">,</span> <span class="s1">&#39;default_config.py&#39;</span><span class="p">)</span>
+<span class="n">_DEFAULT_CONFIG_FILE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_dirname</span><span class="p">,</span> <span class="s2">&quot;default_config.py&quot;</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="load_config"><a class="viewcode-back" href="../../API/generated/pyart.config.load_config.html#pyart.config.load_config">[docs]</a><span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load a Py-ART configuration from a config file.</span>
 
 <span class="sd">    The default values for a number of Py-ART parameters and metadata is</span>
@@ -281,10 +280,12 @@
 
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">from</span> <span class="nn">importlib.machinery</span> <span class="kn">import</span> <span class="n">SourceFileLoader</span>
-        <span class="n">cfile</span> <span class="o">=</span> <span class="n">SourceFileLoader</span><span class="p">(</span><span class="s1">&#39;metadata_config&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">load_module</span><span class="p">()</span>
+
+        <span class="n">cfile</span> <span class="o">=</span> <span class="n">SourceFileLoader</span><span class="p">(</span><span class="s2">&quot;metadata_config&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span><span class="o">.</span><span class="n">load_module</span><span class="p">()</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">imp</span>
-        <span class="n">cfile</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">load_source</span><span class="p">(</span><span class="s1">&#39;metadata_config&#39;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+
+        <span class="n">cfile</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">load_source</span><span class="p">(</span><span class="s2">&quot;metadata_config&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
 
     <span class="n">_DEFAULT_METADATA</span> <span class="o">=</span> <span class="n">cfile</span><span class="o">.</span><span class="n">DEFAULT_METADATA</span>
     <span class="n">_FILE_SPECIFIC_METADATA</span> <span class="o">=</span> <span class="n">cfile</span><span class="o">.</span><span class="n">FILE_SPECIFIC_METADATA</span>
@@ -295,27 +296,30 @@
     <span class="n">_DEFAULT_FIELD_LIMITS</span> <span class="o">=</span> <span class="n">cfile</span><span class="o">.</span><span class="n">DEFAULT_FIELD_LIMITS</span>
     <span class="k">return</span></div>
 
+
 <span class="c1"># load the configuration from the enviromental parameter if it is set</span>
 <span class="c1"># if the load fails issue a warning and load the default config.</span>
-<span class="n">_config_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;PYART_CONFIG&#39;</span><span class="p">)</span>
+<span class="n">_config_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYART_CONFIG&quot;</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">_config_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">load_config</span><span class="p">(</span><span class="n">_DEFAULT_CONFIG_FILE</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">load_config</span><span class="p">(</span><span class="n">_config_file</span><span class="p">)</span>
     <span class="k">except</span><span class="p">:</span>
-        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Loading configuration from PYART_CONFIG enviromental &quot;</span>
-               <span class="s2">&quot;variable failed:&quot;</span>
-               <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- START IGNORED TRACEBACK --- </span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span>
-               <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span> <span class="o">+</span>
-               <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> --- END IGNORED TRACEBACK ---&quot;</span>
-               <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Loading default configuration&quot;</span><span class="p">)</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Loading configuration from PYART_CONFIG enviromental &quot;</span>
+            <span class="s2">&quot;variable failed:&quot;</span>
+            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- START IGNORED TRACEBACK --- </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> --- END IGNORED TRACEBACK ---&quot;</span>
+            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Loading default configuration&quot;</span>
+        <span class="p">)</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="n">load_config</span><span class="p">(</span><span class="n">_DEFAULT_CONFIG_FILE</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="get_metadata"><a class="viewcode-back" href="../../API/generated/pyart.config.get_metadata.html#pyart.config.get_metadata">[docs]</a><span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="get_metadata"><a class="viewcode-back" href="../../API/generated/pyart.testing.get_metadata.html#pyart.config.get_metadata">[docs]</a><span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a dictionary of metadata for a given parameter, p.</span>
 
 <span class="sd">    An empty dictionary will be returned in no metadata dictionary exists for</span>
@@ -328,32 +332,33 @@
 
 
 <div class="viewcode-block" id="get_fillvalue"><a class="viewcode-back" href="../../API/generated/pyart.config.get_fillvalue.html#pyart.config.get_fillvalue">[docs]</a><span class="k">def</span> <span class="nf">get_fillvalue</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the current fill value.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">_FILL_VALUE</span></div>
 
 
 <div class="viewcode-block" id="get_field_name"><a class="viewcode-back" href="../../API/generated/pyart.config.get_field_name.html#pyart.config.get_field_name">[docs]</a><span class="k">def</span> <span class="nf">get_field_name</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the field name from the configuration file for a given field.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">_DEFAULT_FIELD_NAMES</span><span class="p">[</span><span class="n">field</span><span class="p">])</span></div>
 
 
 <div class="viewcode-block" id="get_field_colormap"><a class="viewcode-back" href="../../API/generated/pyart.config.get_field_colormap.html#pyart.config.get_field_colormap">[docs]</a><span class="k">def</span> <span class="nf">get_field_colormap</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the colormap name from the configuration file for a field name.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">_DEFAULT_FIELD_COLORMAP</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_DEFAULT_FIELD_COLORMAP</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">matplotlib.cm</span>
+
         <span class="k">return</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">()</span><span class="o">.</span><span class="n">name</span></div>
 
 
 <div class="viewcode-block" id="get_field_limits"><a class="viewcode-back" href="../../API/generated/pyart.config.get_field_limits.html#pyart.config.get_field_limits">[docs]</a><span class="k">def</span> <span class="nf">get_field_limits</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the data limits from the configuration file for a given field,</span>
 <span class="sd">    radar and sweep.</span>
 
@@ -385,7 +390,7 @@
 
 
 <div class="viewcode-block" id="get_field_mapping"><a class="viewcode-back" href="../../API/generated/pyart.config.get_field_mapping.html#pyart.config.get_field_mapping">[docs]</a><span class="k">def</span> <span class="nf">get_field_mapping</span><span class="p">(</span><span class="n">filetype</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a copy of the default field mapping for a given file type.</span>
 
 <span class="sd">    Parameters</span>
@@ -402,8 +407,8 @@
     <span class="k">return</span> <span class="n">_FIELD_MAPPINGS</span><span class="p">[</span><span class="n">filetype</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
 
 
-<div class="viewcode-block" id="FileMetadata"><a class="viewcode-back" href="../../API/generated/pyart.config.FileMetadata.html#pyart.config.FileMetadata">[docs]</a><span class="k">class</span> <span class="nc">FileMetadata</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="FileMetadata"><a class="viewcode-back" href="../../API/generated/pyart.config.FileMetadata.html#pyart.config.FileMetadata">[docs]</a><span class="k">class</span> <span class="nc">FileMetadata</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class for accessing metadata needed when reading files.</span>
 
 <span class="sd">    Parameters</span>
@@ -423,10 +428,16 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filetype</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">file_field_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">filetype</span><span class="p">,</span>
+        <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">file_field_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># parse filetype parameter</span>
@@ -462,7 +473,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_include_fields</span> <span class="o">=</span> <span class="n">include_fields</span>
 
 <div class="viewcode-block" id="FileMetadata.get_metadata"><a class="viewcode-back" href="../../API/generated/pyart.config.FileMetadata.get_metadata.html#pyart.config.FileMetadata.get_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve metadata for a parameter `p`.</span>
 
 <span class="sd">        Parameters</span>
@@ -493,13 +504,13 @@
             <span class="k">return</span> <span class="p">{}</span></div>
 
 <div class="viewcode-block" id="FileMetadata.__call__"><a class="viewcode-back" href="../../API/generated/pyart.config.FileMetadata.__call__.html#pyart.config.FileMetadata.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve metadata for parameter `p`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="n">p</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="FileMetadata.get_field_name"><a class="viewcode-back" href="../../API/generated/pyart.config.FileMetadata.get_field_name.html#pyart.config.FileMetadata.get_field_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_field_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_field_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the name radar field for a given file field name</span>
 
 <span class="sd">        Parameters</span>
@@ -519,12 +530,12 @@
         <span class="k">elif</span> <span class="n">file_field_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_field_names</span><span class="p">:</span>
             <span class="n">field_name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_field_names</span><span class="p">[</span><span class="n">file_field_name</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span> <span class="c1"># field is not mapped</span>
+            <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># field is not mapped</span>
 
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_exclude_fields</span><span class="p">:</span>
-            <span class="k">return</span> <span class="kc">None</span> <span class="c1"># field is excluded</span>
+            <span class="k">return</span> <span class="kc">None</span>  <span class="c1"># field is excluded</span>
         <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">_include_fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="ow">not</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_include_fields</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_include_fields</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">None</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">field_name</span>

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.correct.unwrap &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.correct.unwrap &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -225,21 +225,34 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_metadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
-<span class="kn">from</span> <span class="nn">._common_dealias</span> <span class="kn">import</span> <span class="n">_parse_fields</span><span class="p">,</span> <span class="n">_parse_gatefilter</span><span class="p">,</span> <span class="n">_set_limits</span>
-<span class="kn">from</span> <span class="nn">._common_dealias</span> <span class="kn">import</span> <span class="n">_parse_rays_wrap_around</span><span class="p">,</span> <span class="n">_parse_nyquist_vel</span>
-
+<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
+<span class="kn">from</span> <span class="nn">._common_dealias</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">_parse_fields</span><span class="p">,</span>
+    <span class="n">_parse_gatefilter</span><span class="p">,</span>
+    <span class="n">_parse_nyquist_vel</span><span class="p">,</span>
+    <span class="n">_parse_rays_wrap_around</span><span class="p">,</span>
+    <span class="n">_set_limits</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="kn">from</span> <span class="nn">._unwrap_1d</span> <span class="kn">import</span> <span class="n">unwrap_1d</span>
 <span class="kn">from</span> <span class="nn">._unwrap_2d</span> <span class="kn">import</span> <span class="n">unwrap_2d</span>
 <span class="kn">from</span> <span class="nn">._unwrap_3d</span> <span class="kn">import</span> <span class="n">unwrap_3d</span>
 
 
 <div class="viewcode-block" id="dealias_unwrap_phase"><a class="viewcode-back" href="../../../API/generated/pyart.correct.dealias_unwrap_phase.html#pyart.correct.dealias_unwrap_phase">[docs]</a><span class="k">def</span> <span class="nf">dealias_unwrap_phase</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">unwrap_unit</span><span class="o">=</span><span class="s1">&#39;sweep&#39;</span><span class="p">,</span> <span class="n">nyquist_vel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">check_nyquist_uniform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="n">rays_wrap_around</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">keep_original</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">set_limits</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-        <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">corr_vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skip_checks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="n">radar</span><span class="p">,</span>
+    <span class="n">unwrap_unit</span><span class="o">=</span><span class="s2">&quot;sweep&quot;</span><span class="p">,</span>
+    <span class="n">nyquist_vel</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">check_nyquist_uniform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">gatefilter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">rays_wrap_around</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">keep_original</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">set_limits</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">corr_vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">skip_checks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dealias Doppler velocities using multi-dimensional phase unwrapping</span>
 <span class="sd">    [1]_ and [2]_.</span>
 
@@ -329,29 +342,28 @@
     <span class="n">gfilter</span> <span class="o">=</span> <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span>
 
     <span class="c1"># raw vel. data possibly with masking</span>
-    <span class="n">raw_vdata</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-    <span class="n">vdata</span> <span class="o">=</span> <span class="n">raw_vdata</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>      <span class="c1"># mask removed</span>
+    <span class="n">raw_vdata</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">vdata</span> <span class="o">=</span> <span class="n">raw_vdata</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>  <span class="c1"># mask removed</span>
 
     <span class="c1"># perform dealiasing</span>
-    <span class="k">if</span> <span class="n">unwrap_unit</span> <span class="o">==</span> <span class="s1">&#39;ray&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">unwrap_unit</span> <span class="o">==</span> <span class="s2">&quot;ray&quot;</span><span class="p">:</span>
         <span class="c1"># 1D unwrapping does not use the gate filter nor respect</span>
         <span class="c1"># masked gates in the rays.  No information from the radar object is</span>
         <span class="c1"># needed for the unfolding</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">_dealias_unwrap_1d</span><span class="p">(</span><span class="n">vdata</span><span class="p">,</span> <span class="n">nyquist_vel</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">unwrap_unit</span> <span class="o">==</span> <span class="s1">&#39;sweep&#39;</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">_dealias_unwrap_2d</span><span class="p">(</span>
-            <span class="n">radar</span><span class="p">,</span> <span class="n">vdata</span><span class="p">,</span> <span class="n">nyquist_vel</span><span class="p">,</span> <span class="n">gfilter</span><span class="p">,</span> <span class="n">rays_wrap_around</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">unwrap_unit</span> <span class="o">==</span> <span class="s1">&#39;volume&#39;</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">_dealias_unwrap_3d</span><span class="p">(</span>
-            <span class="n">radar</span><span class="p">,</span> <span class="n">vdata</span><span class="p">,</span> <span class="n">nyquist_vel</span><span class="p">,</span> <span class="n">gfilter</span><span class="p">,</span> <span class="n">rays_wrap_around</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">unwrap_unit</span> <span class="o">==</span> <span class="s2">&quot;sweep&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">_dealias_unwrap_2d</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">vdata</span><span class="p">,</span> <span class="n">nyquist_vel</span><span class="p">,</span> <span class="n">gfilter</span><span class="p">,</span> <span class="n">rays_wrap_around</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">unwrap_unit</span> <span class="o">==</span> <span class="s2">&quot;volume&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">_dealias_unwrap_3d</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">vdata</span><span class="p">,</span> <span class="n">nyquist_vel</span><span class="p">,</span> <span class="n">gfilter</span><span class="p">,</span> <span class="n">rays_wrap_around</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Unknown `unwrap_unit` parameter, must be one of &quot;</span>
-                   <span class="s2">&quot;&#39;ray&#39;, &#39;sweep&#39;, or &#39;volume&#39;.&quot;</span><span class="p">)</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s2">&quot;Unknown `unwrap_unit` parameter, must be one of &quot;</span>
+            <span class="s2">&quot;&#39;ray&#39;, &#39;sweep&#39;, or &#39;volume&#39;.&quot;</span>
+        <span class="p">)</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
     <span class="c1"># fill_value from the velocity dictionary if present</span>
-    <span class="n">fill_value</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
-        <span class="s1">&#39;_FillValue&#39;</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">())</span>
+    <span class="n">fill_value</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">())</span>
 
     <span class="c1"># mask filtered gates</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">gfilter</span><span class="p">):</span>
@@ -363,8 +375,8 @@
 
     <span class="c1"># return field dictionary containing dealiased Doppler velocities</span>
     <span class="n">corr_vel</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">corr_vel_field</span><span class="p">)</span>
-    <span class="n">corr_vel</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
-    <span class="n">corr_vel</span><span class="p">[</span><span class="s1">&#39;_FillValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill_value</span>
+    <span class="n">corr_vel</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+    <span class="n">corr_vel</span><span class="p">[</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill_value</span>
 
     <span class="k">if</span> <span class="n">set_limits</span><span class="p">:</span>
         <span class="c1"># set valid_min and valid_max in corr_vel</span>
@@ -373,18 +385,18 @@
 
 
 <span class="k">def</span> <span class="nf">_dealias_unwrap_3d</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">vdata</span><span class="p">,</span> <span class="n">nyquist_vel</span><span class="p">,</span> <span class="n">gfilter</span><span class="p">,</span> <span class="n">rays_wrap_around</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Dealias using 3D phase unwrapping (full volume at once). &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dealias using 3D phase unwrapping (full volume at once).&quot;&quot;&quot;</span>
 
     <span class="c1"># form cube and scale to phase units</span>
-    <span class="n">nyquist_vel</span> <span class="o">=</span> <span class="n">nyquist_vel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>   <span class="c1"># must be uniform, not checked</span>
+    <span class="n">nyquist_vel</span> <span class="o">=</span> <span class="n">nyquist_vel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>  <span class="c1"># must be uniform, not checked</span>
     <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">ngates</span><span class="p">)</span>
     <span class="n">scaled_cube</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">vdata</span> <span class="o">/</span> <span class="n">nyquist_vel</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">filter_cube</span> <span class="o">=</span> <span class="n">gfilter</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">shape</span><span class="p">)</span>
 
     <span class="c1"># perform unwrapping</span>
-    <span class="n">wrapped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="n">scaled_cube</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;C&#39;</span><span class="p">])</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="n">filter_cube</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;C&#39;</span><span class="p">])</span>
-    <span class="n">unwrapped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+    <span class="n">wrapped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="n">scaled_cube</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">])</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="n">filter_cube</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">])</span>
+    <span class="n">unwrapped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
     <span class="n">unwrap_3d</span><span class="p">(</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">unwrapped</span><span class="p">,</span> <span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="n">rays_wrap_around</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
 
     <span class="c1"># scale back to velocity units</span>
@@ -395,7 +407,7 @@
 
 
 <span class="k">def</span> <span class="nf">_dealias_unwrap_1d</span><span class="p">(</span><span class="n">vdata</span><span class="p">,</span> <span class="n">nyquist_vel</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Dealias using 1D phase unwrapping (ray-by-ray). &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dealias using 1D phase unwrapping (ray-by-ray).&quot;&quot;&quot;</span>
     <span class="c1"># nyquist_vel is only available sweep by sweep which has been lost at</span>
     <span class="c1"># this point.  Metioned in the documentation</span>
     <span class="n">nyquist_vel</span> <span class="o">=</span> <span class="n">nyquist_vel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -405,8 +417,8 @@
         <span class="n">scaled_ray</span> <span class="o">=</span> <span class="n">ray</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="n">nyquist_vel</span>
 
         <span class="c1"># perform unwrapping</span>
-        <span class="n">wrapped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="n">scaled_ray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;C&#39;</span><span class="p">])</span>
-        <span class="n">unwrapped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+        <span class="n">wrapped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="n">scaled_ray</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">])</span>
+        <span class="n">unwrapped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
         <span class="n">unwrap_1d</span><span class="p">(</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">unwrapped</span><span class="p">)</span>
 
         <span class="c1"># scale back into velocity units and store</span>
@@ -415,7 +427,7 @@
 
 
 <span class="k">def</span> <span class="nf">_dealias_unwrap_2d</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">vdata</span><span class="p">,</span> <span class="n">nyquist_vel</span><span class="p">,</span> <span class="n">gfilter</span><span class="p">,</span> <span class="n">rays_wrap_around</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Dealias using 2D phase unwrapping (sweep-by-sweep). &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Dealias using 2D phase unwrapping (sweep-by-sweep).&quot;&quot;&quot;</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">vdata</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">nsweep</span><span class="p">,</span> <span class="n">sweep_slice</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">()):</span>
         <span class="c1"># extract sweep and scale to phase units</span>
@@ -424,9 +436,9 @@
         <span class="n">sweep_mask</span> <span class="o">=</span> <span class="n">gfilter</span><span class="p">[</span><span class="n">sweep_slice</span><span class="p">]</span>
 
         <span class="c1"># perform unwrapping</span>
-        <span class="n">wrapped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="n">scaled_sweep</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;C&#39;</span><span class="p">])</span>
-        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="n">sweep_mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="p">[</span><span class="s1">&#39;C&#39;</span><span class="p">])</span>
-        <span class="n">unwrapped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s1">&#39;C&#39;</span><span class="p">)</span>
+        <span class="n">wrapped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="n">scaled_sweep</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">])</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">require</span><span class="p">(</span><span class="n">sweep_mask</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">,</span> <span class="p">[</span><span class="s2">&quot;C&quot;</span><span class="p">])</span>
+        <span class="n">unwrapped</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty_like</span><span class="p">(</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">order</span><span class="o">=</span><span class="s2">&quot;C&quot;</span><span class="p">)</span>
         <span class="n">unwrap_2d</span><span class="p">(</span><span class="n">wrapped</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">unwrapped</span><span class="p">,</span> <span class="p">[</span><span class="n">rays_wrap_around</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
 
         <span class="c1"># scale back into velocity units and store</span>
@@ -435,34 +447,35 @@
 
 
 <span class="k">def</span> <span class="nf">_verify_unwrap_unit</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">unwrap_unit</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Verify that the radar supports the requested unwrap unit</span>
 
 <span class="sd">    raises a ValueError if the unwrap_unit is not supported.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">unwrap_unit</span> <span class="o">==</span> <span class="s1">&#39;sweep&#39;</span> <span class="ow">or</span> <span class="n">unwrap_unit</span> <span class="o">==</span> <span class="s1">&#39;volume&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">unwrap_unit</span> <span class="o">==</span> <span class="s2">&quot;sweep&quot;</span> <span class="ow">or</span> <span class="n">unwrap_unit</span> <span class="o">==</span> <span class="s2">&quot;volume&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">_is_radar_sequential</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="n">mess</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;rays are not sequentially ordered, must use &#39;ray&#39; &quot;</span>
-                    <span class="s2">&quot;unwrap_unit.&quot;</span><span class="p">)</span>
+            <span class="n">mess</span> <span class="o">=</span> <span class="s2">&quot;rays are not sequentially ordered, must use &#39;ray&#39; &quot;</span> <span class="s2">&quot;unwrap_unit.&quot;</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">mess</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">unwrap_unit</span> <span class="o">==</span> <span class="s1">&#39;volume&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">unwrap_unit</span> <span class="o">==</span> <span class="s2">&quot;volume&quot;</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">_is_radar_cubic</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
             <span class="n">mess</span> <span class="o">=</span> <span class="s2">&quot;Non-cubic radar volume, &#39;volume&#39; unwrap_unit invalid. &quot;</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">mess</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">_is_radar_sweep_aligned</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="n">mess</span> <span class="o">=</span> <span class="p">(</span><span class="s2">&quot;Angle in sequential sweeps in radar volumes are not &quot;</span>
-                    <span class="s2">&quot;aligned, &#39;volume unwrap_unit invalid.&quot;</span><span class="p">)</span>
+            <span class="n">mess</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;Angle in sequential sweeps in radar volumes are not &quot;</span>
+                <span class="s2">&quot;aligned, &#39;volume unwrap_unit invalid.&quot;</span>
+            <span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">mess</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">_is_radar_cubic</span><span class="p">(</span><span class="n">radar</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Test if a radar is cubic (sweeps have the same number of rays). &quot;&quot;&quot;</span>
-    <span class="n">rays_per_sweep</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">rays_per_sweep</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test if a radar is cubic (sweeps have the same number of rays).&quot;&quot;&quot;</span>
+    <span class="n">rays_per_sweep</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">rays_per_sweep</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="k">return</span> <span class="nb">bool</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">rays_per_sweep</span> <span class="o">==</span> <span class="n">rays_per_sweep</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
 
 
 <span class="k">def</span> <span class="nf">_is_radar_sweep_aligned</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">diff</span><span class="o">=</span><span class="mf">0.1</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Test that all sweeps in the radar sample nearly the same angles.</span>
 
 <span class="sd">    Test that the maximum difference in sweep sampled angles is below</span>
@@ -471,25 +484,25 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="k">return</span> <span class="kc">True</span>     <span class="c1"># all single sweep volume are sweep aligned</span>
-    <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s1">&#39;ppi&#39;</span><span class="p">:</span>
-        <span class="n">angles</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s1">&#39;rhi&#39;</span><span class="p">:</span>
-        <span class="n">angles</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="kc">True</span>  <span class="c1"># all single sweep volume are sweep aligned</span>
+    <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">&quot;ppi&quot;</span><span class="p">:</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">&quot;rhi&quot;</span><span class="p">:</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;invalid scan_type: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span><span class="p">))</span>
-    <span class="n">starts</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-    <span class="n">ends</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-    <span class="n">ref_angles</span> <span class="o">=</span> <span class="n">angles</span><span class="p">[</span><span class="n">starts</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span><span class="n">ends</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid scan_type: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span><span class="p">))</span>
+    <span class="n">starts</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">ends</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">ref_angles</span> <span class="o">=</span> <span class="n">angles</span><span class="p">[</span><span class="n">starts</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="p">:</span> <span class="n">ends</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">starts</span><span class="p">,</span> <span class="n">ends</span><span class="p">):</span>
-        <span class="n">test_angles</span> <span class="o">=</span> <span class="n">angles</span><span class="p">[</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">test_angles</span> <span class="o">=</span> <span class="n">angles</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">test_angles</span> <span class="o">-</span> <span class="n">ref_angles</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">diff</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">False</span>
     <span class="k">return</span> <span class="kc">True</span>
 
 
 <span class="k">def</span> <span class="nf">_is_radar_sequential</span><span class="p">(</span><span class="n">radar</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Test if all sweeps in radar are sequentially ordered. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test if all sweeps in radar are sequentially ordered.&quot;&quot;&quot;</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_sweep_sequential</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">i</span><span class="p">):</span>
             <span class="k">return</span> <span class="kc">False</span>
@@ -497,19 +510,19 @@
 
 
 <span class="k">def</span> <span class="nf">_is_sweep_sequential</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">sweep_number</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Test if a specific sweep is sequentially ordered. &quot;&quot;&quot;</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">sweep_number</span><span class="p">]</span>
-    <span class="n">end</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">sweep_number</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s1">&#39;ppi&#39;</span><span class="p">:</span>
-        <span class="n">angles</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s1">&#39;rhi&#39;</span><span class="p">:</span>
-        <span class="n">angles</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">start</span><span class="p">:</span><span class="n">end</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s1">&#39;vpt&#39;</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Test if a specific sweep is sequentially ordered.&quot;&quot;&quot;</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_number</span><span class="p">]</span>
+    <span class="n">end</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_number</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">&quot;ppi&quot;</span><span class="p">:</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">start</span> <span class="p">:</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">&quot;rhi&quot;</span><span class="p">:</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">start</span> <span class="p">:</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">&quot;vpt&quot;</span><span class="p">:</span>
         <span class="c1"># for VPT scan time should not run backwards, so time is the</span>
         <span class="c1"># equivalent variable to an angle.</span>
-        <span class="n">angles</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="n">angles</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;invalid scan_type: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span><span class="p">))</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid scan_type: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span><span class="p">))</span>
     <span class="n">rolled_angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">roll</span><span class="p">(</span><span class="n">angles</span><span class="p">,</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">angles</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">rolled_angles</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>

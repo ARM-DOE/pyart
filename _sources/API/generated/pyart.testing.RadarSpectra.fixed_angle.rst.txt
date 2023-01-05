@@ -1,0 +1,6 @@
+pyart.testing.RadarSpectra.fixed\_angle
+=======================================
+
+.. currentmodule:: pyart.testing
+
+.. autoproperty:: RadarSpectra.fixed_angle

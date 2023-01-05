@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.util.sigmath &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.util.sigmath &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -228,7 +228,7 @@
 
 
 <div class="viewcode-block" id="angular_texture_2d"><a class="viewcode-back" href="../../../API/generated/pyart.util.angular_texture_2d.html#pyart.util.angular_texture_2d">[docs]</a><span class="k">def</span> <span class="nf">angular_texture_2d</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">interval</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the angular texture of an image. Uses convolutions</span>
 <span class="sd">    in order to speed up texture calculation by a factor of ~50</span>
 <span class="sd">    compared to using ndimage.generic_filter.</span>
@@ -256,7 +256,7 @@
     <span class="c1"># transform distribution from original interval to [-pi, pi]</span>
     <span class="n">interval_max</span> <span class="o">=</span> <span class="n">interval</span>
     <span class="n">interval_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">interval</span>
-    <span class="n">half_width</span> <span class="o">=</span> <span class="p">(</span><span class="n">interval_max</span> <span class="o">-</span> <span class="n">interval_min</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.</span>
+    <span class="n">half_width</span> <span class="o">=</span> <span class="p">(</span><span class="n">interval_max</span> <span class="o">-</span> <span class="n">interval_min</span><span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span>
     <span class="n">center</span> <span class="o">=</span> <span class="n">interval_min</span> <span class="o">+</span> <span class="n">half_width</span>
 
     <span class="c1"># Calculate parameters needed for angular std. dev</span>
@@ -271,25 +271,25 @@
     <span class="n">ns</span> <span class="o">=</span> <span class="n">N</span><span class="o">**</span><span class="mi">2</span>
 
     <span class="c1"># Calculate norm over specified window</span>
-    <span class="n">xmean</span> <span class="o">=</span> <span class="n">xs</span><span class="o">/</span><span class="n">ns</span>
-    <span class="n">ymean</span> <span class="o">=</span> <span class="n">ys</span><span class="o">/</span><span class="n">ns</span>
+    <span class="n">xmean</span> <span class="o">=</span> <span class="n">xs</span> <span class="o">/</span> <span class="n">ns</span>
+    <span class="n">ymean</span> <span class="o">=</span> <span class="n">ys</span> <span class="o">/</span> <span class="n">ns</span>
     <span class="n">norm</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">xmean</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">ymean</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
     <span class="n">std_dev</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">norm</span><span class="p">))</span> <span class="o">*</span> <span class="p">(</span><span class="n">half_width</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
     <span class="k">return</span> <span class="n">std_dev</span></div>
 
 
 <div class="viewcode-block" id="rolling_window"><a class="viewcode-back" href="../../../API/generated/pyart.util.rolling_window.html#pyart.util.rolling_window">[docs]</a><span class="k">def</span> <span class="nf">rolling_window</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">window</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Create a rolling window object for application of functions</span>
-<span class="sd">    eg: result=np.ma.std(array, 11), 1). &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a rolling window object for application of functions</span>
+<span class="sd">    eg: result=np.ma.std(array, 11), 1).&quot;&quot;&quot;</span>
     <span class="n">shape</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">window</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">window</span><span class="p">)</span>
-    <span class="n">strides</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">strides</span> <span class="o">+</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">strides</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="p">)</span>
+    <span class="n">strides</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">strides</span> <span class="o">+</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">strides</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],)</span>
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">stride_tricks</span><span class="o">.</span><span class="n">as_strided</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="texture"><a class="viewcode-back" href="../../../API/generated/pyart.util.texture.html#pyart.util.texture">[docs]</a><span class="k">def</span> <span class="nf">texture</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Determine a texture field using an 11pt stdev</span>
-<span class="sd">    texarray=texture(pyradarobj, field). &quot;&quot;&quot;</span>
-    <span class="n">fld</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine a texture field using an 11pt stdev</span>
+<span class="sd">    texarray=texture(pyradarobj, field).&quot;&quot;&quot;</span>
+    <span class="n">fld</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="nb">print</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">tex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">timestep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tex</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
@@ -301,7 +301,7 @@
 
 
 <div class="viewcode-block" id="texture_along_ray"><a class="viewcode-back" href="../../../API/generated/pyart.util.texture_along_ray.html#pyart.util.texture_along_ray">[docs]</a><span class="k">def</span> <span class="nf">texture_along_ray</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">wind_size</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute field texture along ray using a user specified</span>
 <span class="sd">    window size.</span>
 
@@ -320,8 +320,8 @@
 <span class="sd">        The texture of the specified field.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">half_wind</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">wind_size</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span>
-    <span class="n">fld</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+    <span class="n">half_wind</span> <span class="o">=</span> <span class="nb">int</span><span class="p">((</span><span class="n">wind_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">fld</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="n">tex</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">fld</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">timestep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">tex</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
         <span class="n">ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">std</span><span class="p">(</span><span class="n">rolling_window</span><span class="p">(</span><span class="n">fld</span><span class="p">[</span><span class="n">timestep</span><span class="p">,</span> <span class="p">:],</span> <span class="n">wind_size</span><span class="p">),</span> <span class="mi">1</span><span class="p">)</span>

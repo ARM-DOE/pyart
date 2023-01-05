@@ -1,0 +1,6 @@
+pyart.testing.RadarSpectra.sweep\_end\_ray\_index
+=================================================
+
+.. currentmodule:: pyart.testing
+
+.. autoproperty:: RadarSpectra.sweep_end_ray_index

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.graph.radardisplay_airborne &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.graph.radardisplay_airborne &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -225,15 +225,14 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">.radardisplay</span> <span class="kn">import</span> <span class="n">RadarDisplay</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">common</span>
-<span class="kn">from</span> <span class="nn">..core.transforms</span> <span class="kn">import</span> <span class="n">antenna_to_cartesian</span>
-<span class="kn">from</span> <span class="nn">..core.transforms</span> <span class="kn">import</span> <span class="n">antenna_to_cartesian_track_relative</span>
 <span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">transforms</span>
+<span class="kn">from</span> <span class="nn">..core.transforms</span> <span class="kn">import</span> <span class="n">antenna_to_cartesian</span><span class="p">,</span> <span class="n">antenna_to_cartesian_track_relative</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">common</span>
+<span class="kn">from</span> <span class="nn">.radardisplay</span> <span class="kn">import</span> <span class="n">RadarDisplay</span>
 
 
 <div class="viewcode-block" id="AirborneRadarDisplay"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.html#pyart.graph.AirborneRadarDisplay">[docs]</a><span class="k">class</span> <span class="nc">AirborneRadarDisplay</span><span class="p">(</span><span class="n">RadarDisplay</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A display object for creating plots from data in a airborne radar object.</span>
 
 <span class="sd">    Parameters</span>
@@ -287,22 +286,22 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)):</span>
-        <span class="sd">&quot;&quot;&quot; Initialize the object. &quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">rotation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">roll</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">roll</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">drift</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">drift</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">tilt</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">tilt</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">heading</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">heading</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pitch</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">pitch</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">altitude</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-        <span class="nb">super</span><span class="p">(</span><span class="n">AirborneRadarDisplay</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the object.&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">rotation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">roll</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">roll</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">drift</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">drift</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tilt</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">tilt</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">heading</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">heading</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pitch</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">pitch</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">altitude</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">shift</span><span class="p">)</span>
 
         <span class="c1"># radar location in latitude and longitude</span>
-        <span class="n">middle_lat</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">middle_lon</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="n">lat</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">middle_lat</span><span class="p">])</span>
-        <span class="n">lon</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">middle_lon</span><span class="p">])</span>
+        <span class="n">middle_lat</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">middle_lon</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="n">lat</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">middle_lat</span><span class="p">])</span>
+        <span class="n">lon</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">middle_lon</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">loc</span> <span class="o">=</span> <span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">)</span>
 
     <span class="c1">####################</span>
@@ -310,7 +309,7 @@
     <span class="c1">####################</span>
 
 <div class="viewcode-block" id="AirborneRadarDisplay.plot"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.plot.html#pyart.graph.AirborneRadarDisplay.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a plot appropiate for the radar.</span>
 
 <span class="sd">        This function calls the plotting function corresponding to</span>
@@ -331,26 +330,45 @@
 <span class="sd">        plot_sweep_grid : Plot a RHI or VPT scan</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s1">&#39;ppi&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">&quot;ppi&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">plot_ppi</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s1">&#39;rhi&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">&quot;rhi&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">plot_sweep_grid</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s1">&#39;vpt&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">&quot;vpt&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">plot_sweep_grid</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;unknown scan_type </span><span class="si">% s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_type</span><span class="p">))</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;unknown scan_type </span><span class="si">% s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_type</span><span class="p">))</span>
         <span class="k">return</span></div>
 
 <div class="viewcode-block" id="AirborneRadarDisplay.plot_sweep_grid"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.plot_sweep_grid.html#pyart.graph.AirborneRadarDisplay.plot_sweep_grid">[docs]</a>    <span class="k">def</span> <span class="nf">plot_sweep_grid</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">ignoreTilt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">mask_tuple</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask_outside</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">axislabels</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="n">axislabels_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">colorbar_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">colorbar_orient</span><span class="o">=</span><span class="s1">&#39;vertical&#39;</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raster</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">ticklabs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">field</span><span class="p">,</span>
+        <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">ignoreTilt</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">mask_tuple</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">mask_outside</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">axislabels</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="n">axislabels_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">colorbar_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">colorbar_orient</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span>
+        <span class="n">edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">filter_transitions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">raster</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">ticklabs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a sweep as a grid.</span>
 
 <span class="sd">        Additional arguments are passed to Matplotlib&#39;s pcolormesh function.</span>
@@ -365,11 +383,11 @@
 <span class="sd">        Other Parameters</span>
 <span class="sd">        ----------------</span>
 <span class="sd">        ignoreTilt : bool</span>
-<span class="sd">            True to ignore tilt angle when running the </span>
-<span class="sd">            antenna_to_cartesian_track_relative coordinate transformation (by </span>
-<span class="sd">            setting tilt angle to 0), effectively plotting data relative to </span>
-<span class="sd">            slant range (the same plotting method utilized by the NCAR </span>
-<span class="sd">            soloii/3 software). False (default) plots relative to the aircraft </span>
+<span class="sd">            True to ignore tilt angle when running the</span>
+<span class="sd">            antenna_to_cartesian_track_relative coordinate transformation (by</span>
+<span class="sd">            setting tilt angle to 0), effectively plotting data relative to</span>
+<span class="sd">            slant range (the same plotting method utilized by the NCAR</span>
+<span class="sd">            soloii/3 software). False (default) plots relative to the aircraft</span>
 <span class="sd">            longitudinal axis.</span>
 <span class="sd">        mask_tuple : (str, float)</span>
 <span class="sd">            Tuple containing the field name and value below which to mask</span>
@@ -448,8 +466,7 @@
         <span class="n">cmap</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
 
         <span class="c1"># get data for the plot</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_data</span><span class="p">(</span>
-            <span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">mask_tuple</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="p">,</span> <span class="n">gatefilter</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_data</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">mask_tuple</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="p">,</span> <span class="n">gatefilter</span><span class="p">)</span>
         <span class="n">x</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_x_z</span><span class="p">(</span><span class="n">sweep</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="p">,</span> <span class="n">ignoreTilt</span><span class="o">=</span><span class="n">ignoreTilt</span><span class="p">)</span>
 
         <span class="c1"># mask the data where outside the limits</span>
@@ -461,7 +478,8 @@
         <span class="k">if</span> <span class="n">norm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if norm is set do not override with vmin/vmax</span>
             <span class="n">vmin</span> <span class="o">=</span> <span class="n">vmax</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">pm</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span>
-            <span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">raster</span><span class="p">:</span>
             <span class="n">pm</span><span class="o">.</span><span class="n">set_rasterized</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
@@ -479,34 +497,43 @@
         <span class="c1"># colorbar options</span>
         <span class="k">if</span> <span class="n">colorbar_flag</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">plot_colorbar</span><span class="p">(</span>
-                <span class="n">mappable</span><span class="o">=</span><span class="n">pm</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">colorbar_label</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="n">colorbar_orient</span><span class="p">,</span>
-                <span class="n">field</span><span class="o">=</span><span class="n">field</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span><span class="o">=</span><span class="n">ticklabs</span><span class="p">)</span></div>
+                <span class="n">mappable</span><span class="o">=</span><span class="n">pm</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">colorbar_label</span><span class="p">,</span>
+                <span class="n">orient</span><span class="o">=</span><span class="n">colorbar_orient</span><span class="p">,</span>
+                <span class="n">field</span><span class="o">=</span><span class="n">field</span><span class="p">,</span>
+                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span>
+                <span class="n">ticks</span><span class="o">=</span><span class="n">ticks</span><span class="p">,</span>
+                <span class="n">ticklabs</span><span class="o">=</span><span class="n">ticklabs</span><span class="p">,</span>
+            <span class="p">)</span></div>
 
 <div class="viewcode-block" id="AirborneRadarDisplay.label_xaxis_x"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.label_xaxis_x.html#pyart.graph.AirborneRadarDisplay.label_xaxis_x">[docs]</a>    <span class="k">def</span> <span class="nf">label_xaxis_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Label the xaxis with the default label for x units. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Label the xaxis with the default label for x units.&quot;&quot;&quot;</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_ax</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s1">&#39;Horizontal distance from &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s1">&#39; (km)&#39;</span><span class="p">)</span></div>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Horizontal distance from &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s2">&quot; (km)&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="AirborneRadarDisplay.label_yaxis_y"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.label_yaxis_y.html#pyart.graph.AirborneRadarDisplay.label_yaxis_y">[docs]</a>    <span class="k">def</span> <span class="nf">label_yaxis_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Label the yaxis with the default label for y units. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Label the yaxis with the default label for y units.&quot;&quot;&quot;</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_ax</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Horizontal distance from &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s1">&#39; (km)&#39;</span><span class="p">)</span></div>
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Horizontal distance from &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s2">&quot; (km)&quot;</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="AirborneRadarDisplay.label_yaxis_z"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.label_yaxis_z.html#pyart.graph.AirborneRadarDisplay.label_yaxis_z">[docs]</a>    <span class="k">def</span> <span class="nf">label_yaxis_z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Label the yaxis with the default label for z units. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Label the yaxis with the default label for z units.&quot;&quot;&quot;</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_ax</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s1">&#39;Distance Above &#39;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s1">&#39;  (km)&#39;</span><span class="p">)</span></div>
-        
+        <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Distance Above &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s2">&quot;  (km)&quot;</span><span class="p">)</span></div>
+
     <span class="k">def</span> <span class="nf">_get_x_z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="p">,</span> <span class="n">ignoreTilt</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Retrieve and return x and z coordinate in km. &quot;&quot;&quot;</span>
-        <span class="n">x</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_x_y_z</span><span class="p">(</span><span class="n">sweep</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="p">,</span> <span class="n">ignoreTilt</span><span class="o">=</span><span class="n">ignoreTilt</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve and return x and z coordinate in km.&quot;&quot;&quot;</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_x_y_z</span><span class="p">(</span>
+            <span class="n">sweep</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="p">,</span> <span class="n">ignoreTilt</span><span class="o">=</span><span class="n">ignoreTilt</span>
+        <span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">z</span>
 
     <span class="k">def</span> <span class="nf">_get_x_y_z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="p">,</span> <span class="n">ignoreTilt</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Retrieve and return x, y, and z coordinate in km. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve and return x, y, and z coordinate in km.&quot;&quot;&quot;</span>
         <span class="n">sweep_slice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="n">sweep</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;platform_type&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;aircraft_belly&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;platform_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;aircraft_belly&quot;</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">filter_transitions</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">antenna_transition</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">in_trans</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">antenna_transition</span><span class="p">[</span><span class="n">sweep_slice</span><span class="p">]</span>
                 <span class="n">ranges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ranges</span>
@@ -521,14 +548,13 @@
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">ranges</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">_interpolate_range_edges</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">elevations</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-                    <span class="n">elevations</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">_interpolate_elevation_edges</span><span class="p">(</span>
-                        <span class="n">elevations</span><span class="p">)</span>
+                    <span class="n">elevations</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">_interpolate_elevation_edges</span><span class="p">(</span><span class="n">elevations</span><span class="p">)</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">azimuths</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">azimuths</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">_interpolate_azimuth_edges</span><span class="p">(</span><span class="n">azimuths</span><span class="p">)</span>
 
             <span class="n">rg</span><span class="p">,</span> <span class="n">azg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">)</span>
             <span class="n">rg</span><span class="p">,</span> <span class="n">eleg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">elevations</span><span class="p">)</span>
-            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">antenna_to_cartesian</span><span class="p">(</span><span class="n">rg</span> <span class="o">/</span> <span class="mf">1000.</span><span class="p">,</span> <span class="n">azg</span><span class="p">,</span> <span class="n">eleg</span><span class="p">)</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">antenna_to_cartesian</span><span class="p">(</span><span class="n">rg</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="n">azg</span><span class="p">,</span> <span class="n">eleg</span><span class="p">)</span>
 
         <span class="k">else</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">filter_transitions</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">antenna_transition</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -546,10 +572,10 @@
                 <span class="n">drift</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift</span><span class="p">[</span><span class="n">sweep_slice</span><span class="p">]</span>
                 <span class="n">tilt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tilt</span><span class="p">[</span><span class="n">sweep_slice</span><span class="p">]</span>
                 <span class="n">pitch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pitch</span><span class="p">[</span><span class="n">sweep_slice</span><span class="p">]</span>
-            
+
             <span class="k">if</span> <span class="n">ignoreTilt</span><span class="p">:</span>
                 <span class="n">tilt</span> <span class="o">=</span> <span class="n">tilt</span> <span class="o">*</span> <span class="mf">0.0</span>
-            
+
             <span class="k">if</span> <span class="n">edges</span><span class="p">:</span>
                 <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">ranges</span> <span class="o">=</span> <span class="n">transforms</span><span class="o">.</span><span class="n">_interpolate_range_edges</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span>
@@ -567,7 +593,8 @@
             <span class="n">rg</span><span class="p">,</span> <span class="n">pitchg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">pitch</span><span class="p">)</span>
 
             <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">antenna_to_cartesian_track_relative</span><span class="p">(</span>
-                <span class="n">rg</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="n">rotg</span><span class="p">,</span> <span class="n">rollg</span><span class="p">,</span> <span class="n">driftg</span><span class="p">,</span> <span class="n">tiltg</span><span class="p">,</span> <span class="n">pitchg</span><span class="p">)</span>
+                <span class="n">rg</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="n">rotg</span><span class="p">,</span> <span class="n">rollg</span><span class="p">,</span> <span class="n">driftg</span><span class="p">,</span> <span class="n">tiltg</span><span class="p">,</span> <span class="n">pitchg</span>
+            <span class="p">)</span>
 
         <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">shift</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.0</span>
         <span class="n">y</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">shift</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.0</span>

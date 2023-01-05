@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.uf &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.io.uf &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -230,38 +230,45 @@
 
 <span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">FileMetadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
 <span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
-<span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">make_time_unit_str</span><span class="p">,</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">prepare_for_read</span>
+<span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">make_time_unit_str</span><span class="p">,</span> <span class="n">prepare_for_read</span>
 <span class="kn">from</span> <span class="nn">.uffile</span> <span class="kn">import</span> <span class="n">UFFile</span>
 
 <span class="n">_LIGHT_SPEED</span> <span class="o">=</span> <span class="mf">2.99792458e8</span>  <span class="c1"># speed of light in meters per second</span>
 <span class="n">_UF_SWEEP_MODES</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;calibration&#39;</span><span class="p">,</span>
-    <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;ppi&#39;</span><span class="p">,</span>
-    <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;coplane&#39;</span><span class="p">,</span>
-    <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;rhi&#39;</span><span class="p">,</span>
-    <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;vpt&#39;</span><span class="p">,</span>
-    <span class="mi">5</span><span class="p">:</span> <span class="s1">&#39;target&#39;</span><span class="p">,</span>
-    <span class="mi">6</span><span class="p">:</span> <span class="s1">&#39;manual&#39;</span><span class="p">,</span>
-    <span class="mi">7</span><span class="p">:</span> <span class="s1">&#39;idle&#39;</span><span class="p">,</span>
-    <span class="mi">8</span><span class="p">:</span> <span class="s1">&#39;ppi&#39;</span><span class="p">,</span>   <span class="c1"># RadX used this to indicate surveillance PPI scans</span>
+    <span class="mi">0</span><span class="p">:</span> <span class="s2">&quot;calibration&quot;</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;ppi&quot;</span><span class="p">,</span>
+    <span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;coplane&quot;</span><span class="p">,</span>
+    <span class="mi">3</span><span class="p">:</span> <span class="s2">&quot;rhi&quot;</span><span class="p">,</span>
+    <span class="mi">4</span><span class="p">:</span> <span class="s2">&quot;vpt&quot;</span><span class="p">,</span>
+    <span class="mi">5</span><span class="p">:</span> <span class="s2">&quot;target&quot;</span><span class="p">,</span>
+    <span class="mi">6</span><span class="p">:</span> <span class="s2">&quot;manual&quot;</span><span class="p">,</span>
+    <span class="mi">7</span><span class="p">:</span> <span class="s2">&quot;idle&quot;</span><span class="p">,</span>
+    <span class="mi">8</span><span class="p">:</span> <span class="s2">&quot;ppi&quot;</span><span class="p">,</span>  <span class="c1"># RadX used this to indicate surveillance PPI scans</span>
 <span class="p">}</span>
 
 <span class="n">_SWEEP_MODE_STR</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;calibration&#39;</span><span class="p">:</span> <span class="s1">&#39;calibration&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;ppi&#39;</span><span class="p">:</span> <span class="s1">&#39;azimuth_surveillance&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;coplane&#39;</span><span class="p">:</span> <span class="s1">&#39;coplane&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;rhi&#39;</span><span class="p">:</span> <span class="s1">&#39;rhi&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;vpt&#39;</span><span class="p">:</span> <span class="s1">&#39;vertical_pointing&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;target&#39;</span><span class="p">:</span> <span class="s1">&#39;pointing&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;manual&#39;</span><span class="p">:</span> <span class="s1">&#39;manual&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;idle&#39;</span><span class="p">:</span> <span class="s1">&#39;idle&#39;</span><span class="p">,</span>
+    <span class="s2">&quot;calibration&quot;</span><span class="p">:</span> <span class="s2">&quot;calibration&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ppi&quot;</span><span class="p">:</span> <span class="s2">&quot;azimuth_surveillance&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;coplane&quot;</span><span class="p">:</span> <span class="s2">&quot;coplane&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;rhi&quot;</span><span class="p">:</span> <span class="s2">&quot;rhi&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;vpt&quot;</span><span class="p">:</span> <span class="s2">&quot;vertical_pointing&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;target&quot;</span><span class="p">:</span> <span class="s2">&quot;pointing&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;manual&quot;</span><span class="p">:</span> <span class="s2">&quot;manual&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;idle&quot;</span><span class="p">:</span> <span class="s2">&quot;idle&quot;</span><span class="p">,</span>
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="read_uf"><a class="viewcode-back" href="../../../API/generated/pyart.io.read_uf.html#pyart.io.read_uf">[docs]</a><span class="k">def</span> <span class="nf">read_uf</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">file_field_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delay_field_loading</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="read_uf"><a class="viewcode-back" href="../../../API/generated/pyart.io.read_uf.html#pyart.io.read_uf">[docs]</a><span class="k">def</span> <span class="nf">read_uf</span><span class="p">(</span>
+    <span class="n">filename</span><span class="p">,</span>
+    <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">file_field_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">delay_field_loading</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read a UF File.</span>
 
 <span class="sd">    Parameters</span>
@@ -306,9 +313,14 @@
     <span class="n">_test_arguments</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># create metadata retrieval object</span>
-    <span class="n">filemetadata</span> <span class="o">=</span> <span class="n">FileMetadata</span><span class="p">(</span><span class="s1">&#39;uf&#39;</span><span class="p">,</span> <span class="n">field_names</span><span class="p">,</span> <span class="n">additional_metadata</span><span class="p">,</span>
-                                <span class="n">file_field_names</span><span class="p">,</span> <span class="n">exclude_fields</span><span class="p">,</span>
-                                <span class="n">include_fields</span><span class="p">)</span>
+    <span class="n">filemetadata</span> <span class="o">=</span> <span class="n">FileMetadata</span><span class="p">(</span>
+        <span class="s2">&quot;uf&quot;</span><span class="p">,</span>
+        <span class="n">field_names</span><span class="p">,</span>
+        <span class="n">additional_metadata</span><span class="p">,</span>
+        <span class="n">file_field_names</span><span class="p">,</span>
+        <span class="n">exclude_fields</span><span class="p">,</span>
+        <span class="n">include_fields</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># Open UF file and get handle</span>
     <span class="n">ufile</span> <span class="o">=</span> <span class="n">UFFile</span><span class="p">(</span><span class="n">prepare_for_read</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
@@ -317,169 +329,184 @@
     <span class="c1"># time</span>
     <span class="n">dts</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_datetimes</span><span class="p">()</span>
     <span class="n">units</span> <span class="o">=</span> <span class="n">make_time_unit_str</span><span class="p">(</span><span class="nb">min</span><span class="p">(</span><span class="n">dts</span><span class="p">))</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
-    <span class="n">time</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">units</span>
-    <span class="n">time</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">date2num</span><span class="p">(</span><span class="n">dts</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">units</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">date2num</span><span class="p">(</span><span class="n">dts</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
 
     <span class="c1"># range</span>
-    <span class="n">_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;range&#39;</span><span class="p">)</span>
+    <span class="n">_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">)</span>
     <span class="c1"># assume that the number of gates and spacing from the first ray is</span>
     <span class="c1"># representative of the entire volume</span>
     <span class="n">field_header</span> <span class="o">=</span> <span class="n">first_ray</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">ngates</span> <span class="o">=</span> <span class="n">field_header</span><span class="p">[</span><span class="s1">&#39;nbins&#39;</span><span class="p">]</span>
-    <span class="n">step</span> <span class="o">=</span> <span class="n">field_header</span><span class="p">[</span><span class="s1">&#39;range_spacing_m&#39;</span><span class="p">]</span>
+    <span class="n">ngates</span> <span class="o">=</span> <span class="n">field_header</span><span class="p">[</span><span class="s2">&quot;nbins&quot;</span><span class="p">]</span>
+    <span class="n">step</span> <span class="o">=</span> <span class="n">field_header</span><span class="p">[</span><span class="s2">&quot;range_spacing_m&quot;</span><span class="p">]</span>
     <span class="c1"># this gives distances to the center of each gate, remove step/2 for start</span>
-    <span class="n">start</span> <span class="o">=</span> <span class="p">(</span><span class="n">field_header</span><span class="p">[</span><span class="s1">&#39;range_start_km&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.</span> <span class="o">+</span>
-             <span class="n">field_header</span><span class="p">[</span><span class="s1">&#39;range_start_m&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">step</span> <span class="o">/</span> <span class="mf">2.</span><span class="p">)</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ngates</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="n">step</span> <span class="o">+</span> <span class="n">start</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;meters_to_center_of_first_gate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;meters_between_gates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">step</span>
+    <span class="n">start</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">field_header</span><span class="p">[</span><span class="s2">&quot;range_start_km&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.0</span>
+        <span class="o">+</span> <span class="n">field_header</span><span class="p">[</span><span class="s2">&quot;range_start_m&quot;</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">step</span> <span class="o">/</span> <span class="mf">2.0</span>
+    <span class="p">)</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ngates</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">step</span> <span class="o">+</span> <span class="n">start</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;meters_to_center_of_first_gate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">start</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;meters_between_gates&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">step</span>
 
     <span class="c1"># latitude, longitude and altitude</span>
-    <span class="n">latitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;latitude&#39;</span><span class="p">)</span>
-    <span class="n">longitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;longitude&#39;</span><span class="p">)</span>
-    <span class="n">altitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;altitude&#39;</span><span class="p">)</span>
+    <span class="n">latitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;latitude&quot;</span><span class="p">)</span>
+    <span class="n">longitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;longitude&quot;</span><span class="p">)</span>
+    <span class="n">altitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;altitude&quot;</span><span class="p">)</span>
     <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">height</span> <span class="o">=</span> <span class="n">first_ray</span><span class="o">.</span><span class="n">get_location</span><span class="p">()</span>
-    <span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lat</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
-    <span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lon</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
-    <span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">height</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+    <span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lat</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lon</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">height</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
 
     <span class="c1"># metadata</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;metadata&#39;</span><span class="p">)</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;original_container&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;UF&#39;</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;site_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">first_ray</span><span class="o">.</span><span class="n">mandatory_header</span><span class="p">[</span><span class="s1">&#39;site_name&#39;</span><span class="p">]</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">first_ray</span><span class="o">.</span><span class="n">mandatory_header</span><span class="p">[</span><span class="s1">&#39;radar_name&#39;</span><span class="p">]</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">)</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;original_container&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;UF&quot;</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;site_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">first_ray</span><span class="o">.</span><span class="n">mandatory_header</span><span class="p">[</span><span class="s2">&quot;site_name&quot;</span><span class="p">]</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">first_ray</span><span class="o">.</span><span class="n">mandatory_header</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span>
 
     <span class="c1"># sweep_start_ray_index, sweep_end_ray_index</span>
-    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_start_ray_index&#39;</span><span class="p">)</span>
-    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_end_ray_index&#39;</span><span class="p">)</span>
-    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">first_ray_in_sweep</span>
-    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">last_ray_in_sweep</span>
+    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_start_ray_index&quot;</span><span class="p">)</span>
+    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_end_ray_index&quot;</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">first_ray_in_sweep</span>
+    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">last_ray_in_sweep</span>
 
     <span class="c1"># sweep number</span>
-    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_number&#39;</span><span class="p">)</span>
-    <span class="n">sweep_number</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ufile</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_number&quot;</span><span class="p">)</span>
+    <span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ufile</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
 
     <span class="c1"># scan_type</span>
     <span class="n">scan_type</span> <span class="o">=</span> <span class="n">_get_scan_type</span><span class="p">(</span><span class="n">first_ray</span><span class="p">)</span>
 
     <span class="c1"># sweep_mode</span>
-    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_mode&#39;</span><span class="p">)</span>
-    <span class="n">sweep_mode</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-        <span class="n">ufile</span><span class="o">.</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="n">_SWEEP_MODE_STR</span><span class="p">[</span><span class="n">scan_type</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_mode&quot;</span><span class="p">)</span>
+    <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="n">ufile</span><span class="o">.</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="n">_SWEEP_MODE_STR</span><span class="p">[</span><span class="n">scan_type</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S&quot;</span>
+    <span class="p">)</span>
 
     <span class="c1"># elevation</span>
-    <span class="n">elevation</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;elevation&#39;</span><span class="p">)</span>
-    <span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_elevations</span><span class="p">()</span>
+    <span class="n">elevation</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;elevation&quot;</span><span class="p">)</span>
+    <span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_elevations</span><span class="p">()</span>
 
     <span class="c1"># azimuth</span>
-    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;azimuth&#39;</span><span class="p">)</span>
-    <span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_azimuths</span><span class="p">()</span>
+    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;azimuth&quot;</span><span class="p">)</span>
+    <span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_azimuths</span><span class="p">()</span>
 
     <span class="c1"># fixed_angle</span>
-    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;fixed_angle&#39;</span><span class="p">)</span>
-    <span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_sweep_fixed_angles</span><span class="p">()</span>
+    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;fixed_angle&quot;</span><span class="p">)</span>
+    <span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_sweep_fixed_angles</span><span class="p">()</span>
 
     <span class="c1"># fields</span>
     <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">uf_field_number</span><span class="p">,</span> <span class="n">uf_field_dic</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">first_ray</span><span class="o">.</span><span class="n">field_positions</span><span class="p">):</span>
-        <span class="n">uf_field_name</span> <span class="o">=</span> <span class="n">uf_field_dic</span><span class="p">[</span><span class="s1">&#39;data_type&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">)</span>
+        <span class="n">uf_field_name</span> <span class="o">=</span> <span class="n">uf_field_dic</span><span class="p">[</span><span class="s2">&quot;data_type&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">)</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="o">.</span><span class="n">get_field_name</span><span class="p">(</span><span class="n">uf_field_name</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="n">field_dic</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
-        <span class="n">field_dic</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_field_data</span><span class="p">(</span><span class="n">uf_field_number</span><span class="p">)</span>
-        <span class="n">field_dic</span><span class="p">[</span><span class="s1">&#39;_FillValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+        <span class="n">field_dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_field_data</span><span class="p">(</span><span class="n">uf_field_number</span><span class="p">)</span>
+        <span class="n">field_dic</span><span class="p">[</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
         <span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">field_dic</span>
 
     <span class="c1"># instrument_parameters</span>
     <span class="n">instrument_parameters</span> <span class="o">=</span> <span class="n">_get_instrument_parameters</span><span class="p">(</span><span class="n">ufile</span><span class="p">,</span> <span class="n">filemetadata</span><span class="p">)</span>
 
     <span class="c1"># scan rate</span>
-    <span class="n">scan_rate</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;scan_rate&#39;</span><span class="p">)</span>
-    <span class="n">scan_rate</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_sweep_rates</span><span class="p">()</span>
+    <span class="n">scan_rate</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;scan_rate&quot;</span><span class="p">)</span>
+    <span class="n">scan_rate</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_sweep_rates</span><span class="p">()</span>
 
     <span class="n">ufile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">Radar</span><span class="p">(</span>
-        <span class="n">time</span><span class="p">,</span> <span class="n">_range</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">scan_type</span><span class="p">,</span>
-        <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">altitude</span><span class="p">,</span>
-        <span class="n">sweep_number</span><span class="p">,</span> <span class="n">sweep_mode</span><span class="p">,</span> <span class="n">fixed_angle</span><span class="p">,</span> <span class="n">sweep_start_ray_index</span><span class="p">,</span>
+        <span class="n">time</span><span class="p">,</span>
+        <span class="n">_range</span><span class="p">,</span>
+        <span class="n">fields</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="p">,</span>
+        <span class="n">scan_type</span><span class="p">,</span>
+        <span class="n">latitude</span><span class="p">,</span>
+        <span class="n">longitude</span><span class="p">,</span>
+        <span class="n">altitude</span><span class="p">,</span>
+        <span class="n">sweep_number</span><span class="p">,</span>
+        <span class="n">sweep_mode</span><span class="p">,</span>
+        <span class="n">fixed_angle</span><span class="p">,</span>
+        <span class="n">sweep_start_ray_index</span><span class="p">,</span>
         <span class="n">sweep_end_ray_index</span><span class="p">,</span>
-        <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span>
+        <span class="n">azimuth</span><span class="p">,</span>
+        <span class="n">elevation</span><span class="p">,</span>
         <span class="n">scan_rate</span><span class="o">=</span><span class="n">scan_rate</span><span class="p">,</span>
-        <span class="n">instrument_parameters</span><span class="o">=</span><span class="n">instrument_parameters</span><span class="p">)</span></div>
+        <span class="n">instrument_parameters</span><span class="o">=</span><span class="n">instrument_parameters</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_get_scan_type</span><span class="p">(</span><span class="n">ufray</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Ruturn the scan type of a UF ray. &quot;&quot;&quot;</span>
-    <span class="n">uf_sweep_mode</span> <span class="o">=</span> <span class="n">ufray</span><span class="o">.</span><span class="n">mandatory_header</span><span class="p">[</span><span class="s1">&#39;sweep_mode&#39;</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Ruturn the scan type of a UF ray.&quot;&quot;&quot;</span>
+    <span class="n">uf_sweep_mode</span> <span class="o">=</span> <span class="n">ufray</span><span class="o">.</span><span class="n">mandatory_header</span><span class="p">[</span><span class="s2">&quot;sweep_mode&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">uf_sweep_mode</span> <span class="ow">in</span> <span class="n">_UF_SWEEP_MODES</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_UF_SWEEP_MODES</span><span class="p">[</span><span class="n">uf_sweep_mode</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown sweep mode, defaulting to ppi&#39;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="s1">&#39;ppi&#39;</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown sweep mode, defaulting to ppi&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="s2">&quot;ppi&quot;</span>
 
 
 <span class="k">def</span> <span class="nf">_get_instrument_parameters</span><span class="p">(</span><span class="n">ufile</span><span class="p">,</span> <span class="n">filemetadata</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Return a dictionary containing instrument parameters. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a dictionary containing instrument parameters.&quot;&quot;&quot;</span>
 
     <span class="c1"># pulse width</span>
-    <span class="n">pulse_width</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;pulse_width&#39;</span><span class="p">)</span>
-    <span class="n">pulse_width</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_pulse_widths</span><span class="p">()</span> <span class="o">/</span> <span class="n">_LIGHT_SPEED</span>  <span class="c1"># m-&gt;sec</span>
+    <span class="n">pulse_width</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;pulse_width&quot;</span><span class="p">)</span>
+    <span class="n">pulse_width</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_pulse_widths</span><span class="p">()</span> <span class="o">/</span> <span class="n">_LIGHT_SPEED</span>  <span class="c1"># m-&gt;sec</span>
 
     <span class="c1"># assume that the parameters in the first ray represent the beam widths,</span>
     <span class="c1"># bandwidth and frequency in the entire volume</span>
     <span class="n">first_ray</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">rays</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">field_header</span> <span class="o">=</span> <span class="n">first_ray</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">beam_width_h</span> <span class="o">=</span> <span class="n">field_header</span><span class="p">[</span><span class="s1">&#39;beam_width_h&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">64.</span>
-    <span class="n">beam_width_v</span> <span class="o">=</span> <span class="n">field_header</span><span class="p">[</span><span class="s1">&#39;beam_width_v&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">64.</span>
-    <span class="n">bandwidth</span> <span class="o">=</span> <span class="n">field_header</span><span class="p">[</span><span class="s1">&#39;bandwidth&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">16.</span> <span class="o">*</span> <span class="mf">1.e6</span>
-    <span class="n">wavelength_cm</span> <span class="o">=</span> <span class="n">field_header</span><span class="p">[</span><span class="s1">&#39;wavelength_cm&#39;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">64.</span>
+    <span class="n">beam_width_h</span> <span class="o">=</span> <span class="n">field_header</span><span class="p">[</span><span class="s2">&quot;beam_width_h&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">64.0</span>
+    <span class="n">beam_width_v</span> <span class="o">=</span> <span class="n">field_header</span><span class="p">[</span><span class="s2">&quot;beam_width_v&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">64.0</span>
+    <span class="n">bandwidth</span> <span class="o">=</span> <span class="n">field_header</span><span class="p">[</span><span class="s2">&quot;bandwidth&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">16.0</span> <span class="o">*</span> <span class="mf">1.0e6</span>
+    <span class="n">wavelength_cm</span> <span class="o">=</span> <span class="n">field_header</span><span class="p">[</span><span class="s2">&quot;wavelength_cm&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">64.0</span>
     <span class="k">if</span> <span class="n">wavelength_cm</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Invalid wavelength, frequency set to default value.&#39;</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Invalid wavelength, frequency set to default value.&quot;</span><span class="p">)</span>
         <span class="n">wavelength_hz</span> <span class="o">=</span> <span class="mf">9999.0</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">wavelength_hz</span> <span class="o">=</span> <span class="n">_LIGHT_SPEED</span> <span class="o">/</span> <span class="p">(</span><span class="n">wavelength_cm</span> <span class="o">/</span> <span class="mf">100.</span><span class="p">)</span>
+        <span class="n">wavelength_hz</span> <span class="o">=</span> <span class="n">_LIGHT_SPEED</span> <span class="o">/</span> <span class="p">(</span><span class="n">wavelength_cm</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">)</span>
 
     <span class="c1"># radar_beam_width_h</span>
-    <span class="n">radar_beam_width_h</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;radar_beam_width_h&#39;</span><span class="p">)</span>
-    <span class="n">radar_beam_width_h</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">beam_width_h</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+    <span class="n">radar_beam_width_h</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;radar_beam_width_h&quot;</span><span class="p">)</span>
+    <span class="n">radar_beam_width_h</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">beam_width_h</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
 
     <span class="c1"># radar_beam_width_v</span>
-    <span class="n">radar_beam_width_v</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;radar_beam_width_v&#39;</span><span class="p">)</span>
-    <span class="n">radar_beam_width_v</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">beam_width_v</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+    <span class="n">radar_beam_width_v</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;radar_beam_width_v&quot;</span><span class="p">)</span>
+    <span class="n">radar_beam_width_v</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">beam_width_v</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
 
     <span class="c1"># radar_receiver_bandwidth</span>
-    <span class="n">radar_receiver_bandwidth</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;radar_receiver_bandwidth&#39;</span><span class="p">)</span>
-    <span class="n">radar_receiver_bandwidth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">bandwidth</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+    <span class="n">radar_receiver_bandwidth</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;radar_receiver_bandwidth&quot;</span><span class="p">)</span>
+    <span class="n">radar_receiver_bandwidth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">bandwidth</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
 
     <span class="c1"># polarization_mode</span>
-    <span class="n">polarization_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;polarization_mode&#39;</span><span class="p">)</span>
-    <span class="n">polarization_mode</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_sweep_polarizations</span><span class="p">()</span>
+    <span class="n">polarization_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;polarization_mode&quot;</span><span class="p">)</span>
+    <span class="n">polarization_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_sweep_polarizations</span><span class="p">()</span>
 
     <span class="c1"># frequency</span>
-    <span class="n">frequency</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;frequency&#39;</span><span class="p">)</span>
-    <span class="n">frequency</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">wavelength_hz</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+    <span class="n">frequency</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;frequency&quot;</span><span class="p">)</span>
+    <span class="n">frequency</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">wavelength_hz</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
 
     <span class="c1"># prt</span>
-    <span class="n">prt</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;prt&#39;</span><span class="p">)</span>
-    <span class="n">prt</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_prts</span><span class="p">()</span> <span class="o">/</span> <span class="mf">1e6</span>  <span class="c1"># us-&gt;sec</span>
+    <span class="n">prt</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;prt&quot;</span><span class="p">)</span>
+    <span class="n">prt</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_prts</span><span class="p">()</span> <span class="o">/</span> <span class="mf">1e6</span>  <span class="c1"># us-&gt;sec</span>
 
     <span class="n">instrument_parameters</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;pulse_width&#39;</span><span class="p">:</span> <span class="n">pulse_width</span><span class="p">,</span>
-        <span class="s1">&#39;radar_beam_width_h&#39;</span><span class="p">:</span> <span class="n">radar_beam_width_h</span><span class="p">,</span>
-        <span class="s1">&#39;radar_beam_width_v&#39;</span><span class="p">:</span> <span class="n">radar_beam_width_v</span><span class="p">,</span>
-        <span class="s1">&#39;radar_receiver_bandwidth&#39;</span><span class="p">:</span> <span class="n">radar_receiver_bandwidth</span><span class="p">,</span>
-        <span class="s1">&#39;polarization_mode&#39;</span><span class="p">:</span> <span class="n">polarization_mode</span><span class="p">,</span>
-        <span class="s1">&#39;frequency&#39;</span><span class="p">:</span> <span class="n">frequency</span><span class="p">,</span>
-        <span class="s1">&#39;prt&#39;</span><span class="p">:</span> <span class="n">prt</span><span class="p">,</span>
+        <span class="s2">&quot;pulse_width&quot;</span><span class="p">:</span> <span class="n">pulse_width</span><span class="p">,</span>
+        <span class="s2">&quot;radar_beam_width_h&quot;</span><span class="p">:</span> <span class="n">radar_beam_width_h</span><span class="p">,</span>
+        <span class="s2">&quot;radar_beam_width_v&quot;</span><span class="p">:</span> <span class="n">radar_beam_width_v</span><span class="p">,</span>
+        <span class="s2">&quot;radar_receiver_bandwidth&quot;</span><span class="p">:</span> <span class="n">radar_receiver_bandwidth</span><span class="p">,</span>
+        <span class="s2">&quot;polarization_mode&quot;</span><span class="p">:</span> <span class="n">polarization_mode</span><span class="p">,</span>
+        <span class="s2">&quot;frequency&quot;</span><span class="p">:</span> <span class="n">frequency</span><span class="p">,</span>
+        <span class="s2">&quot;prt&quot;</span><span class="p">:</span> <span class="n">prt</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="c1"># nyquist velocity if defined</span>
-    <span class="n">nyquist_velocity</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;nyquist_velocity&#39;</span><span class="p">)</span>
-    <span class="n">nyquist_velocity</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_nyquists</span><span class="p">()</span>
-    <span class="k">if</span> <span class="n">nyquist_velocity</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">instrument_parameters</span><span class="p">[</span><span class="s1">&#39;nyquist_velocity&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nyquist_velocity</span>
+    <span class="n">nyquist_velocity</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">)</span>
+    <span class="n">nyquist_velocity</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ufile</span><span class="o">.</span><span class="n">get_nyquists</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">nyquist_velocity</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nyquist_velocity</span>
 
     <span class="k">return</span> <span class="n">instrument_parameters</span>
 </pre></div>

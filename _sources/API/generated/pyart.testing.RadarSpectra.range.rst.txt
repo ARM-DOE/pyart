@@ -1,0 +1,6 @@
+pyart.testing.RadarSpectra.range
+================================
+
+.. currentmodule:: pyart.testing
+
+.. autoproperty:: RadarSpectra.range

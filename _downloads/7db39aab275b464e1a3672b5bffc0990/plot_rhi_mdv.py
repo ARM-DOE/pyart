@@ -12,15 +12,16 @@ print(__doc__)
 # License: BSD 3 clause
 
 import matplotlib.pyplot as plt
+
 import pyart
 from pyart.testing import get_test_data
 
-filename = get_test_data('110041.mdv')
+filename = get_test_data("110041.mdv")
 
 # create the plot using RadarDisplay
 radar = pyart.io.read_mdv(filename)
 display = pyart.graph.RadarDisplay(radar)
 fig = plt.figure(figsize=[5, 5])
 ax = fig.add_subplot(111)
-display.plot('reflectivity', 0, vmin=-16, vmax=64.0)
+display.plot("reflectivity", 0, vmin=-16, vmax=64.0)
 plt.show()

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Mapping Data to a Cartesian Grid &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>Mapping Data to a Cartesian Grid &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -328,8 +328,18 @@
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We can create a Grid object from a Radar object by using pyart.map.grid_from_radars()</span>
 <span class="c1"># Grid shape is the amount of points within a dimension. Grid limits is the dimension limits</span>
 <span class="c1"># in meters.</span>
-<span class="n">grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">grid_from_radars</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">41</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">201</span><span class="p">),</span> 
-                                  <span class="n">grid_limits</span><span class="o">=</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span><span class="mi">20000</span><span class="p">,),</span> <span class="p">(</span><span class="o">-</span><span class="mf">100000.</span><span class="p">,</span> <span class="mf">100000.</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">100000</span><span class="p">,</span> <span class="mf">100000.</span><span class="p">)))</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">grid_from_radars</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span>
+    <span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">41</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">201</span><span class="p">),</span>
+    <span class="n">grid_limits</span><span class="o">=</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="mf">0.0</span><span class="p">,</span>
+            <span class="mi">20000</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span><span class="o">-</span><span class="mf">100000.0</span><span class="p">,</span> <span class="mf">100000.0</span><span class="p">),</span>
+        <span class="p">(</span><span class="o">-</span><span class="mi">100000</span><span class="p">,</span> <span class="mf">100000.0</span><span class="p">),</span>
+    <span class="p">),</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -344,7 +354,7 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># If with look at the coordinate data, we can see we have 201 points between</span>
 <span class="c1"># -100000 and 100000 meters.</span>
-<span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -393,7 +403,7 @@
 <span class="c1"># but for grids. To plot the grid:</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">GridMapDisplay</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_grid</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_grid</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -411,7 +421,7 @@ C:\Users\sherm\Anaconda3\envs\pyart_env\lib\site-packages\cartopy\mpl\geoaxes.py
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We can even do both longitudnal and latitudnal slices. Change the lat parameter to view</span>
 <span class="c1"># different portions of the storm!</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_latitude_slice</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="mf">36.75</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_latitude_slice</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="mf">36.75</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -433,9 +443,20 @@ C:\Users\sherm\Anaconda3\envs\pyart_env\lib\site-packages\cartopy\mpl\geoaxes.py
 <span class="c1">#&#39;nearest neighbor&#39;, &#39;barnes&#39; or &#39;cressman&#39;. Let&#39;s try increasing the minimum radius of influence to 1.75 km</span>
 <span class="c1"># and use Cressman as the weighting function.</span>
 <span class="n">grid_better</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">grid_from_radars</span><span class="p">(</span>
-    <span class="n">radar</span><span class="p">,</span> <span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">41</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">201</span><span class="p">),</span> 
-    <span class="n">grid_limits</span><span class="o">=</span><span class="p">((</span><span class="mf">0.</span><span class="p">,</span><span class="mi">20000</span><span class="p">,),</span> <span class="p">(</span><span class="o">-</span><span class="mf">100000.</span><span class="p">,</span> <span class="mf">100000.</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">100000</span><span class="p">,</span> <span class="mf">100000.</span><span class="p">)),</span>
-    <span class="n">roi_func</span><span class="o">=</span><span class="s1">&#39;dist_beam&#39;</span><span class="p">,</span> <span class="n">min_radius</span><span class="o">=</span><span class="mf">1750.0</span><span class="p">,</span> <span class="n">weighting_function</span><span class="o">=</span><span class="s1">&#39;cressman&#39;</span><span class="p">)</span>
+    <span class="n">radar</span><span class="p">,</span>
+    <span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">41</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">201</span><span class="p">),</span>
+    <span class="n">grid_limits</span><span class="o">=</span><span class="p">(</span>
+        <span class="p">(</span>
+            <span class="mf">0.0</span><span class="p">,</span>
+            <span class="mi">20000</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="p">(</span><span class="o">-</span><span class="mf">100000.0</span><span class="p">,</span> <span class="mf">100000.0</span><span class="p">),</span>
+        <span class="p">(</span><span class="o">-</span><span class="mi">100000</span><span class="p">,</span> <span class="mf">100000.0</span><span class="p">),</span>
+    <span class="p">),</span>
+    <span class="n">roi_func</span><span class="o">=</span><span class="s2">&quot;dist_beam&quot;</span><span class="p">,</span>
+    <span class="n">min_radius</span><span class="o">=</span><span class="mf">1750.0</span><span class="p">,</span>
+    <span class="n">weighting_function</span><span class="o">=</span><span class="s2">&quot;cressman&quot;</span><span class="p">,</span>
+<span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -445,7 +466,7 @@ C:\Users\sherm\Anaconda3\envs\pyart_env\lib\site-packages\cartopy\mpl\geoaxes.py
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># As you can see, most of the artifacts at higher altitudes have been smoothed out, but we</span>
 <span class="c1"># have lost some spatial resolution as a result.</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">GridMapDisplay</span><span class="p">(</span><span class="n">grid_better</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_latitude_slice</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="mf">36.75</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_latitude_slice</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="mf">36.75</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">])</span>
 </pre></div>
 </div>

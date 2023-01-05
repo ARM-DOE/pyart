@@ -13,19 +13,27 @@ print(__doc__)
 # License: BSD 3 clause
 
 import matplotlib.pyplot as plt
+
 import pyart
 from pyart.testing import get_test_data
 
 # open the file, create the displays and figure
-filename = get_test_data('Level2_KATX_20130717_1950.ar2v')
+filename = get_test_data("Level2_KATX_20130717_1950.ar2v")
 radar = pyart.io.read_nexrad_archive(filename)
 display = pyart.graph.RadarDisplay(radar)
 fig = plt.figure(figsize=(6, 5))
 
 # plot super resolution reflectivity
 ax = fig.add_subplot(111)
-display.plot('reflectivity', 0, title='NEXRAD Reflectivity',
-             vmin=-32, vmax=64, colorbar_label='', ax=ax)
-display.plot_range_ring(radar.range['data'][-1]/1000., ax=ax)
+display.plot(
+    "reflectivity",
+    0,
+    title="NEXRAD Reflectivity",
+    vmin=-32,
+    vmax=64,
+    colorbar_label="",
+    ax=ax,
+)
+display.plot_range_ring(radar.range["data"][-1] / 1000.0, ax=ax)
 display.set_limits(xlim=(-500, 500), ylim=(-500, 500), ax=ax)
 plt.show()

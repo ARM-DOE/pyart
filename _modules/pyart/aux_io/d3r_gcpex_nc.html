@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.aux_io.d3r_gcpex_nc &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.aux_io.d3r_gcpex_nc &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -225,38 +225,44 @@
 
 <span class="kn">import</span> <span class="nn">datetime</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">netCDF4</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">FileMetadata</span>
-<span class="kn">from</span> <span class="nn">..io.common</span> <span class="kn">import</span> <span class="n">make_time_unit_str</span><span class="p">,</span> <span class="n">_test_arguments</span>
 <span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
-
+<span class="kn">from</span> <span class="nn">..io.common</span> <span class="kn">import</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">make_time_unit_str</span>
 
 <span class="n">D3R_FIELD_NAMES</span> <span class="o">=</span> <span class="p">{</span>
     <span class="c1"># corrected reflectivity, horizontal</span>
-    <span class="s1">&#39;Reflectivity&#39;</span><span class="p">:</span> <span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span>
+    <span class="s2">&quot;Reflectivity&quot;</span><span class="p">:</span> <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
     <span class="c1"># corrected reflectivity, vertical</span>
-    <span class="s1">&#39;DBZV&#39;</span><span class="p">:</span> <span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span>
+    <span class="s2">&quot;DBZV&quot;</span><span class="p">:</span> <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
     <span class="c1"># differential reflectivity</span>
-    <span class="s1">&#39;DifferentialReflectivity&#39;</span><span class="p">:</span> <span class="s1">&#39;differential_reflectivity&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;CrossPolCorrelation&#39;</span><span class="p">:</span> <span class="s1">&#39;cross_correlation_ratio&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;ClutterPowerH&#39;</span><span class="p">:</span> <span class="s1">&#39;clutter_power_h&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;ClutterPowerV&#39;</span><span class="p">:</span> <span class="s1">&#39;clutter_power_v&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;DifferentialPhase&#39;</span><span class="p">:</span> <span class="s1">&#39;differential_phase&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;KDP&#39;</span><span class="p">:</span> <span class="s1">&#39;specific_differential_phase&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;NormalizedCoherentPower&#39;</span><span class="p">:</span> <span class="s1">&#39;normalized_coherent_power&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Signal+Clutter_toNoise_H&#39;</span><span class="p">:</span> <span class="s1">&#39;signal_to_noise_ratio&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;Velocity&#39;</span><span class="p">:</span> <span class="s1">&#39;velocity&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;SpectralWidth&#39;</span><span class="p">:</span> <span class="s1">&#39;spectrum_width&#39;</span><span class="p">,</span>
-    <span class="s1">&#39;SignalPower_H&#39;</span><span class="p">:</span> <span class="s1">&#39;signal_power_h&#39;</span><span class="p">,</span>
+    <span class="s2">&quot;DifferentialReflectivity&quot;</span><span class="p">:</span> <span class="s2">&quot;differential_reflectivity&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;CrossPolCorrelation&quot;</span><span class="p">:</span> <span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ClutterPowerH&quot;</span><span class="p">:</span> <span class="s2">&quot;clutter_power_h&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;ClutterPowerV&quot;</span><span class="p">:</span> <span class="s2">&quot;clutter_power_v&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;DifferentialPhase&quot;</span><span class="p">:</span> <span class="s2">&quot;differential_phase&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;KDP&quot;</span><span class="p">:</span> <span class="s2">&quot;specific_differential_phase&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;NormalizedCoherentPower&quot;</span><span class="p">:</span> <span class="s2">&quot;normalized_coherent_power&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Signal+Clutter_toNoise_H&quot;</span><span class="p">:</span> <span class="s2">&quot;signal_to_noise_ratio&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;Velocity&quot;</span><span class="p">:</span> <span class="s2">&quot;velocity&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SpectralWidth&quot;</span><span class="p">:</span> <span class="s2">&quot;spectrum_width&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;SignalPower_H&quot;</span><span class="p">:</span> <span class="s2">&quot;signal_power_h&quot;</span><span class="p">,</span>
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="read_d3r_gcpex_nc"><a class="viewcode-back" href="../../../API/generated/pyart.aux_io.read_d3r_gcpex_nc.html#pyart.aux_io.read_d3r_gcpex_nc">[docs]</a><span class="k">def</span> <span class="nf">read_d3r_gcpex_nc</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                      <span class="n">file_field_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                      <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">read_altitude_from_nc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="read_d3r_gcpex_nc"><a class="viewcode-back" href="../../../API/generated/pyart.aux_io.read_d3r_gcpex_nc.html#pyart.aux_io.read_d3r_gcpex_nc">[docs]</a><span class="k">def</span> <span class="nf">read_d3r_gcpex_nc</span><span class="p">(</span>
+    <span class="n">filename</span><span class="p">,</span>
+    <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">file_field_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">read_altitude_from_nc</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read a D3R GCPEX netCDF file.</span>
 
 <span class="sd">    Parameters</span>
@@ -312,9 +318,14 @@
     <span class="c1"># create metadata retrieval object</span>
     <span class="k">if</span> <span class="n">field_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">field_names</span> <span class="o">=</span> <span class="n">D3R_FIELD_NAMES</span>
-    <span class="n">filemetadata</span> <span class="o">=</span> <span class="n">FileMetadata</span><span class="p">(</span><span class="s1">&#39;cfradial&#39;</span><span class="p">,</span> <span class="n">field_names</span><span class="p">,</span> <span class="n">additional_metadata</span><span class="p">,</span>
-                                <span class="n">file_field_names</span><span class="p">,</span> <span class="n">exclude_fields</span><span class="p">,</span>
-                                <span class="n">include_fields</span><span class="p">)</span>
+    <span class="n">filemetadata</span> <span class="o">=</span> <span class="n">FileMetadata</span><span class="p">(</span>
+        <span class="s2">&quot;cfradial&quot;</span><span class="p">,</span>
+        <span class="n">field_names</span><span class="p">,</span>
+        <span class="n">additional_metadata</span><span class="p">,</span>
+        <span class="n">file_field_names</span><span class="p">,</span>
+        <span class="n">exclude_fields</span><span class="p">,</span>
+        <span class="n">include_fields</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># read the data</span>
     <span class="n">ncobj</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
@@ -324,94 +335,92 @@
     <span class="n">nsweeps</span> <span class="o">=</span> <span class="mi">1</span>
 
     <span class="c1"># latitude, longitude and altitude</span>
-    <span class="n">latitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;latitude&#39;</span><span class="p">)</span>
-    <span class="n">longitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;longitude&#39;</span><span class="p">)</span>
-    <span class="n">altitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;altitude&#39;</span><span class="p">)</span>
+    <span class="n">latitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;latitude&quot;</span><span class="p">)</span>
+    <span class="n">longitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;longitude&quot;</span><span class="p">)</span>
+    <span class="n">altitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;altitude&quot;</span><span class="p">)</span>
 
-    <span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ncobj</span><span class="o">.</span><span class="n">Latitude</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
-    <span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ncobj</span><span class="o">.</span><span class="n">Longitude</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
-    <span class="n">altitude_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">ncobj</span><span class="o">.</span><span class="n">Altitude</span><span class="p">]</span> <span class="k">if</span> <span class="n">read_altitude_from_nc</span> <span class="k">else</span> <span class="p">[</span><span class="mf">295.</span><span class="p">]</span>
-    <span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">altitude_list</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+    <span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ncobj</span><span class="o">.</span><span class="n">Latitude</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ncobj</span><span class="o">.</span><span class="n">Longitude</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="n">altitude_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">ncobj</span><span class="o">.</span><span class="n">Altitude</span><span class="p">]</span> <span class="k">if</span> <span class="n">read_altitude_from_nc</span> <span class="k">else</span> <span class="p">[</span><span class="mf">295.0</span><span class="p">]</span>
+    <span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">altitude_list</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
 
     <span class="c1"># metadata</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;metadata&#39;</span><span class="p">)</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Colorado State EE - chandrasekar&quot;</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;original_container&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;D3R_gcpex_nc&#39;</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;nc_conventions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">NetCDFRevision</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">)</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Colorado State EE - chandrasekar&quot;</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;original_container&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;D3R_gcpex_nc&quot;</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;nc_conventions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">NetCDFRevision</span>
 
-    <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">NetCDFRevision</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;source&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Chandra&quot;</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">NetCDFRevision</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Chandra&quot;</span>
 
-    <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;system&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">RadarName</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;software&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">NetCDFRevision</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;sw_version&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">NetCDFRevision</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;system&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">RadarName</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;software&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">NetCDFRevision</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;sw_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">NetCDFRevision</span>
 
     <span class="c1"># sweep_start_ray_index, sweep_end_ray_index</span>
-    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_start_ray_index&#39;</span><span class="p">)</span>
-    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_end_ray_index&#39;</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_start_ray_index&quot;</span><span class="p">)</span>
+    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_end_ray_index&quot;</span><span class="p">)</span>
 
-    <span class="n">rays_per_sweep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;Azimuth&#39;</span><span class="p">][:])</span>
-    <span class="n">ssri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">rays_per_sweep</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
-    <span class="n">seri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">rays_per_sweep</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ssri</span>
-    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">seri</span>
+    <span class="n">rays_per_sweep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;Azimuth&quot;</span><span class="p">][:])</span>
+    <span class="n">ssri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">rays_per_sweep</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+    <span class="n">seri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">rays_per_sweep</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ssri</span>
+    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">seri</span>
 
     <span class="c1"># sweep_number</span>
-    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_number&#39;</span><span class="p">)</span>
-    <span class="n">sweep_number</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_number&quot;</span><span class="p">)</span>
+    <span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
 
     <span class="c1"># sweep_mode</span>
-    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_mode&#39;</span><span class="p">)</span>
-    <span class="n">sweep_mode</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s1">&#39;azimuth_surveillance&#39;</span><span class="p">])</span>
+    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_mode&quot;</span><span class="p">)</span>
+    <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s2">&quot;azimuth_surveillance&quot;</span><span class="p">])</span>
 
     <span class="c1"># scan_type</span>
     <span class="k">if</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">ScanType</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">scan_type</span> <span class="o">=</span> <span class="s1">&#39;ppi&#39;</span>
+        <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">&quot;ppi&quot;</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">scan_type</span> <span class="o">=</span> <span class="s1">&#39;rhi&#39;</span>
+        <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">&quot;rhi&quot;</span>
 
     <span class="c1"># fixed_angle</span>
-    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;fixed_angle&#39;</span><span class="p">)</span>
+    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;fixed_angle&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">ScanType</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">sweep_el</span> <span class="o">=</span> <span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;Elevation&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">sweep_el</span> <span class="o">=</span> <span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;Elevation&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">sweep_el</span> <span class="o">=</span> <span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;Azimuth&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sweep_el</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+        <span class="n">sweep_el</span> <span class="o">=</span> <span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;Azimuth&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">sweep_el</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
 
     <span class="c1"># elevation</span>
-    <span class="n">elevation</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;elevation&#39;</span><span class="p">)</span>
-    <span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;Elevation&#39;</span><span class="p">]</span>
+    <span class="n">elevation</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;elevation&quot;</span><span class="p">)</span>
+    <span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;Elevation&quot;</span><span class="p">]</span>
 
     <span class="c1"># range</span>
-    <span class="n">_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;range&#39;</span><span class="p">)</span>
+    <span class="n">_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">)</span>
     <span class="c1"># check that the gate spacing is constant between sweeps</span>
-    <span class="n">rstart</span> <span class="o">=</span> <span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;StartRange&#39;</span><span class="p">][:]</span>
+    <span class="n">rstart</span> <span class="o">=</span> <span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;StartRange&quot;</span><span class="p">][:]</span>
     <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">rstart</span> <span class="o">!=</span> <span class="n">rstart</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;range start changes between sweeps&#39;</span><span class="p">)</span>
-    <span class="n">rscale</span> <span class="o">=</span> <span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;GateWidth&#39;</span><span class="p">][:]</span><span class="o">/</span><span class="mf">1000.</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;range start changes between sweeps&quot;</span><span class="p">)</span>
+    <span class="n">rscale</span> <span class="o">=</span> <span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;GateWidth&quot;</span><span class="p">][:]</span> <span class="o">/</span> <span class="mf">1000.0</span>
     <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">rscale</span> <span class="o">!=</span> <span class="n">rscale</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;range scale changes between sweeps&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;range scale changes between sweeps&quot;</span><span class="p">)</span>
 
     <span class="n">nbins</span> <span class="o">=</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">NumGates</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbins</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="n">rscale</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span>
-                      <span class="n">rstart</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.</span><span class="p">)</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;meters_to_center_of_first_gate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rstart</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;meters_between_gates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rscale</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbins</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">rscale</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">rstart</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.0</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;meters_to_center_of_first_gate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rstart</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;meters_between_gates&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rscale</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="c1"># azimuth</span>
-    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;azimuth&#39;</span><span class="p">)</span>
-    <span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;Azimuth&#39;</span><span class="p">][:]</span>
+    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;azimuth&quot;</span><span class="p">)</span>
+    <span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;Azimuth&quot;</span><span class="p">][:]</span>
 
     <span class="c1"># time</span>
-    <span class="n">_time</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+    <span class="n">_time</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
     <span class="n">start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">ncobj</span><span class="o">.</span><span class="n">Time</span><span class="p">)</span>
-    <span class="n">_time</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_time_unit_str</span><span class="p">(</span><span class="n">start_time</span><span class="p">)</span>
-    <span class="n">_time</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">]</span><span class="o">-</span><span class="n">ncobj</span><span class="o">.</span><span class="n">Time</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+    <span class="n">_time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_time_unit_str</span><span class="p">(</span><span class="n">start_time</span><span class="p">)</span>
+    <span class="n">_time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;Time&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">Time</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
 
     <span class="c1"># fields</span>
     <span class="c1"># all variables with dimensions of &#39;Radial&#39;, &#39;Gate&#39; are fields</span>
-    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ncvars</span><span class="o">.</span><span class="n">items</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">==</span> <span class="p">(</span><span class="s1">&#39;Radial&#39;</span><span class="p">,</span> <span class="s1">&#39;Gate&#39;</span><span class="p">)]</span>
+    <span class="n">keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ncvars</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">dimensions</span> <span class="o">==</span> <span class="p">(</span><span class="s2">&quot;Radial&quot;</span><span class="p">,</span> <span class="s2">&quot;Gate&quot;</span><span class="p">)]</span>
 
     <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">keys</span><span class="p">:</span>
@@ -420,7 +429,7 @@
             <span class="k">if</span> <span class="n">exclude_fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">exclude_fields</span><span class="p">:</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="n">include_fields</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">include_fields</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">include_fields</span><span class="p">:</span>
                     <span class="k">continue</span>
             <span class="n">field_name</span> <span class="o">=</span> <span class="n">key</span>
         <span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
@@ -429,25 +438,39 @@
     <span class="n">instrument_parameters</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">return</span> <span class="n">Radar</span><span class="p">(</span>
-        <span class="n">_time</span><span class="p">,</span> <span class="n">_range</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">scan_type</span><span class="p">,</span>
-        <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">altitude</span><span class="p">,</span>
-        <span class="n">sweep_number</span><span class="p">,</span> <span class="n">sweep_mode</span><span class="p">,</span> <span class="n">fixed_angle</span><span class="p">,</span> <span class="n">sweep_start_ray_index</span><span class="p">,</span>
+        <span class="n">_time</span><span class="p">,</span>
+        <span class="n">_range</span><span class="p">,</span>
+        <span class="n">fields</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="p">,</span>
+        <span class="n">scan_type</span><span class="p">,</span>
+        <span class="n">latitude</span><span class="p">,</span>
+        <span class="n">longitude</span><span class="p">,</span>
+        <span class="n">altitude</span><span class="p">,</span>
+        <span class="n">sweep_number</span><span class="p">,</span>
+        <span class="n">sweep_mode</span><span class="p">,</span>
+        <span class="n">fixed_angle</span><span class="p">,</span>
+        <span class="n">sweep_start_ray_index</span><span class="p">,</span>
         <span class="n">sweep_end_ray_index</span><span class="p">,</span>
-        <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span>
-        <span class="n">instrument_parameters</span><span class="o">=</span><span class="n">instrument_parameters</span><span class="p">)</span></div>
+        <span class="n">azimuth</span><span class="p">,</span>
+        <span class="n">elevation</span><span class="p">,</span>
+        <span class="n">instrument_parameters</span><span class="o">=</span><span class="n">instrument_parameters</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_ncvar_to_dict</span><span class="p">(</span><span class="n">ncvar</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Convert a NetCDF Dataset variable to a dictionary. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert a NetCDF Dataset variable to a dictionary.&quot;&quot;&quot;</span>
     <span class="c1"># copy all attribute except for scaling parameters</span>
-    <span class="n">d</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">k</span><span class="p">,</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ncvar</span><span class="p">,</span> <span class="n">k</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ncvar</span><span class="o">.</span><span class="n">ncattrs</span><span class="p">()</span>
-             <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;scale_factor&#39;</span><span class="p">,</span> <span class="s1">&#39;add_offset&#39;</span><span class="p">])</span>
-    <span class="n">d</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ncvar</span><span class="p">[:]</span>
-    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]):</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">k</span><span class="p">:</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">ncvar</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">ncvar</span><span class="o">.</span><span class="n">ncattrs</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;scale_factor&quot;</span><span class="p">,</span> <span class="s2">&quot;add_offset&quot;</span><span class="p">]</span>
+    <span class="p">}</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ncvar</span><span class="p">[:]</span>
+    <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]):</span>
         <span class="c1"># netCDF4 1.1.0+ returns a scalar for 0-dim array, we always want</span>
         <span class="c1"># 1-dim+ arrays with a valid shape.</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-        <span class="n">d</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="p">)</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,)</span>
     <span class="k">return</span> <span class="n">d</span>
 </pre></div>
 <div class="section">

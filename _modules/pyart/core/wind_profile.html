@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.core.wind_profile &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.core.wind_profile &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -227,8 +227,8 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="HorizontalWindProfile"><a class="viewcode-back" href="../../../API/generated/pyart.core.HorizontalWindProfile.html#pyart.core.HorizontalWindProfile">[docs]</a><span class="k">class</span> <span class="nc">HorizontalWindProfile</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="HorizontalWindProfile"><a class="viewcode-back" href="../../../API/generated/pyart.core.HorizontalWindProfile.html#pyart.core.HorizontalWindProfile">[docs]</a><span class="k">class</span> <span class="nc">HorizontalWindProfile</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Horizontal wind profile.</span>
 
 <span class="sd">    Parameters</span>
@@ -264,9 +264,8 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">latitude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">longitude</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; initialize &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">latitude</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">longitude</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;initialize&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">height</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">speed</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">height</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">direction</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Wind parameters must have the same length.&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">height</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asanyarray</span><span class="p">(</span><span class="n">height</span><span class="p">)</span>
@@ -276,7 +275,7 @@
 
 <div class="viewcode-block" id="HorizontalWindProfile.from_u_and_v"><a class="viewcode-back" href="../../../API/generated/pyart.core.HorizontalWindProfile.from_u_and_v.html#pyart.core.HorizontalWindProfile.from_u_and_v">[docs]</a>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">from_u_and_v</span><span class="p">(</span><span class="bp">cls</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">u_wind</span><span class="p">,</span> <span class="n">v_wind</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a HorizontalWindProfile instance from U and V components.</span>
 
 <span class="sd">        Parameters</span>
@@ -292,34 +291,34 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">u_wind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asanyarray</span><span class="p">(</span><span class="n">u_wind</span><span class="p">)</span>
         <span class="n">v_wind</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asanyarray</span><span class="p">(</span><span class="n">v_wind</span><span class="p">)</span>
-        <span class="n">speed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u_wind</span><span class="o">*</span><span class="n">u_wind</span> <span class="o">+</span> <span class="n">v_wind</span><span class="o">*</span><span class="n">v_wind</span><span class="p">)</span>
+        <span class="n">speed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">u_wind</span> <span class="o">*</span> <span class="n">u_wind</span> <span class="o">+</span> <span class="n">v_wind</span> <span class="o">*</span> <span class="n">v_wind</span><span class="p">)</span>
         <span class="n">direction</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="o">-</span><span class="n">u_wind</span><span class="p">,</span> <span class="o">-</span><span class="n">v_wind</span><span class="p">))</span>
         <span class="n">direction</span><span class="p">[</span><span class="n">direction</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">360</span>
         <span class="k">return</span> <span class="bp">cls</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">u_wind</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; U component of horizontal wind in meters per second. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;U component of horizontal wind in meters per second.&quot;&quot;&quot;</span>
         <span class="c1"># U = -sin(direction) * speed</span>
         <span class="n">u_wind</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span>
         <span class="k">return</span> <span class="n">u_wind</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">v_wind</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; V component of horizontal wind in meters per second. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;V component of horizontal wind in meters per second.&quot;&quot;&quot;</span>
         <span class="c1"># V = -cos(direction) * speed</span>
         <span class="n">v_wind</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">direction</span><span class="p">))</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">speed</span>
         <span class="k">return</span> <span class="n">v_wind</span>
 
     <span class="k">def</span> <span class="nf">_parse_location_data</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Parse profile location data. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse profile location data.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">latitude</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">latitude</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Latitude data must have same length.&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Latitude data must have same length.&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">latitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asanyarray</span><span class="p">(</span><span class="n">latitude</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">longitude</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">height</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">longitude</span><span class="p">):</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Longitude data must have same length.&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Longitude data must have same length.&quot;</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">longitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asanyarray</span><span class="p">(</span><span class="n">longitude</span><span class="p">)</span></div>
 </pre></div>
 <div class="section">

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -227,16 +227,24 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">._echo_class</span> <span class="kn">import</span> <span class="n">steiner_class_buff</span><span class="p">,</span> <span class="n">_revised_conv_strat</span>
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_metadata</span>
+<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
+<span class="kn">from</span> <span class="nn">._echo_class</span> <span class="kn">import</span> <span class="n">_revised_conv_strat</span><span class="p">,</span> <span class="n">steiner_class_buff</span>
 
 
-<div class="viewcode-block" id="steiner_conv_strat"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.steiner_conv_strat.html#pyart.retrieve.steiner_conv_strat">[docs]</a><span class="k">def</span> <span class="nf">steiner_conv_strat</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">intense</span><span class="o">=</span><span class="mf">42.0</span><span class="p">,</span>
-                       <span class="n">work_level</span><span class="o">=</span><span class="mf">3000.0</span><span class="p">,</span> <span class="n">peak_relation</span><span class="o">=</span><span class="s1">&#39;default&#39;</span><span class="p">,</span>
-                       <span class="n">area_relation</span><span class="o">=</span><span class="s1">&#39;medium&#39;</span><span class="p">,</span> <span class="n">bkg_rad</span><span class="o">=</span><span class="mf">11000.0</span><span class="p">,</span>
-                       <span class="n">use_intense</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="steiner_conv_strat"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.steiner_conv_strat.html#pyart.retrieve.steiner_conv_strat">[docs]</a><span class="k">def</span> <span class="nf">steiner_conv_strat</span><span class="p">(</span>
+    <span class="n">grid</span><span class="p">,</span>
+    <span class="n">dx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">dy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">intense</span><span class="o">=</span><span class="mf">42.0</span><span class="p">,</span>
+    <span class="n">work_level</span><span class="o">=</span><span class="mf">3000.0</span><span class="p">,</span>
+    <span class="n">peak_relation</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
+    <span class="n">area_relation</span><span class="o">=</span><span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+    <span class="n">bkg_rad</span><span class="o">=</span><span class="mf">11000.0</span><span class="p">,</span>
+    <span class="n">use_intense</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Partition reflectivity into convective-stratiform using the Steiner et</span>
 <span class="sd">    al. (1995) algorithm.</span>
 
@@ -290,50 +298,83 @@
 
     <span class="c1"># Parse field parameters</span>
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">)</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
 
     <span class="c1"># parse dx and dy</span>
     <span class="k">if</span> <span class="n">dx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">dx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">dy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">dy</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># Get coordinates</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-    <span class="n">z</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 
     <span class="c1"># Get reflectivity data</span>
-    <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+    <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
     <span class="n">ze</span> <span class="o">=</span> <span class="n">ze</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">NaN</span><span class="p">)</span>
 
-    <span class="n">eclass</span> <span class="o">=</span> <span class="n">steiner_class_buff</span><span class="p">(</span><span class="n">ze</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="o">=</span><span class="n">dy</span><span class="p">,</span> <span class="n">bkg_rad</span><span class="o">=</span><span class="n">bkg_rad</span><span class="p">,</span>
-                                <span class="n">work_level</span><span class="o">=</span><span class="n">work_level</span><span class="p">,</span> <span class="n">intense</span><span class="o">=</span><span class="n">intense</span><span class="p">,</span>
-                                <span class="n">peak_relation</span><span class="o">=</span><span class="n">peak_relation</span><span class="p">,</span>
-                                <span class="n">area_relation</span><span class="o">=</span><span class="n">area_relation</span><span class="p">,</span>
-                                <span class="n">use_intense</span><span class="o">=</span><span class="n">use_intense</span><span class="p">,</span> <span class="p">)</span>
+    <span class="n">eclass</span> <span class="o">=</span> <span class="n">steiner_class_buff</span><span class="p">(</span>
+        <span class="n">ze</span><span class="p">,</span>
+        <span class="n">x</span><span class="p">,</span>
+        <span class="n">y</span><span class="p">,</span>
+        <span class="n">z</span><span class="p">,</span>
+        <span class="n">dx</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span>
+        <span class="n">dy</span><span class="o">=</span><span class="n">dy</span><span class="p">,</span>
+        <span class="n">bkg_rad</span><span class="o">=</span><span class="n">bkg_rad</span><span class="p">,</span>
+        <span class="n">work_level</span><span class="o">=</span><span class="n">work_level</span><span class="p">,</span>
+        <span class="n">intense</span><span class="o">=</span><span class="n">intense</span><span class="p">,</span>
+        <span class="n">peak_relation</span><span class="o">=</span><span class="n">peak_relation</span><span class="p">,</span>
+        <span class="n">area_relation</span><span class="o">=</span><span class="n">area_relation</span><span class="p">,</span>
+        <span class="n">use_intense</span><span class="o">=</span><span class="n">use_intense</span><span class="p">,</span>
+    <span class="p">)</span>
 
-    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">eclass</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
-            <span class="s1">&#39;standard_name&#39;</span><span class="p">:</span> <span class="s1">&#39;echo_classification&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Steiner echo classification&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;valid_min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s1">&#39;valid_max&#39;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-            <span class="s1">&#39;comment_1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;Convective-stratiform echo &#39;</span>
-                          <span class="s1">&#39;classification based on &#39;</span>
-                          <span class="s1">&#39;Steiner et al. (1995)&#39;</span><span class="p">),</span>
-            <span class="s1">&#39;comment_2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;0 = Undefined, 1 = Stratiform, &#39;</span>
-                          <span class="s1">&#39;2 = Convective&#39;</span><span class="p">)}</span></div>
+    <span class="k">return</span> <span class="p">{</span>
+        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">eclass</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+        <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;echo_classification&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Steiner echo classification&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;valid_min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;valid_max&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">&quot;comment_1&quot;</span><span class="p">:</span> <span class="p">(</span>
+            <span class="s2">&quot;Convective-stratiform echo &quot;</span>
+            <span class="s2">&quot;classification based on &quot;</span>
+            <span class="s2">&quot;Steiner et al. (1995)&quot;</span>
+        <span class="p">),</span>
+        <span class="s2">&quot;comment_2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;0 = Undefined, 1 = Stratiform, &quot;</span> <span class="s2">&quot;2 = Convective&quot;</span><span class="p">),</span>
+    <span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="conv_strat_yuter"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.conv_strat_yuter.html#pyart.retrieve.conv_strat_yuter">[docs]</a><span class="k">def</span> <span class="nf">conv_strat_yuter</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">dx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">level_m</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">always_core_thres</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span> <span class="n">bkg_rad_km</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
-               <span class="n">use_cosine</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_diff</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">zero_diff_cos_val</span><span class="o">=</span><span class="mi">55</span><span class="p">,</span>
-               <span class="n">scalar_diff</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">use_addition</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">calc_thres</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span>
-               <span class="n">weak_echo_thres</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">min_dBZ_used</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">dB_averaging</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-               <span class="n">remove_small_objects</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">min_km2_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-               <span class="n">val_for_max_conv_rad</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">max_conv_rad_km</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
-               <span class="n">cs_core</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">nosfcecho</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">weakecho</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">conv</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-               <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">estimate_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">estimate_offset</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="conv_strat_yuter"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.conv_strat_yuter.html#pyart.retrieve.conv_strat_yuter">[docs]</a><span class="k">def</span> <span class="nf">conv_strat_yuter</span><span class="p">(</span>
+    <span class="n">grid</span><span class="p">,</span>
+    <span class="n">dx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">dy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">level_m</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">always_core_thres</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="n">bkg_rad_km</span><span class="o">=</span><span class="mi">11</span><span class="p">,</span>
+    <span class="n">use_cosine</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">max_diff</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">zero_diff_cos_val</span><span class="o">=</span><span class="mi">55</span><span class="p">,</span>
+    <span class="n">scalar_diff</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+    <span class="n">use_addition</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">calc_thres</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span>
+    <span class="n">weak_echo_thres</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+    <span class="n">min_dBZ_used</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+    <span class="n">dB_averaging</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">remove_small_objects</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">min_km2_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="n">val_for_max_conv_rad</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+    <span class="n">max_conv_rad_km</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+    <span class="n">cs_core</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">nosfcecho</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">weakecho</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">sf</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">conv</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">estimate_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">estimate_offset</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Partition reflectivity into convective-stratiform using the Yuter et al. (2005)</span>
 <span class="sd">    and Yuter and Houze (1997) algorithm.</span>
 
@@ -431,113 +472,184 @@
 
     <span class="c1"># Parse field parameters</span>
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">)</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
         <span class="n">dB_averaging</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="c1"># parse dx and dy if None</span>
     <span class="k">if</span> <span class="n">dx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">dx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">dy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">dy</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># add catch for background radius size</span>
     <span class="k">if</span> <span class="n">bkg_rad_km</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">dx</span> <span class="ow">or</span> <span class="n">bkg_rad_km</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">dy</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Background radius for averaging must be at least 2 times dx and dy, exiting&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="s2">&quot;Background radius for averaging must be at least 2 times dx and dy, exiting&quot;</span>
+        <span class="p">)</span>
         <span class="k">raise</span>
 
     <span class="c1"># Get coordinates</span>
-    <span class="n">z</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 
     <span class="c1"># Get reflectivity data at desired level</span>
     <span class="k">if</span> <span class="n">level_m</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
+            <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][:,</span> <span class="p">:])</span>
+            <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][:,</span> <span class="p">:])</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">zslice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="n">level_m</span><span class="p">))</span>
-        <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">zslice</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
+        <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">zslice</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
 
     <span class="c1"># run convective stratiform algorithm</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">convsf_best</span> <span class="o">=</span> <span class="n">_revised_conv_strat</span><span class="p">(</span><span class="n">ze</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">always_core_thres</span><span class="o">=</span><span class="n">always_core_thres</span><span class="p">,</span> <span class="n">bkg_rad_km</span><span class="o">=</span><span class="n">bkg_rad_km</span><span class="p">,</span>
-                                            <span class="n">use_cosine</span><span class="o">=</span><span class="n">use_cosine</span><span class="p">,</span> <span class="n">max_diff</span><span class="o">=</span><span class="n">max_diff</span><span class="p">,</span>
-                                            <span class="n">zero_diff_cos_val</span><span class="o">=</span><span class="n">zero_diff_cos_val</span><span class="p">,</span> <span class="n">scalar_diff</span><span class="o">=</span><span class="n">scalar_diff</span><span class="p">,</span>
-                                            <span class="n">use_addition</span><span class="o">=</span><span class="n">use_addition</span><span class="p">,</span> <span class="n">calc_thres</span><span class="o">=</span><span class="n">calc_thres</span><span class="p">,</span>
-                                            <span class="n">weak_echo_thres</span><span class="o">=</span><span class="n">weak_echo_thres</span><span class="p">,</span> <span class="n">min_dBZ_used</span><span class="o">=</span><span class="n">min_dBZ_used</span><span class="p">,</span>
-                                            <span class="n">dB_averaging</span><span class="o">=</span><span class="n">dB_averaging</span><span class="p">,</span> <span class="n">remove_small_objects</span><span class="o">=</span><span class="n">remove_small_objects</span><span class="p">,</span>
-                                            <span class="n">min_km2_size</span><span class="o">=</span><span class="n">min_km2_size</span><span class="p">,</span> <span class="n">val_for_max_conv_rad</span><span class="o">=</span><span class="n">val_for_max_conv_rad</span><span class="p">,</span>
-                                            <span class="n">max_conv_rad_km</span><span class="o">=</span><span class="n">max_conv_rad_km</span><span class="p">,</span> <span class="n">cs_core</span><span class="o">=</span><span class="n">cs_core</span><span class="p">,</span> <span class="n">nosfcecho</span><span class="o">=</span><span class="n">nosfcecho</span><span class="p">,</span>
-                                            <span class="n">weakecho</span><span class="o">=</span><span class="n">weakecho</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">conv</span><span class="o">=</span><span class="n">conv</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">convsf_best</span> <span class="o">=</span> <span class="n">_revised_conv_strat</span><span class="p">(</span>
+        <span class="n">ze</span><span class="p">,</span>
+        <span class="n">dx</span><span class="p">,</span>
+        <span class="n">dy</span><span class="p">,</span>
+        <span class="n">always_core_thres</span><span class="o">=</span><span class="n">always_core_thres</span><span class="p">,</span>
+        <span class="n">bkg_rad_km</span><span class="o">=</span><span class="n">bkg_rad_km</span><span class="p">,</span>
+        <span class="n">use_cosine</span><span class="o">=</span><span class="n">use_cosine</span><span class="p">,</span>
+        <span class="n">max_diff</span><span class="o">=</span><span class="n">max_diff</span><span class="p">,</span>
+        <span class="n">zero_diff_cos_val</span><span class="o">=</span><span class="n">zero_diff_cos_val</span><span class="p">,</span>
+        <span class="n">scalar_diff</span><span class="o">=</span><span class="n">scalar_diff</span><span class="p">,</span>
+        <span class="n">use_addition</span><span class="o">=</span><span class="n">use_addition</span><span class="p">,</span>
+        <span class="n">calc_thres</span><span class="o">=</span><span class="n">calc_thres</span><span class="p">,</span>
+        <span class="n">weak_echo_thres</span><span class="o">=</span><span class="n">weak_echo_thres</span><span class="p">,</span>
+        <span class="n">min_dBZ_used</span><span class="o">=</span><span class="n">min_dBZ_used</span><span class="p">,</span>
+        <span class="n">dB_averaging</span><span class="o">=</span><span class="n">dB_averaging</span><span class="p">,</span>
+        <span class="n">remove_small_objects</span><span class="o">=</span><span class="n">remove_small_objects</span><span class="p">,</span>
+        <span class="n">min_km2_size</span><span class="o">=</span><span class="n">min_km2_size</span><span class="p">,</span>
+        <span class="n">val_for_max_conv_rad</span><span class="o">=</span><span class="n">val_for_max_conv_rad</span><span class="p">,</span>
+        <span class="n">max_conv_rad_km</span><span class="o">=</span><span class="n">max_conv_rad_km</span><span class="p">,</span>
+        <span class="n">cs_core</span><span class="o">=</span><span class="n">cs_core</span><span class="p">,</span>
+        <span class="n">nosfcecho</span><span class="o">=</span><span class="n">nosfcecho</span><span class="p">,</span>
+        <span class="n">weakecho</span><span class="o">=</span><span class="n">weakecho</span><span class="p">,</span>
+        <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span>
+        <span class="n">conv</span><span class="o">=</span><span class="n">conv</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># put data into a dictionary to be added as a field</span>
-    <span class="n">convsf_dict</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;convsf&#39;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">convsf_best</span><span class="p">,</span>
-        <span class="s1">&#39;standard_name&#39;</span><span class="p">:</span> <span class="s1">&#39;convsf&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Convective stratiform classification&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;valid_min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s1">&#39;valid_max&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-        <span class="s1">&#39;comment_1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;Convective-stratiform echo &#39;</span>
-                      <span class="s1">&#39;classification based on &#39;</span>
-                      <span class="s1">&#39;Yuter and Houze (1997) and Yuter et al. (2005)&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;comment_2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;0 = No surface echo/Undefined, 1 = Stratiform, &#39;</span>
-                      <span class="s1">&#39;2 = Convective, 3 = weak echo&#39;</span><span class="p">)}}</span>
+    <span class="n">convsf_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;convsf&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">convsf_best</span><span class="p">,</span>
+            <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;convsf&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Convective stratiform classification&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;valid_min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;valid_max&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="s2">&quot;comment_1&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">&quot;Convective-stratiform echo &quot;</span>
+                <span class="s2">&quot;classification based on &quot;</span>
+                <span class="s2">&quot;Yuter and Houze (1997) and Yuter et al. (2005)&quot;</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;comment_2&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">&quot;0 = No surface echo/Undefined, 1 = Stratiform, &quot;</span>
+                <span class="s2">&quot;2 = Convective, 3 = weak echo&quot;</span>
+            <span class="p">),</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
 
     <span class="c1"># If estimation is True, run the algorithm on the field with offset subtracted and the field with the offset added</span>
     <span class="k">if</span> <span class="n">estimate_flag</span><span class="p">:</span>
-        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">convsf_under</span> <span class="o">=</span> <span class="n">_revised_conv_strat</span><span class="p">(</span><span class="n">ze</span> <span class="o">-</span> <span class="n">estimate_offset</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">always_core_thres</span><span class="o">=</span><span class="n">always_core_thres</span><span class="p">,</span>
-                                                 <span class="n">bkg_rad_km</span><span class="o">=</span><span class="n">bkg_rad_km</span><span class="p">,</span> <span class="n">use_cosine</span><span class="o">=</span><span class="n">use_cosine</span><span class="p">,</span> <span class="n">max_diff</span><span class="o">=</span><span class="n">max_diff</span><span class="p">,</span>
-                                                 <span class="n">zero_diff_cos_val</span><span class="o">=</span><span class="n">zero_diff_cos_val</span><span class="p">,</span> <span class="n">scalar_diff</span><span class="o">=</span><span class="n">scalar_diff</span><span class="p">,</span>
-                                                 <span class="n">use_addition</span><span class="o">=</span><span class="n">use_addition</span><span class="p">,</span> <span class="n">calc_thres</span><span class="o">=</span><span class="n">calc_thres</span><span class="p">,</span>
-                                                 <span class="n">weak_echo_thres</span><span class="o">=</span><span class="n">weak_echo_thres</span><span class="p">,</span> <span class="n">min_dBZ_used</span><span class="o">=</span><span class="n">min_dBZ_used</span><span class="p">,</span>
-                                                 <span class="n">dB_averaging</span><span class="o">=</span><span class="n">dB_averaging</span><span class="p">,</span> <span class="n">remove_small_objects</span><span class="o">=</span><span class="n">remove_small_objects</span><span class="p">,</span>
-                                                 <span class="n">min_km2_size</span><span class="o">=</span><span class="n">min_km2_size</span><span class="p">,</span> <span class="n">val_for_max_conv_rad</span><span class="o">=</span><span class="n">val_for_max_conv_rad</span><span class="p">,</span>
-                                                 <span class="n">max_conv_rad_km</span><span class="o">=</span><span class="n">max_conv_rad_km</span><span class="p">,</span> <span class="n">cs_core</span><span class="o">=</span><span class="n">cs_core</span><span class="p">,</span> <span class="n">nosfcecho</span><span class="o">=</span><span class="n">nosfcecho</span><span class="p">,</span>
-                                                 <span class="n">weakecho</span><span class="o">=</span><span class="n">weakecho</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">conv</span><span class="o">=</span><span class="n">conv</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">convsf_under</span> <span class="o">=</span> <span class="n">_revised_conv_strat</span><span class="p">(</span>
+            <span class="n">ze</span> <span class="o">-</span> <span class="n">estimate_offset</span><span class="p">,</span>
+            <span class="n">dx</span><span class="p">,</span>
+            <span class="n">dy</span><span class="p">,</span>
+            <span class="n">always_core_thres</span><span class="o">=</span><span class="n">always_core_thres</span><span class="p">,</span>
+            <span class="n">bkg_rad_km</span><span class="o">=</span><span class="n">bkg_rad_km</span><span class="p">,</span>
+            <span class="n">use_cosine</span><span class="o">=</span><span class="n">use_cosine</span><span class="p">,</span>
+            <span class="n">max_diff</span><span class="o">=</span><span class="n">max_diff</span><span class="p">,</span>
+            <span class="n">zero_diff_cos_val</span><span class="o">=</span><span class="n">zero_diff_cos_val</span><span class="p">,</span>
+            <span class="n">scalar_diff</span><span class="o">=</span><span class="n">scalar_diff</span><span class="p">,</span>
+            <span class="n">use_addition</span><span class="o">=</span><span class="n">use_addition</span><span class="p">,</span>
+            <span class="n">calc_thres</span><span class="o">=</span><span class="n">calc_thres</span><span class="p">,</span>
+            <span class="n">weak_echo_thres</span><span class="o">=</span><span class="n">weak_echo_thres</span><span class="p">,</span>
+            <span class="n">min_dBZ_used</span><span class="o">=</span><span class="n">min_dBZ_used</span><span class="p">,</span>
+            <span class="n">dB_averaging</span><span class="o">=</span><span class="n">dB_averaging</span><span class="p">,</span>
+            <span class="n">remove_small_objects</span><span class="o">=</span><span class="n">remove_small_objects</span><span class="p">,</span>
+            <span class="n">min_km2_size</span><span class="o">=</span><span class="n">min_km2_size</span><span class="p">,</span>
+            <span class="n">val_for_max_conv_rad</span><span class="o">=</span><span class="n">val_for_max_conv_rad</span><span class="p">,</span>
+            <span class="n">max_conv_rad_km</span><span class="o">=</span><span class="n">max_conv_rad_km</span><span class="p">,</span>
+            <span class="n">cs_core</span><span class="o">=</span><span class="n">cs_core</span><span class="p">,</span>
+            <span class="n">nosfcecho</span><span class="o">=</span><span class="n">nosfcecho</span><span class="p">,</span>
+            <span class="n">weakecho</span><span class="o">=</span><span class="n">weakecho</span><span class="p">,</span>
+            <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span>
+            <span class="n">conv</span><span class="o">=</span><span class="n">conv</span><span class="p">,</span>
+        <span class="p">)</span>
 
-        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">convsf_over</span> <span class="o">=</span> <span class="n">_revised_conv_strat</span><span class="p">(</span><span class="n">ze</span> <span class="o">+</span> <span class="n">estimate_offset</span><span class="p">,</span> <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span><span class="p">,</span> <span class="n">always_core_thres</span><span class="o">=</span><span class="n">always_core_thres</span><span class="p">,</span>
-                                                <span class="n">bkg_rad_km</span><span class="o">=</span><span class="n">bkg_rad_km</span><span class="p">,</span> <span class="n">use_cosine</span><span class="o">=</span><span class="n">use_cosine</span><span class="p">,</span> <span class="n">max_diff</span><span class="o">=</span><span class="n">max_diff</span><span class="p">,</span>
-                                                <span class="n">zero_diff_cos_val</span><span class="o">=</span><span class="n">zero_diff_cos_val</span><span class="p">,</span> <span class="n">scalar_diff</span><span class="o">=</span><span class="n">scalar_diff</span><span class="p">,</span>
-                                                <span class="n">use_addition</span><span class="o">=</span><span class="n">use_addition</span><span class="p">,</span> <span class="n">calc_thres</span><span class="o">=</span><span class="n">calc_thres</span><span class="p">,</span>
-                                                <span class="n">weak_echo_thres</span><span class="o">=</span><span class="n">weak_echo_thres</span><span class="p">,</span> <span class="n">min_dBZ_used</span><span class="o">=</span><span class="n">min_dBZ_used</span><span class="p">,</span>
-                                                <span class="n">dB_averaging</span><span class="o">=</span><span class="n">dB_averaging</span><span class="p">,</span> <span class="n">remove_small_objects</span><span class="o">=</span><span class="n">remove_small_objects</span><span class="p">,</span>
-                                                <span class="n">min_km2_size</span><span class="o">=</span><span class="n">min_km2_size</span><span class="p">,</span> <span class="n">val_for_max_conv_rad</span><span class="o">=</span><span class="n">val_for_max_conv_rad</span><span class="p">,</span>
-                                                <span class="n">max_conv_rad_km</span><span class="o">=</span><span class="n">max_conv_rad_km</span><span class="p">,</span> <span class="n">cs_core</span><span class="o">=</span><span class="n">cs_core</span><span class="p">,</span> <span class="n">nosfcecho</span><span class="o">=</span><span class="n">nosfcecho</span><span class="p">,</span>
-                                                <span class="n">weakecho</span><span class="o">=</span><span class="n">weakecho</span><span class="p">,</span> <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span> <span class="n">conv</span><span class="o">=</span><span class="n">conv</span><span class="p">)</span>
+        <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">convsf_over</span> <span class="o">=</span> <span class="n">_revised_conv_strat</span><span class="p">(</span>
+            <span class="n">ze</span> <span class="o">+</span> <span class="n">estimate_offset</span><span class="p">,</span>
+            <span class="n">dx</span><span class="p">,</span>
+            <span class="n">dy</span><span class="p">,</span>
+            <span class="n">always_core_thres</span><span class="o">=</span><span class="n">always_core_thres</span><span class="p">,</span>
+            <span class="n">bkg_rad_km</span><span class="o">=</span><span class="n">bkg_rad_km</span><span class="p">,</span>
+            <span class="n">use_cosine</span><span class="o">=</span><span class="n">use_cosine</span><span class="p">,</span>
+            <span class="n">max_diff</span><span class="o">=</span><span class="n">max_diff</span><span class="p">,</span>
+            <span class="n">zero_diff_cos_val</span><span class="o">=</span><span class="n">zero_diff_cos_val</span><span class="p">,</span>
+            <span class="n">scalar_diff</span><span class="o">=</span><span class="n">scalar_diff</span><span class="p">,</span>
+            <span class="n">use_addition</span><span class="o">=</span><span class="n">use_addition</span><span class="p">,</span>
+            <span class="n">calc_thres</span><span class="o">=</span><span class="n">calc_thres</span><span class="p">,</span>
+            <span class="n">weak_echo_thres</span><span class="o">=</span><span class="n">weak_echo_thres</span><span class="p">,</span>
+            <span class="n">min_dBZ_used</span><span class="o">=</span><span class="n">min_dBZ_used</span><span class="p">,</span>
+            <span class="n">dB_averaging</span><span class="o">=</span><span class="n">dB_averaging</span><span class="p">,</span>
+            <span class="n">remove_small_objects</span><span class="o">=</span><span class="n">remove_small_objects</span><span class="p">,</span>
+            <span class="n">min_km2_size</span><span class="o">=</span><span class="n">min_km2_size</span><span class="p">,</span>
+            <span class="n">val_for_max_conv_rad</span><span class="o">=</span><span class="n">val_for_max_conv_rad</span><span class="p">,</span>
+            <span class="n">max_conv_rad_km</span><span class="o">=</span><span class="n">max_conv_rad_km</span><span class="p">,</span>
+            <span class="n">cs_core</span><span class="o">=</span><span class="n">cs_core</span><span class="p">,</span>
+            <span class="n">nosfcecho</span><span class="o">=</span><span class="n">nosfcecho</span><span class="p">,</span>
+            <span class="n">weakecho</span><span class="o">=</span><span class="n">weakecho</span><span class="p">,</span>
+            <span class="n">sf</span><span class="o">=</span><span class="n">sf</span><span class="p">,</span>
+            <span class="n">conv</span><span class="o">=</span><span class="n">conv</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># save into dictionaries</span>
-        <span class="n">convsf_dict</span><span class="p">[</span><span class="s1">&#39;convsf_under&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">convsf_under</span><span class="p">,</span>
-            <span class="s1">&#39;standard_name&#39;</span><span class="p">:</span> <span class="s1">&#39;convsf_under&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Convective stratiform classification (Underestimate)&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;valid_min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s1">&#39;valid_max&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-            <span class="s1">&#39;comment_1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;Convective-stratiform echo &#39;</span>
-                          <span class="s1">&#39;classification based on &#39;</span>
-                          <span class="s1">&#39;Yuter and Houze (1997) and Yuter et al. (2005)&#39;</span><span class="p">),</span>
-            <span class="s1">&#39;comment_2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;0 = Undefined, 1 = Stratiform, &#39;</span>
-                          <span class="s1">&#39;2 = Convective, 3 = weak echo&#39;</span><span class="p">)}</span>
+        <span class="n">convsf_dict</span><span class="p">[</span><span class="s2">&quot;convsf_under&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">convsf_under</span><span class="p">,</span>
+            <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;convsf_under&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Convective stratiform classification (Underestimate)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;valid_min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;valid_max&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="s2">&quot;comment_1&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">&quot;Convective-stratiform echo &quot;</span>
+                <span class="s2">&quot;classification based on &quot;</span>
+                <span class="s2">&quot;Yuter and Houze (1997) and Yuter et al. (2005)&quot;</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;comment_2&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">&quot;0 = Undefined, 1 = Stratiform, &quot;</span> <span class="s2">&quot;2 = Convective, 3 = weak echo&quot;</span>
+            <span class="p">),</span>
+        <span class="p">}</span>
 
-        <span class="n">convsf_dict</span><span class="p">[</span><span class="s1">&#39;convsf_over&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s1">&#39;data&#39;</span><span class="p">:</span> <span class="n">convsf_over</span><span class="p">,</span>
-            <span class="s1">&#39;standard_name&#39;</span><span class="p">:</span> <span class="s1">&#39;convsf_under&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;long_name&#39;</span><span class="p">:</span> <span class="s1">&#39;Convective stratiform classification (Overestimate)&#39;</span><span class="p">,</span>
-            <span class="s1">&#39;valid_min&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s1">&#39;valid_max&#39;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-            <span class="s1">&#39;comment_1&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;Convective-stratiform echo &#39;</span>
-                          <span class="s1">&#39;classification based on &#39;</span>
-                          <span class="s1">&#39;Yuter and Houze (1997)&#39;</span><span class="p">),</span>
-            <span class="s1">&#39;comment_2&#39;</span><span class="p">:</span> <span class="p">(</span><span class="s1">&#39;0 = Undefined, 1 = Stratiform, &#39;</span>
-                          <span class="s1">&#39;2 = Convective, 3 = weak echo&#39;</span><span class="p">)}</span>
+        <span class="n">convsf_dict</span><span class="p">[</span><span class="s2">&quot;convsf_over&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">convsf_over</span><span class="p">,</span>
+            <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;convsf_under&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Convective stratiform classification (Overestimate)&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;valid_min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;valid_max&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="s2">&quot;comment_1&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">&quot;Convective-stratiform echo &quot;</span>
+                <span class="s2">&quot;classification based on &quot;</span>
+                <span class="s2">&quot;Yuter and Houze (1997)&quot;</span>
+            <span class="p">),</span>
+            <span class="s2">&quot;comment_2&quot;</span><span class="p">:</span> <span class="p">(</span>
+                <span class="s2">&quot;0 = Undefined, 1 = Stratiform, &quot;</span> <span class="s2">&quot;2 = Convective, 3 = weak echo&quot;</span>
+            <span class="p">),</span>
+        <span class="p">}</span>
 
     <span class="k">return</span> <span class="n">convsf_dict</span></div>
 
 
-<div class="viewcode-block" id="hydroclass_semisupervised"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.hydroclass_semisupervised.html#pyart.retrieve.hydroclass_semisupervised">[docs]</a><span class="k">def</span> <span class="nf">hydroclass_semisupervised</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">mass_centers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                              <span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]),</span>
-                              <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rhv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                              <span class="n">kdp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">temp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                              <span class="n">hydro_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="hydroclass_semisupervised"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.hydroclass_semisupervised.html#pyart.retrieve.hydroclass_semisupervised">[docs]</a><span class="k">def</span> <span class="nf">hydroclass_semisupervised</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span>
+    <span class="n">mass_centers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]),</span>
+    <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">zdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">rhv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">kdp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">temp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">hydro_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Classifies precipitation echoes following the approach by Besic et al</span>
 <span class="sd">    (2016).</span>
 
@@ -581,31 +693,36 @@
     <span class="k">if</span> <span class="n">mass_centers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># assign coefficients according to radar frequency</span>
         <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s1">&#39;frequency&#39;</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">:</span>
+            <span class="k">if</span> <span class="s2">&quot;frequency&quot;</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">:</span>
                 <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_get_mass_centers</span><span class="p">(</span>
-                    <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s1">&#39;frequency&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+                    <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">&quot;frequency&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_mass_centers_table</span><span class="p">()[</span><span class="s1">&#39;C&#39;</span><span class="p">]</span>
-                <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Radar frequency unknown. &#39;</span> <span class="o">+</span>
-                     <span class="s1">&#39;Default coefficients for C band will be applied.&#39;</span><span class="p">)</span>
+                <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_mass_centers_table</span><span class="p">()[</span><span class="s2">&quot;C&quot;</span><span class="p">]</span>
+                <span class="n">warn</span><span class="p">(</span>
+                    <span class="s2">&quot;Radar frequency unknown. &quot;</span>
+                    <span class="s2">&quot;Default coefficients for C band will be applied.&quot;</span>
+                <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_mass_centers_table</span><span class="p">()[</span><span class="s1">&#39;C&#39;</span><span class="p">]</span>
-            <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Radar instrument parameters is empty. So frequency is &#39;</span> <span class="o">+</span>
-                 <span class="s1">&#39;unknown. Default coefficients for C band will be applied.&#39;</span><span class="p">)</span>
+            <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_mass_centers_table</span><span class="p">()[</span><span class="s2">&quot;C&quot;</span><span class="p">]</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Radar instrument parameters is empty. So frequency is &quot;</span>
+                <span class="s2">&quot;unknown. Default coefficients for C band will be applied.&quot;</span>
+            <span class="p">)</span>
 
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">)</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">zdr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">zdr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;differential_reflectivity&#39;</span><span class="p">)</span>
+        <span class="n">zdr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;differential_reflectivity&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">rhv_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">rhv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;cross_correlation_ratio&#39;</span><span class="p">)</span>
+        <span class="n">rhv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">kdp_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">kdp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;specific_differential_phase&#39;</span><span class="p">)</span>
+        <span class="n">kdp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;specific_differential_phase&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">temp_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">temp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;temperature&#39;</span><span class="p">)</span>
+        <span class="n">temp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;temperature&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">hydro_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">hydro_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;radar_echo_classification&#39;</span><span class="p">)</span>
+        <span class="n">hydro_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;radar_echo_classification&quot;</span><span class="p">)</span>
 
     <span class="c1"># extract fields and parameters from radar</span>
     <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">refl_field</span><span class="p">)</span>
@@ -614,44 +731,44 @@
     <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">kdp_field</span><span class="p">)</span>
     <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">temp_field</span><span class="p">)</span>
 
-    <span class="n">refl</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-    <span class="n">zdr</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">zdr_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-    <span class="n">rhohv</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">rhv_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-    <span class="n">kdp</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">kdp_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-    <span class="n">temp</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">temp_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+    <span class="n">refl</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">zdr</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">zdr_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">rhohv</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">rhv_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">kdp</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">kdp_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">temp</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">temp_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 
     <span class="c1"># convert temp in relative height respect to iso0</span>
-    <span class="n">relh</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1000.</span> <span class="o">/</span> <span class="n">lapse_rate</span><span class="p">)</span>
+    <span class="n">relh</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1000.0</span> <span class="o">/</span> <span class="n">lapse_rate</span><span class="p">)</span>
 
     <span class="c1"># standardize data</span>
-    <span class="n">refl_std</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">refl</span><span class="p">,</span> <span class="s1">&#39;Zh&#39;</span><span class="p">)</span>
-    <span class="n">zdr_std</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">zdr</span><span class="p">,</span> <span class="s1">&#39;ZDR&#39;</span><span class="p">)</span>
-    <span class="n">kdp_std</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">kdp</span><span class="p">,</span> <span class="s1">&#39;KDP&#39;</span><span class="p">)</span>
-    <span class="n">rhohv_std</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">rhohv</span><span class="p">,</span> <span class="s1">&#39;RhoHV&#39;</span><span class="p">)</span>
-    <span class="n">relh_std</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">relh</span><span class="p">,</span> <span class="s1">&#39;relH&#39;</span><span class="p">)</span>
+    <span class="n">refl_std</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">refl</span><span class="p">,</span> <span class="s2">&quot;Zh&quot;</span><span class="p">)</span>
+    <span class="n">zdr_std</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">zdr</span><span class="p">,</span> <span class="s2">&quot;ZDR&quot;</span><span class="p">)</span>
+    <span class="n">kdp_std</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">kdp</span><span class="p">,</span> <span class="s2">&quot;KDP&quot;</span><span class="p">)</span>
+    <span class="n">rhohv_std</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">rhohv</span><span class="p">,</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">)</span>
+    <span class="n">relh_std</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">relh</span><span class="p">,</span> <span class="s2">&quot;relH&quot;</span><span class="p">)</span>
 
     <span class="c1"># standardize centroids</span>
     <span class="n">mc_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">))</span>
-    <span class="n">mc_std</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;Zh&#39;</span><span class="p">)</span>
-    <span class="n">mc_std</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s1">&#39;ZDR&#39;</span><span class="p">)</span>
-    <span class="n">mc_std</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="s1">&#39;KDP&#39;</span><span class="p">)</span>
-    <span class="n">mc_std</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="s1">&#39;RhoHV&#39;</span><span class="p">)</span>
-    <span class="n">mc_std</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">],</span> <span class="s1">&#39;relH&#39;</span><span class="p">)</span>
+    <span class="n">mc_std</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;Zh&quot;</span><span class="p">)</span>
+    <span class="n">mc_std</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;ZDR&quot;</span><span class="p">)</span>
+    <span class="n">mc_std</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;KDP&quot;</span><span class="p">)</span>
+    <span class="n">mc_std</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">)</span>
+    <span class="n">mc_std</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">],</span> <span class="s2">&quot;relH&quot;</span><span class="p">)</span>
 
     <span class="c1"># assign to class</span>
     <span class="n">hydroclass_data</span><span class="p">,</span> <span class="n">min_dist</span> <span class="o">=</span> <span class="n">_assign_to_class</span><span class="p">(</span>
-        <span class="n">refl_std</span><span class="p">,</span> <span class="n">zdr_std</span><span class="p">,</span> <span class="n">kdp_std</span><span class="p">,</span> <span class="n">rhohv_std</span><span class="p">,</span> <span class="n">relh_std</span><span class="p">,</span> <span class="n">mc_std</span><span class="p">,</span>
-        <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">)</span>
+        <span class="n">refl_std</span><span class="p">,</span> <span class="n">zdr_std</span><span class="p">,</span> <span class="n">kdp_std</span><span class="p">,</span> <span class="n">rhohv_std</span><span class="p">,</span> <span class="n">relh_std</span><span class="p">,</span> <span class="n">mc_std</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span>
+    <span class="p">)</span>
 
     <span class="c1"># prepare output fields</span>
     <span class="n">hydro</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">hydro_field</span><span class="p">)</span>
-    <span class="n">hydro</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydroclass_data</span>
+    <span class="n">hydro</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydroclass_data</span>
 
     <span class="k">return</span> <span class="n">hydro</span></div>
 
 
 <span class="k">def</span> <span class="nf">_standardize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">mx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mn</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Streches the radar data to -1 to 1 interval.</span>
 
 <span class="sd">    Parameters</span>
@@ -669,37 +786,47 @@
 <span class="sd">        Standardized radar data.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s1">&#39;relH&#39;</span><span class="p">:</span>
-        <span class="n">field_std</span> <span class="o">=</span> <span class="mf">2.</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.005</span> <span class="o">*</span> <span class="n">data</span><span class="p">))</span> <span class="o">-</span> <span class="mf">1.</span>
+    <span class="k">if</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s2">&quot;relH&quot;</span><span class="p">:</span>
+        <span class="n">field_std</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.005</span> <span class="o">*</span> <span class="n">data</span><span class="p">))</span> <span class="o">-</span> <span class="mf">1.0</span>
         <span class="k">return</span> <span class="n">field_std</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">mx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">mn</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
         <span class="n">dlimits_dict</span> <span class="o">=</span> <span class="n">_data_limits_table</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dlimits_dict</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s1">&#39;Field &#39;</span> <span class="o">+</span> <span class="n">field_name</span> <span class="o">+</span> <span class="s1">&#39; unknown. &#39;</span>
-                <span class="o">+</span> <span class="s1">&#39;Valid field names for standardizing are: &#39;</span>
-                <span class="o">+</span> <span class="s1">&#39;relH, Zh, ZDR, KDP and RhoHV&#39;</span><span class="p">)</span>
+                <span class="s2">&quot;Field &quot;</span>
+                <span class="o">+</span> <span class="n">field_name</span>
+                <span class="o">+</span> <span class="s2">&quot; unknown. &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;Valid field names for standardizing are: &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;relH, Zh, ZDR, KDP and RhoHV&quot;</span>
+            <span class="p">)</span>
         <span class="n">mx</span><span class="p">,</span> <span class="n">mn</span> <span class="o">=</span> <span class="n">dlimits_dict</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s1">&#39;KDP&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s2">&quot;KDP&quot;</span><span class="p">:</span>
         <span class="n">data</span><span class="p">[</span><span class="n">data</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="mf">10.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span> <span class="o">+</span> <span class="mf">0.6</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s1">&#39;RhoHV&#39;</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="mf">10.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">1.</span> <span class="o">-</span> <span class="n">data</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span> <span class="o">+</span> <span class="mf">0.6</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">data</span><span class="p">)</span>
 
     <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
-    <span class="n">field_std</span> <span class="o">=</span> <span class="mf">2.</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">mn</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">mx</span> <span class="o">-</span> <span class="n">mn</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.</span>
-    <span class="n">field_std</span><span class="p">[</span><span class="n">data</span> <span class="o">&lt;</span> <span class="n">mn</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.</span>
-    <span class="n">field_std</span><span class="p">[</span><span class="n">data</span> <span class="o">&gt;</span> <span class="n">mx</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">field_std</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">mn</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">mx</span> <span class="o">-</span> <span class="n">mn</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span>
+    <span class="n">field_std</span><span class="p">[</span><span class="n">data</span> <span class="o">&lt;</span> <span class="n">mn</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+    <span class="n">field_std</span><span class="p">[</span><span class="n">data</span> <span class="o">&gt;</span> <span class="n">mx</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
     <span class="n">field_std</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
 
     <span class="k">return</span> <span class="n">field_std</span>
 
 
-<span class="k">def</span> <span class="nf">_assign_to_class</span><span class="p">(</span><span class="n">zh</span><span class="p">,</span> <span class="n">zdr</span><span class="p">,</span> <span class="n">kdp</span><span class="p">,</span> <span class="n">rhohv</span><span class="p">,</span> <span class="n">relh</span><span class="p">,</span> <span class="n">mass_centers</span><span class="p">,</span>
-                     <span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">1.</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">])):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">_assign_to_class</span><span class="p">(</span>
+    <span class="n">zh</span><span class="p">,</span>
+    <span class="n">zdr</span><span class="p">,</span>
+    <span class="n">kdp</span><span class="p">,</span>
+    <span class="n">rhohv</span><span class="p">,</span>
+    <span class="n">relh</span><span class="p">,</span>
+    <span class="n">mass_centers</span><span class="p">,</span>
+    <span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]),</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Assigns an hydrometeor class to a radar range bin computing</span>
 <span class="sd">    the distance between the radar variables an a centroid.</span>
 
@@ -728,25 +855,26 @@
 
     <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">zh</span><span class="p">,</span> <span class="n">zdr</span><span class="p">,</span> <span class="n">kdp</span><span class="p">,</span> <span class="n">rhohv</span><span class="p">,</span> <span class="n">relh</span><span class="p">])</span>
     <span class="n">weights_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
-        <span class="n">weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-        <span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">))</span>
-    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nclasses</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+        <span class="n">weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nclasses</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
 
     <span class="c1"># compute distance: masked entries will not contribute to the distance</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nclasses</span><span class="p">):</span>
         <span class="n">centroids_class</span> <span class="o">=</span> <span class="n">mass_centers</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
         <span class="n">centroids_class</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
-            <span class="n">centroids_class</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
-            <span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">))</span>
-        <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
-            <span class="p">((</span><span class="n">centroids_class</span> <span class="o">-</span> <span class="n">data</span><span class="p">)</span> <span class="o">**</span> <span class="mf">2.</span><span class="p">)</span> <span class="o">*</span> <span class="n">weights_mat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">))</span>
+            <span class="n">centroids_class</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(((</span><span class="n">centroids_class</span> <span class="o">-</span> <span class="n">data</span><span class="p">)</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">weights_mat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="p">)</span>
 
     <span class="c1"># use very large fill_value so that masked entries will be sorted at the</span>
     <span class="c1"># end. There should not be any masked entry anyway</span>
     <span class="n">class_vec</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">10e40</span><span class="p">)</span>
 
     <span class="c1"># get minimum distance. Acts as a confidence value</span>
-    <span class="n">dist_sorted</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">10e40</span><span class="p">)</span>
+    <span class="n">dist</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">10e40</span><span class="p">)</span>
     <span class="n">min_dist</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
 
     <span class="c1"># Entries with non-valid reflectivity values are set to 0 (No class)</span>
@@ -758,7 +886,7 @@
 
 
 <span class="k">def</span> <span class="nf">_get_mass_centers</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get mass centers for a particular frequency.</span>
 
 <span class="sd">    Parameters</span>
@@ -780,20 +908,23 @@
         <span class="k">return</span> <span class="n">mass_centers_dict</span><span class="p">[</span><span class="n">freq_band</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">freq</span> <span class="o">&lt;</span> <span class="mf">4e9</span><span class="p">:</span>
-        <span class="n">freq_band_aux</span> <span class="o">=</span> <span class="s1">&#39;C&#39;</span>
+        <span class="n">freq_band_aux</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span>
     <span class="k">elif</span> <span class="n">freq</span> <span class="o">&gt;</span> <span class="mf">12e9</span><span class="p">:</span>
-        <span class="n">freq_band_aux</span> <span class="o">=</span> <span class="s1">&#39;X&#39;</span>
+        <span class="n">freq_band_aux</span> <span class="o">=</span> <span class="s2">&quot;X&quot;</span>
 
     <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">mass_centers_dict</span><span class="p">[</span><span class="n">freq_band_aux</span><span class="p">]</span>
-    <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Radar frequency out of range. &#39;</span> <span class="o">+</span>
-         <span class="s1">&#39;Centroids only valid for C or X band. &#39;</span> <span class="o">+</span>
-         <span class="n">freq_band_aux</span> <span class="o">+</span> <span class="s1">&#39; band centroids will be applied&#39;</span><span class="p">)</span>
+    <span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;Radar frequency out of range. &quot;</span>
+        <span class="o">+</span> <span class="s2">&quot;Centroids only valid for C or X band. &quot;</span>
+        <span class="o">+</span> <span class="n">freq_band_aux</span>
+        <span class="o">+</span> <span class="s2">&quot; band centroids will be applied&quot;</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">mass_centers</span>
 
 
 <span class="k">def</span> <span class="nf">_mass_centers_table</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Defines the mass centers look up table for each frequency band.</span>
 
 <span class="sd">    Returns</span>
@@ -820,7 +951,7 @@
     <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">52.3969</span><span class="p">,</span> <span class="mf">2.1094</span><span class="p">,</span> <span class="mf">2.4675</span><span class="p">,</span> <span class="mf">0.9730</span><span class="p">,</span> <span class="o">-</span><span class="mf">1550.2</span><span class="p">]</span>  <span class="c1"># MH</span>
     <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">50.6186</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0649</span><span class="p">,</span> <span class="mf">0.0946</span><span class="p">,</span> <span class="mf">0.9904</span><span class="p">,</span> <span class="mf">1179.9</span><span class="p">]</span>  <span class="c1"># IH/HDG</span>
 
-    <span class="n">mass_centers_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;C&#39;</span><span class="p">:</span> <span class="n">mass_centers_c</span><span class="p">})</span>
+    <span class="n">mass_centers_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="n">mass_centers_c</span><span class="p">})</span>
 
     <span class="c1"># X-band centroids derived for MeteoSwiss DX50 radar</span>
     <span class="c1">#                       Zh        ZDR     kdp    RhoHV   delta_Z</span>
@@ -834,13 +965,13 @@
     <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">52.4539</span><span class="p">,</span> <span class="mf">2.3714</span><span class="p">,</span> <span class="mf">1.1120</span><span class="p">,</span> <span class="mf">0.9382</span><span class="p">,</span> <span class="o">-</span><span class="mf">1618.5</span><span class="p">]</span>  <span class="c1"># MH</span>
     <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">44.2216</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3419</span><span class="p">,</span> <span class="mf">0.0687</span><span class="p">,</span> <span class="mf">0.9683</span><span class="p">,</span> <span class="mf">1272.7</span><span class="p">]</span>  <span class="c1"># IH/HDG</span>
 
-    <span class="n">mass_centers_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;X&#39;</span><span class="p">:</span> <span class="n">mass_centers_x</span><span class="p">})</span>
+    <span class="n">mass_centers_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">mass_centers_x</span><span class="p">})</span>
 
     <span class="k">return</span> <span class="n">mass_centers_dict</span>
 
 
 <span class="k">def</span> <span class="nf">_data_limits_table</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Defines the data limits used in the standardization.</span>
 
 <span class="sd">    Returns</span>
@@ -850,16 +981,16 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dlimits_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;Zh&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">60.</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.</span><span class="p">)})</span>
-    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;ZDR&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">5.</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.</span><span class="p">)})</span>
-    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;KDP&#39;</span><span class="p">:</span> <span class="p">(</span><span class="mf">7.</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.</span><span class="p">)})</span>
-    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;RhoHV&#39;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">5.23</span><span class="p">,</span> <span class="o">-</span><span class="mf">50.</span><span class="p">)})</span>
+    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Zh&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">60.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.0</span><span class="p">)})</span>
+    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;ZDR&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.0</span><span class="p">)})</span>
+    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;KDP&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">7.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.0</span><span class="p">)})</span>
+    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;RhoHV&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">5.23</span><span class="p">,</span> <span class="o">-</span><span class="mf">50.0</span><span class="p">)})</span>
 
     <span class="k">return</span> <span class="n">dlimits_dict</span>
 
 
 <div class="viewcode-block" id="get_freq_band"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.get_freq_band.html#pyart.retrieve.get_freq_band">[docs]</a><span class="k">def</span> <span class="nf">get_freq_band</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the frequency band name (S, C, X, ...).</span>
 
 <span class="sd">    Parameters</span>
@@ -874,13 +1005,13 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">freq</span> <span class="o">&gt;=</span> <span class="mf">2e9</span> <span class="ow">and</span> <span class="n">freq</span> <span class="o">&lt;</span> <span class="mf">4e9</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;S&#39;</span>
+        <span class="k">return</span> <span class="s2">&quot;S&quot;</span>
     <span class="k">if</span> <span class="n">freq</span> <span class="o">&gt;=</span> <span class="mf">4e9</span> <span class="ow">and</span> <span class="n">freq</span> <span class="o">&lt;</span> <span class="mf">8e9</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;C&#39;</span>
+        <span class="k">return</span> <span class="s2">&quot;C&quot;</span>
     <span class="k">if</span> <span class="n">freq</span> <span class="o">&gt;=</span> <span class="mf">8e9</span> <span class="ow">and</span> <span class="n">freq</span> <span class="o">&lt;=</span> <span class="mf">12e9</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;X&#39;</span>
+        <span class="k">return</span> <span class="s2">&quot;X&quot;</span>
 
-    <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unknown frequency band&#39;</span><span class="p">)</span>
+    <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown frequency band&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">None</span></div>
 </pre></div>

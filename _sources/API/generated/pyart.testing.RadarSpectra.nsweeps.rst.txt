@@ -1,0 +1,6 @@
+pyart.testing.RadarSpectra.nsweeps
+==================================
+
+.. currentmodule:: pyart.testing
+
+.. autoproperty:: RadarSpectra.nsweeps

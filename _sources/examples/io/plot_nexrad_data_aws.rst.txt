@@ -61,12 +61,14 @@ We will access data from the **noaa-nexrad-level2** bucket, with the data organi
 Where in our case, we are using a sample data file from Houston, Texas (KHGX)
 on March 22, 2022, at 1201:25 UTC. This means our path would look like:
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-36
+.. GENERATED FROM PYTHON SOURCE LINES 33-38
 
 .. code-block:: default
 
 
-    aws_nexrad_level2_file = "s3://noaa-nexrad-level2/2022/03/22/KHGX/KHGX20220322_120125_V06"
+    aws_nexrad_level2_file = (
+        "s3://noaa-nexrad-level2/2022/03/22/KHGX/KHGX20220322_120125_V06"
+    )
 
 
 
@@ -75,11 +77,11 @@ on March 22, 2022, at 1201:25 UTC. This means our path would look like:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 37-38
+.. GENERATED FROM PYTHON SOURCE LINES 39-40
 
 We can use the **pyart.io.read_nexrad_archive** module to access our data, passing in the filepath.
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-41
+.. GENERATED FROM PYTHON SOURCE LINES 40-43
 
 .. code-block:: default
 
@@ -93,11 +95,11 @@ We can use the **pyart.io.read_nexrad_archive** module to access our data, passi
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 42-43
+.. GENERATED FROM PYTHON SOURCE LINES 44-45
 
 Let's take a look at a summary of what fields are available.
 
-.. GENERATED FROM PYTHON SOURCE LINES 43-46
+.. GENERATED FROM PYTHON SOURCE LINES 45-48
 
 .. code-block:: default
 
@@ -113,43 +115,45 @@ Let's take a look at a summary of what fields are available.
  .. code-block:: none
 
 
-    ['spectrum_width', 'velocity', 'differential_phase', 'differential_reflectivity', 'cross_correlation_ratio', 'reflectivity', 'clutter_filter_power_removed']
+    ['differential_reflectivity', 'clutter_filter_power_removed', 'reflectivity', 'differential_phase', 'velocity', 'cross_correlation_ratio', 'spectrum_width']
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-50
+.. GENERATED FROM PYTHON SOURCE LINES 49-52
 
 Let's plot the reflectivity/velocity fields as a first step to investigating our dataset.
 
 Note: the reflectivity and velocity fields are in different sweeps, so we will need to specify which sweep to plot in each plot.
 
-.. GENERATED FROM PYTHON SOURCE LINES 50-74
+.. GENERATED FROM PYTHON SOURCE LINES 52-78
 
 .. code-block:: default
 
 
-    fig = plt.figure(figsize=(12,4))
+    fig = plt.figure(figsize=(12, 4))
     display = pyart.graph.RadarMapDisplay(radar)
 
-    ax = plt.subplot(121,
-                     projection=ccrs.PlateCarree())
+    ax = plt.subplot(121, projection=ccrs.PlateCarree())
 
-    display.plot_ppi_map('reflectivity',
-                         sweep=0,
-                         ax=ax,
-                         colorbar_label='Equivalent Relectivity ($Z_{e}$) \n (dBZ)',
-                         vmin=-20,
-                         vmax=60)
+    display.plot_ppi_map(
+        "reflectivity",
+        sweep=0,
+        ax=ax,
+        colorbar_label="Equivalent Relectivity ($Z_{e}$) \n (dBZ)",
+        vmin=-20,
+        vmax=60,
+    )
 
-    ax = plt.subplot(122,
-                     projection=ccrs.PlateCarree())
+    ax = plt.subplot(122, projection=ccrs.PlateCarree())
 
-    display.plot_ppi_map('velocity',
-                         sweep=1,
-                         ax=ax,
-                         colorbar_label='Radial Velocity ($V_{r}$) \n (m/s)',
-                         vmin=-70,
-                         vmax=70)
+    display.plot_ppi_map(
+        "velocity",
+        sweep=1,
+        ax=ax,
+        colorbar_label="Radial Velocity ($V_{r}$) \n (m/s)",
+        vmin=-70,
+        vmax=70,
+    )
 
 
 
@@ -163,11 +167,11 @@ Note: the reflectivity and velocity fields are in different sweeps, so we will n
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 75-76
+.. GENERATED FROM PYTHON SOURCE LINES 79-80
 
 Within this plot, we see that the velocity data still has regions that are folded, indicating the dataset has not yet been dealiased.
 
-.. GENERATED FROM PYTHON SOURCE LINES 78-96
+.. GENERATED FROM PYTHON SOURCE LINES 82-100
 
 Read NEXRAD Level 3 Data
 ------------------------
@@ -175,7 +179,7 @@ We can also access NEXRAD Level 3 data using Py-ART!
 
 These datasets have had additional data quality processes applied, including dealiasing.
 
-Each Level 3 data field is stored in **separate file** - in this example, we will look at the reflectivity and 
+Each Level 3 data field is stored in **separate file** - in this example, we will look at the reflectivity and
 velocity field at the lowest levels. These correspond to the following variable names:
 
 - ``N0U`` - Velocity at the lowest level
@@ -188,13 +192,17 @@ using the following naming convention:
 
 For example, we can look at data from that same time as the NEXRAD Level 2 data used previously (March 22, 2022 at 1201 UTC)
 
-.. GENERATED FROM PYTHON SOURCE LINES 96-100
+.. GENERATED FROM PYTHON SOURCE LINES 100-108
 
 .. code-block:: default
 
 
-    aws_nexrad_level3_velocity_file = "s3://unidata-nexrad-level3/HGX_N0U_2022_03_22_12_01_25"
-    aws_nexrad_level3_reflectivity_file = "s3://unidata-nexrad-level3/HGX_N0Q_2022_03_22_12_01_25"
+    aws_nexrad_level3_velocity_file = (
+        "s3://unidata-nexrad-level3/HGX_N0U_2022_03_22_12_01_25"
+    )
+    aws_nexrad_level3_reflectivity_file = (
+        "s3://unidata-nexrad-level3/HGX_N0Q_2022_03_22_12_01_25"
+    )
 
 
 
@@ -203,17 +211,19 @@ For example, we can look at data from that same time as the NEXRAD Level 2 data 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 101-102
+.. GENERATED FROM PYTHON SOURCE LINES 109-110
 
 Read our Data using **pyart.io.read_nexrad_level3**
 
-.. GENERATED FROM PYTHON SOURCE LINES 102-106
+.. GENERATED FROM PYTHON SOURCE LINES 110-116
 
 .. code-block:: default
 
 
     radar_level3_velocity = pyart.io.read_nexrad_level3(aws_nexrad_level3_velocity_file)
-    radar_level3_reflectivity = pyart.io.read_nexrad_level3(aws_nexrad_level3_reflectivity_file)
+    radar_level3_reflectivity = pyart.io.read_nexrad_level3(
+        aws_nexrad_level3_reflectivity_file
+    )
 
 
 
@@ -222,20 +232,21 @@ Read our Data using **pyart.io.read_nexrad_level3**
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 107-108
+.. GENERATED FROM PYTHON SOURCE LINES 117-118
 
 Let's confirm that each radar object has a single field:
 
-.. GENERATED FROM PYTHON SOURCE LINES 108-115
+.. GENERATED FROM PYTHON SOURCE LINES 118-126
 
 .. code-block:: default
 
 
-    print('velocity radar object: ', 
-          list(radar_level3_velocity.fields),
-          'reflectivity radar object: ',
-          list(radar_level3_reflectivity.fields)
-         )
+    print(
+        "velocity radar object: ",
+        list(radar_level3_velocity.fields),
+        "reflectivity radar object: ",
+        list(radar_level3_reflectivity.fields),
+    )
 
 
 
@@ -250,7 +261,7 @@ Let's confirm that each radar object has a single field:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 116-121
+.. GENERATED FROM PYTHON SOURCE LINES 127-132
 
 Plot a Quick Look of our NEXRAD Level 3 Data
 
@@ -258,33 +269,35 @@ Let's plot the reflectivity/velocity fields as a first step to investigating our
 
 Note: the reflectivity and velocity fields are in different radars, so we need to setup different displays.
 
-.. GENERATED FROM PYTHON SOURCE LINES 121-144
+.. GENERATED FROM PYTHON SOURCE LINES 132-157
 
 .. code-block:: default
 
 
-    fig = plt.figure(figsize=(12,4))
+    fig = plt.figure(figsize=(12, 4))
     reflectivity_display = pyart.graph.RadarMapDisplay(radar_level3_reflectivity)
 
-    ax = plt.subplot(121,
-                     projection=ccrs.PlateCarree())
+    ax = plt.subplot(121, projection=ccrs.PlateCarree())
 
-    reflectivity_display.plot_ppi_map('reflectivity',
-                                      ax=ax,
-                                      colorbar_label='Equivalent Relectivity ($Z_{e}$) \n (dBZ)',
-                                      vmin=-20,
-                                      vmax=60)
+    reflectivity_display.plot_ppi_map(
+        "reflectivity",
+        ax=ax,
+        colorbar_label="Equivalent Relectivity ($Z_{e}$) \n (dBZ)",
+        vmin=-20,
+        vmax=60,
+    )
 
     velocity_display = pyart.graph.RadarMapDisplay(radar_level3_velocity)
 
-    ax = plt.subplot(122,
-                     projection=ccrs.PlateCarree())
+    ax = plt.subplot(122, projection=ccrs.PlateCarree())
 
-    velocity_display.plot_ppi_map('velocity',
-                                  ax=ax,
-                                  colorbar_label='Radial Velocity ($V_{r}$) \n (m/s)',
-                                  vmin=-70,
-                                  vmax=70)
+    velocity_display.plot_ppi_map(
+        "velocity",
+        ax=ax,
+        colorbar_label="Radial Velocity ($V_{r}$) \n (m/s)",
+        vmin=-70,
+        vmax=70,
+    )
 
 
 
@@ -300,7 +313,7 @@ Note: the reflectivity and velocity fields are in different radars, so we need t
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  20.215 seconds)
+   **Total running time of the script:** ( 0 minutes  23.139 seconds)
 
 
 .. _sphx_glr_download_examples_io_plot_nexrad_data_aws.py:

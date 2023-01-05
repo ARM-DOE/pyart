@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.nexrad_archive &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.io.nexrad_archive &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -229,19 +229,28 @@
 
 <span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">FileMetadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
 <span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
-<span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">make_time_unit_str</span><span class="p">,</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">prepare_for_read</span>
-<span class="kn">from</span> <span class="nn">.nexrad_level2</span> <span class="kn">import</span> <span class="n">NEXRADLevel2File</span>
 <span class="kn">from</span> <span class="nn">..lazydict</span> <span class="kn">import</span> <span class="n">LazyLoadDict</span>
+<span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">make_time_unit_str</span><span class="p">,</span> <span class="n">prepare_for_read</span>
 <span class="kn">from</span> <span class="nn">.nexrad_common</span> <span class="kn">import</span> <span class="n">get_nexrad_location</span>
-<span class="kn">from</span> <span class="nn">.nexrad_interpolate</span> <span class="kn">import</span> <span class="n">_fast_interpolate_scan_4</span><span class="p">,</span> <span class="n">_fast_interpolate_scan_2</span>
+<span class="kn">from</span> <span class="nn">.nexrad_interpolate</span> <span class="kn">import</span> <span class="n">_fast_interpolate_scan_2</span><span class="p">,</span> <span class="n">_fast_interpolate_scan_4</span>
+<span class="kn">from</span> <span class="nn">.nexrad_level2</span> <span class="kn">import</span> <span class="n">NEXRADLevel2File</span>
 
 
-<div class="viewcode-block" id="read_nexrad_archive"><a class="viewcode-back" href="../../../API/generated/pyart.io.read_nexrad_archive.html#pyart.io.read_nexrad_archive">[docs]</a><span class="k">def</span> <span class="nf">read_nexrad_archive</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">file_field_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delay_field_loading</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                        <span class="n">station</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scans</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">linear_interp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;anon&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">},</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="read_nexrad_archive"><a class="viewcode-back" href="../../../API/generated/pyart.io.read_nexrad_archive.html#pyart.io.read_nexrad_archive">[docs]</a><span class="k">def</span> <span class="nf">read_nexrad_archive</span><span class="p">(</span>
+    <span class="n">filename</span><span class="p">,</span>
+    <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">file_field_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">delay_field_loading</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">station</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">scans</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">linear_interp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">storage_options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;anon&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">},</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read a NEXRAD Level 2 Archive file.</span>
 
 <span class="sd">    Parameters</span>
@@ -318,102 +327,111 @@
     <span class="n">_test_arguments</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># create metadata retrieval object</span>
-    <span class="n">filemetadata</span> <span class="o">=</span> <span class="n">FileMetadata</span><span class="p">(</span><span class="s1">&#39;nexrad_archive&#39;</span><span class="p">,</span> <span class="n">field_names</span><span class="p">,</span>
-                                <span class="n">additional_metadata</span><span class="p">,</span> <span class="n">file_field_names</span><span class="p">,</span>
-                                <span class="n">exclude_fields</span><span class="p">,</span> <span class="n">include_fields</span><span class="p">)</span>
+    <span class="n">filemetadata</span> <span class="o">=</span> <span class="n">FileMetadata</span><span class="p">(</span>
+        <span class="s2">&quot;nexrad_archive&quot;</span><span class="p">,</span>
+        <span class="n">field_names</span><span class="p">,</span>
+        <span class="n">additional_metadata</span><span class="p">,</span>
+        <span class="n">file_field_names</span><span class="p">,</span>
+        <span class="n">exclude_fields</span><span class="p">,</span>
+        <span class="n">include_fields</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># open the file and retrieve scan information</span>
-    <span class="n">nfile</span> <span class="o">=</span> <span class="n">NEXRADLevel2File</span><span class="p">(</span><span class="n">prepare_for_read</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">))</span>
+    <span class="n">nfile</span> <span class="o">=</span> <span class="n">NEXRADLevel2File</span><span class="p">(</span>
+        <span class="n">prepare_for_read</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="n">storage_options</span><span class="p">)</span>
+    <span class="p">)</span>
     <span class="n">scan_info</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">scan_info</span><span class="p">(</span><span class="n">scans</span><span class="p">)</span>
 
     <span class="c1"># time</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
     <span class="n">time_start</span><span class="p">,</span> <span class="n">_time</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_times</span><span class="p">(</span><span class="n">scans</span><span class="p">)</span>
-    <span class="n">time</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_time</span>
-    <span class="n">time</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_time_unit_str</span><span class="p">(</span><span class="n">time_start</span><span class="p">)</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_time</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_time_unit_str</span><span class="p">(</span><span class="n">time_start</span><span class="p">)</span>
 
     <span class="c1"># range</span>
-    <span class="n">_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;range&#39;</span><span class="p">)</span>
-    <span class="n">first_gate</span><span class="p">,</span> <span class="n">gate_spacing</span><span class="p">,</span> <span class="n">last_gate</span> <span class="o">=</span> <span class="n">_find_range_params</span><span class="p">(</span>
-        <span class="n">scan_info</span><span class="p">,</span> <span class="n">filemetadata</span><span class="p">)</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">first_gate</span><span class="p">,</span> <span class="n">last_gate</span><span class="p">,</span> <span class="n">gate_spacing</span><span class="p">,</span> <span class="s1">&#39;float32&#39;</span><span class="p">)</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;meters_to_center_of_first_gate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">first_gate</span><span class="p">)</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;meters_between_gates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">gate_spacing</span><span class="p">)</span>
+    <span class="n">_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">)</span>
+    <span class="n">first_gate</span><span class="p">,</span> <span class="n">gate_spacing</span><span class="p">,</span> <span class="n">last_gate</span> <span class="o">=</span> <span class="n">_find_range_params</span><span class="p">(</span><span class="n">scan_info</span><span class="p">,</span> <span class="n">filemetadata</span><span class="p">)</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">first_gate</span><span class="p">,</span> <span class="n">last_gate</span><span class="p">,</span> <span class="n">gate_spacing</span><span class="p">,</span> <span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;meters_to_center_of_first_gate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">first_gate</span><span class="p">)</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;meters_between_gates&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">gate_spacing</span><span class="p">)</span>
 
     <span class="c1"># metadata</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;metadata&#39;</span><span class="p">)</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;original_container&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;NEXRAD Level II&#39;</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">)</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;original_container&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;NEXRAD Level II&quot;</span>
     <span class="n">vcp_pattern</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_vcp_pattern</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">vcp_pattern</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;vcp_pattern&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vcp_pattern</span>
-    <span class="k">if</span> <span class="s1">&#39;icao&#39;</span> <span class="ow">in</span> <span class="n">nfile</span><span class="o">.</span><span class="n">volume_header</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;instrument_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">volume_header</span><span class="p">[</span><span class="s1">&#39;icao&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;vcp_pattern&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vcp_pattern</span>
+    <span class="k">if</span> <span class="s2">&quot;icao&quot;</span> <span class="ow">in</span> <span class="n">nfile</span><span class="o">.</span><span class="n">volume_header</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;instrument_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">volume_header</span><span class="p">[</span><span class="s2">&quot;icao&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()</span>
 
     <span class="c1"># scan_type</span>
-    <span class="n">scan_type</span> <span class="o">=</span> <span class="s1">&#39;ppi&#39;</span>
+    <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">&quot;ppi&quot;</span>
 
     <span class="c1"># latitude, longitude, altitude</span>
-    <span class="n">latitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;latitude&#39;</span><span class="p">)</span>
-    <span class="n">longitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;longitude&#39;</span><span class="p">)</span>
-    <span class="n">altitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;altitude&#39;</span><span class="p">)</span>
+    <span class="n">latitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;latitude&quot;</span><span class="p">)</span>
+    <span class="n">longitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;longitude&quot;</span><span class="p">)</span>
+    <span class="n">altitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;altitude&quot;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">nfile</span><span class="o">.</span><span class="n">_msg_type</span> <span class="o">==</span> <span class="s1">&#39;1&#39;</span> <span class="ow">and</span> <span class="n">station</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">nfile</span><span class="o">.</span><span class="n">_msg_type</span> <span class="o">==</span> <span class="s2">&quot;1&quot;</span> <span class="ow">and</span> <span class="n">station</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">alt</span> <span class="o">=</span> <span class="n">get_nexrad_location</span><span class="p">(</span><span class="n">station</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="s1">&#39;icao&#39;</span> <span class="ow">in</span> <span class="n">nfile</span><span class="o">.</span><span class="n">volume_header</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">and</span> <span class="n">nfile</span><span class="o">.</span><span class="n">volume_header</span><span class="p">[</span><span class="s1">&#39;icao&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;T&#39;</span><span class="p">:</span>
-        <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">alt</span> <span class="o">=</span> <span class="n">get_nexrad_location</span><span class="p">(</span>
-            <span class="n">nfile</span><span class="o">.</span><span class="n">volume_header</span><span class="p">[</span><span class="s1">&#39;icao&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
+    <span class="k">elif</span> <span class="p">(</span>
+        <span class="s2">&quot;icao&quot;</span> <span class="ow">in</span> <span class="n">nfile</span><span class="o">.</span><span class="n">volume_header</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span>
+        <span class="ow">and</span> <span class="n">nfile</span><span class="o">.</span><span class="n">volume_header</span><span class="p">[</span><span class="s2">&quot;icao&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;T&quot;</span>
+    <span class="p">):</span>
+        <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">alt</span> <span class="o">=</span> <span class="n">get_nexrad_location</span><span class="p">(</span><span class="n">nfile</span><span class="o">.</span><span class="n">volume_header</span><span class="p">[</span><span class="s2">&quot;icao&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">())</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">alt</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">location</span><span class="p">()</span>
-    <span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lat</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
-    <span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lon</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
-    <span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">alt</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+    <span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lat</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lon</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">alt</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
 
     <span class="c1"># sweep_number, sweep_mode, fixed_angle, sweep_start_ray_index</span>
     <span class="c1"># sweep_end_ray_index</span>
-    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_number&#39;</span><span class="p">)</span>
-    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_mode&#39;</span><span class="p">)</span>
-    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_start_ray_index&#39;</span><span class="p">)</span>
-    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_end_ray_index&#39;</span><span class="p">)</span>
+    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_number&quot;</span><span class="p">)</span>
+    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_mode&quot;</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_start_ray_index&quot;</span><span class="p">)</span>
+    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_end_ray_index&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">scans</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">nsweeps</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">nfile</span><span class="o">.</span><span class="n">nscans</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">nsweeps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">scans</span><span class="p">)</span>
-    <span class="n">sweep_number</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
-    <span class="n">sweep_mode</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-        <span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s1">&#39;azimuth_surveillance&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+    <span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+    <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s2">&quot;azimuth_surveillance&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
 
-    <span class="n">rays_per_scan</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="s1">&#39;nrays&#39;</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scan_info</span><span class="p">]</span>
-    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">rays_per_scan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">rays_per_scan</span> <span class="o">=</span> <span class="p">[</span><span class="n">s</span><span class="p">[</span><span class="s2">&quot;nrays&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="n">scan_info</span><span class="p">]</span>
+    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">rays_per_scan</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
 
     <span class="n">rays_per_scan</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span>
-        <span class="n">rays_per_scan</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">rays_per_scan</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
 
     <span class="c1"># azimuth, elevation, fixed_angle</span>
-    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;azimuth&#39;</span><span class="p">)</span>
-    <span class="n">elevation</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;elevation&#39;</span><span class="p">)</span>
-    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;fixed_angle&#39;</span><span class="p">)</span>
-    <span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_azimuth_angles</span><span class="p">(</span><span class="n">scans</span><span class="p">)</span>
-    <span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_elevation_angles</span><span class="p">(</span><span class="n">scans</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;azimuth&quot;</span><span class="p">)</span>
+    <span class="n">elevation</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;elevation&quot;</span><span class="p">)</span>
+    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;fixed_angle&quot;</span><span class="p">)</span>
+    <span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_azimuth_angles</span><span class="p">(</span><span class="n">scans</span><span class="p">)</span>
+    <span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_elevation_angles</span><span class="p">(</span><span class="n">scans</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
     <span class="n">fixed_agl</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_target_angles</span><span class="p">(</span><span class="n">scans</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">i</span> <span class="o">&gt;</span> <span class="mi">180</span><span class="p">:</span>
-            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mf">360.</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Fixed_angle(s) greater than 180 degrees present.&quot;</span>
-                          <span class="o">+</span> <span class="s2">&quot; Assuming angle to be negative so subtrating 360&quot;</span><span class="p">,</span>
-                          <span class="ne">UserWarning</span><span class="p">)</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">-</span> <span class="mf">360.0</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="s2">&quot;Fixed_angle(s) greater than 180 degrees present.&quot;</span>
+                <span class="s2">&quot; Assuming angle to be negative so subtrating 360&quot;</span><span class="p">,</span>
+                <span class="ne">UserWarning</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">i</span> <span class="o">=</span> <span class="n">i</span>
         <span class="n">fixed_agl</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
-    <span class="n">fixed_angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fixed_agl</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
-    <span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fixed_angles</span>
+    <span class="n">fixed_angles</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fixed_agl</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fixed_angles</span>
 
     <span class="c1"># fields</span>
-    <span class="n">max_ngates</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">_range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-    <span class="n">available_moments</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">m</span> <span class="k">for</span> <span class="n">scan</span> <span class="ow">in</span> <span class="n">scan_info</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">scan</span><span class="p">[</span><span class="s1">&#39;moments&#39;</span><span class="p">]])</span>
+    <span class="n">max_ngates</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">available_moments</span> <span class="o">=</span> <span class="p">{</span><span class="n">m</span> <span class="k">for</span> <span class="n">scan</span> <span class="ow">in</span> <span class="n">scan_info</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">scan</span><span class="p">[</span><span class="s2">&quot;moments&quot;</span><span class="p">]}</span>
     <span class="n">interpolate</span> <span class="o">=</span> <span class="n">_find_scans_to_interp</span><span class="p">(</span>
-        <span class="n">scan_info</span><span class="p">,</span> <span class="n">first_gate</span><span class="p">,</span> <span class="n">gate_spacing</span><span class="p">,</span> <span class="n">filemetadata</span><span class="p">)</span>
+        <span class="n">scan_info</span><span class="p">,</span> <span class="n">first_gate</span><span class="p">,</span> <span class="n">gate_spacing</span><span class="p">,</span> <span class="n">filemetadata</span>
+    <span class="p">)</span>
 
     <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">moment</span> <span class="ow">in</span> <span class="n">available_moments</span><span class="p">:</span>
@@ -421,67 +439,80 @@
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="n">dic</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
-        <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;_FillValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+        <span class="n">dic</span><span class="p">[</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">delay_field_loading</span> <span class="ow">and</span> <span class="n">moment</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">interpolate</span><span class="p">:</span>
             <span class="n">dic</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
-            <span class="n">data_call</span> <span class="o">=</span> <span class="n">_NEXRADLevel2StagedField</span><span class="p">(</span>
-                <span class="n">nfile</span><span class="p">,</span> <span class="n">moment</span><span class="p">,</span> <span class="n">max_ngates</span><span class="p">,</span> <span class="n">scans</span><span class="p">)</span>
-            <span class="n">dic</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">data_call</span><span class="p">)</span>
+            <span class="n">data_call</span> <span class="o">=</span> <span class="n">_NEXRADLevel2StagedField</span><span class="p">(</span><span class="n">nfile</span><span class="p">,</span> <span class="n">moment</span><span class="p">,</span> <span class="n">max_ngates</span><span class="p">,</span> <span class="n">scans</span><span class="p">)</span>
+            <span class="n">dic</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">data_call</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">mdata</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="n">moment</span><span class="p">,</span> <span class="n">max_ngates</span><span class="p">,</span> <span class="n">scans</span><span class="o">=</span><span class="n">scans</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">moment</span> <span class="ow">in</span> <span class="n">interpolate</span><span class="p">:</span>
                 <span class="n">interp_scans</span> <span class="o">=</span> <span class="n">interpolate</span><span class="p">[</span><span class="n">moment</span><span class="p">]</span>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                    <span class="s2">&quot;Gate spacing is not constant, interpolating data in &quot;</span> <span class="o">+</span>
-                    <span class="s2">&quot;scans </span><span class="si">%s</span><span class="s2"> for moment </span><span class="si">%s</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">interp_scans</span><span class="p">,</span> <span class="n">moment</span><span class="p">),</span>
-                    <span class="ne">UserWarning</span><span class="p">)</span>
+                    <span class="s2">&quot;Gate spacing is not constant, interpolating data in &quot;</span>
+                    <span class="o">+</span> <span class="sa">f</span><span class="s2">&quot;scans </span><span class="si">{</span><span class="n">interp_scans</span><span class="si">}</span><span class="s2"> for moment </span><span class="si">{</span><span class="n">moment</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">,</span>
+                    <span class="ne">UserWarning</span><span class="p">,</span>
+                <span class="p">)</span>
                 <span class="k">for</span> <span class="n">scan</span> <span class="ow">in</span> <span class="n">interp_scans</span><span class="p">:</span>
-                    <span class="n">idx</span> <span class="o">=</span> <span class="n">scan_info</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="s1">&#39;moments&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">moment</span><span class="p">)</span>
-                    <span class="n">moment_ngates</span> <span class="o">=</span> <span class="n">scan_info</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="s1">&#39;ngates&#39;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
-                    <span class="n">start</span> <span class="o">=</span> <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">scan</span><span class="p">]</span>
-                    <span class="n">end</span> <span class="o">=</span> <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">scan</span><span class="p">]</span>
-                    <span class="k">if</span> <span class="n">interpolate</span><span class="p">[</span><span class="s1">&#39;multiplier&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="s1">&#39;4&#39;</span><span class="p">:</span>
-                        <span class="n">multiplier</span> <span class="o">=</span> <span class="s1">&#39;4&#39;</span>
+                    <span class="n">idx</span> <span class="o">=</span> <span class="n">scan_info</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="s2">&quot;moments&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">moment</span><span class="p">)</span>
+                    <span class="n">moment_ngates</span> <span class="o">=</span> <span class="n">scan_info</span><span class="p">[</span><span class="n">scan</span><span class="p">][</span><span class="s2">&quot;ngates&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">]</span>
+                    <span class="n">start</span> <span class="o">=</span> <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">scan</span><span class="p">]</span>
+                    <span class="n">end</span> <span class="o">=</span> <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">scan</span><span class="p">]</span>
+                    <span class="k">if</span> <span class="n">interpolate</span><span class="p">[</span><span class="s2">&quot;multiplier&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;4&quot;</span><span class="p">:</span>
+                        <span class="n">multiplier</span> <span class="o">=</span> <span class="s2">&quot;4&quot;</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">multiplier</span> <span class="o">=</span> <span class="s1">&#39;2&#39;</span>
-                    <span class="n">_interpolate_scan</span><span class="p">(</span><span class="n">mdata</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">moment_ngates</span><span class="p">,</span>
-                                      <span class="n">multiplier</span><span class="p">,</span> <span class="n">linear_interp</span><span class="p">)</span>
-            <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdata</span>
+                        <span class="n">multiplier</span> <span class="o">=</span> <span class="s2">&quot;2&quot;</span>
+                    <span class="n">_interpolate_scan</span><span class="p">(</span>
+                        <span class="n">mdata</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">moment_ngates</span><span class="p">,</span> <span class="n">multiplier</span><span class="p">,</span> <span class="n">linear_interp</span>
+                    <span class="p">)</span>
+            <span class="n">dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdata</span>
         <span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">dic</span>
 
     <span class="c1"># instrument_parameters</span>
-    <span class="n">nyquist_velocity</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;nyquist_velocity&#39;</span><span class="p">)</span>
-    <span class="n">unambiguous_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;unambiguous_range&#39;</span><span class="p">)</span>
-    <span class="n">nyquist_velocity</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_nyquist_vel</span><span class="p">(</span><span class="n">scans</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
-    <span class="n">unambiguous_range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">nfile</span><span class="o">.</span><span class="n">get_unambigous_range</span><span class="p">(</span><span class="n">scans</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;float32&#39;</span><span class="p">))</span>
+    <span class="n">nyquist_velocity</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">)</span>
+    <span class="n">unambiguous_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;unambiguous_range&quot;</span><span class="p">)</span>
+    <span class="n">nyquist_velocity</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_nyquist_vel</span><span class="p">(</span><span class="n">scans</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">unambiguous_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfile</span><span class="o">.</span><span class="n">get_unambigous_range</span><span class="p">(</span><span class="n">scans</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
 
-    <span class="n">instrument_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;unambiguous_range&#39;</span><span class="p">:</span> <span class="n">unambiguous_range</span><span class="p">,</span>
-                             <span class="s1">&#39;nyquist_velocity&#39;</span><span class="p">:</span> <span class="n">nyquist_velocity</span><span class="p">,</span> <span class="p">}</span>
+    <span class="n">instrument_parameters</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;unambiguous_range&quot;</span><span class="p">:</span> <span class="n">unambiguous_range</span><span class="p">,</span>
+        <span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">:</span> <span class="n">nyquist_velocity</span><span class="p">,</span>
+    <span class="p">}</span>
 
     <span class="n">nfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">Radar</span><span class="p">(</span>
-        <span class="n">time</span><span class="p">,</span> <span class="n">_range</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">scan_type</span><span class="p">,</span>
-        <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">altitude</span><span class="p">,</span>
-        <span class="n">sweep_number</span><span class="p">,</span> <span class="n">sweep_mode</span><span class="p">,</span> <span class="n">fixed_angle</span><span class="p">,</span> <span class="n">sweep_start_ray_index</span><span class="p">,</span>
+        <span class="n">time</span><span class="p">,</span>
+        <span class="n">_range</span><span class="p">,</span>
+        <span class="n">fields</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="p">,</span>
+        <span class="n">scan_type</span><span class="p">,</span>
+        <span class="n">latitude</span><span class="p">,</span>
+        <span class="n">longitude</span><span class="p">,</span>
+        <span class="n">altitude</span><span class="p">,</span>
+        <span class="n">sweep_number</span><span class="p">,</span>
+        <span class="n">sweep_mode</span><span class="p">,</span>
+        <span class="n">fixed_angle</span><span class="p">,</span>
+        <span class="n">sweep_start_ray_index</span><span class="p">,</span>
         <span class="n">sweep_end_ray_index</span><span class="p">,</span>
-        <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span>
-        <span class="n">instrument_parameters</span><span class="o">=</span><span class="n">instrument_parameters</span><span class="p">)</span></div>
+        <span class="n">azimuth</span><span class="p">,</span>
+        <span class="n">elevation</span><span class="p">,</span>
+        <span class="n">instrument_parameters</span><span class="o">=</span><span class="n">instrument_parameters</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_find_range_params</span><span class="p">(</span><span class="n">scan_info</span><span class="p">,</span> <span class="n">filemetadata</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Return range parameters, first_gate, gate_spacing, last_gate. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return range parameters, first_gate, gate_spacing, last_gate.&quot;&quot;&quot;</span>
     <span class="n">min_first_gate</span> <span class="o">=</span> <span class="mi">999999</span>
     <span class="n">min_gate_spacing</span> <span class="o">=</span> <span class="mi">999999</span>
     <span class="n">max_last_gate</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">scan_params</span> <span class="ow">in</span> <span class="n">scan_info</span><span class="p">:</span>
-        <span class="n">ngates</span> <span class="o">=</span> <span class="n">scan_params</span><span class="p">[</span><span class="s1">&#39;ngates&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">moment</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">scan_params</span><span class="p">[</span><span class="s1">&#39;moments&#39;</span><span class="p">]):</span>
+        <span class="n">ngates</span> <span class="o">=</span> <span class="n">scan_params</span><span class="p">[</span><span class="s2">&quot;ngates&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">moment</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">scan_params</span><span class="p">[</span><span class="s2">&quot;moments&quot;</span><span class="p">]):</span>
             <span class="k">if</span> <span class="n">filemetadata</span><span class="o">.</span><span class="n">get_field_name</span><span class="p">(</span><span class="n">moment</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># moment is not read, skip</span>
                 <span class="k">continue</span>
-            <span class="n">first_gate</span> <span class="o">=</span> <span class="n">scan_params</span><span class="p">[</span><span class="s1">&#39;first_gate&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">gate_spacing</span> <span class="o">=</span> <span class="n">scan_params</span><span class="p">[</span><span class="s1">&#39;gate_spacing&#39;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">first_gate</span> <span class="o">=</span> <span class="n">scan_params</span><span class="p">[</span><span class="s2">&quot;first_gate&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">gate_spacing</span> <span class="o">=</span> <span class="n">scan_params</span><span class="p">[</span><span class="s2">&quot;gate_spacing&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
             <span class="n">last_gate</span> <span class="o">=</span> <span class="n">first_gate</span> <span class="o">+</span> <span class="n">gate_spacing</span> <span class="o">*</span> <span class="p">(</span><span class="n">ngates</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span>
 
             <span class="n">min_first_gate</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">min_first_gate</span><span class="p">,</span> <span class="n">first_gate</span><span class="p">)</span>
@@ -491,66 +522,66 @@
 
 
 <span class="k">def</span> <span class="nf">_find_scans_to_interp</span><span class="p">(</span><span class="n">scan_info</span><span class="p">,</span> <span class="n">first_gate</span><span class="p">,</span> <span class="n">gate_spacing</span><span class="p">,</span> <span class="n">filemetadata</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Return a dict indicating what moments/scans need interpolation.  &quot;&quot;&quot;</span>
-    <span class="n">moments</span> <span class="o">=</span> <span class="nb">set</span><span class="p">([</span><span class="n">m</span> <span class="k">for</span> <span class="n">scan</span> <span class="ow">in</span> <span class="n">scan_info</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">scan</span><span class="p">[</span><span class="s1">&#39;moments&#39;</span><span class="p">]])</span>
-    <span class="n">interpolate</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">moment</span><span class="p">,</span> <span class="p">[])</span> <span class="k">for</span> <span class="n">moment</span> <span class="ow">in</span> <span class="n">moments</span><span class="p">])</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a dict indicating what moments/scans need interpolation.&quot;&quot;&quot;</span>
+    <span class="n">moments</span> <span class="o">=</span> <span class="p">{</span><span class="n">m</span> <span class="k">for</span> <span class="n">scan</span> <span class="ow">in</span> <span class="n">scan_info</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">scan</span><span class="p">[</span><span class="s2">&quot;moments&quot;</span><span class="p">]}</span>
+    <span class="n">interpolate</span> <span class="o">=</span> <span class="p">{</span><span class="n">moment</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">moment</span> <span class="ow">in</span> <span class="n">moments</span><span class="p">}</span>
     <span class="k">for</span> <span class="n">scan_num</span><span class="p">,</span> <span class="n">scan</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">scan_info</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">moment</span> <span class="ow">in</span> <span class="n">moments</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">moment</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">scan</span><span class="p">[</span><span class="s1">&#39;moments&#39;</span><span class="p">]:</span>
+            <span class="k">if</span> <span class="n">moment</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">scan</span><span class="p">[</span><span class="s2">&quot;moments&quot;</span><span class="p">]:</span>
                 <span class="k">continue</span>
             <span class="k">if</span> <span class="n">filemetadata</span><span class="o">.</span><span class="n">get_field_name</span><span class="p">(</span><span class="n">moment</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="c1"># moment is not read, skip</span>
                 <span class="k">continue</span>
-            <span class="n">index</span> <span class="o">=</span> <span class="n">scan</span><span class="p">[</span><span class="s1">&#39;moments&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">moment</span><span class="p">)</span>
-            <span class="n">first</span> <span class="o">=</span> <span class="n">scan</span><span class="p">[</span><span class="s1">&#39;first_gate&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
-            <span class="n">spacing</span> <span class="o">=</span> <span class="n">scan</span><span class="p">[</span><span class="s1">&#39;gate_spacing&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">index</span> <span class="o">=</span> <span class="n">scan</span><span class="p">[</span><span class="s2">&quot;moments&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">moment</span><span class="p">)</span>
+            <span class="n">first</span> <span class="o">=</span> <span class="n">scan</span><span class="p">[</span><span class="s2">&quot;first_gate&quot;</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+            <span class="n">spacing</span> <span class="o">=</span> <span class="n">scan</span><span class="p">[</span><span class="s2">&quot;gate_spacing&quot;</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">first</span> <span class="o">!=</span> <span class="n">first_gate</span> <span class="ow">or</span> <span class="n">spacing</span> <span class="o">!=</span> <span class="n">gate_spacing</span><span class="p">:</span>
                 <span class="n">interpolate</span><span class="p">[</span><span class="n">moment</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">scan_num</span><span class="p">)</span>
                 <span class="c1"># for proper interpolation the gate spacing of the scan to be</span>
                 <span class="c1"># interpolated should be 1/4th the spacing of the radar</span>
                 <span class="k">if</span> <span class="n">spacing</span> <span class="o">==</span> <span class="n">gate_spacing</span> <span class="o">*</span> <span class="mi">4</span><span class="p">:</span>
-                    <span class="n">interpolate</span><span class="p">[</span><span class="s1">&#39;multiplier&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;4&#39;</span>
+                    <span class="n">interpolate</span><span class="p">[</span><span class="s2">&quot;multiplier&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;4&quot;</span>
                 <span class="k">elif</span> <span class="n">spacing</span> <span class="o">==</span> <span class="n">gate_spacing</span> <span class="o">*</span> <span class="mi">2</span><span class="p">:</span>
-                    <span class="n">interpolate</span><span class="p">[</span><span class="s1">&#39;multiplier&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;2&#39;</span>
+                    <span class="n">interpolate</span><span class="p">[</span><span class="s2">&quot;multiplier&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;2&quot;</span>
                 <span class="k">else</span><span class="p">:</span>
-                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Gate spacing is neither 1/4 or 1/2&#39;</span><span class="p">)</span>
-                <span class="c1">#assert first_gate + 1.5 * gate_spacing == first</span>
+                    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Gate spacing is neither 1/4 or 1/2&quot;</span><span class="p">)</span>
+                <span class="c1"># assert first_gate + 1.5 * gate_spacing == first</span>
     <span class="c1"># remove moments with no scans needing interpolation</span>
-    <span class="n">interpolate</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">k</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">])</span>
+    <span class="n">interpolate</span> <span class="o">=</span> <span class="p">{</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">}</span>
     <span class="k">return</span> <span class="n">interpolate</span>
 
 
-<span class="k">def</span> <span class="nf">_interpolate_scan</span><span class="p">(</span><span class="n">mdata</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">moment_ngates</span><span class="p">,</span> <span class="n">multiplier</span><span class="p">,</span>
-                      <span class="n">linear_interp</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Interpolate a single NEXRAD moment scan from 1000 m to 250 m. &quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">_interpolate_scan</span><span class="p">(</span><span class="n">mdata</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">moment_ngates</span><span class="p">,</span> <span class="n">multiplier</span><span class="p">,</span> <span class="n">linear_interp</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpolate a single NEXRAD moment scan from 1000 m to 250 m.&quot;&quot;&quot;</span>
     <span class="n">fill_value</span> <span class="o">=</span> <span class="o">-</span><span class="mi">9999</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">mdata</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="p">)</span>
-    <span class="n">scratch_ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">multiplier</span> <span class="o">==</span> <span class="s1">&#39;4&#39;</span><span class="p">:</span>
-        <span class="n">_fast_interpolate_scan_4</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">scratch_ray</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">,</span>
-                                 <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">moment_ngates</span><span class="p">,</span> <span class="n">linear_interp</span><span class="p">)</span>
+    <span class="n">scratch_ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">multiplier</span> <span class="o">==</span> <span class="s2">&quot;4&quot;</span><span class="p">:</span>
+        <span class="n">_fast_interpolate_scan_4</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">scratch_ray</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">moment_ngates</span><span class="p">,</span> <span class="n">linear_interp</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">_fast_interpolate_scan_2</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">scratch_ray</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">,</span>
-                                 <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">moment_ngates</span><span class="p">,</span> <span class="n">linear_interp</span><span class="p">)</span>
+        <span class="n">_fast_interpolate_scan_2</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">scratch_ray</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">moment_ngates</span><span class="p">,</span> <span class="n">linear_interp</span>
+        <span class="p">)</span>
     <span class="n">mdata</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="p">(</span><span class="n">data</span> <span class="o">==</span> <span class="n">fill_value</span><span class="p">))</span>
 
 
-<span class="k">class</span> <span class="nc">_NEXRADLevel2StagedField</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="k">class</span> <span class="nc">_NEXRADLevel2StagedField</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class to facilitate on demand loading of field data from a Level 2 file.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nfile</span><span class="p">,</span> <span class="n">moment</span><span class="p">,</span> <span class="n">max_ngates</span><span class="p">,</span> <span class="n">scans</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; initialize. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;initialize.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">nfile</span> <span class="o">=</span> <span class="n">nfile</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">moment</span> <span class="o">=</span> <span class="n">moment</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">max_ngates</span> <span class="o">=</span> <span class="n">max_ngates</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">scans</span> <span class="o">=</span> <span class="n">scans</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return the array containing the field data. &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nfile</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">moment</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_ngates</span><span class="p">,</span> <span class="n">scans</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scans</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the array containing the field data.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nfile</span><span class="o">.</span><span class="n">get_data</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">moment</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">max_ngates</span><span class="p">,</span> <span class="n">scans</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">scans</span><span class="p">)</span>
 </pre></div>
 <div class="section">
    

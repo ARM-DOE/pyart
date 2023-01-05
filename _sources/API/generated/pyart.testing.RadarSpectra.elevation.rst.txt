@@ -1,0 +1,6 @@
+pyart.testing.RadarSpectra.elevation
+====================================
+
+.. currentmodule:: pyart.testing
+
+.. autoproperty:: RadarSpectra.elevation

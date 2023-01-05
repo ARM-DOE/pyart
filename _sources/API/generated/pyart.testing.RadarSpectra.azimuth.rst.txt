@@ -1,0 +1,6 @@
+pyart.testing.RadarSpectra.azimuth
+==================================
+
+.. currentmodule:: pyart.testing
+
+.. autoproperty:: RadarSpectra.azimuth

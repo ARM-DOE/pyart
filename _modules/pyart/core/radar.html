@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.core.radar &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.core.radar &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -233,8 +233,8 @@
 <span class="kn">from</span> <span class="nn">.transforms</span> <span class="kn">import</span> <span class="n">antenna_vectors_to_cartesian</span><span class="p">,</span> <span class="n">cartesian_to_geographic</span>
 
 
-<div class="viewcode-block" id="Radar"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.html#pyart.core.Radar">[docs]</a><span class="k">class</span> <span class="nc">Radar</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.html#pyart.core.Radar">[docs]</a><span class="k">class</span> <span class="nc">Radar</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class for storing antenna coordinate radar data.</span>
 
 <span class="sd">    The structure of the Radar class is based on the CF/Radial Data file</span>
@@ -376,30 +376,42 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time</span><span class="p">,</span> <span class="n">_range</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">scan_type</span><span class="p">,</span>
-                 <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">altitude</span><span class="p">,</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">time</span><span class="p">,</span>
+        <span class="n">_range</span><span class="p">,</span>
+        <span class="n">fields</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="p">,</span>
+        <span class="n">scan_type</span><span class="p">,</span>
+        <span class="n">latitude</span><span class="p">,</span>
+        <span class="n">longitude</span><span class="p">,</span>
+        <span class="n">altitude</span><span class="p">,</span>
+        <span class="n">sweep_number</span><span class="p">,</span>
+        <span class="n">sweep_mode</span><span class="p">,</span>
+        <span class="n">fixed_angle</span><span class="p">,</span>
+        <span class="n">sweep_start_ray_index</span><span class="p">,</span>
+        <span class="n">sweep_end_ray_index</span><span class="p">,</span>
+        <span class="n">azimuth</span><span class="p">,</span>
+        <span class="n">elevation</span><span class="p">,</span>
+        <span class="n">altitude_agl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">target_scan_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">rays_are_indexed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">ray_angle_res</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">scan_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">antenna_transition</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">instrument_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">radar_calibration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">rotation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">tilt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">roll</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">drift</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">heading</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">pitch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">georefs_applied</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
 
-                 <span class="n">sweep_number</span><span class="p">,</span> <span class="n">sweep_mode</span><span class="p">,</span> <span class="n">fixed_angle</span><span class="p">,</span> <span class="n">sweep_start_ray_index</span><span class="p">,</span>
-                 <span class="n">sweep_end_ray_index</span><span class="p">,</span>
-
-                 <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span>
-
-                 <span class="n">altitude_agl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">target_scan_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rays_are_indexed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">ray_angle_res</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-
-                 <span class="n">scan_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">antenna_transition</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-
-                 <span class="n">instrument_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">radar_calibration</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-
-                 <span class="n">rotation</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">tilt</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">roll</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">drift</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">heading</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                 <span class="n">pitch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">georefs_applied</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-
-                 <span class="p">):</span>
-
-        <span class="k">if</span> <span class="s1">&#39;calendar&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">time</span><span class="p">:</span>
-            <span class="n">time</span><span class="p">[</span><span class="s1">&#39;calendar&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;gregorian&#39;</span>
+        <span class="k">if</span> <span class="s2">&quot;calendar&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">time</span><span class="p">:</span>
+            <span class="n">time</span><span class="p">[</span><span class="s2">&quot;calendar&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;gregorian&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">time</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">range</span> <span class="o">=</span> <span class="n">_range</span>
 
@@ -419,7 +431,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">sweep_end_ray_index</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">target_scan_rate</span> <span class="o">=</span> <span class="n">target_scan_rate</span>  <span class="c1"># optional</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">rays_are_indexed</span> <span class="o">=</span> <span class="n">rays_are_indexed</span>    <span class="c1"># optional</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rays_are_indexed</span> <span class="o">=</span> <span class="n">rays_are_indexed</span>  <span class="c1"># optional</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ray_angle_res</span> <span class="o">=</span> <span class="n">ray_angle_res</span>  <span class="c1"># optional</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">azimuth</span> <span class="o">=</span> <span class="n">azimuth</span>
@@ -437,10 +449,10 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">instrument_parameters</span> <span class="o">=</span> <span class="n">instrument_parameters</span>  <span class="c1"># optional</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">radar_calibration</span> <span class="o">=</span> <span class="n">radar_calibration</span>  <span class="c1"># optional</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">ngates</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">_range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nrays</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nsweeps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sweep_number</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">projection</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;proj&#39;</span><span class="p">:</span> <span class="s1">&#39;pyart_aeqd&#39;</span><span class="p">,</span> <span class="s1">&#39;_include_lon_0_lat_0&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ngates</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nrays</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nsweeps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">projection</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;proj&quot;</span><span class="p">:</span> <span class="s2">&quot;pyart_aeqd&quot;</span><span class="p">,</span> <span class="s2">&quot;_include_lon_0_lat_0&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
 
         <span class="c1"># initalize attributes with lazy load dictionaries</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_rays_per_sweep</span><span class="p">()</span>
@@ -449,20 +461,20 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_gate_altitude</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return object&#39;s state which can be pickled. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return object&#39;s state which can be pickled.&quot;&quot;&quot;</span>
         <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># copy the objects state</span>
         <span class="c1"># Remove unpicklable entries (those which are lazily loaded</span>
-        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;rays_per_sweep&#39;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;gate_x&#39;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;gate_y&#39;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;gate_z&#39;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;gate_longitude&#39;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;gate_latitude&#39;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s1">&#39;gate_altitude&#39;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;rays_per_sweep&quot;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;gate_x&quot;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;gate_y&quot;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;gate_z&quot;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;gate_longitude&quot;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;gate_latitude&quot;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;gate_altitude&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">state</span>
 
     <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Restore unpicklable entries from pickled object. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Restore unpicklable entries from pickled object.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_rays_per_sweep</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_gate_x_y_z</span><span class="p">()</span>
@@ -470,54 +482,54 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_gate_altitude</span><span class="p">()</span>
 
     <span class="c1"># Attribute init/reset method</span>
-<div class="viewcode-block" id="Radar.init_rays_per_sweep"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.init_rays_per_sweep.html#pyart.core.Radar.init_rays_per_sweep">[docs]</a>    <span class="k">def</span> <span class="nf">init_rays_per_sweep</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Initialize or reset the rays_per_sweep attribute. &quot;&quot;&quot;</span>
-        <span class="n">lazydic</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;rays_per_sweep&#39;</span><span class="p">))</span>
-        <span class="n">lazydic</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">_rays_per_sweep_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+<div class="viewcode-block" id="Radar.init_rays_per_sweep"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.init_rays_per_sweep.html#pyart.core.Radar.init_rays_per_sweep">[docs]</a>    <span class="k">def</span> <span class="nf">init_rays_per_sweep</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize or reset the rays_per_sweep attribute.&quot;&quot;&quot;</span>
+        <span class="n">lazydic</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;rays_per_sweep&quot;</span><span class="p">))</span>
+        <span class="n">lazydic</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_rays_per_sweep_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rays_per_sweep</span> <span class="o">=</span> <span class="n">lazydic</span></div>
 
-<div class="viewcode-block" id="Radar.init_gate_x_y_z"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.init_gate_x_y_z.html#pyart.core.Radar.init_gate_x_y_z">[docs]</a>    <span class="k">def</span> <span class="nf">init_gate_x_y_z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Initialize or reset the gate_{x, y, z} attributes. &quot;&quot;&quot;</span>
-        <span class="n">gate_x</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;gate_x&#39;</span><span class="p">))</span>
-        <span class="n">gate_x</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">_gate_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<div class="viewcode-block" id="Radar.init_gate_x_y_z"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.init_gate_x_y_z.html#pyart.core.Radar.init_gate_x_y_z">[docs]</a>    <span class="k">def</span> <span class="nf">init_gate_x_y_z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize or reset the gate_{x, y, z} attributes.&quot;&quot;&quot;</span>
+        <span class="n">gate_x</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;gate_x&quot;</span><span class="p">))</span>
+        <span class="n">gate_x</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_gate_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gate_x</span> <span class="o">=</span> <span class="n">gate_x</span>
 
-        <span class="n">gate_y</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;gate_y&#39;</span><span class="p">))</span>
-        <span class="n">gate_y</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">_gate_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">gate_y</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;gate_y&quot;</span><span class="p">))</span>
+        <span class="n">gate_y</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_gate_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gate_y</span> <span class="o">=</span> <span class="n">gate_y</span>
 
-        <span class="n">gate_z</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;gate_z&#39;</span><span class="p">))</span>
-        <span class="n">gate_z</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">_gate_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
+        <span class="n">gate_z</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;gate_z&quot;</span><span class="p">))</span>
+        <span class="n">gate_z</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_gate_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gate_z</span> <span class="o">=</span> <span class="n">gate_z</span></div>
 
-<div class="viewcode-block" id="Radar.init_gate_longitude_latitude"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.init_gate_longitude_latitude.html#pyart.core.Radar.init_gate_longitude_latitude">[docs]</a>    <span class="k">def</span> <span class="nf">init_gate_longitude_latitude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.init_gate_longitude_latitude"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.init_gate_longitude_latitude.html#pyart.core.Radar.init_gate_longitude_latitude">[docs]</a>    <span class="k">def</span> <span class="nf">init_gate_longitude_latitude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize or reset the gate_longitude and gate_latitude attributes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">gate_longitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;gate_longitude&#39;</span><span class="p">))</span>
-        <span class="n">gate_longitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">_gate_lon_lat_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="n">gate_longitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;gate_longitude&quot;</span><span class="p">))</span>
+        <span class="n">gate_longitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_gate_lon_lat_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gate_longitude</span> <span class="o">=</span> <span class="n">gate_longitude</span>
 
-        <span class="n">gate_latitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;gate_latitude&#39;</span><span class="p">))</span>
-        <span class="n">gate_latitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">_gate_lon_lat_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">gate_latitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;gate_latitude&quot;</span><span class="p">))</span>
+        <span class="n">gate_latitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_gate_lon_lat_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gate_latitude</span> <span class="o">=</span> <span class="n">gate_latitude</span></div>
 
-<div class="viewcode-block" id="Radar.init_gate_altitude"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.init_gate_altitude.html#pyart.core.Radar.init_gate_altitude">[docs]</a>    <span class="k">def</span> <span class="nf">init_gate_altitude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Initialize the gate_altitude attribute. &quot;&quot;&quot;</span>
-        <span class="n">gate_altitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;gate_altitude&#39;</span><span class="p">))</span>
-        <span class="n">gate_altitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">_gate_altitude_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+<div class="viewcode-block" id="Radar.init_gate_altitude"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.init_gate_altitude.html#pyart.core.Radar.init_gate_altitude">[docs]</a>    <span class="k">def</span> <span class="nf">init_gate_altitude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the gate_altitude attribute.&quot;&quot;&quot;</span>
+        <span class="n">gate_altitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;gate_altitude&quot;</span><span class="p">))</span>
+        <span class="n">gate_altitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_gate_altitude_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gate_altitude</span> <span class="o">=</span> <span class="n">gate_altitude</span></div>
 
     <span class="c1"># private functions for checking limits, etc.</span>
     <span class="k">def</span> <span class="nf">_check_sweep_in_range</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Check that a sweep number is in range. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that a sweep number is in range.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">sweep</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">sweep</span> <span class="o">&gt;=</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s1">&#39;Sweep out of range: &#39;</span><span class="p">,</span> <span class="n">sweep</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span><span class="s2">&quot;Sweep out of range: &quot;</span><span class="p">,</span> <span class="n">sweep</span><span class="p">)</span>
         <span class="k">return</span>
 
     <span class="c1"># public check functions</span>
-<div class="viewcode-block" id="Radar.check_field_exists"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.check_field_exists.html#pyart.core.Radar.check_field_exists">[docs]</a>    <span class="k">def</span> <span class="nf">check_field_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.check_field_exists"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.check_field_exists.html#pyart.core.Radar.check_field_exists">[docs]</a>    <span class="k">def</span> <span class="nf">check_field_exists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Check that a field exists in the fields dictionary.</span>
 
 <span class="sd">        If the field does not exist raise a KeyError.</span>
@@ -529,63 +541,63 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Field not available: &#39;</span> <span class="o">+</span> <span class="n">field_name</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Field not available: &quot;</span> <span class="o">+</span> <span class="n">field_name</span><span class="p">)</span>
         <span class="k">return</span></div>
 
     <span class="c1"># Iterators</span>
 
-<div class="viewcode-block" id="Radar.iter_start"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.iter_start.html#pyart.core.Radar.iter_start">[docs]</a>    <span class="k">def</span> <span class="nf">iter_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return an iterator over the sweep start indices. &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span></div>
+<div class="viewcode-block" id="Radar.iter_start"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.iter_start.html#pyart.core.Radar.iter_start">[docs]</a>    <span class="k">def</span> <span class="nf">iter_start</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator over the sweep start indices.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Radar.iter_end"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.iter_end.html#pyart.core.Radar.iter_end">[docs]</a>    <span class="k">def</span> <span class="nf">iter_end</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return an iterator over the sweep end indices. &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span></div>
+<div class="viewcode-block" id="Radar.iter_end"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.iter_end.html#pyart.core.Radar.iter_end">[docs]</a>    <span class="k">def</span> <span class="nf">iter_end</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator over the sweep end indices.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">s</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="Radar.iter_start_end"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.iter_start_end.html#pyart.core.Radar.iter_start_end">[docs]</a>    <span class="k">def</span> <span class="nf">iter_start_end</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return an iterator over the sweep start and end indices. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.iter_start_end"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.iter_start_end.html#pyart.core.Radar.iter_start_end">[docs]</a>    <span class="k">def</span> <span class="nf">iter_start_end</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator over the sweep start and end indices.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="p">((</span><span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">iter_start</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_end</span><span class="p">()))</span></div>
 
-<div class="viewcode-block" id="Radar.iter_slice"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.iter_slice.html#pyart.core.Radar.iter_slice">[docs]</a>    <span class="k">def</span> <span class="nf">iter_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return an iterator which returns sweep slice objects. &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">e</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_start_end</span><span class="p">())</span></div>
+<div class="viewcode-block" id="Radar.iter_slice"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.iter_slice.html#pyart.core.Radar.iter_slice">[docs]</a>    <span class="k">def</span> <span class="nf">iter_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator which returns sweep slice objects.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="nb">slice</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">e</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_start_end</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="Radar.iter_field"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.iter_field.html#pyart.core.Radar.iter_field">[docs]</a>    <span class="k">def</span> <span class="nf">iter_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return an iterator which returns sweep field data. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.iter_field"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.iter_field.html#pyart.core.Radar.iter_field">[docs]</a>    <span class="k">def</span> <span class="nf">iter_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator which returns sweep field data.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">())</span></div>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="Radar.iter_azimuth"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.iter_azimuth.html#pyart.core.Radar.iter_azimuth">[docs]</a>    <span class="k">def</span> <span class="nf">iter_azimuth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return an iterator which returns sweep azimuth data. &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">())</span></div>
+<div class="viewcode-block" id="Radar.iter_azimuth"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.iter_azimuth.html#pyart.core.Radar.iter_azimuth">[docs]</a>    <span class="k">def</span> <span class="nf">iter_azimuth</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator which returns sweep azimuth data.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">())</span></div>
 
-<div class="viewcode-block" id="Radar.iter_elevation"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.iter_elevation.html#pyart.core.Radar.iter_elevation">[docs]</a>    <span class="k">def</span> <span class="nf">iter_elevation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return an iterator which returns sweep elevation data. &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">())</span></div>
+<div class="viewcode-block" id="Radar.iter_elevation"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.iter_elevation.html#pyart.core.Radar.iter_elevation">[docs]</a>    <span class="k">def</span> <span class="nf">iter_elevation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an iterator which returns sweep elevation data.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span> <span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">())</span></div>
 
     <span class="c1"># get methods</span>
 
-<div class="viewcode-block" id="Radar.get_start"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.get_start.html#pyart.core.Radar.get_start">[docs]</a>    <span class="k">def</span> <span class="nf">get_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return the starting ray index for a given sweep. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.get_start"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.get_start.html#pyart.core.Radar.get_start">[docs]</a>    <span class="k">def</span> <span class="nf">get_start</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the starting ray index for a given sweep.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_sweep_in_range</span><span class="p">(</span><span class="n">sweep</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">sweep</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Radar.get_end"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.get_end.html#pyart.core.Radar.get_end">[docs]</a>    <span class="k">def</span> <span class="nf">get_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return the ending ray for a given sweep. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.get_end"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.get_end.html#pyart.core.Radar.get_end">[docs]</a>    <span class="k">def</span> <span class="nf">get_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the ending ray for a given sweep.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_sweep_in_range</span><span class="p">(</span><span class="n">sweep</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">sweep</span><span class="p">]</span></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep</span><span class="p">]</span></div>
 
-<div class="viewcode-block" id="Radar.get_start_end"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.get_start_end.html#pyart.core.Radar.get_start_end">[docs]</a>    <span class="k">def</span> <span class="nf">get_start_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return the starting and ending ray for a given sweep. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.get_start_end"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.get_start_end.html#pyart.core.Radar.get_start_end">[docs]</a>    <span class="k">def</span> <span class="nf">get_start_end</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the starting and ending ray for a given sweep.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_start</span><span class="p">(</span><span class="n">sweep</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_end</span><span class="p">(</span><span class="n">sweep</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Radar.get_slice"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.get_slice.html#pyart.core.Radar.get_slice">[docs]</a>    <span class="k">def</span> <span class="nf">get_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return a slice for selecting rays for a given sweep. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.get_slice"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.get_slice.html#pyart.core.Radar.get_slice">[docs]</a>    <span class="k">def</span> <span class="nf">get_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a slice for selecting rays for a given sweep.&quot;&quot;&quot;</span>
         <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_start_end</span><span class="p">(</span><span class="n">sweep</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="nb">slice</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Radar.get_field"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.get_field.html#pyart.core.Radar.get_field">[docs]</a>    <span class="k">def</span> <span class="nf">get_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.get_field"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.get_field.html#pyart.core.Radar.get_field">[docs]</a>    <span class="k">def</span> <span class="nf">get_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the field data for a given sweep.</span>
 
 <span class="sd">        When used with :py:func:`get_gate_x_y_z` this method can be used to</span>
@@ -611,14 +623,14 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
         <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="n">sweep</span><span class="p">)</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">copy</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">data</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">data</span></div>
 
-<div class="viewcode-block" id="Radar.get_azimuth"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.get_azimuth.html#pyart.core.Radar.get_azimuth">[docs]</a>    <span class="k">def</span> <span class="nf">get_azimuth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.get_azimuth"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.get_azimuth.html#pyart.core.Radar.get_azimuth">[docs]</a>    <span class="k">def</span> <span class="nf">get_azimuth</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return an array of azimuth angles for a given sweep.</span>
 
 <span class="sd">        Parameters</span>
@@ -637,14 +649,14 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="n">sweep</span><span class="p">)</span>
-        <span class="n">azimuths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
+        <span class="n">azimuths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">copy</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">azimuths</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">azimuths</span></div>
 
-<div class="viewcode-block" id="Radar.get_elevation"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.get_elevation.html#pyart.core.Radar.get_elevation">[docs]</a>    <span class="k">def</span> <span class="nf">get_elevation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.get_elevation"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.get_elevation.html#pyart.core.Radar.get_elevation">[docs]</a>    <span class="k">def</span> <span class="nf">get_elevation</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return an array of elevation angles for a given sweep.</span>
 
 <span class="sd">        Parameters</span>
@@ -663,14 +675,14 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="n">sweep</span><span class="p">)</span>
-        <span class="n">elevation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
+        <span class="n">elevation</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">copy</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">elevation</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">elevation</span></div>
 
-<div class="viewcode-block" id="Radar.get_gate_x_y_z"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.get_gate_x_y_z.html#pyart.core.Radar.get_gate_x_y_z">[docs]</a>    <span class="k">def</span> <span class="nf">get_gate_x_y_z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.get_gate_x_y_z"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.get_gate_x_y_z.html#pyart.core.Radar.get_gate_x_y_z">[docs]</a>    <span class="k">def</span> <span class="nf">get_gate_x_y_z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the x, y and z gate locations in meters for a given sweep.</span>
 
 <span class="sd">        With the default parameter this method returns the same data as</span>
@@ -709,16 +721,17 @@
 
         <span class="k">if</span> <span class="n">filter_transitions</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">antenna_transition</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">sweep_slice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="n">sweep</span><span class="p">)</span>
-            <span class="n">valid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">antenna_transition</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">antenna_transition</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
             <span class="n">azimuths</span> <span class="o">=</span> <span class="n">azimuths</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
             <span class="n">elevations</span> <span class="o">=</span> <span class="n">elevations</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">antenna_vectors_to_cartesian</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">)</span></div>
+            <span class="bp">self</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="n">edges</span>
+        <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Radar.get_gate_area"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.get_gate_area.html#pyart.core.Radar.get_gate_area">[docs]</a>    <span class="k">def</span> <span class="nf">get_gate_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Return the area of each gate in a sweep. Units of area will be the </span>
+<div class="viewcode-block" id="Radar.get_gate_area"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.get_gate_area.html#pyart.core.Radar.get_gate_area">[docs]</a>    <span class="k">def</span> <span class="nf">get_gate_area</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Return the area of each gate in a sweep. Units of area will be the</span>
 <span class="sd">        same as those of the range variable, squared.</span>
 
 <span class="sd">        Assumptions:</span>
@@ -736,22 +749,23 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="n">sweep</span><span class="p">)</span>
-        <span class="n">azimuths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
-        <span class="n">ranges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="n">azimuths</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
+        <span class="n">ranges</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 
-        <span class="n">circular_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">ranges</span> <span class="o">**</span> <span class="mi">2</span>
+        <span class="n">circular_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">ranges</span><span class="o">**</span><span class="mi">2</span>
         <span class="n">annular_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">circular_area</span><span class="p">)</span>
 
-        <span class="n">d_azimuths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">azimuths</span><span class="p">)</span> <span class="o">/</span> <span class="mf">360.</span> <span class="c1"># Fraction of a full circle</span>
+        <span class="n">d_azimuths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">azimuths</span><span class="p">)</span> <span class="o">/</span> <span class="mf">360.0</span>  <span class="c1"># Fraction of a full circle</span>
 
-        <span class="n">dca</span><span class="p">,</span> <span class="n">daz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">annular_area</span><span class="p">,</span><span class="n">d_azimuths</span><span class="p">)</span>
+        <span class="n">dca</span><span class="p">,</span> <span class="n">daz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">annular_area</span><span class="p">,</span> <span class="n">d_azimuths</span><span class="p">)</span>
 
         <span class="n">area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">dca</span> <span class="o">*</span> <span class="n">daz</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">area</span></div>
 
-<div class="viewcode-block" id="Radar.get_gate_lat_lon_alt"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.get_gate_lat_lon_alt.html#pyart.core.Radar.get_gate_lat_lon_alt">[docs]</a>    <span class="k">def</span> <span class="nf">get_gate_lat_lon_alt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">reset_gate_coords</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                             <span class="n">filter_transitions</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.get_gate_lat_lon_alt"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.get_gate_lat_lon_alt.html#pyart.core.Radar.get_gate_lat_lon_alt">[docs]</a>    <span class="k">def</span> <span class="nf">get_gate_lat_lon_alt</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">reset_gate_coords</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the longitude, latitude and altitude gate locations.</span>
 <span class="sd">        Longitude and latitude are in degrees and altitude in meters.</span>
 
@@ -786,32 +800,32 @@
         <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="n">sweep</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">reset_gate_coords</span><span class="p">:</span>
-            <span class="n">gate_latitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;gate_latitude&#39;</span><span class="p">))</span>
-            <span class="n">gate_latitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">_gate_lon_lat_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="n">gate_latitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;gate_latitude&quot;</span><span class="p">))</span>
+            <span class="n">gate_latitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_gate_lon_lat_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gate_latitude</span> <span class="o">=</span> <span class="n">gate_latitude</span>
 
-            <span class="n">gate_longitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;gate_longitude&#39;</span><span class="p">))</span>
-            <span class="n">gate_longitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">_gate_lon_lat_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+            <span class="n">gate_longitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;gate_longitude&quot;</span><span class="p">))</span>
+            <span class="n">gate_longitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_gate_lon_lat_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gate_longitude</span> <span class="o">=</span> <span class="n">gate_longitude</span>
 
-            <span class="n">gate_altitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;gate_altitude&#39;</span><span class="p">))</span>
-            <span class="n">gate_altitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">_gate_altitude_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+            <span class="n">gate_altitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;gate_altitude&quot;</span><span class="p">))</span>
+            <span class="n">gate_altitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_gate_altitude_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">gate_altitude</span> <span class="o">=</span> <span class="n">gate_altitude</span>
 
-        <span class="n">lat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
-        <span class="n">lon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
-        <span class="n">alt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
+        <span class="n">lat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
+        <span class="n">lon</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
+        <span class="n">alt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">filter_transitions</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">antenna_transition</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">valid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">antenna_transition</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
+            <span class="n">valid</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">antenna_transition</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
             <span class="n">lat</span> <span class="o">=</span> <span class="n">lat</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
             <span class="n">lon</span> <span class="o">=</span> <span class="n">lon</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
             <span class="n">alt</span> <span class="o">=</span> <span class="n">alt</span><span class="p">[</span><span class="n">valid</span><span class="p">]</span>
 
         <span class="k">return</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">alt</span></div>
 
-<div class="viewcode-block" id="Radar.get_nyquist_vel"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.get_nyquist_vel.html#pyart.core.Radar.get_nyquist_vel">[docs]</a>    <span class="k">def</span> <span class="nf">get_nyquist_vel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">check_uniform</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.get_nyquist_vel"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.get_nyquist_vel.html#pyart.core.Radar.get_nyquist_vel">[docs]</a>    <span class="k">def</span> <span class="nf">get_nyquist_vel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">check_uniform</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the Nyquist velocity in meters per second for a given sweep.</span>
 
 <span class="sd">        Raises a LookupError if the Nyquist velocity is not available, an</span>
@@ -835,18 +849,18 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">s</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="n">sweep</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">nyq_vel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s1">&#39;nyquist_velocity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
-        <span class="k">except</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="s1">&#39;Nyquist velocity unavailable&#39;</span><span class="p">)</span>
+            <span class="n">nyq_vel</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">s</span><span class="p">]</span>
+        <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">LookupError</span><span class="p">(</span><span class="s2">&quot;Nyquist velocity unavailable&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">check_uniform</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">nyq_vel</span> <span class="o">!=</span> <span class="n">nyq_vel</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;Nyquist velocities are not uniform in sweep&#39;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">&quot;Nyquist velocities are not uniform in sweep&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="n">nyq_vel</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
 
     <span class="c1"># Methods</span>
 
-<div class="viewcode-block" id="Radar.info"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.info.html#pyart.core.Radar.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s1">&#39;standard&#39;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.info"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.info.html#pyart.core.Radar.info">[docs]</a>    <span class="k">def</span> <span class="nf">info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span><span class="p">,</span> <span class="n">out</span><span class="o">=</span><span class="n">sys</span><span class="o">.</span><span class="n">stdout</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Print information on radar.</span>
 
 <span class="sd">        Parameters</span>
@@ -859,127 +873,127 @@
 <span class="sd">            to standard out (the screen).</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s1">&#39;c&#39;</span><span class="p">:</span>
-            <span class="n">level</span> <span class="o">=</span> <span class="s1">&#39;compact&#39;</span>
-        <span class="k">elif</span> <span class="n">level</span> <span class="o">==</span> <span class="s1">&#39;s&#39;</span><span class="p">:</span>
-            <span class="n">level</span> <span class="o">=</span> <span class="s1">&#39;standard&#39;</span>
-        <span class="k">elif</span> <span class="n">level</span> <span class="o">==</span> <span class="s1">&#39;f&#39;</span><span class="p">:</span>
-            <span class="n">level</span> <span class="o">=</span> <span class="s1">&#39;full&#39;</span>
+        <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">&quot;c&quot;</span><span class="p">:</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="s2">&quot;compact&quot;</span>
+        <span class="k">elif</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">&quot;s&quot;</span><span class="p">:</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="s2">&quot;standard&quot;</span>
+        <span class="k">elif</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">&quot;f&quot;</span><span class="p">:</span>
+            <span class="n">level</span> <span class="o">=</span> <span class="s2">&quot;full&quot;</span>
 
-        <span class="k">if</span> <span class="n">level</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;standard&#39;</span><span class="p">,</span> <span class="s1">&#39;compact&#39;</span><span class="p">,</span> <span class="s1">&#39;full&#39;</span><span class="p">]:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;invalid level parameter&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">level</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;standard&quot;</span><span class="p">,</span> <span class="s2">&quot;compact&quot;</span><span class="p">,</span> <span class="s2">&quot;full&quot;</span><span class="p">]:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid level parameter&quot;</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;altitude&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;altitude_agl&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;antenna_transition&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;azimuth&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;elevation&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;altitude&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;altitude_agl&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;antenna_transition&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;azimuth&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;elevation&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;fields:&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;fields:&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field_dic</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">field_dic</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;fixed_angle&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;fixed_angle&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">instrument_parameters</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;instrument_parameters: None&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;instrument_parameters: None&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;instrument_parameters:&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;instrument_parameters:&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">dic</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;latitude&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;longitude&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;latitude&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;longitude&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;nsweeps:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;ngates:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ngates</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;nrays:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;nsweeps:&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;ngates:&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ngates</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;nrays:&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radar_calibration</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;radar_calibration: None&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;radar_calibration: None&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;radar_calibration:&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;radar_calibration:&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">name</span><span class="p">,</span> <span class="n">dic</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">radar_calibration</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;range&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;scan_rate&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;scan_type:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_type</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;sweep_end_ray_index&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;sweep_mode&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;sweep_number&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;sweep_start_ray_index&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;target_scan_rate&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;scan_rate&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;scan_type:&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">scan_type</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;sweep_end_ray_index&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;sweep_mode&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;sweep_number&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;sweep_start_ray_index&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;target_scan_rate&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
 
         <span class="c1"># Airborne radar parameters</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;rotation&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;rotation&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">tilt</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;tilt&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;tilt&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">roll</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;roll&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;roll&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">drift</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;drift&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;drift&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">heading</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;heading&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;heading&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pitch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;pitch&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;pitch&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">georefs_applied</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;georefs_applied&#39;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;georefs_applied&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
 
         <span class="c1"># always print out all metadata last</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s1">&#39;metadata&#39;</span><span class="p">,</span> <span class="s1">&#39;full&#39;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">,</span> <span class="s2">&quot;full&quot;</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span></div>
 
     <span class="k">def</span> <span class="nf">_dic_info</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">,</span> <span class="n">dic</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ident_level</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Print information on a dictionary attribute. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Print information on a dictionary attribute.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">dic</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">dic</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
 
-        <span class="n">ilvl0</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span> <span class="o">*</span> <span class="n">ident_level</span>
-        <span class="n">ilvl1</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\t</span><span class="s1">&#39;</span> <span class="o">*</span> <span class="p">(</span><span class="n">ident_level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">ilvl0</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">*</span> <span class="n">ident_level</span>
+        <span class="n">ilvl1</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">*</span> <span class="p">(</span><span class="n">ident_level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">dic</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;: None&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;: None&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
             <span class="k">return</span>
 
         <span class="c1"># make a string summary of the data key if it exists.</span>
-        <span class="k">if</span> <span class="s1">&#39;data&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
-            <span class="n">d_str</span> <span class="o">=</span> <span class="s1">&#39;Missing&#39;</span>
-        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
-            <span class="n">d_str</span> <span class="o">=</span> <span class="s1">&#39;&lt;not a ndarray&gt;&#39;</span>
+        <span class="k">if</span> <span class="s2">&quot;data&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
+            <span class="n">d_str</span> <span class="o">=</span> <span class="s2">&quot;Missing&quot;</span>
+        <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+            <span class="n">d_str</span> <span class="o">=</span> <span class="s2">&quot;&lt;not a ndarray&gt;&quot;</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">data</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
             <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="n">d_str</span> <span class="o">=</span> <span class="s1">&#39;&lt;ndarray of type: </span><span class="si">%s</span><span class="s1"> and shape: </span><span class="si">%s</span><span class="s1">&gt;&#39;</span> <span class="o">%</span> <span class="n">t</span>
+            <span class="n">d_str</span> <span class="o">=</span> <span class="s2">&quot;&lt;ndarray of type: </span><span class="si">%s</span><span class="s2"> and shape: </span><span class="si">%s</span><span class="s2">&gt;&quot;</span> <span class="o">%</span> <span class="n">t</span>
 
         <span class="c1"># compact, only data summary</span>
-        <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s1">&#39;compact&#39;</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">ilvl0</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">d_str</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">&quot;compact&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">ilvl0</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">d_str</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
 
         <span class="c1"># standard, all keys, only summary for data</span>
-        <span class="k">elif</span> <span class="n">level</span> <span class="o">==</span> <span class="s1">&#39;standard&#39;</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">ilvl0</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
-            <span class="nb">print</span><span class="p">(</span><span class="n">ilvl1</span> <span class="o">+</span> <span class="s1">&#39;data:&#39;</span><span class="p">,</span> <span class="n">d_str</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">&quot;standard&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">ilvl0</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">ilvl1</span> <span class="o">+</span> <span class="s2">&quot;data:&quot;</span><span class="p">,</span> <span class="n">d_str</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">dic</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;data&quot;</span><span class="p">:</span>
                     <span class="k">continue</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">ilvl1</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">ilvl1</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
 
         <span class="c1"># full, all keys, full data</span>
-        <span class="k">elif</span> <span class="n">level</span> <span class="o">==</span> <span class="s1">&#39;full&#39;</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
-            <span class="k">if</span> <span class="s1">&#39;data&#39;</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">ilvl1</span> <span class="o">+</span> <span class="s1">&#39;data:&#39;</span><span class="p">,</span> <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">&quot;full&quot;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">attr</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s2">&quot;data&quot;</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">ilvl1</span> <span class="o">+</span> <span class="s2">&quot;data:&quot;</span><span class="p">,</span> <span class="n">dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">dic</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;data&quot;</span><span class="p">:</span>
                     <span class="k">continue</span>
-                <span class="nb">print</span><span class="p">(</span><span class="n">ilvl1</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s1">&#39;:&#39;</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
+                <span class="nb">print</span><span class="p">(</span><span class="n">ilvl1</span> <span class="o">+</span> <span class="n">key</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">val</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">out</span><span class="p">)</span>
 
         <span class="k">return</span>
 
-<div class="viewcode-block" id="Radar.add_field"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.add_field.html#pyart.core.Radar.add_field">[docs]</a>    <span class="k">def</span> <span class="nf">add_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.add_field"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.add_field.html#pyart.core.Radar.add_field">[docs]</a>    <span class="k">def</span> <span class="nf">add_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a field to the object.</span>
 
 <span class="sd">        Parameters</span>
@@ -996,11 +1010,11 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># check that the field dictionary to add is valid</span>
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="ow">and</span> <span class="n">replace_existing</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="n">err</span> <span class="o">=</span> <span class="s1">&#39;A field with name: </span><span class="si">%s</span><span class="s1"> already exists&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;A field with name: </span><span class="si">%s</span><span class="s2"> already exists&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s1">&#39;data&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">&quot;data&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;dic must contain a &#39;data&#39; key&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ngates</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ngates</span><span class="p">):</span>
             <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ngates</span><span class="p">)</span>
             <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;&#39;data&#39; has invalid shape, should be (</span><span class="si">%i</span><span class="s2">, </span><span class="si">%i</span><span class="s2">)&quot;</span> <span class="o">%</span> <span class="n">t</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
@@ -1008,9 +1022,8 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">dic</span>
         <span class="k">return</span></div>
 
-<div class="viewcode-block" id="Radar.add_filter"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.add_filter.html#pyart.core.Radar.add_filter">[docs]</a>    <span class="k">def</span> <span class="nf">add_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gatefilter</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                   <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.add_filter"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.add_filter.html#pyart.core.Radar.add_filter">[docs]</a>    <span class="k">def</span> <span class="nf">add_filter</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gatefilter</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Updates the radar object with an applied gatefilter provided</span>
 <span class="sd">        by the user that masks values in fields within the radar object.</span>
 
@@ -1038,26 +1051,33 @@
             <span class="c1"># Replace current fields with masked versions with applied gatefilter.</span>
             <span class="k">if</span> <span class="n">replace_existing</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">include_fields</span><span class="p">:</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span>
-                        <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span>
+                        <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
             <span class="c1"># Add new fields with prefix &#39;filtered_&#39;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">include_fields</span><span class="p">:</span>
                     <span class="n">field_dict</span> <span class="o">=</span> <span class="n">copy</span><span class="o">.</span><span class="n">deepcopy</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">])</span>
-                    <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span>
-                        <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span><span class="p">,</span> <span class="n">field_dict</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-                    <span class="bp">self</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;filtered_&#39;</span><span class="o">+</span><span class="n">field</span><span class="p">,</span> <span class="n">field_dict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                    <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span>
+                        <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span><span class="p">,</span> <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+                    <span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span>
+                        <span class="s2">&quot;filtered_&quot;</span> <span class="o">+</span> <span class="n">field</span><span class="p">,</span> <span class="n">field_dict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span>
+                    <span class="p">)</span>
 
         <span class="c1"># If fields don&#39;t match up throw an error.</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">field</span> <span class="o">+</span> <span class="s1">&#39; not found in the original radar object, &#39;</span>
-                           <span class="s1">&#39;please check that names in the include_fields list &#39;</span>
-                           <span class="s1">&#39;match those in the radar object.&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span>
+                <span class="n">field</span> <span class="o">+</span> <span class="s2">&quot; not found in the original radar object, &quot;</span>
+                <span class="s2">&quot;please check that names in the include_fields list &quot;</span>
+                <span class="s2">&quot;match those in the radar object.&quot;</span>
+            <span class="p">)</span>
         <span class="k">return</span></div>
 
-<div class="viewcode-block" id="Radar.add_field_like"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.add_field_like.html#pyart.core.Radar.add_field_like">[docs]</a>    <span class="k">def</span> <span class="nf">add_field_like</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">existing_field_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
-                       <span class="n">replace_existing</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.add_field_like"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.add_field_like.html#pyart.core.Radar.add_field_like">[docs]</a>    <span class="k">def</span> <span class="nf">add_field_like</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">existing_field_name</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a field to the object with metadata from a existing field.</span>
 
 <span class="sd">        Note that the data parameter is not copied by this method.</span>
@@ -1090,18 +1110,17 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">existing_field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-            <span class="n">err</span> <span class="o">=</span> <span class="s1">&#39;field </span><span class="si">%s</span><span class="s1"> does not exist in object&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">existing_field_name</span><span class="p">)</span>
+            <span class="n">err</span> <span class="o">=</span> <span class="s2">&quot;field </span><span class="si">%s</span><span class="s2"> does not exist in object&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">existing_field_name</span><span class="p">)</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">err</span><span class="p">)</span>
         <span class="n">dic</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">existing_field_name</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s1">&#39;data&#39;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s2">&quot;data&quot;</span><span class="p">:</span>
                 <span class="n">dic</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">v</span>
-        <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span>
-                              <span class="n">replace_existing</span><span class="o">=</span><span class="n">replace_existing</span><span class="p">)</span></div>
+        <span class="n">dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">field_name</span><span class="p">,</span> <span class="n">dic</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="n">replace_existing</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="Radar.extract_sweeps"><a class="viewcode-back" href="../../../API/generated/pyart.core.Radar.extract_sweeps.html#pyart.core.Radar.extract_sweeps">[docs]</a>    <span class="k">def</span> <span class="nf">extract_sweeps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweeps</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="Radar.extract_sweeps"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Radar.extract_sweeps.html#pyart.core.Radar.extract_sweeps">[docs]</a>    <span class="k">def</span> <span class="nf">extract_sweeps</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweeps</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a new radar contains only the data from select sweeps.</span>
 
 <span class="sd">        Parameters</span>
@@ -1118,31 +1137,33 @@
 <span class="sd">        &quot;&quot;&quot;</span>
 
         <span class="c1"># parse and verify parameters</span>
-        <span class="n">sweeps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+        <span class="n">sweeps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">sweeps</span> <span class="o">&gt;</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nsweeps</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;invalid sweeps indices in sweeps parameter&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid sweeps indices in sweeps parameter&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">sweeps</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;only positive sweeps can be extracted&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;only positive sweeps can be extracted&quot;</span><span class="p">)</span>
 
         <span class="k">def</span> <span class="nf">mkdic</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">select</span><span class="p">):</span>
-            <span class="sd">&quot;&quot;&quot; Make a dictionary, selecting out select from data key &quot;&quot;&quot;</span>
+<span class="w">            </span><span class="sd">&quot;&quot;&quot;Make a dictionary, selecting out select from data key&quot;&quot;&quot;</span>
             <span class="k">if</span> <span class="n">dic</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="k">return</span> <span class="kc">None</span>
             <span class="n">d</span> <span class="o">=</span> <span class="n">dic</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="k">if</span> <span class="s1">&#39;data&#39;</span> <span class="ow">in</span> <span class="n">d</span> <span class="ow">and</span> <span class="n">select</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">d</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">select</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s2">&quot;data&quot;</span> <span class="ow">in</span> <span class="n">d</span> <span class="ow">and</span> <span class="n">select</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">d</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">select</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
             <span class="k">return</span> <span class="n">d</span>
 
         <span class="c1"># create array of rays which select the sweeps selected and</span>
         <span class="c1"># the number of rays per sweep.</span>
-        <span class="n">ray_count</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">-</span>
-                     <span class="bp">self</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)[</span><span class="n">sweeps</span><span class="p">]</span>
-        <span class="n">ssri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">sweeps</span><span class="p">]</span>
+        <span class="n">ray_count</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="p">)[</span><span class="n">sweeps</span><span class="p">]</span>
+        <span class="n">ssri</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweeps</span><span class="p">]</span>
         <span class="n">rays</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
-            <span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">s</span><span class="o">+</span><span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ssri</span><span class="p">,</span> <span class="n">ray_count</span><span class="p">)])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+            <span class="p">[</span><span class="nb">range</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">s</span> <span class="o">+</span> <span class="n">e</span><span class="p">)</span> <span class="k">for</span> <span class="n">s</span><span class="p">,</span> <span class="n">e</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">ssri</span><span class="p">,</span> <span class="n">ray_count</span><span class="p">)]</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
 
         <span class="c1"># radar location attribute dictionary selector</span>
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">loc_select</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">loc_select</span> <span class="o">=</span> <span class="n">sweeps</span>
@@ -1166,10 +1187,11 @@
         <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">mkdic</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sweep_mode</span><span class="p">,</span> <span class="n">sweeps</span><span class="p">)</span>
         <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">mkdic</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">,</span> <span class="n">sweeps</span><span class="p">)</span>
         <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">mkdic</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span>
-            <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">ray_count</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+        <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">ray_count</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span>
+        <span class="p">)</span>
         <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">mkdic</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
-        <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">ray_count</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+        <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">ray_count</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
         <span class="n">target_scan_rate</span> <span class="o">=</span> <span class="n">mkdic</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">target_scan_rate</span><span class="p">,</span> <span class="n">sweeps</span><span class="p">)</span>
 
         <span class="n">azimuth</span> <span class="o">=</span> <span class="n">mkdic</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">azimuth</span><span class="p">,</span> <span class="n">rays</span><span class="p">)</span>
@@ -1185,15 +1207,15 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">instrument_parameters</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">dic</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-                    <span class="n">dim0_size</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="k">if</span> <span class="n">dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">ndim</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="n">dim0_size</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">dim0_size</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
                 <span class="k">if</span> <span class="n">dim0_size</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">:</span>
                     <span class="n">fdic</span> <span class="o">=</span> <span class="n">mkdic</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">sweeps</span><span class="p">)</span>
                 <span class="k">elif</span> <span class="n">dim0_size</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">nrays</span><span class="p">:</span>
                     <span class="n">fdic</span> <span class="o">=</span> <span class="n">mkdic</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">rays</span><span class="p">)</span>
-                <span class="k">else</span><span class="p">:</span>   <span class="c1"># keep everything</span>
+                <span class="k">else</span><span class="p">:</span>  <span class="c1"># keep everything</span>
                     <span class="n">fdic</span> <span class="o">=</span> <span class="n">mkdic</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
                 <span class="n">instrument_parameters</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">fdic</span>
 
@@ -1207,81 +1229,103 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">radar_calibration</span> <span class="o">=</span> <span class="p">{}</span>
             <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">dic</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">radar_calibration</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s1">&#39;r_calib_index&#39;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;r_calib_index&quot;</span><span class="p">:</span>
                     <span class="n">radar_calibration</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">mkdic</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">rays</span><span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">radar_calibration</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">mkdic</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
 
-        <span class="k">return</span> <span class="n">Radar</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">_range</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">scan_type</span><span class="p">,</span>
-                     <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">altitude</span><span class="p">,</span>
-                     <span class="n">sweep_number</span><span class="p">,</span> <span class="n">sweep_mode</span><span class="p">,</span> <span class="n">fixed_angle</span><span class="p">,</span>
-                     <span class="n">sweep_start_ray_index</span><span class="p">,</span> <span class="n">sweep_end_ray_index</span><span class="p">,</span>
-                     <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span>
-                     <span class="n">altitude_agl</span><span class="o">=</span><span class="n">altitude_agl</span><span class="p">,</span>
-                     <span class="n">target_scan_rate</span><span class="o">=</span><span class="n">target_scan_rate</span><span class="p">,</span>
-                     <span class="n">scan_rate</span><span class="o">=</span><span class="n">scan_rate</span><span class="p">,</span>
-                     <span class="n">antenna_transition</span><span class="o">=</span><span class="n">antenna_transition</span><span class="p">,</span>
-                     <span class="n">instrument_parameters</span><span class="o">=</span><span class="n">instrument_parameters</span><span class="p">,</span>
-                     <span class="n">radar_calibration</span><span class="o">=</span><span class="n">radar_calibration</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="n">Radar</span><span class="p">(</span>
+            <span class="n">time</span><span class="p">,</span>
+            <span class="n">_range</span><span class="p">,</span>
+            <span class="n">fields</span><span class="p">,</span>
+            <span class="n">metadata</span><span class="p">,</span>
+            <span class="n">scan_type</span><span class="p">,</span>
+            <span class="n">latitude</span><span class="p">,</span>
+            <span class="n">longitude</span><span class="p">,</span>
+            <span class="n">altitude</span><span class="p">,</span>
+            <span class="n">sweep_number</span><span class="p">,</span>
+            <span class="n">sweep_mode</span><span class="p">,</span>
+            <span class="n">fixed_angle</span><span class="p">,</span>
+            <span class="n">sweep_start_ray_index</span><span class="p">,</span>
+            <span class="n">sweep_end_ray_index</span><span class="p">,</span>
+            <span class="n">azimuth</span><span class="p">,</span>
+            <span class="n">elevation</span><span class="p">,</span>
+            <span class="n">altitude_agl</span><span class="o">=</span><span class="n">altitude_agl</span><span class="p">,</span>
+            <span class="n">target_scan_rate</span><span class="o">=</span><span class="n">target_scan_rate</span><span class="p">,</span>
+            <span class="n">scan_rate</span><span class="o">=</span><span class="n">scan_rate</span><span class="p">,</span>
+            <span class="n">antenna_transition</span><span class="o">=</span><span class="n">antenna_transition</span><span class="p">,</span>
+            <span class="n">instrument_parameters</span><span class="o">=</span><span class="n">instrument_parameters</span><span class="p">,</span>
+            <span class="n">radar_calibration</span><span class="o">=</span><span class="n">radar_calibration</span><span class="p">,</span>
+        <span class="p">)</span></div></div>
 
 
 <span class="k">def</span> <span class="nf">_rays_per_sweep_data_factory</span><span class="p">(</span><span class="n">radar</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Return a function which returns the number of rays per sweep. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a function which returns the number of rays per sweep.&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">_rays_per_sweep_data</span><span class="p">():</span>
-        <span class="sd">&quot;&quot;&quot; The function which returns the number of rays per sweep. &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">-</span>
-                <span class="n">radar</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The function which returns the number of rays per sweep.&quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="p">)</span>
+
     <span class="k">return</span> <span class="n">_rays_per_sweep_data</span>
 
 
 <span class="k">def</span> <span class="nf">_gate_data_factory</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Return a function which returns the Cartesian locations of gates. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a function which returns the Cartesian locations of gates.&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">_gate_data</span><span class="p">():</span>
-        <span class="sd">&quot;&quot;&quot; The function which returns the Cartesian locations of gates. &quot;&quot;&quot;</span>
-        <span class="n">ranges</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-        <span class="n">azimuths</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-        <span class="n">elevations</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The function which returns the Cartesian locations of gates.&quot;&quot;&quot;</span>
+        <span class="n">ranges</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">azimuths</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">elevations</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
         <span class="n">cartesian_coords</span> <span class="o">=</span> <span class="n">antenna_vectors_to_cartesian</span><span class="p">(</span>
-            <span class="n">ranges</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+            <span class="n">ranges</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span>
+        <span class="p">)</span>
         <span class="c1"># load x, y, and z data except for the coordinate in question</span>
         <span class="k">if</span> <span class="n">coordinate</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cartesian_coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cartesian_coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">coordinate</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-            <span class="n">radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cartesian_coords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cartesian_coords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">coordinate</span> <span class="o">!=</span> <span class="mi">2</span><span class="p">:</span>
-            <span class="n">radar</span><span class="o">.</span><span class="n">gate_z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cartesian_coords</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">gate_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cartesian_coords</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">cartesian_coords</span><span class="p">[</span><span class="n">coordinate</span><span class="p">]</span>
+
     <span class="k">return</span> <span class="n">_gate_data</span>
 
 
 <span class="k">def</span> <span class="nf">_gate_lon_lat_data_factory</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Return a function which returns the geographic locations of gates. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a function which returns the geographic locations of gates.&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">_gate_lon_lat_data</span><span class="p">():</span>
-        <span class="sd">&quot;&quot;&quot; The function which returns the geographic locations gates. &quot;&quot;&quot;</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The function which returns the geographic locations gates.&quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
         <span class="n">projparams</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">projection</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="k">if</span> <span class="n">projparams</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;_include_lon_0_lat_0&#39;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-            <span class="n">projparams</span><span class="p">[</span><span class="s1">&#39;lon_0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-            <span class="n">projparams</span><span class="p">[</span><span class="s1">&#39;lat_0&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">projparams</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;_include_lon_0_lat_0&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+            <span class="n">projparams</span><span class="p">[</span><span class="s2">&quot;lon_0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">projparams</span><span class="p">[</span><span class="s2">&quot;lat_0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">geographic_coords</span> <span class="o">=</span> <span class="n">cartesian_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">)</span>
         <span class="c1"># set the other geographic coordinate</span>
         <span class="k">if</span> <span class="n">coordinate</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">radar</span><span class="o">.</span><span class="n">gate_latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">geographic_coords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">gate_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">geographic_coords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">radar</span><span class="o">.</span><span class="n">gate_longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">geographic_coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">gate_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">geographic_coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">geographic_coords</span><span class="p">[</span><span class="n">coordinate</span><span class="p">]</span>
+
     <span class="k">return</span> <span class="n">_gate_lon_lat_data</span>
 
 
 <span class="k">def</span> <span class="nf">_gate_altitude_data_factory</span><span class="p">(</span><span class="n">radar</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Return a function which returns the gate altitudes. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a function which returns the gate altitudes.&quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="nf">_gate_altitude_data</span><span class="p">():</span>
-        <span class="sd">&quot;&quot;&quot; The function which returns the gate altitudes. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;The function which returns the gate altitudes.&quot;&quot;&quot;</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
         <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_z</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+            <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+
     <span class="k">return</span> <span class="n">_gate_altitude_data</span>
 </pre></div>
 <div class="section">

@@ -1,0 +1,6 @@
+pyart.testing.RadarSpectra.nrays
+================================
+
+.. currentmodule:: pyart.testing
+
+.. autoproperty:: RadarSpectra.nrays

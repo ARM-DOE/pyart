@@ -1,0 +1,6 @@
+pyart.testing.RadarSpectra.rays\_per\_sweep
+===========================================
+
+.. currentmodule:: pyart.testing
+
+.. autoproperty:: RadarSpectra.rays_per_sweep

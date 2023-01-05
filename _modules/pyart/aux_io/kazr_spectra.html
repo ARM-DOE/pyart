@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.aux_io.kazr_spectra &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.aux_io.kazr_spectra &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -227,8 +227,10 @@
 <span class="kn">import</span> <span class="nn">re</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+
     <span class="n">_XARRAY_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_XARRAY_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
@@ -238,13 +240,19 @@
 <span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
 <span class="kn">from</span> <span class="nn">..io.common</span> <span class="kn">import</span> <span class="n">_test_arguments</span>
 
+<span class="n">KAZR_SPECTRA_FIELD_NAMES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;spectra&quot;</span><span class="p">:</span> <span class="s2">&quot;spectra&quot;</span><span class="p">}</span>
 
-<span class="n">KAZR_SPECTRA_FIELD_NAMES</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;spectra&#39;</span><span class="p">:</span> <span class="s1">&#39;spectra&#39;</span><span class="p">}</span>
 
-<div class="viewcode-block" id="read_kazr_spectra"><a class="viewcode-back" href="../../../API/generated/pyart.aux_io.read_kazr_spectra.html#pyart.aux_io.read_kazr_spectra">[docs]</a><span class="k">def</span> <span class="nf">read_kazr_spectra</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                      <span class="n">file_field_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                      <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="read_kazr_spectra"><a class="viewcode-back" href="../../../API/generated/pyart.aux_io.read_kazr_spectra.html#pyart.aux_io.read_kazr_spectra">[docs]</a><span class="k">def</span> <span class="nf">read_kazr_spectra</span><span class="p">(</span>
+    <span class="n">filename</span><span class="p">,</span>
+    <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">file_field_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read a ARM KAZR spectra netCDF file.</span>
 
 <span class="sd">    Parameters</span>
@@ -287,134 +295,167 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_XARRAY_AVAILABLE</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
-            <span class="s2">&quot;Xarray is required to read KAZR spectra files &quot;</span>
-            <span class="s2">&quot;but is not installed!&quot;</span><span class="p">)</span>
+            <span class="s2">&quot;Xarray is required to read KAZR spectra files but is not installed!&quot;</span>
+        <span class="p">)</span>
     <span class="c1"># test for non empty kwargs</span>
     <span class="n">_test_arguments</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
-     <span class="c1"># create metadata retrieval object</span>
+    <span class="c1"># create metadata retrieval object</span>
     <span class="k">if</span> <span class="n">field_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">field_names</span> <span class="o">=</span> <span class="n">KAZR_SPECTRA_FIELD_NAMES</span>
-    <span class="n">filemetadata</span> <span class="o">=</span> <span class="n">FileMetadata</span><span class="p">(</span><span class="s1">&#39;kazr_spectra&#39;</span><span class="p">,</span> <span class="n">field_names</span><span class="p">,</span>
-                                <span class="n">additional_metadata</span><span class="p">,</span>
-                                <span class="n">file_field_names</span><span class="p">,</span> <span class="n">exclude_fields</span><span class="p">)</span>
+    <span class="n">filemetadata</span> <span class="o">=</span> <span class="n">FileMetadata</span><span class="p">(</span>
+        <span class="s2">&quot;kazr_spectra&quot;</span><span class="p">,</span>
+        <span class="n">field_names</span><span class="p">,</span>
+        <span class="n">additional_metadata</span><span class="p">,</span>
+        <span class="n">file_field_names</span><span class="p">,</span>
+        <span class="n">exclude_fields</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="c1"># read the data</span>
     <span class="n">xrobj</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_dataset</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
     <span class="c1"># retrieve the correct time format</span>
     <span class="c1"># time format changed in later KAZR files</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">times</span> <span class="o">=</span> <span class="p">[(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">sec</span><span class="p">)</span> <span class="o">+</span>
-                  <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span>
-                      <span class="n">xrobj</span><span class="o">.</span><span class="n">base_time</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;O&quot;</span><span class="p">)</span><span class="o">/</span><span class="mf">1e9</span><span class="p">))</span>
-                 <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">xrobj</span><span class="o">.</span><span class="n">time_offset</span><span class="o">.</span><span class="n">values</span><span class="p">]</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span>
+                <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">sec</span><span class="p">)</span>
+                <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span>
+                    <span class="n">xrobj</span><span class="o">.</span><span class="n">base_time</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;O&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e9</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">xrobj</span><span class="o">.</span><span class="n">time_offset</span><span class="o">.</span><span class="n">values</span>
+        <span class="p">]</span>
     <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
-        <span class="n">ts</span> <span class="o">=</span> <span class="p">[(</span><span class="n">i</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s1">&#39;1970-01-01T00:00:00Z&#39;</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">)</span>
-              <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrobj</span><span class="o">.</span><span class="n">time_offset</span><span class="o">.</span><span class="n">values</span><span class="p">]</span>
+        <span class="n">ts</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">i</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s2">&quot;1970-01-01T00:00:00Z&quot;</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">xrobj</span><span class="o">.</span><span class="n">time_offset</span><span class="o">.</span><span class="n">values</span>
+        <span class="p">]</span>
         <span class="n">bs</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="n">xrobj</span><span class="o">.</span><span class="n">base_time</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span>
-                <span class="s1">&#39;1970-01-01T00:00:00Z&#39;</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;s&#39;</span><span class="p">)</span>
-        <span class="n">times</span> <span class="o">=</span> <span class="p">[(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">sec</span><span class="p">)</span> <span class="o">+</span>
-                  <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">bs</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;O&quot;</span><span class="p">)</span><span class="o">/</span><span class="mf">1e9</span><span class="p">))</span>
-                 <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">ts</span><span class="p">]</span>
+            <span class="n">xrobj</span><span class="o">.</span><span class="n">base_time</span><span class="o">.</span><span class="n">values</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="s2">&quot;1970-01-01T00:00:00Z&quot;</span><span class="p">)</span>
+        <span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">timedelta64</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;s&quot;</span><span class="p">)</span>
+        <span class="n">times</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span>
+                <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">sec</span><span class="p">)</span>
+                <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">bs</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;O&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="mf">1e9</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">sec</span> <span class="ow">in</span> <span class="n">ts</span>
+        <span class="p">]</span>
     <span class="n">times</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
-    <span class="n">time_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
-    <span class="n">base_time</span> <span class="o">=</span> <span class="p">(</span><span class="s1">&#39;seconds since &#39;</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
-        <span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s1">&#39;%Y-%m-%DT%H:%M:%SZ&#39;</span><span class="p">))</span>
-    <span class="n">time_array</span> <span class="o">=</span> <span class="p">[(</span><span class="n">x</span><span class="o">-</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">seconds</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">times</span><span class="p">]</span>
-    <span class="n">time_dict</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">base_time</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">time_array</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">time_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+    <span class="n">time_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+    <span class="n">base_time</span> <span class="o">=</span> <span class="s2">&quot;seconds since &quot;</span> <span class="o">+</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
+        <span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;%Y-%m-%DT%H:%M:%SZ&quot;</span>
+    <span class="p">)</span>
+    <span class="n">time_array</span> <span class="o">=</span> <span class="p">[(</span><span class="n">x</span> <span class="o">-</span> <span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span><span class="o">.</span><span class="n">seconds</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">times</span><span class="p">]</span>
+    <span class="n">time_dict</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">base_time</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">time_array</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">time_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
 
     <span class="n">rng_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">xrobj</span><span class="o">.</span><span class="n">range</span><span class="o">.</span><span class="n">values</span><span class="p">)</span>
-    <span class="n">rng_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;range&#39;</span><span class="p">)</span>
-    <span class="n">_range</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">rng_array</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="n">rng_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s1">&#39;range&#39;</span><span class="p">)</span>
+    <span class="n">rng_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">)</span>
+    <span class="n">_range</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">rng_array</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="n">rng_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s2">&quot;range&quot;</span><span class="p">)</span>
 
-    <span class="c1">#metadata = filemetadata(&#39;metadata&#39;)</span>
+    <span class="c1"># metadata = filemetadata(&#39;metadata&#39;)</span>
     <span class="c1"># Retrieve the ARM site info</span>
-    <span class="k">if</span> <span class="s1">&#39;nsa&#39;</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
-        <span class="n">xrobj</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;site_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;nsa&#39;</span>
-    <span class="k">elif</span> <span class="s1">&#39;ena&#39;</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
-        <span class="n">xrobj</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;site_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;ena&#39;</span>
+    <span class="k">if</span> <span class="s2">&quot;nsa&quot;</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+        <span class="n">xrobj</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;site_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;nsa&quot;</span>
+    <span class="k">elif</span> <span class="s2">&quot;ena&quot;</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+        <span class="n">xrobj</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;site_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;ena&quot;</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">xrobj</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;site_id&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;sgp&#39;</span>
+        <span class="n">xrobj</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;site_id&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;sgp&quot;</span>
 
-    <span class="n">lat_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;latitude&#39;</span><span class="p">)</span>
-    <span class="n">lon_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;longitude&#39;</span><span class="p">)</span>
-    <span class="n">alt_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;altitude&#39;</span><span class="p">)</span>
-    <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">alt</span> <span class="o">=</span> <span class="n">get_kazr_location</span><span class="p">(</span><span class="n">xrobj</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s1">&#39;site_id&#39;</span><span class="p">])</span>
-    <span class="n">latitude</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">lat_dict</span><span class="p">)</span>
-    <span class="n">longitude</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">lon_dict</span><span class="p">)</span>
-    <span class="n">altitude</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">alt</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">alt_dict</span><span class="p">)</span>
+    <span class="n">lat_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;latitude&quot;</span><span class="p">)</span>
+    <span class="n">lon_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;longitude&quot;</span><span class="p">)</span>
+    <span class="n">alt_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;altitude&quot;</span><span class="p">)</span>
+    <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">alt</span> <span class="o">=</span> <span class="n">get_kazr_location</span><span class="p">(</span><span class="n">xrobj</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;site_id&quot;</span><span class="p">])</span>
+    <span class="n">latitude</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">lat_dict</span><span class="p">)</span>
+    <span class="n">longitude</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">lon_dict</span><span class="p">)</span>
+    <span class="n">altitude</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">alt</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">alt_dict</span><span class="p">)</span>
 
-    <span class="n">elevation_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;elevation&#39;</span><span class="p">)</span>
-    <span class="n">elevation</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">90.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">time_array</span><span class="p">)),</span>
-                                      <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span>
-                             <span class="n">attrs</span><span class="o">=</span><span class="n">elevation_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+    <span class="n">elevation_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;elevation&quot;</span><span class="p">)</span>
+    <span class="n">elevation</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">90.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">time_array</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span>
+        <span class="n">attrs</span><span class="o">=</span><span class="n">elevation_dict</span><span class="p">,</span>
+        <span class="n">dims</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
 
-    <span class="n">azimuth_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;azimuth&#39;</span><span class="p">)</span>
-    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">360.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">time_array</span><span class="p">)),</span>
-                                    <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span>
-                           <span class="n">attrs</span><span class="o">=</span><span class="n">azimuth_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+    <span class="n">azimuth_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;azimuth&quot;</span><span class="p">)</span>
+    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">360.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">time_array</span><span class="p">)),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span>
+        <span class="n">attrs</span><span class="o">=</span><span class="n">azimuth_dict</span><span class="p">,</span>
+        <span class="n">dims</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
 
-    <span class="n">fix_agl_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;fixed_angle&#39;</span><span class="p">)</span>
-    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">90.0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">),</span>
-                               <span class="n">attrs</span><span class="o">=</span><span class="n">fix_agl_dict</span><span class="p">)</span>
+    <span class="n">fix_agl_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;fixed_angle&quot;</span><span class="p">)</span>
+    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mf">90.0</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">fix_agl_dict</span><span class="p">)</span>
 
-    <span class="n">sweep_number_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_number&#39;</span><span class="p">)</span>
-    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">),</span>
-                                <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_number_dict</span><span class="p">)</span>
+    <span class="n">sweep_number_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_number&quot;</span><span class="p">)</span>
+    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_number_dict</span><span class="p">)</span>
 
-    <span class="n">sweep_mode_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_mode&#39;</span><span class="p">)</span>
-    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="s1">&#39;spectra&#39;</span><span class="p">),</span>
-                              <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_mode_dict</span><span class="p">)</span>
+    <span class="n">sweep_mode_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_mode&quot;</span><span class="p">)</span>
+    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="s2">&quot;spectra&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_mode_dict</span><span class="p">)</span>
 
-    <span class="n">sweep_start_ray_index_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_start_ray_index&#39;</span><span class="p">)</span>
-    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">),</span>
-                                         <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_start_ray_index_dict</span><span class="p">)</span>
-    <span class="n">sweep_end_ray_index_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_end_ray_index&#39;</span><span class="p">)</span>
-    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">),</span>
-                                       <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_end_ray_index_dict</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_start_ray_index&quot;</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_start_ray_index_dict</span>
+    <span class="p">)</span>
+    <span class="n">sweep_end_ray_index_dict</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_end_ray_index&quot;</span><span class="p">)</span>
+    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">times</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_end_ray_index_dict</span>
+    <span class="p">)</span>
     <span class="n">spectra_array</span> <span class="o">=</span> <span class="p">[</span><span class="n">_get_spectra</span><span class="p">(</span><span class="n">xrobj</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">xrobj</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">]</span>
     <span class="n">spectras</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span><span class="n">spectra_array</span><span class="p">)</span>
 
     <span class="n">c</span> <span class="o">=</span> <span class="mi">299792458</span>
 
     <span class="n">npulses_max</span> <span class="o">=</span> <span class="n">xrobj</span><span class="o">.</span><span class="n">speclength</span><span class="o">.</span><span class="n">values</span>
-    <span class="n">wavelength</span> <span class="o">=</span> <span class="n">c</span><span class="o">/</span><span class="nb">float</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[-+]?\d*\.\d+|\d+&quot;</span><span class="p">,</span>
-                                    <span class="n">xrobj</span><span class="o">.</span><span class="n">radar_operating_frequency</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span><span class="o">*</span><span class="mf">1e-9</span>
-    <span class="n">scan_type</span> <span class="o">=</span> <span class="s1">&#39;vpt&#39;</span>
+    <span class="n">wavelength</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">c</span>
+        <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;[-+]?\d*\.\d+|\d+&quot;</span><span class="p">,</span> <span class="n">xrobj</span><span class="o">.</span><span class="n">radar_operating_frequency</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="o">*</span> <span class="mf">1e-9</span>
+    <span class="p">)</span>
+    <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">&quot;vpt&quot;</span>
 
     <span class="n">metadata</span> <span class="o">=</span> <span class="n">xrobj</span><span class="o">.</span><span class="n">attrs</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;wavelength&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wavelength</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;wavelength&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wavelength</span>
     <span class="n">velocity_dict</span> <span class="o">=</span> <span class="n">xrobj</span><span class="o">.</span><span class="n">velocity_bins</span><span class="o">.</span><span class="n">attrs</span>
     <span class="n">bins</span> <span class="o">=</span> <span class="n">xrobj</span><span class="o">.</span><span class="n">velocity_bins</span><span class="o">.</span><span class="n">values</span>
-    <span class="n">velocity_bins</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="n">velocity_dict</span><span class="p">,</span>
-                                 <span class="n">dims</span><span class="o">=</span><span class="s1">&#39;npulses_max&#39;</span><span class="p">)</span>
+    <span class="n">velocity_bins</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">bins</span><span class="p">,</span> <span class="n">attrs</span><span class="o">=</span><span class="n">velocity_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s2">&quot;npulses_max&quot;</span><span class="p">)</span>
     <span class="n">xrobj</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="k">return</span> <span class="n">RadarSpectra</span><span class="p">(</span><span class="n">time</span><span class="p">,</span> <span class="n">_range</span><span class="p">,</span> <span class="n">spectras</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">scan_type</span><span class="p">,</span>
-                        <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">altitude</span><span class="p">,</span>
-                        <span class="n">sweep_number</span><span class="p">,</span> <span class="n">sweep_mode</span><span class="p">,</span> <span class="n">fixed_angle</span><span class="p">,</span>
-                        <span class="n">sweep_start_ray_index</span><span class="p">,</span> <span class="n">sweep_end_ray_index</span><span class="p">,</span>
-                        <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span> <span class="n">npulses_max</span><span class="p">,</span> <span class="n">velocity_bins</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">RadarSpectra</span><span class="p">(</span>
+        <span class="n">time</span><span class="p">,</span>
+        <span class="n">_range</span><span class="p">,</span>
+        <span class="n">spectras</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="p">,</span>
+        <span class="n">scan_type</span><span class="p">,</span>
+        <span class="n">latitude</span><span class="p">,</span>
+        <span class="n">longitude</span><span class="p">,</span>
+        <span class="n">altitude</span><span class="p">,</span>
+        <span class="n">sweep_number</span><span class="p">,</span>
+        <span class="n">sweep_mode</span><span class="p">,</span>
+        <span class="n">fixed_angle</span><span class="p">,</span>
+        <span class="n">sweep_start_ray_index</span><span class="p">,</span>
+        <span class="n">sweep_end_ray_index</span><span class="p">,</span>
+        <span class="n">azimuth</span><span class="p">,</span>
+        <span class="n">elevation</span><span class="p">,</span>
+        <span class="n">npulses_max</span><span class="p">,</span>
+        <span class="n">velocity_bins</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_get_spectra</span><span class="p">(</span><span class="n">xrobj</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Retrieves the spectra values using time and locator mask. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieves the spectra values using time and locator mask.&quot;&quot;&quot;</span>
     <span class="n">the_spectra_locs</span> <span class="o">=</span> <span class="n">xrobj</span><span class="o">.</span><span class="n">locator_mask</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
-    <span class="n">the_spectra_loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">the_spectra_locs</span><span class="p">),</span>
-                                <span class="nb">len</span><span class="p">(</span><span class="n">xrobj</span><span class="o">.</span><span class="n">speclength</span><span class="o">.</span><span class="n">values</span><span class="p">)))</span>
+    <span class="n">the_spectra_loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">the_spectra_locs</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">xrobj</span><span class="o">.</span><span class="n">speclength</span><span class="o">.</span><span class="n">values</span><span class="p">)))</span>
     <span class="n">the_spectra_locs</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">the_spectra_locs</span><span class="p">)]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">9999.0</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">locs</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">the_spectra_locs</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">locs</span> <span class="o">!=</span> <span class="o">-</span><span class="mf">9999.0</span><span class="p">:</span>
             <span class="n">the_spectra_loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">xrobj</span><span class="o">.</span><span class="n">spectra</span><span class="o">.</span><span class="n">values</span><span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">locs</span><span class="p">),</span> <span class="p">:]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">the_spectra_loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span>
-                <span class="n">xrobj</span><span class="o">.</span><span class="n">speclength</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
+            <span class="n">the_spectra_loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">xrobj</span><span class="o">.</span><span class="n">speclength</span><span class="o">.</span><span class="n">values</span><span class="p">))</span>
     <span class="k">return</span> <span class="n">the_spectra_loc</span>
 
 
 <span class="k">def</span> <span class="nf">get_kazr_location</span><span class="p">(</span><span class="n">arm_site</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the latitude, longitude and altitude of a ARM KAZR Radar.</span>
 
 <span class="sd">    Parameters</span>
@@ -430,12 +471,14 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">loc</span> <span class="o">=</span> <span class="n">ARM_SITES</span><span class="p">[</span><span class="n">arm_site</span><span class="o">.</span><span class="n">upper</span><span class="p">()]</span>
-    <span class="k">return</span> <span class="n">loc</span><span class="p">[</span><span class="s1">&#39;lat&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="p">[</span><span class="s1">&#39;lon&#39;</span><span class="p">],</span> <span class="n">loc</span><span class="p">[</span><span class="s1">&#39;alt&#39;</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">loc</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">],</span> <span class="n">loc</span><span class="p">[</span><span class="s2">&quot;lon&quot;</span><span class="p">],</span> <span class="n">loc</span><span class="p">[</span><span class="s2">&quot;alt&quot;</span><span class="p">]</span>
+
 
 <span class="n">ARM_SITES</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;SGP&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;lat&#39;</span><span class="p">:</span> <span class="mf">36.605</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">97.485</span><span class="p">,</span> <span class="s1">&#39;alt&#39;</span><span class="p">:</span> <span class="mi">318</span><span class="p">},</span>
-    <span class="s2">&quot;ENA&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;lat&#39;</span><span class="p">:</span> <span class="mf">39.0916</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">28.0257</span><span class="p">,</span> <span class="s1">&#39;alt&#39;</span><span class="p">:</span> <span class="mi">30</span><span class="p">},</span>
-    <span class="s2">&quot;NSA&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s1">&#39;lat&#39;</span><span class="p">:</span> <span class="mf">71.323</span><span class="p">,</span> <span class="s1">&#39;lon&#39;</span><span class="p">:</span> <span class="o">-</span><span class="mf">156.609</span><span class="p">,</span> <span class="s1">&#39;alt&#39;</span><span class="p">:</span> <span class="mi">8</span><span class="p">},</span> <span class="p">}</span>
+    <span class="s2">&quot;SGP&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="mf">36.605</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">97.485</span><span class="p">,</span> <span class="s2">&quot;alt&quot;</span><span class="p">:</span> <span class="mi">318</span><span class="p">},</span>
+    <span class="s2">&quot;ENA&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="mf">39.0916</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">28.0257</span><span class="p">,</span> <span class="s2">&quot;alt&quot;</span><span class="p">:</span> <span class="mi">30</span><span class="p">},</span>
+    <span class="s2">&quot;NSA&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="mf">71.323</span><span class="p">,</span> <span class="s2">&quot;lon&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mf">156.609</span><span class="p">,</span> <span class="s2">&quot;alt&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">},</span>
+<span class="p">}</span>
 </pre></div>
 <div class="section">
    

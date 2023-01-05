@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.testing.example_data &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.testing.example_data &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -222,18 +222,18 @@
 <span class="kn">import</span> <span class="nn">pooch</span>
 
 <span class="n">DATASETS</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s1">&#39;pyart-datasets&#39;</span><span class="p">),</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s1">&#39;https://adc.arm.gov/pyart/example_data/&#39;</span><span class="p">,</span>
-    <span class="n">env</span><span class="o">=</span><span class="s1">&#39;PYART_DATASETS_DIR&#39;</span><span class="p">,</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;pyart-datasets&quot;</span><span class="p">),</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://adc.arm.gov/pyart/example_data/&quot;</span><span class="p">,</span>
+    <span class="n">env</span><span class="o">=</span><span class="s2">&quot;PYART_DATASETS_DIR&quot;</span><span class="p">,</span>
 <span class="p">)</span>
 
 
-<span class="k">with</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_stream</span><span class="p">(</span><span class="s1">&#39;pyart.testing&#39;</span><span class="p">,</span> <span class="s1">&#39;registry.txt&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">registry_file</span><span class="p">:</span>
+<span class="k">with</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">resource_stream</span><span class="p">(</span><span class="s2">&quot;pyart.testing&quot;</span><span class="p">,</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">registry_file</span><span class="p">:</span>
     <span class="n">DATASETS</span><span class="o">.</span><span class="n">load_registry</span><span class="p">(</span><span class="n">registry_file</span><span class="p">)</span>
 
 
 <span class="k">def</span> <span class="nf">locate</span><span class="p">():</span>
-    <span class="sd">&quot;&quot;&quot;The absolute path to the sample data storage location on disk.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;The absolute path to the sample data storage location on disk.</span>
 <span class="sd">    This is where the data are saved on your computer. The location is</span>
 <span class="sd">    dependent on the operating system. The folder locations are defined by the</span>
 <span class="sd">    ``appdirs``  package (see the `appdirs documentation</span>
@@ -249,7 +249,7 @@
 
 
 <div class="viewcode-block" id="get_test_data"><a class="viewcode-back" href="../../../API/generated/pyart.testing.get_test_data.html#pyart.testing.get_test_data">[docs]</a><span class="k">def</span> <span class="nf">get_test_data</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Accesses the desired test data storage</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>

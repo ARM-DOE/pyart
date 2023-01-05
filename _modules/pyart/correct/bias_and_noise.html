@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.correct.bias_and_noise &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.correct.bias_and_noise &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -225,13 +225,19 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_metadata</span><span class="p">,</span> <span class="n">get_field_name</span>
+<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_metadata</span>
 
 
-<div class="viewcode-block" id="correct_noise_rhohv"><a class="viewcode-back" href="../../../API/generated/pyart.correct.correct_noise_rhohv.html#pyart.correct.correct_noise_rhohv">[docs]</a><span class="k">def</span> <span class="nf">correct_noise_rhohv</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">urhohv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">snr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">zdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nh_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">nv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                        <span class="n">rhohv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="correct_noise_rhohv"><a class="viewcode-back" href="../../../API/generated/pyart.correct.correct_noise_rhohv.html#pyart.correct.correct_noise_rhohv">[docs]</a><span class="k">def</span> <span class="nf">correct_noise_rhohv</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span>
+    <span class="n">urhohv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">snr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">zdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">nh_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">nv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">rhohv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Corrects RhoHV for noise according to eq. 6 in Gourley et al. 2006.</span>
 <span class="sd">    This correction should only be performed if noise has not been subtracted</span>
 <span class="sd">    from the signal during the moments computation.</span>
@@ -261,55 +267,57 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">urhohv_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">urhohv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;uncorrected_cross_correlation_ratio&#39;</span><span class="p">)</span>
+        <span class="n">urhohv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;uncorrected_cross_correlation_ratio&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">snr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">snr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;signal_to_noise_ratio&#39;</span><span class="p">)</span>
+        <span class="n">snr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;signal_to_noise_ratio&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">zdr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">zdr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;differential_reflectivity&#39;</span><span class="p">)</span>
+        <span class="n">zdr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;differential_reflectivity&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">nh_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">nh_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;noisedBZ_hh&#39;</span><span class="p">)</span>
+        <span class="n">nh_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;noisedBZ_hh&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">nv_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">nv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;noisedBZ_vv&#39;</span><span class="p">)</span>
+        <span class="n">nv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;noisedBZ_vv&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">rhohv_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">rhohv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;cross_correlation_ratio&#39;</span><span class="p">)</span>
+        <span class="n">rhohv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">)</span>
 
     <span class="c1"># extract fields from radar</span>
     <span class="k">if</span> <span class="n">urhohv_field</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">urhohv</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">urhohv_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="n">urhohv</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">urhohv_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Field not available: &#39;</span> <span class="o">+</span> <span class="n">urhohv_field</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Field not available: &quot;</span> <span class="o">+</span> <span class="n">urhohv_field</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">snr_field</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">snrdB_h</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">snr_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="n">snrdB_h</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">snr_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Field not available: &#39;</span> <span class="o">+</span> <span class="n">snr_field</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Field not available: &quot;</span> <span class="o">+</span> <span class="n">snr_field</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">zdr_field</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">zdrdB</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">zdr_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="n">zdrdB</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">zdr_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Field not available: &#39;</span> <span class="o">+</span> <span class="n">zdr_field</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Field not available: &quot;</span> <span class="o">+</span> <span class="n">zdr_field</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">nh_field</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">nh</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">nh_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="n">nh</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">nh_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Field not available: &#39;</span> <span class="o">+</span> <span class="n">nh_field</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Field not available: &quot;</span> <span class="o">+</span> <span class="n">nh_field</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">nv_field</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">nv</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">nv_field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="n">nv</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">nv_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Field not available: &#39;</span> <span class="o">+</span> <span class="n">nv_field</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Field not available: &quot;</span> <span class="o">+</span> <span class="n">nv_field</span><span class="p">)</span>
 
-    <span class="n">snr_h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">10.</span><span class="p">,</span> <span class="mf">0.1</span><span class="o">*</span><span class="n">snrdB_h</span><span class="p">)</span>
-    <span class="n">zdr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">10.</span><span class="p">,</span> <span class="mf">0.1</span><span class="o">*</span><span class="n">zdrdB</span><span class="p">)</span>
-    <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">10.</span><span class="p">,</span> <span class="mf">0.1</span><span class="o">*</span><span class="p">(</span><span class="n">nh</span><span class="o">-</span><span class="n">nv</span><span class="p">))</span>
+    <span class="n">snr_h</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">snrdB_h</span><span class="p">)</span>
+    <span class="n">zdr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">zdrdB</span><span class="p">)</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="p">(</span><span class="n">nh</span> <span class="o">-</span> <span class="n">nv</span><span class="p">))</span>
 
-    <span class="n">rhohv_data</span> <span class="o">=</span> <span class="n">urhohv</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="mf">1.</span><span class="o">+</span><span class="mf">1.</span><span class="o">/</span><span class="n">snr_h</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="mf">1.</span><span class="o">+</span><span class="n">zdr</span><span class="o">/</span><span class="p">(</span><span class="n">alpha</span><span class="o">*</span><span class="n">snr_h</span><span class="p">)))</span>
-    <span class="n">rhohv_data</span><span class="p">[</span><span class="n">rhohv_data</span> <span class="o">&gt;</span> <span class="mf">1.</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.</span>
+    <span class="n">rhohv_data</span> <span class="o">=</span> <span class="n">urhohv</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+        <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">snr_h</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">zdr</span> <span class="o">/</span> <span class="p">(</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">snr_h</span><span class="p">))</span>
+    <span class="p">)</span>
+    <span class="n">rhohv_data</span><span class="p">[</span><span class="n">rhohv_data</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
 
     <span class="n">rhohv</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">rhohv_field</span><span class="p">)</span>
-    <span class="n">rhohv</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rhohv_data</span>
+    <span class="n">rhohv</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rhohv_data</span>
 
     <span class="k">return</span> <span class="n">rhohv</span></div>
 
 
-<div class="viewcode-block" id="correct_bias"><a class="viewcode-back" href="../../../API/generated/pyart.correct.correct_bias.html#pyart.correct.correct_bias">[docs]</a><span class="k">def</span> <span class="nf">correct_bias</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span> <span class="n">field_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="correct_bias"><a class="viewcode-back" href="../../../API/generated/pyart.correct.correct_bias.html#pyart.correct.correct_bias">[docs]</a><span class="k">def</span> <span class="nf">correct_bias</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">field_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Corrects a radar data bias. If field name is none the correction is</span>
 <span class="sd">    applied to horizontal reflectivity by default.</span>
 
@@ -330,23 +338,23 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">field_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">)</span>
+        <span class="n">field_name</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
 
     <span class="c1"># extract fields from radar</span>
     <span class="k">if</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">field_data</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="n">field_data</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Field not available: &#39;</span> <span class="o">+</span> <span class="n">field_name</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Field not available: &quot;</span> <span class="o">+</span> <span class="n">field_name</span><span class="p">)</span>
 
     <span class="n">corr_field_data</span> <span class="o">=</span> <span class="n">field_data</span> <span class="o">-</span> <span class="n">bias</span>
 
-    <span class="k">if</span> <span class="n">field_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s1">&#39;corrected_&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">field_name</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;corrected_&quot;</span><span class="p">):</span>
         <span class="n">corr_field_name</span> <span class="o">=</span> <span class="n">field_name</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">corr_field_name</span> <span class="o">=</span> <span class="s1">&#39;corrected_&#39;</span><span class="o">+</span><span class="n">field_name</span>
+        <span class="n">corr_field_name</span> <span class="o">=</span> <span class="s2">&quot;corrected_&quot;</span> <span class="o">+</span> <span class="n">field_name</span>
 
     <span class="n">corr_field</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">corr_field_name</span><span class="p">)</span>
-    <span class="n">corr_field</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr_field_data</span>
+    <span class="n">corr_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr_field_data</span>
 
     <span class="k">return</span> <span class="n">corr_field</span></div>
 </pre></div>

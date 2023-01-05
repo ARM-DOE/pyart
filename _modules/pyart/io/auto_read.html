@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.auto_read &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.io.auto_read &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -228,19 +228,19 @@
 
 <span class="kn">import</span> <span class="nn">netCDF4</span>
 
-<span class="kn">from</span> <span class="nn">.rsl</span> <span class="kn">import</span> <span class="n">read_rsl</span><span class="p">,</span> <span class="n">_RSL_AVAILABLE</span>
-<span class="kn">from</span> <span class="nn">.mdv_radar</span> <span class="kn">import</span> <span class="n">read_mdv</span>
 <span class="kn">from</span> <span class="nn">.cfradial</span> <span class="kn">import</span> <span class="n">read_cfradial</span>
-<span class="kn">from</span> <span class="nn">.sigmet</span> <span class="kn">import</span> <span class="n">read_sigmet</span>
+<span class="kn">from</span> <span class="nn">.chl</span> <span class="kn">import</span> <span class="n">read_chl</span>
+<span class="kn">from</span> <span class="nn">.mdv_radar</span> <span class="kn">import</span> <span class="n">read_mdv</span>
 <span class="kn">from</span> <span class="nn">.nexrad_archive</span> <span class="kn">import</span> <span class="n">read_nexrad_archive</span>
 <span class="kn">from</span> <span class="nn">.nexrad_cdm</span> <span class="kn">import</span> <span class="n">read_nexrad_cdm</span>
 <span class="kn">from</span> <span class="nn">.nexradl3_read</span> <span class="kn">import</span> <span class="n">read_nexrad_level3</span>
+<span class="kn">from</span> <span class="nn">.rsl</span> <span class="kn">import</span> <span class="n">_RSL_AVAILABLE</span><span class="p">,</span> <span class="n">read_rsl</span>
+<span class="kn">from</span> <span class="nn">.sigmet</span> <span class="kn">import</span> <span class="n">read_sigmet</span>
 <span class="kn">from</span> <span class="nn">.uf</span> <span class="kn">import</span> <span class="n">read_uf</span>
-<span class="kn">from</span> <span class="nn">.chl</span> <span class="kn">import</span> <span class="n">read_chl</span>
 
 
 <div class="viewcode-block" id="read"><a class="viewcode-back" href="../../../API/generated/pyart.io.read.html#pyart.io.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">use_rsl</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read a radar file and return a radar object.</span>
 
 <span class="sd">    Additional parameters are passed to the underlying read_* function.</span>
@@ -294,27 +294,27 @@
     <span class="n">filetype</span> <span class="o">=</span> <span class="n">determine_filetype</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
 
     <span class="c1"># Bzip, uncompress and see if we can determine the type</span>
-    <span class="k">if</span> <span class="n">filetype</span> <span class="o">==</span> <span class="s1">&#39;BZ2&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">filetype</span> <span class="o">==</span> <span class="s2">&quot;BZ2&quot;</span><span class="p">:</span>
         <span class="n">bzfile</span> <span class="o">=</span> <span class="n">bz2</span><span class="o">.</span><span class="n">BZ2File</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">radar</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">bzfile</span><span class="p">,</span> <span class="n">use_rsl</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s1">&#39;Bzip file cannot be read compressed, &#39;</span>
-                <span class="s1">&#39;uncompress and try again&#39;</span><span class="p">)</span>
+                <span class="s2">&quot;Bzip file cannot be read compressed, uncompress and try again&quot;</span>
+            <span class="p">)</span>
         <span class="k">finally</span><span class="p">:</span>
             <span class="n">bzfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">radar</span>
 
     <span class="c1"># Gzip, uncompress and see if we can determine the type</span>
-    <span class="k">if</span> <span class="n">filetype</span> <span class="o">==</span> <span class="s1">&#39;GZ&#39;</span><span class="p">:</span>
-        <span class="n">gzfile</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">filetype</span> <span class="o">==</span> <span class="s2">&quot;GZ&quot;</span><span class="p">:</span>
+        <span class="n">gzfile</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">radar</span> <span class="o">=</span> <span class="n">read</span><span class="p">(</span><span class="n">gzfile</span><span class="p">,</span> <span class="n">use_rsl</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">except</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s1">&#39;Gzip file cannot be read compressed, &#39;</span>
-                <span class="s1">&#39;uncompress and try again&#39;</span><span class="p">)</span>
+                <span class="s2">&quot;Gzip file cannot be read compressed, uncompress and try again&quot;</span>
+            <span class="p">)</span>
         <span class="k">finally</span><span class="p">:</span>
             <span class="n">gzfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">radar</span>
@@ -324,17 +324,17 @@
         <span class="k">return</span> <span class="n">read_mdv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">filetype</span> <span class="o">==</span> <span class="s2">&quot;NETCDF3&quot;</span> <span class="ow">or</span> <span class="n">filetype</span> <span class="o">==</span> <span class="s2">&quot;NETCDF4&quot;</span><span class="p">:</span>
         <span class="n">dset</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s1">&#39;cdm_data_type&#39;</span> <span class="ow">in</span> <span class="n">dset</span><span class="o">.</span><span class="n">ncattrs</span><span class="p">():</span>   <span class="c1"># NEXRAD CDM</span>
+        <span class="k">if</span> <span class="s2">&quot;cdm_data_type&quot;</span> <span class="ow">in</span> <span class="n">dset</span><span class="o">.</span><span class="n">ncattrs</span><span class="p">():</span>  <span class="c1"># NEXRAD CDM</span>
             <span class="n">dset</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
             <span class="k">return</span> <span class="n">read_nexrad_cdm</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">dset</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-            <span class="k">return</span> <span class="n">read_cfradial</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>    <span class="c1"># CF/Radial</span>
-    <span class="k">if</span> <span class="n">filetype</span> <span class="o">==</span> <span class="s1">&#39;WSR88D&#39;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">read_cfradial</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>  <span class="c1"># CF/Radial</span>
+    <span class="k">if</span> <span class="n">filetype</span> <span class="o">==</span> <span class="s2">&quot;WSR88D&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">read_nexrad_archive</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">filetype</span> <span class="o">==</span> <span class="s1">&#39;CHL&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">filetype</span> <span class="o">==</span> <span class="s2">&quot;CHL&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">read_chl</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">filetype</span> <span class="o">==</span> <span class="s1">&#39;NEXRADL3&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">filetype</span> <span class="o">==</span> <span class="s2">&quot;NEXRADL3&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">read_nexrad_level3</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># RSL supported formats which are also supported natively in Py-ART</span>
@@ -350,15 +350,15 @@
             <span class="k">return</span> <span class="n">read_uf</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># RSL only supported file formats</span>
-    <span class="n">rsl_formats</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;HDF4&#39;</span><span class="p">,</span> <span class="s1">&#39;RSL&#39;</span><span class="p">,</span> <span class="s1">&#39;DORAD&#39;</span><span class="p">,</span> <span class="s1">&#39;LASSEN&#39;</span><span class="p">]</span>
+    <span class="n">rsl_formats</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;HDF4&quot;</span><span class="p">,</span> <span class="s2">&quot;RSL&quot;</span><span class="p">,</span> <span class="s2">&quot;DORAD&quot;</span><span class="p">,</span> <span class="s2">&quot;LASSEN&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">filetype</span> <span class="ow">in</span> <span class="n">rsl_formats</span> <span class="ow">and</span> <span class="n">_RSL_AVAILABLE</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">read_rsl</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
 
-    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s1">&#39;Unknown or unsupported file format: &#39;</span> <span class="o">+</span> <span class="n">filetype</span><span class="p">)</span></div>
+    <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unknown or unsupported file format: &quot;</span> <span class="o">+</span> <span class="n">filetype</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">determine_filetype</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the filetype of a given file by examining the first few bytes.</span>
 
 <span class="sd">    The following filetypes are detected:</span>
@@ -399,7 +399,7 @@
 
     <span class="c1"># read the first 12 bytes from the file</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>
         <span class="n">begin</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">12</span><span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
@@ -413,7 +413,7 @@
     <span class="c1"># 1016, 14142, 1</span>
     <span class="c1"># import struct</span>
     <span class="c1"># mdv_signature = struct.pack(&#39;&gt;3i&#39;, 1016, 14142, 1)</span>
-    <span class="n">mdv_signature</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x00\x00\x03\xf8\x00\x00</span><span class="s1">7&gt;</span><span class="se">\x00\x00\x00\x01</span><span class="s1">&#39;</span>
+    <span class="n">mdv_signature</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00\x00\x03\xf8\x00\x00</span><span class="s2">7&gt;</span><span class="se">\x00\x00\x00\x01</span><span class="s2">&quot;</span>
     <span class="k">if</span> <span class="n">begin</span><span class="p">[:</span><span class="mi">12</span><span class="p">]</span> <span class="o">==</span> <span class="n">mdv_signature</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;MDV&quot;</span>
 
@@ -421,7 +421,7 @@
     <span class="c1"># begins with ARCH_ID_FILE_HDR = 0x5aa80004</span>
     <span class="c1"># import struct</span>
     <span class="c1"># struct.pack(&#39;&lt;i&#39;, 0x5aa80004)</span>
-    <span class="n">chl_signature</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x04\x00\xa8</span><span class="s1">Z&#39;</span>
+    <span class="n">chl_signature</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x04\x00\xa8</span><span class="s2">Z&quot;</span>
     <span class="k">if</span> <span class="n">begin</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="n">chl_signature</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;CHL&quot;</span>
 
@@ -431,23 +431,23 @@
 
     <span class="c1"># NetCDF4, read with read_cfradial, contained in a HDF5 container</span>
     <span class="c1"># HDF5 format signature from HDF5 specification documentation</span>
-    <span class="n">hdf5_signature</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x89\x48\x44\x46\x0d\x0a\x1a\x0a</span><span class="s1">&#39;</span>
+    <span class="n">hdf5_signature</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x89\x48\x44\x46\x0d\x0a\x1a\x0a</span><span class="s2">&quot;</span>
     <span class="k">if</span> <span class="n">begin</span><span class="p">[:</span><span class="mi">8</span><span class="p">]</span> <span class="o">==</span> <span class="n">hdf5_signature</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;NETCDF4&quot;</span>
 
     <span class="c1"># NEXRAD LEVEL 3 begin with SDUSXX KXXX</span>
-    <span class="n">nexrad_l3_signature</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;SDUS&#39;</span>
+    <span class="n">nexrad_l3_signature</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;SDUS&quot;</span>
     <span class="k">if</span> <span class="n">begin</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="n">nexrad_l3_signature</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;NEXRADL3&quot;</span>
 
     <span class="c1"># NEXRAD LEVEL 3 with NOAAPORT record seperator</span>
     <span class="c1"># Start of heading (x01) \r\r\nXXX \r\r\nSDUSXX KXXX</span>
-    <span class="k">if</span> <span class="n">begin</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x01\r\r\n</span><span class="s1">&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">begin</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x01\r\r\n</span><span class="s2">&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;NEXRADL3&quot;</span>
 
     <span class="c1"># Other files should be read with read_rsl</span>
     <span class="c1"># WSR-88D begin with ARCHIVE2. or AR2V000</span>
-    <span class="k">if</span> <span class="n">begin</span><span class="p">[:</span><span class="mi">9</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;ARCHIVE2.&#39;</span> <span class="ow">or</span> <span class="n">begin</span><span class="p">[:</span><span class="mi">7</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;AR2V000&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">begin</span><span class="p">[:</span><span class="mi">9</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;ARCHIVE2.&quot;</span> <span class="ow">or</span> <span class="n">begin</span><span class="p">[:</span><span class="mi">7</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;AR2V000&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;WSR88D&quot;</span>
 
     <span class="c1"># Universal format has UF in bytes 0,1 or 2,3 or 4,5</span>
@@ -459,7 +459,7 @@
         <span class="k">return</span> <span class="s2">&quot;DORADE&quot;</span>
 
     <span class="c1"># LASSEN</span>
-    <span class="k">if</span> <span class="n">begin</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s1">&#39;SUNRISE&#39;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">begin</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">11</span><span class="p">]</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;SUNRISE&quot;</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;LASSEN&quot;</span>
 
     <span class="c1"># RSL file</span>
@@ -468,7 +468,7 @@
 
     <span class="c1"># HDF4 file</span>
     <span class="c1"># HDF4 format signature from HDF4 specification documentation</span>
-    <span class="n">hdf4_signature</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x0e\x03\x13\x01</span><span class="s1">&#39;</span>
+    <span class="n">hdf4_signature</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x0e\x03\x13\x01</span><span class="s2">&quot;</span>
     <span class="k">if</span> <span class="n">begin</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span> <span class="o">==</span> <span class="n">hdf4_signature</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;HDF4&quot;</span>
 
@@ -476,18 +476,18 @@
     <span class="c1"># SIGMET format is a structure_header with a Product configuration</span>
     <span class="c1"># indicator (see section 4.2.47)</span>
     <span class="c1"># sigmet_signature = chr(27)</span>
-    <span class="n">sigmet_signature</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x1b</span><span class="s1">&#39;</span>
+    <span class="n">sigmet_signature</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x1b</span><span class="s2">&quot;</span>
     <span class="k">if</span> <span class="n">begin</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">1</span><span class="p">]</span> <span class="o">==</span> <span class="n">sigmet_signature</span><span class="p">:</span>
         <span class="k">return</span> <span class="s2">&quot;SIGMET&quot;</span>
 
     <span class="c1"># bzip2 compressed files</span>
-    <span class="n">bzip2_signature</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;BZh&#39;</span>
+    <span class="n">bzip2_signature</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;BZh&quot;</span>
     <span class="k">if</span> <span class="n">begin</span><span class="p">[:</span><span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="n">bzip2_signature</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;BZ2&#39;</span>
+        <span class="k">return</span> <span class="s2">&quot;BZ2&quot;</span>
 
-    <span class="n">gzip_signature</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x1f\x8b</span><span class="s1">&#39;</span>
+    <span class="n">gzip_signature</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x1f\x8b</span><span class="s2">&quot;</span>
     <span class="k">if</span> <span class="n">begin</span><span class="p">[:</span><span class="mi">2</span><span class="p">]</span> <span class="o">==</span> <span class="n">gzip_signature</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s1">&#39;GZ&#39;</span>
+        <span class="k">return</span> <span class="s2">&quot;GZ&quot;</span>
     <span class="c1"># Cannot determine filetype</span>
     <span class="k">return</span> <span class="s2">&quot;UNKNOWN&quot;</span>
 </pre></div>

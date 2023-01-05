@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.common &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.io.common &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -226,13 +226,13 @@
 <span class="kn">import</span> <span class="nn">bz2</span>
 <span class="kn">import</span> <span class="nn">gzip</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">netCDF4</span>
 <span class="kn">import</span> <span class="nn">fsspec</span>
+<span class="kn">import</span> <span class="nn">netCDF4</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 
-<div class="viewcode-block" id="prepare_for_read"><a class="viewcode-back" href="../../../API/generated/pyart.io.prepare_for_read.html#pyart.io.prepare_for_read">[docs]</a><span class="k">def</span> <span class="nf">prepare_for_read</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;anon&#39;</span><span class="p">:</span><span class="kc">True</span><span class="p">}):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="prepare_for_read"><a class="viewcode-back" href="../../../API/generated/pyart.io.prepare_for_read.html#pyart.io.prepare_for_read">[docs]</a><span class="k">def</span> <span class="nf">prepare_for_read</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">storage_options</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;anon&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a file like object read for reading.</span>
 
 <span class="sd">    Open a file for reading in binary mode with transparent decompression of</span>
@@ -255,32 +255,28 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># if a file-like object was provided, return</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;read&#39;</span><span class="p">):</span>   <span class="c1"># file-like object</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;read&quot;</span><span class="p">):</span>  <span class="c1"># file-like object</span>
         <span class="k">return</span> <span class="n">filename</span>
 
     <span class="c1"># look for compressed data by examining the first few bytes</span>
-    <span class="n">fh</span> <span class="o">=</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span>
-                     <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;rb&#39;</span><span class="p">,</span>
-                     <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;infer&quot;</span><span class="p">,</span>
-                     <span class="o">**</span><span class="n">storage_options</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
+    <span class="n">fh</span> <span class="o">=</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rb&quot;</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;infer&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">storage_options</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span>
     <span class="n">magic</span> <span class="o">=</span> <span class="n">fh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
     <span class="n">fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="c1"># If the data is still compressed, use gunzip/bz2 to uncompress the data</span>
-    <span class="k">if</span> <span class="n">magic</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;</span><span class="se">\x1f\x8b</span><span class="s1">&#39;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">gzip</span><span class="o">.</span><span class="n">GzipFile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">magic</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x1f\x8b</span><span class="s2">&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">gzip</span><span class="o">.</span><span class="n">GzipFile</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">magic</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s1">&#39;BZh&#39;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">bz2</span><span class="o">.</span><span class="n">BZ2File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;rb&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">magic</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;BZh&quot;</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">bz2</span><span class="o">.</span><span class="n">BZ2File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span>
-                       <span class="n">mode</span><span class="o">=</span><span class="s1">&#39;rb&#39;</span><span class="p">,</span>
-                       <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;infer&quot;</span><span class="p">,</span>
-                       <span class="o">**</span><span class="n">storage_options</span><span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span></div>
+    <span class="k">return</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">open</span><span class="p">(</span>
+        <span class="n">filename</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;rb&quot;</span><span class="p">,</span> <span class="n">compression</span><span class="o">=</span><span class="s2">&quot;infer&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">storage_options</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">open</span><span class="p">()</span></div>
 
 
 <span class="k">def</span> <span class="nf">stringarray_to_chararray</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">numchars</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert an string array to a character array with one extra dimension.</span>
 
 <span class="sd">    Parameters</span>
@@ -306,21 +302,22 @@
 
     <span class="n">arr_numchars</span> <span class="o">=</span> <span class="n">carr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">numchars</span> <span class="o">&lt;=</span> <span class="n">arr_numchars</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;numchars must be &gt;= </span><span class="si">%i</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">arr_numchars</span><span class="p">))</span>
-    <span class="n">chararr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span> <span class="o">+</span> <span class="p">(</span><span class="n">numchars</span><span class="p">,</span> <span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;S1&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;numchars must be &gt;= </span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">arr_numchars</span><span class="p">))</span>
+    <span class="n">chararr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">arr</span><span class="o">.</span><span class="n">shape</span> <span class="o">+</span> <span class="p">(</span><span class="n">numchars</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S1&quot;</span><span class="p">)</span>
     <span class="n">chararr</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="p">:</span><span class="n">arr_numchars</span><span class="p">]</span> <span class="o">=</span> <span class="n">carr</span><span class="p">[:]</span>
     <span class="k">return</span> <span class="n">chararr</span>
 
 
 <span class="k">def</span> <span class="nf">_test_arguments</span><span class="p">(</span><span class="n">dic</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Issue a warning if receive non-empty argument dict. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Issue a warning if receive non-empty argument dict.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">dic</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">warnings</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s1">&#39;Unexpected arguments: </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span> <span class="n">dic</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
+
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unexpected arguments: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">dic</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
 
 
 <span class="k">def</span> <span class="nf">make_time_unit_str</span><span class="p">(</span><span class="n">dtobj</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Return a time unit string from a datetime object. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a time unit string from a datetime object.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="s2">&quot;seconds since &quot;</span> <span class="o">+</span> <span class="n">dtobj</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2">T%H:%M:%SZ&quot;</span><span class="p">)</span>
 </pre></div>
 <div class="section">

@@ -1,0 +1,6 @@
+pyart.testing.RadarSpectra.longitude
+====================================
+
+.. currentmodule:: pyart.testing
+
+.. autoproperty:: RadarSpectra.longitude

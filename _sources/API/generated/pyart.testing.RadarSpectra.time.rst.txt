@@ -1,0 +1,6 @@
+pyart.testing.RadarSpectra.time
+===============================
+
+.. currentmodule:: pyart.testing
+
+.. autoproperty:: RadarSpectra.time

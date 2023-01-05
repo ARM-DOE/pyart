@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.util.hildebrand_sekhon &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.util.hildebrand_sekhon &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -225,8 +225,9 @@
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+
 <div class="viewcode-block" id="estimate_noise_hs74"><a class="viewcode-back" href="../../../API/generated/pyart.util.estimate_noise_hs74.html#pyart.util.estimate_noise_hs74">[docs]</a><span class="k">def</span> <span class="nf">estimate_noise_hs74</span><span class="p">(</span><span class="n">spectrum</span><span class="p">,</span> <span class="n">navg</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">nnoise_min</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimate noise parameters of a Doppler spectrum.</span>
 
 <span class="sd">    Use the method of estimating the noise level in Doppler spectra outlined</span>
@@ -269,28 +270,28 @@
     <span class="n">sorted_spectrum</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">spectrum</span><span class="p">)</span>
     <span class="n">nnoise</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">spectrum</span><span class="p">)</span>  <span class="c1"># default to all points in the spectrum as noise</span>
 
-    <span class="n">rtest</span> <span class="o">=</span> <span class="mi">1</span><span class="o">+</span><span class="mi">1</span><span class="o">/</span><span class="n">navg</span>
-    <span class="n">sum1</span> <span class="o">=</span> <span class="mf">0.</span>
-    <span class="n">sum2</span> <span class="o">=</span> <span class="mf">0.</span>
+    <span class="n">rtest</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">1</span> <span class="o">/</span> <span class="n">navg</span>
+    <span class="n">sum1</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">sum2</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">pwr</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sorted_spectrum</span><span class="p">):</span>
-        <span class="n">npts</span> <span class="o">=</span> <span class="n">i</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">npts</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
         <span class="n">sum1</span> <span class="o">+=</span> <span class="n">pwr</span>
-        <span class="n">sum2</span> <span class="o">+=</span> <span class="n">pwr</span><span class="o">*</span><span class="n">pwr</span>
+        <span class="n">sum2</span> <span class="o">+=</span> <span class="n">pwr</span> <span class="o">*</span> <span class="n">pwr</span>
 
         <span class="k">if</span> <span class="n">npts</span> <span class="o">&lt;</span> <span class="n">nnoise_min</span><span class="p">:</span>
             <span class="k">continue</span>
 
-        <span class="k">if</span> <span class="n">npts</span><span class="o">*</span><span class="n">sum2</span> <span class="o">&lt;</span> <span class="n">sum1</span><span class="o">*</span><span class="n">sum1</span><span class="o">*</span><span class="n">rtest</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">npts</span> <span class="o">*</span> <span class="n">sum2</span> <span class="o">&lt;</span> <span class="n">sum1</span> <span class="o">*</span> <span class="n">sum1</span> <span class="o">*</span> <span class="n">rtest</span><span class="p">:</span>
             <span class="n">nnoise</span> <span class="o">=</span> <span class="n">npts</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># partial spectrum no longer has characteristics of white noise.</span>
             <span class="n">sum1</span> <span class="o">-=</span> <span class="n">pwr</span>
-            <span class="n">sum2</span> <span class="o">-=</span> <span class="n">pwr</span><span class="o">*</span><span class="n">pwr</span>
+            <span class="n">sum2</span> <span class="o">-=</span> <span class="n">pwr</span> <span class="o">*</span> <span class="n">pwr</span>
             <span class="k">break</span>
 
-    <span class="n">mean</span> <span class="o">=</span> <span class="n">sum1</span><span class="o">/</span><span class="n">nnoise</span>
-    <span class="n">var</span> <span class="o">=</span> <span class="n">sum2</span><span class="o">/</span><span class="n">nnoise</span><span class="o">-</span><span class="n">mean</span><span class="o">*</span><span class="n">mean</span>
-    <span class="n">threshold</span> <span class="o">=</span> <span class="n">sorted_spectrum</span><span class="p">[</span><span class="n">nnoise</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">mean</span> <span class="o">=</span> <span class="n">sum1</span> <span class="o">/</span> <span class="n">nnoise</span>
+    <span class="n">var</span> <span class="o">=</span> <span class="n">sum2</span> <span class="o">/</span> <span class="n">nnoise</span> <span class="o">-</span> <span class="n">mean</span> <span class="o">*</span> <span class="n">mean</span>
+    <span class="n">threshold</span> <span class="o">=</span> <span class="n">sorted_spectrum</span><span class="p">[</span><span class="n">nnoise</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">mean</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">nnoise</span></div>
 </pre></div>
 <div class="section">

@@ -171,23 +171,6 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Image muting reduces the visual prominence of the reflectivities within identified melting and ...">
-
-.. only:: html
-
-  .. image:: /examples/plotting/images/thumb/sphx_glr_plot_nexrad_image_muted_reflectivity_thumb.png
-    :alt: Create an image-muted reflectivity plot
-
-  :ref:`sphx_glr_examples_plotting_plot_nexrad_image_muted_reflectivity.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Create an image-muted reflectivity plot</div>
-    </div>
-
-
-.. raw:: html
-
     <div class="sphx-glr-thumbcontainer" tooltip="An example that creates a 3 panel plot of a PPI, latitude slice, and longitude slice using xarr...">
 
 .. only:: html
@@ -217,6 +200,23 @@ Plotting real world radar data with Py-ART.
 .. raw:: html
 
       <div class="sphx-glr-thumbnail-title">Create a PPI plot on a cartopy map</div>
+    </div>
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="Image muting reduces the visual prominence of the reflectivities within identified melting and ...">
+
+.. only:: html
+
+  .. image:: /examples/plotting/images/thumb/sphx_glr_plot_nexrad_image_muted_reflectivity_thumb.png
+    :alt: Create an image-muted reflectivity plot
+
+  :ref:`sphx_glr_examples_plotting_plot_nexrad_image_muted_reflectivity.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Create an image-muted reflectivity plot</div>
     </div>
 
 
@@ -256,6 +256,23 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This is an example of how to modify a colobar within a Py-ART display object.">
+
+.. only:: html
+
+  .. image:: /examples/plotting/images/thumb/sphx_glr_plot_modify_colorbar_thumb.png
+    :alt: Modify a Colorbar for your Plot
+
+  :ref:`sphx_glr_examples_plotting_plot_modify_colorbar.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Modify a Colorbar for your Plot</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="An example which creates an RHI plot of reflectivity using a RadarDisplay object and adding dif...">
 
 .. only:: html
@@ -290,23 +307,6 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This is an example of how to modify a colobar within a Py-ART display object. ">
-
-.. only:: html
-
-  .. image:: /examples/plotting/images/thumb/sphx_glr_plot_modify_colorbar_thumb.png
-    :alt: Modify a Colorbar for your Plot
-
-  :ref:`sphx_glr_examples_plotting_plot_modify_colorbar.py`
-
-.. raw:: html
-
-      <div class="sphx-glr-thumbnail-title">Modify a Colorbar for your Plot</div>
-    </div>
-
-
-.. raw:: html
-
     </div>
 
 
@@ -322,12 +322,12 @@ Plotting real world radar data with Py-ART.
    /examples/plotting/plot_rhi_two_panel
    /examples/plotting/plot_nexrad_multiple_moments
    /examples/plotting/plot_rhi_cfradial
-   /examples/plotting/plot_nexrad_image_muted_reflectivity
    /examples/plotting/plot_three_panel_gridmapdisplay
    /examples/plotting/plot_ppi_with_rings
+   /examples/plotting/plot_nexrad_image_muted_reflectivity
    /examples/plotting/plot_rhi_data_overlay
    /examples/plotting/plot_cross_section
+   /examples/plotting/plot_modify_colorbar
    /examples/plotting/plot_rhi_contours_differential_reflectivity
    /examples/plotting/plot_choose_a_colormap
-   /examples/plotting/plot_modify_colorbar
 

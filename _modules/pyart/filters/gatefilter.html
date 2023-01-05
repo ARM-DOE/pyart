@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.filters.gatefilter &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.filters.gatefilter &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -233,9 +233,16 @@
 
 
 <div class="viewcode-block" id="moment_based_gate_filter"><a class="viewcode-back" href="../../../API/generated/pyart.filters.moment_based_gate_filter.html#pyart.correct.moment_based_gate_filter">[docs]</a><span class="k">def</span> <span class="nf">moment_based_gate_filter</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">ncp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rhv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">min_ncp</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">min_rhv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_refl</span><span class="o">=-</span><span class="mf">20.</span><span class="p">,</span> <span class="n">max_refl</span><span class="o">=</span><span class="mf">100.0</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="n">radar</span><span class="p">,</span>
+    <span class="n">ncp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">rhv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">min_ncp</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">min_rhv</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">min_refl</span><span class="o">=-</span><span class="mf">20.0</span><span class="p">,</span>
+    <span class="n">max_refl</span><span class="o">=</span><span class="mf">100.0</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a filter which removes undesired gates based on moments.</span>
 
 <span class="sd">    Creates a gate filter in which the following gates are excluded:</span>
@@ -290,11 +297,11 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">)</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">ncp_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">ncp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;normalized_coherent_power&#39;</span><span class="p">)</span>
+        <span class="n">ncp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;normalized_coherent_power&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">rhv_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">rhv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;cross_correlation_ratio&#39;</span><span class="p">)</span>
+        <span class="n">rhv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">)</span>
 
     <span class="c1"># filter gates based upon field parameters</span>
     <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
@@ -320,11 +327,23 @@
 
 
 <div class="viewcode-block" id="moment_and_texture_based_gate_filter"><a class="viewcode-back" href="../../../API/generated/pyart.filters.moment_and_texture_based_gate_filter.html#pyart.correct.moment_and_texture_based_gate_filter">[docs]</a><span class="k">def</span> <span class="nf">moment_and_texture_based_gate_filter</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">zdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rhv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">phi_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">textzdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">textrhv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">textphi_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">textrefl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wind_size</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span> <span class="n">max_textphi</span><span class="o">=</span><span class="mf">20.</span><span class="p">,</span> <span class="n">max_textrhv</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
-        <span class="n">max_textzdr</span><span class="o">=</span><span class="mf">2.85</span><span class="p">,</span> <span class="n">max_textrefl</span><span class="o">=</span><span class="mf">8.</span><span class="p">,</span> <span class="n">min_rhv</span><span class="o">=</span><span class="mf">0.6</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+    <span class="n">radar</span><span class="p">,</span>
+    <span class="n">zdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">rhv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">phi_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">textzdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">textrhv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">textphi_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">textrefl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">wind_size</span><span class="o">=</span><span class="mi">7</span><span class="p">,</span>
+    <span class="n">max_textphi</span><span class="o">=</span><span class="mf">20.0</span><span class="p">,</span>
+    <span class="n">max_textrhv</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">max_textzdr</span><span class="o">=</span><span class="mf">2.85</span><span class="p">,</span>
+    <span class="n">max_textrefl</span><span class="o">=</span><span class="mf">8.0</span><span class="p">,</span>
+    <span class="n">min_rhv</span><span class="o">=</span><span class="mf">0.6</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a filter which removes undesired gates based on texture of moments.</span>
 
 <span class="sd">    Creates a gate filter in which the following gates are excluded:</span>
@@ -383,21 +402,21 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">)</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">zdr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">zdr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;differential_reflectivity&#39;</span><span class="p">)</span>
+        <span class="n">zdr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;differential_reflectivity&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">rhv_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">rhv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;cross_correlation_ratio&#39;</span><span class="p">)</span>
+        <span class="n">rhv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">phi_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">phi_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;uncorrected_differential_phase&#39;</span><span class="p">)</span>
+        <span class="n">phi_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;uncorrected_differential_phase&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">textrefl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">textrefl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;reflectivity_texture&#39;</span><span class="p">)</span>
+        <span class="n">textrefl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity_texture&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">textzdr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">textzdr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;differential_reflectivity_texture&#39;</span><span class="p">)</span>
+        <span class="n">textzdr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;differential_reflectivity_texture&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">textrhv_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">textrhv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;cross_correlation_ratio_texture&#39;</span><span class="p">)</span>
+        <span class="n">textrhv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;cross_correlation_ratio_texture&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">textphi_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">textphi_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;differential_phase_texture&#39;</span><span class="p">)</span>
+        <span class="n">textphi_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;differential_phase_texture&quot;</span><span class="p">)</span>
 
     <span class="c1"># make deepcopy of input radar (we do not want to modify the original)</span>
     <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
@@ -406,26 +425,25 @@
     <span class="k">if</span> <span class="p">(</span><span class="n">max_textphi</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">phi_field</span> <span class="ow">in</span> <span class="n">radar_aux</span><span class="o">.</span><span class="n">fields</span><span class="p">):</span>
         <span class="n">textphi</span> <span class="o">=</span> <span class="n">texture_along_ray</span><span class="p">(</span><span class="n">radar_aux</span><span class="p">,</span> <span class="n">phi_field</span><span class="p">,</span> <span class="n">wind_size</span><span class="o">=</span><span class="n">wind_size</span><span class="p">)</span>
         <span class="n">tphi</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">textphi_field</span><span class="p">)</span>
-        <span class="n">tphi</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">textphi</span>
+        <span class="n">tphi</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">textphi</span>
         <span class="n">radar_aux</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">textphi_field</span><span class="p">,</span> <span class="n">tphi</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">max_textrhv</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">rhv_field</span> <span class="ow">in</span> <span class="n">radar_aux</span><span class="o">.</span><span class="n">fields</span><span class="p">):</span>
         <span class="n">textrho</span> <span class="o">=</span> <span class="n">texture_along_ray</span><span class="p">(</span><span class="n">radar_aux</span><span class="p">,</span> <span class="n">rhv_field</span><span class="p">,</span> <span class="n">wind_size</span><span class="o">=</span><span class="n">wind_size</span><span class="p">)</span>
         <span class="n">trhv</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">textrhv_field</span><span class="p">)</span>
-        <span class="n">trhv</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">textrho</span>
+        <span class="n">trhv</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">textrho</span>
         <span class="n">radar_aux</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">textrhv_field</span><span class="p">,</span> <span class="n">trhv</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">max_textzdr</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">zdr_field</span> <span class="ow">in</span> <span class="n">radar_aux</span><span class="o">.</span><span class="n">fields</span><span class="p">):</span>
         <span class="n">textzdr</span> <span class="o">=</span> <span class="n">texture_along_ray</span><span class="p">(</span><span class="n">radar_aux</span><span class="p">,</span> <span class="n">zdr_field</span><span class="p">,</span> <span class="n">wind_size</span><span class="o">=</span><span class="n">wind_size</span><span class="p">)</span>
         <span class="n">tzdr</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">textzdr_field</span><span class="p">)</span>
-        <span class="n">tzdr</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">textzdr</span>
+        <span class="n">tzdr</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">textzdr</span>
         <span class="n">radar_aux</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">textzdr_field</span><span class="p">,</span> <span class="n">tzdr</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="p">(</span><span class="n">max_textrefl</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">refl_field</span> <span class="ow">in</span> <span class="n">radar_aux</span><span class="o">.</span><span class="n">fields</span><span class="p">):</span>
-        <span class="n">textrefl</span> <span class="o">=</span> <span class="n">texture_along_ray</span><span class="p">(</span>
-            <span class="n">radar_aux</span><span class="p">,</span> <span class="n">refl_field</span><span class="p">,</span> <span class="n">wind_size</span><span class="o">=</span><span class="n">wind_size</span><span class="p">)</span>
+        <span class="n">textrefl</span> <span class="o">=</span> <span class="n">texture_along_ray</span><span class="p">(</span><span class="n">radar_aux</span><span class="p">,</span> <span class="n">refl_field</span><span class="p">,</span> <span class="n">wind_size</span><span class="o">=</span><span class="n">wind_size</span><span class="p">)</span>
         <span class="n">trefl</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">textrefl_field</span><span class="p">)</span>
-        <span class="n">trefl</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">textrefl</span>
+        <span class="n">trefl</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">textrefl</span>
         <span class="n">radar_aux</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">textrefl_field</span><span class="p">,</span> <span class="n">trefl</span><span class="p">)</span>
 
     <span class="c1"># filter gates based upon field parameters</span>
@@ -454,9 +472,10 @@
     <span class="k">return</span> <span class="n">gatefilter</span></div>
 
 
-<div class="viewcode-block" id="temp_based_gate_filter"><a class="viewcode-back" href="../../../API/generated/pyart.filters.temp_based_gate_filter.html#pyart.correct.temp_based_gate_filter">[docs]</a><span class="k">def</span> <span class="nf">temp_based_gate_filter</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">temp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_temp</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
-                           <span class="n">thickness</span><span class="o">=</span><span class="mf">400.</span><span class="p">,</span> <span class="n">beamwidth</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="temp_based_gate_filter"><a class="viewcode-back" href="../../../API/generated/pyart.filters.temp_based_gate_filter.html#pyart.correct.temp_based_gate_filter">[docs]</a><span class="k">def</span> <span class="nf">temp_based_gate_filter</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span> <span class="n">temp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_temp</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="mf">400.0</span><span class="p">,</span> <span class="n">beamwidth</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a filter which removes undesired gates based on temperature. Used</span>
 <span class="sd">    primarily to filter out the melting layer and gates above it.</span>
 
@@ -490,7 +509,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">temp_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">temp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;temperature&#39;</span><span class="p">)</span>
+        <span class="n">temp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;temperature&quot;</span><span class="p">)</span>
 
     <span class="c1"># make deepcopy of input radar (we do not want to modify the original)</span>
     <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
@@ -503,43 +522,42 @@
         <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_masked</span><span class="p">(</span><span class="n">temp_field</span><span class="p">)</span>
         <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_invalid</span><span class="p">(</span><span class="n">temp_field</span><span class="p">)</span>
 
-    <span class="n">deltar</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">deltar</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">beamwidth</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">beam_rad</span> <span class="o">=</span> <span class="n">beamwidth</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span>
+        <span class="n">beam_rad</span> <span class="o">=</span> <span class="n">beamwidth</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>
     <span class="k">if</span> <span class="n">thickness</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">temp</span> <span class="o">=</span> <span class="n">radar_aux</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">temp_field</span><span class="p">]</span>
-        <span class="n">temp</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span>
-            <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">temp</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+        <span class="n">temp</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">temp</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">ray</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">radar_aux</span><span class="o">.</span><span class="n">nrays</span><span class="p">):</span>
-            <span class="n">gate_h_ray</span> <span class="o">=</span> <span class="n">radar_aux</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ray</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">gate_h_ray</span> <span class="o">=</span> <span class="n">radar_aux</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">,</span> <span class="p">:]</span>
             <span class="c1"># index of first excluded gate</span>
             <span class="n">ind_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="p">:]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">ind_r</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="c1"># some gates are excluded: find the maximum height</span>
                 <span class="n">ind_r</span> <span class="o">=</span> <span class="n">ind_r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">beamwidth</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">hmax</span> <span class="o">=</span> <span class="n">gate_h_ray</span><span class="p">[</span><span class="n">ind_r</span><span class="p">]</span><span class="o">-</span><span class="n">thickness</span>
+                    <span class="n">hmax</span> <span class="o">=</span> <span class="n">gate_h_ray</span><span class="p">[</span><span class="n">ind_r</span><span class="p">]</span> <span class="o">-</span> <span class="n">thickness</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># consider also the radar volume</span>
                     <span class="c1"># maximum altitude at the end of the volume</span>
-                    <span class="k">if</span> <span class="n">ind_r</span> <span class="o">&lt;</span> <span class="n">radar_aux</span><span class="o">.</span><span class="n">ngates</span><span class="o">-</span><span class="mi">2</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ind_r</span> <span class="o">&lt;</span> <span class="n">radar_aux</span><span class="o">.</span><span class="n">ngates</span> <span class="o">-</span> <span class="mi">2</span><span class="p">:</span>
                         <span class="n">hmax</span> <span class="o">=</span> <span class="p">(</span>
-                            <span class="p">(</span><span class="n">gate_h_ray</span><span class="p">[</span><span class="n">ind_r</span><span class="p">]</span> <span class="o">+</span> <span class="n">gate_h_ray</span><span class="p">[</span><span class="n">ind_r</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="mf">2.</span> <span class="o">-</span>
-                            <span class="n">thickness</span><span class="p">)</span>
+                            <span class="n">gate_h_ray</span><span class="p">[</span><span class="n">ind_r</span><span class="p">]</span> <span class="o">+</span> <span class="n">gate_h_ray</span><span class="p">[</span><span class="n">ind_r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                        <span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="n">thickness</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">hmax</span> <span class="o">=</span> <span class="n">gate_h_ray</span><span class="p">[</span><span class="n">ind_r</span><span class="p">]</span><span class="o">-</span><span class="n">thickness</span>
+                        <span class="n">hmax</span> <span class="o">=</span> <span class="n">gate_h_ray</span><span class="p">[</span><span class="n">ind_r</span><span class="p">]</span> <span class="o">-</span> <span class="n">thickness</span>
                     <span class="n">beam_radius</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ind_r</span><span class="p">]</span><span class="o">+</span><span class="n">deltar</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span><span class="o">*</span><span class="n">beam_rad</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
-                    <span class="n">delta_h</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="n">beam_radius</span>
-                        <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ray</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span><span class="p">))</span>
+                        <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_r</span><span class="p">]</span> <span class="o">+</span> <span class="n">deltar</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">beam_rad</span> <span class="o">/</span> <span class="mf">2.0</span>
+                    <span class="p">)</span>
+                    <span class="n">delta_h</span> <span class="o">=</span> <span class="n">beam_radius</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span>
+                        <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>
+                    <span class="p">)</span>
                     <span class="n">hmax</span> <span class="o">-=</span> <span class="n">delta_h</span>
 
-                <span class="n">ind_hmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-                    <span class="n">radar_aux</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ray</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&gt;</span> <span class="n">hmax</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ind_hmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">radar_aux</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&gt;</span> <span class="n">hmax</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">ind_hmax</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">ind_hmax</span> <span class="o">=</span> <span class="n">ind_hmax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">temp</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ray</span><span class="p">,</span> <span class="n">ind_hmax</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
+                    <span class="n">temp</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">,</span> <span class="n">ind_hmax</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
         <span class="n">radar_aux</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">temp_field</span><span class="p">,</span> <span class="n">temp</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">GateFilter</span><span class="p">(</span><span class="n">radar_aux</span><span class="p">)</span>
         <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_masked</span><span class="p">(</span><span class="n">temp_field</span><span class="p">)</span>
@@ -547,9 +565,10 @@
     <span class="k">return</span> <span class="n">gatefilter</span></div>
 
 
-<div class="viewcode-block" id="iso0_based_gate_filter"><a class="viewcode-back" href="../../../API/generated/pyart.filters.iso0_based_gate_filter.html#pyart.correct.iso0_based_gate_filter">[docs]</a><span class="k">def</span> <span class="nf">iso0_based_gate_filter</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">iso0_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_h_iso0</span><span class="o">=</span><span class="mf">0.</span><span class="p">,</span>
-                           <span class="n">thickness</span><span class="o">=</span><span class="mf">400.</span><span class="p">,</span> <span class="n">beamwidth</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="iso0_based_gate_filter"><a class="viewcode-back" href="../../../API/generated/pyart.filters.iso0_based_gate_filter.html#pyart.correct.iso0_based_gate_filter">[docs]</a><span class="k">def</span> <span class="nf">iso0_based_gate_filter</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span> <span class="n">iso0_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_h_iso0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="mf">400.0</span><span class="p">,</span> <span class="n">beamwidth</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a filter which removes undesired gates based height over the iso0.</span>
 <span class="sd">    Used primarily to filter out the melting layer and gates above it.</span>
 
@@ -583,7 +602,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">iso0_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">iso0_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s1">&#39;height_over_iso0&#39;</span><span class="p">)</span>
+        <span class="n">iso0_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;height_over_iso0&quot;</span><span class="p">)</span>
 
     <span class="c1"># make deepcopy of input radar (we do not want to modify the original)</span>
     <span class="n">radar_aux</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
@@ -596,43 +615,42 @@
         <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_masked</span><span class="p">(</span><span class="n">iso0_field</span><span class="p">)</span>
         <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_invalid</span><span class="p">(</span><span class="n">iso0_field</span><span class="p">)</span>
 
-    <span class="n">deltar</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span><span class="o">-</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">deltar</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">beamwidth</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">beam_rad</span> <span class="o">=</span> <span class="n">beamwidth</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span>
+        <span class="n">beam_rad</span> <span class="o">=</span> <span class="n">beamwidth</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>
     <span class="k">if</span> <span class="n">thickness</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">iso0</span> <span class="o">=</span> <span class="n">radar_aux</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">iso0_field</span><span class="p">]</span>
-        <span class="n">iso0</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span>
-            <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">iso0</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+        <span class="n">iso0</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">iso0</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">ray</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">radar_aux</span><span class="o">.</span><span class="n">nrays</span><span class="p">):</span>
-            <span class="n">gate_h_ray</span> <span class="o">=</span> <span class="n">radar_aux</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ray</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">gate_h_ray</span> <span class="o">=</span> <span class="n">radar_aux</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">,</span> <span class="p">:]</span>
             <span class="c1"># index of first excluded gate</span>
             <span class="n">ind_r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="p">:]</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">ind_r</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="c1"># some gates are excluded: find the maximum height</span>
                 <span class="n">ind_r</span> <span class="o">=</span> <span class="n">ind_r</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">beamwidth</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">hmax</span> <span class="o">=</span> <span class="n">gate_h_ray</span><span class="p">[</span><span class="n">ind_r</span><span class="p">]</span><span class="o">-</span><span class="n">thickness</span>
+                    <span class="n">hmax</span> <span class="o">=</span> <span class="n">gate_h_ray</span><span class="p">[</span><span class="n">ind_r</span><span class="p">]</span> <span class="o">-</span> <span class="n">thickness</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="c1"># consider also the radar volume</span>
                     <span class="c1"># maximum altitude at the end of the volume</span>
-                    <span class="k">if</span> <span class="n">ind_r</span> <span class="o">&lt;</span> <span class="n">radar_aux</span><span class="o">.</span><span class="n">ngates</span><span class="o">-</span><span class="mi">2</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">ind_r</span> <span class="o">&lt;</span> <span class="n">radar_aux</span><span class="o">.</span><span class="n">ngates</span> <span class="o">-</span> <span class="mi">2</span><span class="p">:</span>
                         <span class="n">hmax</span> <span class="o">=</span> <span class="p">(</span>
-                            <span class="p">(</span><span class="n">gate_h_ray</span><span class="p">[</span><span class="n">ind_r</span><span class="p">]</span> <span class="o">+</span> <span class="n">gate_h_ray</span><span class="p">[</span><span class="n">ind_r</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span><span class="o">/</span><span class="mf">2.</span> <span class="o">-</span>
-                            <span class="n">thickness</span><span class="p">)</span>
+                            <span class="n">gate_h_ray</span><span class="p">[</span><span class="n">ind_r</span><span class="p">]</span> <span class="o">+</span> <span class="n">gate_h_ray</span><span class="p">[</span><span class="n">ind_r</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span>
+                        <span class="p">)</span> <span class="o">/</span> <span class="mf">2.0</span> <span class="o">-</span> <span class="n">thickness</span>
                     <span class="k">else</span><span class="p">:</span>
-                        <span class="n">hmax</span> <span class="o">=</span> <span class="n">gate_h_ray</span><span class="p">[</span><span class="n">ind_r</span><span class="p">]</span><span class="o">-</span><span class="n">thickness</span>
+                        <span class="n">hmax</span> <span class="o">=</span> <span class="n">gate_h_ray</span><span class="p">[</span><span class="n">ind_r</span><span class="p">]</span> <span class="o">-</span> <span class="n">thickness</span>
                     <span class="n">beam_radius</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ind_r</span><span class="p">]</span><span class="o">+</span><span class="n">deltar</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span><span class="o">*</span><span class="n">beam_rad</span><span class="o">/</span><span class="mf">2.</span><span class="p">)</span>
-                    <span class="n">delta_h</span> <span class="o">=</span> <span class="p">(</span>
-                        <span class="n">beam_radius</span>
-                        <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ray</span><span class="p">]</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">/</span><span class="mf">180.</span><span class="p">))</span>
+                        <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ind_r</span><span class="p">]</span> <span class="o">+</span> <span class="n">deltar</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">beam_rad</span> <span class="o">/</span> <span class="mf">2.0</span>
+                    <span class="p">)</span>
+                    <span class="n">delta_h</span> <span class="o">=</span> <span class="n">beam_radius</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span>
+                        <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">]</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>
+                    <span class="p">)</span>
                     <span class="n">hmax</span> <span class="o">-=</span> <span class="n">delta_h</span>
 
-                <span class="n">ind_hmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span>
-                    <span class="n">radar_aux</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ray</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&gt;</span> <span class="n">hmax</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">ind_hmax</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">radar_aux</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">,</span> <span class="p">:]</span> <span class="o">&gt;</span> <span class="n">hmax</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
                 <span class="k">if</span> <span class="n">ind_hmax</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
                     <span class="n">ind_hmax</span> <span class="o">=</span> <span class="n">ind_hmax</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-                    <span class="n">iso0</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">ray</span><span class="p">,</span> <span class="n">ind_hmax</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
+                    <span class="n">iso0</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">,</span> <span class="n">ind_hmax</span><span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
         <span class="n">radar_aux</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">iso0_field</span><span class="p">,</span> <span class="n">iso0</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">GateFilter</span><span class="p">(</span><span class="n">radar_aux</span><span class="p">)</span>
         <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_masked</span><span class="p">(</span><span class="n">iso0_field</span><span class="p">)</span>
@@ -640,8 +658,8 @@
     <span class="k">return</span> <span class="n">gatefilter</span></div>
 
 
-<div class="viewcode-block" id="GateFilter"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.html#pyart.correct.GateFilter">[docs]</a><span class="k">class</span> <span class="nc">GateFilter</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GateFilter"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.html#pyart.correct.GateFilter">[docs]</a><span class="k">class</span> <span class="nc">GateFilter</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class for building a boolean arrays for filtering gates based on</span>
 <span class="sd">    a set of condition typically based on the values in the radar fields.</span>
 <span class="sd">    These filter can be used in various algorithms and calculations within</span>
@@ -671,7 +689,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">exclude_based</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; initialize &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;initialize&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_radar</span> <span class="o">=</span> <span class="n">radar</span>
         <span class="n">shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">ngates</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">exclude_based</span><span class="p">:</span>
@@ -688,14 +706,14 @@
     <span class="c1"># by taking the ones complement of gates_included.</span>
 
 <div class="viewcode-block" id="GateFilter.copy"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.copy.html#pyart.correct.GateFilter.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return a copy of the gatefilter. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a copy of the gatefilter.&quot;&quot;&quot;</span>
         <span class="n">a</span> <span class="o">=</span> <span class="n">GateFilter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="p">)</span>
         <span class="n">a</span><span class="o">.</span><span class="n">_gate_excluded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">a</span></div>
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">gate_included</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Boolean array indicating if a gate should be included in a</span>
 <span class="sd">        calculation. Elements marked True indicate the corresponding gate</span>
 <span class="sd">        should be include. Those marked False should be excluded.</span>
@@ -707,7 +725,7 @@
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">gate_excluded</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Boolean array indicating if a gate should be excluded from a</span>
 <span class="sd">        calculation. Elements marked True indicate the corresponding gate</span>
 <span class="sd">        should be excluded. Those marked False should be included.</span>
@@ -718,12 +736,12 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="nf">_get_fdata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Check that the field exists and retrieve field data. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that the field exists and retrieve field data.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 
     <span class="k">def</span> <span class="nf">_merge</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Merge an array of marked gates with the exclude array. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Merge an array of marked gates with the exclude array.&quot;&quot;&quot;</span>
         <span class="c1"># exclude masked elements in marked by replacing them with the value</span>
         <span class="c1"># of the exclude_masked flag.  This does nothing if marked is a</span>
         <span class="c1"># non-masked array.</span>
@@ -733,11 +751,11 @@
 
         <span class="c1"># merge array of marked gates with existing excluded gates</span>
         <span class="c1"># using the specified operation.</span>
-        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="s1">&#39;or&#39;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;or&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span><span class="p">,</span> <span class="n">marked</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s1">&#39;and&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;and&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span><span class="p">,</span> <span class="n">marked</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s1">&#39;new&#39;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">op</span> <span class="o">==</span> <span class="s2">&quot;new&quot;</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span> <span class="o">=</span> <span class="n">marked</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid &#39;op&#39; parameter: &quot;</span><span class="p">,</span> <span class="n">op</span><span class="p">)</span>
@@ -747,8 +765,8 @@
     <span class="c1"># exclude methods #</span>
     <span class="c1">###################</span>
 
-<div class="viewcode-block" id="GateFilter.exclude_transition"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_transition.html#pyart.correct.GateFilter.exclude_transition">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trans_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;or&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GateFilter.exclude_transition"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_transition.html#pyart.correct.GateFilter.exclude_transition">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trans_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Exclude all gates in rays marked as in transition between sweeps.</span>
 
 <span class="sd">        Exclude all gates in rays marked as &quot;in transition&quot; by the</span>
@@ -784,14 +802,15 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">marked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">antenna_transition</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">transition_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">antenna_transition</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+            <span class="n">transition_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">antenna_transition</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
             <span class="n">in_transition</span> <span class="o">=</span> <span class="n">transition_data</span> <span class="o">==</span> <span class="n">trans_value</span>
             <span class="n">marked</span><span class="p">[</span><span class="n">in_transition</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_below"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_below.html#pyart.correct.GateFilter.exclude_below">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_below</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;or&#39;</span><span class="p">,</span>
-                      <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GateFilter.exclude_below"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_below.html#pyart.correct.GateFilter.exclude_below">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_below</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Exclude gates where a given field is below a given value.</span>
 
 <span class="sd">        Parameters</span>
@@ -828,18 +847,20 @@
             <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">value</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_above"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_above.html#pyart.correct.GateFilter.exclude_above">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_above</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;or&#39;</span><span class="p">,</span>
-                      <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Exclude gates where a given field is above a given value. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GateFilter.exclude_above"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_above.html#pyart.correct.GateFilter.exclude_above">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_above</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exclude gates where a given field is above a given value.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">inclusive</span><span class="p">:</span>
             <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">value</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">value</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_inside"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_inside.html#pyart.correct.GateFilter.exclude_inside">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;or&#39;</span><span class="p">,</span>
-                       <span class="n">inclusive</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Exclude gates where a given field is inside a given interval. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GateFilter.exclude_inside"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_inside.html#pyart.correct.GateFilter.exclude_inside">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_inside</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exclude gates where a given field is inside a given interval.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">v2</span> <span class="o">&lt;</span> <span class="n">v1</span><span class="p">:</span>
             <span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="n">v1</span><span class="p">)</span>
         <span class="n">fdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
@@ -849,9 +870,10 @@
             <span class="n">marked</span> <span class="o">=</span> <span class="p">(</span><span class="n">fdata</span> <span class="o">&gt;</span> <span class="n">v1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">fdata</span> <span class="o">&lt;</span> <span class="n">v2</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_outside"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_outside.html#pyart.correct.GateFilter.exclude_outside">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_outside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;or&#39;</span><span class="p">,</span>
-                        <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Exclude gates where a given field is outside a given interval. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GateFilter.exclude_outside"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_outside.html#pyart.correct.GateFilter.exclude_outside">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_outside</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exclude gates where a given field is outside a given interval.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">v2</span> <span class="o">&lt;</span> <span class="n">v1</span><span class="p">:</span>
             <span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="n">v1</span><span class="p">)</span>
         <span class="n">fdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
@@ -861,40 +883,40 @@
             <span class="n">marked</span> <span class="o">=</span> <span class="p">(</span><span class="n">fdata</span> <span class="o">&lt;</span> <span class="n">v1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">fdata</span> <span class="o">&gt;</span> <span class="n">v2</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_equal"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_equal.html#pyart.correct.GateFilter.exclude_equal">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;or&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Exclude gates where a given field is equal to a value. &quot;&quot;&quot;</span>
-        <span class="n">marked</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">==</span> <span class="n">value</span><span class="p">)</span>
+<div class="viewcode-block" id="GateFilter.exclude_equal"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_equal.html#pyart.correct.GateFilter.exclude_equal">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exclude gates where a given field is equal to a value.&quot;&quot;&quot;</span>
+        <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">==</span> <span class="n">value</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_not_equal"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_not_equal.html#pyart.correct.GateFilter.exclude_not_equal">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_not_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;or&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Exclude gates where a given field is not equal to a value. &quot;&quot;&quot;</span>
-        <span class="n">marked</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">!=</span> <span class="n">value</span><span class="p">)</span>
+<div class="viewcode-block" id="GateFilter.exclude_not_equal"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_not_equal.html#pyart.correct.GateFilter.exclude_not_equal">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_not_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exclude gates where a given field is not equal to a value.&quot;&quot;&quot;</span>
+        <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">!=</span> <span class="n">value</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GateFilter.exclude_all"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_all.html#pyart.correct.GateFilter.exclude_all">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Exclude all gates. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exclude all gates.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span><span class="p">)</span>
         <span class="k">return</span></div>
 
 <div class="viewcode-block" id="GateFilter.exclude_none"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_none.html#pyart.correct.GateFilter.exclude_none">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_none</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Exclude no gates, include all gates. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exclude no gates, include all gates.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span><span class="p">)</span>
         <span class="k">return</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_masked"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_masked.html#pyart.correct.GateFilter.exclude_masked">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_masked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;or&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Exclude gates where a given field is masked. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GateFilter.exclude_masked"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_masked.html#pyart.correct.GateFilter.exclude_masked">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_masked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Exclude gates where a given field is masked.&quot;&quot;&quot;</span>
         <span class="n">marked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_invalid"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_invalid.html#pyart.correct.GateFilter.exclude_invalid">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_invalid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;or&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GateFilter.exclude_invalid"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_invalid.html#pyart.correct.GateFilter.exclude_invalid">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_invalid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Exclude gates where an invalid value occurs in a field (NaNs or infs).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">marked</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_gates"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_gates.html#pyart.correct.GateFilter.exclude_gates">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;or&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GateFilter.exclude_gates"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_gates.html#pyart.correct.GateFilter.exclude_gates">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Exclude gates where a given mask is equal True.</span>
 
 <span class="sd">        Parameters</span>
@@ -920,19 +942,18 @@
 <span class="sd">            or invalid.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">fdata</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">values</span><span class="p">()))[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="n">fdata</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">values</span><span class="p">()))[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">fdata</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;mask array must be the same size as a field.&quot;</span><span class="p">)</span>
-        <span class="n">marked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;bool&#39;</span><span class="p">)</span>
+        <span class="n">marked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;bool&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
     <span class="c1">####################</span>
     <span class="c1"># include_ methods #</span>
     <span class="c1">####################</span>
 
-<div class="viewcode-block" id="GateFilter.include_not_transition"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_not_transition.html#pyart.correct.GateFilter.include_not_transition">[docs]</a>    <span class="k">def</span> <span class="nf">include_not_transition</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">trans_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;and&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GateFilter.include_not_transition"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_not_transition.html#pyart.correct.GateFilter.include_not_transition">[docs]</a>    <span class="k">def</span> <span class="nf">include_not_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trans_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Include all gates in rays not marked as in transition between sweeps.</span>
 
 <span class="sd">        Include all gates in rays not marked as &quot;in transition&quot; by the</span>
@@ -969,32 +990,35 @@
             <span class="n">include</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span><span class="p">)</span>  <span class="c1"># include all gates</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">include</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span><span class="p">)</span>
-            <span class="n">transition_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">antenna_transition</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
-            <span class="n">not_in_transition</span> <span class="o">=</span> <span class="p">(</span><span class="n">transition_data</span> <span class="o">==</span> <span class="n">trans_value</span><span class="p">)</span>
+            <span class="n">transition_data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">antenna_transition</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+            <span class="n">not_in_transition</span> <span class="o">=</span> <span class="n">transition_data</span> <span class="o">==</span> <span class="n">trans_value</span>
             <span class="n">include</span><span class="p">[</span><span class="n">not_in_transition</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="o">~</span><span class="n">include</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_below"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_below.html#pyart.correct.GateFilter.include_below">[docs]</a>    <span class="k">def</span> <span class="nf">include_below</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;and&#39;</span><span class="p">,</span>
-                      <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Include gates where a given field is below a given value. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GateFilter.include_below"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_below.html#pyart.correct.GateFilter.include_below">[docs]</a>    <span class="k">def</span> <span class="nf">include_below</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Include gates where a given field is below a given value.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">inclusive</span><span class="p">:</span>
             <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">value</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="o">~</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_above"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_above.html#pyart.correct.GateFilter.include_above">[docs]</a>    <span class="k">def</span> <span class="nf">include_above</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;and&#39;</span><span class="p">,</span>
-                      <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Include gates where a given field is above a given value. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GateFilter.include_above"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_above.html#pyart.correct.GateFilter.include_above">[docs]</a>    <span class="k">def</span> <span class="nf">include_above</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Include gates where a given field is above a given value.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">inclusive</span><span class="p">:</span>
             <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="n">value</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="o">~</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_inside"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_inside.html#pyart.correct.GateFilter.include_inside">[docs]</a>    <span class="k">def</span> <span class="nf">include_inside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;and&#39;</span><span class="p">,</span>
-                       <span class="n">inclusive</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Include gates where a given field is inside a given interval. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GateFilter.include_inside"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_inside.html#pyart.correct.GateFilter.include_inside">[docs]</a>    <span class="k">def</span> <span class="nf">include_inside</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">True</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Include gates where a given field is inside a given interval.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">v2</span> <span class="o">&lt;</span> <span class="n">v1</span><span class="p">:</span>
             <span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="n">v1</span><span class="p">)</span>
         <span class="n">fdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
@@ -1004,9 +1028,10 @@
             <span class="n">marked</span> <span class="o">=</span> <span class="p">(</span><span class="n">fdata</span> <span class="o">&gt;</span> <span class="n">v1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">fdata</span> <span class="o">&lt;</span> <span class="n">v2</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="o">~</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_outside"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_outside.html#pyart.correct.GateFilter.include_outside">[docs]</a>    <span class="k">def</span> <span class="nf">include_outside</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;and&#39;</span><span class="p">,</span>
-                        <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Include gates where a given field is outside a given interval. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GateFilter.include_outside"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_outside.html#pyart.correct.GateFilter.include_outside">[docs]</a>    <span class="k">def</span> <span class="nf">include_outside</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Include gates where a given field is outside a given interval.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">v2</span> <span class="o">&lt;</span> <span class="n">v1</span><span class="p">:</span>
             <span class="p">(</span><span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span> <span class="o">=</span> <span class="p">(</span><span class="n">v2</span><span class="p">,</span> <span class="n">v1</span><span class="p">)</span>
         <span class="n">fdata</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
@@ -1016,38 +1041,38 @@
             <span class="n">marked</span> <span class="o">=</span> <span class="p">(</span><span class="n">fdata</span> <span class="o">&lt;</span> <span class="n">v1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">fdata</span> <span class="o">&gt;</span> <span class="n">v2</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="o">~</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_equal"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_equal.html#pyart.correct.GateFilter.include_equal">[docs]</a>    <span class="k">def</span> <span class="nf">include_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;and&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Include gates where a given field is equal to a value. &quot;&quot;&quot;</span>
-        <span class="n">marked</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">==</span> <span class="n">value</span><span class="p">)</span>
+<div class="viewcode-block" id="GateFilter.include_equal"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_equal.html#pyart.correct.GateFilter.include_equal">[docs]</a>    <span class="k">def</span> <span class="nf">include_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Include gates where a given field is equal to a value.&quot;&quot;&quot;</span>
+        <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">==</span> <span class="n">value</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="o">~</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_not_equal"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_not_equal.html#pyart.correct.GateFilter.include_not_equal">[docs]</a>    <span class="k">def</span> <span class="nf">include_not_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;and&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Include gates where a given field is not equal to a value. &quot;&quot;&quot;</span>
-        <span class="n">marked</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">!=</span> <span class="n">value</span><span class="p">)</span>
+<div class="viewcode-block" id="GateFilter.include_not_equal"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_not_equal.html#pyart.correct.GateFilter.include_not_equal">[docs]</a>    <span class="k">def</span> <span class="nf">include_not_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Include gates where a given field is not equal to a value.&quot;&quot;&quot;</span>
+        <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">!=</span> <span class="n">value</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="o">~</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GateFilter.include_all"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_all.html#pyart.correct.GateFilter.include_all">[docs]</a>    <span class="k">def</span> <span class="nf">include_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Include all gates. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Include all gates.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GateFilter.include_none"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_none.html#pyart.correct.GateFilter.include_none">[docs]</a>    <span class="k">def</span> <span class="nf">include_none</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Include no gates, exclude all gates. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Include no gates, exclude all gates.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_not_masked"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_not_masked.html#pyart.correct.GateFilter.include_not_masked">[docs]</a>    <span class="k">def</span> <span class="nf">include_not_masked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;and&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Include gates where a given field in not masked. &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GateFilter.include_not_masked"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_not_masked.html#pyart.correct.GateFilter.include_not_masked">[docs]</a>    <span class="k">def</span> <span class="nf">include_not_masked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Include gates where a given field in not masked.&quot;&quot;&quot;</span>
         <span class="n">marked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_valid"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_valid.html#pyart.correct.GateFilter.include_valid">[docs]</a>    <span class="k">def</span> <span class="nf">include_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;and&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GateFilter.include_valid"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_valid.html#pyart.correct.GateFilter.include_valid">[docs]</a>    <span class="k">def</span> <span class="nf">include_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Include gates where a valid value occurs in a field (not NaN or inf).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">marked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="o">~</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_gates"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_gates.html#pyart.correct.GateFilter.include_gates">[docs]</a>    <span class="k">def</span> <span class="nf">include_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s1">&#39;and&#39;</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="GateFilter.include_gates"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_gates.html#pyart.correct.GateFilter.include_gates">[docs]</a>    <span class="k">def</span> <span class="nf">include_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Include gates where a given mask is equal True.</span>
 
 <span class="sd">        Parameters</span>
@@ -1072,10 +1097,10 @@
 <span class="sd">            gates which have previously been included.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">fdata</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">values</span><span class="p">()))[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+        <span class="n">fdata</span> <span class="o">=</span> <span class="nb">next</span><span class="p">(</span><span class="nb">iter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">values</span><span class="p">()))[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">fdata</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Mask array must be the same size as a field.&quot;</span><span class="p">)</span>
-        <span class="n">marked</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;bool&#39;</span><span class="p">)</span>
+        <span class="n">marked</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;bool&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div></div>
 </pre></div>
 <div class="section">

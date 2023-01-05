@@ -1,0 +1,72 @@
+pyart.testing.RadarSpectra
+==========================
+
+.. currentmodule:: pyart.testing
+
+.. autoclass:: RadarSpectra
+
+   
+
+.. HACK -- the point here is that we don't want this to appear in the output, but the autosummary should still generate the pages.
+
+.. autosummary::
+   :toctree:
+
+
+   ~RadarSpectra.check_field_exists
+   ~RadarSpectra.get_end
+   ~RadarSpectra.get_slice
+   ~RadarSpectra.get_start
+   ~RadarSpectra.get_start_end
+   ~RadarSpectra.init_gate_altitude
+   ~RadarSpectra.init_gate_longitude_latitude
+   ~RadarSpectra.init_gate_x_y_z
+   ~RadarSpectra.init_rays_per_sweep
+   ~RadarSpectra.iter_azimuth
+   ~RadarSpectra.iter_elevation
+   ~RadarSpectra.iter_end
+   ~RadarSpectra.iter_field
+   ~RadarSpectra.iter_slice
+   ~RadarSpectra.iter_start
+   ~RadarSpectra.iter_start_end
+   ~RadarSpectra.to_vpt
+
+
+
+
+   
+
+.. HACK -- the point here is that we don't want this to appear in the output, but the autosummary should still generate the pages.
+
+.. autosummary::
+   :toctree:
+
+
+   ~RadarSpectra.altitude
+   ~RadarSpectra.azimuth
+   ~RadarSpectra.elevation
+   ~RadarSpectra.fields
+   ~RadarSpectra.fixed_angle
+   ~RadarSpectra.gate_altitude
+   ~RadarSpectra.gate_latitude
+   ~RadarSpectra.gate_longitude
+   ~RadarSpectra.gate_x
+   ~RadarSpectra.gate_y
+   ~RadarSpectra.gate_z
+   ~RadarSpectra.latitude
+   ~RadarSpectra.longitude
+   ~RadarSpectra.ngates
+   ~RadarSpectra.npulses_max
+   ~RadarSpectra.nrays
+   ~RadarSpectra.nsweeps
+   ~RadarSpectra.projection
+   ~RadarSpectra.range
+   ~RadarSpectra.rays_per_sweep
+   ~RadarSpectra.scan_type
+   ~RadarSpectra.sweep_end_ray_index
+   ~RadarSpectra.sweep_mode
+   ~RadarSpectra.sweep_number
+   ~RadarSpectra.sweep_start_ray_index
+   ~RadarSpectra.time
+   ~RadarSpectra.velocity_bins
+

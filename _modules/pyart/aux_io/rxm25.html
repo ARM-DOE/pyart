@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.aux_io.rxm25 &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.aux_io.rxm25 &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -227,6 +227,7 @@
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span> <span class="nn">pytz</span>
+
     <span class="n">_PYTZ_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_PYTZ_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
@@ -235,22 +236,23 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">import</span> <span class="nn">pyart</span>
+
 <span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_metadata</span>
-<span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
 <span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
 <span class="kn">from</span> <span class="nn">..testing</span> <span class="kn">import</span> <span class="n">make_empty_ppi_radar</span>
 
+
 <div class="viewcode-block" id="read_rxm25"><a class="viewcode-back" href="../../../API/generated/pyart.aux_io.read_rxm25.html#pyart.aux_io.read_rxm25">[docs]</a><span class="k">def</span> <span class="nf">read_rxm25</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">cfradial_outfile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">heading</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read in Ridgeline Instruments RXM-25 formatted NetCDF data.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    filename : str</span>
-<span class="sd">        Name of Ridgeline Instruments (RLI) RXM-25 formatted NetCDF file </span>
+<span class="sd">        Name of Ridgeline Instruments (RLI) RXM-25 formatted NetCDF file</span>
 <span class="sd">        from which to read data.</span>
 <span class="sd">    cfradial_outfile : str, optional</span>
-<span class="sd">        If file is to be converted to CF-Radial format, specify the output </span>
+<span class="sd">        If file is to be converted to CF-Radial format, specify the output</span>
 <span class="sd">        filename here.</span>
 <span class="sd">    heading : float, optional</span>
 <span class="sd">        If a heading offset exists, enter it here (in degrees).</span>
@@ -263,93 +265,96 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_PYTZ_AVAILABLE</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
-            <span class="s2">&quot;Pytz is required to use read_rxm25 but is &quot;</span> <span class="o">+</span>
-            <span class="s2">&quot;not installed&quot;</span><span class="p">)</span>
+            <span class="s2">&quot;Pytz is required to use read_rxm25 but is &quot;</span> <span class="o">+</span> <span class="s2">&quot;not installed&quot;</span>
+        <span class="p">)</span>
 
-    <span class="n">data</span>  <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
 
-    <span class="n">ngates</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="s1">&#39;Gate&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
-    <span class="n">rays_per_sweep</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="s1">&#39;Radial&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">ngates</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="s2">&quot;Gate&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">rays_per_sweep</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">dimensions</span><span class="p">[</span><span class="s2">&quot;Radial&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">make_empty_ppi_radar</span><span class="p">(</span><span class="n">ngates</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># Time needs to be converted from nss1970 to nss1989 and added to</span>
     <span class="c1"># Radar object.</span>
-    <span class="n">nineteen89</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1989</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tzinfo</span> <span class="o">=</span> <span class="n">pytz</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
+    <span class="n">nineteen89</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1989</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=</span><span class="n">pytz</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span>
     <span class="n">baseTime</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span>
-            <span class="n">t</span><span class="p">,</span> <span class="n">tz</span><span class="o">=</span><span class="n">pytz</span><span class="o">.</span><span class="n">UTC</span><span class="p">)</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s1">&#39;Time&#39;</span><span class="p">][:]])</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">t</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">baseTime</span> <span class="o">-</span> <span class="n">nineteen89</span><span class="p">])</span>
+        <span class="p">[</span>
+            <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">tz</span><span class="o">=</span><span class="n">pytz</span><span class="o">.</span><span class="n">UTC</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;Time&quot;</span><span class="p">][:]</span>
+        <span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">t</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">baseTime</span> <span class="o">-</span> <span class="n">nineteen89</span><span class="p">])</span>
 
     <span class="k">if</span> <span class="n">heading</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">radar</span><span class="o">.</span><span class="n">heading</span> <span class="o">=</span> <span class="n">heading</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span>
-            <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Azimuth&#39;</span><span class="p">][:]</span> <span class="o">-</span> <span class="n">radar</span><span class="o">.</span><span class="n">heading</span><span class="p">,</span> <span class="mf">360.</span><span class="p">)</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mod</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="s2">&quot;Azimuth&quot;</span><span class="p">][:]</span> <span class="o">-</span> <span class="n">radar</span><span class="o">.</span><span class="n">heading</span><span class="p">,</span> <span class="mf">360.0</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Azimuth&#39;</span><span class="p">][:]</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Azimuth&quot;</span><span class="p">][:]</span>
 
-    <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">data</span><span class="o">.</span><span class="n">Longitude</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">data</span><span class="o">.</span><span class="n">Latitude</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Elevation&#39;</span><span class="p">][:]</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">data</span><span class="o">.</span><span class="n">Height</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">data</span><span class="o">.</span><span class="n">Longitude</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">data</span><span class="o">.</span><span class="n">Latitude</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Elevation&quot;</span><span class="p">][:]</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">data</span><span class="o">.</span><span class="n">Height</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
 
-    <span class="n">fixed_agl_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
-    <span class="n">fixed_agl_data</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][:</span><span class="n">rays_per_sweep</span><span class="p">])</span>
+    <span class="n">fixed_agl_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">fixed_agl_data</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][:</span><span class="n">rays_per_sweep</span><span class="p">])</span>
 
-    <span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fixed_agl_data</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fixed_agl_data</span>
 
-    <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
-        <span class="n">data</span><span class="p">[</span><span class="s1">&#39;StartRange&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span>
-        <span class="p">(</span><span class="n">ngates</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span><span class="o">*</span><span class="n">data</span><span class="p">[</span><span class="s1">&#39;GateWidth&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">1000</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;StartRange&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">/</span><span class="mi">1000</span><span class="p">,</span>
-        <span class="n">ngates</span><span class="p">)</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span>
+        <span class="n">data</span><span class="p">[</span><span class="s2">&quot;StartRange&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="p">(</span><span class="n">ngates</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;GateWidth&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;StartRange&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="n">ngates</span><span class="p">,</span>
+    <span class="p">)</span>
 
-    <span class="n">ref</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Reflectivity&#39;</span><span class="p">][:]</span>
-    <span class="n">norm_pow</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;NormalizedCoherentPower&#39;</span><span class="p">][:]</span>
-    <span class="n">spec_w</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SpectralWidth&#39;</span><span class="p">][:]</span>
-    <span class="n">vel</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;Velocity&#39;</span><span class="p">][:]</span>
-    <span class="n">corr_ref</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;CorrectedReflectivity&#39;</span><span class="p">][:]</span>
-    <span class="n">diff_ref</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;DifferentialReflectivity&#39;</span><span class="p">][:]</span>
-    <span class="n">diff_phase</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;DifferentialPhase&#39;</span><span class="p">][:]</span>
-    <span class="n">spec_phase</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SpecificPhase&#39;</span><span class="p">][:]</span>
-    <span class="n">corr_diff_ref</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;CorrectedDifferentialReflectivity&#39;</span><span class="p">][:]</span>
-    <span class="n">sig_noise</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;SignalToNoiseRatio&#39;</span><span class="p">][:]</span>
-    <span class="n">rain_rate</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;RainfallRate&#39;</span><span class="p">][:]</span>
-    <span class="n">cross_ra</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s1">&#39;CrossPolCorrelation&#39;</span><span class="p">][:]</span>
+    <span class="n">ref</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Reflectivity&quot;</span><span class="p">][:]</span>
+    <span class="n">norm_pow</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;NormalizedCoherentPower&quot;</span><span class="p">][:]</span>
+    <span class="n">spec_w</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;SpectralWidth&quot;</span><span class="p">][:]</span>
+    <span class="n">vel</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;Velocity&quot;</span><span class="p">][:]</span>
+    <span class="n">corr_ref</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;CorrectedReflectivity&quot;</span><span class="p">][:]</span>
+    <span class="n">diff_ref</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;DifferentialReflectivity&quot;</span><span class="p">][:]</span>
+    <span class="n">diff_phase</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;DifferentialPhase&quot;</span><span class="p">][:]</span>
+    <span class="n">spec_phase</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;SpecificPhase&quot;</span><span class="p">][:]</span>
+    <span class="n">corr_diff_ref</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;CorrectedDifferentialReflectivity&quot;</span><span class="p">][:]</span>
+    <span class="n">sig_noise</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;SignalToNoiseRatio&quot;</span><span class="p">][:]</span>
+    <span class="n">rain_rate</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;RainfallRate&quot;</span><span class="p">][:]</span>
+    <span class="n">cross_ra</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;CrossPolCorrelation&quot;</span><span class="p">][:]</span>
 
     <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;reflectivity&#39;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;normalized_coherent_power&#39;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;normalized_coherent_power&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;spectral_width&#39;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;spectral_width&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;velocity&#39;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;velocity&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;corrected_reflectivity&#39;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;correct_reflectivity&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;differential_reflectivity&#39;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;differential_reflectivity&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;differential_phase&#39;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;differential_phase&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;specific_differential_phase&#39;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;specific_differential_phase&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;corrected_differential_reflectivity&#39;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;corrected_differential_reflectivity&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;signal_to_noise_ratio&#39;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;signal_to_noise_ratio&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;rain_rate&#39;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;rain_rate&#39;</span><span class="p">),</span>
-        <span class="s1">&#39;cross_correlation_ratio&#39;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s1">&#39;cross_correlation_ratio&#39;</span><span class="p">)}</span>
-    
-    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="n">fields</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;normalized_coherent_power&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm_pow</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;spectral_width&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">spec_w</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;velocity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vel</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;corrected_reflectivity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr_ref</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;differential_reflectivity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff_ref</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;differential_phase&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff_phase</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;specific_differential_phase&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">spec_phase</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;corrected_differential_reflectivity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr_diff_ref</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;signal_to_noise_ratio&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sig_noise</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;rain_rate&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rain_rate</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;cross_correlation_ratio&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cross_ra</span>
+        <span class="s2">&quot;reflectivity&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;normalized_coherent_power&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;normalized_coherent_power&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;spectral_width&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;spectral_width&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;velocity&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;velocity&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;corrected_reflectivity&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;correct_reflectivity&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;differential_reflectivity&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;differential_reflectivity&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;differential_phase&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;differential_phase&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;specific_differential_phase&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;specific_differential_phase&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;corrected_differential_reflectivity&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span>
+            <span class="s2">&quot;corrected_differential_reflectivity&quot;</span>
+        <span class="p">),</span>
+        <span class="s2">&quot;signal_to_noise_ratio&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;signal_to_noise_ratio&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;rain_rate&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;rain_rate&quot;</span><span class="p">),</span>
+        <span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">),</span>
+    <span class="p">}</span>
 
-    <span class="n">radar</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;instrument_name&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;RXM-25&#39;</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="n">fields</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ref</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;normalized_coherent_power&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">norm_pow</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;spectral_width&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">spec_w</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;velocity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vel</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;corrected_reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr_ref</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;differential_reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff_ref</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;differential_phase&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">diff_phase</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;specific_differential_phase&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">spec_phase</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;corrected_differential_reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr_diff_ref</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;signal_to_noise_ratio&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sig_noise</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;rain_rate&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rain_rate</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cross_ra</span>
+
+    <span class="n">radar</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;instrument_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;RXM-25&quot;</span>
 
     <span class="k">if</span> <span class="n">cfradial_outfile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">write_cfradial</span><span class="p">(</span>
-            <span class="n">cfradial_outfile</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">arm_time_variables</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">write_cfradial</span><span class="p">(</span><span class="n">cfradial_outfile</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">arm_time_variables</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">radar</span></div>
 </pre></div>

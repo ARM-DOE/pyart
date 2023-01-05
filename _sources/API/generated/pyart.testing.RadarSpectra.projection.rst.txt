@@ -1,0 +1,6 @@
+pyart.testing.RadarSpectra.projection
+=====================================
+
+.. currentmodule:: pyart.testing
+
+.. autoproperty:: RadarSpectra.projection

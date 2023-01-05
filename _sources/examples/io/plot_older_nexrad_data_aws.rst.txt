@@ -81,14 +81,16 @@ First we want to get an older file from amazon web service:
 Where in our case, we are using a sample data file from Handford, CA (KHNX)
 on July 24, 2006, at 0203:38 UTC. This means our path would look like this:
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-45
+.. GENERATED FROM PYTHON SOURCE LINES 40-47
 
 .. code-block:: default
 
 
     # Note: Older files do not contain the 'V06' but instead '.gz' in the AWS path.
 
-    aws_nexrad_level2_file = "s3://noaa-nexrad-level2/2006/07/24/KHNX/KHNX20060724_020338.gz"
+    aws_nexrad_level2_file = (
+        "s3://noaa-nexrad-level2/2006/07/24/KHNX/KHNX20060724_020338.gz"
+    )
 
 
 
@@ -97,11 +99,11 @@ on July 24, 2006, at 0203:38 UTC. This means our path would look like this:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-47
+.. GENERATED FROM PYTHON SOURCE LINES 48-49
 
 We can use the **pyart.io.read_nexrad_archive** module to access our data, passing in the filepath.
 
-.. GENERATED FROM PYTHON SOURCE LINES 47-50
+.. GENERATED FROM PYTHON SOURCE LINES 49-52
 
 .. code-block:: default
 
@@ -120,22 +122,22 @@ We can use the **pyart.io.read_nexrad_archive** module to access our data, passi
       import cgi
     /home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/botocore/httpsession.py:41: DeprecationWarning: 'urllib3.contrib.pyopenssl' module is deprecated and will be removed in a future release of urllib3 2.x. Read more in this issue: https://github.com/urllib3/urllib3/issues/2680
       from urllib3.contrib.pyopenssl import orig_util_SSLContext as SSLContext
-    /home/runner/work/pyart/pyart/pyart/io/nexrad_archive.py:214: UserWarning: Gate spacing is not constant, interpolating data in scans [0, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] for moment REF.
+    /home/runner/work/pyart/pyart/pyart/io/nexrad_archive.py:231: UserWarning: Gate spacing is not constant, interpolating data in scans [0, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] for moment REF.
       warnings.warn(
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-52
+.. GENERATED FROM PYTHON SOURCE LINES 53-54
 
 Now let us take a look at the radar latitude and longitude data.
 
-.. GENERATED FROM PYTHON SOURCE LINES 52-55
+.. GENERATED FROM PYTHON SOURCE LINES 54-57
 
 .. code-block:: default
 
-    print(radar.latitude['data'])
-    print(radar.longitude['data'])
+    print(radar.latitude["data"])
+    print(radar.longitude["data"])
 
 
 
@@ -151,7 +153,7 @@ Now let us take a look at the radar latitude and longitude data.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 56-61
+.. GENERATED FROM PYTHON SOURCE LINES 58-63
 
 This is clearly not correct! The problem is the reader could not find the
 metadata (message 31) for the coordinates.
@@ -159,12 +161,12 @@ metadata (message 31) for the coordinates.
 Lucky for us, we can provide the station in Py-ART's NEXRAD reader, which will
 pull the coordinate information from a dictionary found within Py-ART.
 
-.. GENERATED FROM PYTHON SOURCE LINES 61-64
+.. GENERATED FROM PYTHON SOURCE LINES 63-66
 
 .. code-block:: default
 
 
-    radar = pyart.io.read_nexrad_archive(aws_nexrad_level2_file, station='KHNX')
+    radar = pyart.io.read_nexrad_archive(aws_nexrad_level2_file, station="KHNX")
 
 
 
@@ -174,22 +176,22 @@ pull the coordinate information from a dictionary found within Py-ART.
 
  .. code-block:: none
 
-    /home/runner/work/pyart/pyart/pyart/io/nexrad_archive.py:214: UserWarning: Gate spacing is not constant, interpolating data in scans [0, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] for moment REF.
+    /home/runner/work/pyart/pyart/pyart/io/nexrad_archive.py:231: UserWarning: Gate spacing is not constant, interpolating data in scans [0, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] for moment REF.
       warnings.warn(
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 65-66
+.. GENERATED FROM PYTHON SOURCE LINES 67-68
 
 Again, let us take a look at the radar latitude and longitude data.
 
-.. GENERATED FROM PYTHON SOURCE LINES 66-69
+.. GENERATED FROM PYTHON SOURCE LINES 68-71
 
 .. code-block:: default
 
-    print(radar.latitude['data'])
-    print(radar.longitude['data'])
+    print(radar.latitude["data"])
+    print(radar.longitude["data"])
 
 
 
@@ -205,11 +207,11 @@ Again, let us take a look at the radar latitude and longitude data.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 70-71
+.. GENERATED FROM PYTHON SOURCE LINES 72-73
 
 Everything now looks correct as this is in Handford CA!
 
-.. GENERATED FROM PYTHON SOURCE LINES 71-82
+.. GENERATED FROM PYTHON SOURCE LINES 73-87
 
 .. code-block:: default
 
@@ -218,12 +220,15 @@ Everything now looks correct as this is in Handford CA!
     display = pyart.graph.RadarMapDisplay(radar)
 
     # Setting projection and ploting the first tilt.
-    projection = ccrs.LambertConformal(central_latitude=radar.latitude['data'][0],
-                                       central_longitude=radar.longitude['data'][0])
+    projection = ccrs.LambertConformal(
+        central_latitude=radar.latitude["data"][0],
+        central_longitude=radar.longitude["data"][0],
+    )
 
-    fig = plt.figure(figsize=(6,6))
-    display.plot_ppi_map('reflectivity', 0, vmin=-20, vmax=54,
-                         projection=projection, resolution='10m')
+    fig = plt.figure(figsize=(6, 6))
+    display.plot_ppi_map(
+        "reflectivity", 0, vmin=-20, vmax=54, projection=projection, resolution="10m"
+    )
 
 
 
@@ -302,7 +307,7 @@ Everything now looks correct as this is in Handford CA!
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  11.064 seconds)
+   **Total running time of the script:** ( 0 minutes  13.572 seconds)
 
 
 .. _sphx_glr_download_examples_io_plot_older_nexrad_data_aws.py:

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.util.xsect &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.util.xsect &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -232,7 +232,7 @@
 
 
 <div class="viewcode-block" id="cross_section_ppi"><a class="viewcode-back" href="../../../API/generated/pyart.util.cross_section_ppi.html#pyart.util.cross_section_ppi">[docs]</a><span class="k">def</span> <span class="nf">cross_section_ppi</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">target_azimuths</span><span class="p">,</span> <span class="n">az_tol</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extract cross sections from a PPI volume along one or more azimuth angles.</span>
 
 <span class="sd">    Parameters</span>
@@ -258,7 +258,7 @@
     <span class="n">valid_azimuths</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">target_azimuth</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">target_azimuths</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">sweep_slice</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">():</span>
-            <span class="n">sweep_azimuths</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span>
+            <span class="n">sweep_azimuths</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span>
             <span class="n">d_az</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">sweep_azimuths</span> <span class="o">-</span> <span class="n">target_azimuth</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">az_tol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">ray_number</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">d_az</span><span class="p">)</span>
@@ -267,11 +267,15 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">d_az_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d_az</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">d_az_min</span> <span class="o">&gt;</span> <span class="n">az_tol</span><span class="p">:</span>
-                    <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;WARNING: No azimuth found whithin tolerance &#39;</span>
-                         <span class="o">+</span> <span class="s1">&#39;for angle &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">target_azimuth</span><span class="p">)</span>
-                         <span class="o">+</span> <span class="s1">&#39;. Minimum distance to radar azimuth &#39;</span>
-                         <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d_az_min</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; larger than tolerance &#39;</span>
-                         <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">az_tol</span><span class="p">))</span>
+                    <span class="n">warn</span><span class="p">(</span>
+                        <span class="s2">&quot;WARNING: No azimuth found whithin tolerance &quot;</span>
+                        <span class="o">+</span> <span class="s2">&quot;for angle &quot;</span>
+                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">target_azimuth</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="s2">&quot;. Minimum distance to radar azimuth &quot;</span>
+                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d_az_min</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="s2">&quot; larger than tolerance &quot;</span>
+                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">az_tol</span><span class="p">)</span>
+                    <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">ray_number</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">d_az</span><span class="p">)</span>
                     <span class="n">prhi_rays</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ray_number</span> <span class="o">+</span> <span class="n">sweep_slice</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
@@ -280,16 +284,17 @@
     <span class="n">unique_azimuths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">unique</span><span class="p">(</span><span class="n">valid_azimuths</span><span class="p">)</span>
     <span class="n">rhi_nsweeps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">unique_azimuths</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">rhi_nsweeps</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No azimuth found within tolerance&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No azimuth found within tolerance&quot;</span><span class="p">)</span>
 
     <span class="n">radar_rhi</span> <span class="o">=</span> <span class="n">_construct_xsect_radar</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="s1">&#39;rhi&#39;</span><span class="p">,</span> <span class="n">prhi_rays</span><span class="p">,</span> <span class="n">rhi_nsweeps</span><span class="p">,</span> <span class="n">unique_azimuths</span><span class="p">)</span>
+        <span class="n">radar</span><span class="p">,</span> <span class="s2">&quot;rhi&quot;</span><span class="p">,</span> <span class="n">prhi_rays</span><span class="p">,</span> <span class="n">rhi_nsweeps</span><span class="p">,</span> <span class="n">unique_azimuths</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">radar_rhi</span></div>
 
 
 <div class="viewcode-block" id="cross_section_rhi"><a class="viewcode-back" href="../../../API/generated/pyart.util.cross_section_rhi.html#pyart.util.cross_section_rhi">[docs]</a><span class="k">def</span> <span class="nf">cross_section_rhi</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">target_elevations</span><span class="p">,</span> <span class="n">el_tol</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extract cross sections from an RHI volume along one or more elevation</span>
 <span class="sd">    angles.</span>
 
@@ -318,7 +323,7 @@
     <span class="n">valid_elevations</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">target_elevation</span> <span class="ow">in</span> <span class="n">target_elevations</span><span class="p">:</span>
         <span class="k">for</span> <span class="n">sweep_slice</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">():</span>
-            <span class="n">sweep_elevations</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span>
+            <span class="n">sweep_elevations</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span>
             <span class="n">d_el</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">sweep_elevations</span> <span class="o">-</span> <span class="n">target_elevation</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">el_tol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">ray_number</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">d_el</span><span class="p">)</span>
@@ -327,11 +332,15 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">d_el_min</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">d_el</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">d_el_min</span> <span class="o">&gt;</span> <span class="n">el_tol</span><span class="p">:</span>
-                    <span class="n">warn</span><span class="p">(</span><span class="s1">&#39;WARNING: No elevation found whithin tolerance &#39;</span>
-                         <span class="o">+</span> <span class="s1">&#39;for angle &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">target_elevation</span><span class="p">)</span>
-                         <span class="o">+</span> <span class="s1">&#39;. Minimum distance to radar elevation &#39;</span>
-                         <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d_el_min</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39; larger than tolerance &#39;</span>
-                         <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">el_tol</span><span class="p">))</span>
+                    <span class="n">warn</span><span class="p">(</span>
+                        <span class="s2">&quot;WARNING: No elevation found whithin tolerance &quot;</span>
+                        <span class="o">+</span> <span class="s2">&quot;for angle &quot;</span>
+                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">target_elevation</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="s2">&quot;. Minimum distance to radar elevation &quot;</span>
+                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">d_el_min</span><span class="p">)</span>
+                        <span class="o">+</span> <span class="s2">&quot; larger than tolerance &quot;</span>
+                        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">el_tol</span><span class="p">)</span>
+                    <span class="p">)</span>
                 <span class="k">else</span><span class="p">:</span>
                     <span class="n">ray_number</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">d_el</span><span class="p">)</span>
                     <span class="n">pppi_rays</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">ray_number</span> <span class="o">+</span> <span class="n">sweep_slice</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
@@ -339,17 +348,17 @@
 
     <span class="n">ppi_nsweeps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">valid_elevations</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">ppi_nsweeps</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;No elevation found within tolerance&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No elevation found within tolerance&quot;</span><span class="p">)</span>
 
     <span class="n">radar_ppi</span> <span class="o">=</span> <span class="n">_construct_xsect_radar</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="s1">&#39;ppi&#39;</span><span class="p">,</span> <span class="n">pppi_rays</span><span class="p">,</span> <span class="n">ppi_nsweeps</span><span class="p">,</span> <span class="n">valid_elevations</span><span class="p">)</span>
+        <span class="n">radar</span><span class="p">,</span> <span class="s2">&quot;ppi&quot;</span><span class="p">,</span> <span class="n">pppi_rays</span><span class="p">,</span> <span class="n">ppi_nsweeps</span><span class="p">,</span> <span class="n">valid_elevations</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">radar_ppi</span></div>
 
 
-<span class="k">def</span> <span class="nf">_construct_xsect_radar</span><span class="p">(</span>
-        <span class="n">radar</span><span class="p">,</span> <span class="n">scan_type</span><span class="p">,</span> <span class="n">pxsect_rays</span><span class="p">,</span> <span class="n">xsect_nsweeps</span><span class="p">,</span> <span class="n">target_angles</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span> <span class="nf">_construct_xsect_radar</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">scan_type</span><span class="p">,</span> <span class="n">pxsect_rays</span><span class="p">,</span> <span class="n">xsect_nsweeps</span><span class="p">,</span> <span class="n">target_angles</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Constructs a new radar object that contains cross-sections at fixed angles</span>
 <span class="sd">    of a PPI or RHI volume scan.</span>
 
@@ -381,53 +390,63 @@
     <span class="n">altitude</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">)</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
 
-    <span class="n">time</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-    <span class="n">time</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">pxsect_rays</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">pxsect_rays</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-    <span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">pxsect_rays</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">pxsect_rays</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
-    <span class="n">elevation</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-    <span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">pxsect_rays</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">elevation</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">pxsect_rays</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
     <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">orig_field_dic</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="n">field_dic</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span><span class="n">orig_field_dic</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-        <span class="n">field_dic</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">orig_field_dic</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">pxsect_rays</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">field_dic</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span><span class="n">orig_field_dic</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+        <span class="n">field_dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">orig_field_dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">pxsect_rays</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">field_dic</span>
 
-    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-    <span class="n">sweep_number</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">xsect_nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">xsect_nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
 
-    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_mode</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-    <span class="n">sweep_mode</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">scan_type</span><span class="p">]</span><span class="o">*</span><span class="n">xsect_nsweeps</span><span class="p">)</span>
+    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_mode</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">scan_type</span><span class="p">]</span> <span class="o">*</span> <span class="n">xsect_nsweeps</span><span class="p">)</span>
 
-    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-    <span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">target_angles</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">target_angles</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
 
     <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-    <span class="n">ssri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">xsect_nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span> <span class="o">*</span> <span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span>
-    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ssri</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">ssri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">xsect_nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span>
+    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ssri</span>
 
-    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-    <span class="n">seri</span> <span class="o">=</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">xsect_nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span> <span class="o">*</span>
-            <span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">seri</span>
+    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">_copy_dic</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">seri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">xsect_nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">seri</span>
 
     <span class="n">radar_xsect</span> <span class="o">=</span> <span class="n">Radar</span><span class="p">(</span>
-        <span class="n">time</span><span class="p">,</span> <span class="n">_range</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">scan_type</span><span class="p">,</span>
-        <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">altitude</span><span class="p">,</span>
-        <span class="n">sweep_number</span><span class="p">,</span> <span class="n">sweep_mode</span><span class="p">,</span> <span class="n">fixed_angle</span><span class="p">,</span>
-        <span class="n">sweep_start_ray_index</span><span class="p">,</span> <span class="n">sweep_end_ray_index</span><span class="p">,</span>
-        <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">)</span>
+        <span class="n">time</span><span class="p">,</span>
+        <span class="n">_range</span><span class="p">,</span>
+        <span class="n">fields</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="p">,</span>
+        <span class="n">scan_type</span><span class="p">,</span>
+        <span class="n">latitude</span><span class="p">,</span>
+        <span class="n">longitude</span><span class="p">,</span>
+        <span class="n">altitude</span><span class="p">,</span>
+        <span class="n">sweep_number</span><span class="p">,</span>
+        <span class="n">sweep_mode</span><span class="p">,</span>
+        <span class="n">fixed_angle</span><span class="p">,</span>
+        <span class="n">sweep_start_ray_index</span><span class="p">,</span>
+        <span class="n">sweep_end_ray_index</span><span class="p">,</span>
+        <span class="n">azimuth</span><span class="p">,</span>
+        <span class="n">elevation</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">radar_xsect</span>
 
 
 <span class="k">def</span> <span class="nf">_copy_dic</span><span class="p">(</span><span class="n">orig_dic</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Return a copy of the original dictionary copying each element. &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a copy of the original dictionary copying each element.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">excluded_keys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">excluded_keys</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">dic</span> <span class="o">=</span> <span class="p">{}</span>

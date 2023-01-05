@@ -1,0 +1,6 @@
+pyart.testing.RadarSpectra.velocity\_bins
+=========================================
+
+.. currentmodule:: pyart.testing
+
+.. autoproperty:: RadarSpectra.velocity_bins

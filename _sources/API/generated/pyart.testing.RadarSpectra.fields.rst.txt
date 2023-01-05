@@ -1,0 +1,6 @@
+pyart.testing.RadarSpectra.fields
+=================================
+
+.. currentmodule:: pyart.testing
+
+.. autoproperty:: RadarSpectra.fields

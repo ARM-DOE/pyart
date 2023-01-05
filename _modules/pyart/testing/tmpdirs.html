@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.testing.tmpdirs &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.testing.tmpdirs &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -256,21 +256,20 @@
 
 <span class="c1"># emacs: -*- mode: python-mode; py-indent-offset: 4; indent-tabs-mode: nil -*-</span>
 <span class="c1"># vi: set ft=python sts=4 ts=4 sw=4 et:</span>
-<span class="c1">### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ##</span>
+<span class="c1">##############################################################################</span>
 <span class="c1">#</span>
 <span class="c1">#   See COPYING file distributed along with the NiBabel package for the</span>
 <span class="c1">#   copyright and license terms.</span>
 <span class="c1">#</span>
-<span class="c1">### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ### ##</span>
-<span class="sd">&quot;&quot;&quot; Contexts for *with* statement providing temporary directories. &quot;&quot;&quot;</span>
+<span class="c1">##############################################################################</span>
 
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
-<span class="kn">from</span> <span class="nn">tempfile</span> <span class="kn">import</span> <span class="n">template</span><span class="p">,</span> <span class="n">mkdtemp</span>
+<span class="kn">from</span> <span class="nn">tempfile</span> <span class="kn">import</span> <span class="n">mkdtemp</span><span class="p">,</span> <span class="n">template</span>
 
 
-<span class="k">class</span> <span class="nc">TemporaryDirectory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Create and return a temporary directory. This has the same</span>
+<span class="k">class</span> <span class="nc">TemporaryDirectory</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create and return a temporary directory. This has the same</span>
 <span class="sd">    behavior as mkdtemp but can be used as a context manager.</span>
 
 <span class="sd">    Upon exiting the context, the directory and everything contained</span>
@@ -278,14 +277,15 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; import os</span>
-<span class="sd">    &gt;&gt;&gt; with TemporaryDirectory() as tmpdir:</span>
-<span class="sd">    ...     fname = os.path.join(tmpdir, &#39;example_file.txt&#39;)</span>
-<span class="sd">    ...     with open(fname, &#39;wt&#39;) as fobj:</span>
-<span class="sd">    ...         _ = fobj.write(&#39;a string\\n&#39;)</span>
-<span class="sd">    &gt;&gt;&gt; os.path.exists(tmpdir)</span>
+<span class="sd">    import os</span>
+<span class="sd">    with TemporaryDirectory() as tmpdir:</span>
+<span class="sd">        fname = os.path.join(tmpdir, &#39;example_file.txt&#39;)</span>
+<span class="sd">        with open(fname, &#39;wt&#39;) as fobj:</span>
+<span class="sd">            _ = fobj.write(&#39;a string\\n&#39;)</span>
+<span class="sd">    os.path.exists(tmpdir)</span>
 <span class="sd">    False</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">template</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">mkdtemp</span><span class="p">(</span><span class="n">suffix</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="nb">dir</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_closed</span> <span class="o">=</span> <span class="kc">False</span>
@@ -304,7 +304,7 @@
 
 
 <div class="viewcode-block" id="InTemporaryDirectory"><a class="viewcode-back" href="../../../API/generated/pyart.testing.InTemporaryDirectory.html#pyart.testing.InTemporaryDirectory">[docs]</a><span class="k">class</span> <span class="nc">InTemporaryDirectory</span><span class="p">(</span><span class="n">TemporaryDirectory</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Create, return, and change directory to a temporary directory.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create, return, and change directory to a temporary directory.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
@@ -319,18 +319,19 @@
 <span class="sd">    &gt;&gt;&gt; os.getcwd() == my_cwd</span>
 <span class="sd">    True</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
         <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">name</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">InTemporaryDirectory</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__enter__</span><span class="p">()</span>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__enter__</span><span class="p">()</span>
 
     <span class="k">def</span> <span class="fm">__exit__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">exc</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">):</span>
         <span class="n">os</span><span class="o">.</span><span class="n">chdir</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_pwd</span><span class="p">)</span>
-        <span class="k">return</span> <span class="nb">super</span><span class="p">(</span><span class="n">InTemporaryDirectory</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span><span class="o">.</span><span class="fm">__exit__</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">)</span></div>
+        <span class="k">return</span> <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__exit__</span><span class="p">(</span><span class="n">exc</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">tb</span><span class="p">)</span></div>
 
 
-<span class="k">class</span> <span class="nc">InGivenDirectory</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Change directory to given directory for duration of ``with`` block.</span>
+<span class="k">class</span> <span class="nc">InGivenDirectory</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Change directory to given directory for duration of ``with`` block.</span>
 <span class="sd">    Useful when you want to use `InTemporaryDirectory` for the final test, but</span>
 <span class="sd">    you are still debugging. For example, you may want to do this in the end:</span>
 
@@ -352,8 +353,9 @@
 <span class="sd">    again.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Initialize directory context manager</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize directory context manager</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>

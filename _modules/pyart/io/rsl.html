@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.rsl &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.io.rsl &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -229,22 +229,32 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
 <span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">FileMetadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
+
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_rsl_interface</span>
+
     <span class="n">_RSL_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_RSL_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
-<span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">make_time_unit_str</span>
-<span class="kn">from</span> <span class="nn">..lazydict</span> <span class="kn">import</span> <span class="n">LazyLoadDict</span>
 <span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
+<span class="kn">from</span> <span class="nn">..lazydict</span> <span class="kn">import</span> <span class="n">LazyLoadDict</span>
+<span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">make_time_unit_str</span>
 
 
-<div class="viewcode-block" id="read_rsl"><a class="viewcode-back" href="../../../API/generated/pyart.io.read_rsl.html#pyart.io.read_rsl">[docs]</a><span class="k">def</span> <span class="nf">read_rsl</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-             <span class="n">file_field_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-             <span class="n">delay_field_loading</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-             <span class="n">radar_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">callid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">skip_range_check</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="read_rsl"><a class="viewcode-back" href="../../../API/generated/pyart.io.read_rsl.html#pyart.io.read_rsl">[docs]</a><span class="k">def</span> <span class="nf">read_rsl</span><span class="p">(</span>
+    <span class="n">filename</span><span class="p">,</span>
+    <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">file_field_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">delay_field_loading</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">radar_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">callid</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">skip_range_check</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read a file supported by RSL.</span>
 
 <span class="sd">    Parameters</span>
@@ -301,18 +311,23 @@
     <span class="c1"># check that TRMM RSL is available</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_RSL_AVAILABLE</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
-            <span class="s2">&quot;Py-ART must be build with support for TRMM RSL to use the &quot;</span> <span class="o">+</span>
-            <span class="s2">&quot;read_rsl function.&quot;</span><span class="p">)</span>
+            <span class="s2">&quot;Py-ART must be build with support for TRMM RSL to use the &quot;</span>
+            <span class="s2">&quot;read_rsl function.&quot;</span>
+        <span class="p">)</span>
 
     <span class="c1"># create metadata retrieval object</span>
-    <span class="n">filemetadata</span> <span class="o">=</span> <span class="n">FileMetadata</span><span class="p">(</span><span class="s1">&#39;rsl&#39;</span><span class="p">,</span> <span class="n">field_names</span><span class="p">,</span> <span class="n">additional_metadata</span><span class="p">,</span>
-                                <span class="n">file_field_names</span><span class="p">,</span> <span class="n">exclude_fields</span><span class="p">,</span>
-                                <span class="n">include_fields</span><span class="p">)</span>
+    <span class="n">filemetadata</span> <span class="o">=</span> <span class="n">FileMetadata</span><span class="p">(</span>
+        <span class="s2">&quot;rsl&quot;</span><span class="p">,</span>
+        <span class="n">field_names</span><span class="p">,</span>
+        <span class="n">additional_metadata</span><span class="p">,</span>
+        <span class="n">file_field_names</span><span class="p">,</span>
+        <span class="n">exclude_fields</span><span class="p">,</span>
+        <span class="n">include_fields</span><span class="p">,</span>
+    <span class="p">)</span>
 
     <span class="c1"># read the file, determine common parameters</span>
     <span class="n">fillvalue</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
-    <span class="n">rslfile</span> <span class="o">=</span> <span class="n">_rsl_interface</span><span class="o">.</span><span class="n">RslFile</span><span class="p">(</span>
-        <span class="n">filename</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">),</span> <span class="n">radar_format</span><span class="p">,</span> <span class="n">callid</span><span class="p">)</span>
+    <span class="n">rslfile</span> <span class="o">=</span> <span class="n">_rsl_interface</span><span class="o">.</span><span class="n">RslFile</span><span class="p">(</span><span class="n">filename</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ascii&quot;</span><span class="p">),</span> <span class="n">radar_format</span><span class="p">,</span> <span class="n">callid</span><span class="p">)</span>
     <span class="n">available_vols</span> <span class="o">=</span> <span class="n">rslfile</span><span class="o">.</span><span class="n">available_moments</span><span class="p">()</span>
     <span class="n">first_volume</span> <span class="o">=</span> <span class="n">rslfile</span><span class="o">.</span><span class="n">get_volume</span><span class="p">(</span><span class="n">available_vols</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">first_sweep</span> <span class="o">=</span> <span class="n">first_volume</span><span class="o">.</span><span class="n">get_sweep</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
@@ -320,35 +335,41 @@
     <span class="n">nsweeps</span> <span class="o">=</span> <span class="n">first_volume</span><span class="o">.</span><span class="n">nsweeps</span>
 
     <span class="c1"># scan_type, sweep_mode, fixed_angle</span>
-    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;fixed_angle&#39;</span><span class="p">)</span>
+    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;fixed_angle&quot;</span><span class="p">)</span>
     <span class="n">fdata</span> <span class="o">=</span> <span class="n">first_volume</span><span class="o">.</span><span class="n">get_sweep_fix_angles</span><span class="p">()</span>
-    <span class="n">fdata</span><span class="p">[</span><span class="n">fdata</span> <span class="o">&lt;</span> <span class="mf">0.</span><span class="p">]</span> <span class="o">=</span> <span class="mf">360.</span> <span class="o">+</span> <span class="n">fdata</span><span class="p">[</span><span class="n">fdata</span> <span class="o">&lt;</span> <span class="mf">0.</span><span class="p">]</span>    <span class="c1"># all angles positive</span>
-    <span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fdata</span>
-    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_mode&#39;</span><span class="p">)</span>
+    <span class="n">fdata</span><span class="p">[</span><span class="n">fdata</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">360.0</span> <span class="o">+</span> <span class="n">fdata</span><span class="p">[</span><span class="n">fdata</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">]</span>  <span class="c1"># all angles positive</span>
+    <span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fdata</span>
+    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_mode&quot;</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">rslfile</span><span class="o">.</span><span class="n">scan_mode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>      <span class="c1"># 0 = PPI, 1 = RHI</span>
-        <span class="n">scan_type</span> <span class="o">=</span> <span class="s1">&#39;ppi&#39;</span>
-        <span class="n">sweep_mode</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-            <span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s1">&#39;azimuth_surveillance&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">rslfile</span><span class="o">.</span><span class="n">scan_mode</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>  <span class="c1"># 0 = PPI, 1 = RHI</span>
+        <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">&quot;ppi&quot;</span>
+        <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s2">&quot;azimuth_surveillance&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">scan_type</span> <span class="o">=</span> <span class="s1">&#39;rhi&#39;</span>
-        <span class="n">sweep_mode</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s1">&#39;rhi&#39;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
+        <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">&quot;rhi&quot;</span>
+        <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s2">&quot;rhi&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
 
     <span class="c1"># time</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;time&#39;</span><span class="p">)</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
     <span class="n">t_start</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span>
-        <span class="n">rslfile</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">rslfile</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="n">rslfile</span><span class="o">.</span><span class="n">day</span><span class="p">,</span> <span class="n">rslfile</span><span class="o">.</span><span class="n">hour</span><span class="p">,</span>
-        <span class="n">rslfile</span><span class="o">.</span><span class="n">minute</span><span class="p">,</span> <span class="nb">int</span><span class="p">(</span><span class="n">rslfile</span><span class="o">.</span><span class="n">sec</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span> <span class="o">*</span> <span class="p">(</span><span class="n">rslfile</span><span class="o">.</span><span class="n">sec</span> <span class="o">%</span> <span class="mi">1</span><span class="p">)))</span>
+        <span class="n">rslfile</span><span class="o">.</span><span class="n">year</span><span class="p">,</span>
+        <span class="n">rslfile</span><span class="o">.</span><span class="n">month</span><span class="p">,</span>
+        <span class="n">rslfile</span><span class="o">.</span><span class="n">day</span><span class="p">,</span>
+        <span class="n">rslfile</span><span class="o">.</span><span class="n">hour</span><span class="p">,</span>
+        <span class="n">rslfile</span><span class="o">.</span><span class="n">minute</span><span class="p">,</span>
+        <span class="nb">int</span><span class="p">(</span><span class="n">rslfile</span><span class="o">.</span><span class="n">sec</span><span class="p">),</span>
+        <span class="nb">int</span><span class="p">(</span><span class="mf">1e6</span> <span class="o">*</span> <span class="p">(</span><span class="n">rslfile</span><span class="o">.</span><span class="n">sec</span> <span class="o">%</span> <span class="mi">1</span><span class="p">)),</span>
+    <span class="p">)</span>
     <span class="n">datetimes</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nsweeps</span><span class="p">):</span>
         <span class="n">sweep</span> <span class="o">=</span> <span class="n">first_volume</span><span class="o">.</span><span class="n">get_sweep</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">sweep</span><span class="o">.</span><span class="n">nrays</span><span class="p">):</span>
             <span class="n">datetimes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sweep</span><span class="o">.</span><span class="n">get_ray</span><span class="p">(</span><span class="n">j</span><span class="p">)</span><span class="o">.</span><span class="n">get_datetime</span><span class="p">())</span>
-    <span class="n">t_delta</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span><span class="o">-</span><span class="n">t_start</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">datetimes</span><span class="p">]</span>
+    <span class="n">t_delta</span> <span class="o">=</span> <span class="p">[</span><span class="n">t</span> <span class="o">-</span> <span class="n">t_start</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">datetimes</span><span class="p">]</span>
     <span class="n">sec_since_start</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">t</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">t</span><span class="o">.</span><span class="n">days</span><span class="o">*</span><span class="mi">3600</span><span class="o">*</span><span class="mi">24</span> <span class="o">+</span> <span class="n">t</span><span class="o">.</span><span class="n">microseconds</span><span class="o">/</span><span class="mf">1.e6</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">t_delta</span><span class="p">]</span>
-    <span class="n">time</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sec_since_start</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
-    <span class="n">time</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_time_unit_str</span><span class="p">(</span><span class="n">t_start</span><span class="p">)</span>
+        <span class="n">t</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">t</span><span class="o">.</span><span class="n">days</span> <span class="o">*</span> <span class="mi">3600</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">+</span> <span class="n">t</span><span class="o">.</span><span class="n">microseconds</span> <span class="o">/</span> <span class="mf">1.0e6</span> <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="n">t_delta</span>
+    <span class="p">]</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sec_since_start</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_time_unit_str</span><span class="p">(</span><span class="n">t_start</span><span class="p">)</span>
 
     <span class="c1"># range</span>
     <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">skip_range_check</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="ow">not</span> <span class="n">first_volume</span><span class="o">.</span><span class="n">is_range_bins_uniform</span><span class="p">()):</span>
@@ -356,16 +377,17 @@
             <span class="s2">&quot;Range bin locations change between rays. File cannot be read &quot;</span>
             <span class="s2">&quot;with with correct range locations for all rays. &quot;</span>
             <span class="s2">&quot;To read in data reporting the ranges from the first ray set the &quot;</span>
-            <span class="s2">&quot;**skip_range_check** parameter to True.&quot;</span><span class="p">)</span>
-        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+            <span class="s2">&quot;**skip_range_check** parameter to True.&quot;</span>
+        <span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
 
-    <span class="n">_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;range&#39;</span><span class="p">)</span>
+    <span class="n">_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">)</span>
     <span class="n">gate0</span> <span class="o">=</span> <span class="n">first_ray</span><span class="o">.</span><span class="n">range_bin1</span>
     <span class="n">gate_size</span> <span class="o">=</span> <span class="n">first_ray</span><span class="o">.</span><span class="n">gate_size</span>
     <span class="n">ngates</span> <span class="o">=</span> <span class="n">first_ray</span><span class="o">.</span><span class="n">nbins</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gate0</span> <span class="o">+</span> <span class="n">gate_size</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ngates</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;meters_to_center_of_first_gate&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s1">&#39;meters_between_gates&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gate_size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gate0</span> <span class="o">+</span> <span class="n">gate_size</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">ngates</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;meters_to_center_of_first_gate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;meters_between_gates&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gate_size</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
 
     <span class="c1"># fields</span>
     <span class="c1"># transfer only those which are available</span>
@@ -382,98 +404,112 @@
 
         <span class="c1"># create the field dictionary</span>
         <span class="n">field_dic</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
-        <span class="n">field_dic</span><span class="p">[</span><span class="s1">&#39;_FillValue&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fillvalue</span>
-        <span class="n">data_extractor</span> <span class="o">=</span> <span class="n">_RslVolumeDataExtractor</span><span class="p">(</span>
-            <span class="n">rslfile</span><span class="p">,</span> <span class="n">volume_num</span><span class="p">,</span> <span class="n">fillvalue</span><span class="p">)</span>
+        <span class="n">field_dic</span><span class="p">[</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fillvalue</span>
+        <span class="n">data_extractor</span> <span class="o">=</span> <span class="n">_RslVolumeDataExtractor</span><span class="p">(</span><span class="n">rslfile</span><span class="p">,</span> <span class="n">volume_num</span><span class="p">,</span> <span class="n">fillvalue</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">delay_field_loading</span><span class="p">:</span>
             <span class="n">field_dic</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">field_dic</span><span class="p">)</span>
-            <span class="n">field_dic</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">,</span> <span class="n">data_extractor</span><span class="p">)</span>
+            <span class="n">field_dic</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">data_extractor</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">field_dic</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_extractor</span><span class="p">()</span>
+            <span class="n">field_dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data_extractor</span><span class="p">()</span>
         <span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">field_dic</span>
 
     <span class="c1"># metadata</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;metadata&#39;</span><span class="p">)</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s1">&#39;original_container&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;rsl&#39;</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">)</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;original_container&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;rsl&quot;</span>
     <span class="n">rsl_dict</span> <span class="o">=</span> <span class="n">rslfile</span><span class="o">.</span><span class="n">get_radar_header</span><span class="p">()</span>
     <span class="n">need_from_rsl_header</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;instrument_name&#39;</span><span class="p">,</span> <span class="s1">&#39;project&#39;</span><span class="p">:</span> <span class="s1">&#39;project&#39;</span><span class="p">,</span> <span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="s1">&#39;state&#39;</span><span class="p">,</span>
-        <span class="s1">&#39;country&#39;</span><span class="p">:</span> <span class="s1">&#39;country&#39;</span><span class="p">}</span>  <span class="c1"># rsl_name : radar_metadata_name</span>
+        <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;instrument_name&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;project&quot;</span><span class="p">:</span> <span class="s2">&quot;project&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;state&quot;</span><span class="p">:</span> <span class="s2">&quot;state&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;country&quot;</span><span class="p">:</span> <span class="s2">&quot;country&quot;</span><span class="p">,</span>
+    <span class="p">}</span>  <span class="c1"># rsl_name : radar_metadata_name</span>
     <span class="k">for</span> <span class="n">rsl_key</span><span class="p">,</span> <span class="n">metadata_key</span> <span class="ow">in</span> <span class="n">need_from_rsl_header</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">metadata</span><span class="p">[</span><span class="n">metadata_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">rsl_dict</span><span class="p">[</span><span class="n">rsl_key</span><span class="p">]</span>
 
     <span class="c1"># latitude</span>
-    <span class="n">latitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;latitude&#39;</span><span class="p">)</span>
-    <span class="n">lat</span> <span class="o">=</span> <span class="n">_dms_to_d</span><span class="p">((</span><span class="n">rsl_dict</span><span class="p">[</span><span class="s1">&#39;latd&#39;</span><span class="p">],</span> <span class="n">rsl_dict</span><span class="p">[</span><span class="s1">&#39;latm&#39;</span><span class="p">],</span> <span class="n">rsl_dict</span><span class="p">[</span><span class="s1">&#39;lats&#39;</span><span class="p">]))</span>
-    <span class="n">latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lat</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+    <span class="n">latitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;latitude&quot;</span><span class="p">)</span>
+    <span class="n">lat</span> <span class="o">=</span> <span class="n">_dms_to_d</span><span class="p">((</span><span class="n">rsl_dict</span><span class="p">[</span><span class="s2">&quot;latd&quot;</span><span class="p">],</span> <span class="n">rsl_dict</span><span class="p">[</span><span class="s2">&quot;latm&quot;</span><span class="p">],</span> <span class="n">rsl_dict</span><span class="p">[</span><span class="s2">&quot;lats&quot;</span><span class="p">]))</span>
+    <span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lat</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
 
     <span class="c1"># longitude</span>
-    <span class="n">longitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;longitude&#39;</span><span class="p">)</span>
-    <span class="n">lon</span> <span class="o">=</span> <span class="n">_dms_to_d</span><span class="p">((</span><span class="n">rsl_dict</span><span class="p">[</span><span class="s1">&#39;lond&#39;</span><span class="p">],</span> <span class="n">rsl_dict</span><span class="p">[</span><span class="s1">&#39;lonm&#39;</span><span class="p">],</span> <span class="n">rsl_dict</span><span class="p">[</span><span class="s1">&#39;lons&#39;</span><span class="p">]))</span>
-    <span class="n">longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lon</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+    <span class="n">longitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;longitude&quot;</span><span class="p">)</span>
+    <span class="n">lon</span> <span class="o">=</span> <span class="n">_dms_to_d</span><span class="p">((</span><span class="n">rsl_dict</span><span class="p">[</span><span class="s2">&quot;lond&quot;</span><span class="p">],</span> <span class="n">rsl_dict</span><span class="p">[</span><span class="s2">&quot;lonm&quot;</span><span class="p">],</span> <span class="n">rsl_dict</span><span class="p">[</span><span class="s2">&quot;lons&quot;</span><span class="p">]))</span>
+    <span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lon</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
 
     <span class="c1"># altitude</span>
-    <span class="n">altitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;altitude&#39;</span><span class="p">)</span>
-    <span class="n">altitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">rsl_dict</span><span class="p">[</span><span class="s1">&#39;height&#39;</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float64&#39;</span><span class="p">)</span>
+    <span class="n">altitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;altitude&quot;</span><span class="p">)</span>
+    <span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">rsl_dict</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
 
     <span class="c1"># sweep_number, sweep_mode, sweep_start_ray_index, sweep_end_ray_index</span>
-    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_number&#39;</span><span class="p">)</span>
-    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_start_ray_index&#39;</span><span class="p">)</span>
-    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;sweep_end_ray_index&#39;</span><span class="p">)</span>
+    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_number&quot;</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_start_ray_index&quot;</span><span class="p">)</span>
+    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_end_ray_index&quot;</span><span class="p">)</span>
 
-    <span class="n">sweep_number</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
-    <span class="n">ray_count</span> <span class="o">=</span> <span class="n">first_volume</span><span class="o">.</span><span class="n">get_nray_array</span><span class="p">()</span>   <span class="c1"># array of rays in each sweep</span>
-    <span class="n">ssri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">ray_count</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
-    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ssri</span>
-    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">ray_count</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+    <span class="n">ray_count</span> <span class="o">=</span> <span class="n">first_volume</span><span class="o">.</span><span class="n">get_nray_array</span><span class="p">()</span>  <span class="c1"># array of rays in each sweep</span>
+    <span class="n">ssri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">ray_count</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ssri</span>
+    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">ray_count</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
 
     <span class="c1"># azimuth, elevation</span>
-    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;azimuth&#39;</span><span class="p">)</span>
-    <span class="n">elevation</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;elevation&#39;</span><span class="p">)</span>
+    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;azimuth&quot;</span><span class="p">)</span>
+    <span class="n">elevation</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;elevation&quot;</span><span class="p">)</span>
     <span class="n">_azimuth</span><span class="p">,</span> <span class="n">_elevation</span> <span class="o">=</span> <span class="n">first_volume</span><span class="o">.</span><span class="n">get_azimuth_and_elev_array</span><span class="p">()</span>
-    <span class="n">azimuth</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_azimuth</span>
-    <span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_elevation</span>
+    <span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_azimuth</span>
+    <span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_elevation</span>
 
     <span class="c1"># instrument_parameters</span>
-    <span class="n">prt</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;prt&#39;</span><span class="p">)</span>
-    <span class="n">prt_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;prt_mode&#39;</span><span class="p">)</span>
-    <span class="n">nyquist_velocity</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;nyquist_velocity&#39;</span><span class="p">)</span>
-    <span class="n">unambiguous_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;unambiguous_range&#39;</span><span class="p">)</span>
-    <span class="n">beam_width_h</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;radar_beam_width_h&#39;</span><span class="p">)</span>
-    <span class="n">beam_width_v</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s1">&#39;radar_beam_width_v&#39;</span><span class="p">)</span>
+    <span class="n">prt</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;prt&quot;</span><span class="p">)</span>
+    <span class="n">prt_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;prt_mode&quot;</span><span class="p">)</span>
+    <span class="n">nyquist_velocity</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">)</span>
+    <span class="n">unambiguous_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;unambiguous_range&quot;</span><span class="p">)</span>
+    <span class="n">beam_width_h</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;radar_beam_width_h&quot;</span><span class="p">)</span>
+    <span class="n">beam_width_v</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;radar_beam_width_v&quot;</span><span class="p">)</span>
 
     <span class="n">pm_data</span><span class="p">,</span> <span class="n">nv_data</span><span class="p">,</span> <span class="n">pr_data</span><span class="p">,</span> <span class="n">ur_data</span> <span class="o">=</span> <span class="n">first_volume</span><span class="o">.</span><span class="n">get_instr_params</span><span class="p">()</span>
-    <span class="n">prt</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pr_data</span>
-    <span class="n">prt_mode</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pm_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s1">&#39;S&#39;</span><span class="p">)</span>
-    <span class="n">nyquist_velocity</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nv_data</span>
-    <span class="n">unambiguous_range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ur_data</span>
-    <span class="n">beam_width_h</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">first_sweep</span><span class="o">.</span><span class="n">horz_half_bw</span> <span class="o">*</span> <span class="mf">2.</span><span class="p">],</span>
-                                    <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
-    <span class="n">beam_width_v</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">first_sweep</span><span class="o">.</span><span class="n">vert_half_bw</span> <span class="o">*</span> <span class="mf">2.</span><span class="p">],</span>
-                                    <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float32&#39;</span><span class="p">)</span>
+    <span class="n">prt</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pr_data</span>
+    <span class="n">prt_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pm_data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
+    <span class="n">nyquist_velocity</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nv_data</span>
+    <span class="n">unambiguous_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ur_data</span>
+    <span class="n">beam_width_h</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">first_sweep</span><span class="o">.</span><span class="n">horz_half_bw</span> <span class="o">*</span> <span class="mf">2.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">beam_width_v</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">first_sweep</span><span class="o">.</span><span class="n">vert_half_bw</span> <span class="o">*</span> <span class="mf">2.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
 
-    <span class="n">instrument_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;unambiguous_range&#39;</span><span class="p">:</span> <span class="n">unambiguous_range</span><span class="p">,</span>
-                             <span class="s1">&#39;prt_mode&#39;</span><span class="p">:</span> <span class="n">prt_mode</span><span class="p">,</span> <span class="s1">&#39;prt&#39;</span><span class="p">:</span> <span class="n">prt</span><span class="p">,</span>
-                             <span class="s1">&#39;nyquist_velocity&#39;</span><span class="p">:</span> <span class="n">nyquist_velocity</span><span class="p">,</span>
-                             <span class="s1">&#39;radar_beam_width_h&#39;</span><span class="p">:</span> <span class="n">beam_width_h</span><span class="p">,</span>
-                             <span class="s1">&#39;radar_beam_width_v&#39;</span><span class="p">:</span> <span class="n">beam_width_v</span><span class="p">}</span>
+    <span class="n">instrument_parameters</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;unambiguous_range&quot;</span><span class="p">:</span> <span class="n">unambiguous_range</span><span class="p">,</span>
+        <span class="s2">&quot;prt_mode&quot;</span><span class="p">:</span> <span class="n">prt_mode</span><span class="p">,</span>
+        <span class="s2">&quot;prt&quot;</span><span class="p">:</span> <span class="n">prt</span><span class="p">,</span>
+        <span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">:</span> <span class="n">nyquist_velocity</span><span class="p">,</span>
+        <span class="s2">&quot;radar_beam_width_h&quot;</span><span class="p">:</span> <span class="n">beam_width_h</span><span class="p">,</span>
+        <span class="s2">&quot;radar_beam_width_v&quot;</span><span class="p">:</span> <span class="n">beam_width_v</span><span class="p">,</span>
+    <span class="p">}</span>
 
     <span class="k">return</span> <span class="n">Radar</span><span class="p">(</span>
-        <span class="n">time</span><span class="p">,</span> <span class="n">_range</span><span class="p">,</span> <span class="n">fields</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">scan_type</span><span class="p">,</span>
-        <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">altitude</span><span class="p">,</span>
-        <span class="n">sweep_number</span><span class="p">,</span> <span class="n">sweep_mode</span><span class="p">,</span> <span class="n">fixed_angle</span><span class="p">,</span> <span class="n">sweep_start_ray_index</span><span class="p">,</span>
+        <span class="n">time</span><span class="p">,</span>
+        <span class="n">_range</span><span class="p">,</span>
+        <span class="n">fields</span><span class="p">,</span>
+        <span class="n">metadata</span><span class="p">,</span>
+        <span class="n">scan_type</span><span class="p">,</span>
+        <span class="n">latitude</span><span class="p">,</span>
+        <span class="n">longitude</span><span class="p">,</span>
+        <span class="n">altitude</span><span class="p">,</span>
+        <span class="n">sweep_number</span><span class="p">,</span>
+        <span class="n">sweep_mode</span><span class="p">,</span>
+        <span class="n">fixed_angle</span><span class="p">,</span>
+        <span class="n">sweep_start_ray_index</span><span class="p">,</span>
         <span class="n">sweep_end_ray_index</span><span class="p">,</span>
-        <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span>
-        <span class="n">instrument_parameters</span><span class="o">=</span><span class="n">instrument_parameters</span><span class="p">)</span></div>
+        <span class="n">azimuth</span><span class="p">,</span>
+        <span class="n">elevation</span><span class="p">,</span>
+        <span class="n">instrument_parameters</span><span class="o">=</span><span class="n">instrument_parameters</span><span class="p">,</span>
+    <span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_dms_to_d</span><span class="p">(</span><span class="n">dms</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot; Degrees, minutes, seconds to degrees &quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Degrees, minutes, seconds to degrees&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">dms</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">dms</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">dms</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">/</span> <span class="mf">60.0</span><span class="p">)</span> <span class="o">/</span> <span class="mf">60.0</span>
 
 
-<span class="k">class</span> <span class="nc">_RslVolumeDataExtractor</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="k">class</span> <span class="nc">_RslVolumeDataExtractor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Class facilitating on demand extraction of data from a RSL file.</span>
 
 <span class="sd">    Parameters</span>
@@ -488,13 +524,13 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">rslfile</span><span class="p">,</span> <span class="n">volume_num</span><span class="p">,</span> <span class="n">fillvalue</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; initialize the object. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;initialize the object.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rslfile</span> <span class="o">=</span> <span class="n">rslfile</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">volume_num</span> <span class="o">=</span> <span class="n">volume_num</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fillvalue</span> <span class="o">=</span> <span class="n">fillvalue</span>
 
     <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Return an array containing data from the referenced volume. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an array containing data from the referenced volume.&quot;&quot;&quot;</span>
         <span class="c1"># extract the field and mask</span>
         <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rslfile</span><span class="o">.</span><span class="n">get_volume_array</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">volume_num</span><span class="p">)</span>
         <span class="n">data</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">data</span><span class="p">))]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">fillvalue</span>
@@ -503,53 +539,53 @@
 
 
 <span class="n">VOLUMENUM2RSLNAME</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="mi">0</span><span class="p">:</span> <span class="s1">&#39;DZ&#39;</span><span class="p">,</span>
-    <span class="mi">1</span><span class="p">:</span> <span class="s1">&#39;VR&#39;</span><span class="p">,</span>
-    <span class="mi">2</span><span class="p">:</span> <span class="s1">&#39;SW&#39;</span><span class="p">,</span>
-    <span class="mi">3</span><span class="p">:</span> <span class="s1">&#39;CZ&#39;</span><span class="p">,</span>
-    <span class="mi">4</span><span class="p">:</span> <span class="s1">&#39;ZT&#39;</span><span class="p">,</span>
-    <span class="mi">5</span><span class="p">:</span> <span class="s1">&#39;DR&#39;</span><span class="p">,</span>
-    <span class="mi">6</span><span class="p">:</span> <span class="s1">&#39;LR&#39;</span><span class="p">,</span>
-    <span class="mi">7</span><span class="p">:</span> <span class="s1">&#39;ZD&#39;</span><span class="p">,</span>
-    <span class="mi">8</span><span class="p">:</span> <span class="s1">&#39;DM&#39;</span><span class="p">,</span>
-    <span class="mi">9</span><span class="p">:</span> <span class="s1">&#39;RH&#39;</span><span class="p">,</span>
-    <span class="mi">10</span><span class="p">:</span> <span class="s1">&#39;PH&#39;</span><span class="p">,</span>
-    <span class="mi">11</span><span class="p">:</span> <span class="s1">&#39;XZ&#39;</span><span class="p">,</span>
-    <span class="mi">12</span><span class="p">:</span> <span class="s1">&#39;CD&#39;</span><span class="p">,</span>
-    <span class="mi">13</span><span class="p">:</span> <span class="s1">&#39;MZ&#39;</span><span class="p">,</span>
-    <span class="mi">14</span><span class="p">:</span> <span class="s1">&#39;MD&#39;</span><span class="p">,</span>
-    <span class="mi">15</span><span class="p">:</span> <span class="s1">&#39;ZE&#39;</span><span class="p">,</span>
-    <span class="mi">16</span><span class="p">:</span> <span class="s1">&#39;VE&#39;</span><span class="p">,</span>
-    <span class="mi">17</span><span class="p">:</span> <span class="s1">&#39;KD&#39;</span><span class="p">,</span>
-    <span class="mi">18</span><span class="p">:</span> <span class="s1">&#39;TI&#39;</span><span class="p">,</span>
-    <span class="mi">19</span><span class="p">:</span> <span class="s1">&#39;DX&#39;</span><span class="p">,</span>
-    <span class="mi">20</span><span class="p">:</span> <span class="s1">&#39;CH&#39;</span><span class="p">,</span>
-    <span class="mi">21</span><span class="p">:</span> <span class="s1">&#39;AH&#39;</span><span class="p">,</span>
-    <span class="mi">22</span><span class="p">:</span> <span class="s1">&#39;CV&#39;</span><span class="p">,</span>
-    <span class="mi">23</span><span class="p">:</span> <span class="s1">&#39;AV&#39;</span><span class="p">,</span>
-    <span class="mi">24</span><span class="p">:</span> <span class="s1">&#39;SQ&#39;</span><span class="p">,</span>
-    <span class="mi">25</span><span class="p">:</span> <span class="s1">&#39;VS&#39;</span><span class="p">,</span>
-    <span class="mi">26</span><span class="p">:</span> <span class="s1">&#39;VL&#39;</span><span class="p">,</span>
-    <span class="mi">27</span><span class="p">:</span> <span class="s1">&#39;VG&#39;</span><span class="p">,</span>
-    <span class="mi">28</span><span class="p">:</span> <span class="s1">&#39;VT&#39;</span><span class="p">,</span>
-    <span class="mi">29</span><span class="p">:</span> <span class="s1">&#39;NP&#39;</span><span class="p">,</span>
-    <span class="mi">30</span><span class="p">:</span> <span class="s1">&#39;HC&#39;</span><span class="p">,</span>
-    <span class="mi">31</span><span class="p">:</span> <span class="s1">&#39;VC&#39;</span><span class="p">,</span>
-    <span class="mi">32</span><span class="p">:</span> <span class="s1">&#39;V2&#39;</span><span class="p">,</span>
-    <span class="mi">33</span><span class="p">:</span> <span class="s1">&#39;S2&#39;</span><span class="p">,</span>
-    <span class="mi">34</span><span class="p">:</span> <span class="s1">&#39;V3&#39;</span><span class="p">,</span>
-    <span class="mi">35</span><span class="p">:</span> <span class="s1">&#39;S3&#39;</span><span class="p">,</span>
-    <span class="mi">36</span><span class="p">:</span> <span class="s1">&#39;CR&#39;</span><span class="p">,</span>
-    <span class="mi">37</span><span class="p">:</span> <span class="s1">&#39;CC&#39;</span><span class="p">,</span>
-    <span class="mi">38</span><span class="p">:</span> <span class="s1">&#39;PR&#39;</span><span class="p">,</span>
-    <span class="mi">39</span><span class="p">:</span> <span class="s1">&#39;SD&#39;</span><span class="p">,</span>
-    <span class="mi">40</span><span class="p">:</span> <span class="s1">&#39;ZZ&#39;</span><span class="p">,</span>
-    <span class="mi">41</span><span class="p">:</span> <span class="s1">&#39;RD&#39;</span><span class="p">,</span>
-    <span class="mi">42</span><span class="p">:</span> <span class="s1">&#39;ET&#39;</span><span class="p">,</span>
-    <span class="mi">43</span><span class="p">:</span> <span class="s1">&#39;EZ&#39;</span><span class="p">,</span>
+    <span class="mi">0</span><span class="p">:</span> <span class="s2">&quot;DZ&quot;</span><span class="p">,</span>
+    <span class="mi">1</span><span class="p">:</span> <span class="s2">&quot;VR&quot;</span><span class="p">,</span>
+    <span class="mi">2</span><span class="p">:</span> <span class="s2">&quot;SW&quot;</span><span class="p">,</span>
+    <span class="mi">3</span><span class="p">:</span> <span class="s2">&quot;CZ&quot;</span><span class="p">,</span>
+    <span class="mi">4</span><span class="p">:</span> <span class="s2">&quot;ZT&quot;</span><span class="p">,</span>
+    <span class="mi">5</span><span class="p">:</span> <span class="s2">&quot;DR&quot;</span><span class="p">,</span>
+    <span class="mi">6</span><span class="p">:</span> <span class="s2">&quot;LR&quot;</span><span class="p">,</span>
+    <span class="mi">7</span><span class="p">:</span> <span class="s2">&quot;ZD&quot;</span><span class="p">,</span>
+    <span class="mi">8</span><span class="p">:</span> <span class="s2">&quot;DM&quot;</span><span class="p">,</span>
+    <span class="mi">9</span><span class="p">:</span> <span class="s2">&quot;RH&quot;</span><span class="p">,</span>
+    <span class="mi">10</span><span class="p">:</span> <span class="s2">&quot;PH&quot;</span><span class="p">,</span>
+    <span class="mi">11</span><span class="p">:</span> <span class="s2">&quot;XZ&quot;</span><span class="p">,</span>
+    <span class="mi">12</span><span class="p">:</span> <span class="s2">&quot;CD&quot;</span><span class="p">,</span>
+    <span class="mi">13</span><span class="p">:</span> <span class="s2">&quot;MZ&quot;</span><span class="p">,</span>
+    <span class="mi">14</span><span class="p">:</span> <span class="s2">&quot;MD&quot;</span><span class="p">,</span>
+    <span class="mi">15</span><span class="p">:</span> <span class="s2">&quot;ZE&quot;</span><span class="p">,</span>
+    <span class="mi">16</span><span class="p">:</span> <span class="s2">&quot;VE&quot;</span><span class="p">,</span>
+    <span class="mi">17</span><span class="p">:</span> <span class="s2">&quot;KD&quot;</span><span class="p">,</span>
+    <span class="mi">18</span><span class="p">:</span> <span class="s2">&quot;TI&quot;</span><span class="p">,</span>
+    <span class="mi">19</span><span class="p">:</span> <span class="s2">&quot;DX&quot;</span><span class="p">,</span>
+    <span class="mi">20</span><span class="p">:</span> <span class="s2">&quot;CH&quot;</span><span class="p">,</span>
+    <span class="mi">21</span><span class="p">:</span> <span class="s2">&quot;AH&quot;</span><span class="p">,</span>
+    <span class="mi">22</span><span class="p">:</span> <span class="s2">&quot;CV&quot;</span><span class="p">,</span>
+    <span class="mi">23</span><span class="p">:</span> <span class="s2">&quot;AV&quot;</span><span class="p">,</span>
+    <span class="mi">24</span><span class="p">:</span> <span class="s2">&quot;SQ&quot;</span><span class="p">,</span>
+    <span class="mi">25</span><span class="p">:</span> <span class="s2">&quot;VS&quot;</span><span class="p">,</span>
+    <span class="mi">26</span><span class="p">:</span> <span class="s2">&quot;VL&quot;</span><span class="p">,</span>
+    <span class="mi">27</span><span class="p">:</span> <span class="s2">&quot;VG&quot;</span><span class="p">,</span>
+    <span class="mi">28</span><span class="p">:</span> <span class="s2">&quot;VT&quot;</span><span class="p">,</span>
+    <span class="mi">29</span><span class="p">:</span> <span class="s2">&quot;NP&quot;</span><span class="p">,</span>
+    <span class="mi">30</span><span class="p">:</span> <span class="s2">&quot;HC&quot;</span><span class="p">,</span>
+    <span class="mi">31</span><span class="p">:</span> <span class="s2">&quot;VC&quot;</span><span class="p">,</span>
+    <span class="mi">32</span><span class="p">:</span> <span class="s2">&quot;V2&quot;</span><span class="p">,</span>
+    <span class="mi">33</span><span class="p">:</span> <span class="s2">&quot;S2&quot;</span><span class="p">,</span>
+    <span class="mi">34</span><span class="p">:</span> <span class="s2">&quot;V3&quot;</span><span class="p">,</span>
+    <span class="mi">35</span><span class="p">:</span> <span class="s2">&quot;S3&quot;</span><span class="p">,</span>
+    <span class="mi">36</span><span class="p">:</span> <span class="s2">&quot;CR&quot;</span><span class="p">,</span>
+    <span class="mi">37</span><span class="p">:</span> <span class="s2">&quot;CC&quot;</span><span class="p">,</span>
+    <span class="mi">38</span><span class="p">:</span> <span class="s2">&quot;PR&quot;</span><span class="p">,</span>
+    <span class="mi">39</span><span class="p">:</span> <span class="s2">&quot;SD&quot;</span><span class="p">,</span>
+    <span class="mi">40</span><span class="p">:</span> <span class="s2">&quot;ZZ&quot;</span><span class="p">,</span>
+    <span class="mi">41</span><span class="p">:</span> <span class="s2">&quot;RD&quot;</span><span class="p">,</span>
+    <span class="mi">42</span><span class="p">:</span> <span class="s2">&quot;ET&quot;</span><span class="p">,</span>
+    <span class="mi">43</span><span class="p">:</span> <span class="s2">&quot;EZ&quot;</span><span class="p">,</span>
 <span class="p">}</span>
 
-<span class="n">RSLNAME2VOLUMENUM</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">([(</span><span class="n">v</span><span class="p">,</span> <span class="n">k</span><span class="p">)</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">VOLUMENUM2RSLNAME</span><span class="o">.</span><span class="n">items</span><span class="p">()])</span>
+<span class="n">RSLNAME2VOLUMENUM</span> <span class="o">=</span> <span class="p">{</span><span class="n">v</span><span class="p">:</span> <span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">VOLUMENUM2RSLNAME</span><span class="o">.</span><span class="n">items</span><span class="p">()}</span>
 </pre></div>
 <div class="section">
    

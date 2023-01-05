@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.qvp &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.retrieve.qvp &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -228,9 +228,11 @@
 <span class="kn">from</span> <span class="nn">..core.transforms</span> <span class="kn">import</span> <span class="n">antenna_to_cartesian</span>
 
 
-<div class="viewcode-block" id="quasi_vertical_profile"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.quasi_vertical_profile.html#pyart.retrieve.quasi_vertical_profile">[docs]</a><span class="k">def</span> <span class="nf">quasi_vertical_profile</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">desired_angle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="quasi_vertical_profile"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.quasi_vertical_profile.html#pyart.retrieve.quasi_vertical_profile">[docs]</a><span class="k">def</span> <span class="nf">quasi_vertical_profile</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span> <span class="n">desired_angle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span>
+<span class="p">):</span>
 
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Quasi Vertical Profile.</span>
 
 <span class="sd">    Creates a QVP object containing fields from a radar object that can</span>
@@ -246,7 +248,7 @@
 <span class="sd">        Radar tilt angle to use for indexing radar field data.</span>
 <span class="sd">        None will result in wanted_angle = 20.0</span>
 <span class="sd">    verbose : bool</span>
-<span class="sd">        boolean flag to turn the printing of radar tilts on or off. </span>
+<span class="sd">        boolean flag to turn the printing of radar tilts on or off.</span>
 
 <span class="sd">    Other Parameters</span>
 <span class="sd">    ----------------</span>
@@ -282,13 +284,13 @@
     <span class="c1"># Setting the desired radar angle and getting index value for desired radar angle</span>
     <span class="k">if</span> <span class="n">desired_angle</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">desired_angle</span> <span class="o">=</span> <span class="mf">20.0</span>
-    <span class="n">index</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">]</span> <span class="o">-</span> <span class="n">desired_angle</span><span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
+    <span class="n">index</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">desired_angle</span><span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
     <span class="n">radar_slice</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">verbose</span><span class="p">:</span>
         <span class="c1"># Printing radar tilt angles and radar elevation</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-        <span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
 
     <span class="c1"># Setting field parameters</span>
     <span class="c1"># If fields is None then all radar fields pulled else defined field is used</span>
@@ -301,32 +303,35 @@
             <span class="c1"># If none is defined goes to else statement</span>
             <span class="k">if</span> <span class="n">gatefilter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">get_fields</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
-                <span class="n">mask_fields</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span><span class="p">[</span><span class="n">radar_slice</span><span class="p">],</span>
-                                                 <span class="n">get_fields</span><span class="p">)</span>
+                <span class="n">mask_fields</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span>
+                    <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span><span class="p">[</span><span class="n">radar_slice</span><span class="p">],</span> <span class="n">get_fields</span>
+                <span class="p">)</span>
                 <span class="n">radar_fields</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mask_fields</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">radar_fields</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-            <span class="n">qvp</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">field</span><span class="p">:</span><span class="n">radar_fields</span><span class="p">})</span>
+            <span class="n">qvp</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">field</span><span class="p">:</span> <span class="n">radar_fields</span><span class="p">})</span>
 
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Filtereing data based on defined gatefilter</span>
         <span class="c1"># If none is defined goes to else statement</span>
         <span class="k">if</span> <span class="n">gatefilter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">get_field</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span>
-            <span class="n">mask_field</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span><span class="p">[</span><span class="n">radar_slice</span><span class="p">],</span>
-                                            <span class="n">get_field</span><span class="p">)</span>
+            <span class="n">mask_field</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span>
+                <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span><span class="p">[</span><span class="n">radar_slice</span><span class="p">],</span> <span class="n">get_field</span>
+            <span class="p">)</span>
             <span class="n">radar_field</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">mask_field</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">radar_field</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">fields</span><span class="p">)</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
 
-        <span class="n">qvp</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">fields</span><span class="p">:</span><span class="n">radar_field</span><span class="p">})</span>
+        <span class="n">qvp</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">fields</span><span class="p">:</span> <span class="n">radar_field</span><span class="p">})</span>
 
     <span class="c1"># Adding range, time, and height fields</span>
-    <span class="n">qvp</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;range&#39;</span><span class="p">:</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="s1">&#39;time&#39;</span><span class="p">:</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">})</span>
-    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">antenna_to_cartesian</span><span class="p">(</span><span class="n">qvp</span><span class="p">[</span><span class="s1">&#39;range&#39;</span><span class="p">]</span><span class="o">/</span><span class="mf">1000.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span>
-                                   <span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">index</span><span class="p">])</span>
-    <span class="n">qvp</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s1">&#39;height&#39;</span><span class="p">:</span> <span class="n">z</span><span class="p">})</span>
+    <span class="n">qvp</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;range&quot;</span><span class="p">:</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">})</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">antenna_to_cartesian</span><span class="p">(</span>
+        <span class="n">qvp</span><span class="p">[</span><span class="s2">&quot;range&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">index</span><span class="p">]</span>
+    <span class="p">)</span>
+    <span class="n">qvp</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="n">z</span><span class="p">})</span>
     <span class="k">return</span> <span class="n">qvp</span></div>
 </pre></div>
 <div class="section">

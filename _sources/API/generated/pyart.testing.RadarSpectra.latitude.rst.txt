@@ -1,0 +1,6 @@
+pyart.testing.RadarSpectra.latitude
+===================================
+
+.. currentmodule:: pyart.testing
+
+.. autoproperty:: RadarSpectra.latitude

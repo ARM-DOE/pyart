@@ -13,7 +13,13 @@
 .. autosummary::
     :toctree: .
     
+    Grid
+    
     InTemporaryDirectory
+    
+    Radar
+    
+    RadarSpectra
     
 
 
@@ -23,6 +29,8 @@
 
 .. autosummary::
     :toctree: .
+    
+    get_metadata
     
     get_test_data
     

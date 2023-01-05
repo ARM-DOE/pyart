@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>The Py-ART Radar object and indexing &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>The Py-ART Radar object and indexing &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -509,7 +509,7 @@ metadata:
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># If we just want the elevations of one sweep, we can use the get_slice() function</span>
 <span class="c1"># of the Radar object to just get the elevations from one slice.</span>
 <span class="n">sweep_1</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">sweep_1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_1</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -642,7 +642,7 @@ metadata:
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># All of the radar fields are stored in a dictionary called radar.fields. This dictionary</span>
 <span class="c1"># contains entries that correspond to the field names in the file.</span>
-<span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">]</span>
+<span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -680,7 +680,7 @@ metadata:
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This shows entries such as the data itself, coordinates, long name, and units. You can</span>
 <span class="c1"># access the array with the reflectivity data itself using radar.fields[&#39;reflectivity&#39;][&#39;data&#39;].</span>
 <span class="c1"># This is stored as a 2D masked array with dimensions (number of rays) x (number of gates)</span>
-<span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -711,7 +711,7 @@ metadata:
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># If you just want the data from one slice, you can get the indicies for the</span>
 <span class="c1"># slice using radar.get_slice()</span>
 <span class="n">slice_indices</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">slice_indices</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">slice_indices</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -731,7 +731,9 @@ metadata:
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># You can also iterate over each slice by using radar.iter_slice() This example</span>
 <span class="c1"># returns the mean reflectivity of each sweep.</span>
-<span class="n">reflectivity</span> <span class="o">=</span> <span class="p">[</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">()]</span>
+<span class="n">reflectivity</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">()</span>
+<span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">reflectivity</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -747,7 +749,7 @@ metadata:
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># You can also view the important radar instrument parameters. One commonly used parameter</span>
 <span class="c1"># is the nyquist velocity, which is the maximum magnitude of the velocity the radar is</span>
 <span class="c1"># capable of recording before a phenomena known as aliasing occurs.</span>
-<span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s1">&#39;nyquist_velocity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>

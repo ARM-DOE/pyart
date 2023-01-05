@@ -5,15 +5,15 @@ Contributor's Guide
 The Python ARM Radar Toolkit (Py-ART)
 -------------------------------------
 
-The Python ARM Radar Toolkit, Py-ART, is an open source Python module 
+The Python ARM Radar Toolkit, Py-ART, is an open source Python module
 containing a growing collection of weather radar algorithms and utilities
 build on top of the Scientific Python stack and distributed under the
-3-Clause BSD license. Py-ART is used by the 
-`Atmospheric Radiation Measurement (ARM) Climate Research Facility 
+3-Clause BSD license. Py-ART is used by the
+`Atmospheric Radiation Measurement (ARM) Climate Research Facility
 <http://www.arm.gov>`_ for working with data from a number of precipitation
 and cloud radars, but has been designed so that it can be used by others in
 the radar and atmospheric communities to examine, processes, and analyze
-data from many types of weather radars. 
+data from many types of weather radars.
 
 
 Important Links
@@ -46,9 +46,9 @@ Install
 -------
 
 The easiest method for installing Py-ART is to use the conda packages from
-the latest release.  To do this you must download and install 
-`Anaconda <https://www.anaconda.com/download/#>`_ or 
-`Miniconda <https://conda.io/miniconda.html>`_.  
+the latest release.  To do this you must download and install
+`Anaconda <https://www.anaconda.com/download/#>`_ or
+`Miniconda <https://conda.io/miniconda.html>`_.
 Then use the following command in a terminal or command prompt to install
 the latest version of Py-ART::
 
@@ -95,7 +95,7 @@ To use pycodestyle::
 
 To install pylint::
 
-        conda install pylint 
+        conda install pylint
 
 To get a detailed pylint report::
 
@@ -121,7 +121,7 @@ the module.
 An example:
 
 .. code-block:: python
-        
+
         """
         Retrieval of VADs from a radar object.
 
@@ -140,7 +140,7 @@ For example:
 
         import glob
         import os
-         
+
         import numpy as np
         import numpy.ma as ma
         from scipy.interpolate import interp1d
@@ -320,7 +320,7 @@ filename is the filename and location, such as::
         pytest /home/user/pyart/pyart/io/tests/test_cfradial.py
 
 Relative paths can also be used::
-        
+
         cd pyart
         pytest ./pyart/retrieve/tests/test_vad.py
 
@@ -337,7 +337,7 @@ under your forked repository. Let's say the user is adding a new map display.
 Instead of creating that new function in your master branch. Create a new
 branch called ‘cartopy_map’. If everything checks out and the admin
 accepts the pull request, you can then merge the master branch and
-cartopy_map branch. 
+cartopy_map branch.
 
 To delete a branch both locally and remotely, if done with it::
 
@@ -345,7 +345,7 @@ To delete a branch both locally and remotely, if done with it::
 		git branch -d <branch_name>
 
 or in this case::
-		
+
 		git push origin --delete cartopy_map
 		git branch -d cartopy_map
 

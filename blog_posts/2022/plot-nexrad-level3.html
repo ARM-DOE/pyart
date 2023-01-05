@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Fixing Weird Patterns When Plotting NEXRAD Level 3 Data &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>Fixing Weird Patterns When Plotting NEXRAD Level 3 Data &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -223,10 +223,10 @@
   <span><i class="fa-fw fa fa-tags"></i> </span
   >
    
-  <a href="../../blog/tag/nexrad.html">NEXRAD</a>   
+  <a href="../../blog/tag/visualization.html">visualization</a>   
   <a href="../../blog/tag/matplotlib.html">matplotlib</a>   
-  <a href="../../blog/tag/debug.html">debug</a>   
-  <a href="../../blog/tag/visualization.html">visualization</a>  
+  <a href="../../blog/tag/nexrad.html">NEXRAD</a>   
+  <a href="../../blog/tag/debug.html">debug</a>  
 </li>
  
 </ul>
@@ -513,6 +513,7 @@
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -537,7 +538,7 @@
 <p>When reading into PyART, we can use the <a class="reference external" href="https://arm-doe.github.io/pyart/API/generated/pyart.io.read_nexrad_level3.html#pyart.io.read_nexrad_level3"><code class="docutils literal notranslate"><span class="pre">pyart.io.read_level3</span></code></a> module, <strong>or</strong>, we can use the <a class="reference external" href="https://arm-doe.github.io/pyart/API/generated/pyart.io.read.html#pyart.io.read"><code class="docutils literal notranslate"><span class="pre">pyart.io.read</span></code></a> module which automatically detects the filetype being read in.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s1">&#39;KMOB_SDUS54_N0UEVX_201810101458&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;KMOB_SDUS54_N0UEVX_201810101458&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -550,7 +551,7 @@
 <p>Before we dig into plotting, let’s set our background to dark since that is what the original image showed and it will be easier to identify the pattern in the data.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s1">&#39;dark_background&#39;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">style</span><span class="o">.</span><span class="n">use</span><span class="p">(</span><span class="s2">&quot;dark_background&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -562,15 +563,17 @@
 <p>When we create our plot, everything looks okay - we don’t see the odd Moiré Pattern…</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span><span class="s1">&#39;velocity&#39;</span><span class="p">,</span>
-                     <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                     <span class="n">vmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span>
-                     <span class="n">vmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-                     <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
-                     <span class="n">colorbar_label</span><span class="o">=</span><span class="s1">&#39;radial velocity (m/s)&#39;</span><span class="p">,</span>
-                     <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_balance&#39;</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
+    <span class="s2">&quot;velocity&quot;</span><span class="p">,</span>
+    <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">&quot;radial velocity (m/s)&quot;</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_balance&quot;</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">88</span><span class="p">,</span> <span class="o">-</span><span class="mi">83</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">33</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -587,16 +590,18 @@
 <p>When we add in the <code class="docutils literal notranslate"><span class="pre">alpha=0.8</span></code> argument, which adjusts the <em><strong>transparency</strong></em> of our field, we start to see the pattern.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span><span class="s1">&#39;velocity&#39;</span><span class="p">,</span>
-                     <span class="n">alpha</span><span class="o">=</span><span class="mf">.8</span><span class="p">,</span>
-                     <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-                     <span class="n">vmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span>
-                     <span class="n">vmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-                     <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
-                     <span class="n">colorbar_label</span><span class="o">=</span><span class="s1">&#39;radial velocity (m/s)&#39;</span><span class="p">,</span>
-                     <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_balance&#39;</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
+    <span class="s2">&quot;velocity&quot;</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+    <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+    <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">&quot;radial velocity (m/s)&quot;</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_balance&quot;</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mi">88</span><span class="p">,</span> <span class="o">-</span><span class="mi">83</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">28</span><span class="p">,</span> <span class="mi">33</span><span class="p">)</span>
@@ -618,7 +623,7 @@
 <p>Let’s take a look at the specific plotting call being made with <code class="docutils literal notranslate"><span class="pre">plot_ppi_map</span></code> using <code class="docutils literal notranslate"><span class="pre">??</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>display.plot_ppi_map<span class="o">??</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">??</span>display.plot_ppi_map
 </pre></div>
 </div>
 </div>
@@ -943,7 +948,7 @@ display<span class=" -Color -Color-Blue">.</span>plot_ppi_map<span class=" -Colo
 <p>In a similar fashion to the <code class="docutils literal notranslate"><span class="pre">plot_ppi_map</span></code> function from <code class="docutils literal notranslate"><span class="pre">pyart</span></code>, we can take a look at the parameters for <code class="docutils literal notranslate"><span class="pre">plt.pcolormesh</span></code>:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span>plt.pcolormesh<span class="o">?</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">?</span>plt.pcolormesh
 </pre></div>
 </div>
 </div>
@@ -1195,7 +1200,7 @@ Another difference is the support of Gouraud shading in
 <p>First, let’s read in the numpy array of data using <code class="docutils literal notranslate"><span class="pre">['data']</span></code>.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">velocity</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;velocity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">velocity</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;velocity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 <span class="n">velocity</span>
 </pre></div>
 </div>
@@ -1267,11 +1272,12 @@ Another difference is the support of Gouraud shading in
 <p>Notice how our pattern shows up again - we get the Moiré Pattern…</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span>
-               <span class="n">lats</span><span class="p">,</span>
-               <span class="n">velocity</span><span class="p">,</span>
-               <span class="n">alpha</span><span class="o">=</span><span class="mf">.8</span><span class="p">,</span>
-               <span class="p">);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span>
+    <span class="n">lons</span><span class="p">,</span>
+    <span class="n">lats</span><span class="p">,</span>
+    <span class="n">velocity</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+<span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -1282,12 +1288,7 @@ Another difference is the support of Gouraud shading in
 <p>When we try passing in <code class="docutils literal notranslate"><span class="pre">edgecolors='face'</span></code> instead, it goes away!</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span>
-               <span class="n">lats</span><span class="p">,</span>
-               <span class="n">velocity</span><span class="p">,</span>
-               <span class="n">alpha</span><span class="o">=</span><span class="mf">.8</span><span class="p">,</span>
-               <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;face&#39;</span>
-               <span class="p">);</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;face&quot;</span><span class="p">);</span>
 </pre></div>
 </div>
 </div>
@@ -1305,52 +1306,48 @@ Another difference is the support of Gouraud shading in
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setup our figure/geoaxis</span>
-<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span><span class="mi">7</span><span class="p">))</span>
-<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span>
-                 <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">7</span><span class="p">))</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 
 <span class="c1"># Add state borders and the coastline</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">cfeature</span><span class="o">.</span><span class="n">STATES</span><span class="p">,</span>
-               <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">,</span>
-               <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
-<span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">cfeature</span><span class="o">.</span><span class="n">COASTLINE</span><span class="p">,</span>
-               <span class="n">edgecolor</span><span class="o">=</span><span class="s1">&#39;white&#39;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">cfeature</span><span class="o">.</span><span class="n">STATES</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">cfeature</span><span class="o">.</span><span class="n">COASTLINE</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">)</span>
 
 <span class="c1"># Plot our velocity field using pcolormesh with edgecolors argument</span>
-<span class="n">mesh</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span><span class="n">lons</span><span class="p">,</span>
-                     <span class="n">lats</span><span class="p">,</span>
-                     <span class="n">velocity</span><span class="p">,</span>
-                     <span class="n">vmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span>
-                     <span class="n">vmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
-                     <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;face&#39;</span><span class="p">,</span>
-                     <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;pyart_balance&#39;</span><span class="p">)</span>
+<span class="n">mesh</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span>
+    <span class="n">lons</span><span class="p">,</span> <span class="n">lats</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;face&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_balance&quot;</span>
+<span class="p">)</span>
 
 <span class="c1"># Configure our colorbar</span>
 <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">mesh</span><span class="p">)</span>
 <span class="n">cbar</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">labelsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s1">&#39;Radial Velocity (m/s)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;Radial Velocity (m/s)&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
 
 <span class="c1"># Add gridlines</span>
-<span class="n">gl</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">gridlines</span><span class="p">(</span><span class="n">crs</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
-                  <span class="n">draw_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-                  <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> 
-                  <span class="n">color</span><span class="o">=</span><span class="s1">&#39;gray&#39;</span><span class="p">,</span> 
-                  <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-                  <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">gl</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">gridlines</span><span class="p">(</span>
+    <span class="n">crs</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+    <span class="n">draw_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span>
+    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+    <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+<span class="p">)</span>
 
 <span class="c1"># Make sure labels are only plotted on the left and bottom</span>
 <span class="n">gl</span><span class="o">.</span><span class="n">xlabels_top</span> <span class="o">=</span> <span class="kc">False</span>
 <span class="n">gl</span><span class="o">.</span><span class="n">ylabels_right</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="c1"># Increase the fontsize of our gridline labels</span>
-<span class="n">gl</span><span class="o">.</span><span class="n">xlabel_style</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">14</span><span class="p">}</span>
-<span class="n">gl</span><span class="o">.</span><span class="n">ylabel_style</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;fontsize&#39;</span><span class="p">:</span><span class="mi">14</span><span class="p">}</span>
+<span class="n">gl</span><span class="o">.</span><span class="n">xlabel_style</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fontsize&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">}</span>
+<span class="n">gl</span><span class="o">.</span><span class="n">ylabel_style</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;fontsize&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">}</span>
 
 <span class="c1"># Add a title, using time information</span>
-<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;KEVX (Elgin Air Force Base) </span><span class="se">\n</span><span class="s2"> 0.5 Degree Radial Velocity </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">][</span><span class="mi">14</span><span class="p">:]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
-          <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;KEVX (Elgin Air Force Base) </span><span class="se">\n</span><span class="s2"> 0.5 Degree Radial Velocity </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s1">&#39;units&#39;</span><span class="p">][</span><span class="mi">14</span><span class="p">:]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+    <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+<span class="p">)</span>
 
-<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s1">&#39;kevz_velocity_2018_10_10_1458.png&#39;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="s2">&quot;kevz_velocity_2018_10_10_1458.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>

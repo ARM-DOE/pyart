@@ -90,18 +90,29 @@
     }
    ],
    "source": [
-    "fig = plt.figure(figsize=[8,16])\n",
-    "ax = plt.subplot(2,1,1,projection=ccrs.PlateCarree())\n",
+    "fig = plt.figure(figsize=[8, 16])\n",
+    "ax = plt.subplot(2, 1, 1, projection=ccrs.PlateCarree())\n",
     "display = pyart.graph.RadarMapDisplay(radar)\n",
-    "display.plot_ppi_map('reflectivity', sweep=2, resolution='50m',\n",
-    "                     vmin=0, vmax=60, \n",
-    "                     projection=ccrs.PlateCarree())\n",
+    "display.plot_ppi_map(\n",
+    "    \"reflectivity\",\n",
+    "    sweep=2,\n",
+    "    resolution=\"50m\",\n",
+    "    vmin=0,\n",
+    "    vmax=60,\n",
+    "    projection=ccrs.PlateCarree(),\n",
+    ")\n",
     "\n",
-    "ax2 = plt.subplot(2,1,2,projection=ccrs.PlateCarree())\n",
+    "ax2 = plt.subplot(2, 1, 2, projection=ccrs.PlateCarree())\n",
     "display = pyart.graph.RadarMapDisplay(radar)\n",
-    "display.plot_ppi_map('velocity', sweep=2, resolution='50m',\n",
-    "                     vmin=-15, vmax=15, \n",
-    "                     projection=ccrs.PlateCarree(), cmap='pyart_balance')\n",
+    "display.plot_ppi_map(\n",
+    "    \"velocity\",\n",
+    "    sweep=2,\n",
+    "    resolution=\"50m\",\n",
+    "    vmin=-15,\n",
+    "    vmax=15,\n",
+    "    projection=ccrs.PlateCarree(),\n",
+    "    cmap=\"pyart_balance\",\n",
+    ")\n",
     "plt.show()"
    ]
   },
@@ -136,7 +147,7 @@
     }
    ],
    "source": [
-    "radar.instrument_parameters['nyquist_velocity']['data']"
+    "radar.instrument_parameters[\"nyquist_velocity\"][\"data\"]"
    ]
   },
   {
@@ -147,8 +158,10 @@
    "source": [
     "# Set the nyquist to what we see in the instrument parameter above.\n",
     "# Calculate the velocity texture\n",
-    "vel_texture = pyart.retrieve.calculate_velocity_texture(radar, vel_field='velocity', wind_size=3, nyq=16.524973)\n",
-    "radar.add_field('velocity_texture', vel_texture, replace_existing=True)"
+    "vel_texture = pyart.retrieve.calculate_velocity_texture(\n",
+    "    radar, vel_field=\"velocity\", wind_size=3, nyq=16.524973\n",
+    ")\n",
+    "radar.add_field(\"velocity_texture\", vel_texture, replace_existing=True)"
    ]
   },
   {
@@ -173,9 +186,15 @@
     "# Let us see what the velocity texture looks like.\n",
     "fig = plt.figure(figsize=[8, 8])\n",
     "display = pyart.graph.RadarMapDisplay(radar)\n",
-    "display.plot_ppi_map('velocity_texture', sweep=2, resolution='50m',\n",
-    "                     vmin=0, vmax=10, \n",
-    "                     projection=ccrs.PlateCarree(), cmap='pyart_balance')\n",
+    "display.plot_ppi_map(\n",
+    "    \"velocity_texture\",\n",
+    "    sweep=2,\n",
+    "    resolution=\"50m\",\n",
+    "    vmin=0,\n",
+    "    vmax=10,\n",
+    "    projection=ccrs.PlateCarree(),\n",
+    "    cmap=\"pyart_balance\",\n",
+    ")\n",
     "plt.show()"
    ]
   },
@@ -212,11 +231,11 @@
     "# hydrometeors and what values of texture correspond to artifacts.\n",
     "# In the below example, a threshold of 3 would eliminate most of the peak corresponding to noise\n",
     "# around 6 while preserving most of the values in the peak of ~0.5 corresponding to hydrometeors.\n",
-    "hist, bins = np.histogram(radar.fields['velocity_texture']['data'], bins=150)\n",
-    "bins = (bins[1:]+bins[:-1])/2.0\n",
+    "hist, bins = np.histogram(radar.fields[\"velocity_texture\"][\"data\"], bins=150)\n",
+    "bins = (bins[1:] + bins[:-1]) / 2.0\n",
     "plt.plot(bins, hist)\n",
-    "plt.xlabel('Velocity texture')\n",
-    "plt.ylabel('Count')"
+    "plt.xlabel(\"Velocity texture\")\n",
+    "plt.ylabel(\"Count\")"
    ]
   },
   {
@@ -227,7 +246,7 @@
    "source": [
     "# Set up the gatefilter to be based on the velocity texture.\n",
     "gatefilter = pyart.filters.GateFilter(radar)\n",
-    "gatefilter.exclude_above('velocity_texture', 3)"
+    "gatefilter.exclude_above(\"velocity_texture\", 3)"
    ]
   },
   {
@@ -252,10 +271,16 @@
     "# Let us view the vleocity with the filter applied.\n",
     "fig = plt.figure(figsize=[8, 8])\n",
     "display = pyart.graph.RadarMapDisplay(radar)\n",
-    "display.plot_ppi_map('velocity', sweep=2, resolution='50m',\n",
-    "                     vmin=-15, vmax=15, \n",
-    "                     projection=ccrs.PlateCarree(), cmap='pyart_balance',\n",
-    "                     gatefilter=gatefilter)\n",
+    "display.plot_ppi_map(\n",
+    "    \"velocity\",\n",
+    "    sweep=2,\n",
+    "    resolution=\"50m\",\n",
+    "    vmin=-15,\n",
+    "    vmax=15,\n",
+    "    projection=ccrs.PlateCarree(),\n",
+    "    cmap=\"pyart_balance\",\n",
+    "    gatefilter=gatefilter,\n",
+    ")\n",
     "plt.show()"
    ]
   },
@@ -267,10 +292,11 @@
    "source": [
     "# At this point, we can simply used dealias_region_based to dealias the velocities\n",
     "# and then add the new field to the radar.\n",
-    "nyq = radar.instrument_parameters['nyquist_velocity']['data'][0]\n",
-    "velocity_dealiased = pyart.correct.dealias_region_based(radar, vel_field='velocity', nyquist_vel=nyq,\n",
-    "                                                        centered=True, gatefilter=gatefilter)\n",
-    "radar.add_field('corrected_velocity', velocity_dealiased, replace_existing=True)"
+    "nyq = radar.instrument_parameters[\"nyquist_velocity\"][\"data\"][0]\n",
+    "velocity_dealiased = pyart.correct.dealias_region_based(\n",
+    "    radar, vel_field=\"velocity\", nyquist_vel=nyq, centered=True, gatefilter=gatefilter\n",
+    ")\n",
+    "radar.add_field(\"corrected_velocity\", velocity_dealiased, replace_existing=True)"
    ]
   },
   {
@@ -295,10 +321,16 @@
     "# Plot the new velocities, which now look much more realistic.\n",
     "fig = plt.figure(figsize=[8, 8])\n",
     "display = pyart.graph.RadarMapDisplay(radar)\n",
-    "display.plot_ppi_map('corrected_velocity', sweep=2, resolution='50m',\n",
-    "                     vmin=-30, vmax=30, \n",
-    "                     projection=ccrs.PlateCarree(), cmap='pyart_balance',\n",
-    "                     gatefilter=gatefilter)\n",
+    "display.plot_ppi_map(\n",
+    "    \"corrected_velocity\",\n",
+    "    sweep=2,\n",
+    "    resolution=\"50m\",\n",
+    "    vmin=-30,\n",
+    "    vmax=30,\n",
+    "    projection=ccrs.PlateCarree(),\n",
+    "    cmap=\"pyart_balance\",\n",
+    "    gatefilter=gatefilter,\n",
+    ")\n",
     "plt.show()"
    ]
   }

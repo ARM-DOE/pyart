@@ -1,0 +1,6 @@
+pyart.testing.RadarSpectra.ngates
+=================================
+
+.. currentmodule:: pyart.testing
+
+.. autoproperty:: RadarSpectra.ngates

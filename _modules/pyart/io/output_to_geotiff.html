@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.output_to_geotiff &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.io.output_to_geotiff &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -226,21 +226,35 @@
 <span class="kn">import</span> <span class="nn">os</span>
 <span class="kn">import</span> <span class="nn">shutil</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
 <span class="kn">import</span> <span class="nn">matplotlib.colors</span> <span class="k">as</span> <span class="nn">colors</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
 <span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
+
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">osgeo</span> <span class="kn">import</span> <span class="n">gdal</span>
+
     <span class="n">IMPORT_FLAG</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">IMPORT_FLAG</span> <span class="o">=</span> <span class="kc">False</span>
 
 
-<div class="viewcode-block" id="write_grid_geotiff"><a class="viewcode-back" href="../../../API/generated/pyart.io.write_grid_geotiff.html#pyart.io.write_grid_geotiff">[docs]</a><span class="k">def</span> <span class="nf">write_grid_geotiff</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">rgb</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">cmap</span><span class="o">=</span><span class="s1">&#39;viridis&#39;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span> <span class="n">color_levels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                       <span class="n">warp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">sld</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">use_doublequotes</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="write_grid_geotiff"><a class="viewcode-back" href="../../../API/generated/pyart.io.write_grid_geotiff.html#pyart.io.write_grid_geotiff">[docs]</a><span class="k">def</span> <span class="nf">write_grid_geotiff</span><span class="p">(</span>
+    <span class="n">grid</span><span class="p">,</span>
+    <span class="n">filename</span><span class="p">,</span>
+    <span class="n">field</span><span class="p">,</span>
+    <span class="n">rgb</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">level</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;viridis&quot;</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">75</span><span class="p">,</span>
+    <span class="n">color_levels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">warp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">sld</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">use_doublequotes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Write a Py-ART Grid object to a GeoTIFF file.</span>
 
 <span class="sd">    The GeoTIFF can be the standard Azimuthal Equidistant projection used</span>
@@ -308,27 +322,26 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">IMPORT_FLAG</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
-            <span class="s1">&#39;GDAL not detected, GeoTIFF output failure!&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span><span class="s2">&quot;GDAL not detected, GeoTIFF output failure!&quot;</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Failed -&#39;</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="s1">&#39;field not found in Grid object.&#39;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Failed -&quot;</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="s2">&quot;field not found in Grid object.&quot;</span><span class="p">)</span>
 
     <span class="c1"># Determine whether filename template already contains a suffix</span>
     <span class="c1"># If not, append an appropriate one.</span>
-    <span class="k">if</span> <span class="s1">&#39;.&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
+    <span class="k">if</span> <span class="s2">&quot;.&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">filename</span><span class="p">:</span>
         <span class="n">name</span> <span class="o">=</span> <span class="n">filename</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="s1">&#39;tif&#39;</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="s2">&quot;tif&quot;</span>
         <span class="n">ofile</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.&quot;</span> <span class="o">+</span> <span class="n">end</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ofile</span> <span class="o">=</span> <span class="n">filename</span>
-    <span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
-    <span class="n">dist</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
-    <span class="n">rangestep</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
-    <span class="n">lat</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">origin_latitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">lon</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">origin_longitude</span><span class="p">[</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">rangestep</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">lat</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">origin_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">lon</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">origin_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
     <span class="c1"># Check if masked array; if so, fill missing data</span>
-    <span class="n">filled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">],</span> <span class="n">fill_value</span><span class="o">=-</span><span class="mi">32768</span><span class="p">)</span>
+    <span class="n">filled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">fill_value</span><span class="o">=-</span><span class="mi">32768</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">level</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">filled</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -336,31 +349,37 @@
     <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">data</span><span class="p">[</span><span class="n">data</span> <span class="o">==</span> <span class="o">-</span><span class="mi">32768</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
 
-    <span class="n">iproj</span> <span class="o">=</span> <span class="s1">&#39;PROJCS[&quot;unnamed&quot;,GEOGCS[&quot;WGS 84&quot;,DATUM[&quot;unknown&quot;,&#39;</span> <span class="o">+</span> \
-        <span class="s1">&#39;SPHEROID[&quot;WGS84&quot;,6378137,298.257223563]],&#39;</span> <span class="o">+</span> \
-        <span class="s1">&#39;PRIMEM[&quot;Greenwich&quot;,0],&#39;</span> <span class="o">+</span> \
-        <span class="s1">&#39;UNIT[&quot;degree&quot;,0.0174532925199433]],&#39;</span> <span class="o">+</span> \
-        <span class="s1">&#39;PROJECTION[&quot;Azimuthal_Equidistant&quot;],&#39;</span> <span class="o">+</span> \
-        <span class="s1">&#39;PARAMETER[&quot;latitude_of_center&quot;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;],&#39;</span> <span class="o">+</span> \
-        <span class="s1">&#39;PARAMETER[&quot;longitude_of_center&quot;,&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lon</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;],&#39;</span> <span class="o">+</span> \
-        <span class="s1">&#39;PARAMETER[&quot;false_easting&quot;,0],&#39;</span> <span class="o">+</span> \
-        <span class="s1">&#39;PARAMETER[&quot;false_northing&quot;,0],&#39;</span> <span class="o">+</span> \
-        <span class="s1">&#39;UNIT[&quot;metre&quot;,1,AUTHORITY[&quot;EPSG&quot;,&quot;9001&quot;]]]&#39;</span>
+    <span class="n">iproj</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s1">&#39;PROJCS[&quot;unnamed&quot;,GEOGCS[&quot;WGS 84&quot;,DATUM[&quot;unknown&quot;,&#39;</span>
+        <span class="o">+</span> <span class="s1">&#39;SPHEROID[&quot;WGS84&quot;,6378137,298.257223563]],&#39;</span>
+        <span class="o">+</span> <span class="s1">&#39;PRIMEM[&quot;Greenwich&quot;,0],&#39;</span>
+        <span class="o">+</span> <span class="s1">&#39;UNIT[&quot;degree&quot;,0.0174532925199433]],&#39;</span>
+        <span class="o">+</span> <span class="s1">&#39;PROJECTION[&quot;Azimuthal_Equidistant&quot;],&#39;</span>
+        <span class="o">+</span> <span class="s1">&#39;PARAMETER[&quot;latitude_of_center&quot;,&#39;</span>
+        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lat</span><span class="p">)</span>
+        <span class="o">+</span> <span class="s2">&quot;],&quot;</span>
+        <span class="o">+</span> <span class="s1">&#39;PARAMETER[&quot;longitude_of_center&quot;,&#39;</span>
+        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">lon</span><span class="p">)</span>
+        <span class="o">+</span> <span class="s2">&quot;],&quot;</span>
+        <span class="o">+</span> <span class="s1">&#39;PARAMETER[&quot;false_easting&quot;,0],&#39;</span>
+        <span class="o">+</span> <span class="s1">&#39;PARAMETER[&quot;false_northing&quot;,0],&#39;</span>
+        <span class="o">+</span> <span class="s1">&#39;UNIT[&quot;metre&quot;,1,AUTHORITY[&quot;EPSG&quot;,&quot;9001&quot;]]]&#39;</span>
+    <span class="p">)</span>
     <span class="n">out_driver</span> <span class="o">=</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GetDriverByName</span><span class="p">(</span><span class="s2">&quot;GTiff&quot;</span><span class="p">)</span>
 
     <span class="c1"># Output dataset depends on rgb flag</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">rgb</span><span class="p">:</span>
         <span class="c1"># Single-channel, floating-point output</span>
-        <span class="n">dst_options</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;COMPRESS=LZW&#39;</span><span class="p">,</span> <span class="s1">&#39;ALPHA=YES&#39;</span><span class="p">]</span>
+        <span class="n">dst_options</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;COMPRESS=LZW&quot;</span><span class="p">,</span> <span class="s2">&quot;ALPHA=YES&quot;</span><span class="p">]</span>
         <span class="n">dst_ds</span> <span class="o">=</span> <span class="n">out_driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span>
-            <span class="n">ofile</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span>
-            <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Float32</span><span class="p">,</span> <span class="n">dst_options</span><span class="p">)</span>
+            <span class="n">ofile</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">1</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Float32</span><span class="p">,</span> <span class="n">dst_options</span>
+        <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Assign data RGB levels based on value relative to vmax/vmin</span>
-        <span class="n">rarr</span><span class="p">,</span> <span class="n">garr</span><span class="p">,</span> <span class="n">barr</span> <span class="o">=</span> <span class="n">_get_rgb_values</span><span class="p">(</span>
-            <span class="n">data</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">color_levels</span><span class="p">,</span> <span class="n">cmap</span><span class="p">)</span>
-        <span class="n">dst_ds</span> <span class="o">=</span> <span class="n">out_driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span><span class="n">ofile</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
-                                   <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Byte</span><span class="p">)</span>
+        <span class="n">rarr</span><span class="p">,</span> <span class="n">garr</span><span class="p">,</span> <span class="n">barr</span> <span class="o">=</span> <span class="n">_get_rgb_values</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">color_levels</span><span class="p">,</span> <span class="n">cmap</span><span class="p">)</span>
+        <span class="n">dst_ds</span> <span class="o">=</span> <span class="n">out_driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span>
+            <span class="n">ofile</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Byte</span>
+        <span class="p">)</span>
 
     <span class="c1"># Common Projection and GeoTransform</span>
     <span class="n">dst_ds</span><span class="o">.</span><span class="n">SetGeoTransform</span><span class="p">([</span><span class="o">-</span><span class="n">dist</span><span class="p">,</span> <span class="o">-</span><span class="n">rangestep</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">dist</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">rangestep</span><span class="p">])</span>
@@ -383,18 +402,28 @@
         <span class="c1"># Warps TIFF to lat/lon WGS84 projection that is more useful</span>
         <span class="c1"># for web mapping applications. Likely changes array shape.</span>
         <span class="k">if</span> <span class="n">use_doublequotes</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;gdalwarp -q -t_srs </span><span class="se">\&quot;</span><span class="s1">+proj=longlat +ellps=WGS84 &#39;</span> <span class="o">+</span>
-                      <span class="s1">&#39;+datum=WGS84 +no_defs</span><span class="se">\&quot;</span><span class="s1"> &#39;</span> <span class="o">+</span> <span class="n">ofile</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span>
-                      <span class="n">ofile</span> <span class="o">+</span> <span class="s1">&#39;_tmp.tif&#39;</span><span class="p">)</span>
+            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span>
+                <span class="s1">&#39;gdalwarp -q -t_srs &quot;+proj=longlat +ellps=WGS84 &#39;</span>
+                <span class="o">+</span> <span class="s1">&#39;+datum=WGS84 +no_defs&quot; &#39;</span>
+                <span class="o">+</span> <span class="n">ofile</span>
+                <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+                <span class="o">+</span> <span class="n">ofile</span>
+                <span class="o">+</span> <span class="s2">&quot;_tmp.tif&quot;</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;gdalwarp -q -t_srs </span><span class="se">\&#39;</span><span class="s1">+proj=longlat +ellps=WGS84 &#39;</span> <span class="o">+</span>
-                      <span class="s1">&#39;+datum=WGS84 +no_defs</span><span class="se">\&#39;</span><span class="s1"> &#39;</span> <span class="o">+</span> <span class="n">ofile</span> <span class="o">+</span> <span class="s1">&#39; &#39;</span> <span class="o">+</span>
-                      <span class="n">ofile</span> <span class="o">+</span> <span class="s1">&#39;_tmp.tif&#39;</span><span class="p">)</span>
-        <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">ofile</span><span class="o">+</span><span class="s1">&#39;_tmp.tif&#39;</span><span class="p">,</span> <span class="n">ofile</span><span class="p">)</span></div>
+            <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span>
+                <span class="s2">&quot;gdalwarp -q -t_srs &#39;+proj=longlat +ellps=WGS84 &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;+datum=WGS84 +no_defs&#39; &quot;</span>
+                <span class="o">+</span> <span class="n">ofile</span>
+                <span class="o">+</span> <span class="s2">&quot; &quot;</span>
+                <span class="o">+</span> <span class="n">ofile</span>
+                <span class="o">+</span> <span class="s2">&quot;_tmp.tif&quot;</span>
+            <span class="p">)</span>
+        <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">ofile</span> <span class="o">+</span> <span class="s2">&quot;_tmp.tif&quot;</span><span class="p">,</span> <span class="n">ofile</span><span class="p">)</span></div>
 
 
 <span class="k">def</span> <span class="nf">_get_rgb_values</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">color_levels</span><span class="p">,</span> <span class="n">cmap</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get RGB values for later output to GeoTIFF, given a 2D data field,</span>
 <span class="sd">    display min/max and color table info. Missing data get numpy.nan.</span>
 <span class="sd">    Only called if rgb is True in write_grid_geotiff.</span>
@@ -423,7 +452,7 @@
 <span class="sd">        Green channel indices (range = 0-255).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">frac</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">vmin</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">vmax</span><span class="o">-</span><span class="n">vmin</span><span class="p">)</span>
+    <span class="n">frac</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">vmin</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">vmax</span> <span class="o">-</span> <span class="n">vmin</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">color_levels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">color_levels</span> <span class="o">=</span> <span class="mi">255</span>
     <span class="n">index</span> <span class="o">=</span> <span class="p">(</span><span class="n">frac</span> <span class="o">*</span> <span class="n">color_levels</span><span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
@@ -452,7 +481,7 @@
 
 
 <span class="k">def</span> <span class="nf">_create_sld</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">color_levels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Develop a Style Layer Descriptor file given a color table and</span>
 <span class="sd">    user-specified min/max files. Output color info to that file.</span>
 <span class="sd">    Only called if sld is True in write_grid_geotiff.</span>
@@ -481,24 +510,28 @@
     <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">color_levels</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">color_levels</span> <span class="o">=</span> <span class="mi">255</span>
-    <span class="n">name</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)</span>
-    <span class="n">ofile</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s1">&#39;.sld&#39;</span>
-    <span class="n">fileobj</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">ofile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span>
+    <span class="n">name</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">filename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;.&quot;</span><span class="p">)</span>
+    <span class="n">ofile</span> <span class="o">=</span> <span class="n">name</span> <span class="o">+</span> <span class="s2">&quot;.sld&quot;</span>
+    <span class="n">fileobj</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">ofile</span><span class="p">,</span> <span class="s2">&quot;w&quot;</span><span class="p">)</span>
 
-    <span class="n">header</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
-<span class="s2">&lt;sld:StyledLayerDescriptor xmlns=&quot;http://www.opengis.net/sld&quot; xmlns:sld=&quot;http://www.opengis.net/sld&quot; xmlns:ogc=&quot;http://www.opengis.net/ogc&quot; xmlns:gml=&quot;http://www.opengis.net/gml&quot; version=&quot;1.0.0&quot;&gt;</span>
-<span class="s2">    &lt;sld:UserLayer&gt;</span>
-<span class="s2">        &lt;sld:LayerFeatureConstraints&gt;</span>
-<span class="s2">            &lt;sld:FeatureTypeConstraint/&gt;</span>
-<span class="s2">        &lt;/sld:LayerFeatureConstraints&gt;</span>
-<span class="s2">        &lt;sld:UserStyle&gt;</span>
-<span class="s2">            &lt;sld:Name&gt;&quot;&quot;&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;&quot;&quot;&lt;/sld:Name&gt;</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="p">(</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;</span>
+<span class="sd">&lt;sld:StyledLayerDescriptor xmlns=&quot;http://www.opengis.net/sld&quot; xmlns:sld=&quot;http://www.opengis.net/sld&quot; xmlns:ogc=&quot;http://www.opengis.net/ogc&quot; xmlns:gml=&quot;http://www.opengis.net/gml&quot; version=&quot;1.0.0&quot;&gt;</span>
+<span class="sd">    &lt;sld:UserLayer&gt;</span>
+<span class="sd">        &lt;sld:LayerFeatureConstraints&gt;</span>
+<span class="sd">            &lt;sld:FeatureTypeConstraint/&gt;</span>
+<span class="sd">        &lt;/sld:LayerFeatureConstraints&gt;</span>
+<span class="sd">        &lt;sld:UserStyle&gt;</span>
+<span class="sd">            &lt;sld:Name&gt;&quot;&quot;&quot;</span>
+        <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+        <span class="o">+</span> <span class="s2">&quot;&quot;&quot;&lt;/sld:Name&gt;</span>
 <span class="s2">            &lt;sld:FeatureTypeStyle&gt;</span>
 <span class="s2">                &lt;sld:Name&gt;name&lt;/sld:Name&gt;</span>
 <span class="s2">                &lt;sld:FeatureTypeName&gt;Feature&lt;/sld:FeatureTypeName&gt;</span>
 <span class="s2">                &lt;sld:Rule&gt;</span>
 <span class="s2">                    &lt;sld:RasterSymbolizer&gt;</span>
 <span class="s2">                        &lt;sld:ColorMap&gt;&quot;&quot;&quot;</span>
+    <span class="p">)</span>
     <span class="n">fileobj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">color_levels</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
@@ -509,9 +542,15 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">op</span> <span class="o">=</span> <span class="mf">1.0</span>
         <span class="n">hexval</span> <span class="o">=</span> <span class="n">colors</span><span class="o">.</span><span class="n">rgb2hex</span><span class="p">(</span><span class="n">rgbt</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">3</span><span class="p">])</span>
-        <span class="n">wstr</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">                            &lt;sld:ColorMapEntry color=</span><span class="se">\&quot;</span><span class="s1">&#39;</span> <span class="o">+</span> \
-            <span class="nb">str</span><span class="p">(</span><span class="n">hexval</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\&quot;</span><span class="s1"> opacity=</span><span class="se">\&quot;</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">)</span> <span class="o">+</span> \
-            <span class="s1">&#39;</span><span class="se">\&quot;</span><span class="s1"> quantity=</span><span class="se">\&quot;</span><span class="s1">&#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span> <span class="o">+</span> <span class="s1">&#39;</span><span class="se">\&quot;</span><span class="s1">/&gt;&#39;</span>
+        <span class="n">wstr</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">                            &lt;sld:ColorMapEntry color=&quot;&#39;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">hexval</span><span class="p">)</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span>
+            <span class="o">+</span> <span class="s1">&#39;&quot; opacity=&quot;&#39;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">op</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s1">&#39;&quot; quantity=&quot;&#39;</span>
+            <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">val</span><span class="p">)</span>
+            <span class="o">+</span> <span class="s1">&#39;&quot;/&gt;&#39;</span>
+        <span class="p">)</span>
         <span class="n">fileobj</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">wstr</span><span class="p">)</span>
 
     <span class="n">footer</span> <span class="o">=</span> <span class="s2">&quot;&quot;&quot;</span>

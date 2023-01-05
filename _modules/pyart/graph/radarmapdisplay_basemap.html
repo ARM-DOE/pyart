@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.graph.radarmapdisplay_basemap &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>pyart.graph.radarmapdisplay_basemap &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -226,19 +226,21 @@
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span> <span class="nn">mpl_toolkits.basemap</span> <span class="kn">import</span> <span class="n">Basemap</span>
+
     <span class="n">_BASEMAP_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_BASEMAP_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">.radardisplay</span> <span class="kn">import</span> <span class="n">RadarDisplay</span>
-<span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">parse_ax_fig</span><span class="p">,</span> <span class="n">parse_vmin_vmax</span><span class="p">,</span> <span class="n">parse_cmap</span>
 <span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
+<span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">parse_ax_fig</span><span class="p">,</span> <span class="n">parse_cmap</span><span class="p">,</span> <span class="n">parse_vmin_vmax</span>
+<span class="kn">from</span> <span class="nn">.radardisplay</span> <span class="kn">import</span> <span class="n">RadarDisplay</span>
 
 
 <div class="viewcode-block" id="RadarMapDisplayBasemap"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.html#pyart.graph.RadarMapDisplayBasemap">[docs]</a><span class="k">class</span> <span class="nc">RadarMapDisplayBasemap</span><span class="p">(</span><span class="n">RadarDisplay</span><span class="p">):</span>
-    <span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A display object for creating plots on a geographic map from data in a</span>
 <span class="sd">    Radar object.</span>
 
@@ -288,46 +290,78 @@
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)):</span>
-        <span class="sd">&quot;&quot;&quot; Initialize the object. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the object.&quot;&quot;&quot;</span>
         <span class="c1"># check that basemap is available</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BASEMAP_AVAILABLE</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
                 <span class="s2">&quot;Basemap is required to use RadarMapDisplayBasemap but is not &quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;installed&quot;</span><span class="p">)</span>
+                <span class="o">+</span> <span class="s2">&quot;installed&quot;</span>
+            <span class="p">)</span>
 
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;RadarMapDisplayBasemap is deprecated in favor of &quot;</span>
-                      <span class="o">+</span> <span class="s2">&quot;RadarMapDisplay. Basemap is still optional to use, &quot;</span>
-                      <span class="o">+</span> <span class="s2">&quot;but there will be no support if an error appears.&quot;</span><span class="p">,</span>
-                      <span class="ne">DeprecationWarning</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;RadarMapDisplayBasemap is deprecated in favor of &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;RadarMapDisplay. Basemap is still optional to use, &quot;</span>
+            <span class="o">+</span> <span class="s2">&quot;but there will be no support if an error appears.&quot;</span><span class="p">,</span>
+            <span class="ne">DeprecationWarning</span><span class="p">,</span>
+        <span class="p">)</span>
 
         <span class="c1"># initalize the base class</span>
         <span class="n">RadarDisplay</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="n">shift</span><span class="p">)</span>
 
         <span class="c1"># additional attributes needed for plotting on a basemap.</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span> <span class="o">=</span> <span class="kc">None</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_x0</span> <span class="o">=</span> <span class="kc">None</span>     <span class="c1"># x axis radar location in map coords (meters)</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_y0</span> <span class="o">=</span> <span class="kc">None</span>     <span class="c1"># y axis radar location in map coords (meters)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_x0</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># x axis radar location in map coords (meters)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_y0</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># y axis radar location in map coords (meters)</span>
         <span class="k">return</span>
 
     <span class="k">def</span> <span class="nf">_check_basemap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot; Check that basemap is not None, raise ValueError if it is. &quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that basemap is not None, raise ValueError if it is.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;no basemap plotted&#39;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;no basemap plotted&quot;</span><span class="p">)</span>
 
 <div class="viewcode-block" id="RadarMapDisplayBasemap.plot_ppi_map"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_ppi_map.html#pyart.graph.RadarMapDisplayBasemap.plot_ppi_map">[docs]</a>    <span class="k">def</span> <span class="nf">plot_ppi_map</span><span class="p">(</span>
-            <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">mask_tuple</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mask_outside</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">colorbar_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">lat_lines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lon_lines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">projection</span><span class="o">=</span><span class="s1">&#39;lcc&#39;</span><span class="p">,</span> <span class="n">area_thresh</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
-            <span class="n">min_lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lon_0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lat_0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;h&#39;</span><span class="p">,</span> <span class="n">shapefile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">basemap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">embellish</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-            <span class="n">ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ticklabs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">raster</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-            <span class="n">edgecolors</span><span class="o">=</span><span class="s1">&#39;face&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">field</span><span class="p">,</span>
+        <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">mask_tuple</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">mask_outside</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">colorbar_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">lat_lines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">lon_lines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">projection</span><span class="o">=</span><span class="s2">&quot;lcc&quot;</span><span class="p">,</span>
+        <span class="n">area_thresh</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
+        <span class="n">min_lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">min_lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">max_lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">width</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">lon_0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">lat_0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">resolution</span><span class="o">=</span><span class="s2">&quot;h&quot;</span><span class="p">,</span>
+        <span class="n">shapefile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">basemap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">filter_transitions</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">embellish</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">ticklabs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">raster</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;face&quot;</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a PPI volume sweep onto a geographic map.</span>
 
 <span class="sd">        Additional arguments are passed to Basemap.</span>
@@ -463,8 +497,7 @@
             <span class="n">lon_0</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
         <span class="c1"># get data for the plot</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_data</span><span class="p">(</span>
-            <span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">mask_tuple</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="p">,</span> <span class="n">gatefilter</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_data</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">mask_tuple</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="p">,</span> <span class="n">gatefilter</span><span class="p">)</span>
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_x_y</span><span class="p">(</span><span class="n">sweep</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="p">)</span>
 
         <span class="c1"># mask the data where outside the limits</span>
@@ -473,40 +506,51 @@
 
         <span class="c1"># create the basemap if not provided</span>
         <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">basemap</span><span class="p">)</span> <span class="o">!=</span> <span class="n">Basemap</span><span class="p">:</span>
-            <span class="n">using_corners</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">min_lon</span><span class="p">,</span> <span class="n">min_lat</span><span class="p">,</span> <span class="n">max_lon</span><span class="p">,</span> <span class="n">max_lat</span><span class="p">])</span>
+            <span class="n">using_corners</span> <span class="o">=</span> <span class="kc">None</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="n">min_lon</span><span class="p">,</span> <span class="n">min_lat</span><span class="p">,</span> <span class="n">max_lon</span><span class="p">,</span> <span class="n">max_lat</span><span class="p">]</span>
             <span class="k">if</span> <span class="n">using_corners</span><span class="p">:</span>
                 <span class="n">basemap</span> <span class="o">=</span> <span class="n">Basemap</span><span class="p">(</span>
-                    <span class="n">llcrnrlon</span><span class="o">=</span><span class="n">min_lon</span><span class="p">,</span> <span class="n">llcrnrlat</span><span class="o">=</span><span class="n">min_lat</span><span class="p">,</span>
-                    <span class="n">urcrnrlon</span><span class="o">=</span><span class="n">max_lon</span><span class="p">,</span> <span class="n">urcrnrlat</span><span class="o">=</span><span class="n">max_lat</span><span class="p">,</span>
-                    <span class="n">lat_0</span><span class="o">=</span><span class="n">lat_0</span><span class="p">,</span> <span class="n">lon_0</span><span class="o">=</span><span class="n">lon_0</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
-                    <span class="n">area_thresh</span><span class="o">=</span><span class="n">area_thresh</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-                    <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>   <span class="c1"># using width and height</span>
+                    <span class="n">llcrnrlon</span><span class="o">=</span><span class="n">min_lon</span><span class="p">,</span>
+                    <span class="n">llcrnrlat</span><span class="o">=</span><span class="n">min_lat</span><span class="p">,</span>
+                    <span class="n">urcrnrlon</span><span class="o">=</span><span class="n">max_lon</span><span class="p">,</span>
+                    <span class="n">urcrnrlat</span><span class="o">=</span><span class="n">max_lat</span><span class="p">,</span>
+                    <span class="n">lat_0</span><span class="o">=</span><span class="n">lat_0</span><span class="p">,</span>
+                    <span class="n">lon_0</span><span class="o">=</span><span class="n">lon_0</span><span class="p">,</span>
+                    <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
+                    <span class="n">area_thresh</span><span class="o">=</span><span class="n">area_thresh</span><span class="p">,</span>
+                    <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
+                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                    <span class="o">**</span><span class="n">kwargs</span>
+                <span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>  <span class="c1"># using width and height</span>
                 <span class="c1"># map domain determined from location of radar gates</span>
                 <span class="k">if</span> <span class="n">width</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">width</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">*</span> <span class="mf">1000.</span>
+                    <span class="n">width</span> <span class="o">=</span> <span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">*</span> <span class="mf">1000.0</span>
                 <span class="k">if</span> <span class="n">height</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">height</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">*</span> <span class="mf">1000.</span>
+                    <span class="n">height</span> <span class="o">=</span> <span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">*</span> <span class="mf">1000.0</span>
                 <span class="n">basemap</span> <span class="o">=</span> <span class="n">Basemap</span><span class="p">(</span>
-                    <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span> <span class="n">lon_0</span><span class="o">=</span><span class="n">lon_0</span><span class="p">,</span> <span class="n">lat_0</span><span class="o">=</span><span class="n">lat_0</span><span class="p">,</span>
-                    <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span> <span class="n">area_thresh</span><span class="o">=</span><span class="n">area_thresh</span><span class="p">,</span>
-                    <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+                    <span class="n">width</span><span class="o">=</span><span class="n">width</span><span class="p">,</span>
+                    <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">,</span>
+                    <span class="n">lon_0</span><span class="o">=</span><span class="n">lon_0</span><span class="p">,</span>
+                    <span class="n">lat_0</span><span class="o">=</span><span class="n">lat_0</span><span class="p">,</span>
+                    <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
+                    <span class="n">area_thresh</span><span class="o">=</span><span class="n">area_thresh</span><span class="p">,</span>
+                    <span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
+                    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                    <span class="o">**</span><span class="n">kwargs</span>
+                <span class="p">)</span>
 
         <span class="c1"># The cylindrical equidistant projection does not support conversions</span>
         <span class="c1"># from geographic (lon/lat) to map projection (x/y) coordinates and</span>
         <span class="c1"># therefore cannot be used.</span>
-        <span class="k">if</span> <span class="n">basemap</span><span class="o">.</span><span class="n">projection</span> <span class="o">==</span> <span class="s1">&#39;cyl&#39;</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s1">&#39;The cylindrical equidistant projection is not supported&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">basemap</span><span class="o">.</span><span class="n">projection</span> <span class="o">==</span> <span class="s2">&quot;cyl&quot;</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;The cylindrical equidistant projection is not supported&quot;</span><span class="p">)</span>
 
         <span class="c1"># add embelishments</span>
         <span class="k">if</span> <span class="n">embellish</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
             <span class="n">basemap</span><span class="o">.</span><span class="n">drawcoastlines</span><span class="p">(</span><span class="n">linewidth</span><span class="o">=</span><span class="mf">1.25</span><span class="p">)</span>
             <span class="n">basemap</span><span class="o">.</span><span class="n">drawstates</span><span class="p">()</span>
-            <span class="n">basemap</span><span class="o">.</span><span class="n">drawparallels</span><span class="p">(</span>
-                <span class="n">lat_lines</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
-            <span class="n">basemap</span><span class="o">.</span><span class="n">drawmeridians</span><span class="p">(</span>
-                <span class="n">lon_lines</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">])</span>
+            <span class="n">basemap</span><span class="o">.</span><span class="n">drawparallels</span><span class="p">(</span><span class="n">lat_lines</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
+            <span class="n">basemap</span><span class="o">.</span><span class="n">drawmeridians</span><span class="p">(</span><span class="n">lon_lines</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span> <span class="o">=</span> <span class="n">basemap</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_x0</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y0</span> <span class="o">=</span> <span class="n">basemap</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
@@ -517,15 +561,23 @@
         <span class="k">if</span> <span class="n">norm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if norm is set do not override with vmin/vmax</span>
             <span class="n">vmin</span> <span class="o">=</span> <span class="n">vmax</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="n">pm</span> <span class="o">=</span> <span class="n">basemap</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">_x0</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="mf">1000.</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y0</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="mf">1000.</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span>
-            <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span> <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
-            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span> <span class="n">edgecolors</span><span class="o">=</span><span class="n">edgecolors</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_x0</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="mf">1000.0</span><span class="p">,</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_y0</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="mf">1000.0</span><span class="p">,</span>
+            <span class="n">data</span><span class="p">,</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+            <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+            <span class="n">norm</span><span class="o">=</span><span class="n">norm</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="n">alpha</span><span class="p">,</span>
+            <span class="n">edgecolors</span><span class="o">=</span><span class="n">edgecolors</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
 
         <span class="k">if</span> <span class="n">raster</span><span class="p">:</span>
             <span class="n">pm</span><span class="o">.</span><span class="n">set_rasterized</span><span class="p">(</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">shapefile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">basemap</span><span class="o">.</span><span class="n">readshapefile</span><span class="p">(</span><span class="n">shapefile</span><span class="p">,</span> <span class="s1">&#39;shapefile&#39;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
+            <span class="n">basemap</span><span class="o">.</span><span class="n">readshapefile</span><span class="p">(</span><span class="n">shapefile</span><span class="p">,</span> <span class="s2">&quot;shapefile&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">title_flag</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_title</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span>
@@ -536,13 +588,26 @@
 
         <span class="k">if</span> <span class="n">colorbar_flag</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">plot_colorbar</span><span class="p">(</span>
-                <span class="n">mappable</span><span class="o">=</span><span class="n">pm</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">colorbar_label</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="n">field</span><span class="p">,</span> <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span>
-                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="o">=</span><span class="n">ticks</span><span class="p">,</span> <span class="n">ticklabs</span><span class="o">=</span><span class="n">ticklabs</span><span class="p">)</span>
+                <span class="n">mappable</span><span class="o">=</span><span class="n">pm</span><span class="p">,</span>
+                <span class="n">label</span><span class="o">=</span><span class="n">colorbar_label</span><span class="p">,</span>
+                <span class="n">field</span><span class="o">=</span><span class="n">field</span><span class="p">,</span>
+                <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span>
+                <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+                <span class="n">ticks</span><span class="o">=</span><span class="n">ticks</span><span class="p">,</span>
+                <span class="n">ticklabs</span><span class="o">=</span><span class="n">ticklabs</span><span class="p">,</span>
+            <span class="p">)</span>
         <span class="k">return</span></div>
 
-<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_point"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_point.html#pyart.graph.RadarMapDisplayBasemap.plot_point">[docs]</a>    <span class="k">def</span> <span class="nf">plot_point</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s1">&#39;ro&#39;</span><span class="p">,</span> <span class="n">label_text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-                   <span class="n">label_offset</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_point"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_point.html#pyart.graph.RadarMapDisplayBasemap.plot_point">[docs]</a>    <span class="k">def</span> <span class="nf">plot_point</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">lon</span><span class="p">,</span>
+        <span class="n">lat</span><span class="p">,</span>
+        <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;ro&quot;</span><span class="p">,</span>
+        <span class="n">label_text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">label_offset</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
+        <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a point on the current map.</span>
 
 <span class="sd">        Additional arguments are passed to basemap.plot.</span>
@@ -573,12 +638,11 @@
         <span class="k">if</span> <span class="n">label_text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="c1"># basemap does not have a text method so we must determine</span>
             <span class="c1"># the x and y points and plot them on the basemap&#39;s axis.</span>
-            <span class="n">x_text</span><span class="p">,</span> <span class="n">y_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span><span class="p">(</span>
-                <span class="n">lon</span> <span class="o">+</span> <span class="n">lon_offset</span><span class="p">,</span> <span class="n">lat</span> <span class="o">+</span> <span class="n">lat_offset</span><span class="p">)</span>
+            <span class="n">x_text</span><span class="p">,</span> <span class="n">y_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span><span class="p">(</span><span class="n">lon</span> <span class="o">+</span> <span class="n">lon_offset</span><span class="p">,</span> <span class="n">lat</span> <span class="o">+</span> <span class="n">lat_offset</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x_text</span><span class="p">,</span> <span class="n">y_text</span><span class="p">,</span> <span class="n">label_text</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_line_geo"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_line_geo.html#pyart.graph.RadarMapDisplayBasemap.plot_line_geo">[docs]</a>    <span class="k">def</span> <span class="nf">plot_line_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_lons</span><span class="p">,</span> <span class="n">line_lats</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_line_geo"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_line_geo.html#pyart.graph.RadarMapDisplayBasemap.plot_line_geo">[docs]</a>    <span class="k">def</span> <span class="nf">plot_line_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_lons</span><span class="p">,</span> <span class="n">line_lats</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="s2">&quot;r-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a line segments on the current map given values in lat and lon.</span>
 
 <span class="sd">        Additional arguments are passed to basemap.plot.</span>
@@ -594,11 +658,10 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_basemap</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-            <span class="n">line_lons</span><span class="p">,</span> <span class="n">line_lats</span><span class="p">,</span> <span class="n">line_style</span><span class="p">,</span> <span class="n">latlon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">line_lons</span><span class="p">,</span> <span class="n">line_lats</span><span class="p">,</span> <span class="n">line_style</span><span class="p">,</span> <span class="n">latlon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_line_xy"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_line_xy.html#pyart.graph.RadarMapDisplayBasemap.plot_line_xy">[docs]</a>    <span class="k">def</span> <span class="nf">plot_line_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_x</span><span class="p">,</span> <span class="n">line_y</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="s1">&#39;r-&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_line_xy"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_line_xy.html#pyart.graph.RadarMapDisplayBasemap.plot_line_xy">[docs]</a>    <span class="k">def</span> <span class="nf">plot_line_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_x</span><span class="p">,</span> <span class="n">line_y</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="s2">&quot;r-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a line segments on the current map given radar x, y values.</span>
 
 <span class="sd">        Additional arguments are passed to basemap.plot.</span>
@@ -614,12 +677,14 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_basemap</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_x0</span> <span class="o">+</span> <span class="n">line_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y0</span> <span class="o">+</span> <span class="n">line_y</span><span class="p">,</span> <span class="n">line_style</span><span class="p">,</span>
-                          <span class="n">latlon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_x0</span> <span class="o">+</span> <span class="n">line_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y0</span> <span class="o">+</span> <span class="n">line_y</span><span class="p">,</span> <span class="n">line_style</span><span class="p">,</span> <span class="n">latlon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span></div>
 
-<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_range_ring"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_range_ring.html#pyart.graph.RadarMapDisplayBasemap.plot_range_ring">[docs]</a>    <span class="k">def</span> <span class="nf">plot_range_ring</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">range_ring_location_km</span><span class="p">,</span> <span class="n">npts</span><span class="o">=</span><span class="mi">360</span><span class="p">,</span>
-                        <span class="n">line_style</span><span class="o">=</span><span class="s1">&#39;k-&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
+<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_range_ring"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_range_ring.html#pyart.graph.RadarMapDisplayBasemap.plot_range_ring">[docs]</a>    <span class="k">def</span> <span class="nf">plot_range_ring</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">range_ring_location_km</span><span class="p">,</span> <span class="n">npts</span><span class="o">=</span><span class="mi">360</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="s2">&quot;k-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a single range ring on the map.</span>
 
 <span class="sd">        Additional arguments are passed to basemap.plot.</span>
@@ -637,13 +702,13 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># The RadarDisplay.plot_range_rings uses a col parameter to specify</span>
         <span class="c1"># the line color, deal with this here.</span>
-        <span class="k">if</span> <span class="s1">&#39;col&#39;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s1">&#39;col&#39;</span><span class="p">)</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s1">&#39;c&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="k">if</span> <span class="s2">&quot;col&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;col&quot;</span><span class="p">)</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_basemap</span><span class="p">()</span>
-        <span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.</span><span class="p">,</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">npts</span><span class="p">)</span>
-        <span class="n">xpts</span> <span class="o">=</span> <span class="n">range_ring_location_km</span> <span class="o">*</span> <span class="mf">1000.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
-        <span class="n">ypts</span> <span class="o">=</span> <span class="n">range_ring_location_km</span> <span class="o">*</span> <span class="mf">1000.</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+        <span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">npts</span><span class="p">)</span>
+        <span class="n">xpts</span> <span class="o">=</span> <span class="n">range_ring_location_km</span> <span class="o">*</span> <span class="mf">1000.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+        <span class="n">ypts</span> <span class="o">=</span> <span class="n">range_ring_location_km</span> <span class="o">*</span> <span class="mf">1000.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plot_line_xy</span><span class="p">(</span><span class="n">xpts</span><span class="p">,</span> <span class="n">ypts</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="n">line_style</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div></div>
 </pre></div>
 <div class="section">

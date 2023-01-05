@@ -25,7 +25,7 @@ Extract a radar column above a point
 Given a radar and a point, extract the column of radar data values above
 a point
 
-.. GENERATED FROM PYTHON SOURCE LINES 9-23
+.. GENERATED FROM PYTHON SOURCE LINES 9-24
 
 .. code-block:: default
 
@@ -33,14 +33,15 @@ a point
     # Author: Maxwell Grover (mgrover@anl.gov)
     # License: BSD 3 clause
 
-    import pyart
-    import numpy as np
-    import matplotlib.pyplot as plt
     import cartopy.crs as ccrs
+    import matplotlib.pyplot as plt
+    import numpy as np
+
+    import pyart
     from pyart.testing import get_test_data
 
     # Read in some test data
-    filename = get_test_data('swx_20120520_0641.nc')
+    filename = get_test_data("swx_20120520_0641.nc")
     radar = pyart.io.read(filename)
 
 
@@ -50,7 +51,7 @@ a point
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 24-30
+.. GENERATED FROM PYTHON SOURCE LINES 25-31
 
 **Plot the first sweep and our desired point**
 
@@ -59,13 +60,13 @@ the location of our desired point on a map.
 This will provide some context as to where we are extracting our
 column of values.
 
-.. GENERATED FROM PYTHON SOURCE LINES 30-50
+.. GENERATED FROM PYTHON SOURCE LINES 31-54
 
 .. code-block:: default
 
 
-    site_lon = -97.73 # longitude in degrees
-    site_lat = 36.41 # latitdue in degrees
+    site_lon = -97.73  # longitude in degrees
+    site_lat = 36.41  # latitdue in degrees
 
     # Setup the RadarMapDisplay and add our projection
     display = pyart.graph.RadarMapDisplay(radar)
@@ -73,15 +74,18 @@ column of values.
 
     # Visualize the reflectivity field, using the lowest sweep with
     # latitude and longitude lines
-    display.plot_ppi_map('reflectivity_horizontal',
-                         0, ax=ax,vmin=-32, vmax=64.,
-                         lon_lines=np.arange(-98, -97, .2),
-                         lat_lines=np.arange(36, 37, .2))
+    display.plot_ppi_map(
+        "reflectivity_horizontal",
+        0,
+        ax=ax,
+        vmin=-32,
+        vmax=64.0,
+        lon_lines=np.arange(-98, -97, 0.2),
+        lat_lines=np.arange(36, 37, 0.2),
+    )
 
     # Plot our site location on top of the radar image
-    ax.scatter(site_lon,
-               site_lat,
-               color='black');
+    ax.scatter(site_lon, site_lat, color="black")
 
 
 
@@ -97,16 +101,16 @@ column of values.
  .. code-block:: none
 
 
-    <matplotlib.collections.PathCollection object at 0x7f7315f6e310>
+    <matplotlib.collections.PathCollection object at 0x7fc8e3153690>
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-53
+.. GENERATED FROM PYTHON SOURCE LINES 55-57
 
-Now that we have our point defined, and our radar object, we can use the following 
+Now that we have our point defined, and our radar object, we can use the following
 utility function in Py-ART to subset a column
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-55
+.. GENERATED FROM PYTHON SOURCE LINES 57-59
 
 .. code-block:: default
 
@@ -119,11 +123,11 @@ utility function in Py-ART to subset a column
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 56-57
+.. GENERATED FROM PYTHON SOURCE LINES 60-61
 
 This function returns an xarray dataset, with all of our data fields!
 
-.. GENERATED FROM PYTHON SOURCE LINES 57-59
+.. GENERATED FROM PYTHON SOURCE LINES 61-63
 
 .. code-block:: default
 
@@ -164,18 +168,18 @@ This function returns an xarray dataset, with all of our data fields!
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 60-64
+.. GENERATED FROM PYTHON SOURCE LINES 64-68
 
 **Visualize the Reflectivity Values in the Column**
 
 Let's visualize the reflectivity values in the column
 above our point, which is stored in our new dataset
 
-.. GENERATED FROM PYTHON SOURCE LINES 64-65
+.. GENERATED FROM PYTHON SOURCE LINES 68-69
 
 .. code-block:: default
 
-    ds.corrected_reflectivity_horizontal.plot(y='height');
+    ds.corrected_reflectivity_horizontal.plot(y="height")
 
 
 
@@ -190,14 +194,14 @@ above our point, which is stored in our new dataset
  .. code-block:: none
 
 
-    [<matplotlib.lines.Line2D object at 0x7f7315c79650>]
+    [<matplotlib.lines.Line2D object at 0x7fc8e1f27490>]
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.108 seconds)
+   **Total running time of the script:** ( 0 minutes  3.699 seconds)
 
 
 .. _sphx_glr_download_examples_retrieve_plot_column_subset.py:

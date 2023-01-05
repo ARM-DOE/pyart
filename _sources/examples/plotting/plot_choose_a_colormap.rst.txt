@@ -34,8 +34,8 @@ and how to add them to your own plots.
     # Author: Max Grover (mgrover@anl.gov)
     # License: BSD 3 clause
 
-    import numpy as np
     import matplotlib.pyplot as plt
+    import numpy as np
 
     import pyart
     from pyart.testing import get_test_data
@@ -54,7 +54,7 @@ and how to add them to your own plots.
 Let's see which colormaps are available directly from Py-ART!
 We use a helper function from matplotlib to plot this.
 
-.. GENERATED FROM PYTHON SOURCE LINES 26-50
+.. GENERATED FROM PYTHON SOURCE LINES 26-58
 
 .. code-block:: default
 
@@ -67,16 +67,23 @@ We use a helper function from matplotlib to plot this.
     def plot_color_gradients(cmap_category, cmap_list):
         # Create figure and adjust figure height to number of colormaps
         nrows = len(cmap_list)
-        figh = 0.35 + 0.15 + (nrows + (nrows-1)*0.1)*0.22
+        figh = 0.35 + 0.15 + (nrows + (nrows - 1) * 0.1) * 0.22
         fig, axs = plt.subplots(nrows=nrows, figsize=(6.4, figh))
-        fig.subplots_adjust(top=1-.35/figh, bottom=.15/figh, left=0.4, right=0.99)
+        fig.subplots_adjust(top=1 - 0.35 / figh, bottom=0.15 / figh, left=0.4, right=0.99)
 
-        axs[0].set_title(cmap_category + ' Colormaps', fontsize=14)
+        axs[0].set_title(cmap_category + " Colormaps", fontsize=14)
 
         for ax, cmap_name in zip(axs, cmap_list):
-            ax.imshow(gradient, aspect='auto', cmap=f"pyart_{cmap_name}")
-            ax.text(-.01, .5, f"pyart_{cmap_name}", va='center', ha='right', fontsize=10,
-                    transform=ax.transAxes)
+            ax.imshow(gradient, aspect="auto", cmap=f"pyart_{cmap_name}")
+            ax.text(
+                -0.01,
+                0.5,
+                f"pyart_{cmap_name}",
+                va="center",
+                ha="right",
+                fontsize=10,
+                transform=ax.transAxes,
+            )
 
         # Turn off *all* ticks & spines, not just the ones with colormaps.
         for ax in axs:
@@ -89,7 +96,8 @@ We use a helper function from matplotlib to plot this.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 51-56
+
+.. GENERATED FROM PYTHON SOURCE LINES 59-64
 
 **Colorblind Friendly Colormaps**
 
@@ -97,14 +105,14 @@ We recommend starting with these colorblind friendly colormaps.
 These colormaps are the most inclusive, and should be used where
 possible.
 
-.. GENERATED FROM PYTHON SOURCE LINES 56-62
+.. GENERATED FROM PYTHON SOURCE LINES 64-70
 
 .. code-block:: default
 
 
     plot_color_gradients(
         "Colorblind Friendly",
-        ["LangRainbow12", "HomeyerRainbow", "balance", "ChaseSpectral", "SpectralExtended"]
+        ["LangRainbow12", "HomeyerRainbow", "balance", "ChaseSpectral", "SpectralExtended"],
     )
 
 
@@ -119,19 +127,26 @@ possible.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 63-67
+.. GENERATED FROM PYTHON SOURCE LINES 71-75
 
 **Perceptually Uniform Colormaps**
 
 More generally, perceptually uniform colormaps are colormaps where
 the lightness value increases monotonically through the colormaps.
 
-.. GENERATED FROM PYTHON SOURCE LINES 67-70
+.. GENERATED FROM PYTHON SOURCE LINES 75-85
 
 .. code-block:: default
 
-    plot_color_gradients("Sequential", ["Bu10", "Bu7", "Gray5",
-                                        "Gray9",])
+    plot_color_gradients(
+        "Sequential",
+        [
+            "Bu10",
+            "Bu7",
+            "Gray5",
+            "Gray9",
+        ],
+    )
 
 
 
@@ -145,22 +160,37 @@ the lightness value increases monotonically through the colormaps.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 71-75
+.. GENERATED FROM PYTHON SOURCE LINES 86-90
 
 **Diverging Colormaps**
 
 Diverging colormaps are helpful when showing positive and negative
 values. This is when the 0 value is meaningful (ex. velocity)
 
-.. GENERATED FROM PYTHON SOURCE LINES 75-81
+.. GENERATED FROM PYTHON SOURCE LINES 90-111
 
 .. code-block:: default
 
-    plot_color_gradients("Diverging", ["BlueBrown11", "BrBu10", "BrBu12",
-                                       "BuDOr12", "BuDOr18", "BuDRd12",
-                                       "BuDRd18", "BuGr14", "BuGy8",
-                                       "BuOr10", "BuOr12", "BuOr8",
-                                       "BuOrR14", "GrMg16", "RdYlBu11b"])
+    plot_color_gradients(
+        "Diverging",
+        [
+            "BlueBrown11",
+            "BrBu10",
+            "BrBu12",
+            "BuDOr12",
+            "BuDOr18",
+            "BuDRd12",
+            "BuDRd18",
+            "BuGr14",
+            "BuGy8",
+            "BuOr10",
+            "BuOr12",
+            "BuOr8",
+            "BuOrR14",
+            "GrMg16",
+            "RdYlBu11b",
+        ],
+    )
 
 
 
@@ -174,7 +204,7 @@ values. This is when the 0 value is meaningful (ex. velocity)
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-87
+.. GENERATED FROM PYTHON SOURCE LINES 112-117
 
 **Field-Specific Colormaps**
 
@@ -182,16 +212,32 @@ There are some colormaps that useful for specific fields, such as
 "BlueBrown10" for terrain, or NWSRef for the National Weather Service
 reflectivity field
 
-.. GENERATED FROM PYTHON SOURCE LINES 87-95
+.. GENERATED FROM PYTHON SOURCE LINES 117-141
 
 .. code-block:: default
 
-    plot_color_gradients("Field-specific ", ["BlueBrown10", "Carbone11", "Carbone17",
-                                             "Carbone42", "Cat12", "EWilson17",
-                                             "NWSRef", "NWSVel", "NWS_SPW",
-                                             "PD17", "RRate11", "RefDiff",
-                                             "SCook18", "StepSeq25", "SymGray12",
-                                             "Theodore16", "Wild25"])
+    plot_color_gradients(
+        "Field-specific ",
+        [
+            "BlueBrown10",
+            "Carbone11",
+            "Carbone17",
+            "Carbone42",
+            "Cat12",
+            "EWilson17",
+            "NWSRef",
+            "NWSVel",
+            "NWS_SPW",
+            "PD17",
+            "RRate11",
+            "RefDiff",
+            "SCook18",
+            "StepSeq25",
+            "SymGray12",
+            "Theodore16",
+            "Wild25",
+        ],
+    )
 
 
 
@@ -206,28 +252,27 @@ reflectivity field
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 96-100
+.. GENERATED FROM PYTHON SOURCE LINES 142-146
 
 **Plot Using a Colormap from Matplotlib**
 
 Now, we can apply one of these colorbars to plot and
 compare to a colormap from matplotlib, starting with the matplotlib example.
 
-.. GENERATED FROM PYTHON SOURCE LINES 100-112
+.. GENERATED FROM PYTHON SOURCE LINES 146-157
 
 .. code-block:: default
 
 
     # Read in a sample cfradial file
-    radar_file = get_test_data('swx_20120520_0641.nc')
+    radar_file = get_test_data("swx_20120520_0641.nc")
     radar = pyart.io.read(radar_file)
 
     # Setup a display to plot the data
     display = pyart.graph.RadarDisplay(radar)
 
     # Start by plotting a regular matplotlib colormap (Spectral_r)
-    display.plot('reflectivity_horizontal', vmin=-32, vmax=64.,
-                 cmap='Spectral_r')
+    display.plot("reflectivity_horizontal", vmin=-32, vmax=64.0, cmap="Spectral_r")
 
 
 
@@ -241,7 +286,7 @@ compare to a colormap from matplotlib, starting with the matplotlib example.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 113-119
+.. GENERATED FROM PYTHON SOURCE LINES 158-164
 
 **Plot Using a Colormap from Py-ART**
 
@@ -250,7 +295,7 @@ to remember to add the pyart_ string in front of the
 colormap, as shown below.
 Setup a display to plot the data
 
-.. GENERATED FROM PYTHON SOURCE LINES 119-125
+.. GENERATED FROM PYTHON SOURCE LINES 164-171
 
 .. code-block:: default
 
@@ -258,8 +303,9 @@ Setup a display to plot the data
     display = pyart.graph.RadarDisplay(radar)
 
     # Start by plotting a regular matplotlib colormap (Spectral_r)
-    display.plot('reflectivity_horizontal', vmin=-32, vmax=64.,
-                 cmap='pyart_HomeyerRainbow')
+    display.plot(
+        "reflectivity_horizontal", vmin=-32, vmax=64.0, cmap="pyart_HomeyerRainbow"
+    )
 
 
 
@@ -275,7 +321,7 @@ Setup a display to plot the data
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  2.902 seconds)
+   **Total running time of the script:** ( 0 minutes  3.658 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_choose_a_colormap.py:

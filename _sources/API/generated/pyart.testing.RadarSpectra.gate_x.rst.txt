@@ -1,0 +1,6 @@
+pyart.testing.RadarSpectra.gate\_x
+==================================
+
+.. currentmodule:: pyart.testing
+
+.. autoproperty:: RadarSpectra.gate_x

@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Masking Data With Py-ART Gatefilters &#8212; Py-ART 1.14.1.post13 documentation</title>
+    <title>Masking Data With Py-ART Gatefilters &#8212; Py-ART 1.14.1.post14 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -330,10 +330,18 @@
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># When plotting, we can see second trip echoes present as well as nonhydrometeor echoes.</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;50m&#39;</span><span class="p">,</span>
-                     <span class="n">vmin</span><span class="o">=-</span><span class="mi">8</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">min_lon</span><span class="o">=-</span><span class="mf">98.25</span><span class="p">,</span> <span class="n">max_lon</span><span class="o">=-</span><span class="mf">96.75</span><span class="p">,</span>
-                     <span class="n">min_lat</span><span class="o">=</span><span class="mf">35.75</span><span class="p">,</span> <span class="n">max_lat</span><span class="o">=</span><span class="mf">37.25</span><span class="p">,</span>
-                     <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
+    <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+    <span class="n">sweep</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">resolution</span><span class="o">=</span><span class="s2">&quot;50m&quot;</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=-</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+    <span class="n">min_lon</span><span class="o">=-</span><span class="mf">98.25</span><span class="p">,</span>
+    <span class="n">max_lon</span><span class="o">=-</span><span class="mf">96.75</span><span class="p">,</span>
+    <span class="n">min_lat</span><span class="o">=</span><span class="mf">35.75</span><span class="p">,</span>
+    <span class="n">max_lat</span><span class="o">=</span><span class="mf">37.25</span><span class="p">,</span>
+    <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+<span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -357,9 +365,9 @@
 <span class="c1"># equal to a certain value. (You can exclude values based on conditions from multiple</span>
 <span class="c1"># fields. In this example, we are excluding regions identified as second trip echoes</span>
 <span class="c1"># (gate_id = 0), nonhydrometeors (gate_id = 1), and clutter (gate_id = 2).</span>
-<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_equal</span><span class="p">(</span><span class="s1">&#39;gate_id&#39;</span><span class="p">,</span><span class="mi">0</span><span class="p">)</span>
-<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_equal</span><span class="p">(</span><span class="s1">&#39;gate_id&#39;</span><span class="p">,</span><span class="mi">3</span><span class="p">)</span>
-<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_equal</span><span class="p">(</span><span class="s1">&#39;gate_id&#39;</span><span class="p">,</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_equal</span><span class="p">(</span><span class="s2">&quot;gate_id&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_equal</span><span class="p">(</span><span class="s2">&quot;gate_id&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_equal</span><span class="p">(</span><span class="s2">&quot;gate_id&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -370,11 +378,19 @@
 <span class="c1"># As you can see, much cleaner with the clutter removed.</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;50m&#39;</span><span class="p">,</span>
-                     <span class="n">vmin</span><span class="o">=-</span><span class="mi">8</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">min_lon</span><span class="o">=-</span><span class="mf">98.25</span><span class="p">,</span> <span class="n">max_lon</span><span class="o">=-</span><span class="mf">96.75</span><span class="p">,</span>
-                     <span class="n">min_lat</span><span class="o">=</span><span class="mf">35.75</span><span class="p">,</span> <span class="n">max_lat</span><span class="o">=</span><span class="mf">37.25</span><span class="p">,</span>
-                     <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
-                     <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
+    <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+    <span class="n">sweep</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">resolution</span><span class="o">=</span><span class="s2">&quot;50m&quot;</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=-</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+    <span class="n">min_lon</span><span class="o">=-</span><span class="mf">98.25</span><span class="p">,</span>
+    <span class="n">max_lon</span><span class="o">=-</span><span class="mf">96.75</span><span class="p">,</span>
+    <span class="n">min_lat</span><span class="o">=</span><span class="mf">35.75</span><span class="p">,</span>
+    <span class="n">max_lat</span><span class="o">=</span><span class="mf">37.25</span><span class="p">,</span>
+    <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+    <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -394,7 +410,7 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Lets remove reflectivity values below a threshold.</span>
-<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -404,11 +420,19 @@
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Here we see reflectivity values below zero masked.</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">resolution</span><span class="o">=</span><span class="s1">&#39;50m&#39;</span><span class="p">,</span>
-                     <span class="n">vmin</span><span class="o">=-</span><span class="mi">8</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">min_lon</span><span class="o">=-</span><span class="mf">98.25</span><span class="p">,</span> <span class="n">max_lon</span><span class="o">=-</span><span class="mf">96.75</span><span class="p">,</span>
-                     <span class="n">min_lat</span><span class="o">=</span><span class="mf">35.75</span><span class="p">,</span> <span class="n">max_lat</span><span class="o">=</span><span class="mf">37.25</span><span class="p">,</span>
-                     <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
-                     <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
+    <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+    <span class="n">sweep</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">resolution</span><span class="o">=</span><span class="s2">&quot;50m&quot;</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=-</span><span class="mi">8</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
+    <span class="n">min_lon</span><span class="o">=-</span><span class="mf">98.25</span><span class="p">,</span>
+    <span class="n">max_lon</span><span class="o">=-</span><span class="mf">96.75</span><span class="p">,</span>
+    <span class="n">min_lat</span><span class="o">=</span><span class="mf">35.75</span><span class="p">,</span>
+    <span class="n">max_lat</span><span class="o">=</span><span class="mf">37.25</span><span class="p">,</span>
+    <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+    <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span>
+<span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -423,9 +447,13 @@
 <span class="c1"># fields that tell you whether a gate is excluded (gatefilter.gate_excluded) or included</span>
 <span class="c1"># (gatefilter.gate_included). These can be used to do calculations on the data that</span>
 <span class="c1"># include the filter. For example, if we want to get the mean reflectivity of each sweep, we can do:</span>
-<span class="n">refl_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_included</span> <span class="o">==</span> <span class="kc">False</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">])</span>
+<span class="n">refl_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span>
+    <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_included</span> <span class="o">==</span> <span class="kc">False</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+<span class="p">)</span>
 <span class="n">reflectivity_w_mask</span> <span class="o">=</span> <span class="p">[</span><span class="n">refl_array</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">()]</span>
-<span class="n">reflectivity</span> <span class="o">=</span> <span class="p">[</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">][</span><span class="s1">&#39;data&#39;</span><span class="p">][</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">()]</span>
+<span class="n">reflectivity</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">()</span>
+<span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">reflectivity</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">reflectivity_w_mask</span><span class="p">)</span>
 </pre></div>

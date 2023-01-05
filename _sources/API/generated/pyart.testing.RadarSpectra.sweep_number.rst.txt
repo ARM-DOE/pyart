@@ -1,0 +1,6 @@
+pyart.testing.RadarSpectra.sweep\_number
+========================================
+
+.. currentmodule:: pyart.testing
+
+.. autoproperty:: RadarSpectra.sweep_number
