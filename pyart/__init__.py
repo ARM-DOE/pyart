@@ -22,11 +22,6 @@ from os import environ as _environ
 if "PYART_QUIET" not in _environ:
     print(_citation_text)
 
-# Make sure that deprecation warnings get printed by default
-import warnings as _warnings
-
-_warnings.simplefilter("always", DeprecationWarning)
-
 from pkg_resources import DistributionNotFound, get_distribution
 
 # import subpackages
