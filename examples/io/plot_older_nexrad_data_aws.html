@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues &#8212; Py-ART 1.14.1.post15 documentation</title>
+    <title>Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues &#8212; Py-ART 1.14.2.post1 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -498,11 +498,7 @@ on July 24, 2006, at 0203:38 UTC. This means our path would look like this:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">aws_nexrad_level2_file</span></a><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/botocore/utils.py:15: DeprecationWarning: &#39;cgi&#39; is deprecated and slated for removal in Python 3.13
-  import cgi
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/botocore/httpsession.py:41: DeprecationWarning: &#39;urllib3.contrib.pyopenssl&#39; module is deprecated and will be removed in a future release of urllib3 2.x. Read more in this issue: https://github.com/urllib3/urllib3/issues/2680
-  from urllib3.contrib.pyopenssl import orig_util_SSLContext as SSLContext
-/home/runner/work/pyart/pyart/pyart/io/nexrad_archive.py:231: UserWarning: Gate spacing is not constant, interpolating data in scans [0, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] for moment REF.
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/work/pyart/pyart/pyart/io/nexrad_archive.py:231: UserWarning: Gate spacing is not constant, interpolating data in scans [0, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] for moment REF.
   warnings.warn(
 </pre></div>
 </div>
@@ -551,67 +547,15 @@ pull the coordinate information from a dictionary found within Py-ART.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_older_nexrad_data_aws_001.png" srcset="../../_images/sphx_glr_plot_older_nexrad_data_aws_001.png" alt="KHNX 0.4 Deg. 2006-07-24T02:03:37Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:827: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  multi_line_string = cartopy.trace.project_linear(linear_ring,
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/io/__init__.py:241: DownloadWarning: Downloading: https://naturalearth.s3.amazonaws.com/10m_physical/ne_10m_coastline.zip
+<img src="../../_images/sphx_glr_plot_older_nexrad_data_aws_001.png" srcset="../../_images/sphx_glr_plot_older_nexrad_data_aws_001.png" alt="KHNX 0.4 Deg. 2006-07-24T02:03:37Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/io/__init__.py:241: DownloadWarning: Downloading: https://naturalearth.s3.amazonaws.com/10m_physical/ne_10m_coastline.zip
   warnings.warn(f&#39;Downloading: {url}&#39;, DownloadWarning)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:827: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  multi_line_string = cartopy.trace.project_linear(linear_ring,
 /home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/io/__init__.py:241: DownloadWarning: Downloading: https://naturalearth.s3.amazonaws.com/10m_cultural/ne_10m_admin_1_states_provinces_lines.zip
   warnings.warn(f&#39;Downloading: {url}&#39;, DownloadWarning)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:814: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  return cartopy.trace.project_linear(geometry, src_crs, self)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:827: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  multi_line_string = cartopy.trace.project_linear(linear_ring,
 /home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/shapely/set_operations.py:133: RuntimeWarning: invalid value encountered in intersection
   return lib.intersection(a, b, **kwargs)
-/home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/crs.py:827: DeprecationWarning: The &#39;geom_factory&#39; function is deprecated in Shapely 2.0, and will be removed in a future version
-  multi_line_string = cartopy.trace.project_linear(linear_ring,
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  10.863 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  10.843 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-io-plot-older-nexrad-data-aws-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/dd8047f1249e597155ffad03108f4a4e/plot_older_nexrad_data_aws.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_older_nexrad_data_aws.py</span></code></a></p>
