@@ -535,7 +535,10 @@ class Radar:
         circular_area = np.pi * ranges**2
         annular_area = np.diff(circular_area)
 
-        d_azimuths = np.diff(azimuths) / 360.0  # Fraction of a full circle
+        az_diffs = np.diff(azimuths)
+        az_diffs[az_diffs < 0.0] += 360
+
+        d_azimuths = az_diffs / 360.0  # Fraction of a full circle
 
         dca, daz = np.meshgrid(annular_area, d_azimuths)
 
