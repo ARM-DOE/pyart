@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.core.radar &#8212; Py-ART 1.14.2.post1 documentation</title>
+    <title>pyart.core.radar &#8212; Py-ART 1.14.3.post1 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -755,7 +755,10 @@
         <span class="n">circular_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">*</span> <span class="n">ranges</span><span class="o">**</span><span class="mi">2</span>
         <span class="n">annular_area</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">circular_area</span><span class="p">)</span>
 
-        <span class="n">d_azimuths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">azimuths</span><span class="p">)</span> <span class="o">/</span> <span class="mf">360.0</span>  <span class="c1"># Fraction of a full circle</span>
+        <span class="n">az_diffs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">azimuths</span><span class="p">)</span>
+        <span class="n">az_diffs</span><span class="p">[</span><span class="n">az_diffs</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">360</span>
+
+        <span class="n">d_azimuths</span> <span class="o">=</span> <span class="n">az_diffs</span> <span class="o">/</span> <span class="mf">360.0</span>  <span class="c1"># Fraction of a full circle</span>
 
         <span class="n">dca</span><span class="p">,</span> <span class="n">daz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">annular_area</span><span class="p">,</span> <span class="n">d_azimuths</span><span class="p">)</span>
 

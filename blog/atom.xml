@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>mgrover1.github.io/pyart/</id>
   <title>PyART Blog</title>
-  <updated>2023-01-07T19:50:57.367491+00:00</updated>
+  <updated>2023-01-13T02:56:37.789490+00:00</updated>
   <link href="mgrover1.github.io/pyart/"/>
   <link href="mgrover1.github.io/pyart/blog/atom.xml" rel="self"/>
   <generator uri="https://ablog.readthedocs.org/" version="0.10.33">ABlog</generator>
@@ -112,7 +112,7 @@ interactive-kazr-vizinteractive-kazr-viz</summary>
     <title>Hail Storm Visualization Using Py-ART and Pandas!</title>
     <updated>2022-11-23T00:00:00+00:00</updated>
     <author>
-      <name>Max Grover</name>
+      <name>Russ Schumacher</name>
     </author>
     <content type="html">&lt;div class="ablog-post-excerpt docutils container"&gt;
 &lt;p&gt;Within this post, we will walk through how to combine radar and storm report data, creating an animation of the two!&lt;/p&gt;
