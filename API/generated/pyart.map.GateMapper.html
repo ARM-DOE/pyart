@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>pyart.map.GateMapper &#8212; Py-ART 1.14.3.post1 documentation</title>
+    <title>pyart.map.GateMapper &#8212; Py-ART 1.14.3.post2 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -3387,10 +3387,10 @@ radar objects with simple indexing. In addition, returning a mapped radar object
 </dd>
 </dl>
 <p class="rubric">Examples</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">grid_mapper</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">GridMapper</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">gate_mapper</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">GateMapper</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">dest</span><span class="p">)</span>
 <span class="gp">&gt;&gt;&gt; </span><span class="c1"># Get the destination radar&#39;s equivalent of (2, 2) in the source radar&#39;s coordinates</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">dest_index</span> <span class="o">=</span> <span class="n">grid_mapper</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
-<span class="gp">&gt;&gt;&gt; </span><span class="n">radar_mapped</span> <span class="o">=</span> <span class="n">grid_mapper</span><span class="o">.</span><span class="n">mapped_radar</span><span class="p">([</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">])</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">dest_index</span> <span class="o">=</span> <span class="n">gate_mapper</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">radar_mapped</span> <span class="o">=</span> <span class="n">gate_mapper</span><span class="o">.</span><span class="n">mapped_radar</span><span class="p">([</span><span class="s1">&#39;reflectivity&#39;</span><span class="p">])</span>
 </pre></div>
 </div>
 <dl class="field-list simple">

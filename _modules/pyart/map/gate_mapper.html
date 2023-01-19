@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.map.gate_mapper &#8212; Py-ART 1.14.3.post1 documentation</title>
+    <title>pyart.map.gate_mapper &#8212; Py-ART 1.14.3.post2 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -262,10 +262,10 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; grid_mapper = pyart.map.GridMapper(src, dest)</span>
+<span class="sd">    &gt;&gt;&gt; gate_mapper = pyart.map.GateMapper(src, dest)</span>
 <span class="sd">    &gt;&gt;&gt; # Get the destination radar&#39;s equivalent of (2, 2) in the source radar&#39;s coordinates</span>
-<span class="sd">    &gt;&gt;&gt; dest_index = grid_mapper[2, 2]</span>
-<span class="sd">    &gt;&gt;&gt; radar_mapped = grid_mapper.mapped_radar([&#39;reflectivity&#39;])</span>
+<span class="sd">    &gt;&gt;&gt; dest_index = gate_mapper[2, 2]</span>
+<span class="sd">    &gt;&gt;&gt; radar_mapped = gate_mapper.mapped_radar([&#39;reflectivity&#39;])</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
