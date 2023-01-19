@@ -42,10 +42,10 @@ class GateMapper:
 
     Examples
     --------
-    >>> grid_mapper = pyart.map.GridMapper(src, dest)
+    >>> gate_mapper = pyart.map.GateMapper(src, dest)
     >>> # Get the destination radar's equivalent of (2, 2) in the source radar's coordinates
-    >>> dest_index = grid_mapper[2, 2]
-    >>> radar_mapped = grid_mapper.mapped_radar(['reflectivity'])
+    >>> dest_index = gate_mapper[2, 2]
+    >>> radar_mapped = gate_mapper.mapped_radar(['reflectivity'])
 
     Parameters
     ----------
