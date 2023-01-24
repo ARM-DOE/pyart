@@ -1783,8 +1783,8 @@ def _mask_outside(flag, data, v1, v2):
 
 
 def _edge_time(times):
-    """ Appends the last time with the added subtraction of the last two
-    times in the time array. """
+    """Appends the last time with the added subtraction of the last two
+    times in the time array."""
     timedelta = times[-1] - times[-2]
     edge_time = times[-1] + timedelta
     return np.append(times, edge_time)
