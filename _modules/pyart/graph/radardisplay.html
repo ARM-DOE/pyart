@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.graph.radardisplay &#8212; Py-ART 1.14.3.post3 documentation</title>
+    <title>pyart.graph.radardisplay &#8212; Py-ART 1.14.3.post4 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -946,6 +946,8 @@
         <span class="k">if</span> <span class="n">time_axis_flag</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_set_vpt_time_axis</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">date_time_form</span><span class="o">=</span><span class="n">date_time_form</span><span class="p">,</span> <span class="n">tz</span><span class="o">=</span><span class="n">tz</span><span class="p">)</span>
             <span class="n">times</span> <span class="o">=</span> <span class="n">datetimes_from_radar</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">edges</span><span class="p">:</span>
+                <span class="n">times</span> <span class="o">=</span> <span class="n">_edge_time</span><span class="p">(</span><span class="n">times</span><span class="p">)</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">times</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;datetime64[ns]&quot;</span><span class="p">)</span>
 
         <span class="c1"># mask the data where outside the limits</span>
@@ -1998,6 +2000,14 @@
         <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_outside</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span>
+
+
+<span class="k">def</span> <span class="nf">_edge_time</span><span class="p">(</span><span class="n">times</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Appends the last time with the added subtraction of the last two</span>
+<span class="sd">    times in the time array.&quot;&quot;&quot;</span>
+    <span class="n">timedelta</span> <span class="o">=</span> <span class="n">times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">times</span><span class="p">[</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">edge_time</span> <span class="o">=</span> <span class="n">times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">timedelta</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">times</span><span class="p">,</span> <span class="n">edge_time</span><span class="p">)</span>
 </pre></div>
 <div class="section">
    
