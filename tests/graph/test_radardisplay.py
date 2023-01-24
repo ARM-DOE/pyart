@@ -330,7 +330,7 @@ def test_radardisplay_get_colorbar_label():
 def test_edge_time():
     radar = pyart.io.read(pyart.testing.MDV_PPI_FILE)
     times = pyart.util.datetimes_from_radar(radar)
-    edge_time = pyart.graph._edge_time(times)
+    edge_time = pyart.graph.radardisplay._edge_time(times)
     assert edge_time[-1] == cftime.DatetimeGregorian(2011, 5, 20, 11, 6, 35, 933148)
 
 
