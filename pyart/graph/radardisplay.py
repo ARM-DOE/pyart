@@ -726,6 +726,8 @@ class RadarDisplay:
         if time_axis_flag:
             self._set_vpt_time_axis(ax, date_time_form=date_time_form, tz=tz)
             times = datetimes_from_radar(self._radar)
+            if edges:
+                times = _edge_time(times)
             x = times.astype("datetime64[ns]")
 
         # mask the data where outside the limits
@@ -1778,3 +1780,11 @@ def _mask_outside(flag, data, v1, v2):
         data = np.ma.masked_invalid(data)
         data = np.ma.masked_outside(data, v1, v2)
     return data
+
+
+def _edge_time(times):
+    """Appends the last time with the added subtraction of the last two
+    times in the time array."""
+    timedelta = times[-1] - times[-2]
+    edge_time = times[-1] + timedelta
+    return np.append(times, edge_time)
