@@ -26,7 +26,7 @@ The Python ARM Radar Toolkit (Py-ART)
     :target: https://anaconda.org/conda-forge/arm_pyart/files
 
 .. |DocsUsers| image:: https://img.shields.io/badge/docs-users-4088b8.svg
-    :target: http://arm-doe.github.io/pyart-docs-travis/API/index.html
+    :target: http://arm-doe.github.io/pyart/API/index.html
 
 .. |DocsGuides| image:: https://img.shields.io/badge/docs-guides-4088b8.svg
     :target: https://github.com/ARM-DOE/pyart/tree/master/guides/
