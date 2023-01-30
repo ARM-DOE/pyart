@@ -29,7 +29,7 @@ The Python ARM Radar Toolkit (Py-ART)
     :target: http://arm-doe.github.io/pyart/API/index.html
 
 .. |DocsGuides| image:: https://img.shields.io/badge/docs-guides-4088b8.svg
-    :target: https://github.com/ARM-DOE/pyart/tree/master/guides/
+    :target: https://github.com/ARM-DOE/pyart/tree/main/guides/
 
 .. |ARM| image:: https://img.shields.io/badge/Sponsor-ARM-blue.svg?colorA=00c1de&colorB=00539c
     :target: https://www.arm.gov/
