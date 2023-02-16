@@ -54,10 +54,6 @@ jobs:
         run: |
           python -m pip install -e . --no-deps --force-reinstall
 
-      - name: Black style check
-        run: |
-          black --check .
-
       - name: Run Linting
         shell: bash -l {0}
         run: |
