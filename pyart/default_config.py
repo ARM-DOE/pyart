@@ -202,7 +202,6 @@ DEFAULT_FIELD_NAMES = {
     "reflectivity_texture": reflectivity_texture,
     "differential_reflectivity_texture": differential_reflectivity_texture,
     "cross_correlation_ratio_texture": cross_correlation_ratio_texture,
-    "differential_phase_texture": differential_phase_texture,
 }
 
 
@@ -1236,8 +1235,7 @@ gamic_field_mapping = {
     # velocities fields without an F have been unfolded.
     "V": corrected_velocity,
     # Unfolded velocity from corrected timeseries
-    "VF": velocity,  # Folded velocity from corr. t.s.
-    "UV": None,  # Unfolded velocity from uncorrected timeseries
+    "VF": velocity,  # Unfolded velocity from uncorrected timeseries
     "UVF": None,  # Folded velcity from uncorr. t.s.
     "Vh": corrected_velocity,
     "VH": corrected_velocity,

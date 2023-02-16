@@ -23,13 +23,8 @@ repos:
       - id: black
       - id: black-jupyter
 
-  - repo: https://github.com/PyCQA/flake8
-    rev: 4.0.1
+  - repo: https://github.com/charliermarsh/ruff-pre-commit
+    rev: 'v0.0.239'
     hooks:
-      - id: flake8
-        args: [--config, setup.cfg]
-
-  - repo: https://github.com/PyCQA/isort
-    rev: 5.10.1
-    hooks:
-      - id: isort
+      - id: ruff
+        args: [ "--fix" ]

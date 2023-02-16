@@ -340,8 +340,8 @@ def check_metagroup(section, dataset, meta_group_name, valid_meta_group_vars):
     for var_name in find_all_meta_group_vars(dataset, meta_group_name):
         if var_name not in valid_meta_group_vars:
             text = (
-                "variable %s should not have its meta_group attribute "
-                "set to '%s'" % (var_name, meta_group_name)
+                "variable {} should not have its meta_group attribute "
+                "set to '{}'".format(var_name, meta_group_name)
             )
             log_error(section, text)
 
@@ -721,8 +721,8 @@ def check_cfradial_compliance(dataset, verb=False):
             dim_0 = dataset.variables[v].dimensions[0]
             if dim_0 != "sweep":
                 text = (
-                    "instrument_parameters %s must have a first "
-                    "dimension of sweep, not %s" % (v, dim_0)
+                    "instrument_parameters {} must have a first "
+                    "dimension of sweep, not {}".format(v, dim_0)
                 )
                 log_error("5.1", text)
 

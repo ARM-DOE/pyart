@@ -9,3 +9,33 @@ requires = [
 
 [tool.black]
 line-length = 88
+
+[tool.ruff]
+target-version = "py39"
+builtins = ["ellipsis"]
+exclude = [
+    ".eggs",
+    "doc",
+]
+
+# E402: module level import not at top of file
+# E501: line too long - let black worry about that
+# E731: do not assign a lambda expression, use a def
+# E733: do not use bare `except`
+ignore = [
+    "E402",
+    "E501",
+    "E731",
+    "E722",
+]
+select = [
+    # Pyflakes
+    "F",
+    # Pycodestyle
+    "E",
+    "W",
+    # isort
+    "I",
+    # Pyupgrade
+    "UP",
+]
