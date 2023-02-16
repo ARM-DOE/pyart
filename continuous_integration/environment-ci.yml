@@ -23,9 +23,11 @@ dependencies:
   - cftime
   - setuptools
   - shapely
+  - ruff
   - pip
   - pip:
     - cibuildwheel
     - pooch
     - versioneer
+    - black
     - git+https://github.com/openradar/open-radar-data

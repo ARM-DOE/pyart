@@ -921,12 +921,12 @@ def _calculate_scale_and_offset(dic, dtype, minimum=None, maximum=None):
     if maximum < minimum:
         raise ValueError(
             "Error calculating variable scaling: "
-            "maximum: %f is smaller than minimum: %f" % (maximum, minimum)
+            "maximum: {:f} is smaller than minimum: {:f}".format(maximum, minimum)
         )
     elif maximum == minimum:
         warnings.warn(
             "While calculating variable scaling: "
-            "maximum: %f is equal to minimum: %f" % (maximum, minimum)
+            "maximum: {:f} is equal to minimum: {:f}".format(maximum, minimum)
         )
         maximum = minimum + 1
 

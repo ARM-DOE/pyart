@@ -7,7 +7,7 @@ onto the radar gates.
 try:
     from netCDF4 import DatetimeGregorian, num2date
 except ImportError:
-    from cftime import num2date, DatetimeGregorian
+    from cftime import DatetimeGregorian, num2date
 
 import numpy as np
 from scipy import interpolate

@@ -26,19 +26,21 @@ from pkg_resources import DistributionNotFound, get_distribution
 
 # import subpackages
 # print out helpful message if build fails or importing from source tree
-from . import __check_build  # noqa
-from . import aux_io  # noqa
-from . import bridge  # noqa
-from . import config  # noqa
-from . import core  # noqa
-from . import correct  # noqa
-from . import filters  # noqa
-from . import graph  # noqa
-from . import io  # noqa
-from . import map  # noqa
-from . import retrieve  # noqa
-from . import testing  # noqa
-from . import util  # noqa
+from . import (
+    __check_build,  # noqa
+    aux_io,  # noqa
+    bridge,  # noqa
+    config,  # noqa
+    core,  # noqa
+    correct,  # noqa
+    filters,  # noqa
+    graph,  # noqa
+    io,  # noqa
+    map,  # noqa
+    retrieve,  # noqa
+    testing,  # noqa
+    util,  # noqa
+)
 from ._debug_info import _debug_info  # noqa
 
 # root level functions
