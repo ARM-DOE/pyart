@@ -23,6 +23,7 @@ dependencies:
   - cftime
   - setuptools
   - shapely
+  - ruff
   - pip
   - pip:
     - cibuildwheel
