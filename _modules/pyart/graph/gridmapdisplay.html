@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.graph.gridmapdisplay &#8212; Py-ART 1.14.5.post3 documentation</title>
+    <title>pyart.graph.gridmapdisplay &#8212; Py-ART 1.14.5.post4 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -340,7 +340,6 @@
         <span class="n">add_grid_lines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">ticklabs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">imshow</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -413,9 +412,6 @@
 <span class="sd">            Colorbar custom tick label locations.</span>
 <span class="sd">        ticklabs : array</span>
 <span class="sd">            Colorbar custom tick labels.</span>
-<span class="sd">        imshow : bool</span>
-<span class="sd">            If used, plot uses ax.imshow instead of ax.pcolormesh.</span>
-<span class="sd">            Default is False.</span>
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ds</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="o">.</span><span class="n">to_xarray</span><span class="p">()</span>
@@ -474,26 +470,15 @@
         <span class="k">if</span> <span class="n">norm</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>  <span class="c1"># if norm is set do not override with vmin/vmax</span>
             <span class="n">vmin</span> <span class="o">=</span> <span class="n">vmax</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="k">if</span> <span class="n">imshow</span><span class="p">:</span>
-            <span class="n">pm</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span>
-                <span class="n">x</span><span class="o">=</span><span class="s2">&quot;lon&quot;</span><span class="p">,</span>
-                <span class="n">y</span><span class="o">=</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span>
-                <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
-                <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
-                <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
-                <span class="n">add_colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">kwargs</span>
-            <span class="p">)</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="n">pm</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span>
-                <span class="n">x</span><span class="o">=</span><span class="s2">&quot;lon&quot;</span><span class="p">,</span>
-                <span class="n">y</span><span class="o">=</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span>
-                <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
-                <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
-                <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
-                <span class="n">add_colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-                <span class="o">**</span><span class="n">kwargs</span>
-            <span class="p">)</span>
+        <span class="n">pm</span> <span class="o">=</span> <span class="n">ds</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="n">level</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">pcolormesh</span><span class="p">(</span>
+            <span class="n">x</span><span class="o">=</span><span class="s2">&quot;lon&quot;</span><span class="p">,</span>
+            <span class="n">y</span><span class="o">=</span><span class="s2">&quot;lat&quot;</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+            <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+            <span class="n">add_colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span>
+        <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">mappables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pm</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field</span><span class="p">)</span>
