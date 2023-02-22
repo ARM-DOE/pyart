@@ -120,7 +120,6 @@ class GridMapDisplay:
         add_grid_lines=True,
         ticks=None,
         ticklabs=None,
-        imshow=False,
         **kwargs
     ):
         """
@@ -193,9 +192,6 @@ class GridMapDisplay:
             Colorbar custom tick label locations.
         ticklabs : array
             Colorbar custom tick labels.
-        imshow : bool
-            If used, plot uses ax.imshow instead of ax.pcolormesh.
-            Default is False.
 
         """
         ds = self.grid.to_xarray()
@@ -254,26 +250,15 @@ class GridMapDisplay:
         if norm is not None:  # if norm is set do not override with vmin/vmax
             vmin = vmax = None
 
-        if imshow:
-            pm = ds[field][0, level].plot.imshow(
-                x="lon",
-                y="lat",
-                cmap=cmap,
-                vmin=vmin,
-                vmax=vmax,
-                add_colorbar=False,
-                **kwargs
-            )
-        else:
-            pm = ds[field][0, level].plot.pcolormesh(
-                x="lon",
-                y="lat",
-                cmap=cmap,
-                vmin=vmin,
-                vmax=vmax,
-                add_colorbar=False,
-                **kwargs
-            )
+        pm = ds[field][0, level].plot.pcolormesh(
+            x="lon",
+            y="lat",
+            cmap=cmap,
+            vmin=vmin,
+            vmax=vmax,
+            add_colorbar=False,
+            **kwargs
+        )
 
         self.mappables.append(pm)
         self.fields.append(field)

@@ -337,8 +337,8 @@ class Grid:
                 coords={
                     "time": (["time"], time),
                     "z": (["z"], z),
-                    "lat": (["y"], lat[:, 0]),
-                    "lon": (["x"], lon[0, :]),
+                    "lat": (["y", "x"], lat),
+                    "lon": (["y", "x"], lon),
                     "y": (["y"], y),
                     "x": (["x"], x),
                 },
