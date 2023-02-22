@@ -90,8 +90,6 @@ def test_grid_to_xarray():
 
     lon, lat = pyart.core.Grid.get_point_longitude_latitude(grid)
     time = np.array([netCDF4.num2date(grid.time["data"][0], grid.time["units"])])
-    lon = lon
-    lat = lat
     z = grid.z["data"]
     y = grid.y["data"]
     x = grid.x["data"]
