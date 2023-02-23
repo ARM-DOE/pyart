@@ -3,8 +3,6 @@ Retrieval of VADs from a radar object.
 
 """
 
-import warnings
-
 import numpy as np
 
 from ..config import get_field_name
@@ -46,12 +44,6 @@ def vad_michelson(radar, vel_field=None, z_want=None, gatefilter=None):
     Norrkoping.
 
     """
-    warnings.warn(
-        "vad_michelson function is currently having issues, "
-        "working on a fix. Please use vad_browning in the meantime. "
-        "See issue #992 for more details: "
-        "https://github.com/ARM-DOE/pyart/issues/992"
-    )
     speeds = []
     angles = []
     heights = []
