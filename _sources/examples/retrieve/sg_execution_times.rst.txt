@@ -5,16 +5,16 @@
 
 Computation times
 =================
-**00:40.302** total execution time for **examples_retrieve** files:
+**00:46.301** total execution time for **examples_retrieve** files:
 
 +-------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_retrieve_plot_convective_stratiform.py` (``plot_convective_stratiform.py``)   | 00:26.881 | 0.0 MB |
+| :ref:`sphx_glr_examples_retrieve_plot_convective_stratiform.py` (``plot_convective_stratiform.py``)   | 00:31.707 | 0.0 MB |
 +-------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_retrieve_plot_composite_reflectivity.py` (``plot_composite_reflectivity.py``) | 00:03.909 | 0.0 MB |
+| :ref:`sphx_glr_examples_retrieve_plot_vad.py` (``plot_vad.py``)                                       | 00:04.386 | 0.0 MB |
 +-------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_retrieve_plot_vad.py` (``plot_vad.py``)                                       | 00:03.504 | 0.0 MB |
+| :ref:`sphx_glr_examples_retrieve_plot_composite_reflectivity.py` (``plot_composite_reflectivity.py``) | 00:03.678 | 0.0 MB |
 +-------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_retrieve_plot_hydrometeor.py` (``plot_hydrometeor.py``)                       | 00:03.021 | 0.0 MB |
+| :ref:`sphx_glr_examples_retrieve_plot_hydrometeor.py` (``plot_hydrometeor.py``)                       | 00:03.414 | 0.0 MB |
 +-------------------------------------------------------------------------------------------------------+-----------+--------+
-| :ref:`sphx_glr_examples_retrieve_plot_column_subset.py` (``plot_column_subset.py``)                   | 00:02.986 | 0.0 MB |
+| :ref:`sphx_glr_examples_retrieve_plot_column_subset.py` (``plot_column_subset.py``)                   | 00:03.117 | 0.0 MB |
 +-------------------------------------------------------------------------------------------------------+-----------+--------+
