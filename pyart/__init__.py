@@ -22,7 +22,7 @@ from os import environ as _environ
 if "PYART_QUIET" not in _environ:
     print(_citation_text)
 
-from pkg_resources import DistributionNotFound, get_distribution
+import importlib.metadata as _importlib_metadata
 
 # import subpackages
 # print out helpful message if build fails or importing from source tree
@@ -48,7 +48,7 @@ from .config import load_config  # noqa
 
 # Get the version
 try:
-    __version__ = get_distribution("arm_pyart").version
-except DistributionNotFound:
+    __version__ = _importlib_metadata.version("arm_pyart")
+except _importlib_metadata.PackageNotFoundError:
     # package is not installed
     __version__ = "0.0.0"

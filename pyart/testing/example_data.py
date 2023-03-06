@@ -1,4 +1,5 @@
-import pkg_resources
+import importlib.resources
+
 import pooch
 
 DATASETS = pooch.create(
@@ -8,7 +9,7 @@ DATASETS = pooch.create(
 )
 
 
-with pkg_resources.resource_stream("pyart.testing", "registry.txt") as registry_file:
+with open(importlib.resources.files("pyart.testing") / "registry.txt") as registry_file:
     DATASETS.load_registry(registry_file)
 
 
