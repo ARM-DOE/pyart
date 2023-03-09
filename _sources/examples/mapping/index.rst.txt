@@ -23,7 +23,7 @@ Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
 .. only:: html
 
   .. image:: /examples/mapping/images/thumb/sphx_glr_plot_map_one_radar_to_grid_thumb.png
-    :alt: Map a single radar to a Cartesian grid
+    :alt:
 
   :ref:`sphx_glr_examples_mapping_plot_map_one_radar_to_grid.py`
 
@@ -40,7 +40,7 @@ Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
 .. only:: html
 
   .. image:: /examples/mapping/images/thumb/sphx_glr_plot_map_two_radars_to_grid_thumb.png
-    :alt: Map two radars to a Cartesian grid
+    :alt:
 
   :ref:`sphx_glr_examples_mapping_plot_map_two_radars_to_grid.py`
 
@@ -57,7 +57,7 @@ Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
 .. only:: html
 
   .. image:: /examples/mapping/images/thumb/sphx_glr_plot_compare_two_radars_gatemapper_thumb.png
-    :alt: Compare Two Radars Using Gatemapper
+    :alt:
 
   :ref:`sphx_glr_examples_mapping_plot_compare_two_radars_gatemapper.py`
 

@@ -10,7 +10,7 @@
     .. note::
         :class: sphx-glr-download-link-note
 
-        Click :ref:`here <sphx_glr_download_examples_plotting_plot_modify_colorbar.py>`
+        :ref:`Go to the end <sphx_glr_download_examples_plotting_plot_modify_colorbar.py>`
         to download the full example code
 
 .. rst-class:: sphx-glr-example-title
@@ -196,7 +196,7 @@ and slightly overlaps the PPI display
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  4.375 seconds)
+   **Total running time of the script:** ( 0 minutes  4.367 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_modify_colorbar.py:
@@ -204,6 +204,8 @@ and slightly overlaps the PPI display
 .. only:: html
 
   .. container:: sphx-glr-footer sphx-glr-footer-example
+
+
 
 
     .. container:: sphx-glr-download sphx-glr-download-python

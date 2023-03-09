@@ -23,7 +23,7 @@ Reading/writing a variety of radar data using Py-ART.
 .. only:: html
 
   .. image:: /examples/io/images/thumb/sphx_glr_plot_older_nexrad_data_aws_thumb.png
-    :alt: Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues
+    :alt:
 
   :ref:`sphx_glr_examples_io_plot_older_nexrad_data_aws.py`
 
@@ -40,7 +40,7 @@ Reading/writing a variety of radar data using Py-ART.
 .. only:: html
 
   .. image:: /examples/io/images/thumb/sphx_glr_plot_nexrad_data_aws_thumb.png
-    :alt: Reading NEXRAD Data from the AWS Cloud
+    :alt:
 
   :ref:`sphx_glr_examples_io_plot_nexrad_data_aws.py`
 

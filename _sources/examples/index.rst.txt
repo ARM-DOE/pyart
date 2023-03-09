@@ -38,7 +38,7 @@ Performing radar moment corrections in antenna (radial) coordinates.
 .. only:: html
 
   .. image:: /examples/correct/images/thumb/sphx_glr_plot_attenuation_thumb.png
-    :alt: Correct reflectivity attenuation
+    :alt:
 
   :ref:`sphx_glr_examples_correct_plot_attenuation.py`
 
@@ -55,7 +55,7 @@ Performing radar moment corrections in antenna (radial) coordinates.
 .. only:: html
 
   .. image:: /examples/correct/images/thumb/sphx_glr_plot_dealias_thumb.png
-    :alt: Dealias doppler velocities using the Region Based Algorithm
+    :alt:
 
   :ref:`sphx_glr_examples_correct_plot_dealias.py`
 
@@ -89,7 +89,7 @@ Reading/writing a variety of radar data using Py-ART.
 .. only:: html
 
   .. image:: /examples/io/images/thumb/sphx_glr_plot_older_nexrad_data_aws_thumb.png
-    :alt: Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues
+    :alt:
 
   :ref:`sphx_glr_examples_io_plot_older_nexrad_data_aws.py`
 
@@ -106,7 +106,7 @@ Reading/writing a variety of radar data using Py-ART.
 .. only:: html
 
   .. image:: /examples/io/images/thumb/sphx_glr_plot_nexrad_data_aws_thumb.png
-    :alt: Reading NEXRAD Data from the AWS Cloud
+    :alt:
 
   :ref:`sphx_glr_examples_io_plot_nexrad_data_aws.py`
 
@@ -140,7 +140,7 @@ Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
 .. only:: html
 
   .. image:: /examples/mapping/images/thumb/sphx_glr_plot_map_one_radar_to_grid_thumb.png
-    :alt: Map a single radar to a Cartesian grid
+    :alt:
 
   :ref:`sphx_glr_examples_mapping_plot_map_one_radar_to_grid.py`
 
@@ -157,7 +157,7 @@ Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
 .. only:: html
 
   .. image:: /examples/mapping/images/thumb/sphx_glr_plot_map_two_radars_to_grid_thumb.png
-    :alt: Map two radars to a Cartesian grid
+    :alt:
 
   :ref:`sphx_glr_examples_mapping_plot_map_two_radars_to_grid.py`
 
@@ -174,7 +174,7 @@ Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
 .. only:: html
 
   .. image:: /examples/mapping/images/thumb/sphx_glr_plot_compare_two_radars_gatemapper_thumb.png
-    :alt: Compare Two Radars Using Gatemapper
+    :alt:
 
   :ref:`sphx_glr_examples_mapping_plot_compare_two_radars_gatemapper.py`
 
@@ -208,7 +208,7 @@ Plotting real world radar data with Py-ART.
 .. only:: html
 
   .. image:: /examples/plotting/images/thumb/sphx_glr_plot_rhi_mdv_thumb.png
-    :alt: Create a RHI plot from a MDV file
+    :alt:
 
   :ref:`sphx_glr_examples_plotting_plot_rhi_mdv.py`
 
@@ -225,7 +225,7 @@ Plotting real world radar data with Py-ART.
 .. only:: html
 
   .. image:: /examples/plotting/images/thumb/sphx_glr_plot_ppi_mdv_thumb.png
-    :alt: Create a PPI plot from a MDV file
+    :alt:
 
   :ref:`sphx_glr_examples_plotting_plot_ppi_mdv.py`
 
@@ -242,7 +242,7 @@ Plotting real world radar data with Py-ART.
 .. only:: html
 
   .. image:: /examples/plotting/images/thumb/sphx_glr_plot_ppi_cfradial_thumb.png
-    :alt: Create a PPI plot from a Cfradial file
+    :alt:
 
   :ref:`sphx_glr_examples_plotting_plot_ppi_cfradial.py`
 
@@ -259,7 +259,7 @@ Plotting real world radar data with Py-ART.
 .. only:: html
 
   .. image:: /examples/plotting/images/thumb/sphx_glr_plot_nexrad_reflectivity_thumb.png
-    :alt: Create a plot of NEXRAD reflectivity
+    :alt:
 
   :ref:`sphx_glr_examples_plotting_plot_nexrad_reflectivity.py`
 
@@ -276,7 +276,7 @@ Plotting real world radar data with Py-ART.
 .. only:: html
 
   .. image:: /examples/plotting/images/thumb/sphx_glr_plot_xsect_thumb.png
-    :alt: Plot a cross section from  a PPI volume
+    :alt:
 
   :ref:`sphx_glr_examples_plotting_plot_xsect.py`
 
@@ -293,7 +293,7 @@ Plotting real world radar data with Py-ART.
 .. only:: html
 
   .. image:: /examples/plotting/images/thumb/sphx_glr_plot_rhi_cfradial_singlescan_thumb.png
-    :alt: Create a multiple panel RHI plot from a CF/Radial file
+    :alt:
 
   :ref:`sphx_glr_examples_plotting_plot_rhi_cfradial_singlescan.py`
 
@@ -310,7 +310,7 @@ Plotting real world radar data with Py-ART.
 .. only:: html
 
   .. image:: /examples/plotting/images/thumb/sphx_glr_plot_rhi_two_panel_thumb.png
-    :alt: Create a two panel RHI plot
+    :alt:
 
   :ref:`sphx_glr_examples_plotting_plot_rhi_two_panel.py`
 
@@ -327,7 +327,7 @@ Plotting real world radar data with Py-ART.
 .. only:: html
 
   .. image:: /examples/plotting/images/thumb/sphx_glr_plot_nexrad_multiple_moments_thumb.png
-    :alt: Create a plot of multiple moments from a NEXRAD file
+    :alt:
 
   :ref:`sphx_glr_examples_plotting_plot_nexrad_multiple_moments.py`
 
@@ -344,7 +344,7 @@ Plotting real world radar data with Py-ART.
 .. only:: html
 
   .. image:: /examples/plotting/images/thumb/sphx_glr_plot_rhi_cfradial_thumb.png
-    :alt: Create a multiple panel RHI plot from a CF/Radial file
+    :alt:
 
   :ref:`sphx_glr_examples_plotting_plot_rhi_cfradial.py`
 
@@ -361,7 +361,7 @@ Plotting real world radar data with Py-ART.
 .. only:: html
 
   .. image:: /examples/plotting/images/thumb/sphx_glr_plot_three_panel_gridmapdisplay_thumb.png
-    :alt: Create a 3 panel plot using GridMapDisplay
+    :alt:
 
   :ref:`sphx_glr_examples_plotting_plot_three_panel_gridmapdisplay.py`
 
@@ -378,7 +378,7 @@ Plotting real world radar data with Py-ART.
 .. only:: html
 
   .. image:: /examples/plotting/images/thumb/sphx_glr_plot_ppi_with_rings_thumb.png
-    :alt: Create a PPI plot on a cartopy map
+    :alt:
 
   :ref:`sphx_glr_examples_plotting_plot_ppi_with_rings.py`
 
@@ -395,7 +395,7 @@ Plotting real world radar data with Py-ART.
 .. only:: html
 
   .. image:: /examples/plotting/images/thumb/sphx_glr_plot_nexrad_image_muted_reflectivity_thumb.png
-    :alt: Create an image-muted reflectivity plot
+    :alt:
 
   :ref:`sphx_glr_examples_plotting_plot_nexrad_image_muted_reflectivity.py`
 
@@ -412,7 +412,7 @@ Plotting real world radar data with Py-ART.
 .. only:: html
 
   .. image:: /examples/plotting/images/thumb/sphx_glr_plot_rhi_data_overlay_thumb.png
-    :alt: Create an RHI plot with reflectivity contour lines from an MDV file
+    :alt:
 
   :ref:`sphx_glr_examples_plotting_plot_rhi_data_overlay.py`
 
@@ -429,7 +429,7 @@ Plotting real world radar data with Py-ART.
 .. only:: html
 
   .. image:: /examples/plotting/images/thumb/sphx_glr_plot_cross_section_thumb.png
-    :alt: Plot a Cross Section from a Grid
+    :alt:
 
   :ref:`sphx_glr_examples_plotting_plot_cross_section.py`
 
@@ -446,7 +446,7 @@ Plotting real world radar data with Py-ART.
 .. only:: html
 
   .. image:: /examples/plotting/images/thumb/sphx_glr_plot_modify_colorbar_thumb.png
-    :alt: Modify a Colorbar for your Plot
+    :alt:
 
   :ref:`sphx_glr_examples_plotting_plot_modify_colorbar.py`
 
@@ -463,7 +463,7 @@ Plotting real world radar data with Py-ART.
 .. only:: html
 
   .. image:: /examples/plotting/images/thumb/sphx_glr_plot_rhi_contours_differential_reflectivity_thumb.png
-    :alt: Create an RHI plot with reflectivity contour lines from an MDV file
+    :alt:
 
   :ref:`sphx_glr_examples_plotting_plot_rhi_contours_differential_reflectivity.py`
 
@@ -480,7 +480,7 @@ Plotting real world radar data with Py-ART.
 .. only:: html
 
   .. image:: /examples/plotting/images/thumb/sphx_glr_plot_choose_a_colormap_thumb.png
-    :alt: Choose a Colormap for your Plot
+    :alt:
 
   :ref:`sphx_glr_examples_plotting_plot_choose_a_colormap.py`
 
@@ -514,7 +514,7 @@ Retrievals from various radars, such as additional fields or subsets of the data
 .. only:: html
 
   .. image:: /examples/retrieve/images/thumb/sphx_glr_plot_column_subset_thumb.png
-    :alt: Extract a radar column above a point
+    :alt:
 
   :ref:`sphx_glr_examples_retrieve_plot_column_subset.py`
 
@@ -531,7 +531,7 @@ Retrievals from various radars, such as additional fields or subsets of the data
 .. only:: html
 
   .. image:: /examples/retrieve/images/thumb/sphx_glr_plot_composite_reflectivity_thumb.png
-    :alt: Calculate and Plot Composite Reflectivity
+    :alt:
 
   :ref:`sphx_glr_examples_retrieve_plot_composite_reflectivity.py`
 
@@ -548,7 +548,7 @@ Retrievals from various radars, such as additional fields or subsets of the data
 .. only:: html
 
   .. image:: /examples/retrieve/images/thumb/sphx_glr_plot_vad_thumb.png
-    :alt: Calculate and Plot VAD profile
+    :alt:
 
   :ref:`sphx_glr_examples_retrieve_plot_vad.py`
 
@@ -565,7 +565,7 @@ Retrievals from various radars, such as additional fields or subsets of the data
 .. only:: html
 
   .. image:: /examples/retrieve/images/thumb/sphx_glr_plot_hydrometeor_thumb.png
-    :alt: Calculate and Plot hydrometeor classification
+    :alt:
 
   :ref:`sphx_glr_examples_retrieve_plot_hydrometeor.py`
 
@@ -582,7 +582,7 @@ Retrievals from various radars, such as additional fields or subsets of the data
 .. only:: html
 
   .. image:: /examples/retrieve/images/thumb/sphx_glr_plot_convective_stratiform_thumb.png
-    :alt: Convective-Stratiform classification
+    :alt:
 
   :ref:`sphx_glr_examples_retrieve_plot_convective_stratiform.py`
 
@@ -601,12 +601,12 @@ Retrievals from various radars, such as additional fields or subsets of the data
    :hidden:
    :includehidden:
 
+
    /examples/correct/index.rst
    /examples/io/index.rst
    /examples/mapping/index.rst
    /examples/plotting/index.rst
    /examples/retrieve/index.rst
-
 
 .. only:: html
 

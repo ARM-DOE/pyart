@@ -23,7 +23,7 @@ Performing radar moment corrections in antenna (radial) coordinates.
 .. only:: html
 
   .. image:: /examples/correct/images/thumb/sphx_glr_plot_attenuation_thumb.png
-    :alt: Correct reflectivity attenuation
+    :alt:
 
   :ref:`sphx_glr_examples_correct_plot_attenuation.py`
 
@@ -40,7 +40,7 @@ Performing radar moment corrections in antenna (radial) coordinates.
 .. only:: html
 
   .. image:: /examples/correct/images/thumb/sphx_glr_plot_dealias_thumb.png
-    :alt: Dealias doppler velocities using the Region Based Algorithm
+    :alt:
 
   :ref:`sphx_glr_examples_correct_plot_dealias.py`
 
