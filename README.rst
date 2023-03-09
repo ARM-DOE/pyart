@@ -91,7 +91,7 @@ environment based on the `environment.yml <https://github.com/ARM-DOE/pyart/blob
 
 Or for a basic environment and downloading optional dependencies as needed::
 
-    conda create -n pyart_env -c conda-forge python=3.8 arm_pyart
+    conda create -n pyart_env -c conda-forge python=3.9 arm_pyart
 
 Basic command in a terminal or command prompt to install the latest version of
 Py-ART::
