@@ -113,6 +113,7 @@ class RadarMapDisplayBasemap(RadarDisplay):
         title_flag=True,
         colorbar_flag=True,
         colorbar_label=None,
+        colorbar_orient="vertical",
         ax=None,
         fig=None,
         lat_lines=None,
@@ -191,6 +192,8 @@ class RadarMapDisplayBasemap(RadarDisplay):
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
             field information.
+        colorbar_orient : 'vertical' or 'horizontal'
+            Colorbar orientation.
         ax : Axis
             Axis to plot on. None will use the current axis.
         fig : Figure
@@ -370,6 +373,7 @@ class RadarMapDisplayBasemap(RadarDisplay):
             self.plot_colorbar(
                 mappable=pm,
                 label=colorbar_label,
+                orient=colorbar_orient,
                 field=field,
                 fig=fig,
                 ax=ax,
