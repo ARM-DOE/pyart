@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.graph.radarmapdisplay &#8212; Py-ART 1.14.6.post2 documentation</title>
+    <title>pyart.graph.radarmapdisplay &#8212; Py-ART 1.14.6.post3 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -341,6 +341,7 @@
         <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">colorbar_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">colorbar_orient</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span>
         <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">lat_lines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -417,6 +418,8 @@
 <span class="sd">        colorbar_label : str</span>
 <span class="sd">            Colorbar label, None will use a default label generated from the</span>
 <span class="sd">            field information.</span>
+<span class="sd">        colorbar_orient : &#39;vertical&#39; or &#39;horizontal&#39;</span>
+<span class="sd">            Colorbar orientation.</span>
 <span class="sd">        ax : Cartopy GeoAxes instance</span>
 <span class="sd">            If None, create GeoAxes instance using other keyword info.</span>
 <span class="sd">            If provided, ax must have a Cartopy crs projection and projection</span>
@@ -637,6 +640,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">plot_colorbar</span><span class="p">(</span>
                 <span class="n">mappable</span><span class="o">=</span><span class="n">pm</span><span class="p">,</span>
                 <span class="n">label</span><span class="o">=</span><span class="n">colorbar_label</span><span class="p">,</span>
+                <span class="n">orient</span><span class="o">=</span><span class="n">colorbar_orient</span><span class="p">,</span>
                 <span class="n">field</span><span class="o">=</span><span class="n">field</span><span class="p">,</span>
                 <span class="n">fig</span><span class="o">=</span><span class="n">fig</span><span class="p">,</span>
                 <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
