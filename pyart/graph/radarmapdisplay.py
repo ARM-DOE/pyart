@@ -121,6 +121,7 @@ class RadarMapDisplay(RadarDisplay):
         title_flag=True,
         colorbar_flag=True,
         colorbar_label=None,
+        colorbar_orient="vertical",
         ax=None,
         fig=None,
         lat_lines=None,
@@ -197,6 +198,8 @@ class RadarMapDisplay(RadarDisplay):
         colorbar_label : str
             Colorbar label, None will use a default label generated from the
             field information.
+        colorbar_orient : 'vertical' or 'horizontal'
+            Colorbar orientation.
         ax : Cartopy GeoAxes instance
             If None, create GeoAxes instance using other keyword info.
             If provided, ax must have a Cartopy crs projection and projection
@@ -417,6 +420,7 @@ class RadarMapDisplay(RadarDisplay):
             self.plot_colorbar(
                 mappable=pm,
                 label=colorbar_label,
+                orient=colorbar_orient,
                 field=field,
                 fig=fig,
                 ax=ax,
