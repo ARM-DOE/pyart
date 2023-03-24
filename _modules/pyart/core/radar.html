@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.core.radar &#8212; Py-ART 1.14.6.post3 documentation</title>
+    <title>pyart.core.radar &#8212; Py-ART 1.14.6.post4 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -968,7 +968,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
             <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span><span class="o">.</span><span class="n">dtype</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-            <span class="n">d_str</span> <span class="o">=</span> <span class="s2">&quot;&lt;ndarray of type: </span><span class="si">%s</span><span class="s2"> and shape: </span><span class="si">%s</span><span class="s2">&gt;&quot;</span> <span class="o">%</span> <span class="n">t</span>
+            <span class="n">d_str</span> <span class="o">=</span> <span class="s2">&quot;&lt;ndarray of type: </span><span class="si">{}</span><span class="s2"> and shape: </span><span class="si">{}</span><span class="s2">&gt;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
 
         <span class="c1"># compact, only data summary</span>
         <span class="k">if</span> <span class="n">level</span> <span class="o">==</span> <span class="s2">&quot;compact&quot;</span><span class="p">:</span>

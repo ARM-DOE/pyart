@@ -242,8 +242,6 @@ Everything now looks correct as this is in Handford CA!
       warnings.warn(f'Downloading: {url}', DownloadWarning)
     /home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/cartopy/io/__init__.py:241: DownloadWarning: Downloading: https://naturalearth.s3.amazonaws.com/10m_cultural/ne_10m_admin_1_states_provinces_lines.zip
       warnings.warn(f'Downloading: {url}', DownloadWarning)
-    /home/runner/micromamba-root/envs/pyart-docs/lib/python3.11/site-packages/shapely/set_operations.py:133: RuntimeWarning: invalid value encountered in intersection
-      return lib.intersection(a, b, **kwargs)
 
 
 
@@ -251,7 +249,7 @@ Everything now looks correct as this is in Handford CA!
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  11.588 seconds)
+   **Total running time of the script:** ( 0 minutes  13.021 seconds)
 
 
 .. _sphx_glr_download_examples_io_plot_older_nexrad_data_aws.py:

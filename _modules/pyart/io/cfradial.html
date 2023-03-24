@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.cfradial &#8212; Py-ART 1.14.6.post3 documentation</title>
+    <title>pyart.io.cfradial &#8212; Py-ART 1.14.6.post4 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -749,7 +749,7 @@
         <span class="n">node</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">node</span><span class="p">()</span>
         <span class="n">time_str</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
         <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">time_str</span><span class="p">)</span>
-        <span class="n">history</span> <span class="o">=</span> <span class="s2">&quot;created by </span><span class="si">%s</span><span class="s2"> on </span><span class="si">%s</span><span class="s2"> at </span><span class="si">%s</span><span class="s2"> using Py-ART&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">history</span> <span class="o">=</span> <span class="s2">&quot;created by </span><span class="si">{}</span><span class="s2"> on </span><span class="si">{}</span><span class="s2"> at </span><span class="si">{}</span><span class="s2"> using Py-ART&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
 
     <span class="n">dataset</span><span class="o">.</span><span class="n">setncatts</span><span class="p">(</span><span class="n">metadata_copy</span><span class="p">)</span>
 
