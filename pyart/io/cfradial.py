@@ -529,7 +529,7 @@ def write_cfradial(
         node = platform.node()
         time_str = datetime.datetime.now().isoformat()
         t = (user, node, time_str)
-        history = "created by %s on %s at %s using Py-ART" % (t)
+        history = "created by {} on {} at {} using Py-ART".format(*t)
 
     dataset.setncatts(metadata_copy)
 
