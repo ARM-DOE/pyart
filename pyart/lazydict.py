@@ -92,7 +92,7 @@ class LazyLoadDict(MutableMapping):
         else:
             seperator = ", "
         lazy_reprs = [(repr(k), repr(v)) for k, v in self._lazyload.items()]
-        lazy_strs = ["%s: LazyLoad(%s)" % r for r in lazy_reprs]
+        lazy_strs = ["{}: LazyLoad({})".format(*r) for r in lazy_reprs]
         lazy_str = ", ".join(lazy_strs) + "}"
         return str(self._dic)[:-1] + seperator + lazy_str
 

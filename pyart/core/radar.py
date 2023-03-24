@@ -748,7 +748,7 @@ class Radar:
         else:
             data = dic["data"]
             t = (data.dtype, data.shape)
-            d_str = "<ndarray of type: %s and shape: %s>" % t
+            d_str = "<ndarray of type: {} and shape: {}>".format(*t)
 
         # compact, only data summary
         if level == "compact":
