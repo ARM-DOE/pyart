@@ -59,12 +59,12 @@ def read_cfradial(
     **kwargs
 ):
     """
-    Read a Cfradial 1.x netCDF file.
+    Read a Cfradial 1.4 netCDF file.
 
     Parameters
     ----------
     filename : str
-        Name of CF/Radial 1.x netCDF file to read data from.
+        Name of CF/Radial 1.4 netCDF file to read data from.
     field_names : dict, optional
         Dictionary mapping field names in the file names to radar field names.
         Unlike other read functions, fields not in this dictionary or having a
