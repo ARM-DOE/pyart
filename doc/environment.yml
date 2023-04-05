@@ -7,7 +7,7 @@ dependencies:
   - numpy
   - scipy
   - matplotlib
-  - pandas
+  - pandas<2.0
   - netcdf4
   - pytest
   - wradlib
