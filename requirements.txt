@@ -6,4 +6,5 @@ pooch
 cftime
 fsspec
 s3fs
+pandas<2.0
 xarray!=0.21.0
