@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>mgrover1.github.io/pyart/</id>
   <title>PyART Blog</title>
-  <updated>2023-04-06T21:29:33.262514+00:00</updated>
+  <updated>2023-04-07T22:45:30.025561+00:00</updated>
   <link href="mgrover1.github.io/pyart/"/>
   <link href="mgrover1.github.io/pyart/blog/atom.xml" rel="self"/>
   <generator uri="https://ablog.readthedocs.org/" version="0.10.33.post1">ABlog</generator>
@@ -112,7 +112,7 @@ interactive-kazr-vizinteractive-kazr-viz</summary>
     <title>Hail Storm Visualization Using Py-ART and Pandas!</title>
     <updated>2022-11-23T00:00:00+00:00</updated>
     <author>
-      <name>Max Grover</name>
+      <name>Russ Schumacher</name>
     </author>
     <content type="html">&lt;div class="ablog-post-excerpt docutils container"&gt;
 &lt;p&gt;Within this post, we will walk through how to combine radar and storm report data, creating an animation of the two!&lt;/p&gt;
@@ -128,5 +128,26 @@ interactive-kazr-vizinteractive-kazr-viz</summary>
     <category term="matplotlib" label="matplotlib"/>
     <category term="visualization" label="visualization"/>
     <published>2022-11-23T00:00:00+00:00</published>
+  </entry>
+  <entry>
+    <id>mgrover1.github.io/pyart/blog_posts/2023/severe-storms-southern-wisconsin.html</id>
+    <title>Plotting Severe Weather in Wisconsin</title>
+    <updated>2023-04-07T00:00:00+00:00</updated>
+    <author>
+      <name>Max Grover</name>
+    </author>
+    <content type="html">&lt;div class="ablog-post-excerpt docutils container"&gt;
+&lt;p&gt;Last Friday (March 31, 2023), a severe weather outbreak impacted a large portion of the Central United States, including the Upper Midwest. There were a total of:&lt;/p&gt;
+&lt;p&gt;142 tornado reports&lt;/p&gt;
+&lt;img alt="NWS Milwaukee Radar Image" src="https://www.weather.gov/images/mkx/top-news/2023/4%20Panel%20KMKX%200105z%20April%201%202023%20Delavan%20Lake%20TDS.png" /&gt;
+&lt;/div&gt;
+</content>
+    <link href="mgrover1.github.io/pyart/blog_posts/2023/severe-storms-southern-wisconsin.html" rel="alternate"/>
+    <summary>Last Friday (March 31, 2023), a severe weather outbreak impacted a large portion of the Central United States, including the Upper Midwest. There were a total of:142 tornado reportsNWS Milwaukee Radar Image</summary>
+    <category term="NEXRAD" label="NEXRAD"/>
+    <category term="matplotlib" label="matplotlib"/>
+    <category term="severe-weather" label="severe-weather"/>
+    <category term="visualization" label="visualization"/>
+    <published>2023-04-07T00:00:00+00:00</published>
   </entry>
 </feed>

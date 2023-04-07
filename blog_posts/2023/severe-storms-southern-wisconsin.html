@@ -1,0 +1,837 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Visualizing Severe Weather in Wisconsin &#8212; Py-ART 1.14.6.post7 documentation</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="../../_static/doc_shared.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+<script async="" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
+<script>
+                    window.dataLayer = window.dataLayer || [];
+                    function gtag(){ dataLayer.push(arguments); }
+                    gtag('js', new Date());
+                    gtag('config', 'G-JJEG3CV376');
+                </script>
+ 
+<link
+  rel="alternate"
+  type="application/atom+xml"
+  href="../../blog/atom.xml"
+  title="PyART Blog"
+/>
+ 
+<style type="text/css">
+  ul.ablog-archive {
+    list-style: none;
+    overflow: auto;
+    margin-left: 0px;
+  }
+  ul.ablog-archive li {
+    float: left;
+    margin-right: 5px;
+    font-size: 80%;
+  }
+  ul.postlist a {
+    font-style: italic;
+  }
+  ul.postlist-style-disc {
+    list-style-type: disc;
+  }
+  ul.postlist-style-none {
+    list-style-type: none;
+  }
+  ul.postlist-style-circle {
+    list-style-type: circle;
+  }
+</style>
+
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+  <nav class="navbar navbar-dark navbar-expand-lg bg-arm fixed-top bd-navbar shadow" id="navbar-main"><div class="container-xl">
+
+  <div id="navbar-start">
+    
+    
+<a class="navbar-brand" href="../../index.html">
+<p class="title">Py-ART</p>
+</a>
+
+    
+  </div>
+
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-collapsible" aria-controls="navbar-collapsible" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  
+  <div id="navbar-collapsible" class="col-lg-9 collapse navbar-collapse">
+    <div id="navbar-center" class="mr-auto">
+      
+      <div class="navbar-center-item">
+        <ul id="navbar-main-elements" class="navbar-nav">
+    <li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../userguide/index.html">
+  User Guide
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../API/index.html">
+  API Reference Manual
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../examples/index.html">
+  Example Gallery
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../notebook-gallery.html">
+  Notebook Gallery
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../blog.html">
+  Blog
+ </a>
+</li>
+
+<li class="toctree-l1 nav-item">
+ <a class="reference internal nav-link" href="../../changelog.html">
+  Changelog
+ </a>
+</li>
+
+    
+</ul>
+      </div>
+      
+    </div>
+
+    <div id="navbar-end">
+      
+      <div class="navbar-end-item">
+        <ul id="navbar-icon-links" class="navbar-nav" aria-label="Icon Links">
+        <li class="nav-item">
+          <a class="nav-link" href="https://github.com/ARM-DOE/pyart" rel="noopener" target="_blank" title="GitHub"><span><i class="fab fa-github-square"></i></span>
+            <label class="sr-only">GitHub</label></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="https://twitter.com/Py_ART" rel="noopener" target="_blank" title="Twitter"><span><i class="fab fa-twitter-square"></i></span>
+            <label class="sr-only">Twitter</label></a>
+        </li>
+      </ul>
+      </div>
+      
+    </div>
+  </div>
+</div>
+  </nav>
+
+
+    <div class="container-fluid" id="banner"></div>
+
+
+    <div class="container-xl">
+      <div class="row">
+          
+            
+            <!-- Only show if we have sidebars configured, else just a small margin  -->
+            <div class="col-12 col-md-3 bd-sidebar">
+              <div class="sidebar-start-items">
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>$('#searchbox').show(0);</script><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+  <div class="bd-toc-item active">
+    
+  </div>
+</nav>  
+<h2>
+   <i class="fa fa-calendar"></i>
+  07 April 2023 
+</h2>
+
+<ul>
+   
+<li id="author">
+  <span><i class="fa-fw fa fa-user"></i></span
+  >
+   
+  <a href="../../blog/author/max-grover.html">Max Grover</a>  
+</li>
+    
+<li id="tags">
+  <span><i class="fa-fw fa fa-tags"></i> </span
+  >
+   
+  <a href="../../blog/tag/matplotlib.html">matplotlib</a>   
+  <a href="../../blog/tag/severe-weather.html">severe-weather</a>   
+  <a href="../../blog/tag/nexrad.html">NEXRAD</a>   
+  <a href="../../blog/tag/visualization.html">visualization</a>  
+</li>
+ 
+</ul>
+
+<h3>
+  <a href="../../blog.html">Recent Posts</a>
+</h3>
+<ul>
+   
+  <li>
+    <a href="../2022/hail-analysis-spc.html"
+      >23 November - Hail Storm Visualization Using Py-ART and Pandas!</a
+    >
+  </li>
+  
+  <li>
+    <a href="../2022/TRACER.html"
+      >21 October - Blending Observations from TRACER using Py-ART</a
+    >
+  </li>
+  
+  <li>
+    <a href="../2022/first_pullrequest.html"
+      >26 April - Active Py-ART Development - Submitting a Pull Request (PR)</a
+    >
+  </li>
+  
+  <li>
+    <a href="../2022/plot-nexrad-level3.html"
+      >12 April - Fixing Weird Patterns When Plotting NEXRAD Level 3 Data</a
+    >
+  </li>
+  
+  <li>
+    <a href="../2022/ka-band-pyart-xarray-hvplot.html"
+      >21 March - Working with Vertically Pointing Radar Data Using PyART, Xarray, and hvPlot</a
+    >
+  </li>
+  
+</ul>
+
+<h3>
+  <a href="../../blog/archive.html">Archives</a>
+</h3>
+<ul>
+   
+  <li>
+    <a href="../../blog/2023.html">2023 (1)</a>
+  </li>
+    
+  <li>
+    <a href="../../blog/2022.html">2022 (6)</a>
+  </li>
+   
+</ul>
+
+              </div>
+              <div class="sidebar-end-items">
+              </div>
+            </div>
+            
+          
+
+          
+          <div class="d-none d-xl-block col-xl-2 bd-toc">
+            
+              
+              <div class="toc-item">
+                
+<div class="tocsection onthispage mt-5 pt-1 pb-3">
+    <i class="fas fa-list"></i> On this page
+</div>
+
+<nav id="bd-toc-nav">
+    <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#motivation">
+   Motivation
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#the-outbreak">
+     The Outbreak
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#focusing-on-southern-wisconsin">
+     Focusing on Southern Wisconsin
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#reproducing-event-images">
+     Reproducing Event Images
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#visualizing-the-event">
+   Visualizing the Event
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#imports">
+     Imports
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#access-the-data">
+     Access the Data
+    </a>
+    <ul class="nav section-nav flex-column">
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#download-the-road-data">
+       Download the Road Data
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#add-the-interstate-date-as-a-feature">
+       Add the Interstate Date as a feature
+      </a>
+     </li>
+     <li class="toc-h4 nav-item toc-entry">
+      <a class="reference internal nav-link" href="#investigate-the-nexrad-data-available">
+       Investigate the NEXRAD Data Available
+      </a>
+     </li>
+    </ul>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#setup-our-plotting-functions">
+     Setup our Plotting Functions
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#run-our-plotting-functions">
+     Run our Plotting Functions
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conclusion">
+   Conclusion
+  </a>
+ </li>
+</ul>
+
+</nav>
+              </div>
+              
+              <div class="toc-item">
+                
+              </div>
+              
+            
+          </div>
+          
+
+          
+          
+            
+          
+          <main class="col-12 col-md-9 col-xl-7 py-md-5 pl-md-5 pr-md-4 bd-content" role="main">
+              
+              <div>
+                 <section class="tex2jax_ignore mathjax_ignore" id="visualizing-severe-weather-in-wisconsin">
+<h1>Visualizing Severe Weather in Wisconsin<a class="headerlink" href="#visualizing-severe-weather-in-wisconsin" title="Permalink to this headline">#</a></h1>
+<section id="motivation">
+<h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this headline">#</a></h2>
+<section id="the-outbreak">
+<h3>The Outbreak<a class="headerlink" href="#the-outbreak" title="Permalink to this headline">#</a></h3>
+<p>Last Friday (March 31, 2023), a severe weather outbreak impacted a large portion of the Central United States, including the Upper Midwest. There were a total of:</p>
+<ul class="simple">
+<li><p>142 tornado reports</p></li>
+<li><p>368 wind reports, with 7 of those being high wind reports, in excess of 65 knots (~75 mph)</p></li>
+<li><p>184 hail reports, with 14 of those bing large hail reports, in excess of 2 inches in diameter</p></li>
+</ul>
+<p>Here is a map of the storm reports provided by the National Weather Service:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">IFrame</span>
+
+<span class="n">IFrame</span><span class="p">(</span>
+    <span class="n">src</span><span class="o">=</span><span class="s2">&quot;https://www.spc.noaa.gov/climo/gmf.php?rpt=230331_rpts_filtered&quot;</span><span class="p">,</span>
+    <span class="n">width</span><span class="o">=</span><span class="mi">700</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html">
+        <iframe
+            width="700"
+            height="500"
+            src="https://www.spc.noaa.gov/climo/gmf.php?rpt=230331_rpts_filtered"
+            frameborder="0"
+            allowfullscreen
+            
+        ></iframe>
+        </div></div>
+</div>
+</section>
+<section id="focusing-on-southern-wisconsin">
+<h3>Focusing on Southern Wisconsin<a class="headerlink" href="#focusing-on-southern-wisconsin" title="Permalink to this headline">#</a></h3>
+<p>In this blog post, we explore a single area - Walworth County, Wisconsin, which is located in Southeastern Wisconsin. This county is home to Lake Geneva, Wisconsin, a popular tourist destination, especially for those living in the Chicagoland area.</p>
+<p>3 confirmed tornadoes moved through Walworth county, with those confirmations from the local National Weather Service (NWS Milwaukee). They also found a considerable amount of wind and hail damage around the area.</p>
+<p>NWS Milwaukee assembled an event summary (<a class="reference external" href="https://www.weather.gov/mkx/March_31_Tornadoes_SevereStorms">Link to NWS Event Summary</a>)
+which includes the following radar imagery, which was produced using data from their radar and GRLevel software:
+<img alt="NWS Milwaukee Radar Image" src="https://www.weather.gov/images/mkx/top-news/2023/4%20Panel%20KMKX%200105z%20April%201%202023%20Delavan%20Lake%20TDS.png" /></p>
+</section>
+<section id="reproducing-event-images">
+<h3>Reproducing Event Images<a class="headerlink" href="#reproducing-event-images" title="Permalink to this headline">#</a></h3>
+<p>What if we wanted to reproduce these plots, using free, open-source software, using open data? We can do this using Py-ART. We encourage people check out the <a class="reference external" href="https://projectpythia.org/radar-cookbook/">Radar Cookbook</a>, which walks through how to get started with the software stack, and details how to work with NEXRAD data, as we are in this case.</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://projectpythia.org/radar-cookbook/notebooks/example-workflows/moore-oklahoma-tornado.html">Link to NEXRAD Data from Moore, Oklahoma Tornado Case</a></p></li>
+</ul>
+<p>The focus here is to build upon the workflow described there, and automate this as much as possible, to enable local NWS offices to easily create post-event evaluation images.</p>
+</section>
+</section>
+<section id="visualizing-the-event">
+<h2>Visualizing the Event<a class="headerlink" href="#visualizing-the-event" title="Permalink to this headline">#</a></h2>
+<section id="imports">
+<h3>Imports<a class="headerlink" href="#imports" title="Permalink to this headline">#</a></h3>
+<p>We import a variety of python packages, which can be installed using</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>arm_pyart<span class="w"> </span>metpy<span class="w"> </span>cartopy<span class="w"> </span>pandas<span class="w"> </span>numpy<span class="w"> </span>shapely
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+<span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
+<span class="kn">import</span> <span class="nn">cartopy.feature</span> <span class="k">as</span> <span class="nn">cfeature</span>
+<span class="kn">import</span> <span class="nn">cartopy.io.shapereader</span> <span class="k">as</span> <span class="nn">shpreader</span>
+<span class="kn">from</span> <span class="nn">cartopy.feature</span> <span class="kn">import</span> <span class="n">ShapelyFeature</span>
+<span class="kn">import</span> <span class="nn">fsspec</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">metpy.plots</span> <span class="kn">import</span> <span class="n">USCOUNTIES</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">pyart</span>
+
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>## You are using the Python ARM Radar Toolkit (Py-ART), an open source
+## library for working with weather radar data. Py-ART is partly
+## supported by the U.S. Department of Energy as part of the Atmospheric
+## Radiation Measurement (ARM) Climate Research Facility, an Office of
+## Science user facility.
+##
+## If you use this software to prepare a publication, please cite:
+##
+##     JJ Helmus and SM Collis, JORS 2016, doi: 10.5334/jors.119
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mgrover/miniforge3/envs/pyart-dev/lib/python3.10/site-packages/tqdm/auto.py:22: TqdmWarning: IProgress not found. Please update jupyter and ipywidgets. See https://ipywidgets.readthedocs.io/en/stable/user_install.html
+  from .autonotebook import tqdm as notebook_tqdm
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="access-the-data">
+<h3>Access the Data<a class="headerlink" href="#access-the-data" title="Permalink to this headline">#</a></h3>
+<p>We start first with some extra map features - in this case, we add interstates to the map (credit to the Census database for the data, and Randy Chase for the code)</p>
+<section id="download-the-road-data">
+<h4>Download the Road Data<a class="headerlink" href="#download-the-road-data" title="Permalink to this headline">#</a></h4>
+<p>I am running this on a Mac, so I used curl, but if you are on a Linux machine you would want to use <code class="docutils literal notranslate"><span class="pre">wget</span></code> here.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">!</span>curl<span class="w"> </span>https://www2.census.gov/geo/tiger/TIGER2016/PRIMARYROADS/tl_2016_us_primaryroads.zip<span class="w"> </span>--output<span class="w"> </span>tl_2016_us_primaryroads.zip
+<span class="o">!</span>unzip<span class="w"> </span>tl_2016_us_primaryroads.zip
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 25.7M    0 25.7M    0     0  21.0M      0 --:--:--  0:00:01 --:--:-- 21.0M
+Archive:  tl_2016_us_primaryroads.zip
+ extracting: tl_2016_us_primaryroads.cpg  
+  inflating: tl_2016_us_primaryroads.dbf  
+  inflating: tl_2016_us_primaryroads.prj  
+  inflating: tl_2016_us_primaryroads.shp  
+  inflating: tl_2016_us_primaryroads.shp.ea.iso.xml  
+  inflating: tl_2016_us_primaryroads.shp.iso.xml  
+  inflating: tl_2016_us_primaryroads.shp.xml  
+  inflating: tl_2016_us_primaryroads.shx  
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="add-the-interstate-date-as-a-feature">
+<h4>Add the Interstate Date as a feature<a class="headerlink" href="#add-the-interstate-date-as-a-feature" title="Permalink to this headline">#</a></h4>
+<p>We can add this data as a feature to be used on the maps using Shapely</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read shape file</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="n">shpreader</span><span class="o">.</span><span class="n">Reader</span><span class="p">(</span><span class="s2">&quot;./tl_2016_us_primaryroads.shp&quot;</span><span class="p">)</span>
+<span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">geoms</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Loop through and find the interstates, looking for an I in the full name</span>
+<span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="n">reader</span><span class="o">.</span><span class="n">records</span><span class="p">():</span>
+    <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;FULLNAME&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;I&quot;</span><span class="p">:</span>
+        <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
+        <span class="n">geoms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rec</span><span class="o">.</span><span class="n">geometry</span><span class="p">)</span>
+
+<span class="c1"># make interstate feature</span>
+<span class="n">interstate_feature</span> <span class="o">=</span> <span class="n">ShapelyFeature</span><span class="p">(</span>
+    <span class="n">geoms</span><span class="p">,</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;darkblue&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="investigate-the-nexrad-data-available">
+<h4>Investigate the NEXRAD Data Available<a class="headerlink" href="#investigate-the-nexrad-data-available" title="Permalink to this headline">#</a></h4>
+<p>The NEXRAD data is available through Amazon Web Services (AWS), and we are using the Level2 data, which has been quality controlled to an extent, but has not been fully cleaned (ex. velocity field may still be aliased).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">filesystem</span><span class="p">(</span><span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="n">anon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">site</span> <span class="o">=</span> <span class="s2">&quot;KMKX&quot;</span>
+<span class="n">year</span> <span class="o">=</span> <span class="s2">&quot;2023&quot;</span>
+<span class="n">month</span> <span class="o">=</span> <span class="s2">&quot;04&quot;</span>
+<span class="n">day</span> <span class="o">=</span> <span class="s2">&quot;01&quot;</span>
+<span class="n">hour</span> <span class="o">=</span> <span class="s2">&quot;01&quot;</span>
+<span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
+    <span class="n">fs</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;s3://noaa-nexrad-level2/</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">day</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">site</span><span class="si">}{</span><span class="n">year</span><span class="si">}{</span><span class="n">month</span><span class="si">}{</span><span class="n">day</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">hour</span><span class="si">}</span><span class="s2">*06&quot;</span>
+    <span class="p">)</span>
+<span class="p">)</span>
+<span class="n">files</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_010517_V06&#39;,
+ &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_011057_V06&#39;,
+ &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_011638_V06&#39;,
+ &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_012219_V06&#39;,
+ &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_012759_V06&#39;,
+ &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_013341_V06&#39;,
+ &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_013922_V06&#39;,
+ &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_014502_V06&#39;,
+ &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_015042_V06&#39;,
+ &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_015623_V06&#39;,
+ &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_015928_V06&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="setup-our-plotting-functions">
+<h3>Setup our Plotting Functions<a class="headerlink" href="#setup-our-plotting-functions" title="Permalink to this headline">#</a></h3>
+<p>Now that we have our data, we setup a function to process data, which:</p>
+<ul class="simple">
+<li><p>Reads the data into a Py-ART radar object</p></li>
+<li><p>Subset the lowest elevations</p></li>
+<li><p>Dealias the radial velocity</p></li>
+<li><p>Plot the velocity</p></li>
+<li><p>Plot the reflectivity</p></li>
+<li><p>Save the plot to a file</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_configuration</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;reflectivity&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;vmin&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span>
+        <span class="s2">&quot;vmax&quot;</span><span class="p">:</span> <span class="mi">70</span><span class="p">,</span>
+        <span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="s2">&quot;pyart_ChaseSpectral&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Horizontal Reflectivity (dBZ)&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;velocity&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;vmin&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">50</span><span class="p">,</span>
+        <span class="s2">&quot;vmax&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="s2">&quot;twilight_shifted&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Radial Velocity (m/s)&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+    <span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">&quot;vmin&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
+        <span class="s2">&quot;vmax&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="s2">&quot;pyart_ChaseSpectral&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Cross Correlation Ratio&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_radar_ppi</span><span class="p">(</span>
+    <span class="n">file</span><span class="p">,</span>
+    <span class="n">left_field</span><span class="o">=</span><span class="s2">&quot;velocity&quot;</span><span class="p">,</span>
+    <span class="n">right_field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+    <span class="n">plot_config</span><span class="o">=</span><span class="n">plot_configuration</span><span class="p">,</span>
+<span class="p">):</span>
+
+    <span class="c1"># Read the radar data</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;s3://</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Extract the lowest two sweeps - to help with speeding up the data cleaning</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">extract_sweeps</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
+
+    <span class="k">if</span> <span class="s2">&quot;velocity&quot;</span> <span class="ow">in</span> <span class="p">[</span><span class="n">left_field</span><span class="p">,</span> <span class="n">right_field</span><span class="p">]:</span>
+
+        <span class="c1"># Dealias the radial velocities, using a reflectivity threshold to only look at precip regions</span>
+        <span class="n">nyq</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+        <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">vel_dealias</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">dealias_region_based</span><span class="p">(</span>
+            <span class="n">radar</span><span class="p">,</span> <span class="n">nyquist_vel</span><span class="o">=</span><span class="n">nyq</span><span class="p">,</span> <span class="n">centered</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span>
+        <span class="p">)</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;corrected_velocity&quot;</span><span class="p">,</span> <span class="n">vel_dealias</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># Add a subplot for the velocity</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
+    <span class="n">graph</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+
+    <span class="c1"># Create a plot number to iterate over</span>
+    <span class="n">plot_number</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">(</span><span class="n">left_field</span><span class="p">,</span> <span class="n">right_field</span><span class="p">):</span>
+
+        <span class="c1"># Use the configuration for the field</span>
+        <span class="n">config</span> <span class="o">=</span> <span class="n">plot_config</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
+
+        <span class="c1"># Assume 0 sweep (lowest elevation)</span>
+        <span class="n">sweep</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="c1"># User a new name for the corrected velocity, and use the next sweep</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;velocity&quot;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">vel_dealias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">field</span> <span class="o">=</span> <span class="s2">&quot;corrected_velocity&quot;</span>
+            <span class="n">sweep</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="c1"># Plot the first field</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span> <span class="o">+</span> <span class="n">plot_number</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+
+        <span class="c1"># Prepare the title</span>
+        <span class="n">title</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">generate_title</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">20</span><span class="p">:])</span>
+        <span class="n">time_steps</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">index</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_start_end</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">time</span> <span class="o">+=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">time_steps</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
+        <span class="n">central_time</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="s2">&quot;US/Central&quot;</span><span class="p">))[:</span><span class="o">-</span><span class="mi">13</span><span class="p">]</span>
+        <span class="n">new_title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">title</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">13</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">central_time</span><span class="si">}</span><span class="s2"> CDT&quot;</span>
+        <span class="n">graph</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
+            <span class="n">field</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;cmap&quot;</span><span class="p">],</span>
+            <span class="n">sweep</span><span class="o">=</span><span class="n">sweep</span><span class="p">,</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;vmin&quot;</span><span class="p">],</span>
+            <span class="n">vmax</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;vmax&quot;</span><span class="p">],</span>
+            <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+            <span class="n">colorbar_orient</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span><span class="p">,</span>
+            <span class="n">colorbar_label</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">],</span>
+            <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Add a point near the start of the tornado in Sharon</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="o">-</span><span class="mf">88.7</span><span class="p">,</span> <span class="mf">42.53</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Sharon, Wisconsin (Near Start of Tornado)&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Add a point for Delavan Lake, Wisconsin</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+            <span class="o">-</span><span class="mf">88.6105</span><span class="p">,</span>
+            <span class="mf">42.60666</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Delavan Lake, Wisconsin (Near End of Tornado)&quot;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;lightgrey&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Add the interstates</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span>
+            <span class="n">interstate_feature</span><span class="p">,</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;lavenderblush&quot;</span><span class="p">,</span>
+            <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Interstate 43&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Add the counties</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">USCOUNTIES</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+        <span class="c1"># Add gridlines</span>
+        <span class="n">gl</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">gridlines</span><span class="p">(</span>
+            <span class="n">crs</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+            <span class="n">draw_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+            <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span>
+            <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+            <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="n">gl</span><span class="o">.</span><span class="n">right_labels</span> <span class="o">=</span> <span class="kc">False</span>
+        <span class="n">gl</span><span class="o">.</span><span class="n">top_labels</span> <span class="o">=</span> <span class="kc">False</span>
+
+        <span class="c1"># Add a label for the interstates</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;lavenderblush&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Interstate 43&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">88.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">88.2</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mf">42.3</span><span class="p">,</span> <span class="mf">42.9</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+
+        <span class="c1"># Add one to the plot number</span>
+        <span class="n">plot_number</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">new_title</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ppi_velocity_reflectivity_</span><span class="si">{</span><span class="n">time</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="run-our-plotting-functions">
+<h3>Run our Plotting Functions<a class="headerlink" href="#run-our-plotting-functions" title="Permalink to this headline">#</a></h3>
+<p>Now that we have our plotting functions, we can apply these to the first volume of our file list, when the NWS identified the Sharon to Delavan Lake tornado
+<img alt="NWS Tornado Damage Survey" src="https://www.weather.gov/images/mkx/top-news/2023/SharonDelavanLake.png" /></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_radar_ppi</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/50d142cd84cb9f3b4f2a224163b90f9904ab4f4bba2cfc62d01e3b9874806d67.png" src="../../_images/50d142cd84cb9f3b4f2a224163b90f9904ab4f4bba2cfc62d01e3b9874806d67.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_radar_ppi</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">right_field</span><span class="o">=</span><span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/7d730a3d5f6e619091f430c4d673102bce40dd02112fe4b73dd96734dacb3650.png" src="../../_images/7d730a3d5f6e619091f430c4d673102bce40dd02112fe4b73dd96734dacb3650.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="conclusion">
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this headline">#</a></h2>
+<p>Within this post, we examined how to use data from the National Weather Service to identify tornado signatures, and create a flexible plotting function to visualize its path. We even added interstates for reference!</p>
+<p>We hope that this will be applicable to NWS offices interested in making colorblind-friendly maps of severe weather events, and automate the data selection and visualization process (where possible).</p>
+</section>
+</section>
+
+<div class="section">
+    
+
+<div class="section">
+  <span style="float: left">
+     
+    <a href="../2022/hail-analysis-spc.html">
+      <i class="fa fa-arrow-circle-left"></i> Hail Storm Visualization Using Py-ART and Pandas!
+    </a>
+    
+  </span>
+  <span>&nbsp;</span>
+  <span style="float: right">
+    
+  </span>
+</div>
+  
+</div>
+
+              </div>
+              
+              
+              <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+</div>
+              
+          </main>
+          
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+<footer class="footer mt-5 mt-md-0">
+  <div class="container">
+    
+    <div class="footer-item">
+      <p class="copyright">
+    &copy; Copyright 2013-2022, Py-ART developers.<br>
+</p>
+    </div>
+    
+    <div class="footer-item">
+      <p class="sphinx-version">
+Created using <a href="http://sphinx-doc.org/">Sphinx</a> 4.5.0.<br>
+</p>
+    </div>
+    
+  </div>
+</footer>
+  </body>
+</html>
