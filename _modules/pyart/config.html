@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.config &#8212; Py-ART 1.14.6.post7 documentation</title>
+    <title>pyart.config &#8212; Py-ART 1.14.6.post8 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -392,7 +392,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">_DEFAULT_FIELD_LIMITS</span><span class="p">:</span>
         <span class="n">limits</span> <span class="o">=</span> <span class="n">_DEFAULT_FIELD_LIMITS</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">callable</span><span class="p">(</span><span class="n">limits</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">limits</span><span class="p">):</span>
             <span class="n">limits</span> <span class="o">=</span> <span class="n">limits</span><span class="p">(</span><span class="n">container</span><span class="p">,</span> <span class="n">selection</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">limits</span>
     <span class="k">else</span><span class="p">:</span>
