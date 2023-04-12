@@ -13,6 +13,7 @@ dependencies:
   - cartopy
   - arm_pyart
   - xarray
+  - xradar
   - pip
   - pip:
     - wheel
