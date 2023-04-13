@@ -30,7 +30,7 @@ def test_gatemapper():
         == old_radar.fields["reflectivity_copy"]["data"][40, 40]
     )
 
- 
+
 def test_gatemapper_gatefilter():
     # Make fake radar with target
     old_radar = pyart.testing.make_target_radar()
