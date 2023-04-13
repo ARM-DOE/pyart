@@ -222,9 +222,15 @@ class GateMapper:
 
         src_fields = {}
         for field in field_list:
-            mapped_radar.fields[field]["data"] = np.ma.masked_where(
-                True, mapped_radar.fields[field]["data"]
-            )
+            if field in list(mapped_radar.fields.keys()):
+                mapped_radar.fields[field]["data"] = np.ma.masked_where(
+                    True, mapped_radar.fields[field]["data"]
+                )
+            else:
+                mapped_radar.fields[field] = deepcopy(self.src_radar.fields[field])
+                mapped_radar.fields[field]["data"] = np.ma.masked_where(
+                    True, np.ma.zeros((mapped_radar.nrays, mapped_radar.ngates))
+                )
             src_fields[field] = np.ma.masked_where(
                 self.gatefilter_src.gate_excluded, self.src_radar.fields[field]["data"]
             )
