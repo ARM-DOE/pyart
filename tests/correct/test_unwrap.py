@@ -60,7 +60,6 @@ def test_dealias_unwrap_phase_volume():
 
 
 def test_set_limits():
-
     radar, dealias_vel = perform_dealias("ray", set_limits=True)
     assert "valid_min" in dealias_vel
     assert_almost_equal(dealias_vel["valid_min"], -30.0)
@@ -182,7 +181,6 @@ def test_is_sweep_sequential():
 
 
 def test_dealias_unwrap_phase_raises():
-
     # invalid unwrap_unit
     radar = pyart.testing.make_velocity_aliased_radar()
     pytest.raises(
@@ -264,7 +262,6 @@ def test_fillvalue(**kwargs):
 
 
 if __name__ == "__main__":
-
     radar, dealias_vel = perform_dealias()
     radar.fields["dealiased_velocity"] = dealias_vel
 

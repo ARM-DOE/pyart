@@ -14,7 +14,6 @@ from pyart.core import Radar
 
 
 def composite_reflectivity(radar, field="reflectivity", gatefilter=None):
-
     """
     Composite Reflectivity
 

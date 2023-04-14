@@ -343,7 +343,6 @@ def test_compressed_scan_info():
 
 
 def test_bad_compression_header():
-
     # read the beginning of the compressed file
     f = open(COMPRESSED_FILE, "rb")
     head = f.read(36)

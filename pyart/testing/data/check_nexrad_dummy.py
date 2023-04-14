@@ -14,7 +14,6 @@ def test_dummy_similar():
 
 
 def radars_similar(r1, r2):
-
     ###########################
     # Attribute that are None #
     ###########################

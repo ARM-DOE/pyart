@@ -400,7 +400,6 @@ class _Average1D:
 
         y_new = np.zeros_like(x_new, dtype=self.y_sorted.dtype)
         for i, center in enumerate(x_new):
-
             bottom = center - window
             top = center + window
             start = np.searchsorted(self.x_sorted, bottom)

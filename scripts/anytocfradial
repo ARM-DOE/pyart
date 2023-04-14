@@ -5,7 +5,6 @@ import argparse
 import pyart
 
 if __name__ == "__main__":
-
     # parse the arguments
     parser = argparse.ArgumentParser(
         description="Convert a radar file to CF/Radial format."

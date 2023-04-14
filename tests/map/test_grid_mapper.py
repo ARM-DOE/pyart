@@ -18,7 +18,6 @@ COMMON_MAP_TO_GRID_ARGS = {
 
 
 def test_map_to_grid_filter():
-
     # simulate a radar with bad gates which reports huge reflectivities
     radar = pyart.testing.make_target_radar()
     radar.fields["reflectivity"]["data"][0:100, 25] = 99999.0
@@ -133,7 +132,6 @@ def test_map_to_grid_masked_refl_field():
 
 
 def test_map_to_grid_barnes_filter_masked():
-
     radar = pyart.testing.make_target_radar()
 
     # mask and replace with non-sense values a region of radar volume

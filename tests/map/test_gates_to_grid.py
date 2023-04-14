@@ -18,7 +18,6 @@ COMMON_MAP_TO_GRID_ARGS = {
 
 
 def test_map_to_grid_filter():
-
     # simulate a radar with bad gates which reports huge reflectivities
     radar = pyart.testing.make_target_radar()
     radar.fields["reflectivity"]["data"][0:100, 25] = 99999.0

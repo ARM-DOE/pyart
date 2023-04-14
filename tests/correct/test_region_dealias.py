@@ -110,7 +110,6 @@ def test_keep_original():
 
 
 def test_set_limits():
-
     radar, dealias_vel = perform_dealias(set_limits=True)
     assert "valid_min" in dealias_vel
     assert_almost_equal(dealias_vel["valid_min"], -30.0)
@@ -204,7 +203,6 @@ def test_fillvalue(**kwargs):
 
 
 def main():
-
     radar, dealias_vel = perform_dealias()
     radar.fields["dealiased_velocity"] = dealias_vel
 

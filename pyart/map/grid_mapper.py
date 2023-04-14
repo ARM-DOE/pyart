@@ -522,7 +522,6 @@ def map_to_grid(
 
     # loop over the radars finding gate locations, field data, and offset
     for iradar, (radar, gatefilter) in enumerate(zip(radars, gatefilters)):
-
         # calculate radar offset from the origin
         x_disp, y_disp = geographic_to_cartesian(
             radar.longitude["data"], radar.latitude["data"], projparams
@@ -652,7 +651,6 @@ def map_to_grid(
 
     # interpolate field values for each point in the grid
     for iz, iy, ix in np.ndindex(nz, ny, nx):
-
         # calculate the grid point
         x = x_start + x_step * ix
         y = y_start + y_step * iy

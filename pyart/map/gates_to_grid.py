@@ -132,7 +132,6 @@ def map_gates_to_grid(
 
     # project gates from each radar onto the grid
     for radar, gatefilter in zip(radars, gatefilters):
-
         # Copy the field data and masks.
         # TODO method that does not copy field data into new array
         if nfields == 0:

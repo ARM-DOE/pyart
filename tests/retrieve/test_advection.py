@@ -44,7 +44,6 @@ def test_grid_displacement_pc():
 
 
 def test_grid_shift():
-
     # create two guassian storms
     grid1 = pyart.testing.make_normal_storm(10.0, [0.0, 0.0])
     grid2 = pyart.testing.make_normal_storm(10.0, [5.0, 5.0])

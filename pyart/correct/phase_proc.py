@@ -1003,7 +1003,6 @@ def LP_solver_cylp(A_Matrix, B_vectors, weights, really_verbose=False):
         s.logLevel = 0
 
     for raynum in range(n_rays):
-
         # set new B_vector values for actual ray
         s.setRowLowerArray(np.squeeze(np.asarray(B_vectors[raynum])))
         # set new weights (objectives) for actual ray
@@ -1518,7 +1517,6 @@ def get_phidp_unf_gf(
     cordata = np.zeros(my_phidp.shape, dtype=float)
     all_non_meteo = gatefilter.gate_excluded
     for radial in range(my_phidp.shape[0]):
-
         # deterimine non meteo from gatefilter CHANGED
         notmeteo = all_non_meteo[radial, :]
         x_ma = ma.masked_where(notmeteo, my_phidp[radial, :])

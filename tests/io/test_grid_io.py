@@ -189,7 +189,6 @@ def test_write_projection_coordinate_system():
     grid = pyart.testing.make_empty_grid(grid_shape, grid_limits)
 
     with pyart.testing.InTemporaryDirectory():
-
         # standard projection
         grid.projection["proj"] = "pyart_aeqd"
         tmpfile = "tmp_grid1.nc"

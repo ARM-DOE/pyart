@@ -161,7 +161,6 @@ def dealias_region_based(
 
     # loop over sweeps
     for nsweep, sweep_slice in enumerate(radar.iter_slice()):
-
         # extract sweep data
         sdata = vdata[sweep_slice].copy()  # is a copy needed here?
         scorr = data[sweep_slice]
@@ -365,7 +364,6 @@ def _find_regions(vel, gfilter, limits):
     label = np.zeros(vel.shape, dtype=np.int32)
     nfeatures = 0
     for lmin, lmax in zip(limits[:-1], limits[1:]):
-
         # find connected regions within the limits
         inp = (lmin <= vel) & (vel < lmax) & mask
         limit_label, limit_nfeatures = ndimage.label(inp)
@@ -627,7 +625,6 @@ class _EdgeTracker:
             self._common_finder[:] = False
             edges_in_base = list(self.edges_in_node[base_node])
             for edge_num in edges_in_base:
-
                 # reverse edge if needed so node_alpha is base_node
                 if self.node_beta[edge_num] == base_node:
                     self._reverse_edge_direction(edge_num)
@@ -640,7 +637,6 @@ class _EdgeTracker:
 
         # loop over edge nodes
         for edge_num in edges_in_merge:
-
             # reverse edge so that node alpha is the merge_node
             if self.node_beta[edge_num] == merge_node:
                 self._reverse_edge_direction(edge_num)

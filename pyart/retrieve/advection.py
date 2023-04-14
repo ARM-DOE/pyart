@@ -140,7 +140,6 @@ def grid_shift(grid, advection, trim_edges=0, field_list=None):
         field_list = grid.fields.keys()
 
     for field in field_list:
-
         # copy data and fill with nans
         data = grid.fields[field]["data"].copy()
         data = np.ma.filled(data, np.nan)

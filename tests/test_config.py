@@ -27,7 +27,6 @@ def test_config_functions():
 
 
 def test_filemetadata_custom():
-
     pyart.load_config(CUSTOM_CONFIG_FILE)
 
     # The MDV reflectivity field is mapped to velocity
@@ -73,7 +72,6 @@ def test_filemetadata_custom():
 
 
 def test_init_load():
-
     # load the custom config and verify
     os.environ["PYART_CONFIG"] = CUSTOM_CONFIG_FILE
     reload(pyart.config)
@@ -99,7 +97,6 @@ def test_init_load():
 
 
 def test_intergration():
-
     pyart.load_config()  # load default
     radar = pyart.io.read_mdv(pyart.testing.MDV_PPI_FILE)
     assert "reflectivity" in radar.fields

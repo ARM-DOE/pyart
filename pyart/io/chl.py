@@ -104,7 +104,6 @@ def read_chl(
     # fields
     fields = {}
     for i, fdata in chl_file.fields.items():
-
         field_info = chl_file.field_info[i]
         field_name = filemetadata.get_field_name(field_info["name"])
         if field_name is None:
@@ -236,7 +235,6 @@ class ChlFile:
     """
 
     def __init__(self, filename, ns_time=True, debug=False):
-
         # initalize attributes
         self.ngates = None
         self.num_sweeps = None
@@ -402,7 +400,6 @@ class ChlFile:
         all_data = np.frombuffer(self._dstring, dtype=self._dtype)
         all_data = all_data.reshape(-1, self.ngates)
         for i, field_num in enumerate(self._field_nums):
-
             fdata = np.ma.masked_values(all_data[all_data.dtype.names[i]], 0)
             # apply scale and offset factors to interger data types
             if issubclass(fdata.dtype.type, np.integer):

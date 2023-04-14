@@ -11,7 +11,6 @@ from ..core.transforms import antenna_to_cartesian
 def quasi_vertical_profile(
     radar, desired_angle=None, fields=None, gatefilter=None, verbose=False
 ):
-
     """
     Quasi Vertical Profile.
 
@@ -78,7 +77,6 @@ def quasi_vertical_profile(
         fields = radar.fields
 
         for field in fields:
-
             # Filtering data based on defined gatefilter
             # If none is defined goes to else statement
             if gatefilter is not None:

@@ -29,7 +29,6 @@ fin.close()
 # replace all radial data with a single value so it compresses well
 pos = 0
 while pos < buf_length:
-
     # retrieve the record (msg31)
     new_pos, record = nexrad._get_record_from_buf(buf, pos)
     if record["header"]["type"] != 31:

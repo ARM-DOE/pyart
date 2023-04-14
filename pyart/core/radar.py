@@ -189,7 +189,6 @@ class Radar:
         pitch=None,
         georefs_applied=None,
     ):
-
         if "calendar" not in time:
             time["calendar"] = "gregorian"
         self.time = time

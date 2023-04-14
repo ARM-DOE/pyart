@@ -865,7 +865,6 @@ class MdvFile:
         # the file pointer must be set at the correct location prior to call
         radar_info, elevations, calib_info = None, [], None
         for cnum, curr_chunk_header in enumerate(self.chunk_headers):
-
             chunk_id = curr_chunk_header["chunk_id"]
             self.fileptr.seek(curr_chunk_header["chunk_data_offset"])
 

@@ -243,7 +243,6 @@ def test_projection_argument():
 
 
 def test_inconsistent_radar_arguments():
-
     #  partially instantiate a Grid class with fake data and a radar_latitude
     # argument indicating a single radar
     partial_grid = functools.partial(

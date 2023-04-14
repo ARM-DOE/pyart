@@ -290,7 +290,6 @@ def check_chararr_variable(section, dataset, text, var_name, valid_options):
     """
     if var_name in dataset.variables:
         for i, chars in enumerate(dataset.variables[var_name]):
-
             value = chars.tostring().strip("\x00").strip()
             if value not in valid_options:
                 tup = (text, var_name, i, value, " ".join(valid_options))
@@ -667,7 +666,6 @@ def check_cfradial_compliance(dataset, verb=False):
     # XXX a better way to do this might be to check against section 6.2
     for var_name, var in dataset.variables.items():
         if var.dimensions == ("time", "range"):
-
             # check the data type
             if var.dtype not in [BYTE, SHORT, INT, FLOAT, DOUBLE]:
                 tup = (var_name, var.dtype)
@@ -1025,7 +1023,6 @@ def check_cfradial_compliance(dataset, verb=False):
 
 
 if __name__ == "__main__":
-
     parser = argparse.ArgumentParser(
         description="Check a file for CF/Radial version 1.2 compliance."
     )

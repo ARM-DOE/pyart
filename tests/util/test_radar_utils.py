@@ -86,7 +86,6 @@ radar = pyart.io.read_nexrad_archive(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
 
 
 def test_image_mute_radar():
-
     # image mute example file
     mute_radar = pyart.util.image_mute_radar(
         radar,

@@ -38,7 +38,6 @@ def test_gatefilter_copy():
 
 
 def test_exclude_transition():
-
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_transition()
     assert np.all(gfilter.gate_excluded == np.False_)
@@ -57,7 +56,6 @@ def test_exclude_transition():
 
 
 def test_include_not_transition():
-
     gfilter = pyart.correct.GateFilter(radar, exclude_based=False)
     gfilter.include_not_transition()
     assert np.all(gfilter.gate_excluded == np.False_)

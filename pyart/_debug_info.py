@@ -129,5 +129,4 @@ def _debug_info(stream=None):
 
 
 if __name__ == "__main__":
-
     _debug_info()

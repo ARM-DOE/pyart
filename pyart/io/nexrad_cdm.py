@@ -139,7 +139,6 @@ def read_nexrad_cdm(
 
     ray_i = 0
     for scan_index, scan_dic in enumerate(scan_info):
-
         var_index = scan_dic["index"][0]
         nradials = scan_dic["nradials"][0]
 
@@ -155,7 +154,6 @@ def read_nexrad_cdm(
         fixed_agl_data[scan_index] = np.mean(dvars[elevation_var][var_index][:nradials])
 
         for i, moment in enumerate(scan_dic["moments"]):
-
             moment_index = scan_dic["index"][i]
             m_ngates = scan_dic["ngates"][i]
             m_nradials = scan_dic["nradials"][i]
@@ -321,7 +319,6 @@ def _scan_info(dvars):
 
     for time_var in time_variables:
         for time_var_i, time in enumerate(dvars[time_var][:, 0]):
-
             scan_index = scan_start_times.index(time)
             scan_dic = scan_info[scan_index]
             moment = time_var_to_moment[time_var]
