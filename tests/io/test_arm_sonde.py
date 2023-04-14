@@ -34,7 +34,6 @@ def test_read_arm_sonde_vap_radar():
 
 
 def test_read_arm_sonde_vap_errors():
-
     # radar or target_datetime must be specified
     raises(ValueError, pyart.io.read_arm_sonde_vap, pyart.testing.INTERP_SOUNDE_FILE)
 

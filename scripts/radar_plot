@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import pyart
 
 if __name__ == "__main__":
-
     # parse the arguments
     parser = argparse.ArgumentParser(description="Plot a field from a radar file.")
 

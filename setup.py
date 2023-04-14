@@ -108,7 +108,6 @@ def guess_rsl_path():
 
 
 def check_rsl_path(rsl_lib_path, rsl_include_path):
-
     ext = {"darwin": "dylib", "linux2": "so", "linux": "so", "win32": "DLL"}[
         sys.platform
     ]

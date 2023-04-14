@@ -5,7 +5,6 @@ import argparse
 import pyart
 
 if __name__ == "__main__":
-
     # parse the arguments
     parser = argparse.ArgumentParser(description="Print information on a radar file.")
     parser.add_argument("filename", type=str, help="radar file to check")

@@ -217,7 +217,6 @@ def steiner_class_buff(
     area_relation,
     use_intense,
 ):
-
     zslice = np.argmin(np.abs(z - work_level))
     refl = ze[zslice, :, :]
 

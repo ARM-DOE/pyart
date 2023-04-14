@@ -56,7 +56,6 @@ def test_dealias_sounding():
     not pyart.correct.dealias._FOURDD_AVAILABLE, reason="TRMM RSL is not installed."
 )
 def test_set_limits():
-
     radar, dealias_vel = perform_dealias(set_limits=True)
     assert "valid_min" in dealias_vel
     assert_almost_equal(dealias_vel["valid_min"], -30.0)
@@ -246,7 +245,6 @@ def test_segmentation_fault_error():
 
 
 if __name__ == "__main__":
-
     radar, dealias_vel = perform_dealias()
     radar.fields["dealiased_velocity"] = dealias_vel
 

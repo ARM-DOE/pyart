@@ -125,7 +125,6 @@ def for_azimuth(radar_latitude, target_latitude, radar_longitude, target_longitu
 
 
 def get_field_location(radar, latitude, longitude):
-
     """
     Given the location (in latitude, longitude) of a target, extract the
     radar column above that point for further analysis.
@@ -276,7 +275,6 @@ def get_field_location(radar, latitude, longitude):
 
 
 def get_column_rays(radar, azimuth):
-
     """
     Given the location (in latitude,longitude) of a target, return the rays
     that correspond to radar column above the target.
@@ -329,7 +327,6 @@ def get_column_rays(radar, azimuth):
 
 
 def check_latitude(latitude):
-
     """
     Function to check if input latitude is valid for type and value.
 
@@ -356,7 +353,6 @@ def check_latitude(latitude):
 
 
 def check_longitude(longitude):
-
     """
     Function to check if input latitude is valid for type and value.
 

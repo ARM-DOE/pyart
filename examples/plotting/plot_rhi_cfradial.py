@@ -33,7 +33,6 @@ colorbar_label = "Hz. Eq. Refl. Fac. (dBZ)"
 nplots = radar.nsweeps
 
 for snum in radar.sweep_number["data"]:
-
     fixed_angle = radar.fixed_angle["data"][snum]
     title = "HSRHI Az=%.3f" % (fixed_angle)
     ax = fig.add_subplot(nplots, 1, snum + 1)

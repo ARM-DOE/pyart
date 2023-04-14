@@ -221,7 +221,6 @@ def read_gamic(
     moment_names = gfile.moment_names(moment_groups)
 
     for moment_name, group in zip(moment_names, moment_groups):
-
         field_name = filemetadata.get_field_name(moment_name)
         if field_name is None:
             continue

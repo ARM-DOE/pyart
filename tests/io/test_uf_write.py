@@ -48,7 +48,6 @@ FIELD_MAPPING = {
 
 
 def test_ray_section_by_section():
-
     ufile = UFFile(pyart.testing.UF_FILE)
     uray = ufile.rays[0]
     ref_ray_buf = uray._buf
@@ -173,7 +172,6 @@ def test_ray_section_by_section():
 
 
 def test_ray_full():
-
     ufile = UFFile(pyart.testing.UF_FILE)
     ref_ray = ufile.rays[0]._buf[:]
     ufile.close()
@@ -210,7 +208,6 @@ def test_ray_full():
 
 
 def test_complete_file():
-
     with open(pyart.testing.UF_FILE, "rb") as fh:
         ref_file = fh.read()
 
@@ -251,7 +248,6 @@ def test_complete_file():
 
 
 def test_complete_file_standard_names():
-
     with open(pyart.testing.UF_FILE, "rb") as fh:
         ref_file = fh.read()
 

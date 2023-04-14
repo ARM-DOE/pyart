@@ -1532,7 +1532,6 @@ def boundary_conditions_maesaka(
     idx_far = np.zeros(radar.nrays, dtype=np.int32)
 
     for ray, regions in enumerate(slices):
-
         # check if all range gates are missing
         if regions is None:
             continue
@@ -1543,10 +1542,8 @@ def boundary_conditions_maesaka(
 
         # near range gate boundary condition
         for slc in regions:
-
             # check if enough samples exist in slice
             if slc.stop - slc.start >= n:
-
                 # parse index and range of nearest range gate
                 idx = slice(slc.start, slc.start + n)
                 idx_near[ray] = idx.start
@@ -1571,9 +1568,7 @@ def boundary_conditions_maesaka(
 
         # far range gate boundary condition
         for slc in reversed(regions):
-
             if slc.stop - slc.start >= n:
-
                 # parse index and range of furthest range gate
                 idx = slice(slc.stop - n, slc.stop)
                 idx_far[ray] = idx.stop
@@ -1604,7 +1599,6 @@ def boundary_conditions_maesaka(
 
     # skip the check if there are no valid values
     if kwargs.get("check_outliers", True) and (phi_near_valid.size != 0):
-
         # bin and count near range boundary condition values, i.e., create
         # a distribution of values
         # the default bin width is 5 deg
@@ -1651,7 +1645,6 @@ def boundary_conditions_maesaka(
             print(f"Estimated system phase offset: {system_phase_offset:.0f} deg")
 
         for ray, bc in enumerate(phi_near):
-
             # if near range boundary condition does not draw from system phase
             # distribution then set it to the system phase offset
             if bc < left_edge or bc > right_edge:

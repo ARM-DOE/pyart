@@ -459,7 +459,6 @@ def join_radar(radar1, radar2):
         == 1 & len(radar2.altitude["data"])
         == 1
     ):
-
         lat1 = float(radar1.latitude["data"])
         lon1 = float(radar1.longitude["data"])
         alt1 = float(radar1.altitude["data"])

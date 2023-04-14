@@ -184,7 +184,6 @@ def test_calib_info():
 
 
 def test_radar_info():
-
     # check radar_info
     ref_radar_info = {
         "altitude_km": 0.32760000228881836,
@@ -281,7 +280,6 @@ def test_fileptr():
 
 
 def test_read_one_field():
-
     mdvfile = MdvFile(pyart.testing.MDV_PPI_FILE)
     # extract a field
     assert mdvfile.fields_data[0] is None
@@ -298,7 +296,6 @@ def test_read_one_field():
 
 
 def test_read_all_fields():
-
     mdvfile = MdvFile(pyart.testing.MDV_PPI_FILE)
     # read all fields
     assert mdvfile.fields_data[0] is None

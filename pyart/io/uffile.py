@@ -112,7 +112,6 @@ class UFFile:
         # read in the records, store as a list of rays
         self.rays = []
         while len(buf) == 8:  # read until EOF reached
-
             # record size stored as a 2-byte int start at byte 2
             record_size = struct.unpack(">h", buf[padding + 2 : padding + 4])[0] * 2
 
