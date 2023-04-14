@@ -45,7 +45,7 @@
        "        "
       ],
       "text/plain": [
-       "<IPython.lib.display.IFrame at 0x110792770>"
+       "<IPython.lib.display.IFrame at 0x111992b00>"
       ]
      },
      "execution_count": 1,
@@ -347,7 +347,6 @@
     "    right_field=\"reflectivity\",\n",
     "    plot_config=plot_configuration,\n",
     "):\n",
-    "\n",
     "    # Read the radar data\n",
     "    radar = pyart.io.read_nexrad_archive(f\"s3://{file}\")\n",
     "\n",
@@ -355,7 +354,6 @@
     "    radar = radar.extract_sweeps([0, 1])\n",
     "\n",
     "    if \"velocity\" in [left_field, right_field]:\n",
-    "\n",
     "        # Dealias the radial velocities, using a reflectivity threshold to only look at precip regions\n",
     "        nyq = radar.instrument_parameters[\"nyquist_velocity\"][\"data\"][0]\n",
     "        gatefilter = pyart.filters.GateFilter(radar)\n",
@@ -372,7 +370,6 @@
     "    # Create a plot number to iterate over\n",
     "    plot_number = 0\n",
     "    for field in (left_field, right_field):\n",
-    "\n",
     "        # Use the configuration for the field\n",
     "        config = plot_config[field]\n",
     "\n",

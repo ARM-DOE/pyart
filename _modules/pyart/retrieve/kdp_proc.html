@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.kdp_proc &#8212; Py-ART 1.15.0.post1 documentation</title>
+    <title>pyart.retrieve.kdp_proc &#8212; Py-ART 1.15.0.post2 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -1752,7 +1752,6 @@
     <span class="n">idx_far</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">ray</span><span class="p">,</span> <span class="n">regions</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">slices</span><span class="p">):</span>
-
         <span class="c1"># check if all range gates are missing</span>
         <span class="k">if</span> <span class="n">regions</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">continue</span>
@@ -1763,10 +1762,8 @@
 
         <span class="c1"># near range gate boundary condition</span>
         <span class="k">for</span> <span class="n">slc</span> <span class="ow">in</span> <span class="n">regions</span><span class="p">:</span>
-
             <span class="c1"># check if enough samples exist in slice</span>
             <span class="k">if</span> <span class="n">slc</span><span class="o">.</span><span class="n">stop</span> <span class="o">-</span> <span class="n">slc</span><span class="o">.</span><span class="n">start</span> <span class="o">&gt;=</span> <span class="n">n</span><span class="p">:</span>
-
                 <span class="c1"># parse index and range of nearest range gate</span>
                 <span class="n">idx</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">slc</span><span class="o">.</span><span class="n">start</span><span class="p">,</span> <span class="n">slc</span><span class="o">.</span><span class="n">start</span> <span class="o">+</span> <span class="n">n</span><span class="p">)</span>
                 <span class="n">idx_near</span><span class="p">[</span><span class="n">ray</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span><span class="o">.</span><span class="n">start</span>
@@ -1791,9 +1788,7 @@
 
         <span class="c1"># far range gate boundary condition</span>
         <span class="k">for</span> <span class="n">slc</span> <span class="ow">in</span> <span class="nb">reversed</span><span class="p">(</span><span class="n">regions</span><span class="p">):</span>
-
             <span class="k">if</span> <span class="n">slc</span><span class="o">.</span><span class="n">stop</span> <span class="o">-</span> <span class="n">slc</span><span class="o">.</span><span class="n">start</span> <span class="o">&gt;=</span> <span class="n">n</span><span class="p">:</span>
-
                 <span class="c1"># parse index and range of furthest range gate</span>
                 <span class="n">idx</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="n">slc</span><span class="o">.</span><span class="n">stop</span> <span class="o">-</span> <span class="n">n</span><span class="p">,</span> <span class="n">slc</span><span class="o">.</span><span class="n">stop</span><span class="p">)</span>
                 <span class="n">idx_far</span><span class="p">[</span><span class="n">ray</span><span class="p">]</span> <span class="o">=</span> <span class="n">idx</span><span class="o">.</span><span class="n">stop</span>
@@ -1824,7 +1819,6 @@
 
     <span class="c1"># skip the check if there are no valid values</span>
     <span class="k">if</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;check_outliers&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">phi_near_valid</span><span class="o">.</span><span class="n">size</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">):</span>
-
         <span class="c1"># bin and count near range boundary condition values, i.e., create</span>
         <span class="c1"># a distribution of values</span>
         <span class="c1"># the default bin width is 5 deg</span>
@@ -1871,7 +1865,6 @@
             <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Estimated system phase offset: </span><span class="si">{</span><span class="n">system_phase_offset</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> deg&quot;</span><span class="p">)</span>
 
         <span class="k">for</span> <span class="n">ray</span><span class="p">,</span> <span class="n">bc</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">phi_near</span><span class="p">):</span>
-
             <span class="c1"># if near range boundary condition does not draw from system phase</span>
             <span class="c1"># distribution then set it to the system phase offset</span>
             <span class="k">if</span> <span class="n">bc</span> <span class="o">&lt;</span> <span class="n">left_edge</span> <span class="ow">or</span> <span class="n">bc</span> <span class="o">&gt;</span> <span class="n">right_edge</span><span class="p">:</span>

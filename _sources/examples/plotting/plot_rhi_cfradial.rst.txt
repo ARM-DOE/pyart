@@ -25,7 +25,7 @@ Create a multiple panel RHI plot from a CF/Radial file
 An example which creates a multiple panel RHI plot of a CF/Radial file using
 a RadarDisplay object.
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-63
+.. GENERATED FROM PYTHON SOURCE LINES 10-62
 
 
 
@@ -66,7 +66,6 @@ a RadarDisplay object.
     nplots = radar.nsweeps
 
     for snum in radar.sweep_number["data"]:
-
         fixed_angle = radar.fixed_angle["data"][snum]
         title = "HSRHI Az=%.3f" % (fixed_angle)
         ax = fig.add_subplot(nplots, 1, snum + 1)
@@ -97,7 +96,7 @@ a RadarDisplay object.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  3.080 seconds)
+   **Total running time of the script:** ( 0 minutes  2.483 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_rhi_cfradial.py:

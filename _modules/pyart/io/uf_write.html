@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.uf_write &#8212; Py-ART 1.15.0.post1 documentation</title>
+    <title>pyart.io.uf_write &#8212; Py-ART 1.15.0.post2 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -333,7 +333,6 @@
     <span class="p">)</span>
 
     <span class="k">for</span> <span class="n">ray_num</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">):</span>
-
         <span class="n">ray_bytes</span> <span class="o">=</span> <span class="n">raycreator</span><span class="o">.</span><span class="n">make_ray</span><span class="p">(</span><span class="n">ray_num</span><span class="p">)</span>
         <span class="n">pad</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="sa">b</span><span class="s2">&quot;&gt;i&quot;</span><span class="p">,</span> <span class="n">raycreator</span><span class="o">.</span><span class="n">record_length</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
 
@@ -355,7 +354,6 @@
 
     <span class="n">field_mapping</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">radar_field</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-
         <span class="k">if</span> <span class="n">radar_field</span> <span class="ow">in</span> <span class="n">exclude_fields</span><span class="p">:</span>
             <span class="k">continue</span>
 
@@ -550,7 +548,6 @@
         <span class="n">ray</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_field_position</span><span class="p">()</span>
 
         <span class="k">for</span> <span class="n">field_info</span> <span class="ow">in</span> <span class="n">field_positions</span><span class="p">:</span>
-
             <span class="n">data_type</span> <span class="o">=</span> <span class="n">field_info</span><span class="p">[</span><span class="s2">&quot;data_type&quot;</span><span class="p">]</span>
             <span class="n">offset</span> <span class="o">=</span> <span class="n">field_info</span><span class="p">[</span><span class="s2">&quot;offset_field_header&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">19</span>
             <span class="n">radar_field</span> <span class="o">=</span> <span class="n">field_info</span><span class="p">[</span><span class="s2">&quot;radar_field&quot;</span><span class="p">]</span>

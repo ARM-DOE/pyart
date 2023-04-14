@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
 
-    <title>Visualizing Severe Weather in Wisconsin &#8212; Py-ART 1.15.0.post1 documentation</title>
+    <title>Visualizing Severe Weather in Wisconsin &#8212; Py-ART 1.15.0.post2 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -224,9 +224,9 @@
   >
    
   <a href="../../blog/tag/visualization.html">visualization</a>   
+  <a href="../../blog/tag/nexrad.html">NEXRAD</a>   
   <a href="../../blog/tag/severe-weather.html">severe-weather</a>   
-  <a href="../../blog/tag/matplotlib.html">matplotlib</a>   
-  <a href="../../blog/tag/nexrad.html">NEXRAD</a>  
+  <a href="../../blog/tag/matplotlib.html">matplotlib</a>  
 </li>
  
 </ul>
@@ -634,7 +634,6 @@ Archive:  tl_2016_us_primaryroads.zip
     <span class="n">right_field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
     <span class="n">plot_config</span><span class="o">=</span><span class="n">plot_configuration</span><span class="p">,</span>
 <span class="p">):</span>
-
     <span class="c1"># Read the radar data</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;s3://</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
@@ -642,7 +641,6 @@ Archive:  tl_2016_us_primaryroads.zip
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">extract_sweeps</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
     <span class="k">if</span> <span class="s2">&quot;velocity&quot;</span> <span class="ow">in</span> <span class="p">[</span><span class="n">left_field</span><span class="p">,</span> <span class="n">right_field</span><span class="p">]:</span>
-
         <span class="c1"># Dealias the radial velocities, using a reflectivity threshold to only look at precip regions</span>
         <span class="n">nyq</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
@@ -659,7 +657,6 @@ Archive:  tl_2016_us_primaryroads.zip
     <span class="c1"># Create a plot number to iterate over</span>
     <span class="n">plot_number</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="p">(</span><span class="n">left_field</span><span class="p">,</span> <span class="n">right_field</span><span class="p">):</span>
-
         <span class="c1"># Use the configuration for the field</span>
         <span class="n">config</span> <span class="o">=</span> <span class="n">plot_config</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
 

@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.correct.phase_proc &#8212; Py-ART 1.15.0.post1 documentation</title>
+    <title>pyart.correct.phase_proc &#8212; Py-ART 1.15.0.post2 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -1223,7 +1223,6 @@
         <span class="n">s</span><span class="o">.</span><span class="n">logLevel</span> <span class="o">=</span> <span class="mi">0</span>
 
     <span class="k">for</span> <span class="n">raynum</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_rays</span><span class="p">):</span>
-
         <span class="c1"># set new B_vector values for actual ray</span>
         <span class="n">s</span><span class="o">.</span><span class="n">setRowLowerArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">B_vectors</span><span class="p">[</span><span class="n">raynum</span><span class="p">])))</span>
         <span class="c1"># set new weights (objectives) for actual ray</span>
@@ -1738,7 +1737,6 @@
     <span class="n">cordata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">my_phidp</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
     <span class="n">all_non_meteo</span> <span class="o">=</span> <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span>
     <span class="k">for</span> <span class="n">radial</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">my_phidp</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-
         <span class="c1"># deterimine non meteo from gatefilter CHANGED</span>
         <span class="n">notmeteo</span> <span class="o">=</span> <span class="n">all_non_meteo</span><span class="p">[</span><span class="n">radial</span><span class="p">,</span> <span class="p">:]</span>
         <span class="n">x_ma</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">notmeteo</span><span class="p">,</span> <span class="n">my_phidp</span><span class="p">[</span><span class="n">radial</span><span class="p">,</span> <span class="p">:])</span>
