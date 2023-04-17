@@ -2,7 +2,7 @@
 Generate a Cartesian grid by mapping from radar gates onto the grid.
 
 """
-
+import gc
 import warnings
 
 import numpy as np
@@ -185,6 +185,8 @@ def map_gates_to_grid(
         roi_array = np.empty(grid_shape, dtype=np.float32)
         gatemapper.find_roi_for_grid(roi_array, roi_func)
         grids["ROI"] = roi_array
+
+    gc.collect()
     return grids
 
 
