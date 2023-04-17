@@ -168,13 +168,6 @@ pull the coordinate information from a dictionary found within Py-ART.
 
 
 
-.. rst-class:: sphx-glr-script-out
-
- .. code-block:: none
-
-    /home/runner/work/pyart/pyart/pyart/io/nexrad_archive.py:231: UserWarning: Gate spacing is not constant, interpolating data in scans [0, 2, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] for moment REF.
-      warnings.warn(
-
 
 
 
@@ -249,7 +242,7 @@ Everything now looks correct as this is in Handford CA!
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  12.291 seconds)
+   **Total running time of the script:** ( 0 minutes  12.777 seconds)
 
 
 .. _sphx_glr_download_examples_io_plot_older_nexrad_data_aws.py:
