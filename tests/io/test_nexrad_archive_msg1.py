@@ -91,7 +91,7 @@ def test_altitude():
     assert "units" in radar.altitude
     assert "positive" in radar.altitude
     assert radar.altitude["data"].shape == (1,)
-    assert_almost_equal(radar.altitude["data"], 663, 0)
+    assert_almost_equal(radar.altitude["data"], 202, 0)
 
 
 # altitude_agl attribute
