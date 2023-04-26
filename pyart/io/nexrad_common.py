@@ -24,6 +24,10 @@ def get_nexrad_location(station):
 
     """
     loc = NEXRAD_LOCATIONS[station.upper()]
+
+    # Convert from feet to meters for elevation units
+    loc["elev"] = loc["elev"] * 0.3048
+
     return loc["lat"], loc["lon"], loc["elev"]
 
 
