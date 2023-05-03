@@ -324,7 +324,7 @@ def read_odim_h5(
         _time = filemetadata("time")
         if ("startazT" in ds1_how) and ("stopazT" in ds1_how):
             # average between startazT and stopazT
-            t_data = np.empty((total_rays,), dtype="float32")
+            t_data = np.empty((total_rays,), dtype="float64")
             for dset, start, stop in zip(datasets, ssri, seri):
                 t_start = hfile[dset]["how"].attrs["startazT"]
                 t_stop = hfile[dset]["how"].attrs["stopazT"]
