@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.aux_io.odim_h5 &#8212; Py-ART 1.15.0.post4 documentation</title>
+    <title>pyart.aux_io.odim_h5 &#8212; Py-ART 1.15.0.post5 documentation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="../../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -544,7 +544,7 @@
         <span class="n">_time</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;startazT&quot;</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;stopazT&quot;</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">):</span>
             <span class="c1"># average between startazT and stopazT</span>
-            <span class="n">t_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">total_rays</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+            <span class="n">t_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">total_rays</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">dset</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">ssri</span><span class="p">,</span> <span class="n">seri</span><span class="p">):</span>
                 <span class="n">t_start</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">&quot;how&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;startazT&quot;</span><span class="p">]</span>
                 <span class="n">t_stop</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">&quot;how&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;stopazT&quot;</span><span class="p">]</span>
