@@ -25,14 +25,15 @@ dependencies:
   - glpk
   - cftime
   - shapely
+  - open-radar-data
+  - myst-nb
+  - ablog
+  - pydata-sphinx-theme
+  - sphinx-gallery
+  - sphinx-design
+  - sphinx-copybutton
+  - nbsphinx
   - pip
   - pip:
-      - git+https://github.com/openradar/open-radar-data
-      - pydata-sphinx-theme<0.9.0
-      - sphinx_gallery
-      - sphinx-copybutton
-      - myst_nb
-      - ablog
-      - nbsphinx
       - pooch
       - versioneer
