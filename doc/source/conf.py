@@ -16,9 +16,12 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
+from pathlib import Path
+
+# cwd = Path.cwd().resolve()
+# sys.path.insert(0, os.path.abspath('../../pyart'))
 
 
 # -- General configuration ------------------------------------------------
@@ -47,6 +50,7 @@ extensions = [
     "sphinx_copybutton",
     "sphinx_gallery.gen_gallery",
     "sphinx_gallery.load_style",
+    "sphinx_design",
     "nbsphinx",
     "myst_nb",
     "ablog",
@@ -71,6 +75,7 @@ autoclass_content = "both"
 
 autosummary_generate = True
 autosummary_imported_members = True
+autodoc_typehints = "description"
 
 # Otherwise, the Return parameter list looks different from the Parameters list
 napoleon_use_rtype = False
@@ -146,7 +151,7 @@ html_theme = "pydata_sphinx_theme"
 # documentation.
 #
 html_theme_options = {
-    "google_analytics_id": "G-JJEG3CV376",
+    "analytics": {"google_analytics_id": "G-JJEG3CV376"},
     "github_url": "https://github.com/ARM-DOE/pyart",
     "twitter_url": "https://twitter.com/Py_ART",
 }
@@ -188,7 +193,7 @@ html_sidebars = {
 }
 
 # Setup the blog portion
-blog_baseurl = "mgrover1.github.io/pyart/"
+blog_baseurl = "arm-doe.github.io/pyart/"
 blog_title = "PyART Blog"
 blog_path = "blog"
 fontawesome_included = True
@@ -212,6 +217,7 @@ html_context = {
     "github_user": "ARM-DOE",
     "github_repo": "pyart",
     "github_version": "main",
+    "default_mode": "light",
 }
 
 # -- Options for HTMLHelp output ------------------------------------------

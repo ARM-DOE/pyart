@@ -19,6 +19,13 @@ The Python ARM Radar Toolkit - Py-ART
 .. toctree::
    :maxdepth: 2
    :hidden:
+   :caption: Developer's Guide
+
+   dev/index.rst
+
+.. toctree::
+   :maxdepth: 2
+   :hidden:
    :caption: Example Gallery
 
    examples/index.rst
@@ -43,6 +50,54 @@ The Python ARM Radar Toolkit - Py-ART
    :caption: Changelog
 
    changelog.md
+
+.. grid:: 1 2 2 2
+    :gutter: 2
+
+    .. grid-item-card:: :octicon:`book;10em`
+        :link: https://projectpythia.org/radar-cookbook
+        :link-type: doc
+        :text-align: center
+
+        **Radar Cookbook**
+
+        The cookbook provides in-depth information on how
+        to use Py-ART (and other open radar packages), including how to get started.
+        This is where to look for general conceptual descriptions on how
+        to use parts of Py-ART, like its support for corrections and gridding.
+
+    .. grid-item-card:: :octicon:`list-unordered;10em`
+        :link: API/index
+        :link-type: doc
+        :text-align: center
+
+        **Reference Guide**
+
+        The reference guide contains detailed descriptions on
+        every function and class within Py-ART. This is where to turn to understand
+        how to use a particular feature or where to search for a specific tool
+
+    .. grid-item-card:: :octicon:`terminal;10em`
+        :link: dev/index
+        :link-type: doc
+        :text-align: center
+
+        **Developer Guide**
+
+        Want to help make Py-ART better? Found something
+        that's not working quite right? You can find instructions on how to
+        contribute to Py-ART here. You can also find detailed descriptions on
+        tools useful for developing Py-ART.
+
+    .. grid-item-card:: :octicon:`graph;10em`
+        :link: examples/index
+        :link-type: doc
+        :text-align: center
+
+        **Example Gallery**
+
+        Check out Py-ART's gallery of examples which contains
+        sample code demonstrating various parts of Py-ART's functionality.
 
 What is Py-ART?
 ===============
