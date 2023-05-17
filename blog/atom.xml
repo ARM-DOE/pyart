@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
   <id>arm-doe.github.io/pyart/</id>
   <title>PyART Blog</title>
-  <updated>2023-05-16T13:13:23.618076+00:00</updated>
+  <updated>2023-05-17T15:53:55.274664+00:00</updated>
   <link href="arm-doe.github.io/pyart/"/>
   <link href="arm-doe.github.io/pyart/blog/atom.xml" rel="self"/>
-  <generator uri="https://ablog.readthedocs.io/" version="0.11.3">ABlog</generator>
+  <generator uri="https://ablog.readthedocs.io/" version="0.11.4.post1">ABlog</generator>
   <entry>
     <id>arm-doe.github.io/pyart/blog_posts/2023/severe-storms-southern-wisconsin.html</id>
     <title>Plotting Severe Weather in Wisconsin</title>
@@ -13,11 +13,9 @@
     <author>
       <name>Max Grover</name>
     </author>
-    <content type="html">&lt;div class="ablog-post-excerpt docutils container"&gt;
-&lt;p&gt;Last Friday (March 31, 2023), a severe weather outbreak impacted a large portion of the Central United States, including the Upper Midwest. There were a total of:&lt;/p&gt;
+    <content type="html">&lt;p class="ablog-post-excerpt"&gt;&lt;p&gt;Last Friday (March 31, 2023), a severe weather outbreak impacted a large portion of the Central United States, including the Upper Midwest. There were a total of:&lt;/p&gt;
 &lt;p&gt;142 tornado reports&lt;/p&gt;
-&lt;img alt="NWS Milwaukee Radar Image" src="https://www.weather.gov/images/mkx/top-news/2023/4%20Panel%20KMKX%200105z%20April%201%202023%20Delavan%20Lake%20TDS.png" /&gt;
-&lt;/div&gt;
+&lt;img alt="NWS Milwaukee Radar Image" src="https://www.weather.gov/images/mkx/top-news/2023/4%20Panel%20KMKX%200105z%20April%201%202023%20Delavan%20Lake%20TDS.png" /&gt;&lt;/p&gt;
 </content>
     <link href="arm-doe.github.io/pyart/blog_posts/2023/severe-storms-southern-wisconsin.html" rel="alternate"/>
     <summary>Last Friday (March 31, 2023), a severe weather outbreak impacted a large portion of the Central United States, including the Upper Midwest. There were a total of:142 tornado reportsNWS Milwaukee Radar Image</summary>
@@ -32,13 +30,11 @@
     <title>Hail Storm Visualization Using Py-ART and Pandas!</title>
     <updated>2022-11-23T00:00:00+00:00</updated>
     <author>
-      <name>Russ Schumacher</name>
+      <name>Max Grover</name>
     </author>
-    <content type="html">&lt;div class="ablog-post-excerpt docutils container"&gt;
-&lt;p&gt;Within this post, we will walk through how to combine radar and storm report data, creating an animation of the two!&lt;/p&gt;
+    <content type="html">&lt;p class="ablog-post-excerpt"&gt;&lt;p&gt;Within this post, we will walk through how to combine radar and storm report data, creating an animation of the two!&lt;/p&gt;
 &lt;p&gt;On September 7, 2021, a strong line of thunderstorms passed through Southern Wisconsin and Northern Illinois, leaving a trail of hail and wind damage in its path.&lt;/p&gt;
-&lt;img alt="Hail Image" src="https://www.weather.gov/images/mkx/events/2021/Sept_07_Hail/RecapOfSevereStorms.png" /&gt;
-&lt;/div&gt;
+&lt;img alt="Hail Image" src="https://www.weather.gov/images/mkx/events/2021/Sept_07_Hail/RecapOfSevereStorms.png" /&gt;&lt;/p&gt;
 </content>
     <link href="arm-doe.github.io/pyart/blog_posts/2022/hail-analysis-spc.html" rel="alternate"/>
     <summary>Within this post, we will walk through how to combine radar and storm report data, creating an animation of the two!On September 7, 2021, a strong line of thunderstorms passed through Southern Wisconsin and Northern Illinois, leaving a trail of hail and wind damage in its path.Hail Image</summary>
@@ -56,11 +52,9 @@
     <author>
       <name>Bobby Jackson</name>
     </author>
-    <content type="html">&lt;div class="ablog-post-excerpt docutils container"&gt;
-&lt;p&gt;The TRacking Aerosol Convection Interactions (TRACER) field experiment was a U.S. Department of Energy IOP with the goal of studying the lifecycle of convection over Houston as well as potential aerosol impacts on this lifecycle. Houston is uniquely suited for this kind of field experiment where seabreeze convection forms off of the coast of Houston in cleaner air conditions and then approaches the more polluted Houston region. For more information about the TRACER field experiment, click &lt;a class="reference external" href="https://www.arm.gov/research/campaigns/amf2021tracer"&gt;here&lt;/a&gt;.&lt;/p&gt;
+    <content type="html">&lt;p class="ablog-post-excerpt"&gt;&lt;p&gt;The TRacking Aerosol Convection Interactions (TRACER) field experiment was a U.S. Department of Energy IOP with the goal of studying the lifecycle of convection over Houston as well as potential aerosol impacts on this lifecycle. Houston is uniquely suited for this kind of field experiment where seabreeze convection forms off of the coast of Houston in cleaner air conditions and then approaches the more polluted Houston region. For more information about the TRACER field experiment, click &lt;a class="reference external" href="https://www.arm.gov/research/campaigns/amf2021tracer"&gt;here&lt;/a&gt;.&lt;/p&gt;
 &lt;p&gt;This post will show how to plot overlays of Texas A&amp;amp;M University Lightning Mapping Array data over GOES and ARM CSAPR2 data for a case of wildfire smoke entraining into developing convection sampled during July 12 and 13, 2022. In addition, we highlight a case that was tracked by CSAPR2 for 90 minutes on June 17, 2022.&lt;/p&gt;
-&lt;img alt="arm-doe.github.io/pyart/_images/53bb6a0c91c33d045d65f23fabad1966894e643ee93c7442450ec0420d6eda10.png" src="arm-doe.github.io/pyart/_images/53bb6a0c91c33d045d65f23fabad1966894e643ee93c7442450ec0420d6eda10.png" /&gt;
-&lt;/div&gt;
+&lt;img alt="arm-doe.github.io/pyart/_images/53bb6a0c91c33d045d65f23fabad1966894e643ee93c7442450ec0420d6eda10.png" src="arm-doe.github.io/pyart/_images/53bb6a0c91c33d045d65f23fabad1966894e643ee93c7442450ec0420d6eda10.png" /&gt;&lt;/p&gt;
 </content>
     <link href="arm-doe.github.io/pyart/blog_posts/2022/TRACER.html" rel="alternate"/>
     <summary>The TRacking Aerosol Convection Interactions (TRACER) field experiment was a U.S. Department of Energy IOP with the goal of studying the lifecycle of convection over Houston as well as potential aerosol impacts on this lifecycle. Houston is uniquely suited for this kind of field experiment where seabreeze convection forms off of the coast of Houston in cleaner air conditions and then approaches the more polluted Houston region. For more information about the TRACER field experiment, click here.This post will show how to plot overlays of Texas A&amp;M University Lightning Mapping Array data over GOES and ARM CSAPR2 data for a case of wildfire smoke entraining into developing convection sampled during July 12 and 13, 2022. In addition, we highlight a case that was tracked by CSAPR2 for 90 minutes on June 17, 2022.</summary>
@@ -77,11 +71,9 @@
     <author>
       <name>Joe O’Brien</name>
     </author>
-    <content type="html">&lt;div class="ablog-post-excerpt docutils container"&gt;
-&lt;p&gt;The motivation for this blog comes from wanting to change the colorscheme within the default Py-ART documentation images to a more (&lt;a class="reference external" href="https://ntrs.nasa.gov/api/citations/20180004634/downloads/20180004634.pdf"&gt;color vision deficiency friendly color scheme&lt;/a&gt;).&lt;/p&gt;
+    <content type="html">&lt;p class="ablog-post-excerpt"&gt;&lt;p&gt;The motivation for this blog comes from wanting to change the colorscheme within the default Py-ART documentation images to a more (&lt;a class="reference external" href="https://ntrs.nasa.gov/api/citations/20180004634/downloads/20180004634.pdf"&gt;color vision deficiency friendly color scheme&lt;/a&gt;).&lt;/p&gt;
 &lt;p&gt;Here are the images we are working with:&lt;/p&gt;
-&lt;img alt="drawing" src="arm-doe.github.io/pyart/_images/PyART_Docs_Original_PPI_image.png" style="width: 400px;" /&gt;
-&lt;/div&gt;
+&lt;img alt="drawing" src="arm-doe.github.io/pyart/_images/PyART_Docs_Original_PPI_image.png" style="width: 400px;" /&gt;&lt;/p&gt;
 </content>
     <link href="arm-doe.github.io/pyart/blog_posts/2022/first_pullrequest.html" rel="alternate"/>
     <summary>The motivation for this blog comes from wanting to change the colorscheme within the default Py-ART documentation images to a more (color vision deficiency friendly color scheme).Here are the images we are working with:drawing</summary>
@@ -94,11 +86,9 @@
     <author>
       <name>Max Grover</name>
     </author>
-    <content type="html">&lt;div class="ablog-post-excerpt docutils container"&gt;
-&lt;p&gt;The motivation here comes from a thread on Twitter, indicating an issue when plotting NEXRAD Level 3 radial velocity (&lt;code class="docutils literal notranslate"&gt;&lt;span class="pre"&gt;NOU&lt;/span&gt;&lt;/code&gt;).&lt;/p&gt;
+    <content type="html">&lt;p class="ablog-post-excerpt"&gt;&lt;p&gt;The motivation here comes from a thread on Twitter, indicating an issue when plotting NEXRAD Level 3 radial velocity (&lt;code class="docutils literal notranslate"&gt;&lt;span class="pre"&gt;NOU&lt;/span&gt;&lt;/code&gt;).&lt;/p&gt;
 &lt;p&gt;Here is the radar image, plotted by David (&lt;a class="reference external" href="https://twitter.com/dryglick"&gt;&amp;#64;dryglick&lt;/a&gt;):&lt;/p&gt;
-&lt;img alt="drawing" src="arm-doe.github.io/pyart/_images/nexrad-plotting-issue.jpeg" style="width: 400px;" /&gt;
-&lt;/div&gt;
+&lt;img alt="drawing" src="arm-doe.github.io/pyart/_images/nexrad-plotting-issue.jpeg" style="width: 400px;" /&gt;&lt;/p&gt;
 </content>
     <link href="arm-doe.github.io/pyart/blog_posts/2022/plot-nexrad-level3.html" rel="alternate"/>
     <summary>The motivation here comes from a thread on Twitter, indicating an issue when plotting NEXRAD Level 3 radial velocity (NOU).Here is the radar image, plotted by David (@dryglick):drawing</summary>
@@ -115,12 +105,10 @@
     <author>
       <name>Max Grover</name>
     </author>
-    <content type="html">&lt;div class="ablog-post-excerpt docutils container"&gt;
-&lt;p&gt;This notebook will walk through how to utilize existing packages in the Python ecosystem (&lt;code class="docutils literal notranslate"&gt;&lt;span class="pre"&gt;PyART&lt;/span&gt;&lt;/code&gt;, &lt;code class="docutils literal notranslate"&gt;&lt;span class="pre"&gt;Xarray&lt;/span&gt;&lt;/code&gt;, and &lt;code class="docutils literal notranslate"&gt;&lt;span class="pre"&gt;hvPlot&lt;/span&gt;&lt;/code&gt;) to visualize data from a vertically pointing Ka-band radar.&lt;/p&gt;
+    <content type="html">&lt;p class="ablog-post-excerpt"&gt;&lt;p&gt;This notebook will walk through how to utilize existing packages in the Python ecosystem (&lt;code class="docutils literal notranslate"&gt;&lt;span class="pre"&gt;PyART&lt;/span&gt;&lt;/code&gt;, &lt;code class="docutils literal notranslate"&gt;&lt;span class="pre"&gt;Xarray&lt;/span&gt;&lt;/code&gt;, and &lt;code class="docutils literal notranslate"&gt;&lt;span class="pre"&gt;hvPlot&lt;/span&gt;&lt;/code&gt;) to visualize data from a vertically pointing Ka-band radar.&lt;/p&gt;
 &lt;p&gt;By the end of this notebook, you will learn how to create the following visualization:
 &lt;img alt="interactive-kazr-viz" src="arm-doe.github.io/pyart/_images/interactive-kazr-viz.gif" /&gt;&lt;/p&gt;
-&lt;img alt="interactive-kazr-viz" src="arm-doe.github.io/pyart/_images/interactive-kazr-viz.gif" /&gt;
-&lt;/div&gt;
+&lt;img alt="interactive-kazr-viz" src="arm-doe.github.io/pyart/_images/interactive-kazr-viz.gif" /&gt;&lt;/p&gt;
 </content>
     <link href="arm-doe.github.io/pyart/blog_posts/2022/ka-band-pyart-xarray-hvplot.html" rel="alternate"/>
     <summary>This notebook will walk through how to utilize existing packages in the Python ecosystem (PyART, Xarray, and hvPlot) to visualize data from a vertically pointing Ka-band radar.By the end of this notebook, you will learn how to create the following visualization:
@@ -140,10 +128,9 @@ interactive-kazr-vizinteractive-kazr-viz</summary>
     <author>
       <name>Max Grover</name>
     </author>
-    <content type="html">&lt;div class="ablog-post-excerpt docutils container"&gt;
-&lt;p&gt;Hello All!&lt;/p&gt;
+    <content type="html">&lt;p class="ablog-post-excerpt"&gt;&lt;p&gt;Hello All!&lt;/p&gt;
 &lt;p&gt;Welcome to our new documentation page! This is a &lt;strong&gt;new section&lt;/strong&gt; within the docs meant for:&lt;/p&gt;
-&lt;/div&gt;
+&lt;/p&gt;
 </content>
     <link href="arm-doe.github.io/pyart/blog_posts/2022/test.html" rel="alternate"/>
     <summary>Hello All!Welcome to our new documentation page! This is a new section within the docs meant for:</summary>
