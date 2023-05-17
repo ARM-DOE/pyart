@@ -130,7 +130,7 @@ def _vad_calculation_m(velocity_field, azimuth, elevation):
     vals2 = np.vstack((vals, vals))
 
     # Summing non-nan data and creating new array with summed data
-    count = np.sum(np.isnan(sumv) is False, 0)
+    count = np.sum(~np.isnan(sumv), 0)
     count = np.float64(count)
     u_m = np.array([np.nansum(sumv, 0) // (2 * count)])
 
@@ -184,7 +184,7 @@ def _interval_mean(data, current_z, wanted_z):
         for i in range(len(wanted_z))
     ]
     mean_values = np.array(
-        [data[pos_lower[i] : pos_upper[i]].mean() for i in range(len(pos_upper))]
+        [(data[pos_lower[i] : pos_upper[i]]).mean() for i in range(len(pos_upper))]
     )
     return mean_values
 
