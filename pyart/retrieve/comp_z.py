@@ -119,8 +119,7 @@ def composite_reflectivity(radar, field="reflectivity", gatefilter=None):
 
     # since we are using the whole volume scan, report mean time
     dtime = to_datetime(
-        num2date(radar.time["data"], radar.time["units"]).astype(str),
-        format='ISO8601')
+        num2date(radar.time["data"], radar.time["units"]).astype(str), format='ISO8601')
     dtime = dtime.mean()
 
     # return dict, because this is was pyart does with lots of things
