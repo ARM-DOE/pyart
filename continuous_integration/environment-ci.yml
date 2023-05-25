@@ -7,7 +7,7 @@ dependencies:
   - matplotlib
   - gdal
   - netcdf4
-  - pandas<2.0
+  - pandas
   - pytest
   - wradlib
   - cartopy
