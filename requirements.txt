@@ -8,5 +8,5 @@ fsspec
 s3fs
 open_radar_data
 xradar
-pandas<2.0
+pandas
 xarray!=0.21.0

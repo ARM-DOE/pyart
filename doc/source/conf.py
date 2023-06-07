@@ -179,16 +179,16 @@ html_sidebars = {
     "blog": [
         "searchbox.html",
         "sidebar-nav-bs.html",
-        "tagcloud.html",
-        "recentposts.html",
-        "archives.html",
+        "ablog/tagcloud.html",
+        "ablog/recentposts.html",
+        "ablog/archives.html",
     ],
     "blog_posts/*/*": [
         "searchbox.html",
         "sidebar-nav-bs.html",
-        "postcard.html",
-        "recentposts.html",
-        "archives.html",
+        "ablog/postcard.html",
+        "ablog/recentposts.html",
+        "ablog/archives.html",
     ],
 }
 

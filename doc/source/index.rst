@@ -56,7 +56,6 @@ The Python ARM Radar Toolkit - Py-ART
 
     .. grid-item-card:: :octicon:`book;10em`
         :link: https://projectpythia.org/radar-cookbook
-        :link-type: doc
         :text-align: center
 
         **Radar Cookbook**
