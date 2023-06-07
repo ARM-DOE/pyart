@@ -27,7 +27,6 @@ dependencies:
   - shapely
   - open-radar-data
   - myst-nb
-  - ablog
   - pydata-sphinx-theme
   - sphinx-gallery
   - sphinx-design
@@ -37,3 +36,4 @@ dependencies:
   - pip:
       - pooch
       - versioneer
+      - ablog
