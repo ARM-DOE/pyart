@@ -35,14 +35,11 @@ jobs:
 
       # Install dependencies
       - name: Setup Conda Environment
-        uses: conda-incubator/setup-miniconda@v2
+        uses: mamba-org/setup-micromamba@v1
         with:
           environment-file: continuous_integration/environment-ci.yml
           activate-environment: pyart-dev
-          auto-activate-base: false
-          mamba-version: '*'
-          use-mamba: true
-          miniforge-variant: Mambaforge
+          cache-downloads: true
           python-version: ${{ matrix.python-version }}
 
       - name: Fetch all history for all tags and branches
