@@ -375,8 +375,6 @@ def _revised_conv_strat(
     refl = np.ma.masked_invalid(refl)
     # Compute background radius
     refl_bkg = calc_bkg_intensity(refl, bkg_mask_array, dB_averaging, calc_thres)
-    # mask reflectivity field
-    refl = np.ma.masked_where(refl_bkg.mask, refl)
 
     # Get convective core array from cosine scheme, or scalar scheme
     if use_cosine:
@@ -623,13 +621,14 @@ def convcore_cos_scheme(
     zDiff[zDiff < 0] = 0  # where difference less than zero, set to zero
     zDiff[refl_bkg < 0] = max_diff  # where background less than zero, set to max. diff
 
-    # set values
-    conv_core_array[
-        refl >= always_core_thres
-    ] = CS_CORE  # where Z is greater than always_core_thres, set to core
-    conv_core_array[
-        (refl - refl_bkg) >= zDiff
-    ] = CS_CORE  # where difference exceeeds minimum, set to core
+    # set core values
+    # where refl >= always_core_thres and where difference exceeds minimum
+    core_elements = np.logical_or((refl >= always_core_thres), (refl-refl_bkg) >= zDiff)
+    core_elements = core_elements.filled(0)
+    conv_core_array[core_elements] = CS_CORE
+
+    # mask by refl array
+    conv_core_array = np.ma.masked_where(refl.mask, conv_core_array)
 
     return conv_core_array
 
@@ -667,20 +666,21 @@ def convcore_scalar_scheme(
     # calculate zDiff for entire array
     # if addition, add difference. Else, multiply difference
     if use_addition:
-        zDiff = max_diff + refl_bkg
+        zDiff = (max_diff + refl_bkg) - refl_bkg
     else:
-        zDiff = max_diff * refl_bkg
+        zDiff = (max_diff * refl_bkg) - refl_bkg
 
     zDiff[zDiff < 0] = 0  # where difference less than zero, set to zero
     zDiff[refl_bkg < 0] = 0  # where background less than zero, set to zero
 
-    # set values
-    conv_core_array[
-        refl >= always_core_thres
-    ] = CS_CORE  # where Z is greater than always_core_thres, set to core
-    conv_core_array[
-        refl >= zDiff
-    ] = CS_CORE  # where difference exceeeds minimum, set to core
+    # set core values
+    # where refl >= always_core_thres and where difference exceeds minimum
+    core_elements = np.logical_or((refl >= always_core_thres), (refl-refl_bkg) >= zDiff)
+    core_elements = core_elements.filled(0)
+    conv_core_array[core_elements] = CS_CORE
+
+    # mask by refl array
+    conv_core_array = np.ma.masked_where(refl.mask, conv_core_array)
 
     return conv_core_array
 
