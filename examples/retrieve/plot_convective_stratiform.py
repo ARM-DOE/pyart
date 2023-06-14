@@ -54,10 +54,12 @@ import pyart
 pyart.graph.plot_convstrat_scheme(
     always_core_thres=30, use_cosine=True, max_diff=5, zero_diff_cos_val=45
 )
+plt.show()
 # when zero_diff_cos_val is greater than always_core_thres, the difference becomes zero at the zero_diff_cos_val
 pyart.graph.plot_convstrat_scheme(
     always_core_thres=55, use_cosine=True, max_diff=5, zero_diff_cos_val=45
 )
+plt.show()
 # alternatively, we can use a simpler scalar difference instead of a cosine scheme
 pyart.graph.plot_convstrat_scheme(
     always_core_thres=40,
@@ -67,6 +69,7 @@ pyart.graph.plot_convstrat_scheme(
     use_addition=True,
     scalar_diff=2,
 )
+plt.show()
 # if you are interested in picking up weak features, you can also use the scalar difference as a multiplier instead,
 # so very weak features do not have to be that different from the background to be classified as convective.
 pyart.graph.plot_convstrat_scheme(
@@ -77,6 +80,7 @@ pyart.graph.plot_convstrat_scheme(
     use_addition=False,
     scalar_diff=2,
 )
+plt.show()
 
 ######################################
 # Once the cores are identified, there is an option to remove speckles (``remove_small_objects``) smaller than a  given
