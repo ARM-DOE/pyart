@@ -623,7 +623,9 @@ def convcore_cos_scheme(
 
     # set core values
     # where refl >= always_core_thres and where difference exceeds minimum
-    core_elements = np.logical_or((refl >= always_core_thres), (refl-refl_bkg) >= zDiff)
+    core_elements = np.logical_or(
+        (refl >= always_core_thres), (refl-refl_bkg) >= zDiff
+    )
     core_elements = core_elements.filled(0)
     conv_core_array[core_elements] = CS_CORE
 
@@ -675,7 +677,9 @@ def convcore_scalar_scheme(
 
     # set core values
     # where refl >= always_core_thres and where difference exceeds minimum
-    core_elements = np.logical_or((refl >= always_core_thres), (refl-refl_bkg) >= zDiff)
+    core_elements = np.logical_or(
+        (refl >= always_core_thres), (refl-refl_bkg) >= zDiff
+    )
     core_elements = core_elements.filled(0)
     conv_core_array[core_elements] = CS_CORE
 
