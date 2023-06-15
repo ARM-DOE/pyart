@@ -50,14 +50,19 @@ import pyart
 # ``always_core_thres`` > ``zero_diff_cos_val`` then all values greater than ``zero_diff_cos_val`` will be considered a
 # convective core. We plot some examples of the schemes below:
 
-# plot cosine scheme
+######################################
+# Example of the cosine scheme:
 pyart.graph.plot_convstrat_scheme(
     always_core_thres=30, use_cosine=True, max_diff=5, zero_diff_cos_val=45
 )
+
+######################################
 # when zero_diff_cos_val is greater than always_core_thres, the difference becomes zero at the zero_diff_cos_val
 pyart.graph.plot_convstrat_scheme(
     always_core_thres=55, use_cosine=True, max_diff=5, zero_diff_cos_val=45
 )
+
+######################################
 # alternatively, we can use a simpler scalar difference instead of a cosine scheme
 pyart.graph.plot_convstrat_scheme(
     always_core_thres=40,
@@ -67,6 +72,8 @@ pyart.graph.plot_convstrat_scheme(
     use_addition=True,
     scalar_diff=2,
 )
+
+######################################
 # if you are interested in picking up weak features, you can also use the scalar difference as a multiplier instead,
 # so very weak features do not have to be that different from the background to be classified as convective.
 pyart.graph.plot_convstrat_scheme(
@@ -154,11 +161,6 @@ projection = ccrs.AlbersEqualArea(
     central_latitude=radar.latitude["data"][0],
     central_longitude=radar.longitude["data"][0],
 )
-######################################
-# Note how the convective stratiform field has less data around the edges compared to the reflectivity
-# field. This is because the function is designed to only compute the background radius where the footprint has 75%
-# of data, so along the edges there is not enough data to fulfill this requirement. The footprint percentage can be
-# changed using the variable ``calc_thres``.
 
 # plot
 plt.figure(figsize=(10, 4))

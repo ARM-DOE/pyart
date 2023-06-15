@@ -15,7 +15,7 @@ def plot_convstrat_scheme(
 
     Parameters
     ----------
-     always_core_thres : float
+    always_core_thres : float
         All values above this threshold considered to be convective
     use_cosine : bool
         Boolean used to determine if cosine scheme should be used for identifying convective cores (True) or a scalar
