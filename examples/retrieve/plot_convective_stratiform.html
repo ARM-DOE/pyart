@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Convective-Stratiform classification &#8212; Py-ART 1.15.1.post2 documentation</title>
+    <title>Convective-Stratiform classification &#8212; Py-ART 1.15.1.post3 documentation</title>
   
   
   
@@ -140,7 +140,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.15.1.post2 documentation</p>
+    <p class="title logo__title">Py-ART 1.15.1.post3 documentation</p>
   
 </a></div>
     
@@ -576,16 +576,20 @@ and the background is zero, or where the cosine function crosses the x-axis. Not
 all values greater than <code class="docutils literal notranslate"><span class="pre">always_core_thres</span></code> will be considered a convective core. If
 <code class="docutils literal notranslate"><span class="pre">always_core_thres</span></code> &gt; <code class="docutils literal notranslate"><span class="pre">zero_diff_cos_val</span></code> then all values greater than <code class="docutils literal notranslate"><span class="pre">zero_diff_cos_val</span></code> will be considered a
 convective core. We plot some examples of the schemes below:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot cosine scheme</span>
-<span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">plot_convstrat_scheme</span><span class="p">(</span>
+<p>Example of the cosine scheme:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">plot_convstrat_scheme</span><span class="p">(</span>
     <span class="n">always_core_thres</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">use_cosine</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_diff</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">zero_diff_cos_val</span><span class="o">=</span><span class="mi">45</span>
 <span class="p">)</span>
-<span class="c1"># when zero_diff_cos_val is greater than always_core_thres, the difference becomes zero at the zero_diff_cos_val</span>
-<span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">plot_convstrat_scheme</span><span class="p">(</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_plot_convective_stratiform_001.png" srcset="../../_images/sphx_glr_plot_convective_stratiform_001.png" alt="Convective Stratiform Equation" class = "sphx-glr-single-img"/><p>when zero_diff_cos_val is greater than always_core_thres, the difference becomes zero at the zero_diff_cos_val</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">plot_convstrat_scheme</span><span class="p">(</span>
     <span class="n">always_core_thres</span><span class="o">=</span><span class="mi">55</span><span class="p">,</span> <span class="n">use_cosine</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">max_diff</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">zero_diff_cos_val</span><span class="o">=</span><span class="mi">45</span>
 <span class="p">)</span>
-<span class="c1"># alternatively, we can use a simpler scalar difference instead of a cosine scheme</span>
-<span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">plot_convstrat_scheme</span><span class="p">(</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_plot_convective_stratiform_002.png" srcset="../../_images/sphx_glr_plot_convective_stratiform_002.png" alt="Convective Stratiform Equation" class = "sphx-glr-single-img"/><p>alternatively, we can use a simpler scalar difference instead of a cosine scheme</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">plot_convstrat_scheme</span><span class="p">(</span>
     <span class="n">always_core_thres</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
     <span class="n">use_cosine</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">max_diff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -593,9 +597,11 @@ convective core. We plot some examples of the schemes below:</p>
     <span class="n">use_addition</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">scalar_diff</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="c1"># if you are interested in picking up weak features, you can also use the scalar difference as a multiplier instead,</span>
-<span class="c1"># so very weak features do not have to be that different from the background to be classified as convective.</span>
-<span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">plot_convstrat_scheme</span><span class="p">(</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_plot_convective_stratiform_003.png" srcset="../../_images/sphx_glr_plot_convective_stratiform_003.png" alt="Convective Stratiform Equation" class = "sphx-glr-single-img"/><p>if you are interested in picking up weak features, you can also use the scalar difference as a multiplier instead,
+so very weak features do not have to be that different from the background to be classified as convective.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">plot_convstrat_scheme</span><span class="p">(</span>
     <span class="n">always_core_thres</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
     <span class="n">use_cosine</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">max_diff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -605,7 +611,7 @@ convective core. We plot some examples of the schemes below:</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_convective_stratiform_001.png" srcset="../../_images/sphx_glr_plot_convective_stratiform_001.png" alt="Convective Stratiform Equation" class = "sphx-glr-single-img"/><p>Once the cores are identified, there is an option to remove speckles (<code class="docutils literal notranslate"><span class="pre">remove_small_objects</span></code>) smaller than a  given
+<img src="../../_images/sphx_glr_plot_convective_stratiform_004.png" srcset="../../_images/sphx_glr_plot_convective_stratiform_004.png" alt="Convective Stratiform Equation" class = "sphx-glr-single-img"/><p>Once the cores are identified, there is an option to remove speckles (<code class="docutils literal notranslate"><span class="pre">remove_small_objects</span></code>) smaller than a  given
 size (<code class="docutils literal notranslate"><span class="pre">min_km2_size</span></code>).
 After the convective cores are identified, We then incorporate convective radii using
 <code class="docutils literal notranslate"><span class="pre">val_for_max_conv_rad</span></code> and <code class="docutils literal notranslate"><span class="pre">max_conv_rad_km</span></code>. The convective radii act as a dilation and are used to classify
@@ -677,13 +683,8 @@ points.</p>
     <span class="n">central_latitude</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span></a><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
     <span class="n">central_longitude</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span></a><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
 <span class="p">)</span>
-</pre></div>
-</div>
-<p>Note how the convective stratiform field has less data around the edges compared to the reflectivity
-field. This is because the function is designed to only compute the background radius where the footprint has 75%
-of data, so along the edges there is not enough data to fulfill this requirement. The footprint percentage can be
-changed using the variable <code class="docutils literal notranslate"><span class="pre">calc_thres</span></code>.</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># plot</span>
+
+<span class="c1"># plot</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 <span class="n">ax1</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot_grid</span><span class="p">(</span>
@@ -708,7 +709,7 @@ changed using the variable <code class="docutils literal notranslate"><span clas
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_convective_stratiform_002.png" srcset="../../_images/sphx_glr_plot_convective_stratiform_002.png" alt="xsapr-sg 0.0 km 2011-05-20T06:42:11Z  Equivalent reflectivity factor, xsapr-sg 0.0 km 2011-05-20T06:42:11Z  Convsf" class = "sphx-glr-single-img"/><p>In addition to the default convective-stratiform classification, the function also returns an underestimate
+<img src="../../_images/sphx_glr_plot_convective_stratiform_005.png" srcset="../../_images/sphx_glr_plot_convective_stratiform_005.png" alt="xsapr-sg 0.0 km 2011-05-20T06:42:11Z  Equivalent reflectivity factor, xsapr-sg 0.0 km 2011-05-20T06:42:11Z  Convsf" class = "sphx-glr-single-img"/><p>In addition to the default convective-stratiform classification, the function also returns an underestimate
 (convsf_under) and an overestimate (convsf_over) to take into consideration the uncertainty when choosing
 classification parameters. The under and overestimate use the same parameters, but vary the input field by a
 certain value (default is 5 dBZ, can be changed with <code class="docutils literal notranslate"><span class="pre">estimate_offset</span></code>). The estimation can be turned off (
@@ -752,7 +753,7 @@ certain value (default is 5 dBZ, can be changed with <code class="docutils liter
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_convective_stratiform_003.png" srcset="../../_images/sphx_glr_plot_convective_stratiform_003.png" alt="Best estimate, Underestimate, Overestimate" class = "sphx-glr-single-img"/><p><strong>Tropical example</strong></p>
+<img src="../../_images/sphx_glr_plot_convective_stratiform_006.png" srcset="../../_images/sphx_glr_plot_convective_stratiform_006.png" alt="Best estimate, Underestimate, Overestimate" class = "sphx-glr-single-img"/><p><strong>Tropical example</strong></p>
 <p>Let’s get a NEXRAD file from Hurricane Ian</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read in file</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nexrad_file</span></a> <span class="o">=</span> <span class="s2">&quot;s3://noaa-nexrad-level2/2022/09/28/KTBW/KTBW20220928_190142_V06&quot;</span>
@@ -837,7 +838,7 @@ certain value (default is 5 dBZ, can be changed with <code class="docutils liter
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_convective_stratiform_004.png" srcset="../../_images/sphx_glr_plot_convective_stratiform_004.png" alt="KTBW 0.0 km 2022-09-28T19:01:42Z  Equivalent reflectivity factor, KTBW 0.0 km 2022-09-28T19:01:42Z  Convsf" class = "sphx-glr-single-img"/><p><strong>Winter storm example with image muting</strong></p>
+<img src="../../_images/sphx_glr_plot_convective_stratiform_007.png" srcset="../../_images/sphx_glr_plot_convective_stratiform_007.png" alt="KTBW 0.0 km 2022-09-28T19:01:42Z  Equivalent reflectivity factor, KTBW 0.0 km 2022-09-28T19:01:42Z  Convsf" class = "sphx-glr-single-img"/><p><strong>Winter storm example with image muting</strong></p>
 <p>Here is a final example of the convective stratiform classification using an example from a winter storm. Before
 doing the classification, we image mute the reflectivity to remove regions with melting or mixed precipitation. We
 then rescale the reflectivity to snow rate (Rasumussen et al. 2003). We recommend using a rescaled reflectivity
@@ -954,7 +955,7 @@ reflecitivity.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_convective_stratiform_005.png" srcset="../../_images/sphx_glr_plot_convective_stratiform_005.png" alt="KOKX 0.0 km 2021-02-07T16:14:13Z  Snow rate, KOKX 0.0 km 2021-02-07T16:14:13Z  Convsf" class = "sphx-glr-single-img"/></section>
+<img src="../../_images/sphx_glr_plot_convective_stratiform_008.png" srcset="../../_images/sphx_glr_plot_convective_stratiform_008.png" alt="KOKX 0.0 km 2021-02-07T16:14:13Z  Snow rate, KOKX 0.0 km 2021-02-07T16:14:13Z  Convsf" class = "sphx-glr-single-img"/></section>
 <section id="summary-of-recommendations-and-best-practices">
 <h2>Summary of recommendations and best practices<a class="headerlink" href="#summary-of-recommendations-and-best-practices" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
@@ -980,7 +981,7 @@ KWAJEX. J. Appl. Meteor., 44, 385-415. <a class="reference external" href="https
 and M. Xu, 2003: Snow Nowcasting Using a Real-Time Correlation of Radar
 Reflectivity with Snow Gauge Accumulation. J. Appl. Meteorol. Climatol., 42, 20–36.
 <a class="reference external" href="https://doi.org/10.1175/1520-0450(2003)042%3C0020:SNUART%3E2.0.CO;2">https://doi.org/10.1175/1520-0450(2003)042%3C0020:SNUART%3E2.0.CO;2</a></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  39.841 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  27.561 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-retrieve-plot-convective-stratiform-py">
 <div class="sphx-glr-download sphx-glr-download-python docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/1d62df8aa64385317dcd707d9a779b45/plot_convective_stratiform.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_convective_stratiform.py</span></code></a></p>

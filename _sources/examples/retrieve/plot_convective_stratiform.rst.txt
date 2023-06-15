@@ -81,37 +81,16 @@ all values greater than ``always_core_thres`` will be considered a convective co
 ``always_core_thres`` > ``zero_diff_cos_val`` then all values greater than ``zero_diff_cos_val`` will be considered a
 convective core. We plot some examples of the schemes below:
 
-.. GENERATED FROM PYTHON SOURCE LINES 52-81
+.. GENERATED FROM PYTHON SOURCE LINES 54-55
+
+Example of the cosine scheme:
+
+.. GENERATED FROM PYTHON SOURCE LINES 55-59
 
 .. code-block:: default
 
-
-    # plot cosine scheme
     pyart.graph.plot_convstrat_scheme(
         always_core_thres=30, use_cosine=True, max_diff=5, zero_diff_cos_val=45
-    )
-    # when zero_diff_cos_val is greater than always_core_thres, the difference becomes zero at the zero_diff_cos_val
-    pyart.graph.plot_convstrat_scheme(
-        always_core_thres=55, use_cosine=True, max_diff=5, zero_diff_cos_val=45
-    )
-    # alternatively, we can use a simpler scalar difference instead of a cosine scheme
-    pyart.graph.plot_convstrat_scheme(
-        always_core_thres=40,
-        use_cosine=False,
-        max_diff=None,
-        zero_diff_cos_val=None,
-        use_addition=True,
-        scalar_diff=2,
-    )
-    # if you are interested in picking up weak features, you can also use the scalar difference as a multiplier instead,
-    # so very weak features do not have to be that different from the background to be classified as convective.
-    pyart.graph.plot_convstrat_scheme(
-        always_core_thres=40,
-        use_cosine=False,
-        max_diff=None,
-        zero_diff_cos_val=None,
-        use_addition=False,
-        scalar_diff=2,
     )
 
 
@@ -126,7 +105,90 @@ convective core. We plot some examples of the schemes below:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-92
+.. GENERATED FROM PYTHON SOURCE LINES 60-61
+
+when zero_diff_cos_val is greater than always_core_thres, the difference becomes zero at the zero_diff_cos_val
+
+.. GENERATED FROM PYTHON SOURCE LINES 61-65
+
+.. code-block:: default
+
+    pyart.graph.plot_convstrat_scheme(
+        always_core_thres=55, use_cosine=True, max_diff=5, zero_diff_cos_val=45
+    )
+
+
+
+
+.. image-sg:: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_002.png
+   :alt: Convective Stratiform Equation
+   :srcset: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_002.png
+   :class: sphx-glr-single-img
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 66-67
+
+alternatively, we can use a simpler scalar difference instead of a cosine scheme
+
+.. GENERATED FROM PYTHON SOURCE LINES 67-76
+
+.. code-block:: default
+
+    pyart.graph.plot_convstrat_scheme(
+        always_core_thres=40,
+        use_cosine=False,
+        max_diff=None,
+        zero_diff_cos_val=None,
+        use_addition=True,
+        scalar_diff=2,
+    )
+
+
+
+
+.. image-sg:: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_003.png
+   :alt: Convective Stratiform Equation
+   :srcset: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_003.png
+   :class: sphx-glr-single-img
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 77-79
+
+if you are interested in picking up weak features, you can also use the scalar difference as a multiplier instead,
+so very weak features do not have to be that different from the background to be classified as convective.
+
+.. GENERATED FROM PYTHON SOURCE LINES 79-88
+
+.. code-block:: default
+
+    pyart.graph.plot_convstrat_scheme(
+        always_core_thres=40,
+        use_cosine=False,
+        max_diff=None,
+        zero_diff_cos_val=None,
+        use_addition=False,
+        scalar_diff=2,
+    )
+
+
+
+
+.. image-sg:: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_004.png
+   :alt: Convective Stratiform Equation
+   :srcset: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_004.png
+   :class: sphx-glr-single-img
+
+
+
+
+
+.. GENERATED FROM PYTHON SOURCE LINES 89-99
 
 Once the cores are identified, there is an option to remove speckles (``remove_small_objects``) smaller than a  given
 size (``min_km2_size``).
@@ -139,7 +201,7 @@ function.
 Finally, the points are classified as NOSFCECHO (threshold set with ``min_dBZ_used``; 0), WEAKECHO (threshold set with
 ``weak_echo_thres``; 3), SF (stratiform; 1), CONV (convective; 2).
 
-.. GENERATED FROM PYTHON SOURCE LINES 94-100
+.. GENERATED FROM PYTHON SOURCE LINES 101-107
 
 Examples
 ----------
@@ -148,7 +210,7 @@ Examples
 Our first example classifies echo from a summer convective event. We use a cosine scheme to classify the convective
 points.
 
-.. GENERATED FROM PYTHON SOURCE LINES 100-157
+.. GENERATED FROM PYTHON SOURCE LINES 107-190
 
 .. code-block:: default
 
@@ -210,24 +272,6 @@ points.
         central_longitude=radar.longitude["data"][0],
     )
 
-
-
-
-
-
-
-.. GENERATED FROM PYTHON SOURCE LINES 158-162
-
-Note how the convective stratiform field has less data around the edges compared to the reflectivity
-field. This is because the function is designed to only compute the background radius where the footprint has 75%
-of data, so along the edges there is not enough data to fulfill this requirement. The footprint percentage can be
-changed using the variable ``calc_thres``.
-
-.. GENERATED FROM PYTHON SOURCE LINES 162-188
-
-.. code-block:: default
-
-
     # plot
     plt.figure(figsize=(10, 4))
     ax1 = plt.subplot(1, 2, 1, projection=projection)
@@ -256,16 +300,16 @@ changed using the variable ``calc_thres``.
 
 
 
-.. image-sg:: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_002.png
+.. image-sg:: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_005.png
    :alt: xsapr-sg 0.0 km 2011-05-20T06:42:11Z  Equivalent reflectivity factor, xsapr-sg 0.0 km 2011-05-20T06:42:11Z  Convsf
-   :srcset: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_002.png
+   :srcset: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_005.png
    :class: sphx-glr-single-img
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 189-194
+.. GENERATED FROM PYTHON SOURCE LINES 191-196
 
 In addition to the default convective-stratiform classification, the function also returns an underestimate
 (convsf_under) and an overestimate (convsf_over) to take into consideration the uncertainty when choosing
@@ -273,7 +317,7 @@ classification parameters. The under and overestimate use the same parameters, b
 certain value (default is 5 dBZ, can be changed with ``estimate_offset``). The estimation can be turned off (
 ``estimate_flag=False``), but we recommend keeping it turned on.
 
-.. GENERATED FROM PYTHON SOURCE LINES 194-233
+.. GENERATED FROM PYTHON SOURCE LINES 196-235
 
 .. code-block:: default
 
@@ -319,22 +363,22 @@ certain value (default is 5 dBZ, can be changed with ``estimate_offset``). The e
 
 
 
-.. image-sg:: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_003.png
+.. image-sg:: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_006.png
    :alt: Best estimate, Underestimate, Overestimate
-   :srcset: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_003.png
+   :srcset: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_006.png
    :class: sphx-glr-single-img
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 234-237
+.. GENERATED FROM PYTHON SOURCE LINES 236-239
 
 **Tropical example**
 
 Let's get a NEXRAD file from Hurricane Ian
 
-.. GENERATED FROM PYTHON SOURCE LINES 237-320
+.. GENERATED FROM PYTHON SOURCE LINES 239-322
 
 .. code-block:: default
 
@@ -424,16 +468,16 @@ Let's get a NEXRAD file from Hurricane Ian
 
 
 
-.. image-sg:: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_004.png
+.. image-sg:: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_007.png
    :alt: KTBW 0.0 km 2022-09-28T19:01:42Z  Equivalent reflectivity factor, KTBW 0.0 km 2022-09-28T19:01:42Z  Convsf
-   :srcset: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_004.png
+   :srcset: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_007.png
    :class: sphx-glr-single-img
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 321-331
+.. GENERATED FROM PYTHON SOURCE LINES 323-333
 
 **Winter storm example with image muting**
 
@@ -446,7 +490,7 @@ dBZ units).
 In this example, note how we change some of the other parameters since we are classifying snow rate instead of
 reflecitivity.
 
-.. GENERATED FROM PYTHON SOURCE LINES 331-439
+.. GENERATED FROM PYTHON SOURCE LINES 333-441
 
 .. code-block:: default
 
@@ -561,16 +605,16 @@ reflecitivity.
 
 
 
-.. image-sg:: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_005.png
+.. image-sg:: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_008.png
    :alt: KOKX 0.0 km 2021-02-07T16:14:13Z  Snow rate, KOKX 0.0 km 2021-02-07T16:14:13Z  Convsf
-   :srcset: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_005.png
+   :srcset: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_008.png
    :class: sphx-glr-single-img
 
 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 440-466
+.. GENERATED FROM PYTHON SOURCE LINES 442-468
 
 Summary of recommendations and best practices
 ----------
@@ -602,7 +646,7 @@ https://doi.org/10.1175/1520-0450(2003)042%3C0020:SNUART%3E2.0.CO;2
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** ( 0 minutes  39.841 seconds)
+   **Total running time of the script:** ( 0 minutes  27.561 seconds)
 
 
 .. _sphx_glr_download_examples_retrieve_plot_convective_stratiform.py:
