@@ -1615,9 +1615,7 @@ def boundary_conditions_maesaka(
 
         if debug:
             print(
-                "Peak of system phase distribution: {:.0f} deg".format(
-                    system_phase_peak_left
-                )
+                f"Peak of system phase distribution: {system_phase_peak_left:.0f} deg"
             )
 
         # determine left edge location of system phase distribution
