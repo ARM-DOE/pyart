@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.aux_io.sinarame_h5 &#8212; Py-ART 1.15.1.post3 documentation</title>
+    <title>pyart.aux_io.sinarame_h5 &#8212; Py-ART 1.15.2.post1 documentation</title>
   
   
   
@@ -137,7 +137,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.15.1.post3 documentation</p>
+    <p class="title logo__title">Py-ART 1.15.2.post1 documentation</p>
   
 </a></div>
     
@@ -863,9 +863,7 @@ document.write(`
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)):</span>
             <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
             <span class="n">bs</span> <span class="o">=</span> <span class="n">basename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
-            <span class="n">base1</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{b1}</span><span class="s2">_</span><span class="si">{b2}</span><span class="s2">_</span><span class="si">{b3}</span><span class="s2">_</span><span class="si">{fn}</span><span class="s2">_</span><span class="si">{b4}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                <span class="n">b1</span><span class="o">=</span><span class="n">bs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b2</span><span class="o">=</span><span class="n">bs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">b3</span><span class="o">=</span><span class="n">bs</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">fn</span><span class="o">=</span><span class="n">bs</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">b4</span><span class="o">=</span><span class="n">bs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span>
-            <span class="p">)</span>
+            <span class="n">base1</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
             <span class="n">file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path_user</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">base1</span><span class="si">}</span><span class="s2">&quot;</span>
 
             <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
