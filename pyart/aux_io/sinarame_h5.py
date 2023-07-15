@@ -400,9 +400,7 @@ def write_sinarame_cfradial(path):
         for j in np.arange(len(files)):
             basename = os.path.basename(files[j])
             bs = basename.split("_")
-            base1 = "{b1}_{b2}_{b3}_{fn}_{b4}".format(
-                b1=bs[0], b2=bs[1], b3=bs[2], fn=bs[3], b4=bs[4]
-            )
+            base1 = f"{bs[0]}_{bs[1]}_{bs[2]}_{bs[3]}_{bs[4]}"
             file = f"{path_user}/{base1}"
 
             if j == 0:

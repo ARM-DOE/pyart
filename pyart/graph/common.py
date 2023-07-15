@@ -365,9 +365,7 @@ def generate_longitudinal_level_title(grid, field, level):
     else:
         direction = "west"
         disp = -disp
-    l1 = "{} {:.1f} km {} of origin {} ".format(
-        generate_grid_name(grid), disp, direction, time_str
-    )
+    l1 = f"{generate_grid_name(grid)} {disp:.1f} km {direction} of origin {time_str} "
     field_name = generate_field_name(grid, field)
     return l1 + "\n" + field_name
 
@@ -399,9 +397,7 @@ def generate_latitudinal_level_title(grid, field, level):
     else:
         direction = "south"
         disp = -disp
-    l1 = "{} {:.1f} km {} of origin {} ".format(
-        generate_grid_name(grid), disp, direction, time_str
-    )
+    l1 = f"{generate_grid_name(grid)} {disp:.1f} km {direction} of origin {time_str} "
     field_name = generate_field_name(grid, field)
     return l1 + "\n" + field_name
 
