@@ -18,7 +18,6 @@ dependencies:
   - pytest-mpl
   - coveralls
   - flake8
-  - Cython>3.0
   - fsspec
   - glpk
   - cftime
