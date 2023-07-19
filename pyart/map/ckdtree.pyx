@@ -297,7 +297,7 @@ cdef inline np.float64_t _distance_p(np.float64_t *x, np.float64_t *y,
     cdef np.intp_t i
     cdef np.float64_t r, z
     r = 0
-    if p==2.0:
+    if p==2:
         for i in range(k):
             z = x[i] - y[i]
             r += z*z
@@ -308,7 +308,7 @@ cdef inline np.float64_t _distance_p(np.float64_t *x, np.float64_t *y,
             r = dmax(r,dabs(x[i]-y[i]))
             if r>upperbound:
                 return r
-    elif p==1.0:
+    elif p==1:
         for i in range(k):
             r += dabs(x[i]-y[i])
             if r>upperbound:
