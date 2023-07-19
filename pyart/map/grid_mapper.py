@@ -287,7 +287,7 @@ def map_to_grid(
     toa=17000.0,
     copy_field_data=True,
     algorithm="kd_tree",
-    leafsize=10.0,
+    leafsize=10,
     roi_func="dist_beam",
     constant_roi=None,
     z_factor=0.05,
