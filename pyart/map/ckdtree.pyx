@@ -315,7 +315,7 @@ cdef inline np.float64_t _distance_p(np.float64_t *x, np.float64_t *y,
                 return r
     else:
         for i in range(k):
-            r += dabs(x[i]-y[i])**p
+            r += dabs(dabs(x[i]-y[i]))**p
             if r>upperbound:
                 return r
     return r
