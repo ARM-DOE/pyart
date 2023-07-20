@@ -17,6 +17,7 @@ dependencies:
   - pytest-cov
   - pytest-mpl
   - coveralls
+  - libnetcdf<=4.9.1
   - flake8
   - fsspec
   - glpk
