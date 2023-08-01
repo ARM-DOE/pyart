@@ -12,6 +12,13 @@ The Python ARM Radar Toolkit - Py-ART
 .. toctree::
    :maxdepth: 2
    :hidden:
+   :caption: Example Gallery
+
+   examples/index.rst
+
+.. toctree::
+   :maxdepth: 2
+   :hidden:
    :caption: Reference Guide
 
    API/index.rst
@@ -22,13 +29,6 @@ The Python ARM Radar Toolkit - Py-ART
    :caption: Developer's Guide
 
    dev/index.rst
-
-.. toctree::
-   :maxdepth: 2
-   :hidden:
-   :caption: Example Gallery
-
-   examples/index.rst
 
 .. toctree::
    :maxdepth: 2
