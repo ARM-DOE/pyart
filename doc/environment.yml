@@ -32,6 +32,7 @@ dependencies:
   - sphinx-design
   - sphinx-copybutton
   - nbsphinx
+  - pre_commit
   - pip
   - pip:
       - pooch
