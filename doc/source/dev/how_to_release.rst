@@ -41,55 +41,18 @@ https://github.com/ARM-DOE/pyart/releases/new there is a button to click
 called Generate release notes. Which will generate release notes between
 the new tag and the one prior.
 
-Update the GitHub Release
--------------------------
+Update the GitHub Release and Trigger the PyPI Upload
+-----------------------------------------------------
 
 From the ARM-DOE Github page, click on the Releases tab and make a new release.
 https://github.com/ARM-DOE/pyart/releases Use the existing tag pushed for the
-version. Include the release notes. Upload the tar.gz file from PyPI in the
-release. Some older releases also included a zip file, these are no longer
-included as PyPI only allows a single source distribution to be uploaded.
-
-Create and upload a source distribution to PyPI
------------------------------------------------
-
-To create a release and the associated source distribution on PyPI, begin by
-cloning the ARM-DOE repository into a temporary location and checking out the
-tagged release. Starting from a fresh clone is recommended to prevent any
-extra files from accidentally being included in the source distribution.
-
-With the tagged version checked out, generate the source distribution file
-using ``python setup.py sdist --formats=gztar``. This will create a
-arm_pyart-X.X.X.tar.gz file in the dist directory. Tests should be run to check
-that this file can be used to install a working version of Py-ART.
-
-Once tested the tar.gz source distribution file can be uploaded to PyPI using
-`twine <https://pypi.python.org/pypi/twine>`_, installing if needed, with the
-command ``twine upload dist/*``. This command will prompt the user for their
-PyPI credentials.  After uploading check that this file is available for
-download from
-`pypi.python.org/pypi/arm_pyart <https://pypi.python.org/pypi/arm_pyart>`_.
-
-Some older releases also included a zip file, these are no longer included as
-PyPI only allows a single source distribution to be uploaded.
-
-A typical workflow for creating and uploading the source distribution to PyPI
-is as follows:
-
-::
-
-    git clone git@github.com:ARM-DOE/pyart.git
-    cd pyart
-    git checkout tags/v1.8.0
-    # test the .tar.gz file in the dist directory
-    pip install dist/arm_pyart-1.8.0.tar.gz
-    pytest -v
-    twine upload dist/*
+version. Include the release notes. Once you select release, a Github action
+will be triggered, generating the source files and uploding them to PyPI.
 
 
 Documentation
 -------------
-Py-ART's documenation will update on its own via successful build doc
+Py-ART's documentation will update on its own via successful build doc
 pull requests.
 
 Create conda packages on conda-forge
@@ -121,10 +84,10 @@ host dependencies for you. Recommended following the method above if the recipe
 changes.
 
 
-Announce the release on the pyart-user mailing list
----------------------------------------------------
+Announce the release on the Open Radar Forum
+--------------------------------------------
 
-Announce the new release on the `Py-ART mailing list`_. Use a previous
+Announce the new release on the `Open Radar Forum`_. Use a previous
 announcement as a template and include the release notes written above.
 
-.. _Py-ART mailing list : http://groups.google.com/group/pyart-users/
+.. _Open Radar Forum : https://openradar.discourse.group/
