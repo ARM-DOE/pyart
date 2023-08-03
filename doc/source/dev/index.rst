@@ -7,6 +7,8 @@ Developer's Guide
    :hidden:
 
    CONTRIBUTING
+   ci_setup
+   how_to_release
 
 This discusses information relevant to developing Py-ART.
 
