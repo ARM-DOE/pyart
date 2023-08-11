@@ -488,7 +488,7 @@ def attribute_equal(class1, class2, key, allow_str_case_diff=True):
 
     assert type(a1) == type(a2)
 
-    if type(a1) is str and allow_str_case_diff:
+    if isinstance(a1, str) and allow_str_case_diff:
         assert a1.upper() == a2.upper()
     else:
         assert a1 == a2

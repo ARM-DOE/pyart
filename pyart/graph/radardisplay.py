@@ -1203,7 +1203,7 @@ class RadarDisplay:
         """
         ax = common.parse_ax(ax)
 
-        if type(symbols) is str:
+        if isinstance(symbols, str):
             symbols = [symbols] * len(labels)
         if len(labels) != len(locations):
             raise ValueError("length of labels and locations must match")

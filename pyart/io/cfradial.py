@@ -56,7 +56,7 @@ def read_cfradial(
     exclude_fields=None,
     include_fields=None,
     delay_field_loading=False,
-    **kwargs
+    **kwargs,
 ):
     """
     Read a Cfradial 1.4 netCDF file.
@@ -921,12 +921,12 @@ def _calculate_scale_and_offset(dic, dtype, minimum=None, maximum=None):
     if maximum < minimum:
         raise ValueError(
             "Error calculating variable scaling: "
-            "maximum: {:f} is smaller than minimum: {:f}".format(maximum, minimum)
+            f"maximum: {maximum:f} is smaller than minimum: {minimum:f}"
         )
     elif maximum == minimum:
         warnings.warn(
             "While calculating variable scaling: "
-            "maximum: {:f} is equal to minimum: {:f}".format(maximum, minimum)
+            f"maximum: {maximum:f} is equal to minimum: {minimum:f}"
         )
         maximum = minimum + 1
 
