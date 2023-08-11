@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.graph.radardisplay &#8212; Py-ART 1.15.2.post4 documentation</title>
+    <title>pyart.graph.radardisplay &#8212; Py-ART 1.15.2.post5 documentation</title>
   
   
   
@@ -137,7 +137,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.15.2.post4 documentation</p>
+    <p class="title logo__title">Py-ART 1.15.2.post5 documentation</p>
   
 </a></div>
     
@@ -1680,7 +1680,7 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_ax</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
 
-        <span class="k">if</span> <span class="nb">type</span><span class="p">(</span><span class="n">symbols</span><span class="p">)</span> <span class="ow">is</span> <span class="nb">str</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">symbols</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
             <span class="n">symbols</span> <span class="o">=</span> <span class="p">[</span><span class="n">symbols</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">locations</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;length of labels and locations must match&quot;</span><span class="p">)</span>

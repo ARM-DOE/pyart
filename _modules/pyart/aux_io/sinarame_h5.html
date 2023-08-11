@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.aux_io.sinarame_h5 &#8212; Py-ART 1.15.2.post4 documentation</title>
+    <title>pyart.aux_io.sinarame_h5 &#8212; Py-ART 1.15.2.post5 documentation</title>
   
   
   
@@ -137,7 +137,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.15.2.post4 documentation</p>
+    <p class="title logo__title">Py-ART 1.15.2.post5 documentation</p>
   
 </a></div>
     
@@ -942,9 +942,7 @@ document.write(`
         <span class="n">radar</span><span class="o">.</span><span class="n">_DeflateLevel</span> <span class="o">=</span> <span class="mi">5</span>
 
         <span class="c1"># cfrad.TIME1_to_TIME2_NAME_VCP_RANGE.nc</span>
-        <span class="n">cffile</span> <span class="o">=</span> <span class="s2">&quot;cfrad.</span><span class="si">{time1}</span><span class="s2">.0000_to_</span><span class="si">{time2}</span><span class="s2">.0000&quot;</span> <span class="s2">&quot;_</span><span class="si">{b1}</span><span class="s2">_</span><span class="si">{est}</span><span class="s2">_</span><span class="si">{ran}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-            <span class="n">time1</span><span class="o">=</span><span class="n">time1</span><span class="p">,</span> <span class="n">time2</span><span class="o">=</span><span class="n">time2</span><span class="p">,</span> <span class="n">b1</span><span class="o">=</span><span class="n">bs</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">est</span><span class="o">=</span><span class="n">bs</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">ran</span><span class="o">=</span><span class="n">bs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span>
-        <span class="p">)</span>
+        <span class="n">cffile</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;cfrad.</span><span class="si">{</span><span class="n">time1</span><span class="si">}</span><span class="s2">.0000_to_</span><span class="si">{</span><span class="n">time2</span><span class="si">}</span><span class="s2">.0000&quot;</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing to </span><span class="si">{</span><span class="n">path_user</span><span class="si">}{</span><span class="n">cffile</span><span class="si">}</span><span class="s2">.nc&quot;</span><span class="p">)</span>
         <span class="n">write_cfradial</span><span class="p">(</span>

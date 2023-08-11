@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.cfradial &#8212; Py-ART 1.15.2.post4 documentation</title>
+    <title>pyart.io.cfradial &#8212; Py-ART 1.15.2.post5 documentation</title>
   
   
   
@@ -137,7 +137,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.15.2.post4 documentation</p>
+    <p class="title logo__title">Py-ART 1.15.2.post5 documentation</p>
   
 </a></div>
     
@@ -533,7 +533,7 @@ document.write(`
     <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">delay_field_loading</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read a Cfradial 1.4 netCDF file.</span>
@@ -1398,12 +1398,12 @@ document.write(`
     <span class="k">if</span> <span class="n">maximum</span> <span class="o">&lt;</span> <span class="n">minimum</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
             <span class="s2">&quot;Error calculating variable scaling: &quot;</span>
-            <span class="s2">&quot;maximum: </span><span class="si">{:f}</span><span class="s2"> is smaller than minimum: </span><span class="si">{:f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">maximum</span><span class="p">,</span> <span class="n">minimum</span><span class="p">)</span>
+            <span class="sa">f</span><span class="s2">&quot;maximum: </span><span class="si">{</span><span class="n">maximum</span><span class="si">:</span><span class="s2">f</span><span class="si">}</span><span class="s2"> is smaller than minimum: </span><span class="si">{</span><span class="n">minimum</span><span class="si">:</span><span class="s2">f</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
     <span class="k">elif</span> <span class="n">maximum</span> <span class="o">==</span> <span class="n">minimum</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="s2">&quot;While calculating variable scaling: &quot;</span>
-            <span class="s2">&quot;maximum: </span><span class="si">{:f}</span><span class="s2"> is equal to minimum: </span><span class="si">{:f}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">maximum</span><span class="p">,</span> <span class="n">minimum</span><span class="p">)</span>
+            <span class="sa">f</span><span class="s2">&quot;maximum: </span><span class="si">{</span><span class="n">maximum</span><span class="si">:</span><span class="s2">f</span><span class="si">}</span><span class="s2"> is equal to minimum: </span><span class="si">{</span><span class="n">minimum</span><span class="si">:</span><span class="s2">f</span><span class="si">}</span><span class="s2">&quot;</span>
         <span class="p">)</span>
         <span class="n">maximum</span> <span class="o">=</span> <span class="n">minimum</span> <span class="o">+</span> <span class="mi">1</span>
 
