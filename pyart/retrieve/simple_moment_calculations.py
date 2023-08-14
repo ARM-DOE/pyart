@@ -253,7 +253,7 @@ def calculate_velocity_texture(
         Name of the velocity field. A value of None will force Py-ART to
         automatically determine the name of the velocity field.
     wind_size : int or 2-element tuple, optional
-        The size of the window to calculate texture from. 
+        The size of the window to calculate texture from.
         If an integer, the window is defined to be a square of size wind_size
         by wind_size. If tuple, defines the m x n dimensions of the filter
         window.
