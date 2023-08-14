@@ -240,7 +240,7 @@ def compute_cdr(radar, rhohv_field=None, zdr_field=None, cdr_field=None):
 
 
 def calculate_velocity_texture(
-    radar, vel_field=None, wind_size=4, nyq=None, check_nyq_uniform=True
+    radar, vel_field=None, wind_size=3, nyq=None, check_nyq_uniform=True
 ):
     """
     Derive the texture of the velocity field.
