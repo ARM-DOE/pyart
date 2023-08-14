@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.aux_io.arm_vpt &#8212; Py-ART 1.15.2.post5 documentation</title>
+    <title>pyart.aux_io.arm_vpt &#8212; Py-ART 1.15.2.post6 documentation</title>
   
   
   
@@ -137,7 +137,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.15.2.post5 documentation</p>
+    <p class="title logo__title">Py-ART 1.15.2.post6 documentation</p>
   
 </a></div>
     
@@ -595,7 +595,7 @@ document.write(`
     <span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
 
     <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_mode&quot;</span><span class="p">)</span>
-    <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;vertical_pointing&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">str</span><span class="p">)</span>
+    <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;vertical_pointing&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
 
     <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;fixed_angle&quot;</span><span class="p">)</span>
     <span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">90.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
@@ -645,7 +645,7 @@ document.write(`
     <span class="n">frequency</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">omega</span> <span class="o">/</span> <span class="mf">1e9</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
 
     <span class="n">prt_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;prt_mode&quot;</span><span class="p">)</span>
-    <span class="n">prt_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;fixed&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">str</span><span class="p">)</span>
+    <span class="n">prt_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;fixed&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">str</span><span class="p">)</span>
 
     <span class="n">prf</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">ncobj</span><span class="o">.</span><span class="n">pulse_repetition_frequency</span><span class="o">.</span><span class="n">split</span><span class="p">()[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">prt</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;prt&quot;</span><span class="p">)</span>
