@@ -306,7 +306,5 @@ def calculate_velocity_texture(
     vel_texture_field["standard_name"] = (
         "texture_of_radial_velocity" + "_of_scatters_away_from_instrument"
     )
-    vel_texture_field["data"] = ndimage.median_filter(
-        vel_texture, size=wind_size
-    )
+    vel_texture_field["data"] = ndimage.median_filter(vel_texture, size=wind_size)
     return vel_texture_field
