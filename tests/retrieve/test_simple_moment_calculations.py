@@ -75,6 +75,10 @@ def test_calculate_velocity_texture():
         radar, vel_field, wind_size=4, nyq=10
     )
     assert np.all(texture_field["data"] == 0)
+    texture_field = pyart.retrieve.calculate_velocity_texture(
+        radar, vel_field, wind_size=(5, 7), nyq=10
+    )
+    assert np.all(texture_field["data"] == 0)
 
     # Test none parameters
     radar2 = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
@@ -86,3 +90,16 @@ def test_calculate_velocity_texture():
         [0.000363, 0.000363, 0.000363, 0.000363, 0.000363],
         atol=1e-03,
     )
+
+    # Test rectangular filter option consistency with default scalar
+    radar2 = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
+    radar2.fields['velocity']['data'] = \
+        np.random.normal(scale=0.01, size=radar2.fields['velocity']['data'].shape) * \
+        radar2.fields['velocity']['data']  # Generate value variability
+    texture_field2 = pyart.retrieve.calculate_velocity_texture(
+        radar2, vel_field='velocity', wind_size=3, nyq=10.
+    )
+    texture_field3 = pyart.retrieve.calculate_velocity_texture(
+        radar2, vel_field='velocity', wind_size=(3, 3), nyq=10.
+    )
+    assert_allclose(texture_field2["data"], texture_field3["data"], atol=1e-10)
