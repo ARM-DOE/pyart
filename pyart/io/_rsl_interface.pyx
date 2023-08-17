@@ -72,7 +72,7 @@ cpdef create_volume(
 
     """
     # these variables can be moved to the module level if used elsewhere
-    cdef (float (*)(_rsl_h.Range)) * RSL_F_LIST = [
+    cdef (float (*)(_rsl_h.Range) noexcept) * RSL_F_LIST = [
         _rsl_h.DZ_F, _rsl_h.VR_F, _rsl_h.SW_F, _rsl_h.CZ_F, _rsl_h.ZT_F,
         _rsl_h.DR_F, _rsl_h.LR_F, _rsl_h.ZD_F, _rsl_h.DM_F, _rsl_h.RH_F,
         _rsl_h.PH_F, _rsl_h.XZ_F, _rsl_h.CD_F, _rsl_h.MZ_F, _rsl_h.MD_F,
@@ -83,7 +83,7 @@ cpdef create_volume(
         _rsl_h.SW_F, _rsl_h.DZ_F, _rsl_h.CZ_F, _rsl_h.PH_F, _rsl_h.SD_F,
         _rsl_h.DZ_F, _rsl_h.DZ_F]
 
-    cdef (_rsl_h.Range (*)(float)) * RSL_INVF_LIST = [
+    cdef (_rsl_h.Range (*)(float) noexcept) * RSL_INVF_LIST = [
         _rsl_h.DZ_INVF, _rsl_h.VR_INVF, _rsl_h.SW_INVF, _rsl_h.CZ_INVF,
         _rsl_h.ZT_INVF, _rsl_h.DR_INVF, _rsl_h.LR_INVF, _rsl_h.ZD_INVF,
         _rsl_h.DM_INVF, _rsl_h.RH_INVF, _rsl_h.PH_INVF, _rsl_h.XZ_INVF,
