@@ -18,9 +18,11 @@ def angular_texture_2d(image, N, interval):
     image : 2D array of floats
         The array containing the velocities in which to calculate
         texture from.
-    N : int
-        This is the window size for calculating texture. The texture will be
-        calculated from an N by N window centered around the gate.
+    N : int or 2-element tuple
+        If int, this is the window size for calculating texture. The
+        texture will be calculated from an N by N window centered
+        around the gate. If tuple N defines the m x n dimensions of
+        the window centered around the gate.
     interval : float
         The absolute value of the maximum velocity. In conversion to
         radial coordinates, pi will be defined to be interval
@@ -33,6 +35,10 @@ def angular_texture_2d(image, N, interval):
         Texture of the radial velocity field.
 
     """
+    # Set N as a tuple if input is int
+    if isinstance(N, int):
+        N = (N, N)
+
     # transform distribution from original interval to [-pi, pi]
     interval_max = interval
     interval_min = -interval
@@ -45,10 +51,10 @@ def angular_texture_2d(image, N, interval):
     y = np.sin(im)
 
     # Calculate convolution
-    kernel = np.ones((N, N))
+    kernel = np.ones(N)
     xs = signal.convolve2d(x, kernel, mode="same", boundary="symm")
     ys = signal.convolve2d(y, kernel, mode="same", boundary="symm")
-    ns = N**2
+    ns = np.prod(N)
 
     # Calculate norm over specified window
     xmean = xs / ns

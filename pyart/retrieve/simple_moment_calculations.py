@@ -240,7 +240,7 @@ def compute_cdr(radar, rhohv_field=None, zdr_field=None, cdr_field=None):
 
 
 def calculate_velocity_texture(
-    radar, vel_field=None, wind_size=4, nyq=None, check_nyq_uniform=True
+    radar, vel_field=None, wind_size=3, nyq=None, check_nyq_uniform=True
 ):
     """
     Derive the texture of the velocity field.
@@ -252,9 +252,11 @@ def calculate_velocity_texture(
     vel_field : str, optional
         Name of the velocity field. A value of None will force Py-ART to
         automatically determine the name of the velocity field.
-    wind_size : int, optional
-        The size of the window to calculate texture from. The window is
-        defined to be a square of size wind_size by wind_size.
+    wind_size : int or 2-element tuple, optional
+        The size of the window to calculate texture from.
+        If an integer, the window is defined to be a square of size wind_size
+        by wind_size. If tuple, defines the m x n dimensions of the filter
+        window.
     nyq : float, optional
         The nyquist velocity of the radar. A value of None will force Py-ART
         to try and determine this automatically.
@@ -273,6 +275,10 @@ def calculate_velocity_texture(
     # Parse names of velocity field
     if vel_field is None:
         vel_field = get_field_name("velocity")
+
+    # Set wind_size as a tuple if input is int
+    if isinstance(wind_size, int):
+        wind_size = (wind_size, wind_size)
 
     # Allocate memory for texture field
     vel_texture = np.zeros(radar.fields[vel_field]["data"].shape)
@@ -300,7 +306,5 @@ def calculate_velocity_texture(
     vel_texture_field["standard_name"] = (
         "texture_of_radial_velocity" + "_of_scatters_away_from_instrument"
     )
-    vel_texture_field["data"] = ndimage.median_filter(
-        vel_texture, size=(wind_size, wind_size)
-    )
+    vel_texture_field["data"] = ndimage.median_filter(vel_texture, size=wind_size)
     return vel_texture_field

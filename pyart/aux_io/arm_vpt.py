@@ -118,7 +118,7 @@ def read_kazr(
     sweep_number["data"] = np.array([0], dtype=np.int32)
 
     sweep_mode = filemetadata("sweep_mode")
-    sweep_mode["data"] = np.array(["vertical_pointing"], dtype=np.str)
+    sweep_mode["data"] = np.array(["vertical_pointing"], dtype=str)
 
     fixed_angle = filemetadata("fixed_angle")
     fixed_angle["data"] = np.array([90.0], dtype=np.float32)
@@ -168,7 +168,7 @@ def read_kazr(
     frequency["data"] = np.array([omega / 1e9], dtype=np.float32)
 
     prt_mode = filemetadata("prt_mode")
-    prt_mode["data"] = np.array(["fixed"], dtype=np.str)
+    prt_mode["data"] = np.array(["fixed"], dtype=str)
 
     prf = float(ncobj.pulse_repetition_frequency.split()[0])
     prt = filemetadata("prt")
@@ -176,7 +176,7 @@ def read_kazr(
 
     v_nq = float(ncobj.nyquist_velocity.split()[0])
     nyquist_velocity = filemetadata("nyquist_velocity")
-    nyquist_velocity["data"] = (v_nq * np.ones(ncvars["time"].size, dtype=np.float32),)
+    nyquist_velocity["data"] = v_nq * np.ones(ncvars["time"].size, dtype=np.float32)
     samples = int(ncobj.num_spectral_averages)
     n_samples = filemetadata("n_samples")
     n_samples["data"] = samples * np.ones(ncvars["time"].size, dtype=np.int32)

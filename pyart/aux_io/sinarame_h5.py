@@ -465,9 +465,7 @@ def write_sinarame_cfradial(path):
         radar._DeflateLevel = 5
 
         # cfrad.TIME1_to_TIME2_NAME_VCP_RANGE.nc
-        cffile = "cfrad.{time1}.0000_to_{time2}.0000" "_{b1}_{est}_{ran}".format(
-            time1=time1, time2=time2, b1=bs[0], est=bs[1], ran=bs[2]
-        )
+        cffile = f"cfrad.{time1}.0000_to_{time2}.0000" f"_{bs[0]}_{bs[1]}_{bs[2]}"
 
         print(f"Writing to {path_user}{cffile}.nc")
         write_cfradial(
