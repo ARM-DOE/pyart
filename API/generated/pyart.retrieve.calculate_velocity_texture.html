@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>pyart.retrieve.calculate_velocity_texture &#8212; Py-ART 1.15.2.post6 documentation</title>
+    <title>pyart.retrieve.calculate_velocity_texture &#8212; Py-ART 1.15.2.post7 documentation</title>
   
   
   
@@ -140,7 +140,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.15.2.post6 documentation</p>
+    <p class="title logo__title">Py-ART 1.15.2.post7 documentation</p>
   
 </a></div>
     
@@ -1143,7 +1143,7 @@ document.write(`
 <h1>pyart.retrieve.calculate_velocity_texture<a class="headerlink" href="#pyart-retrieve-calculate-velocity-texture" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyart.retrieve.calculate_velocity_texture">
-<span class="sig-prename descclassname"><span class="pre">pyart.retrieve.</span></span><span class="sig-name descname"><span class="pre">calculate_velocity_texture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wind_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">4</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nyq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_nyq_uniform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/retrieve/simple_moment_calculations.html#calculate_velocity_texture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.retrieve.calculate_velocity_texture" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyart.retrieve.</span></span><span class="sig-name descname"><span class="pre">calculate_velocity_texture</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">wind_size</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">3</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nyq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_nyq_uniform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/retrieve/simple_moment_calculations.html#calculate_velocity_texture"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.retrieve.calculate_velocity_texture" title="Permalink to this definition">#</a></dt>
 <dd><p>Derive the texture of the velocity field.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -1151,8 +1151,10 @@ document.write(`
 <li><p><strong>radar</strong> (<em>Radar</em>) – Radar object from which velocity texture field will be made.</p></li>
 <li><p><strong>vel_field</strong> (<em>str, optional</em>) – Name of the velocity field. A value of None will force Py-ART to
 automatically determine the name of the velocity field.</p></li>
-<li><p><strong>wind_size</strong> (<em>int, optional</em>) – The size of the window to calculate texture from. The window is
-defined to be a square of size wind_size by wind_size.</p></li>
+<li><p><strong>wind_size</strong> (<em>int or 2-element tuple, optional</em>) – The size of the window to calculate texture from.
+If an integer, the window is defined to be a square of size wind_size
+by wind_size. If tuple, defines the m x n dimensions of the filter
+window.</p></li>
 <li><p><strong>nyq</strong> (<em>float, optional</em>) – The nyquist velocity of the radar. A value of None will force Py-ART
 to try and determine this automatically.</p></li>
 <li><p><strong>check_nyquist_uniform</strong> (<em>bool, optional</em>) – True to check if the Nyquist velocities are uniform for all rays

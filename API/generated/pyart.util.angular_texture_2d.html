@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>pyart.util.angular_texture_2d &#8212; Py-ART 1.15.2.post6 documentation</title>
+    <title>pyart.util.angular_texture_2d &#8212; Py-ART 1.15.2.post7 documentation</title>
   
   
   
@@ -140,7 +140,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.15.2.post6 documentation</p>
+    <p class="title logo__title">Py-ART 1.15.2.post7 documentation</p>
   
 </a></div>
     
@@ -1152,8 +1152,10 @@ compared to using ndimage.generic_filter.</p>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>image</strong> (<em>2D array of floats</em>) – The array containing the velocities in which to calculate
 texture from.</p></li>
-<li><p><strong>N</strong> (<em>int</em>) – This is the window size for calculating texture. The texture will be
-calculated from an N by N window centered around the gate.</p></li>
+<li><p><strong>N</strong> (<em>int or 2-element tuple</em>) – If int, this is the window size for calculating texture. The
+texture will be calculated from an N by N window centered
+around the gate. If tuple N defines the m x n dimensions of
+the window centered around the gate.</p></li>
 <li><p><strong>interval</strong> (<em>float</em>) – The absolute value of the maximum velocity. In conversion to
 radial coordinates, pi will be defined to be interval
 and -pi will be -interval. It is recommended that interval be

@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.simple_moment_calculations &#8212; Py-ART 1.15.2.post6 documentation</title>
+    <title>pyart.retrieve.simple_moment_calculations &#8212; Py-ART 1.15.2.post7 documentation</title>
   
   
   
@@ -137,7 +137,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.15.2.post6 documentation</p>
+    <p class="title logo__title">Py-ART 1.15.2.post7 documentation</p>
   
 </a></div>
     
@@ -717,7 +717,7 @@ document.write(`
 
 
 <div class="viewcode-block" id="calculate_velocity_texture"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.calculate_velocity_texture.html#pyart.retrieve.calculate_velocity_texture">[docs]</a><span class="k">def</span> <span class="nf">calculate_velocity_texture</span><span class="p">(</span>
-    <span class="n">radar</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wind_size</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span> <span class="n">nyq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">check_nyq_uniform</span><span class="o">=</span><span class="kc">True</span>
+    <span class="n">radar</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wind_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">nyq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">check_nyq_uniform</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Derive the texture of the velocity field.</span>
@@ -729,9 +729,11 @@ document.write(`
 <span class="sd">    vel_field : str, optional</span>
 <span class="sd">        Name of the velocity field. A value of None will force Py-ART to</span>
 <span class="sd">        automatically determine the name of the velocity field.</span>
-<span class="sd">    wind_size : int, optional</span>
-<span class="sd">        The size of the window to calculate texture from. The window is</span>
-<span class="sd">        defined to be a square of size wind_size by wind_size.</span>
+<span class="sd">    wind_size : int or 2-element tuple, optional</span>
+<span class="sd">        The size of the window to calculate texture from.</span>
+<span class="sd">        If an integer, the window is defined to be a square of size wind_size</span>
+<span class="sd">        by wind_size. If tuple, defines the m x n dimensions of the filter</span>
+<span class="sd">        window.</span>
 <span class="sd">    nyq : float, optional</span>
 <span class="sd">        The nyquist velocity of the radar. A value of None will force Py-ART</span>
 <span class="sd">        to try and determine this automatically.</span>
@@ -750,6 +752,10 @@ document.write(`
     <span class="c1"># Parse names of velocity field</span>
     <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">vel_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;velocity&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Set wind_size as a tuple if input is int</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wind_size</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">wind_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">wind_size</span><span class="p">,</span> <span class="n">wind_size</span><span class="p">)</span>
 
     <span class="c1"># Allocate memory for texture field</span>
     <span class="n">vel_texture</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
@@ -777,9 +783,7 @@ document.write(`
     <span class="n">vel_texture_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
         <span class="s2">&quot;texture_of_radial_velocity&quot;</span> <span class="o">+</span> <span class="s2">&quot;_of_scatters_away_from_instrument&quot;</span>
     <span class="p">)</span>
-    <span class="n">vel_texture_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">median_filter</span><span class="p">(</span>
-        <span class="n">vel_texture</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">wind_size</span><span class="p">,</span> <span class="n">wind_size</span><span class="p">)</span>
-    <span class="p">)</span>
+    <span class="n">vel_texture_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">median_filter</span><span class="p">(</span><span class="n">vel_texture</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">wind_size</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">vel_texture_field</span></div>
 </pre></div>
 <div class="section ablog__blog_comments">

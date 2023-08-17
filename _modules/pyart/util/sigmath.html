@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.util.sigmath &#8212; Py-ART 1.15.2.post6 documentation</title>
+    <title>pyart.util.sigmath &#8212; Py-ART 1.15.2.post7 documentation</title>
   
   
   
@@ -137,7 +137,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.15.2.post6 documentation</p>
+    <p class="title logo__title">Py-ART 1.15.2.post7 documentation</p>
   
 </a></div>
     
@@ -495,9 +495,11 @@ document.write(`
 <span class="sd">    image : 2D array of floats</span>
 <span class="sd">        The array containing the velocities in which to calculate</span>
 <span class="sd">        texture from.</span>
-<span class="sd">    N : int</span>
-<span class="sd">        This is the window size for calculating texture. The texture will be</span>
-<span class="sd">        calculated from an N by N window centered around the gate.</span>
+<span class="sd">    N : int or 2-element tuple</span>
+<span class="sd">        If int, this is the window size for calculating texture. The</span>
+<span class="sd">        texture will be calculated from an N by N window centered</span>
+<span class="sd">        around the gate. If tuple N defines the m x n dimensions of</span>
+<span class="sd">        the window centered around the gate.</span>
 <span class="sd">    interval : float</span>
 <span class="sd">        The absolute value of the maximum velocity. In conversion to</span>
 <span class="sd">        radial coordinates, pi will be defined to be interval</span>
@@ -510,6 +512,10 @@ document.write(`
 <span class="sd">        Texture of the radial velocity field.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># Set N as a tuple if input is int</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">N</span> <span class="o">=</span> <span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+
     <span class="c1"># transform distribution from original interval to [-pi, pi]</span>
     <span class="n">interval_max</span> <span class="o">=</span> <span class="n">interval</span>
     <span class="n">interval_min</span> <span class="o">=</span> <span class="o">-</span><span class="n">interval</span>
@@ -522,10 +528,10 @@ document.write(`
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">im</span><span class="p">)</span>
 
     <span class="c1"># Calculate convolution</span>
-    <span class="n">kernel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+    <span class="n">kernel</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
     <span class="n">xs</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">convolve2d</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span> <span class="n">boundary</span><span class="o">=</span><span class="s2">&quot;symm&quot;</span><span class="p">)</span>
     <span class="n">ys</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">convolve2d</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">kernel</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span> <span class="n">boundary</span><span class="o">=</span><span class="s2">&quot;symm&quot;</span><span class="p">)</span>
-    <span class="n">ns</span> <span class="o">=</span> <span class="n">N</span><span class="o">**</span><span class="mi">2</span>
+    <span class="n">ns</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">prod</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
 
     <span class="c1"># Calculate norm over specified window</span>
     <span class="n">xmean</span> <span class="o">=</span> <span class="n">xs</span> <span class="o">/</span> <span class="n">ns</span>
