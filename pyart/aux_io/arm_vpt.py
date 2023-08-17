@@ -176,7 +176,7 @@ def read_kazr(
 
     v_nq = float(ncobj.nyquist_velocity.split()[0])
     nyquist_velocity = filemetadata("nyquist_velocity")
-    nyquist_velocity["data"] = (v_nq * np.ones(ncvars["time"].size, dtype=np.float32),)
+    nyquist_velocity["data"] = v_nq * np.ones(ncvars["time"].size, dtype=np.float32)
     samples = int(ncobj.num_spectral_averages)
     n_samples = filemetadata("n_samples")
     n_samples["data"] = samples * np.ones(ncvars["time"].size, dtype=np.int32)
