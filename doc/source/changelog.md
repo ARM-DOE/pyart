@@ -1,5 +1,86 @@
 # Changelog
 
+## Py-ART 1.16.0
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.15.2...ba7f3533438db44b60e1c41e7ba17dfd6350497f))
+
+### Enhancements made
+
+- ENH: optional rectangular window dims for velocity texture analysis and bug fixes to the load_kazr method [#1446](https://github.com/ARM-DOE/pyart/pull/1446) ([@isilber](https://github.com/isilber))
+
+### Bugs fixed
+
+- FIX: Fix failing ci isinstance [#1448](https://github.com/ARM-DOE/pyart/pull/1448) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix RSL Cython Interface [#1447](https://github.com/ARM-DOE/pyart/pull/1447) ([@mgrover1](https://github.com/mgrover1))
+- FIX: change deprecated np.str in arm_vpt to str [#1445](https://github.com/ARM-DOE/pyart/pull/1445) ([@isilber](https://github.com/isilber))
+- FIX: Add isinstance checks to improve linting [#1444](https://github.com/ARM-DOE/pyart/pull/1444) ([@mgrover1](https://github.com/mgrover1))
+
+### Maintenance and upkeep improvements
+
+- MNT: Support Cython 3.0 [#1440](https://github.com/ARM-DOE/pyart/pull/1440) ([@mgrover1](https://github.com/mgrover1))
+
+### Documentation improvements
+
+- DOC: Add dedicated developers guide section [#1442](https://github.com/ARM-DOE/pyart/pull/1442) ([@mgrover1](https://github.com/mgrover1))
+
+### Other merged PRs
+
+- ADD: Add to existing developers guide [#1443](https://github.com/ARM-DOE/pyart/pull/1443) ([@mgrover1](https://github.com/mgrover1))
+- Fix linting errors [#1437](https://github.com/ARM-DOE/pyart/pull/1437) ([@mgrover1](https://github.com/mgrover1))
+- Minor adjustments to convective-stratiform algorith, documentation, and example [#1434](https://github.com/ARM-DOE/pyart/pull/1434) ([@lauratomkins](https://github.com/lauratomkins))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2023-06-15&to=2023-09-07&type=c))
+
+[@isilber](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Aisilber+updated%3A2023-06-15..2023-09-07&type=Issues) | [@lauratomkins](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Alauratomkins+updated%3A2023-06-15..2023-09-07&type=Issues) | [@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2023-06-15..2023-09-07&type=Issues) | [@wolfidan](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Awolfidan+updated%3A2023-06-15..2023-09-07&type=Issues)
+
+## Py-ART 1.15.2
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.15.1...v1.15.2))
+
+### Maintenance and upkeep improvements
+
+- MNT: Remove pandas pinning, testing. [#1430](https://github.com/ARM-DOE/pyart/pull/1430) ([@zssherman](https://github.com/zssherman))
+
+### Other merged PRs
+
+- Create codeql.yml [#1433](https://github.com/ARM-DOE/pyart/pull/1433) ([@AdamTheisen](https://github.com/AdamTheisen))
+- Fix masking issue in VAD michelson [#1428](https://github.com/ARM-DOE/pyart/pull/1428) ([@mgrover1](https://github.com/mgrover1))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2023-05-17&to=2023-06-15&type=c))
+
+[@AdamTheisen](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3AAdamTheisen+updated%3A2023-05-17..2023-06-15&type=Issues) | [@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2023-05-17..2023-06-15&type=Issues) | [@neutrinoceros](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Aneutrinoceros+updated%3A2023-05-17..2023-06-15&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2023-05-17..2023-06-15&type=Issues)
+
+## Py-ART 1.15.1
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.15.0...v1.15.1))
+
+### Bugs fixed
+
+- FIX: Fix type of time for odim reader [#1425](https://github.com/ARM-DOE/pyart/pull/1425) ([@mgrover1](https://github.com/mgrover1))
+- FIX: GateMapper will now map source field to destination radar even if field not in destination radar [#1418](https://github.com/ARM-DOE/pyart/pull/1418) ([@rcjackson](https://github.com/rcjackson))
+
+### Maintenance and upkeep improvements
+
+- MNT: Update commit hooks changelog [#1419](https://github.com/ARM-DOE/pyart/pull/1419) ([@mgrover1](https://github.com/mgrover1))
+
+### Other merged PRs
+
+- Fix masking issue in VAD michelson [#1428](https://github.com/ARM-DOE/pyart/pull/1428) ([@mgrover1](https://github.com/mgrover1))
+- Update Sphinx Theme [#1427](https://github.com/ARM-DOE/pyart/pull/1427) ([@mgrover1](https://github.com/mgrover1))
+- Ensure units are in feet for nexrad references [#1423](https://github.com/ARM-DOE/pyart/pull/1423) ([@mgrover1](https://github.com/mgrover1))
+- fix: memory leak in grid mappers [#1421](https://github.com/ARM-DOE/pyart/pull/1421) ([@Vforcell](https://github.com/Vforcell))
+- Add xradar as a dependency [#1417](https://github.com/ARM-DOE/pyart/pull/1417) ([@mgrover1](https://github.com/mgrover1))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2023-04-12&to=2023-05-17&type=c))
+
+[@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2023-04-12..2023-05-17&type=Issues) | [@rcjackson](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Arcjackson+updated%3A2023-04-12..2023-05-17&type=Issues) | [@scollis](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ascollis+updated%3A2023-04-12..2023-05-17&type=Issues) | [@SteepAtticStairs](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3ASteepAtticStairs+updated%3A2023-04-12..2023-05-17&type=Issues) | [@Vforcell](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3AVforcell+updated%3A2023-04-12..2023-05-17&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2023-04-12..2023-05-17&type=Issues)
+
 ## Py-ART v1.15.0
 
 ([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.14.6...v1.15.0))
