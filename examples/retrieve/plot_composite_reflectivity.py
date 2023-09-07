@@ -38,5 +38,5 @@ display.plot("reflectivity_horizontal", ax=ax, vmin=-20, vmax=80)
 ax2 = plt.subplot(122)
 composite_display = pyart.graph.RadarDisplay(compz)
 composite_display.plot(
-    "composite_reflectivity", ax=ax2, vmin=-20, vmax=80, cmap="pyart_HomeyerRainbow"
+    "composite_reflectivity", ax=ax2, vmin=-20, vmax=80, cmap="HomeyerRainbow"
 )

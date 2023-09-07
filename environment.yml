@@ -15,6 +15,7 @@ dependencies:
   - xarray
   - xradar
   - pip
+  - cmweather
   - pip:
     - wheel
     - watchdog

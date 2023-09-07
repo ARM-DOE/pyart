@@ -10,3 +10,4 @@ open_radar_data
 xradar
 pandas
 xarray!=0.21.0
+cmweather

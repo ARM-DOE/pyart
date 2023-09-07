@@ -5,7 +5,7 @@ There are also Radar related colormaps and colorblind friendly radar
 colormaps for plotting.
 
 Available colormaps, reversed versions (_r) are also provided, these
-colormaps are available within matplotlib with names 'pyart_COLORMAP':
+colormaps are available within matplotlib with names 'COLORMAP':
 
     * BlueBrown10
     * BlueBrown11
@@ -54,7 +54,6 @@ Colorblind friendly
 
 """
 
-from . import cm, cm_colorblind  # noqa
 from .convstrat_scheme_plot import plot_convstrat_scheme  # noqa
 from .gridmapdisplay import GridMapDisplay  # noqa
 from .gridmapdisplay_basemap import GridMapDisplayBasemap  # noqa
