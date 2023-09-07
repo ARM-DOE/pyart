@@ -24,7 +24,6 @@ display = pyart.graph.RadarDisplay(radar)
 fig = plt.figure(figsize=[5, 5])
 ax = fig.add_subplot(111)
 display.plot(
-    "reflectivity", 0, vmin=-16.0, vmax=64, title="PPI", cmap="HomeyerRainbow"
-)
+    "reflectivity", 0, vmin=-16.0, vmax=64, title="PPI", cmap="HomeyerRainbow")
 display.set_limits(ylim=[-150, 150], xlim=[-150, 150])
 plt.show()

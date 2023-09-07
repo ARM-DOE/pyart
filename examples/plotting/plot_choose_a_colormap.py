@@ -164,5 +164,4 @@ display = pyart.graph.RadarDisplay(radar)
 
 # Now let's plot with a CVD-friendly colormap (HomeyerRainbow)
 display.plot(
-    "reflectivity_horizontal", vmin=-32, vmax=64.0, cmap="HomeyerRainbow"
-)
+    "reflectivity_horizontal", vmin=-32, vmax=64.0, cmap="HomeyerRainbow")
