@@ -175,7 +175,7 @@ def test_data_limits_table():
         "RhoHV": (-5.23, -50.0),
     }
 
-    assert type(dlimits_dict) == dict
+    assert isinstance(dlimits_dict, dict)
     assert dlimits_dict == test_dict
 
 
