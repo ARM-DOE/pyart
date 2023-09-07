@@ -19,9 +19,6 @@ _citation_text = """
 """
 from os import environ as _environ
 
-# Import here so config.py can load the cmweather colormaps
-import cmweather
-
 if "PYART_QUIET" not in _environ:
     print(_citation_text)
 
