@@ -55,7 +55,7 @@ Colorblind friendly
 """
 
 # Import colormaps from cmweather
-import cmweather # noqa: F401
+import cmweather  # noqa: F401
 
 from .convstrat_scheme_plot import plot_convstrat_scheme  # noqa
 from .gridmapdisplay import GridMapDisplay  # noqa
