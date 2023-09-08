@@ -50,7 +50,7 @@ display.plot_ppi_map(
     vmax=60,
     embellish=False,
     norm=None,
-    cmap="pyart_HomeyerRainbow",
+    cmap="HomeyerRainbow",
 )
 
 # Add gridlines
@@ -99,7 +99,7 @@ ppi_map = display.plot_ppi_map(
     vmax=60,
     embellish=False,
     norm=None,
-    cmap="pyart_HomeyerRainbow",
+    cmap="HomeyerRainbow",
 )
 
 # Add gridlines

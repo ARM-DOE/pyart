@@ -25,6 +25,7 @@ dependencies:
   - setuptools
   - shapely
   - ruff
+  - cmweather
   - pip
   - pip:
     - cibuildwheel
