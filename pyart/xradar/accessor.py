@@ -79,4 +79,4 @@ class Xradar:
             self.xradar = self.xradar.xradar.georeference()
 
         data = self.xradar[f"sweep_{sweep}"].xradar.georeference()
-        return data["x"].values, data["y"].values, data["x"].values
+        return data["x"].values, data["y"].values, data["z"].values
