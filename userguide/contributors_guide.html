@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
-    <title>Contributor’s Guide &#8212; Py-ART 1.16.0.post2 documentation</title>
+    <title>Contributor’s Guide &#8212; Py-ART 1.16.0.post3 documentation</title>
   
   
   
@@ -19,12 +19,12 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
-<link href="../_static/styles/bootstrap.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=ac02cc09edc035673794" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=ac02cc09edc035673794" rel="stylesheet" />
 
   
-  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=927b94d3fcb96560df09" rel="stylesheet" />
+  <link href="../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=ac02cc09edc035673794" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
@@ -42,9 +42,9 @@
     <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09" />
-  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=927b94d3fcb96560df09"></script>
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794" />
+  <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=ac02cc09edc035673794"></script>
 
     <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
     <script src="../_static/jquery.js"></script>
@@ -151,7 +151,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.0.post2 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.0.post3 documentation</p>
   
 </a></div>
     
@@ -240,8 +240,8 @@
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__kbd-shortcut">Search</span>
-    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
    </button>
  `);
  </script>
@@ -297,8 +297,8 @@ document.write(`
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
     <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__kbd-shortcut">Search</span>
-    <span><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
    </button>
  `);
  </script>
@@ -450,7 +450,7 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="INSTALL.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="INSTALL.html">Building and installing Py-ART</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setting_up_an_environment.html">Setting up an Environment</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Contributor’s Guide</a></li>
 </ul>
@@ -544,13 +544,15 @@ Programming Language. Journal of Open Research Software. 4(1), p.e25.
 DOI: <a class="reference external" href="http://doi.org/10.5334/jors.119">http://doi.org/10.5334/jors.119</a></p>
 </div></blockquote>
 <p>Py-ART implements many published scientific methods which should <em>also</em> be
-cited if you make use of them.  Refer to the <strong>References</strong> section in the
+cited if you make use of them. Refer to the <strong>References</strong> section in the
 documentation of the functions used for information on these citations.</p>
 </section>
 <section id="install">
 <h2>Install<a class="headerlink" href="#install" title="Permalink to this heading">#</a></h2>
 <p>The easiest method for installing Py-ART is to use the conda packages from
-the latest release.  To do this you must download and install
+the latest release and use Python 3, as Python 2 support ended January 1st,
+2020 and many packages including Py-ART no longer support Python 2.
+To do this you must download and install
 <a class="reference external" href="https://www.anaconda.com/download/#">Anaconda</a> or
 <a class="reference external" href="https://conda.io/miniconda.html">Miniconda</a>.
 Then use the following command in a terminal or command prompt to install
@@ -562,6 +564,10 @@ the latest version of Py-ART:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">update</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">arm_pyart</span>
 </pre></div>
 </div>
+<p>If you are using mamba:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mamba</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="n">arm_pyart</span>
+</pre></div>
+</div>
 </section>
 <section id="resources">
 <h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
@@ -570,7 +576,8 @@ the latest version of Py-ART:</p>
 <li><p><a class="github reference external" href="https://github.com/openradar/AMS-Short-Course-on-Open-Source-Radar-Software">openradar/AMS-Short-Course-on-Open-Source-Radar-Software</a></p></li>
 <li><p><a class="github reference external" href="https://github.com/EVS-ATMOS/pyart_short_course">EVS-ATMOS/pyart_short_course</a></p></li>
 <li><p><a class="reference external" href="https://www.youtube.com/watch?v=diiP-Q3bKZw">https://www.youtube.com/watch?v=diiP-Q3bKZw</a></p></li>
-<li><p><a class="reference external" href="http://arm-doe.github.io/pyart/dev/auto_examples/index.html">http://arm-doe.github.io/pyart/dev/auto_examples/index.html</a></p></li>
+<li><p><a class="reference external" href="https://arm-doe.github.io/pyart/examples/">https://arm-doe.github.io/pyart/examples/</a></p></li>
+<li><p><a class="reference external" href="https://arm-doe.github.io/pyart/blog.html">https://arm-doe.github.io/pyart/blog.html</a></p></li>
 </ul>
 <p>Git:</p>
 <ul class="simple">
@@ -650,7 +657,7 @@ other helpful information. These documentation standards follow the NumPy
 documentation style.</p>
 <p>For more on the NumPy documentation style:</p>
 <ul class="simple">
-<li><p><a class="github reference external" href="https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt">numpy/numpy</a></p></li>
+<li><p><a class="github reference external" href="https://github.com/numpy/numpy/blob/main/doc/HOWTO_DOCUMENT.rst.txt">numpy/numpy</a></p></li>
 </ul>
 <p>An example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">velocity_azimuth_display</span><span class="p">(</span>
@@ -730,7 +737,7 @@ pyart, pytest will use the test created to see if the function is still valid an
 produces the same values. It works that, it takes known values that are
 obtained from the function, and when pytest is ran, it takes the test
 function and reruns the function and compares the results to the original.</p>
-<p>An example:</p>
+<p>An example continuing to use the VAD code above:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">test_vad</span><span class="p">():</span>
     <span class="n">test_radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">make_target_radar</span><span class="p">()</span>
     <span class="n">height</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
@@ -816,9 +823,9 @@ From within the main pyart directory:</p>
 <h2>GitHub<a class="headerlink" href="#github" title="Permalink to this heading">#</a></h2>
 <p>When contributing to pyart, the changes created should be in a new branch
 under your forked repository. Let’s say the user is adding a new map display.
-Instead of creating that new function in your master branch. Create a new
+Instead of creating that new function in your main branch. Create a new
 branch called ‘cartopy_map’. If everything checks out and the admin
-accepts the pull request, you can then merge the master branch and
+accepts the pull request, you can then merge the main branch and
 cartopy_map branch.</p>
 <p>To delete a branch both locally and remotely, if done with it:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="n">origin</span> <span class="o">--</span><span class="n">delete</span> <span class="o">&lt;</span><span class="n">branch_name</span><span class="o">&gt;</span>
@@ -836,8 +843,8 @@ cartopy_map branch.</p>
 </div>
 <p>If you have a branch with changes that have not been added to a pull request
 but you would like to start a new branch with a different task in mind. It
-is recommended that your new branch is based on your master. First:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="n">master</span>
+is recommended that your new branch is based on your main. First:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="n">main</span>
 </pre></div>
 </div>
 <p>Then:</p>
@@ -845,7 +852,7 @@ is recommended that your new branch is based on your master. First:</p>
 </pre></div>
 </div>
 <p>This way, your new branch is not a combination of your other task branch and
-the new task branch, but is based on the original master branch.</p>
+the new task branch, but is based on the original main branch.</p>
 <p>Typing <cite>git status</cite> will not only inform the user of what files have been
 modified and untracked, it will also inform the user of which branch they
 are currently on.</p>
@@ -880,26 +887,22 @@ branches with the original upstream repository.</p>
 </div>
 <p>After fetching, a git merge is needed to pull in the changes.</p>
 <p>This is done by:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">merge</span> <span class="n">upstream</span><span class="o">/</span><span class="n">master</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">merge</span> <span class="n">upstream</span><span class="o">/</span><span class="n">main</span>
 </pre></div>
 </div>
 <p>To prevent a merge commit:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">merge</span> <span class="o">--</span><span class="n">ff</span><span class="o">-</span><span class="n">only</span> <span class="n">upstream</span><span class="o">/</span><span class="n">master</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">merge</span> <span class="o">--</span><span class="n">ff</span><span class="o">-</span><span class="n">only</span> <span class="n">upstream</span><span class="o">/</span><span class="n">main</span>
 </pre></div>
 </div>
-<p>After creating a pull request through GitHub, two outside checkers,
-Appveyor and TravisCI will determine if the code past all checks. If the
-code fails either tests, as the pull request sits, make changes to fix the
-code and when pushed to GitHub, the pull request will automatically update
-and TravisCI and Appveyor will automatically rerun.</p>
-</section>
-<section id="blog-posts">
-<h2>Blog Posts<a class="headerlink" href="#blog-posts" title="Permalink to this heading">#</a></h2>
-<p>You can also contribute by adding blog posts. To get started with
-blog posts, check out the blog post notebook template in the
-<cite>doc/source/blog_posts/</cite> directory. Move the blog post to a
-directory with the corresponding year (ex. <cite>2022</cite>), and follow the
-contribution process outlined above.</p>
+<p>After creating a pull request through GitHub, GitHub Actions will determine
+if the code past all checks for multiple Python versions as well as Operating
+Systems. If the code fails either tests, as the pull request sits, we will
+provide guidance to make changes to fix the code. Once the code is fixed and
+committed to GitHub, GitHub Actions will automatically rerun. A documentation
+build will also run to update Py-ART’s documentation with the new changes.
+Code coverage will also provided statistics if your new code is properly
+unit tested. PEP8 check will also run with changes to fix to keep the code
+to PEP8 standards.</p>
 </section>
 </section>
 
@@ -959,7 +962,6 @@ contribution process outlined above.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-file-setup">Python File Setup</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github">GitHub</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#blog-posts">Blog Posts</a></li>
 </ul>
   </nav></div>
 
@@ -984,8 +986,8 @@ contribution process outlined above.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../_static/scripts/bootstrap.js?digest=927b94d3fcb96560df09"></script>
-<script src="../_static/scripts/pydata-sphinx-theme.js?digest=927b94d3fcb96560df09"></script>
+  <script src="../_static/scripts/bootstrap.js?digest=ac02cc09edc035673794"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=ac02cc09edc035673794"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1015,7 +1017,7 @@ contribution process outlined above.</p>
     <div class="footer-items__end">
       
         <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.1.
 </p></div>
       
     </div>
