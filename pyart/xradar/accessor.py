@@ -162,7 +162,9 @@ class Xradar:
         # add the field
         self.fields[field_name] = dic
         for sweep in range(self.nsweeps):
-            sweep_ds = self.xradar[f"sweep_{sweep}"].to_dataset()
+            sweep_ds = (
+                self.xradar[f"sweep_{sweep}"].to_dataset().drop_duplicates("azimuth")
+            )
             sweep_ds[field_name] = (
                 ("azimuth", "range"),
                 self.fields[field_name]["data"][self.get_slice(sweep)],
@@ -260,7 +262,7 @@ class Xradar:
             self.xradar = self.xradar.xradar.georeference()
 
         data = self.xradar[f"sweep_{sweep}"].xradar.georeference()
-        return data["x"].values, data["y"].values, data["x"].values
+        return data["x"].values, data["y"].values, data["z"].values
 
     def _combine_sweeps(self, radar):
         # Loop through and extract the different datasets
