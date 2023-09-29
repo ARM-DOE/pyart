@@ -1,0 +1,13 @@
+
+:orphan:
+
+.. _sphx_glr_examples_xradar_sg_execution_times:
+
+
+Computation times
+=================
+**00:06.534** total execution time for **examples_xradar** files:
+
++---------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_xradar_plot_xradar.py` (``plot_xradar.py``) | 00:06.534 | 0.0 MB |
++---------------------------------------------------------------------+-----------+--------+
