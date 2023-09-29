@@ -1,5 +1,6 @@
 import numpy as np
 import xradar as xd
+from numpy.testing import assert_almost_equal
 from open_radar_data import DATASETS
 
 import pyart
@@ -53,5 +54,5 @@ def test_grid(filename=filename):
         grid_limits=((2000, 2000), (-100_000.0, 100_000.0), (-100_000.0, 100_000.0)),
         fields=["DBZ"],
     )
-    np.testing.assert_almost_equal(grid.x["data"], np.arange(-100_000, 120_000, 20_000))
-    assert grid.fields["DBZ"]["data"][0, -1, 0] == 0.4243435
+    assert_almost_equal(grid.x["data"], np.arange(-100_000, 120_000, 20_000))
+    assert_almost_equal(grid.fields["DBZ"]["data"][0, -1, 0], np.array(0.4243435))
