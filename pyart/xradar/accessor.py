@@ -17,12 +17,11 @@ from xarray.core import utils
 
 
 class Xradar:
-    def __init__(self, xradar, default_sweep="sweep_0"):
+    def __init__(self, xradar, default_sweep="sweep_0", scan_type=None):
         self.xradar = xradar
-        self.scan_type = "ppi"
+        self.scan_type = scan_type or "ppi"
         self.combined_sweeps = self._combine_sweeps(self.xradar)
         self.fields = self._find_fields(self.combined_sweeps)
-        self.scan_type = None
         self.time = dict(
             data=(self.combined_sweeps.time - self.combined_sweeps.time.min()).astype(
                 "int64"
@@ -199,8 +198,9 @@ class Xradar:
         data : array
             Array containing data for the requested sweep and field.
         """
-        data = self.xradar[f"sweep_{sweep}"][field_name].values
-
+        self.check_field_exists(field_name)
+        s = self.get_slice(sweep)
+        data = self.fields[field_name]["data"][s]
         if copy:
             return data.copy()
         else:
@@ -259,9 +259,9 @@ class Xradar:
         """
         # Check to see if the data needs to be georeferenced
         if "x" not in self.xradar[f"sweep_{sweep}"].coords:
-            self.xradar = self.xradar.xradar.georeference()
+            self.combined_sweeps = self.combined_sweeps.xradar.georeference()
 
-        data = self.xradar[f"sweep_{sweep}"].xradar.georeference()
+        data = self.combined_sweeps.sel(sweep_number=sweep)
         return data["x"].values, data["y"].values, data["z"].values
 
     def _combine_sweeps(self, radar):
