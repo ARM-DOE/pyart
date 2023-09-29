@@ -3,7 +3,7 @@
 Plot a PPI Using Xradar and Py-ART
 ==================================
 
-An example which uses xradar andd Py-ART to create a PPI plot of a Cfradial file.
+An example which uses xradar and Py-ART to create a PPI plot of a Cfradial file.
 
 """
 

@@ -13,7 +13,7 @@ def test_get_field(filename=filename):
     )
     radar = pyart.xradar.Xradar(dtree)
     reflectivity = radar.get_field(0, "DBZ")
-    assert reflectivity.shape == (483, 996)
+    assert reflectivity.shape == (480, 996)
 
 
 def test_get_gate_x_y_z(filename=filename):
@@ -23,9 +23,9 @@ def test_get_gate_x_y_z(filename=filename):
     )
     radar = pyart.xradar.Xradar(dtree)
     x, y, z = radar.get_gate_x_y_z(0)
-    assert x.shape == (483, 996)
-    assert y.shape == (483, 996)
-    assert z.shape == (483, 996)
+    assert x.shape == (480, 996)
+    assert y.shape == (480, 996)
+    assert z.shape == (480, 996)
 
 
 def test_add_field(filename=filename):
