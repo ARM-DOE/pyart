@@ -5,15 +5,15 @@ Utilities for interfacing between xradar and Py-ART
 
 
 import copy
-from collections.abc import Hashable, Mapping
-from typing import Any, overload
 
 import numpy as np
 import pandas as pd
 from datatree import DataTree, formatting, formatting_html
 from datatree.treenode import NodePath
-from xarray import DataArray, Dataset, concat
+from xarray import concat
 from xarray.core import utils
+
+from ..core.transforms import antenna_vectors_to_cartesian
 
 
 class Xradar:
@@ -36,8 +36,15 @@ class Xradar:
         self.elevation = dict(data=self.combined_sweeps.elevation.values)
         self.fixed_angle = dict(data=self.combined_sweeps.sweep_fixed_angle.values)
         self.antenna_transition = None
-        self.latitude = dict(data=self.xradar["latitude"].values)
-        self.longitude = dict(data=self.xradar["longitude"].values)
+        self.latitude = dict(
+            data=np.expand_dims(self.xradar["latitude"].values, axis=0)
+        )
+        self.longitude = dict(
+            data=np.expand_dims(self.xradar["longitude"].values, axis=0)
+        )
+        self.altitude = dict(
+            data=np.expand_dims(self.xradar["altitude"].values, axis=0)
+        )
         self.sweep_end_ray_index = dict(
             data=self.combined_sweeps.ngates.groupby("sweep_number").max().values
         )
@@ -49,6 +56,8 @@ class Xradar:
         self.nrays = len(self.azimuth["data"])
         self.nsweeps = len(self.xradar.sweep_group_name)
         self.instrument_parameters = dict(**self.xradar["radar_parameters"].attrs)
+        self.init_gate_x_y_z()
+        self.init_gate_alt()
 
     def __repr__(self):
         return formatting.datatree_repr(self.xradar)
@@ -56,19 +65,7 @@ class Xradar:
     def _repr_html_(self):
         return formatting_html.datatree_repr(self.xradar)
 
-    @overload
-    def __getitem__(self, key: Mapping) -> Dataset:  # type: ignore[misc]
-        ...
-
-    @overload
-    def __getitem__(self, key: Hashable) -> DataArray:  # type: ignore[misc]
-        ...
-
-    @overload
-    def __getitem__(self, key: Any) -> Dataset:
-        ...
-
-    def __getitem__(self: DataTree, key: str) -> DataTree | DataArray:
+    def __getitem__(self: DataTree, key):
         """
         Access child nodes, variables, or coordinates stored anywhere in this tree.
 
@@ -263,6 +260,40 @@ class Xradar:
 
         data = self.xradar[f"sweep_{sweep}"].xradar.georeference()
         return data["x"].values, data["y"].values, data["z"].values
+
+    def init_gate_x_y_z(self):
+        """Initialize or reset the gate_{x, y, z} attributes."""
+
+        ranges = self.range["data"]
+        azimuths = self.azimuth["data"]
+        elevations = self.elevation["data"]
+        cartesian_coords = antenna_vectors_to_cartesian(
+            ranges, azimuths, elevations, edges=False
+        )
+
+        if not hasattr(self, "gate_x"):
+            self.gate_x = dict()
+
+        if not hasattr(self, "gate_y"):
+            self.gate_y = dict()
+
+        if not hasattr(self, "gate_z"):
+            self.gate_z = dict()
+
+        self.gate_x = dict(data=cartesian_coords[0])
+        self.gate_y = dict(data=cartesian_coords[1])
+        self.gate_z = dict(data=cartesian_coords[2])
+
+    def init_gate_alt(self):
+        if not hasattr(self, "gate_altitude"):
+            self.gate_altitude = dict()
+
+        try:
+            self.gate_altitude = dict(data=self.altitude["data"] + self.gate_z["data"])
+        except ValueError:
+            self.gate_altitude = dict(
+                data=np.mean(self.altitude["data"]) + self.gate_z["data"]
+            )
 
     def _combine_sweeps(self, radar):
         # Loop through and extract the different datasets
