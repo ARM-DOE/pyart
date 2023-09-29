@@ -5,14 +5,12 @@ Utilities for interfacing between xradar and Py-ART
 
 
 import copy
-from collections.abc import Hashable, Mapping
-from typing import Any, overload
 
 import numpy as np
 import pandas as pd
 from datatree import DataTree, formatting, formatting_html
 from datatree.treenode import NodePath
-from xarray import DataArray, Dataset, concat
+from xarray import concat
 from xarray.core import utils
 
 from ..core.transforms import antenna_vectors_to_cartesian
@@ -67,19 +65,7 @@ class Xradar:
     def _repr_html_(self):
         return formatting_html.datatree_repr(self.xradar)
 
-    @overload
-    def __getitem__(self, key: Mapping) -> Dataset:  # type: ignore[misc]
-        ...
-
-    @overload
-    def __getitem__(self, key: Hashable) -> DataArray:  # type: ignore[misc]
-        ...
-
-    @overload
-    def __getitem__(self, key: Any) -> Dataset:
-        ...
-
-    def __getitem__(self: DataTree, key: str) -> DataTree | DataArray:
+    def __getitem__(self: DataTree, key):
         """
         Access child nodes, variables, or coordinates stored anywhere in this tree.
 
