@@ -151,6 +151,7 @@ def get_field_location(radar, latitude, longitude):
         Xarary Dataset containing the radar column above the target for
         the various fields within the radar object.
     """
+    print('hey joe active development')
     # Make sure latitude, longitudes are valid
     check_latitude(latitude)
     check_longitude(longitude)
@@ -325,6 +326,73 @@ def get_column_rays(radar, azimuth):
 
     return rays
 
+def get_sweep_rays(sweep_azi, azimuth, azimuth_spread=None):
+#def get_sweep_rays():
+    """
+    Extract the specific rays for a given azimuth from a radar sweep
+    
+    Azimuth spread determines the +/- degrees azimuth to include within
+    the extraction
+
+    Parameters
+    ----------
+    radar_sweep : pyart.core.radar object
+        Radar Sweep from which the rays are extracted from
+
+    azimuth : float [degrees]
+        Forward Azimuth Angle from Radar to Target in Degreees
+
+    Azimuth_Spread : list [-degrees, +degrees]
+        Bound of Forward azimuth Angle to include within extraction list
+        containing forward azimuth angles in degrees
+
+    Returns
+    -------
+    center_rays : list [integers]
+        List of integers cooresponding to ray indices within the azimuth
+        directly over the target
+    
+    spread_rays : list [integers]
+        List of integers cooresponding to ray indices within the spread
+        of azimuths emcompassing the target
+        
+    """
+ 
+    centerline = np.nonzero((np.abs(sweep_azi - azimuth) < 0.5))[0].tolist()
+    spread = np.nonzero((np.abs(sweep_azi - azimuth) < azimuth_spread))[0].tolist()
+
+    return centerline, spread
+
+def subset_fields(radar, ray, target_gates, method='mean'):
+    """
+    Parameter
+    ---------
+    radar : pyart.core.radar object
+    Radar Sweep from which fields are extracted from the target locations
+
+    target_gates : list
+    List containing indices for the gates of interest
+
+    Returns
+    -------
+    fields : dict
+    dictionary containing averaged subset fields for target location 
+    """
+    # initiate a diciontary to hold the moment data.
+    moment = {key: [] for key in radar.fields.keys()}
+
+    # Iterate over input rays and average according to input method
+    # future - allow users to input weights for spatial averaging
+    for key in moment:
+        if key != "height":
+            if method == 'mean':
+                if np.ma.all(radar.fields[key]['data'][ray, target_gates]) is np.ma.masked:
+                    moment[key].append(np.nan)
+                else:
+                    moment[key].append(np.ma.mean(radar.fields[key]['data'][ray, target_gates]))
+
+    return moment
+    
 
 def check_latitude(latitude):
     """
