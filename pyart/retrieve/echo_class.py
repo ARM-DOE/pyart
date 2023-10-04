@@ -8,7 +8,7 @@ from warnings import warn
 import numpy as np
 
 from ..config import get_field_name, get_fillvalue, get_metadata
-from ._echo_class import _revised_conv_strat, steiner_class_buff
+from ._echo_class import _feature_detection, steiner_class_buff
 
 
 def steiner_conv_strat(
@@ -125,7 +125,7 @@ def steiner_conv_strat(
     }
 
 
-def conv_strat_yuter(
+def feature_detection(
     grid,
     dx=None,
     dy=None,
@@ -139,24 +139,25 @@ def conv_strat_yuter(
     use_addition=True,
     calc_thres=0.75,
     weak_echo_thres=5.0,
-    min_dBZ_used=5.0,
+    min_val_used=5.0,
     dB_averaging=True,
     remove_small_objects=True,
     min_km2_size=10,
-    val_for_max_conv_rad=30,
-    max_conv_rad_km=5.0,
-    cs_core=3,
+    val_for_max_rad=30,
+    max_rad_km=5.0,
+    core=3,
     nosfcecho=0,
     weakecho=3,
-    sf=1,
-    conv=2,
-    refl_field=None,
+    bkgd_val=1,
+    feat_val=2,
+    field=None,
     estimate_flag=True,
     estimate_offset=5,
 ):
     """
-    Partition reflectivity into convective-stratiform using the Yuter et al. (2005)
-    and Yuter and Houze (1997) algorithm.
+    This function can be used to detect features in a field (e.g. reflectivity, rain rate, snow rate,
+    etc.) described by Tomkins et al. (2023) and based on original convective-stratiform algorithms developed by
+    Steiner et al. (1995), Yuter et al. (2005) and Yuter and Houze (1997) algorithm.
 
     Parameters
     ----------
@@ -166,18 +167,17 @@ def conv_strat_yuter(
         The x- and y-dimension resolutions in meters, respectively. If None
         the resolution is determined from the first two axes values parsed from grid object.
     level_m : float, optional
-        Desired height in meters to classify with convective stratiform algorithm.
+        Desired height in meters to run feature detection algorithm.
     always_core_thres : float, optional
-        Threshold for points that are always convective. All values above the threshold are classifed as convective
-        See Yuter et al. (2005) for more detail.
+        Threshold for points that are always features. All values above the threshold are classified as features.
     bkg_rad_km : float, optional
         Radius to compute background reflectivity in kilometers. Default is 11 km. Recommended to be at least 3 x
         grid spacing
     use_cosine : bool, optional
         Boolean used to determine if a cosine scheme (see Yuter and Houze (1997)) should be used for identifying
-        convective cores (True) or if a simpler scalar scheme (False) should be used.
+        cores (True) or if a simpler scalar scheme (False) should be used.
     max_diff : float, optional
-        Maximum difference between background average and reflectivity in order to be classified as convective.
+        Maximum difference between background average and reflectivity in order to be classified as features.
         "a" value in Eqn. B1 in Yuter and Houze (1997)
     zero_diff_cos_val : float, optional
         Value where difference between background average and reflectivity is zero in the cosine function
@@ -190,50 +190,51 @@ def conv_strat_yuter(
         Minimum percentage of points needed to be considered in background average calculation
     weak_echo_thres : float, optional
         Threshold for determining weak echo. All values below this threshold will be considered weak echo
-    min_dBZ_used : float, optional
-        Minimum dBZ value used for classification. All values below this threshold will be considered no surface echo
-        See Yuter and Houze (1997) and Yuter et al. (2005) for more detail.
+    min_val_used : float, optional
+        Minimum value used for classification. All values below this threshold will be considered no surface echo
+        See Yuter and Houze (1997) and Yuter et al. (2005) for more detail. Units based on input field
     dB_averaging : bool, optional
         True if using dBZ reflectivity values that need to be converted to linear Z before averaging. False for
         other non-dBZ values (i.e. snow rate)
     remove_small_objects : bool, optional
-        Determines if small objects should be removed from convective core array. Default is True.
+        Determines if small objects should be removed from core array. Default is True.
     min_km2_size : float, optional
-        Minimum size of convective cores to be considered. Cores less than this size will be removed. Default is 10
-        km^2.
-    val_for_max_conv_rad : float, optional
-        dBZ for maximum convective radius. Convective cores with values above this will have the maximum convective
-        radius
-    max_conv_rad_km : float, optional
-        Maximum radius around convective cores to classify as convective. Default is 5 km
-    cs_core : int, optional
-        Value for points classified as convective cores
+        Minimum size of Cores to be considered. Cores less than this size will be removed. Default is 10 km^2.
+    val_for_max_rad : float, optional
+        value used for maximum radius. Cores with values above this will have the maximum radius incorporated.
+    max_rad_km : float, optional
+        Maximum radius around cores to classify as feature. Default is 5 km
+    core : int, optional
+        Value for points classified as cores
     nosfcecho : int, optional
-        Value for points classified as no surface echo, based on min_dBZ_used
+        Value for points classified as no surface echo, based on min_val_used
     weakecho : int, optional
-        Value for points classified as weak echo, based on weak_echo_thres
-    sf : int, optional
-        Value for points classified as stratiform
-    conv : int, optional
-        Value for points classified as convective
-    refl_field : str, optional
-        Field in grid to use as the reflectivity during partitioning. None will use the default reflectivity
-        field name from the Py-ART configuration file.
+        Value for points classified as weak echo, based on weak_echo_thres.
+    bkgd_val : int, optional
+        Value for points classified as background echo.
+    feat_val : int, optional
+        Value for points classified as features.
+    field : str, optional
+        Field in grid to find objects in. None will use the default reflectivity field name from the Py-ART
+        configuration file.
     estimate_flag : bool, optional
         Determines if over/underestimation should be applied. If true, the algorithm will also be run on the same field
         wih the estimate_offset added and the same field with the estimate_offset subtracted.
         Default is True (recommended)
     estimate_offset : float, optional
-        Value used to offset the reflectivity values by for the over/underestimation application. Default value is 5
-        dBZ.
+        Value used to offset the field values by for the over/underestimation application. Default value is 5 dBZ.
 
     Returns
     -------
-    convsf_dict : dict
-        Convective-stratiform classification dictionary.
+    feature_dict : dict
+        Feature detection classification dictionary.
 
     References
     ----------
+    Steiner, M. R., R. A. Houze Jr., and S. E. Yuter, 1995: Climatological
+    Characterization of Three-Dimensional Storm Structure from Operational
+    Radar and Rain Gauge Data. J. Appl. Meteor., 34, 1978-2007.
+
     Yuter, S. E., and R. A. Houze, Jr., 1997: Measurements of raindrop size
     distributions over the Pacific warm pool and implications for Z-R relations.
     J. Appl. Meteor., 36, 847-867.
@@ -245,14 +246,14 @@ def conv_strat_yuter(
 
     """
 
-    # Maxmimum convective radius must be less than 5 km
-    if max_conv_rad_km > 5:
-        print("Max conv radius must be less than 5 km, exiting")
+    # Maxmimum radius must be less than 5 km
+    if max_rad_km > 5:
+        print("Max radius must be less than 5 km, exiting")
         raise
 
     # Parse field parameters
-    if refl_field is None:
-        refl_field = get_field_name("reflectivity")
+    if field is None:
+        field = get_field_name("reflectivity")
         dB_averaging = True
 
     # parse dx and dy if None
@@ -274,15 +275,15 @@ def conv_strat_yuter(
     # Get reflectivity data at desired level
     if level_m is None:
         try:
-            ze = np.ma.copy(grid.fields[refl_field]["data"][0, :, :])
+            ze = np.ma.copy(grid.fields[field]["data"][0, :, :])
         except:
-            ze = np.ma.copy(grid.fields[refl_field]["data"][:, :])
+            ze = np.ma.copy(grid.fields[field]["data"][:, :])
     else:
         zslice = np.argmin(np.abs(z - level_m))
-        ze = np.ma.copy(grid.fields[refl_field]["data"][zslice, :, :])
+        ze = np.ma.copy(grid.fields[field]["data"][zslice, :, :])
 
-    # run convective stratiform algorithm
-    _, _, convsf_best = _revised_conv_strat(
+    # run feature detection algorithm
+    _, _, feature_best = _feature_detection(
         ze,
         dx,
         dy,
@@ -295,42 +296,37 @@ def conv_strat_yuter(
         use_addition=use_addition,
         calc_thres=calc_thres,
         weak_echo_thres=weak_echo_thres,
-        min_dBZ_used=min_dBZ_used,
+        min_val_used=min_val_used,
         dB_averaging=dB_averaging,
         remove_small_objects=remove_small_objects,
         min_km2_size=min_km2_size,
-        val_for_max_conv_rad=val_for_max_conv_rad,
-        max_conv_rad_km=max_conv_rad_km,
-        cs_core=cs_core,
+        val_for_max_rad=val_for_max_rad,
+        max_rad_km=max_rad_km,
+        core=core,
         nosfcecho=nosfcecho,
         weakecho=weakecho,
-        sf=sf,
-        conv=conv,
+        bkgd_val=bkgd_val,
+        feat_val=feat_val,
     )
 
     # put data into a dictionary to be added as a field
-    convsf_dict = {
-        "convsf": {
-            "data": convsf_best,
-            "standard_name": "convsf",
-            "long_name": "Convective stratiform classification",
+    feature_dict = {
+        "feature_detection": {
+            "data": feature_best,
+            "standard_name": "feature_detection",
+            "long_name": "Feature Detection",
             "valid_min": 0,
             "valid_max": 3,
             "comment_1": (
-                "Convective-stratiform echo "
-                "classification based on "
-                "Yuter and Houze (1997) and Yuter et al. (2005)"
-            ),
-            "comment_2": (
-                "0 = No surface echo/Undefined, 1 = Stratiform, "
-                "2 = Convective, 3 = weak echo"
+                "{0} = No surface echo/Undefined, {1} = Background echo, {2} = Features, {3} = weak echo".format(
+                    nosfcecho, bkgd_val, feat_val, weakecho)
             ),
         }
     }
 
     # If estimation is True, run the algorithm on the field with offset subtracted and the field with the offset added
     if estimate_flag:
-        _, _, convsf_under = _revised_conv_strat(
+        _, _, feature_under = _feature_detection(
             ze - estimate_offset,
             dx,
             dy,
@@ -343,20 +339,20 @@ def conv_strat_yuter(
             use_addition=use_addition,
             calc_thres=calc_thres,
             weak_echo_thres=weak_echo_thres,
-            min_dBZ_used=min_dBZ_used,
+            min_val_used=min_val_used,
             dB_averaging=dB_averaging,
             remove_small_objects=remove_small_objects,
             min_km2_size=min_km2_size,
-            val_for_max_conv_rad=val_for_max_conv_rad,
-            max_conv_rad_km=max_conv_rad_km,
-            cs_core=cs_core,
+            val_for_max_rad=val_for_max_rad,
+            max_rad_km=max_rad_km,
+            core=core,
             nosfcecho=nosfcecho,
             weakecho=weakecho,
-            sf=sf,
-            conv=conv,
+            bkgd_val=bkgd_val,
+            feat_val=feat_val,
         )
 
-        _, _, convsf_over = _revised_conv_strat(
+        _, _, feature_over = _feature_detection(
             ze + estimate_offset,
             dx,
             dy,
@@ -369,53 +365,45 @@ def conv_strat_yuter(
             use_addition=use_addition,
             calc_thres=calc_thres,
             weak_echo_thres=weak_echo_thres,
-            min_dBZ_used=min_dBZ_used,
+            min_val_used=min_val_used,
             dB_averaging=dB_averaging,
             remove_small_objects=remove_small_objects,
             min_km2_size=min_km2_size,
-            val_for_max_conv_rad=val_for_max_conv_rad,
-            max_conv_rad_km=max_conv_rad_km,
-            cs_core=cs_core,
+            val_for_max_rad=val_for_max_rad,
+            max_rad_km=max_rad_km,
+            core=core,
             nosfcecho=nosfcecho,
             weakecho=weakecho,
-            sf=sf,
-            conv=conv,
+            bkgd_val=bkgd_val,
+            feat_val=feat_val,
         )
 
         # save into dictionaries
-        convsf_dict["convsf_under"] = {
-            "data": convsf_under,
-            "standard_name": "convsf_under",
-            "long_name": "Convective stratiform classification (Underestimate)",
+        feature_dict["feature_under"] = {
+            "data": feature_under,
+            "standard_name": "feature_detection_under",
+            "long_name": "Feature Detection Underestimate",
             "valid_min": 0,
             "valid_max": 3,
             "comment_1": (
-                "Convective-stratiform echo "
-                "classification based on "
-                "Yuter and Houze (1997) and Yuter et al. (2005)"
-            ),
-            "comment_2": (
-                "0 = Undefined, 1 = Stratiform, " "2 = Convective, 3 = weak echo"
+                "{0} = No surface echo/Undefined, {1} = Background echo, {2} = Features, {3} = weak echo".format(
+                    nosfcecho, bkgd_val, feat_val, weakecho)
             ),
         }
 
-        convsf_dict["convsf_over"] = {
-            "data": convsf_over,
-            "standard_name": "convsf_under",
-            "long_name": "Convective stratiform classification (Overestimate)",
+        feature_dict["feature_over"] = {
+            "data": feature_over,
+            "standard_name": "feature_detection_over",
+            "long_name": "Feature Detection Overestimate",
             "valid_min": 0,
             "valid_max": 3,
             "comment_1": (
-                "Convective-stratiform echo "
-                "classification based on "
-                "Yuter and Houze (1997)"
-            ),
-            "comment_2": (
-                "0 = Undefined, 1 = Stratiform, " "2 = Convective, 3 = weak echo"
+                "{0} = No surface echo/Undefined, {1} = Background echo, {2} = Features, {3} = weak echo".format(
+                    nosfcecho, bkgd_val, feat_val, weakecho)
             ),
         }
 
-    return convsf_dict
+    return feature_dict
 
 
 def hydroclass_semisupervised(
