@@ -244,6 +244,9 @@ def feature_detection(
     2005: Physical characterization of tropical oceanic convection observed in
     KWAJEX. J. Appl. Meteor., 44, 385-415. https://doi.org/10.1175/JAM2206.1
 
+    Tomkins, L. M., S. E. Yuter, and M. A. Miller, 2023: Objective identification
+    of faint and strong snow bands in radar observations of winter storms. in prep.
+
     """
 
     # Maxmimum radius must be less than 5 km
