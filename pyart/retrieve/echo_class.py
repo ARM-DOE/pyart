@@ -160,6 +160,8 @@ def feature_detection(
     etc.) described by Tomkins et al. (2023) and based on original convective-stratiform algorithms developed by
     Steiner et al. (1995), Yuter et al. (2005) and Yuter and Houze (1997) algorithm.
 
+    Author: Laura Tomkins (@lauratomkins)
+
     Parameters
     ----------
     grid : Grid
@@ -303,7 +305,7 @@ def feature_detection(
     # put data into a dictionary to be added as a field
     feature_dict = {
         "feature_detection": {
-            "data": feature_best,
+            "data": feature_best[None,:,:],
             "standard_name": "feature_detection",
             "long_name": "Feature Detection",
             "valid_min": 0,
@@ -341,7 +343,7 @@ def feature_detection(
 
         # save into dictionaries
         feature_dict["feature_under"] = {
-            "data": feature_under,
+            "data": feature_under[None,:,:],
             "standard_name": "feature_detection_under",
             "long_name": "Feature Detection Underestimate",
             "valid_min": 0,
@@ -353,7 +355,7 @@ def feature_detection(
         }
 
         feature_dict["feature_over"] = {
-            "data": feature_over,
+            "data": feature_over[None,:,:],
             "standard_name": "feature_detection_over",
             "long_name": "Feature Detection Overestimate",
             "valid_min": 0,
