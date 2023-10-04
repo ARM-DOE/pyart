@@ -143,9 +143,10 @@ def feature_detection(
     dB_averaging=True,
     remove_small_objects=True,
     min_km2_size=10,
+    binary_close=False,
     val_for_max_rad=30,
     max_rad_km=5.0,
-    core=3,
+    core_val=3,
     nosfcecho=0,
     weakecho=3,
     bkgd_val=1,
@@ -200,11 +201,13 @@ def feature_detection(
         Determines if small objects should be removed from core array. Default is True.
     min_km2_size : float, optional
         Minimum size of Cores to be considered. Cores less than this size will be removed. Default is 10 km^2.
+    binary_close : bool, optional
+        Determines if a binary closing should be performed on the cores. Default is False.
     val_for_max_rad : float, optional
         value used for maximum radius. Cores with values above this will have the maximum radius incorporated.
     max_rad_km : float, optional
         Maximum radius around cores to classify as feature. Default is 5 km
-    core : int, optional
+    core_val : int, optional
         Value for points classified as cores
     nosfcecho : int, optional
         Value for points classified as no surface echo, based on min_val_used
@@ -286,31 +289,16 @@ def feature_detection(
         ze = np.ma.copy(grid.fields[field]["data"][zslice, :, :])
 
     # run feature detection algorithm
-    _, _, feature_best = _feature_detection(
-        ze,
-        dx,
-        dy,
-        always_core_thres=always_core_thres,
-        bkg_rad_km=bkg_rad_km,
-        use_cosine=use_cosine,
-        max_diff=max_diff,
-        zero_diff_cos_val=zero_diff_cos_val,
-        scalar_diff=scalar_diff,
-        use_addition=use_addition,
-        calc_thres=calc_thres,
-        weak_echo_thres=weak_echo_thres,
-        min_val_used=min_val_used,
-        dB_averaging=dB_averaging,
-        remove_small_objects=remove_small_objects,
-        min_km2_size=min_km2_size,
-        val_for_max_rad=val_for_max_rad,
-        max_rad_km=max_rad_km,
-        core=core,
-        nosfcecho=nosfcecho,
-        weakecho=weakecho,
-        bkgd_val=bkgd_val,
-        feat_val=feat_val,
-    )
+    _, _, feature_best = _feature_detection(ze, dx, dy, always_core_thres=always_core_thres, bkg_rad_km=bkg_rad_km,
+                                            use_cosine=use_cosine, max_diff=max_diff,
+                                            zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
+                                            use_addition=use_addition, calc_thres=calc_thres,
+                                            weak_echo_thres=weak_echo_thres, min_val_used=min_val_used,
+                                            dB_averaging=dB_averaging, remove_small_objects=remove_small_objects,
+                                            min_km2_size=min_km2_size, binary_close=binary_close,
+                                            val_for_max_rad=val_for_max_rad, max_rad_km=max_rad_km, core_val=core_val,
+                                            nosfcecho=nosfcecho, weakecho=weakecho, bkgd_val=bkgd_val,
+                                            feat_val=feat_val)
 
     # put data into a dictionary to be added as a field
     feature_dict = {
@@ -329,57 +317,27 @@ def feature_detection(
 
     # If estimation is True, run the algorithm on the field with offset subtracted and the field with the offset added
     if estimate_flag:
-        _, _, feature_under = _feature_detection(
-            ze - estimate_offset,
-            dx,
-            dy,
-            always_core_thres=always_core_thres,
-            bkg_rad_km=bkg_rad_km,
-            use_cosine=use_cosine,
-            max_diff=max_diff,
-            zero_diff_cos_val=zero_diff_cos_val,
-            scalar_diff=scalar_diff,
-            use_addition=use_addition,
-            calc_thres=calc_thres,
-            weak_echo_thres=weak_echo_thres,
-            min_val_used=min_val_used,
-            dB_averaging=dB_averaging,
-            remove_small_objects=remove_small_objects,
-            min_km2_size=min_km2_size,
-            val_for_max_rad=val_for_max_rad,
-            max_rad_km=max_rad_km,
-            core=core,
-            nosfcecho=nosfcecho,
-            weakecho=weakecho,
-            bkgd_val=bkgd_val,
-            feat_val=feat_val,
-        )
+        _, _, feature_under = _feature_detection(ze - estimate_offset, dx, dy, always_core_thres=always_core_thres,
+                                                 bkg_rad_km=bkg_rad_km, use_cosine=use_cosine, max_diff=max_diff,
+                                                 zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
+                                                 use_addition=use_addition, calc_thres=calc_thres,
+                                                 weak_echo_thres=weak_echo_thres, min_val_used=min_val_used,
+                                                 dB_averaging=dB_averaging, remove_small_objects=remove_small_objects,
+                                                 min_km2_size=min_km2_size, binary_close=binary_close,
+                                                 val_for_max_rad=val_for_max_rad, max_rad_km=max_rad_km, core_val=core_val,
+                                                 nosfcecho=nosfcecho, weakecho=weakecho, bkgd_val=bkgd_val,
+                                                 feat_val=feat_val)
 
-        _, _, feature_over = _feature_detection(
-            ze + estimate_offset,
-            dx,
-            dy,
-            always_core_thres=always_core_thres,
-            bkg_rad_km=bkg_rad_km,
-            use_cosine=use_cosine,
-            max_diff=max_diff,
-            zero_diff_cos_val=zero_diff_cos_val,
-            scalar_diff=scalar_diff,
-            use_addition=use_addition,
-            calc_thres=calc_thres,
-            weak_echo_thres=weak_echo_thres,
-            min_val_used=min_val_used,
-            dB_averaging=dB_averaging,
-            remove_small_objects=remove_small_objects,
-            min_km2_size=min_km2_size,
-            val_for_max_rad=val_for_max_rad,
-            max_rad_km=max_rad_km,
-            core=core,
-            nosfcecho=nosfcecho,
-            weakecho=weakecho,
-            bkgd_val=bkgd_val,
-            feat_val=feat_val,
-        )
+        _, _, feature_over = _feature_detection(ze + estimate_offset, dx, dy, always_core_thres=always_core_thres,
+                                                bkg_rad_km=bkg_rad_km, use_cosine=use_cosine, max_diff=max_diff,
+                                                zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
+                                                use_addition=use_addition, calc_thres=calc_thres,
+                                                weak_echo_thres=weak_echo_thres, min_val_used=min_val_used,
+                                                dB_averaging=dB_averaging, remove_small_objects=remove_small_objects,
+                                                min_km2_size=min_km2_size, binary_close=binary_close,
+                                                val_for_max_rad=val_for_max_rad, max_rad_km=max_rad_km, core_val=core_val,
+                                                nosfcecho=nosfcecho, weakecho=weakecho, bkgd_val=bkgd_val,
+                                                feat_val=feat_val)
 
         # save into dictionaries
         feature_dict["feature_under"] = {

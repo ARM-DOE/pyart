@@ -256,9 +256,10 @@ def _feature_detection(
     dB_averaging=True,
     remove_small_objects=True,
     min_km2_size=10,
+    binary_close=False,
     val_for_max_rad=30,
     max_rad_km=5.0,
-    core=3,
+    core_val=3,
     nosfcecho=0,
     weakecho=3,
     bkgd_val=1,
@@ -311,11 +312,13 @@ def _feature_detection(
         Determines if small objects should be removed from core array. Default is True.
     min_km2_size : float, optional
         Minimum size of Cores to be considered. Cores less than this size will be removed. Default is 10 km^2.
+    binary_close : bool, optional
+        Determines if a binary closing should be performed on the cores. Default is False.
     val_for_max_rad : float, optional
         value used for maximum radius. Cores with values above this will have the maximum radius incorporated.
     max_rad_km : float, optional
         Maximum radius around cores to classify as feature. Default is 5 km
-    core : int, optional
+    core_val : int, optional
         Value for points classified as cores
     nosfcecho : int, optional
         Value for points classified as no surface echo, based on min_val_used
@@ -375,9 +378,9 @@ def _feature_detection(
 
     # Get core array from cosine scheme, or scalar scheme
     if use_cosine:
-        core_array = core_cos_scheme(field, field_bkg, max_diff, zero_diff_cos_val, always_core_thres, core)
+        core_array = core_cos_scheme(field, field_bkg, max_diff, zero_diff_cos_val, always_core_thres, core_val)
     else:
-        core_array = core_scalar_scheme(field, field_bkg, scalar_diff, always_core_thres, core,
+        core_array = core_scalar_scheme(field, field_bkg, scalar_diff, always_core_thres, core_val,
                                         use_addition=use_addition)
 
     # Assign radii based on background field
@@ -399,6 +402,13 @@ def _feature_detection(
             # if number of pixels is less than minimum, then remove core
             if size_lab < min_pix_size:
                 core_array[cc_labels == lab] = 0
+
+    # perform binary closing
+    if binary_close:
+        # binary closing - returns binary array
+        close_core = scipy.ndimage.binary_closing(core_array).astype(int)
+        # set values to core values
+        core_array = close_core * core_val
 
     # Incorporate radius using binary dilation
     # Create empty array for assignment
@@ -423,12 +433,12 @@ def _feature_detection(
 
     # add dilated cores to original array
     core_copy = np.ma.copy(core_array)
-    core_copy[temp_assignment >= 1] = core
+    core_copy[temp_assignment >= 1] = core_val
 
     # Now do feature detection
     feature_array = np.zeros_like(field)
     feature_array = classify_feature_array(field, feature_array, core_copy, nosfcecho, feat_val, bkgd_val, weakecho,
-                                           core, min_val_used, weak_echo_thres)
+                                           core_val, min_val_used, weak_echo_thres)
     # mask where field is masked
     feature_array = np.ma.masked_where(field.mask, feature_array)
 
