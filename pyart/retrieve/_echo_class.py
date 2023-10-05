@@ -378,13 +378,18 @@ def _feature_detection(
 
     # Get core array from cosine scheme, or scalar scheme
     if use_cosine:
-        core_array = core_cos_scheme(field, field_bkg, max_diff, zero_diff_cos_val, always_core_thres, core_val)
+        core_array = core_cos_scheme(
+            field, field_bkg, max_diff, zero_diff_cos_val, always_core_thres, core_val
+        )
     else:
-        core_array = core_scalar_scheme(field, field_bkg, scalar_diff, always_core_thres, core_val,
-                                        use_addition=use_addition)
+        core_array = core_scalar_scheme(
+            field, field_bkg, scalar_diff, always_core_thres, core_val, use_addition=use_addition
+        )
 
     # Assign radii based on background field
-    radius_array_km = assign_feature_radius_km(field_bkg, val_for_max_rad=val_for_max_rad, max_rad=max_rad_km)
+    radius_array_km = assign_feature_radius_km(
+        field_bkg, val_for_max_rad=val_for_max_rad, max_rad=max_rad_km
+    )
 
     # remove small objects in core array
     if remove_small_objects:
@@ -437,8 +442,18 @@ def _feature_detection(
 
     # Now do feature detection
     feature_array = np.zeros_like(field)
-    feature_array = classify_feature_array(field, feature_array, core_copy, nosfcecho, feat_val, bkgd_val, weakecho,
-                                           core_val, min_val_used, weak_echo_thres)
+    feature_array = classify_feature_array(
+        field,
+        feature_array,
+        core_copy,
+        nosfcecho,
+        feat_val,
+        bkgd_val,
+        weakecho,
+        core_val,
+        min_val_used,
+        weak_echo_thres
+    )
     # mask where field is masked
     feature_array = np.ma.masked_where(field.mask, feature_array)
 
@@ -674,9 +689,7 @@ def core_scalar_scheme(
     return core_array
 
 
-def create_radius_mask(
-    max_diameter, radius_km, x_spacing, y_spacing, center_mask_x
-):
+def create_radius_mask(max_diameter, radius_km, x_spacing, y_spacing, center_mask_x):
     """
     Creates a circular mask based on input diameter
 

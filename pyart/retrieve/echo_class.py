@@ -291,27 +291,43 @@ def feature_detection(
         ze = np.ma.copy(grid.fields[field]["data"][zslice, :, :])
 
     # run feature detection algorithm
-    _, _, feature_best = _feature_detection(ze, dx, dy, always_core_thres=always_core_thres, bkg_rad_km=bkg_rad_km,
-                                            use_cosine=use_cosine, max_diff=max_diff,
-                                            zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
-                                            use_addition=use_addition, calc_thres=calc_thres,
-                                            weak_echo_thres=weak_echo_thres, min_val_used=min_val_used,
-                                            dB_averaging=dB_averaging, remove_small_objects=remove_small_objects,
-                                            min_km2_size=min_km2_size, binary_close=binary_close,
-                                            val_for_max_rad=val_for_max_rad, max_rad_km=max_rad_km, core_val=core_val,
-                                            nosfcecho=nosfcecho, weakecho=weakecho, bkgd_val=bkgd_val,
-                                            feat_val=feat_val)
+    _, _, feature_best = _feature_detection(
+        ze,
+        dx,
+        dy,
+        always_core_thres=always_core_thres,
+        bkg_rad_km=bkg_rad_km,
+        use_cosine=use_cosine,
+        max_diff=max_diff,
+        zero_diff_cos_val=zero_diff_cos_val,
+        scalar_diff=scalar_diff,
+        use_addition=use_addition,
+        calc_thres=calc_thres,
+        weak_echo_thres=weak_echo_thres,
+        min_val_used=min_val_used,
+        dB_averaging=dB_averaging,
+        remove_small_objects=remove_small_objects,
+        min_km2_size=min_km2_size,
+        binary_close=binary_close,
+        val_for_max_rad=val_for_max_rad,
+        max_rad_km=max_rad_km,
+        core_val=core_val,
+        nosfcecho=nosfcecho,
+        weakecho=weakecho,
+        bkgd_val=bkgd_val,
+        feat_val=feat_val
+    )
 
     # put data into a dictionary to be added as a field
     feature_dict = {
         "feature_detection": {
-            "data": feature_best[None,:,:],
+            "data": feature_best[None, :, :],
             "standard_name": "feature_detection",
             "long_name": "Feature Detection",
             "valid_min": 0,
             "valid_max": 3,
             "comment_1": (
-                "{0} = No surface echo/Undefined, {1} = Background echo, {2} = Features, {3} = weak echo".format(
+                "{} = No surface echo/Undefined, {} = Background echo, {} = Features, {} = weak echo".format(
                     nosfcecho, bkgd_val, feat_val, weakecho)
             ),
         }
@@ -319,49 +335,81 @@ def feature_detection(
 
     # If estimation is True, run the algorithm on the field with offset subtracted and the field with the offset added
     if estimate_flag:
-        _, _, feature_under = _feature_detection(ze - estimate_offset, dx, dy, always_core_thres=always_core_thres,
-                                                 bkg_rad_km=bkg_rad_km, use_cosine=use_cosine, max_diff=max_diff,
-                                                 zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
-                                                 use_addition=use_addition, calc_thres=calc_thres,
-                                                 weak_echo_thres=weak_echo_thres, min_val_used=min_val_used,
-                                                 dB_averaging=dB_averaging, remove_small_objects=remove_small_objects,
-                                                 min_km2_size=min_km2_size, binary_close=binary_close,
-                                                 val_for_max_rad=val_for_max_rad, max_rad_km=max_rad_km, core_val=core_val,
-                                                 nosfcecho=nosfcecho, weakecho=weakecho, bkgd_val=bkgd_val,
-                                                 feat_val=feat_val)
+        _, _, feature_under = _feature_detection(
+            ze - estimate_offset,
+            dx,
+            dy,
+            always_core_thres=always_core_thres,
+            bkg_rad_km=bkg_rad_km,
+            use_cosine=use_cosine,
+            max_diff=max_diff,
+            zero_diff_cos_val=zero_diff_cos_val,
+            scalar_diff=scalar_diff,
+            use_addition=use_addition,
+            calc_thres=calc_thres,
+            weak_echo_thres=weak_echo_thres,
+            min_val_used=min_val_used,
+            dB_averaging=dB_averaging,
+            remove_small_objects=remove_small_objects,
+            min_km2_size=min_km2_size,
+            binary_close=binary_close,
+            val_for_max_rad=val_for_max_rad,
+            max_rad_km=max_rad_km,
+            core_val=core_val,
+            nosfcecho=nosfcecho,
+            weakecho=weakecho,
+            bkgd_val=bkgd_val,
+            feat_val=feat_val
+        )
 
-        _, _, feature_over = _feature_detection(ze + estimate_offset, dx, dy, always_core_thres=always_core_thres,
-                                                bkg_rad_km=bkg_rad_km, use_cosine=use_cosine, max_diff=max_diff,
-                                                zero_diff_cos_val=zero_diff_cos_val, scalar_diff=scalar_diff,
-                                                use_addition=use_addition, calc_thres=calc_thres,
-                                                weak_echo_thres=weak_echo_thres, min_val_used=min_val_used,
-                                                dB_averaging=dB_averaging, remove_small_objects=remove_small_objects,
-                                                min_km2_size=min_km2_size, binary_close=binary_close,
-                                                val_for_max_rad=val_for_max_rad, max_rad_km=max_rad_km, core_val=core_val,
-                                                nosfcecho=nosfcecho, weakecho=weakecho, bkgd_val=bkgd_val,
-                                                feat_val=feat_val)
+        _, _, feature_over = _feature_detection(
+            ze + estimate_offset,
+            dx,
+            dy,
+            always_core_thres=always_core_thres,
+            bkg_rad_km=bkg_rad_km,
+            use_cosine=use_cosine,
+            max_diff=max_diff,
+            zero_diff_cos_val=zero_diff_cos_val,
+            scalar_diff=scalar_diff,
+            use_addition=use_addition,
+            calc_thres=calc_thres,
+            weak_echo_thres=weak_echo_thres,
+            min_val_used=min_val_used,
+            dB_averaging=dB_averaging,
+            remove_small_objects=remove_small_objects,
+            min_km2_size=min_km2_size,
+            binary_close=binary_close,
+            val_for_max_rad=val_for_max_rad,
+            max_rad_km=max_rad_km,
+            core_val=core_val,
+            nosfcecho=nosfcecho,
+            weakecho=weakecho,
+            bkgd_val=bkgd_val,
+            feat_val=feat_val
+        )
 
         # save into dictionaries
         feature_dict["feature_under"] = {
-            "data": feature_under[None,:,:],
+            "data": feature_under[None, :, :],
             "standard_name": "feature_detection_under",
             "long_name": "Feature Detection Underestimate",
             "valid_min": 0,
             "valid_max": 3,
             "comment_1": (
-                "{0} = No surface echo/Undefined, {1} = Background echo, {2} = Features, {3} = weak echo".format(
+                "{} = No surface echo/Undefined, {} = Background echo, {} = Features, {} = weak echo".format(
                     nosfcecho, bkgd_val, feat_val, weakecho)
             ),
         }
 
         feature_dict["feature_over"] = {
-            "data": feature_over[None,:,:],
+            "data": feature_over[None, :, :],
             "standard_name": "feature_detection_over",
             "long_name": "Feature Detection Overestimate",
             "valid_min": 0,
             "valid_max": 3,
             "comment_1": (
-                "{0} = No surface echo/Undefined, {1} = Background echo, {2} = Features, {3} = weak echo".format(
+                "{} = No surface echo/Undefined, {} = Background echo, {} = Features, {} = weak echo".format(
                     nosfcecho, bkgd_val, feat_val, weakecho)
             ),
         }
