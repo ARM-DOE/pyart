@@ -315,7 +315,7 @@ def feature_detection(
         nosfcecho=nosfcecho,
         weakecho=weakecho,
         bkgd_val=bkgd_val,
-        feat_val=feat_val
+        feat_val=feat_val,
     )
 
     # put data into a dictionary to be added as a field
@@ -328,7 +328,8 @@ def feature_detection(
             "valid_max": 3,
             "comment_1": (
                 "{} = No surface echo/Undefined, {} = Background echo, {} = Features, {} = weak echo".format(
-                    nosfcecho, bkgd_val, feat_val, weakecho)
+                    nosfcecho, bkgd_val, feat_val, weakecho
+                )
             ),
         }
     }
@@ -359,7 +360,7 @@ def feature_detection(
             nosfcecho=nosfcecho,
             weakecho=weakecho,
             bkgd_val=bkgd_val,
-            feat_val=feat_val
+            feat_val=feat_val,
         )
 
         _, _, feature_over = _feature_detection(
@@ -386,7 +387,7 @@ def feature_detection(
             nosfcecho=nosfcecho,
             weakecho=weakecho,
             bkgd_val=bkgd_val,
-            feat_val=feat_val
+            feat_val=feat_val,
         )
 
         # save into dictionaries
@@ -398,7 +399,8 @@ def feature_detection(
             "valid_max": 3,
             "comment_1": (
                 "{} = No surface echo/Undefined, {} = Background echo, {} = Features, {} = weak echo".format(
-                    nosfcecho, bkgd_val, feat_val, weakecho)
+                    nosfcecho, bkgd_val, feat_val, weakecho
+                )
             ),
         }
 
@@ -410,7 +412,8 @@ def feature_detection(
             "valid_max": 3,
             "comment_1": (
                 "{} = No surface echo/Undefined, {} = Background echo, {} = Features, {} = weak echo".format(
-                    nosfcecho, bkgd_val, feat_val, weakecho)
+                    nosfcecho, bkgd_val, feat_val, weakecho
+                )
             ),
         }
 

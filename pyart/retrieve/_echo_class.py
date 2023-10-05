@@ -383,7 +383,12 @@ def _feature_detection(
         )
     else:
         core_array = core_scalar_scheme(
-            field, field_bkg, scalar_diff, always_core_thres, core_val, use_addition=use_addition
+            field,
+            field_bkg,
+            scalar_diff,
+            always_core_thres,
+            core_val,
+            use_addition=use_addition,
         )
 
     # Assign radii based on background field
@@ -452,7 +457,7 @@ def _feature_detection(
         weakecho,
         core_val,
         min_val_used,
-        weak_echo_thres
+        weak_echo_thres,
     )
     # mask where field is masked
     feature_array = np.ma.masked_where(field.mask, feature_array)
