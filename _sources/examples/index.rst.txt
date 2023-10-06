@@ -639,7 +639,7 @@ Examples of using Xradar with Py-ART to accomplish different tasks.
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Plot a PPI Using Xradar and Py-ART</div>
+      <div class="sphx-glr-thumbnail-title">Grid Data Using Xradar and Py-ART</div>
     </div>
 
 
