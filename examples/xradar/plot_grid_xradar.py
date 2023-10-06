@@ -1,7 +1,7 @@
 """
-==================================
-Plot a PPI Using Xradar and Py-ART
-==================================
+=================================
+Grid Data Using Xradar and Py-ART
+=================================
 
 An example which uses xradar and Py-ART to grid a PPI file.
 
