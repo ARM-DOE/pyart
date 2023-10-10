@@ -52,6 +52,23 @@ Examples of using Xradar with Py-ART to accomplish different tasks.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which uses xradar and Py-ART to dealias radial velocities.">
+
+.. only:: html
+
+  .. image:: /examples/xradar/images/thumb/sphx_glr_plot_dealias_xradar_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_xradar_plot_dealias_xradar.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Dealias Radial Velocities Using Xradar and Py-ART</div>
+    </div>
+
+
+.. raw:: html
+
     </div>
 
 
@@ -60,4 +77,5 @@ Examples of using Xradar with Py-ART to accomplish different tasks.
 
    /examples/xradar/plot_xradar
    /examples/xradar/plot_grid_xradar
+   /examples/xradar/plot_dealias_xradar
 
