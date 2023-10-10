@@ -3,7 +3,7 @@
 Dealias Radial Velocities Using Xradar and Py-ART
 =================================================
 
-An example which uses xradar and Py-ART to dealias radial velocites.
+An example which uses xradar and Py-ART to dealias radial velocities.
 
 """
 
