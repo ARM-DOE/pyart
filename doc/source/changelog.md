@@ -1,5 +1,40 @@
 # Changelog
 
+## Py-ART 1.16.1
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.16.0...a91195baac7e8afcffa9aae3a62dc27f32e8ab1a))
+
+### Enhancements made
+
+- ENH: cmweather used to now import colormaps [#1452](https://github.com/ARM-DOE/pyart/pull/1452) ([@zssherman](https://github.com/zssherman))
+- EN: Update accessor.py [#1457](https://github.com/ARM-DOE/pyart/pull/1457) ([@syedhamidali](https://github.com/syedhamidali))
+- ENH: Add new xradar functionality [#1456](https://github.com/ARM-DOE/pyart/pull/1456) ([@mgrover1](https://github.com/mgrover1))
+
+### Bugs fixed
+
+- FIX: Fix the colormap in xradar examples [#1474](https://github.com/ARM-DOE/pyart/pull/1474) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix the small typo in xradar grid example [#1471](https://github.com/ARM-DOE/pyart/pull/1471) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix failing ci isinstance [#1448](https://github.com/ARM-DOE/pyart/pull/1448) ([@mgrover1](https://github.com/mgrover1))
+
+### Documentation improvements
+
+- DOC: Add dealias example with xradar [#1472](https://github.com/ARM-DOE/pyart/pull/1472) ([@mgrover1](https://github.com/mgrover1))
+- DOC: Add xradar gridding example [#1470](https://github.com/ARM-DOE/pyart/pull/1470) ([@mgrover1](https://github.com/mgrover1))
+- DOC: Add docs for using xradar and Py-ART together [#1469](https://github.com/ARM-DOE/pyart/pull/1469) ([@mgrover1](https://github.com/mgrover1))
+- DOC: Update outdated installation instructions [#1462](https://github.com/ARM-DOE/pyart/pull/1462) ([@mgrover1](https://github.com/mgrover1))
+
+### Other merged PRs
+
+- ADD: Add python 3.12 to ci and wheels [#1473](https://github.com/ARM-DOE/pyart/pull/1473) ([@mgrover1](https://github.com/mgrover1))
+- ADD: Add gridding support from the xradar object [#1468](https://github.com/ARM-DOE/pyart/pull/1468) ([@mgrover1](https://github.com/mgrover1))
+- ADD: Update changelog for recent releases [#1450](https://github.com/ARM-DOE/pyart/pull/1450) ([@mgrover1](https://github.com/mgrover1))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2023-08-18&to=2023-10-13&type=c))
+
+[@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2023-08-18..2023-10-13&type=Issues) | [@review-notebook-app](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Areview-notebook-app+updated%3A2023-08-18..2023-10-13&type=Issues) | [@scollis](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ascollis+updated%3A2023-08-18..2023-10-13&type=Issues) | [@syedhamidali](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Asyedhamidali+updated%3A2023-08-18..2023-10-13&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2023-08-18..2023-10-13&type=Issues)
+
 ## Py-ART 1.16.0
 
 ([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.15.2...ba7f3533438db44b60e1c41e7ba17dfd6350497f))
