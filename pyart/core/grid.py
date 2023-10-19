@@ -316,11 +316,6 @@ class Grid:
 
         """
 
-        if not _XARRAY_AVAILABLE:
-            raise MissingOptionalDependency(
-                "Xarray is required to use Grid.to_xarray but is not " + "installed!"
-            )
-
         lon, lat = self.get_point_longitude_latitude()
         z = self.z["data"]
         y = self.y["data"]
@@ -348,6 +343,7 @@ class Grid:
                     data.attrs.update({meta: self.fields[field][meta]})
 
             ds[field] = data
+
             ds.lon.attrs = [
                 ("long_name", "longitude of grid cell center"),
                 ("units", "degree_E"),
@@ -366,6 +362,58 @@ class Grid:
             ds.z.encoding["_FillValue"] = None
             ds.lat.encoding["_FillValue"] = None
             ds.lon.encoding["_FillValue"] = None
+
+            # Delayed import
+            from ..io.grid_io import _make_coordinatesystem_dict
+
+            ds["ProjectionCoordinateSystem"] = xarray.DataArray(
+                data=np.array(1, dtype="int32"),
+                dims=None,
+                attrs=_make_coordinatesystem_dict(self),
+            )
+
+            if self.origin_latitude is not None:
+                ds["origin_latitude"] = xarray.DataArray(
+                    np.ma.expand_dims(self.origin_latitude["data"][0], 0),
+                    dims=("time"),
+                    attrs=get_metadata("origin_latitude"),
+                )
+
+            if self.origin_longitude is not None:
+                ds["origin_longitude"] = xarray.DataArray(
+                    np.ma.expand_dims(self.origin_longitude["data"][0], 0),
+                    dims=("time"),
+                    attrs=get_metadata("origin_longitude"),
+                )
+
+            if self.origin_altitude is not None:
+                ds["origin_altitude"] = xarray.DataArray(
+                    np.ma.expand_dims(self.origin_altitude["data"][0], 0),
+                    dims=("time"),
+                    attrs=get_metadata("origin_altitude"),
+                )
+
+            if self.radar_altitude is not None:
+                ds["radar_altitude"] = xarray.DataArray(
+                    np.ma.expand_dims(self.radar_altitude["data"][0], 0),
+                    dims=("nradar"),
+                    attrs=get_metadata("radar_altitude"),
+                )
+
+            if self.radar_latitude is not None:
+                ds["radar_latitude"] = xarray.DataArray(
+                    np.ma.expand_dims(self.radar_latitude["data"][0], 0),
+                    dims=("nradar"),
+                    attrs=get_metadata("radar_latitude"),
+                )
+
+            if self.radar_longitude is not None:
+                ds["radar_longitude"] = xarray.DataArray(
+                    np.ma.expand_dims(self.radar_longitude["data"][0], 0),
+                    dims=("nradar"),
+                    attrs=get_metadata("radar_longitude"),
+                )
+
             ds.close()
         return ds
 
