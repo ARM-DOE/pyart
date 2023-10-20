@@ -315,6 +315,12 @@ class Grid:
             in a one dimensional array.
 
         """
+        
+        if not _XARRAY_AVAILABLE:
+            raise MissingOptionalDependency(
+                "Xarray is required to use Grid.to_xarray but is not " + "installed!"
+                )
+
         lon, lat = self.get_point_longitude_latitude()
         z = self.z["data"]
         y = self.y["data"]
