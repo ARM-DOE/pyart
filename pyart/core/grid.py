@@ -328,7 +328,6 @@ class Grid:
 
         time = np.array(
             [num2date(self.time["data"][0], units=self.time["units"])],
-            dtype="datetime64[ns]",
         )
 
         ds = xarray.Dataset()
@@ -424,12 +423,13 @@ class Grid:
             ds.radar_time.attrs.pop("calendar")
 
         if self.radar_name is not None:
-            radar_name = self.radar_name["data"][0]
+            radar_name = self.radar_name["data"]
             ds["radar_name"] = xarray.DataArray(
-                np.array([b"".join(radar_name)], dtype="S4"),
+                np.array([b"".join(radar_name)]),
                 dims=("nradar"),
                 attrs=get_metadata("radar_name"),
             )
+
         ds.attrs = self.metadata
         ds.close()
         return ds
