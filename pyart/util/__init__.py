@@ -18,6 +18,7 @@ from .columnsect import for_azimuth  # noqa
 from .columnsect import get_column_rays  # noqa
 from .columnsect import get_field_location  # noqa
 from .columnsect import sphere_distance  # noqa
+from .columnsect import column_vertical_profile
 from .datetime_utils import datetime_from_dataset  # noqa
 from .datetime_utils import datetime_from_grid  # noqa
 from .datetime_utils import datetime_from_radar  # noqa
