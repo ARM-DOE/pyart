@@ -45,7 +45,7 @@ def column_vertical_profile(
     Returns
     -------
     column : xarray
-        Xarary Dataset containing the radar column above the target for
+        Xarray Dataset containing the radar column above the target for
         the various fields within the radar object.
 
     References
@@ -301,7 +301,7 @@ def get_field_location(radar, latitude, longitude):
     Returns
     -------
     column : xarray DataSet
-        Xarary Dataset containing the radar column above the target for
+        Xarray Dataset containing the radar column above the target for
         the various fields within the radar object.
     """
 
@@ -491,10 +491,8 @@ def get_sweep_rays(sweep_azi, azimuth, azimuth_spread=0):
     ----------
     radar_sweep : pyart.core.radar object
         Radar Sweep from which the rays are extracted from
-
     azimuth : float [degrees]
         Forward Azimuth Angle from Radar to Target in Degreees
-
     Azimuth_Spread : int
         Number of azimuth angles to include within extraction list
 
@@ -503,7 +501,6 @@ def get_sweep_rays(sweep_azi, azimuth, azimuth_spread=0):
     center_rays : list [integers]
         List of integers cooresponding to ray indices within the azimuth
         directly over the target
-
     spread_rays : list [integers]
         List of integers cooresponding to ray indices within the spread
         of azimuths emcompassing the target
@@ -525,15 +522,15 @@ def subset_fields(radar, ray, target_gates):
     Parameter
     ---------
     radar : pyart.core.radar object
-    Radar Sweep from which fields are extracted from the target locations
+        Radar Sweep from which fields are extracted from the target locations
 
     target_gates : list
-    List containing indices for the gates of interest
+        List containing indices for the gates of interest
 
     Returns
     -------
     fields : dict
-    dictionary containing averaged subset fields for target location
+        dictionary containing averaged subset fields for target location
 
     """
     # initiate a diciontary to hold the moment data.
@@ -582,7 +579,7 @@ def assemble_column(radar, total_moment, azimuth, distance, latitude, longitude)
     Returns
     -------
     column : xarray DataSet
-        Xarary Dataset containing the radar column above the target for
+        Xarray Dataset containing the radar column above the target for
         the various fields within the radar object.
 
     """
