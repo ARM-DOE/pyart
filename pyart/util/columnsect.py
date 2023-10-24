@@ -10,11 +10,13 @@ import xarray as xr
 
 from ..core.transforms import antenna_vectors_to_cartesian
 
+
 def column_vertical_profile(radar, latitude, longitude, azimuth_spread=3, spatial_spread=3):
     """
-    Given the location (in latitude, longitude) of a target, return the rays that correspond to
-    radar column above the target, allowing for user-defined range of azimuths and range gates 
-    to be included within this extraction. 
+    Given the location (in latitude, longitude) of a target, return the rays
+    that correspond to radar column above the target, allowing for user
+    defined range of azimuths and range gates to be included within this
+    extraction.
 
     Parameters
     ----------
@@ -40,19 +42,19 @@ def column_vertical_profile(radar, latitude, longitude, azimuth_spread=3, spatia
 
     Returns
     -------
-    column : xarray 
+    column : xarray
         Xarary Dataset containing the radar column above the target for
         the various fields within the radar object.
 
     References
     ----------
-    Murphy, A. M., A. Ryzhkov, and P. Zhang, 2020: Columnar Vertical 
-    Profile (CVP) Methodology for Validating Polarimetric Radar Retrievals 
-    in Ice Using In Situ Aircraft Measurements. J. Atmos. Oceanic Technol., 
+    Murphy, A. M., A. Ryzhkov, and P. Zhang, 2020: Columnar Vertical
+    Profile (CVP) Methodology for Validating Polarimetric Radar Retrievals
+    in Ice Using In Situ Aircraft Measurements. J. Atmos. Oceanic Technol.,
     37, 1623–1642, https://doi.org/10.1175/JTECH-D-20-0011.1.
-    
-    Bukovčić, P., A. Ryzhkov, and D. Zrnić, 2020: Polarimetric Relations for 
-    Snow Estimation—Radar Verification. J. Appl. Meteor. Climatol., 
+
+    Bukovčić, P., A. Ryzhkov, and D. Zrnić, 2020: Polarimetric Relations for
+    Snow Estimation—Radar Verification. J. Appl. Meteor. Climatol.,
     59, 991–1009, https://doi.org/10.1175/JAMC-D-19-0140.1.
     """
 
@@ -61,7 +63,7 @@ def column_vertical_profile(radar, latitude, longitude, azimuth_spread=3, spatia
 
     # Define a dictionary structure to contain the extracted features
     total_moment = {key: [] for key in radar.fields.keys()}
-    total_moment.update({'height' : [], 'time_offset' : []})
+    total_moment.update({'height': [], 'time_offset': []})
 
     # Define the start of the radar volume
     base_time = pd.to_datetime(radar.time["units"][14:]).to_numpy()
@@ -101,11 +103,11 @@ def column_vertical_profile(radar, latitude, longitude, azimuth_spread=3, spatia
                                                                  radar.azimuth["data"][ray],
                                                                  radar.elevation["data"][ray],
                                                                  edges=False,
-                                                                )
+                                                                 )
             # Calculate distance to target
             rhidis = np.sqrt((rhi_x**2) + (rhi_y**2)) * np.sign(rhi_z)
             # Calculate target gate
-            tar_gate = np.nonzero((np.abs(rhidis[0, :] - dis) < spatial_range))[0].tolist()
+            tar_gate = np.nonzero(np.abs(rhidis[0, :] - dis) < spatial_range)[0].tolist()
             # Subset the radar fields for the target locations
             subset = subset_fields(radar, ray, tar_gate)
             # Add back to the total dictionary
@@ -123,11 +125,11 @@ def column_vertical_profile(radar, latitude, longitude, azimuth_spread=3, spatia
                                                                  radar.azimuth["data"][ray],
                                                                  radar.elevation["data"][ray],
                                                                  edges=False,
-                                                                )
+                                                                 )
             # Calculate distance to target
             rhidis = np.sqrt((rhi_x**2) + (rhi_y**2)) * np.sign(rhi_z)
             # Calculate target gate
-            tar_gate = np.nonzero((np.abs(rhidis[0, :] - dis) < spatial_range))[0].tolist()
+            tar_gate = np.nonzero(np.abs(rhidis[0, :] - dis) < spatial_range)[0].tolist()
             # Subset the radar fields for the target locations
             subset = subset_fields(radar, ray, tar_gate)
             # Add back to the sweep dictionary
@@ -136,9 +138,6 @@ def column_vertical_profile(radar, latitude, longitude, azimuth_spread=3, spatia
             # to define height as center of each gate above sea level
             zgates.append(np.ma.mean(rhi_z[0, tar_gate] + radar.altitude["data"][0]))
             # Determine the time for the individual gates
-            ##delta = pd.to_timedelta(radar.time["data"][ray], unit="s")
-            ##total_time = base_time + delta
-            ##gate_time.append(total_time.to_numpy())
             gate_time.append(radar.time["data"][ray])
 
         # Average all azimuth moments into a single value for the sweep
@@ -146,16 +145,16 @@ def column_vertical_profile(radar, latitude, longitude, azimuth_spread=3, spatia
             if key == 'height':
                 total_moment[key].append(np.ma.mean(np.ma.masked_invalid(zgates)))
             elif key == 'time_offset':
-                ##total_moment[key].append(pd.to_datetime(gate_time).mean().to_numpy())
                 total_moment[key].append(np.round(np.ma.mean(np.array(gate_time)), 4))
             else:
                 total_moment[key].append(np.round(np.ma.mean(np.ma.masked_invalid(moment[key])), 4))
 
     # Add the base time for the radar
-    total_moment.update({'base_time' : base_time})
+    total_moment.update({'base_time': base_time})
 
     # Convert to xarray
     return assemble_column(radar, total_moment, forazi, dis, latitude, longitude)
+
 
 def sphere_distance(radar_latitude, target_latitude, radar_longitude, target_longitude):
     """
@@ -472,10 +471,11 @@ def get_column_rays(radar, azimuth):
 
     return rays
 
+
 def get_sweep_rays(sweep_azi, azimuth, azimuth_spread=0):
     """
     Extract the specific rays for a given azimuth from a radar sweep
-    
+
     Azimuth spread determines the +/- degrees azimuth to include within
     the extraction by multipling the azimuth resolution by input value.
 
@@ -495,19 +495,20 @@ def get_sweep_rays(sweep_azi, azimuth, azimuth_spread=0):
     center_rays : list [integers]
         List of integers cooresponding to ray indices within the azimuth
         directly over the target
-    
+
     spread_rays : list [integers]
         List of integers cooresponding to ray indices within the spread
         of azimuths emcompassing the target
-        
+
     """
     # determine resolution of azimuth angles
     resolution = np.round((sweep_azi[1] - sweep_azi[0]), 3)
 
-    centerline = np.nonzero((np.abs(sweep_azi - azimuth) < 0.5))[0].tolist()
-    spread = np.nonzero((np.abs(sweep_azi - azimuth) < (resolution * azimuth_spread)))[0].tolist()
+    centerline = np.nonzero(np.abs(sweep_azi - azimuth) < 0.5)[0].tolist()
+    spread = np.nonzero(np.abs(sweep_azi - azimuth) < (resolution * azimuth_spread))[0].tolist()
 
     return centerline, spread
+
 
 def subset_fields(radar, ray, target_gates):
     """
@@ -522,7 +523,7 @@ def subset_fields(radar, ray, target_gates):
     Returns
     -------
     fields : dict
-    dictionary containing averaged subset fields for target location 
+    dictionary containing averaged subset fields for target location
 
     """
     # initiate a diciontary to hold the moment data.
@@ -539,6 +540,7 @@ def subset_fields(radar, ray, target_gates):
 
     return moment
 
+
 def assemble_column(radar, total_moment, azimuth, distance, latitude, longitude):
     """
     With a dictionary containing the extracted fields from a radar sweep,
@@ -546,11 +548,11 @@ def assemble_column(radar, total_moment, azimuth, distance, latitude, longitude)
 
     Parameters
     ----------
-    total_moment : dict 
+    total_moment : dict
         Dictionary containing the extracted fields from the radar object.
-        File requires at least the height of the individual gates and 
+        File requires at least the height of the individual gates and
         the start time of the volumetric scan.
-    
+
     azimuth : float, [degrees]
         azimuth angle from the radar where
         target is located within the scan.
@@ -564,7 +566,7 @@ def assemble_column(radar, total_moment, azimuth, distance, latitude, longitude)
 
     longitude : float, [degrees]
         Longitude of the target in degrees
-    
+
     Returns
     -------
     column : xarray DataSet
@@ -576,12 +578,12 @@ def assemble_column(radar, total_moment, azimuth, distance, latitude, longitude)
     # Create a blank list to hold the xarray DataArrays
     ds_container = []
     da_meta = [
-            "units",
-            "standard_name",
-            "long_name",
-            "valid_max",
-            "valid_min",
-            "coordinates",
+        "units",
+        "standard_name",
+        "long_name",
+        "valid_max",
+        "valid_min",
+        "coordinates",
     ]
     # Skip these fields and apply meta data after creation
     # of the Xarray DataSet
@@ -593,12 +595,11 @@ def assemble_column(radar, total_moment, azimuth, distance, latitude, longitude)
             # Convert Masked Array elements to NaNs for Xarray
             total_moment[key] = [np.nan if x is np.ma.masked else x for x in total_moment[key]]
             # Convert to Xarray DataArray, set derived height as dimension/coordinates
-            da = xr.DataArray(
-                    total_moment[key],
-                    coords=dict(height=total_moment['height']),
-                    name=key,
-                    dims=["height"]
-                )
+            da = xr.DataArray(total_moment[key],
+                              coords=dict(height=total_moment['height']),
+                              name=key,
+                              dims=["height"]
+                              )
             # Add meta data for the radar fields
             if key != "time_offset":
                 for tag in da_meta:
@@ -615,15 +616,14 @@ def assemble_column(radar, total_moment, azimuth, distance, latitude, longitude)
     column.base_time.attrs.update(
         long_name=("Start time of individual radar scan volumes "
                    + " from which column are extracted "
-                  ),
+                   ),
         units="UTC Time",
     )
 
     # Assign Attributes for the Height and Times
-    height_des = (
-            "Height Above Sea Level [in meters] for the Center of Each"
-            + " Radar Gate Above the Target Location"
-    )
+    height_des = ("Height Above Sea Level [in meters] for the Center of Each"
+                  + " Radar Gate Above the Target Location"
+                  )
     column.height.attrs.update(
         long_name="Height of Radar Beam",
         units="m",
@@ -645,11 +645,11 @@ def assemble_column(radar, total_moment, azimuth, distance, latitude, longitude)
     column["latitude"] = latitude
     column.latitude.attrs.update(long_name="Latitude of Location Column is Extracted Above",
                                  units="deg"
-                                )
+                                 )
     column["longitude"] = longitude
     column.longitude.attrs.update(long_name="Longitude of Location Column is Extracted Above",
                                   units="deg"
-                                 )
+                                  )
 
     # Assign Global Attributes to the DataSet
     column.attrs["distance_from_radar"] = str(np.around(distance / 1000.0, 3)) + " km"
