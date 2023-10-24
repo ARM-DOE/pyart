@@ -49,12 +49,9 @@ def test_column_vertical_profile():
     """
     test to make sure CVP column above location is pulled correctly
     """
-    column = pyart.util.columnsect.column_vertical_profile(radar,
-                                                           47.97,
-                                                           -122.20,
-                                                           azimuth_spread=3,
-                                                           spatial_spread=5
-                                                           )
+    column = pyart.util.columnsect.column_vertical_profile(
+        radar, 47.97, -122.20, azimuth_spread=3, spatial_spread=5
+    )
     # check to make sure z-gate is pulled correctly.
     test_height = abs(column.height.data[0] - 565.5)
     assert test_height < 0.001
