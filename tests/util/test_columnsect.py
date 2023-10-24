@@ -7,6 +7,7 @@ import pyart
 # read in example file
 radar = pyart.io.read_nexrad_archive(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
 
+
 def test_get_azimuth():
     """
     test to make sure azimuth is correct to Everett, WA
@@ -42,6 +43,7 @@ def test_get_field_location():
     # check to make sure reflectivity value is minimum
     test_z = abs(column.reflectivity[0] + 32)
     assert test_z < 0.001
+
 
 def test_column_vertical_profile():
     """
