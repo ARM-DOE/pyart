@@ -85,7 +85,7 @@ def test_grid_write_read():
     grid1.metadata["comment"] = "This is another comment"
 
     with pyart.testing.InTemporaryDirectory():
-        tmpfile = "tmp_grid.nc"
+        tmpfile = "tmp_grid2.nc"
         pyart.io.write_grid(tmpfile, grid1)
         grid2 = xr.open_dataset(tmpfile, decode_times=False)
         grid2 = pyart.xradar.Xgrid(grid2)
@@ -130,3 +130,4 @@ def test_grid_write_read():
         _check_attrs_similar(grid1, grid2, "radar_time")
         assert grid1.radar_name["data"] == grid2.radar_name["data"]
         assert grid1.nradar == grid2.nradar
+        grid2.ds.close()
