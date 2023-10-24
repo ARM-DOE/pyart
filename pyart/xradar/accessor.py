@@ -30,7 +30,8 @@ class Xgrid:
 
         Parameters
         ----------
-
+        grid_ds: xarray Dataset
+            The xarray Dataset to convert to a Py-ART grid.
         """
         if "units" not in list(grid_ds["time"].attrs.keys()):
             raise RuntimeError(
