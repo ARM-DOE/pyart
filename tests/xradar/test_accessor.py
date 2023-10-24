@@ -1,7 +1,6 @@
 import numpy as np
-import xradar as xd
 import xarray as xr
-
+import xradar as xd
 from numpy.testing import assert_allclose, assert_almost_equal
 from open_radar_data import DATASETS
 
@@ -60,6 +59,7 @@ def test_grid(filename=filename):
     assert_allclose(
         grid.fields["DBZ"]["data"][0, -1, 0], np.array(0.4243435), rtol=1e-03
     )
+
 
 def _check_attrs_similar(grid1, grid2, attr):
     print("Checking attribute:", attr)

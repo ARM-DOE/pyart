@@ -10,73 +10,85 @@ import numpy as np
 import pandas as pd
 from datatree import DataTree, formatting, formatting_html
 from datatree.treenode import NodePath
-from netCDF4 import num2date
-from xarray import concat, Dataset, DataArray
+from xarray import DataArray, Dataset, concat
 from xarray.core import utils
 
-from ..core.transforms import antenna_vectors_to_cartesian, cartesian_to_geographic
-from ..core.transforms import cartesian_vectors_to_geographic
-from ..lazydict import LazyLoadDict
 from ..config import get_metadata
+from ..core.transforms import (
+    antenna_vectors_to_cartesian,
+    cartesian_to_geographic,
+    cartesian_vectors_to_geographic,
+)
+from ..lazydict import LazyLoadDict
+
 
 class Xgrid:
     def __init__(self, grid_ds):
         """
-        Wraps a Cf-compliant xarray Dataset into a PyART Grid Object. 
+        Wraps a Cf-compliant xarray Dataset into a PyART Grid Object.
         Note that the times must not be decoded by xr.open_dataset when loading the file.
 
         Parameters
         ----------
 
         """
-        if not 'units' in list(grid_ds['time'].attrs.keys()):
-            raise RuntimeError("decode_times must be set to false when opening grid file!")
+        if "units" not in list(grid_ds["time"].attrs.keys()):
+            raise RuntimeError(
+                "decode_times must be set to false when opening grid file!"
+            )
         self.ds = grid_ds
-        self.time = dict(data=np.atleast_1d(self.ds['time'].values))
-        self.time.update(self.ds['time'].attrs)
+        self.time = dict(data=np.atleast_1d(self.ds["time"].values))
+        self.time.update(self.ds["time"].attrs)
         self.fields = {}
         self._find_fields()
-        self.origin_altitude = dict(data=np.atleast_1d(self.ds['origin_altitude'].values))
-        self.origin_altitude.update(self.ds['origin_altitude'].attrs)
-        self.origin_latitude = dict(data=np.atleast_1d(self.ds['origin_latitude'].values))
-        self.origin_latitude.update(self.ds['origin_latitude'].attrs)
-        self.origin_longitude = dict(data=np.atleast_1d(self.ds['origin_longitude'].values))
-        self.origin_longitude.update(self.ds['origin_longitude'].attrs)
-        self.z = dict(data=np.atleast_1d(self.ds['z'].values))
-        self.z.update(self.ds['z'].attrs)
-        self.y = dict(data=np.atleast_1d(self.ds['y'].values))
-        self.y.update(self.ds['y'].attrs)
-        self.x = dict(data=np.atleast_1d(self.ds['x'].values))
-        self.x.update(self.ds['x'].attrs)
-        self.nradar = len(self.ds['nradar'].values)
-        self.radar_altitude = dict(data=np.atleast_1d(self.ds['radar_altitude'].values))
-        self.radar_altitude.update(self.ds['radar_altitude'].attrs)
-        self.radar_longitude = dict(data=np.atleast_1d(self.ds['radar_longitude'].values))
-        self.radar_longitude.update(self.ds['radar_longitude'].attrs)
-        self.radar_latitude = dict(data=np.atleast_1d(self.ds['radar_latitude'].values))
-        self.radar_latitude.update(self.ds['radar_latitude'].attrs)
-        self.radar_time = dict(data=np.atleast_1d(self.ds['radar_time'].values))
-        self.radar_time.update(self.ds['radar_time'].attrs)
-        self.radar_name = dict(data=self.ds['radar_name'].values.astype('<U12'))
-        self.radar_name.update(self.ds['radar_name'].attrs)
-        self.projection = self.ds['projection'].attrs
-        if '_include_lon_0_lat_0' in list(self.projection.keys()):
-            if self.projection['_include_lon_0_lat_0'].lower() == 'true':
-                self.projection['_include_lon_0_lat_0'] = True
+        self.origin_altitude = dict(
+            data=np.atleast_1d(self.ds["origin_altitude"].values)
+        )
+        self.origin_altitude.update(self.ds["origin_altitude"].attrs)
+        self.origin_latitude = dict(
+            data=np.atleast_1d(self.ds["origin_latitude"].values)
+        )
+        self.origin_latitude.update(self.ds["origin_latitude"].attrs)
+        self.origin_longitude = dict(
+            data=np.atleast_1d(self.ds["origin_longitude"].values)
+        )
+        self.origin_longitude.update(self.ds["origin_longitude"].attrs)
+        self.z = dict(data=np.atleast_1d(self.ds["z"].values))
+        self.z.update(self.ds["z"].attrs)
+        self.y = dict(data=np.atleast_1d(self.ds["y"].values))
+        self.y.update(self.ds["y"].attrs)
+        self.x = dict(data=np.atleast_1d(self.ds["x"].values))
+        self.x.update(self.ds["x"].attrs)
+        self.nradar = len(self.ds["nradar"].values)
+        self.radar_altitude = dict(data=np.atleast_1d(self.ds["radar_altitude"].values))
+        self.radar_altitude.update(self.ds["radar_altitude"].attrs)
+        self.radar_longitude = dict(
+            data=np.atleast_1d(self.ds["radar_longitude"].values)
+        )
+        self.radar_longitude.update(self.ds["radar_longitude"].attrs)
+        self.radar_latitude = dict(data=np.atleast_1d(self.ds["radar_latitude"].values))
+        self.radar_latitude.update(self.ds["radar_latitude"].attrs)
+        self.radar_time = dict(data=np.atleast_1d(self.ds["radar_time"].values))
+        self.radar_time.update(self.ds["radar_time"].attrs)
+        self.radar_name = dict(data=self.ds["radar_name"].values.astype("<U12"))
+        self.radar_name.update(self.ds["radar_name"].attrs)
+        self.projection = self.ds["projection"].attrs
+        if "_include_lon_0_lat_0" in list(self.projection.keys()):
+            if self.projection["_include_lon_0_lat_0"].lower() == "true":
+                self.projection["_include_lon_0_lat_0"] = True
             else:
-                self.projection['_include_lon_0_lat_0'] = False
- 
+                self.projection["_include_lon_0_lat_0"] = False
+
         self.init_point_altitude()
         self.init_point_longitude_latitude()
         self.init_point_x_y_z()
 
     def _find_fields(self):
         for key in list(self.ds.variables.keys()):
-            if self.ds[key].dims == ('time', 'z', 'y', 'x'):
+            if self.ds[key].dims == ("time", "z", "y", "x"):
                 self.fields[key] = {}
                 self.fields[key]["data"] = self.ds[key].values.squeeze()
                 self.fields[key].update(self.ds[key].attrs)
-                
 
     def get_projparams(self):
         projparams = self.projection.copy()
@@ -84,22 +96,22 @@ class Xgrid:
             projparams["lon_0"] = self.origin_longitude["data"][0]
             projparams["lat_0"] = self.origin_latitude["data"][0]
         return projparams
-    
+
     @property
     def metadata(self):
         return self.ds.attrs
-    
+
     @property
     def ny(self):
-        return self.ds.dims['y']
-    
+        return self.ds.dims["y"]
+
     @property
     def nx(self):
-        return self.ds.dims['x']
-    
+        return self.ds.dims["x"]
+
     @property
     def nz(self):
-        return self.ds.dims['z']
+        return self.ds.dims["z"]
 
     # Attribute init/reset methods
     def init_point_x_y_z(self):
@@ -130,7 +142,7 @@ class Xgrid:
         point_altitude = LazyLoadDict(get_metadata("point_altitude"))
         point_altitude.set_lazy("data", _point_altitude_data_factory(self))
         self.point_altitude = point_altitude
-    
+
     def get_point_longitude_latitude(self, level=0, edges=False):
         """
         Return arrays of longitude and latitude for a given grid height level.
@@ -186,7 +198,6 @@ class Xgrid:
             err = "'data' has invalid shape, should be (%i, %i)" % t
             raise ValueError(err)
         self.fields[field_name] = dic
-
 
     def to_xarray(self):
         """
