@@ -151,9 +151,13 @@ def column_vertical_profile(
             if key == "height":
                 total_moment[key].append(np.ma.mean(np.ma.masked_invalid(zgates)))
             elif key == "time_offset":
-                total_moment[key].append(np.round(np.ma.mean(np.array(gate_time)), 4))
+                total_moment[key].append(
+                    np.round(np.ma.mean(np.array(gate_time)), 4)
+                )
             else:
-                total_moment[key].append(np.round(np.ma.mean(np.ma.masked_invalid(moment[key])), 4))
+                total_moment[key].append(
+                    np.round(np.ma.mean(np.ma.masked_invalid(moment[key])), 4)
+                )
 
     # Add the base time for the radar
     total_moment.update({"base_time": base_time})
@@ -606,10 +610,11 @@ def assemble_column(radar, total_moment, azimuth, distance, latitude, longitude)
             total_moment[key] = [
                 np.nan if x is np.ma.masked else x for x in total_moment[key]
             ]
-            # Convert to Xarray DataArray, set derived height as dimension/coordinates
+            # Convert to Xarray DataArray, set derived height as 
+            # dimension/coordinates
             da = xr.DataArray(
                 total_moment[key],
-                coords=dict(height=total_moment['height']),
+                coords=dict(height=total_moment["height"]),
                 name=key,
                 dims=["height"]
             )
