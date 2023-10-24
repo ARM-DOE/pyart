@@ -174,8 +174,8 @@ def sphere_distance(radar_latitude, target_latitude, radar_longitude, target_lon
     Distance is calculated for a smooth sphere
     Radar and Target are at the same altitude (need to check)
 
-    Parameter
-    ---------
+    Parameters
+    ----------
     radar_latitude : float, [degrees]
         latitude of the radar in degrees
     target_latitude : float, [degrees]
@@ -523,7 +523,6 @@ def subset_fields(radar, ray, target_gates):
     ---------
     radar : pyart.core.radar object
         Radar Sweep from which fields are extracted from the target locations
-
     target_gates : list
         List containing indices for the gates of interest
 
@@ -561,18 +560,14 @@ def assemble_column(radar, total_moment, azimuth, distance, latitude, longitude)
         Dictionary containing the extracted fields from the radar object.
         File requires at least the height of the individual gates and
         the start time of the volumetric scan.
-
     azimuth : float, [degrees]
         azimuth angle from the radar where
         target is located within the scan.
         output is in degrees.
-
     distance : float, [meters]
         Great-Circle Distance between radar and target in meters
-
     latitude : float, [degrees]
         Latitude of the target in degrees
-
     longitude : float, [degrees]
         Longitude of the target in degrees
 
@@ -583,7 +578,6 @@ def assemble_column(radar, total_moment, azimuth, distance, latitude, longitude)
         the various fields within the radar object.
 
     """
-
     # Create a blank list to hold the xarray DataArrays
     ds_container = []
     da_meta = [
@@ -709,7 +703,7 @@ def check_longitude(longitude):
     Function to check if input latitude is valid for type and value.
 
     Parameters
-    ---------
+    ----------
     longitude : int, float
         Longitude of a location taht should be between 180W and 180E
     """
