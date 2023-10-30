@@ -40,7 +40,7 @@ jobs:
           environment-file: continuous_integration/environment-ci.yml
           activate-environment: pyart-dev
           cache-downloads: true
-          python-version: ${{ matrix.python-version }}
+          create-args: python=${{ matrix.python-version }}
 
       - name: Fetch all history for all tags and branches
         run: |
