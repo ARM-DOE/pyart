@@ -1,0 +1,6 @@
+pyart.util.column\_vertical\_profile
+====================================
+
+.. currentmodule:: pyart.util
+
+.. autofunction:: column_vertical_profile

@@ -25,6 +25,8 @@
     
     angular_texture_2d
     
+    column_vertical_profile
+    
     cross_section_ppi
     
     cross_section_rhi
