@@ -9,7 +9,9 @@ radar = pyart.io.read_nexrad_archive(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
 
 
 def test_get_azimuth():
-    # test to make sure azimuth is correct to Everett, WA
+    """
+    test to make sure azimuth is correct to Everett, WA
+    """
     azimuth = pyart.util.columnsect.for_azimuth(
         radar.latitude["data"][0], 47.97, radar.longitude["data"][0], -122.20
     )
@@ -18,7 +20,9 @@ def test_get_azimuth():
 
 
 def test_sphere_distance():
-    # test to make sure sphere distance is correct to Everett, WA
+    """
+    test to make sure sphere distance is correct to Everett, WA
+    """
     distance = pyart.util.columnsect.sphere_distance(
         radar.latitude["data"][0], 47.97, (radar.longitude["data"][0]), -122.20
     )
@@ -27,7 +31,9 @@ def test_sphere_distance():
 
 
 def test_get_field_location():
-    # test to make sure column above location is pulled correctly
+    """
+    test to make sure column above location is pulled correctly
+    """
     column = pyart.util.columnsect.get_field_location(radar, 47.97, -122.20)
 
     # check to make sure z-gate is pulled correctly.
@@ -37,3 +43,23 @@ def test_get_field_location():
     # check to make sure reflectivity value is minimum
     test_z = abs(column.reflectivity[0] + 32)
     assert test_z < 0.001
+
+
+def test_column_vertical_profile():
+    """
+    test to make sure CVP column above location is pulled correctly
+    """
+    column = pyart.util.columnsect.column_vertical_profile(
+        radar, 47.97, -122.20, azimuth_spread=3, spatial_spread=5
+    )
+    # check to make sure z-gate is pulled correctly.
+    test_height = abs(column.height.data[0] - 565.7)
+    assert test_height < 0.001
+
+    # check to make sure reflectivity value is minimum
+    test_z = abs(column.reflectivity.data[0] + 32)
+    assert test_z < 0.001
+
+    # check to make sure time-offset is correct
+    test_offset = abs(column.time_offset.data[0] - 27.492)
+    assert test_offset < 0.001
