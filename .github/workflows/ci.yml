@@ -38,7 +38,7 @@ jobs:
         uses: mamba-org/setup-micromamba@v1
         with:
           environment-file: continuous_integration/environment-ci.yml
-          activate-environment: pyart-dev
+          environment-name: pyart-dev
           cache-downloads: true
           create-args: python=${{ matrix.python-version }}
 
