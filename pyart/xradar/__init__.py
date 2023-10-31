@@ -1,1 +1,1 @@
-from .accessor import Xradar  # noqa
+from .accessor import Xradar, Xgrid  # noqa
