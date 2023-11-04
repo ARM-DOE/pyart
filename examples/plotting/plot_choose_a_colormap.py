@@ -126,6 +126,8 @@ plot_color_gradients(
         "NWSRef",
         "NWSVel",
         "NWS_SPW",
+        "NWS_CC"
+        "plasmidis"
         "PD17",
         "RRate11",
         "RefDiff",

@@ -52,7 +52,9 @@ chase_spectral_rgb_vals = np.genfromtxt(
 spectral_ext_rgb_vals = np.genfromtxt(
     os.path.join(data_dir, "spectral-extended-rgb.txt")
 )
-
+plasmidis_rgb_vals = np.genfromtxt(
+    os.path.join(data_dir, "plasmidis-rgb.txt")
+)
 
 # HomeyerRainbow developed by Cameron Homeyer with assistance from Bobby Jackson
 
@@ -61,4 +63,5 @@ datad = {
     "balance": bal_rgb_vals,
     "ChaseSpectral": chase_spectral_rgb_vals,
     "SpectralExtended": spectral_ext_rgb_vals,
+    "plasmidis": plasmidis_rgb_vals
 }

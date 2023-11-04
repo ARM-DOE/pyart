@@ -31,6 +31,7 @@ colormaps are available within matplotlib with names 'pyart_COLORMAP':
     * NWSRef
     * NWSVel
     * NWS_SPW
+    * NWS_CC
     * PD17
     * RRate11
     * RdYlBu11b
