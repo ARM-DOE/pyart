@@ -54,7 +54,7 @@ def ZtoR(radar, ref_field="reflectivity", a=300, b=1.4, save_name='NWS_primary_p
         'long_name': "{} rescaled from linear reflectivity".format(save_name),
         'units': 'mm/hr',
         'valid_min': 0,
-        'valid_max': 1000
+        'valid_max': 10000
     }
 
     # add field to radar object
