@@ -5,10 +5,8 @@ Rescale reflectivity to precipitation rate
 
 import numpy as np
 
-from pyart.core import Radar
 
-
-def ZtoR(radar, ref_field="reflectivity", a=300, b=1.4, save_name='NWS_primary_prate'):
+def ZtoR(radar, ref_field="reflectivity", a=300, b=1.4, save_name="NWS_primary_prate"):
     """
     Convert reflectivity (dBZ) to precipitation rate (mm/hr)
 
@@ -40,7 +38,7 @@ def ZtoR(radar, ref_field="reflectivity", a=300, b=1.4, save_name='NWS_primary_p
     """
 
     # get reflectivity data
-    ref_data = radar.fields[ref_field]['data']
+    ref_data = radar.fields[ref_field]["data"]
     ref_data = np.ma.masked_invalid(ref_data)
 
     # convert to linear reflectivity
@@ -49,12 +47,12 @@ def ZtoR(radar, ref_field="reflectivity", a=300, b=1.4, save_name='NWS_primary_p
 
     # create dictionary
     prate_dict = {
-        'data': precip_rate,
-        'standard_name': save_name,
-        'long_name': "{} rescaled from linear reflectivity".format(save_name),
-        'units': 'mm/hr',
-        'valid_min': 0,
-        'valid_max': 10000
+        "data": precip_rate,
+        "standard_name": save_name,
+        "long_name": f"{save_name} rescaled from linear reflectivity",
+        "units": "mm/hr",
+        "valid_min": 0,
+        "valid_max": 10000,
     }
 
     # add field to radar object

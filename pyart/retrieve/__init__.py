@@ -11,7 +11,7 @@ from .echo_class import hydroclass_semisupervised  # noqa
 from .echo_class import steiner_conv_strat  # noqa
 from .gate_id import fetch_radar_time_profile, map_profile_to_gates  # noqa
 from .kdp_proc import kdp_maesaka, kdp_schneebeli, kdp_vulpiani  # noqa
-from .precip_rate import ZtoR # noqa
+from .precip_rate import ZtoR  # noqa
 from .qpe import est_rain_rate_a  # noqa
 from .qpe import est_rain_rate_hydro  # noqa
 from .qpe import est_rain_rate_kdp  # noqa
