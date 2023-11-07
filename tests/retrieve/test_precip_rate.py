@@ -4,6 +4,7 @@ import math
 
 import pyart
 
+
 def test_precip_rate():
     grid = pyart.testing.make_storm_grid()
     grid = pyart.retrieve.ZtoR(grid)
@@ -27,7 +28,3 @@ def test_precip_rate():
         )
         < -4
     )
-
-
-
-
