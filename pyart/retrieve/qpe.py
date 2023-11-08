@@ -685,6 +685,7 @@ def _coeff_ra_table():
 
     return coeff_ra_dict
 
+
 def ZtoR(radar, ref_field="reflectivity", a=300, b=1.4, save_name="NWS_primary_prate"):
     """
     Convert reflectivity (dBZ) to precipitation rate (mm/hr)
