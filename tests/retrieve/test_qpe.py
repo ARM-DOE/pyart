@@ -1,7 +1,7 @@
 """ Unit tests for rainfall rate estimation module. """
 
-from numpy.testing import assert_allclose
 import numpy as np
+from numpy.testing import assert_allclose
 
 import pyart
 
@@ -154,6 +154,7 @@ def test_get_coeff_rkdp():
 
     coeff_rkdp_use_x = pyart.retrieve.qpe._get_coeff_rkdp(13e9)
     assert coeff_rkdp_use_x == (15.81, 0.7992)
+
 
 def test_precip_rate():
     grid = pyart.testing.make_storm_grid()
