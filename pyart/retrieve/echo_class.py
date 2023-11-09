@@ -154,6 +154,8 @@ def feature_detection(
     field=None,
     estimate_flag=True,
     estimate_offset=5,
+    overest_field=None,
+    underest_field=None,
 ):
     """
     This function can be used to detect features in a field (e.g. reflectivity, rain rate, snow rate,
@@ -228,6 +230,10 @@ def feature_detection(
         Default is True (recommended)
     estimate_offset : float, optional
         Value used to offset the field values by for the over/underestimation application. Default value is 5 dBZ.
+    overest_field : str, optional
+        Name of field in grid object used to calculate the overestimate if estimate_flag is True.
+    underest_field : str, optional
+        Name of field in grid object used to calculate the underestimate if estimate_flag is True.
 
     Returns
     -------
@@ -336,8 +342,16 @@ def feature_detection(
 
     # If estimation is True, run the algorithm on the field with offset subtracted and the field with the offset added
     if estimate_flag:
+
+        # get underestimate field
+        if underest_field is None:
+            under_field = ze - estimate_offset
+        elif underest_field is not None:
+            under_field = np.ma.copy(grid.fields[underest_field]["data"][0, :, :])
+
+        # run algorithm to get feature detection underestimate
         _, _, feature_under = _feature_detection(
-            ze - estimate_offset,
+            under_field,
             dx,
             dy,
             always_core_thres=always_core_thres,
@@ -363,8 +377,15 @@ def feature_detection(
             feat_val=feat_val,
         )
 
+        # get overestimate field
+        if overest_field is None:
+            over_field = ze + estimate_offset
+        elif overest_field is not None:
+            over_field = np.ma.copy(grid.fields[overest_field]["data"][0, :, :])
+
+        # run algorithm to get feature detection underestimate
         _, _, feature_over = _feature_detection(
-            ze + estimate_offset,
+            over_field,
             dx,
             dy,
             always_core_thres=always_core_thres,
