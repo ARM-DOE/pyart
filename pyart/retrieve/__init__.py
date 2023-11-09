@@ -18,6 +18,7 @@ from .qpe import est_rain_rate_z  # noqa
 from .qpe import est_rain_rate_za  # noqa
 from .qpe import est_rain_rate_zkdp  # noqa
 from .qpe import est_rain_rate_zpoly  # noqa
+from .qpe import ZtoR  # noqa
 from .qvp import quasi_vertical_profile  # noqa
 from .simple_moment_calculations import calculate_snr_from_reflectivity  # noqa
 from .simple_moment_calculations import calculate_velocity_texture  # noqa
