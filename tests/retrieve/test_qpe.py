@@ -1,6 +1,5 @@
 """ Unit tests for rainfall rate estimation module. """
 
-import numpy as np
 from numpy.testing import assert_allclose
 
 import pyart
@@ -163,19 +162,10 @@ def test_precip_rate():
     # check that field is in grid object
     assert "NWS_primary_prate" in grid.fields.keys()
 
-    # check calculations are within 10^-4 orders of magnitude
-    assert (
-        np.floor(
-            np.log10(
-                grid.fields["NWS_primary_prate"]["data"][0, 10, 10]
-                - (
-                    (
-                        (10 ** (grid.fields["reflectivity"]["data"][0, 10, 10] / 10))
-                        / 300
-                    )
-                    ** (1 / 1.4)
-                )
-            )
-        )
-        < -4
-    )
+    # Calculate the estimated value
+    correct = (
+        (10 ** (grid.fields["reflectivity"]["data"][0, 10, 10] / 10.0)) / 300.0
+    ) ** (1 / 1.4)
+
+    # Check for correctness
+    assert_allclose(grid.fields["NWS_primary_prate"]["data"][0, 10, 10], correct)
