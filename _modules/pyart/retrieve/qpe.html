@@ -8,7 +8,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.qpe &#8212; Py-ART 1.16.1.post5 documentation</title>
+    <title>pyart.retrieve.qpe &#8212; Py-ART 1.16.1.post6 documentation</title>
   
   
   
@@ -149,7 +149,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post5 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post6 documentation</p>
   
 </a></div>
     
@@ -1176,6 +1176,61 @@ document.write(`
     <span class="n">coeff_ra_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">45.5</span><span class="p">,</span> <span class="mf">0.83</span><span class="p">)})</span>
 
     <span class="k">return</span> <span class="n">coeff_ra_dict</span>
+
+
+<div class="viewcode-block" id="ZtoR"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.ZtoR.html#pyart.retrieve.ZtoR">[docs]</a><span class="k">def</span> <span class="nf">ZtoR</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">ref_field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">1.4</span><span class="p">,</span> <span class="n">save_name</span><span class="o">=</span><span class="s2">&quot;NWS_primary_prate&quot;</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Convert reflectivity (dBZ) to precipitation rate (mm/hr)</span>
+
+<span class="sd">    Author: Laura Tomkins</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    radar : Radar</span>
+<span class="sd">        Radar object used.</span>
+<span class="sd">    ref_field : str</span>
+<span class="sd">        Reflectivity field name to use to look up reflectivity data. In the</span>
+<span class="sd">        radar object. Default field name is &#39;reflectivity&#39;. Units are expected</span>
+<span class="sd">        to be dBZ.</span>
+<span class="sd">    a : float</span>
+<span class="sd">        a value (coefficient) in the Z-R relationship</span>
+<span class="sd">    b: float</span>
+<span class="sd">        b value (exponent) in the Z-R relationship</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    radar : Radar</span>
+<span class="sd">        The radar object containing the precipitation rate field</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    American Meteorological Society, 2022: &quot;Z-R relation&quot;. Glossary of Meteorology,</span>
+<span class="sd">    https://glossary.ametsoc.org/wiki/Z-r_relation</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># get reflectivity data</span>
+    <span class="n">ref_data</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">ref_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">ref_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">ref_data</span><span class="p">)</span>
+
+    <span class="c1"># convert to linear reflectivity</span>
+    <span class="n">ref_linear</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">ref_data</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
+    <span class="n">precip_rate</span> <span class="o">=</span> <span class="p">(</span><span class="n">ref_linear</span> <span class="o">/</span> <span class="n">a</span><span class="p">)</span> <span class="o">**</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">b</span><span class="p">)</span>
+
+    <span class="c1"># create dictionary</span>
+    <span class="n">prate_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">precip_rate</span><span class="p">,</span>
+        <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="n">save_name</span><span class="p">,</span>
+        <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">save_name</span><span class="si">}</span><span class="s2"> rescaled from linear reflectivity&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;mm/hr&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;valid_min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">&quot;valid_max&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>
+    <span class="p">}</span>
+
+    <span class="c1"># add field to radar object</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="n">save_name</span><span class="p">,</span> <span class="n">prate_dict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">radar</span></div>
 </pre></div>
 <div class="section ablog__blog_comments">
   
