@@ -277,7 +277,7 @@ convsf_cmap = mcolors.LinearSegmentedColormap.from_list(
     [
         (33 / 255, 145 / 255, 140 / 255),
         (253 / 255, 231 / 255, 37 / 255),
-        (210 / 255, 180 / 255, 140 / 255)
+        (210 / 255, 180 / 255, 140 / 255),
     ],
     N=3,
 )
@@ -351,7 +351,7 @@ convsf_dict = pyart.retrieve.feature_detection(
     weakecho=3,
     bkgd_val=1,
     feat_val=2,
-    field='maxdz',
+    field="maxdz",
     estimate_flag=True,
     estimate_offset=5,
 )
@@ -430,7 +430,9 @@ grid = pyart.util.image_mute_radar(
 )
 
 # rescale reflectivity to snow rate
-grid = pyart.retrieve.qpe.ZtoR(grid, ref_field="reflectivity", a=57.3, b=1.67, save_name="snow_rate")
+grid = pyart.retrieve.qpe.ZtoR(
+    grid, ref_field="reflectivity", a=57.3, b=1.67, save_name="snow_rate"
+)
 
 # get dx dy
 dx = grid.x["data"][1] - grid.x["data"][0]
@@ -521,12 +523,8 @@ ref_field_under["standard_name"] = ref_field["standard_name"] + "_underest"
 ref_field_under["long_name"] = ref_field["long_name"] + " underestimate"
 
 # add to grid object
-grid.add_field(
-    "reflectivity_over", ref_field_over, replace_existing=True
-)
-grid.add_field(
-    "reflectivity_under", ref_field_under, replace_existing=True
-)
+grid.add_field("reflectivity_over", ref_field_over, replace_existing=True)
+grid.add_field("reflectivity_under", ref_field_under, replace_existing=True)
 
 # convert to snow rate
 grid = pyart.retrieve.qpe.ZtoR(
@@ -564,15 +562,23 @@ y = grid.y["data"]
 fig, axs = plt.subplots(2, 2, figsize=(12, 10))
 # snow rate
 rpm = axs[0, 0].pcolormesh(
-    x / 1000, y / 1000, grid.fields["snow_rate"]["data"][0, :, :], vmin=0, vmax=10,
+    x / 1000,
+    y / 1000,
+    grid.fields["snow_rate"]["data"][0, :, :],
+    vmin=0,
+    vmax=10,
 )
 axs[0, 0].set_aspect("equal")
 axs[0, 0].set_title("Reflectivity [dBZ]")
 plt.colorbar(rpm, ax=axs[0, 0])
 # features best
 bpm = axs[0, 1].pcolormesh(
-    x / 1000, y / 1000, feature_estimate_dict["feature_detection"]["data"][0, :, :],
-    vmin=0, vmax=3, cmap=plt.get_cmap("viridis", 3),
+    x / 1000,
+    y / 1000,
+    feature_estimate_dict["feature_detection"]["data"][0, :, :],
+    vmin=0,
+    vmax=3,
+    cmap=plt.get_cmap("viridis", 3),
 )
 axs[0, 1].set_aspect("equal")
 axs[0, 1].set_title("Feature detection (best)")
@@ -580,8 +586,12 @@ cb = plt.colorbar(bpm, ax=axs[0, 1], ticks=[3 / 2, 5 / 2])
 cb.ax.set_yticklabels(["Background", "Feature"])
 # features underestimate
 upm = axs[1, 0].pcolormesh(
-    x / 1000, y / 1000, feature_estimate_dict["feature_under"]["data"][0, :, :],
-    vmin=0, vmax=3, cmap=plt.get_cmap("viridis", 3),
+    x / 1000,
+    y / 1000,
+    feature_estimate_dict["feature_under"]["data"][0, :, :],
+    vmin=0,
+    vmax=3,
+    cmap=plt.get_cmap("viridis", 3),
 )
 axs[1, 0].set_aspect("equal")
 axs[1, 0].set_title("Feature detection (underestimate)")
@@ -589,8 +599,12 @@ cb = plt.colorbar(upm, ax=axs[1, 0], ticks=[3 / 2, 5 / 2])
 cb.ax.set_yticklabels(["Background", "Feature"])
 # features overestimate
 opm = axs[1, 1].pcolormesh(
-    x / 1000, y / 1000, feature_estimate_dict["feature_over"]["data"][0, :, :],
-    vmin=0, vmax=3, cmap=plt.get_cmap("viridis", 3),
+    x / 1000,
+    y / 1000,
+    feature_estimate_dict["feature_over"]["data"][0, :, :],
+    vmin=0,
+    vmax=3,
+    cmap=plt.get_cmap("viridis", 3),
 )
 axs[1, 1].set_aspect("equal")
 axs[1, 1].set_title("Feature detection (overestimate)")
@@ -636,8 +650,12 @@ cosine_features_masked = grid.fields["feature_detection"]["data"]
 faint_features = scalar_features_masked - cosine_features_masked
 faint_features_masked = np.ma.masked_less_equal(faint_features, 0)
 # add strong and faint features
-features_faint_strong = 2 * faint_features_masked.filled(0) + cosine_features_masked.filled(0)
-features_faint_strong_masked = np.ma.masked_where(cosine_features_masked.mask, features_faint_strong)
+features_faint_strong = 2 * faint_features_masked.filled(
+    0
+) + cosine_features_masked.filled(0)
+features_faint_strong_masked = np.ma.masked_where(
+    cosine_features_masked.mask, features_faint_strong
+)
 
 # add to grid object
 new_dict = {
@@ -669,7 +687,7 @@ faint_strong_cmap = mcolors.LinearSegmentedColormap.from_list(
     [
         (32 / 255, 144 / 255, 140 / 255),
         (254 / 255, 238 / 255, 93 / 255),
-        (254 / 255, 152 / 255, 93 / 255)
+        (254 / 255, 152 / 255, 93 / 255),
     ],
     N=3,
 )
@@ -706,12 +724,14 @@ plt.show()
 # This last section shows how we can image mute the fields (Tomkins et al. 2022) and reduce the visual prominence of
 # melting and mixed precipitation.
 
+
 # create a function to quickly apply image muting to other fields
 def quick_image_mute(field, muted_ref):
     nonmuted_field = np.ma.masked_where(~muted_ref.mask, field)
     muted_field = np.ma.masked_where(muted_ref.mask, field)
 
     return nonmuted_field, muted_field
+
 
 # get fields
 snow_rate = grid.fields["snow_rate"]["data"][0, :, :]
@@ -734,9 +754,7 @@ muted_cmap = mcolors.LinearSegmentedColormap.from_list(
 # plot
 fig, axs = plt.subplots(1, 2, figsize=(10, 4))
 # snow rate
-srpm = axs[0].pcolormesh(
-    x / 1000, y / 1000, snow_rate_nonmuted, vmin=0, vmax=10
-)
+srpm = axs[0].pcolormesh(x / 1000, y / 1000, snow_rate_nonmuted, vmin=0, vmax=10)
 srpmm = axs[0].pcolormesh(
     x / 1000, y / 1000, snow_rate_muted, vmin=0, vmax=10, cmap=muted_cmap
 )
