@@ -255,8 +255,8 @@ def feature_detection(
     2005: Physical characterization of tropical oceanic convection observed in
     KWAJEX. J. Appl. Meteor., 44, 385-415. https://doi.org/10.1175/JAM2206.1
 
-    Tomkins, L. M., S. E. Yuter, and M. A. Miller, 2023: Objective identification
-    of faint and strong snow bands in radar observations of winter storms. in prep.
+    Tomkins, L. M., S. E. Yuter, and M. A. Miller, 2024: Objective identification
+    of faint and strong features in radar observations of winter storms. in prep.
 
     """
 
@@ -342,7 +342,6 @@ def feature_detection(
 
     # If estimation is True, run the algorithm on the field with offset subtracted and the field with the offset added
     if estimate_flag:
-
         # get underestimate field
         if underest_field is None:
             under_field = ze - estimate_offset
