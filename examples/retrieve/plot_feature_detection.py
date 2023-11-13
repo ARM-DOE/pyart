@@ -17,9 +17,9 @@ import cartopy.crs as ccrs
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
 import numpy as np
+from open_radar_data import DATASETS
 
 import pyart
-from open_radar_data import DATASETS
 
 ######################################
 # How the algorithm works
@@ -80,7 +80,9 @@ feature_masked = np.ma.masked_equal(feature_masked, 3)
 # add dimension to array to add to grid object
 feature_dict["feature_detection"]["data"] = feature_masked
 # add field
-grid.add_field("feature_detection", feature_dict["feature_detection"], replace_existing=True)
+grid.add_field(
+    "feature_detection", feature_dict["feature_detection"], replace_existing=True
+)
 
 # create plot using GridMapDisplay
 # plot variables
@@ -118,7 +120,6 @@ display.plot_grid(
 )
 plt.show()
 
-
 ######################################
 # In addition to the default feature detection classification, the function also returns an underestimate
 # (``feature_under``) and an overestimate (``feature_over``) to take into consideration the uncertainty when choosing
@@ -155,7 +156,7 @@ ax2.pcolormesh(
     feature_dict["feature_under"]["data"][0, :, :],
     vmin=0,
     vmax=2,
-    cmap=plt.get_cmap("viridis", 3)
+    cmap=plt.get_cmap("viridis", 3),
 )
 ax2.set_title("Underestimate")
 ax2.set_aspect("equal")
@@ -164,7 +165,7 @@ ax3.pcolormesh(
     feature_dict["feature_over"]["data"][0, :, :],
     vmin=0,
     vmax=2,
-    cmap=plt.get_cmap("viridis", 3)
+    cmap=plt.get_cmap("viridis", 3),
 )
 ax3.set_title("Overestimate")
 ax3.set_aspect("equal")
@@ -218,7 +219,9 @@ feature_masked = np.ma.masked_equal(feature_masked, 3)
 # add dimension to array to add to grid object
 feature_dict["feature_detection"]["data"] = feature_masked
 # add field
-grid.add_field("feature_detection", feature_dict["feature_detection"], replace_existing=True)
+grid.add_field(
+    "feature_detection", feature_dict["feature_detection"], replace_existing=True
+)
 
 # create plot using GridMapDisplay
 # plot variables
@@ -257,7 +260,6 @@ display.plot_grid(
 )
 plt.show()
 
-
 ######################################
 # **Comparison with original C++ algorithm**
 #
@@ -270,87 +272,127 @@ filename = DATASETS.fetch("convsf.19990811.221202.cdf")
 grid = pyart.io.read_grid(filename)
 
 # colormap
-convsf_cmap = mcolors.LinearSegmentedColormap.from_list('convsf', [(33 / 255, 145 / 255, 140 / 255),
-                                                                    (253 / 255, 231 / 255, 37 / 255),
-                                                                    (210 / 255, 180 / 255, 140 / 255)], N=3)
+convsf_cmap = mcolors.LinearSegmentedColormap.from_list(
+    "convsf",
+    [
+        (33 / 255, 145 / 255, 140 / 255),
+        (253 / 255, 231 / 255, 37 / 255),
+        (210 / 255, 180 / 255, 140 / 255)
+    ],
+    N=3,
+)
 
 # get original data from file processed in C++
-x = grid.x['data']
-y = grid.y['data']
-ref = grid.fields['maxdz']['data'][0,:,:]
-csb = grid.fields['convsf']['data'][0,:,:]
+x = grid.x["data"]
+y = grid.y["data"]
+ref = grid.fields["maxdz"]["data"][0, :, :]
+csb = grid.fields["convsf"]["data"][0, :, :]
 csb_masked = np.ma.masked_less_equal(csb, 0)
-csl = grid.fields['convsf_lo']['data'][0,:,:]
+csl = grid.fields["convsf_lo"]["data"][0, :, :]
 csl_masked = np.ma.masked_less_equal(csl, 0)
-csh = grid.fields['convsf_hi']['data'][0,:,:]
+csh = grid.fields["convsf_hi"]["data"][0, :, :]
 csh_masked = np.ma.masked_less_equal(csh, 0)
 
 # plot
-fig, axs = plt.subplots(2,2, figsize=(12,10))
+fig, axs = plt.subplots(2, 2, figsize=(12, 10))
 # reflectivity
-rpm = axs[0,0].pcolormesh(x/1000, y/1000, ref, vmin=0, vmax=45, cmap='magma_r')
-axs[0,0].set_aspect('equal')
-axs[0,0].set_title('Reflectivity [dBZ]')
-plt.colorbar(rpm, ax=axs[0,0])
+rpm = axs[0, 0].pcolormesh(x / 1000, y / 1000, ref, vmin=0, vmax=45, cmap="magma_r")
+axs[0, 0].set_aspect("equal")
+axs[0, 0].set_title("Reflectivity [dBZ]")
+plt.colorbar(rpm, ax=axs[0, 0])
 # convsf
-csbpm = axs[0,1].pcolormesh(x/1000, y/1000, csb_masked, vmin=1, vmax=3, cmap=convsf_cmap)
-axs[0,1].set_aspect('equal')
-axs[0,1].set_title('convsf')
-cb = plt.colorbar(csbpm, ax=axs[0,1], ticks=[4/3, 2, 8/3])
-cb.ax.set_yticklabels(['Stratiform', 'Convective', 'Weak Echo'])
+csbpm = axs[0, 1].pcolormesh(
+    x / 1000, y / 1000, csb_masked, vmin=1, vmax=3, cmap=convsf_cmap
+)
+axs[0, 1].set_aspect("equal")
+axs[0, 1].set_title("convsf")
+cb = plt.colorbar(csbpm, ax=axs[0, 1], ticks=[4 / 3, 2, 8 / 3])
+cb.ax.set_yticklabels(["Stratiform", "Convective", "Weak Echo"])
 # convsf lo
-cslpm = axs[1,0].pcolormesh(x/1000, y/1000, csl_masked, vmin=1, vmax=3, cmap=convsf_cmap)
-axs[1,0].set_aspect('equal')
-axs[1,0].set_title('convsf lo')
-cb = plt.colorbar(cslpm, ax=axs[1,0], ticks=[])
+cslpm = axs[1, 0].pcolormesh(
+    x / 1000, y / 1000, csl_masked, vmin=1, vmax=3, cmap=convsf_cmap
+)
+axs[1, 0].set_aspect("equal")
+axs[1, 0].set_title("convsf lo")
+cb = plt.colorbar(cslpm, ax=axs[1, 0], ticks=[])
 # convsf hi
-cshpm = axs[1,1].pcolormesh(x/1000, y/1000, csh_masked, vmin=1, vmax=3, cmap=convsf_cmap)
-axs[1,1].set_aspect('equal')
-axs[1,1].set_title('convsf hi')
-cb = plt.colorbar(cshpm, ax=axs[1,1], ticks=[4/3, 2, 8/3])
-cb.ax.set_yticklabels(['Stratiform', 'Convective', 'Weak Echo'])
+cshpm = axs[1, 1].pcolormesh(
+    x / 1000, y / 1000, csh_masked, vmin=1, vmax=3, cmap=convsf_cmap
+)
+axs[1, 1].set_aspect("equal")
+axs[1, 1].set_title("convsf hi")
+cb = plt.colorbar(cshpm, ax=axs[1, 1], ticks=[4 / 3, 2, 8 / 3])
+cb.ax.set_yticklabels(["Stratiform", "Convective", "Weak Echo"])
 plt.show()
 
 # now let's compare with the Python algorithm
-convsf_dict = pyart.retrieve.feature_detection(grid, dx=x[1]-x[0], dy=y[1]-y[0], level_m=None, always_core_thres=40,
-                                              bkg_rad_km=11, use_cosine=True, max_diff=8, zero_diff_cos_val=55,
-                                              scalar_diff=None, use_addition=False, calc_thres=0,
-                                              weak_echo_thres=15, min_val_used=0, dB_averaging=True,
-                                              remove_small_objects=False, min_km2_size=None, val_for_max_rad=30,
-                                              max_rad_km=5.0, core_val=3, nosfcecho=0, weakecho=3, bkgd_val=1,
-                                              feat_val=2, field='maxdz', estimate_flag=True, estimate_offset=5)
+convsf_dict = pyart.retrieve.feature_detection(
+    grid,
+    dx=x[1] - x[0],
+    dy=y[1] - y[0],
+    level_m=None,
+    always_core_thres=40,
+    bkg_rad_km=11,
+    use_cosine=True,
+    max_diff=8,
+    zero_diff_cos_val=55,
+    scalar_diff=None,
+    use_addition=False,
+    calc_thres=0,
+    weak_echo_thres=15,
+    min_val_used=0,
+    dB_averaging=True,
+    remove_small_objects=False,
+    min_km2_size=None,
+    val_for_max_rad=30,
+    max_rad_km=5.0,
+    core_val=3,
+    nosfcecho=0,
+    weakecho=3,
+    bkgd_val=1,
+    feat_val=2,
+    field='maxdz',
+    estimate_flag=True,
+    estimate_offset=5,
+)
 
 # new data
-csb_lt = convsf_dict['feature_detection']['data'][0, :, :]
+csb_lt = convsf_dict["feature_detection"]["data"][0, :, :]
 csb_lt_masked = np.ma.masked_less_equal(csb_lt, 0)
-csu_lt = convsf_dict['feature_under']['data'][0, :, :]
+csu_lt = convsf_dict["feature_under"]["data"][0, :, :]
 csu_lt_masked = np.ma.masked_less_equal(csu_lt, 0)
-cso_lt = convsf_dict['feature_over']['data'][0, :, :]
+cso_lt = convsf_dict["feature_over"]["data"][0, :, :]
 cso_lt_masked = np.ma.masked_less_equal(cso_lt, 0)
 
-fig, axs = plt.subplots(2,2, figsize=(12,10))
+fig, axs = plt.subplots(2, 2, figsize=(12, 10))
 # reflectivity
-rpm = axs[0,0].pcolormesh(x/1000, y/1000, ref, vmin=0, vmax=45, cmap='magma_r')
-axs[0,0].set_aspect('equal')
-axs[0,0].set_title('Reflectivity [dBZ]')
-plt.colorbar(rpm, ax=axs[0,0])
+rpm = axs[0, 0].pcolormesh(x / 1000, y / 1000, ref, vmin=0, vmax=45, cmap="magma_r")
+axs[0, 0].set_aspect("equal")
+axs[0, 0].set_title("Reflectivity [dBZ]")
+plt.colorbar(rpm, ax=axs[0, 0])
 # convsf best
-csbpm = axs[0,1].pcolormesh(x/1000, y/1000, csb_lt_masked, vmin=1, vmax=3, cmap=convsf_cmap)
-axs[0,1].set_aspect('equal')
-axs[0,1].set_title('convsf')
-cb = plt.colorbar(csbpm, ax=axs[0,1], ticks=[4/3, 2, 8/3])
-cb.ax.set_yticklabels(['Stratiform', 'Convective', 'Weak Echo'])
+csbpm = axs[0, 1].pcolormesh(
+    x / 1000, y / 1000, csb_lt_masked, vmin=1, vmax=3, cmap=convsf_cmap
+)
+axs[0, 1].set_aspect("equal")
+axs[0, 1].set_title("convsf")
+cb = plt.colorbar(csbpm, ax=axs[0, 1], ticks=[4 / 3, 2, 8 / 3])
+cb.ax.set_yticklabels(["Stratiform", "Convective", "Weak Echo"])
 # convsf under
-csupm = axs[1,0].pcolormesh(x/1000, y/1000, csu_lt_masked, vmin=1, vmax=3, cmap=convsf_cmap)
-axs[1,0].set_aspect('equal')
-axs[1,0].set_title('convsf under')
-cb = plt.colorbar(csupm, ax=axs[1,0], ticks=[])
+csupm = axs[1, 0].pcolormesh(
+    x / 1000, y / 1000, csu_lt_masked, vmin=1, vmax=3, cmap=convsf_cmap
+)
+axs[1, 0].set_aspect("equal")
+axs[1, 0].set_title("convsf under")
+cb = plt.colorbar(csupm, ax=axs[1, 0], ticks=[])
 # convsf over
-csopm = axs[1,1].pcolormesh(x/1000, y/1000, cso_lt_masked, vmin=1, vmax=3, cmap=convsf_cmap)
-axs[1,1].set_aspect('equal')
-axs[1,1].set_title('convsf over')
-cb = plt.colorbar(csopm, ax=axs[1,1], ticks=[4/3, 2, 8/3])
-cb.ax.set_yticklabels(['Stratiform', 'Convective', 'Weak Echo'])
+csopm = axs[1, 1].pcolormesh(
+    x / 1000, y / 1000, cso_lt_masked, vmin=1, vmax=3, cmap=convsf_cmap
+)
+axs[1, 1].set_aspect("equal")
+axs[1, 1].set_title("convsf over")
+cb = plt.colorbar(csopm, ax=axs[1, 1], ticks=[4 / 3, 2, 8 / 3])
+cb.ax.set_yticklabels(["Stratiform", "Convective", "Weak Echo"])
 plt.show()
 
 ######################################
@@ -387,23 +429,8 @@ grid = pyart.util.image_mute_radar(
     grid, "reflectivity", "cross_correlation_ratio", 0.97, 20
 )
 
-# convect non-muted reflectivity to snow rate
-ref = grid.fields["reflectivity"]["data"][0, :, :]
-ref = np.ma.masked_invalid(ref)
-
-ref_linear = 10 ** (ref / 10)  # mm6/m3
-snow_rate = (ref_linear / 57.3) ** (1 / 1.67)  # mm/hr
-
-# add to grid
-snow_rate_dict = {
-    "data": snow_rate[None, :, :],
-    "standard_name": "snow_rate",
-    "long_name": "Snow rate converted from linear reflectivity",
-    "units": "mm/hr",
-    "valid_min": 0,
-    "valid_max": 40500,
-}
-grid.add_field("snow_rate", snow_rate_dict, replace_existing=True)
+# rescale reflectivity to snow rate
+grid = pyart.retrieve.qpe.ZtoR(grid, ref_field="reflectivity", a=57.3, b=1.67, save_name="snow_rate")
 
 # get dx dy
 dx = grid.x["data"][1] - grid.x["data"][0]
@@ -435,7 +462,9 @@ feature_masked = np.ma.masked_equal(feature_masked, 3)
 # add dimension to array to add to grid object
 feature_dict["feature_detection"]["data"] = feature_masked
 # add field
-grid.add_field("feature_detection", feature_dict["feature_detection"], replace_existing=True)
+grid.add_field(
+    "feature_detection", feature_dict["feature_detection"], replace_existing=True
+)
 
 # create plot using GridMapDisplay
 # plot variables
@@ -472,6 +501,104 @@ display.plot_grid(
 plt.show()
 
 ######################################
+# **Under and over estimate in snow**
+#
+# Here we show how to bound the snow rate with an under and over estimate
+
+# get reflectivity field and copy
+ref_field = grid.fields["reflectivity"]
+ref_field_over = ref_field.copy()
+ref_field_under = ref_field.copy()
+
+# offset original field by +/- 2dB
+ref_field_over["data"] = ref_field["data"] + 2
+ref_field_under["data"] = ref_field["data"] - 2
+
+# adjust dictionary
+ref_field_over["standard_name"] = ref_field["standard_name"] + "_overest"
+ref_field_over["long_name"] = ref_field["long_name"] + " overestimate"
+ref_field_under["standard_name"] = ref_field["standard_name"] + "_underest"
+ref_field_under["long_name"] = ref_field["long_name"] + " underestimate"
+
+# add to grid object
+grid.add_field(
+    "reflectivity_over", ref_field_over, replace_existing=True
+)
+grid.add_field(
+    "reflectivity_under", ref_field_under, replace_existing=True
+)
+
+# convert to snow rate
+grid = pyart.retrieve.qpe.ZtoR(
+    grid, ref_field="reflectivity_over", a=57.3, b=1.67, save_name="snow_rate_over"
+)
+grid = pyart.retrieve.qpe.ZtoR(
+    grid, ref_field="reflectivity_under", a=57.3, b=1.67, save_name="snow_rate_under"
+)
+
+# now do feature detection with under and over estimate fields
+feature_estimate_dict = pyart.retrieve.feature_detection(
+    grid,
+    dx,
+    dy,
+    field="snow_rate",
+    dB_averaging=False,
+    always_core_thres=4,
+    bkg_rad_km=40,
+    use_cosine=True,
+    max_diff=1.5,
+    zero_diff_cos_val=5,
+    weak_echo_thres=0,
+    min_val_used=0,
+    max_rad_km=1,
+    estimate_flag=True,
+    overest_field="snow_rate_over",
+    underest_field="snow_rate_under",
+)
+
+# x and y data for plotting
+x = grid.x["data"]
+y = grid.y["data"]
+
+# now let's plot
+fig, axs = plt.subplots(2, 2, figsize=(12, 10))
+# snow rate
+rpm = axs[0, 0].pcolormesh(
+    x / 1000, y / 1000, grid.fields["snow_rate"]["data"][0, :, :], vmin=0, vmax=10,
+)
+axs[0, 0].set_aspect("equal")
+axs[0, 0].set_title("Reflectivity [dBZ]")
+plt.colorbar(rpm, ax=axs[0, 0])
+# features best
+bpm = axs[0, 1].pcolormesh(
+    x / 1000, y / 1000, feature_estimate_dict["feature_detection"]["data"][0, :, :],
+    vmin=0, vmax=3, cmap=plt.get_cmap("viridis", 3),
+)
+axs[0, 1].set_aspect("equal")
+axs[0, 1].set_title("Feature detection (best)")
+cb = plt.colorbar(bpm, ax=axs[0, 1], ticks=[3 / 2, 5 / 2])
+cb.ax.set_yticklabels(["Background", "Feature"])
+# features underestimate
+upm = axs[1, 0].pcolormesh(
+    x / 1000, y / 1000, feature_estimate_dict["feature_under"]["data"][0, :, :],
+    vmin=0, vmax=3, cmap=plt.get_cmap("viridis", 3),
+)
+axs[1, 0].set_aspect("equal")
+axs[1, 0].set_title("Feature detection (underestimate)")
+cb = plt.colorbar(upm, ax=axs[1, 0], ticks=[3 / 2, 5 / 2])
+cb.ax.set_yticklabels(["Background", "Feature"])
+# features overestimate
+opm = axs[1, 1].pcolormesh(
+    x / 1000, y / 1000, feature_estimate_dict["feature_over"]["data"][0, :, :],
+    vmin=0, vmax=3, cmap=plt.get_cmap("viridis", 3),
+)
+axs[1, 1].set_aspect("equal")
+axs[1, 1].set_title("Feature detection (overestimate)")
+cb = plt.colorbar(opm, ax=axs[1, 1], ticks=[3 / 2, 5 / 2])
+cb.ax.set_yticklabels(["Background", "Feature"])
+plt.show()
+
+######################################
 # **Strong and Faint features**
 #
 # We have developed a new technique which runs the algorithm twice to find features that are very distinct from the
@@ -498,11 +625,13 @@ feature_dict = pyart.retrieve.feature_detection(
 
 # separate strong vs. faint
 # mask zero values (no surface echo)
-scalar_features_masked = np.ma.masked_equal(feature_dict["feature_detection"]["data"], 0)
+scalar_features_masked = np.ma.masked_equal(
+    feature_dict["feature_detection"]["data"], 0
+)
 # mask 3 values (weak echo)
 scalar_features_masked = np.ma.masked_equal(scalar_features_masked, 3)
 # get cosine features
-cosine_features_masked = grid.fields['feature_detection']['data']
+cosine_features_masked = grid.fields["feature_detection"]["data"]
 # isolate faint features only
 faint_features = scalar_features_masked - cosine_features_masked
 faint_features_masked = np.ma.masked_less_equal(faint_features, 0)
@@ -512,17 +641,19 @@ features_faint_strong_masked = np.ma.masked_where(cosine_features_masked.mask, f
 
 # add to grid object
 new_dict = {
-    "features_faint_strong" : {
+    "features_faint_strong": {
         "data": features_faint_strong_masked,
         "standard_name": "features_faint_strong",
         "long name": "Faint and Strong Features",
         "valid_min": 0,
         "valid_max": 10,
-        "comment_1": "3: Faint features, 2: Strong features, 1: background"
+        "comment_1": "3: Faint features, 2: Strong features, 1: background",
     }
 }
 # add field
-grid.add_field("features_faint_strong", new_dict["features_faint_strong"], replace_existing=True)
+grid.add_field(
+    "features_faint_strong", new_dict["features_faint_strong"], replace_existing=True
+)
 
 # create plot using GridMapDisplay
 # plot variables
@@ -533,9 +664,15 @@ projection = ccrs.AlbersEqualArea(
     central_longitude=radar.longitude["data"][0],
 )
 
-faint_strong_cmap = mcolors.LinearSegmentedColormap.from_list('faint_strong',
-                                                [(32 / 255, 144 / 255, 140 / 255), (254 / 255, 238 / 255, 93 / 255),
-                                                 (254 / 255, 152 / 255, 93 / 255)], N=3)
+faint_strong_cmap = mcolors.LinearSegmentedColormap.from_list(
+    "faint_strong",
+    [
+        (32 / 255, 144 / 255, 140 / 255),
+        (254 / 255, 238 / 255, 93 / 255),
+        (254 / 255, 152 / 255, 93 / 255)
+    ],
+    N=3,
+)
 
 # plot
 plt.figure(figsize=(10, 4))
@@ -561,6 +698,65 @@ display.plot_grid(
     ticklabs=["Background", "Strong Feature", "Faint Feature"],
     ax=ax2,
 )
+plt.show()
+
+######################################
+# **Image muted Strong and Faint features**
+#
+# This last section shows how we can image mute the fields (Tomkins et al. 2022) and reduce the visual prominence of
+# melting and mixed precipitation.
+
+# create a function to quickly apply image muting to other fields
+def quick_image_mute(field, muted_ref):
+    nonmuted_field = np.ma.masked_where(~muted_ref.mask, field)
+    muted_field = np.ma.masked_where(muted_ref.mask, field)
+
+    return nonmuted_field, muted_field
+
+# get fields
+snow_rate = grid.fields["snow_rate"]["data"][0, :, :]
+muted_ref = grid.fields["muted_reflectivity"]["data"][0, :, :]
+features = grid.fields["features_faint_strong"]["data"][0, :, :]
+x = grid.x["data"]
+y = grid.y["data"]
+
+# mute
+snow_rate_nonmuted, snow_rate_muted = quick_image_mute(snow_rate, muted_ref)
+features_nonmuted, features_muted = quick_image_mute(features, muted_ref)
+
+# muted colormap
+grays_cmap = plt.get_cmap("gray_r")
+muted_cmap = mcolors.LinearSegmentedColormap.from_list(
+    "muted_cmap", grays_cmap(np.linspace(0.2, 0.8, grays_cmap.N)), 3
+)
+
+
+# plot
+fig, axs = plt.subplots(1, 2, figsize=(10, 4))
+# snow rate
+srpm = axs[0].pcolormesh(
+    x / 1000, y / 1000, snow_rate_nonmuted, vmin=0, vmax=10
+)
+srpmm = axs[0].pcolormesh(
+    x / 1000, y / 1000, snow_rate_muted, vmin=0, vmax=10, cmap=muted_cmap
+)
+axs[0].set_aspect("equal")
+axs[0].set_title("Snow rate [mm hr$^{-1}$]")
+plt.colorbar(srpm, ax=axs[0])
+
+# features
+csbpm = axs[1].pcolormesh(
+    x / 1000, y / 1000, features_nonmuted, vmin=1, vmax=3, cmap=faint_strong_cmap
+)
+csbpmm = axs[1].pcolormesh(
+    x / 1000, y / 1000, features_muted, vmin=1, vmax=3, cmap=muted_cmap
+)
+
+axs[1].set_aspect("equal")
+axs[1].set_title("Feature detection")
+cb = plt.colorbar(csbpm, ax=axs[1], ticks=[1.33, 2, 2.66])
+cb.ax.set_yticklabels(["Background", "Strong Feature", "Faint Feature"])
+
 plt.show()
 ######################################
 # Summary of recommendations and best practices
@@ -589,3 +785,8 @@ plt.show()
 # and M. Xu, 2003: Snow Nowcasting Using a Real-Time Correlation of Radar
 # Reflectivity with Snow Gauge Accumulation. J. Appl. Meteorol. Climatol., 42, 20–36.
 # https://doi.org/10.1175/1520-0450(2003)042%3C0020:SNUART%3E2.0.CO;2
+#
+# Tomkins, L. M., Yuter, S. E., Miller, M. A., and Allen, L. R., 2022:
+# Image muting of mixed precipitation to improve identification of regions
+# of heavy snow in radar data. Atmos. Meas. Tech., 15, 5515–5525,
+# https://doi.org/10.5194/amt-15-5515-2022
