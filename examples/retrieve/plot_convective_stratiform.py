@@ -146,7 +146,7 @@ convsf_masked = np.ma.masked_equal(convsf_dict["feature_detection"]["data"], 0)
 # mask 3 values (weak echo)
 convsf_masked = np.ma.masked_equal(convsf_masked, 3)
 # add dimension to array to add to grid object
-convsf_dict["feature_detection"]["data"] = convsf_masked[None, :, :]
+convsf_dict["feature_detection"]["data"] = convsf_masked
 # add field
 grid.add_field("convsf", convsf_dict["feature_detection"], replace_existing=True)
 
@@ -220,7 +220,7 @@ ax1.set_title("Best estimate")
 ax1.set_aspect("equal")
 ax2 = plt.subplot(132)
 ax2.pcolormesh(
-    convsf_dict["feature_under"]["data"],
+    convsf_dict["feature_under"]["data"][0, :, :],
     vmin=0,
     vmax=2,
     cmap=plt.get_cmap("viridis", 3),
@@ -229,7 +229,10 @@ ax2.set_title("Underestimate")
 ax2.set_aspect("equal")
 ax3 = plt.subplot(133)
 ax3.pcolormesh(
-    convsf_dict["feature_over"]["data"], vmin=0, vmax=2, cmap=plt.get_cmap("viridis", 3)
+    convsf_dict["feature_over"]["data"][0, :, :],
+    vmin=0,
+    vmax=2,
+    cmap=plt.get_cmap("viridis", 3)
 )
 ax3.set_title("Overestimate")
 ax3.set_aspect("equal")
@@ -281,7 +284,7 @@ convsf_masked = np.ma.masked_equal(convsf_dict["feature_detection"]["data"], 0)
 # mask 3 values (weak echo)
 convsf_masked = np.ma.masked_equal(convsf_masked, 3)
 # add dimension to array to add to grid object
-convsf_dict["feature_detection"]["data"] = convsf_masked[None, :, :]
+convsf_dict["feature_detection"]["data"] = convsf_masked
 # add field
 grid.add_field("convsf", convsf_dict["feature_detection"], replace_existing=True)
 
@@ -400,7 +403,7 @@ convsf_masked = np.ma.masked_equal(convsf_dict["feature_detection"]["data"], 0)
 # mask 3 values (weak echo)
 convsf_masked = np.ma.masked_equal(convsf_masked, 3)
 # add dimension to array to add to grid object
-convsf_dict["feature_detection"]["data"] = convsf_masked[None, :, :]
+convsf_dict["feature_detection"]["data"] = convsf_masked
 # add field
 grid.add_field("convsf", convsf_dict["feature_detection"], replace_existing=True)
 
