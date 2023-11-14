@@ -499,6 +499,8 @@ def image_mute_radar(radar, field, mute_field, mute_threshold, field_threshold=N
     the correlation coefficient is less than a certain threshold to discern
     melting precipitation.
 
+    Author: Laura Tomkins (@lauratomkins)
+
     Parameters
     ----------
     radar : Radar
