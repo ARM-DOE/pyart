@@ -6,6 +6,7 @@ Radar retrievals.
 from .advection import grid_displacement_pc, grid_shift  # noqa
 from .comp_z import composite_reflectivity  # noqa
 from .echo_class import feature_detection  # noqa
+from .echo_class import conv_strat_yuter  # noqa
 from .echo_class import get_freq_band  # noqa
 from .echo_class import hydroclass_semisupervised  # noqa
 from .echo_class import steiner_conv_strat  # noqa
