@@ -232,7 +232,7 @@ ax3.pcolormesh(
     convsf_dict["feature_over"]["data"][0, :, :],
     vmin=0,
     vmax=2,
-    cmap=plt.get_cmap("viridis", 3)
+    cmap=plt.get_cmap("viridis", 3),
 )
 ax3.set_title("Overestimate")
 ax3.set_aspect("equal")
