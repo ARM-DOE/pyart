@@ -220,7 +220,10 @@ ax1.set_title("Best estimate")
 ax1.set_aspect("equal")
 ax2 = plt.subplot(132)
 ax2.pcolormesh(
-    convsf_dict["feature_under"]["data"], vmin=0, vmax=2, cmap=plt.get_cmap("viridis", 3)
+    convsf_dict["feature_under"]["data"],
+    vmin=0,
+    vmax=2,
+    cmap=plt.get_cmap("viridis", 3),
 )
 ax2.set_title("Underestimate")
 ax2.set_aspect("equal")
