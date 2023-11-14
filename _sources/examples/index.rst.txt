@@ -594,6 +594,23 @@ Retrievals from various radars, such as additional fields or subsets of the data
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Feature Detection classification">
+
+.. only:: html
+
+  .. image:: /examples/retrieve/images/thumb/sphx_glr_plot_feature_detection_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_retrieve_plot_feature_detection.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Feature Detection classification</div>
+    </div>
+
+
+.. raw:: html
+
     </div>
 
 

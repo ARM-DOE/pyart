@@ -252,13 +252,13 @@ points.
 
     # add to grid object
     # mask zero values (no surface echo)
-    convsf_masked = np.ma.masked_equal(convsf_dict["convsf"]["data"], 0)
+    convsf_masked = np.ma.masked_equal(convsf_dict["feature_detection"]["data"], 0)
     # mask 3 values (weak echo)
     convsf_masked = np.ma.masked_equal(convsf_masked, 3)
     # add dimension to array to add to grid object
-    convsf_dict["convsf"]["data"] = convsf_masked[None, :, :]
+    convsf_dict["feature_detection"]["data"] = convsf_masked
     # add field
-    grid.add_field("convsf", convsf_dict["convsf"], replace_existing=True)
+    grid.add_field("convsf", convsf_dict["feature_detection"], replace_existing=True)
 
     # create plot using GridMapDisplay
     # plot variables
@@ -301,7 +301,7 @@ points.
 
 
 .. image-sg:: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_005.png
-   :alt: xsapr-sg 0.0 km 2011-05-20T06:42:11Z  Equivalent reflectivity factor, xsapr-sg 0.0 km 2011-05-20T06:42:11Z  Convsf
+   :alt: xsapr-sg 0.0 km 2011-05-20T06:42:11Z  Equivalent reflectivity factor, xsapr-sg 0.0 km 2011-05-20T06:42:11Z  Feature detection
    :srcset: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_005.png
    :class: sphx-glr-single-img
 
@@ -317,29 +317,29 @@ classification parameters. The under and overestimate use the same parameters, b
 certain value (default is 5 dBZ, can be changed with ``estimate_offset``). The estimation can be turned off (
 ``estimate_flag=False``), but we recommend keeping it turned on.
 
-.. GENERATED FROM PYTHON SOURCE LINES 196-235
+.. GENERATED FROM PYTHON SOURCE LINES 196-241
 
 .. code-block:: default
 
 
     # mask weak echo and no surface echo
-    convsf_masked = np.ma.masked_equal(convsf_dict["convsf"]["data"], 0)
+    convsf_masked = np.ma.masked_equal(convsf_dict["feature_detection"]["data"], 0)
     convsf_masked = np.ma.masked_equal(convsf_masked, 3)
-    convsf_dict["convsf"]["data"] = convsf_masked
+    convsf_dict["feature_detection"]["data"] = convsf_masked
     # underest.
-    convsf_masked = np.ma.masked_equal(convsf_dict["convsf_under"]["data"], 0)
+    convsf_masked = np.ma.masked_equal(convsf_dict["feature_under"]["data"], 0)
     convsf_masked = np.ma.masked_equal(convsf_masked, 3)
-    convsf_dict["convsf_under"]["data"] = convsf_masked
+    convsf_dict["feature_under"]["data"] = convsf_masked
     # overest.
-    convsf_masked = np.ma.masked_equal(convsf_dict["convsf_over"]["data"], 0)
+    convsf_masked = np.ma.masked_equal(convsf_dict["feature_over"]["data"], 0)
     convsf_masked = np.ma.masked_equal(convsf_masked, 3)
-    convsf_dict["convsf_over"]["data"] = convsf_masked
+    convsf_dict["feature_over"]["data"] = convsf_masked
 
     # Plot each estimation
     plt.figure(figsize=(10, 4))
     ax1 = plt.subplot(131)
     ax1.pcolormesh(
-        convsf_dict["convsf"]["data"][0, :, :],
+        convsf_dict["feature_detection"]["data"][0, :, :],
         vmin=0,
         vmax=2,
         cmap=plt.get_cmap("viridis", 3),
@@ -348,13 +348,19 @@ certain value (default is 5 dBZ, can be changed with ``estimate_offset``). The e
     ax1.set_aspect("equal")
     ax2 = plt.subplot(132)
     ax2.pcolormesh(
-        convsf_dict["convsf_under"]["data"], vmin=0, vmax=2, cmap=plt.get_cmap("viridis", 3)
+        convsf_dict["feature_under"]["data"][0, :, :],
+        vmin=0,
+        vmax=2,
+        cmap=plt.get_cmap("viridis", 3),
     )
     ax2.set_title("Underestimate")
     ax2.set_aspect("equal")
     ax3 = plt.subplot(133)
     ax3.pcolormesh(
-        convsf_dict["convsf_over"]["data"], vmin=0, vmax=2, cmap=plt.get_cmap("viridis", 3)
+        convsf_dict["feature_over"]["data"][0, :, :],
+        vmin=0,
+        vmax=2,
+        cmap=plt.get_cmap("viridis", 3),
     )
     ax3.set_title("Overestimate")
     ax3.set_aspect("equal")
@@ -372,13 +378,13 @@ certain value (default is 5 dBZ, can be changed with ``estimate_offset``). The e
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 236-239
+.. GENERATED FROM PYTHON SOURCE LINES 242-245
 
 **Tropical example**
 
 Let's get a NEXRAD file from Hurricane Ian
 
-.. GENERATED FROM PYTHON SOURCE LINES 239-322
+.. GENERATED FROM PYTHON SOURCE LINES 245-328
 
 .. code-block:: default
 
@@ -420,13 +426,13 @@ Let's get a NEXRAD file from Hurricane Ian
 
     # add to grid object
     # mask zero values (no surface echo)
-    convsf_masked = np.ma.masked_equal(convsf_dict["convsf"]["data"], 0)
+    convsf_masked = np.ma.masked_equal(convsf_dict["feature_detection"]["data"], 0)
     # mask 3 values (weak echo)
     convsf_masked = np.ma.masked_equal(convsf_masked, 3)
     # add dimension to array to add to grid object
-    convsf_dict["convsf"]["data"] = convsf_masked[None, :, :]
+    convsf_dict["feature_detection"]["data"] = convsf_masked
     # add field
-    grid.add_field("convsf", convsf_dict["convsf"], replace_existing=True)
+    grid.add_field("convsf", convsf_dict["feature_detection"], replace_existing=True)
 
     # create plot using GridMapDisplay
     # plot variables
@@ -469,7 +475,7 @@ Let's get a NEXRAD file from Hurricane Ian
 
 
 .. image-sg:: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_007.png
-   :alt: KTBW 0.0 km 2022-09-28T19:01:42Z  Equivalent reflectivity factor, KTBW 0.0 km 2022-09-28T19:01:42Z  Convsf
+   :alt: KTBW 0.0 km 2022-09-28T19:01:42Z  Equivalent reflectivity factor, KTBW 0.0 km 2022-09-28T19:01:42Z  Feature detection
    :srcset: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_007.png
    :class: sphx-glr-single-img
 
@@ -477,7 +483,7 @@ Let's get a NEXRAD file from Hurricane Ian
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 323-333
+.. GENERATED FROM PYTHON SOURCE LINES 329-339
 
 **Winter storm example with image muting**
 
@@ -490,7 +496,7 @@ dBZ units).
 In this example, note how we change some of the other parameters since we are classifying snow rate instead of
 reflecitivity.
 
-.. GENERATED FROM PYTHON SOURCE LINES 333-441
+.. GENERATED FROM PYTHON SOURCE LINES 339-447
 
 .. code-block:: default
 
@@ -557,13 +563,13 @@ reflecitivity.
 
     # add to grid object
     # mask zero values (no surface echo)
-    convsf_masked = np.ma.masked_equal(convsf_dict["convsf"]["data"], 0)
+    convsf_masked = np.ma.masked_equal(convsf_dict["feature_detection"]["data"], 0)
     # mask 3 values (weak echo)
     convsf_masked = np.ma.masked_equal(convsf_masked, 3)
     # add dimension to array to add to grid object
-    convsf_dict["convsf"]["data"] = convsf_masked[None, :, :]
+    convsf_dict["feature_detection"]["data"] = convsf_masked
     # add field
-    grid.add_field("convsf", convsf_dict["convsf"], replace_existing=True)
+    grid.add_field("convsf", convsf_dict["feature_detection"], replace_existing=True)
 
     # create plot using GridMapDisplay
     # plot variables
@@ -606,7 +612,7 @@ reflecitivity.
 
 
 .. image-sg:: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_008.png
-   :alt: KOKX 0.0 km 2021-02-07T16:14:13Z  Snow rate, KOKX 0.0 km 2021-02-07T16:14:13Z  Convsf
+   :alt: KOKX 0.0 km 2021-02-07T16:14:13Z  Snow rate, KOKX 0.0 km 2021-02-07T16:14:13Z  Feature detection
    :srcset: /examples/retrieve/images/sphx_glr_plot_convective_stratiform_008.png
    :class: sphx-glr-single-img
 
@@ -614,7 +620,7 @@ reflecitivity.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 442-468
+.. GENERATED FROM PYTHON SOURCE LINES 448-474
 
 Summary of recommendations and best practices
 ----------
@@ -646,7 +652,7 @@ https://doi.org/10.1175/1520-0450(2003)042%3C0020:SNUART%3E2.0.CO;2
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 33.147 seconds)
+   **Total running time of the script:** (0 minutes 21.762 seconds)
 
 
 .. _sphx_glr_download_examples_retrieve_plot_convective_stratiform.py:

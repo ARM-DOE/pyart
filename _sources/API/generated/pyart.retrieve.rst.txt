@@ -49,6 +49,8 @@
     
     est_rain_rate_zpoly
     
+    feature_detection
+    
     fetch_radar_time_profile
     
     get_freq_band
