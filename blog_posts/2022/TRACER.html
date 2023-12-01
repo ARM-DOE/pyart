@@ -1,15 +1,14 @@
 
-
 <!DOCTYPE html>
 
 
-<html lang="en" data-theme="light">
+<html lang="en" data-content_root="../../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Blending Observations from TRACER using Py-ART &#8212; Py-ART 1.16.1.post7 documentation</title>
+    <title>Blending Observations from TRACER using Py-ART &#8212; Py-ART 1.16.1.post8 documentation</title>
   
   
   
@@ -19,44 +18,46 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=365ca57ee442770a23c6" rel="stylesheet" />
+  <link href="../../_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
   <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
 <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6" />
-  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=365ca57ee442770a23c6"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
-    <script src="../../_static/jquery.js"></script>
-    <script src="../../_static/underscore.js"></script>
-    <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
-    <script src="../../_static/doctools.js"></script>
-    <script src="../../_static/sphinx_highlight.js"></script>
-    <script src="../../_static/clipboard.min.js"></script>
-    <script src="../../_static/copybutton.js"></script>
-    <script src="../../_static/design-tabs.js"></script>
+    <script src="../../_static/documentation_options.js?v=6966a4bb"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-JJEG3CV376');
+            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -66,7 +67,7 @@
     <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
     <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'blog_posts/2022/TRACER';</script>
-    <script src="../../_static/doc_shared.js"></script>
+    <script src="../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
 
@@ -143,6 +144,7 @@
   <div class="col-lg-3 navbar-header-items__start">
     
       <div class="navbar-item">
+
   
 
 <a class="navbar-brand logo" href="../../index.html">
@@ -152,7 +154,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post7 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post8 documentation</p>
   
 </a></div>
     
@@ -162,7 +164,8 @@
     
     <div class="me-auto navbar-header-items__center">
       
-        <div class="navbar-item"><nav class="navbar-nav">
+        <div class="navbar-item">
+<nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
@@ -237,6 +240,7 @@
       
         <div class="navbar-item navbar-persistent--container">
           
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -250,6 +254,7 @@
       
       
         <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -294,6 +299,7 @@ document.write(`
   
   
     <div class="navbar-persistent--mobile">
+
  <script>
  document.write(`
    <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -327,7 +333,8 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item"><nav class="navbar-nav">
+          <div class="navbar-item">
+<nav class="navbar-nav">
   <p class="sidebar-header-items__title"
      role="heading"
      aria-level="1"
@@ -402,6 +409,7 @@ document.write(`
       <div class="sidebar-header-items__end">
         
           <div class="navbar-item">
+
 <script>
 document.write(`
   <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
@@ -491,7 +499,7 @@ document.write(`
     </span>
   
   
-  <a href="../../blog/tag/tracer.html">TRACER</a>
+  <a href="../../blog/tag/aerosol.html">aerosol</a>
   
   
   
@@ -503,13 +511,13 @@ document.write(`
   
   
   
-  <a href="../../blog/tag/aerosol.html">aerosol</a>
-  
-  
-  
-  
-  
   <a href="../../blog/tag/radar.html">radar</a>
+  
+  
+  
+  
+  
+  <a href="../../blog/tag/tracer.html">TRACER</a>
   
   
   
@@ -635,11 +643,11 @@ document.write(`
                 <article class="bd-article" role="main">
                   
 <section class="tex2jax_ignore mathjax_ignore" id="blending-observations-from-tracer-using-py-art">
-<h1>Blending Observations from TRACER using Py-ART<a class="headerlink" href="#blending-observations-from-tracer-using-py-art" title="Permalink to this heading">#</a></h1>
+<h1>Blending Observations from TRACER using Py-ART<a class="headerlink" href="#blending-observations-from-tracer-using-py-art" title="Link to this heading">#</a></h1>
 <p>The TRacking Aerosol Convection Interactions (TRACER) field experiment was a U.S. Department of Energy IOP with the goal of studying the lifecycle of convection over Houston as well as potential aerosol impacts on this lifecycle. Houston is uniquely suited for this kind of field experiment where seabreeze convection forms off of the coast of Houston in cleaner air conditions and then approaches the more polluted Houston region. For more information about the TRACER field experiment, click <a class="reference external" href="https://www.arm.gov/research/campaigns/amf2021tracer">here</a>.</p>
 <p>This post will show how to plot overlays of Texas A&amp;M University Lightning Mapping Array data over GOES and ARM CSAPR2 data for a case of wildfire smoke entraining into developing convection sampled during July 12 and 13, 2022. In addition, we highlight a case that was tracked by CSAPR2 for 90 minutes on June 17, 2022.</p>
 <section id="imports">
-<h2>Imports<a class="headerlink" href="#imports" title="Permalink to this heading">#</a></h2>
+<h2>Imports<a class="headerlink" href="#imports" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyart</span>
@@ -661,7 +669,7 @@ document.write(`
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="goes-data-access">
-<h1>GOES data access<a class="headerlink" href="#goes-data-access" title="Permalink to this heading">#</a></h1>
+<h1>GOES data access<a class="headerlink" href="#goes-data-access" title="Link to this heading">#</a></h1>
 <p>All of the NOAA GOES satellite data are available on Amazon Web Services for download. Therefore, you can use the s3fs tool to download the required data. We will download band 13, which is the longwave infrared band of GOES. In order to only download the band 13 files, we will ensure that there is a “C13” in the filename as this denotes the band number for each file.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1205,7 +1213,7 @@ Attributes: (12/30)
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="csapr-data-access">
-<h1>CSAPR data access<a class="headerlink" href="#csapr-data-access" title="Permalink to this heading">#</a></h1>
+<h1>CSAPR data access<a class="headerlink" href="#csapr-data-access" title="Link to this heading">#</a></h1>
 <p>The a1-level CSAPR data are available for public use on <a class="reference external" href="https://adc.arm.gov/discovery/">ARM Data Disovery</a>. In addition, we can use the Atmospheric Community Toolkit to download the July 12 and 13 CSAPR data. The DOI for the CSAPR2 a1-level data is 10.5439/1467901, which if accessed will bring you to the download page on ARM Data Discovery.</p>
 <p>The first block of code below will look at the automated catalogue of CSAPR data created by Adam Theisen. This provides us with a view of what scanning mode the CSAPR was in for a given time period as well as the scanning geometry and precipitation coverage.</p>
 <div class="cell docutils container">
@@ -1611,7 +1619,7 @@ Attributes: (12/30)
 </div>
 </div>
 <section id="load-lma-flash-data">
-<h2>Load LMA Flash data<a class="headerlink" href="#load-lma-flash-data" title="Permalink to this heading">#</a></h2>
+<h2>Load LMA Flash data<a class="headerlink" href="#load-lma-flash-data" title="Link to this heading">#</a></h2>
 <p>Here we load the data from the Houston Lightning Mapping Array. The data are in standard netCDF format that is easily read by xarray.
 The data are currently available for order at https://data.eol.ucar.edu/cgi-bin/codiac/fgr_form/id=100.016. Both the flash density data and locations of each flash are stored in the file.</p>
 <div class="cell docutils container">
@@ -1625,7 +1633,7 @@ The data are currently available for order at https://data.eol.ucar.edu/cgi-bin/
 </div>
 </section>
 <section id="june-17th-case">
-<h2>June 17th case<a class="headerlink" href="#june-17th-case" title="Permalink to this heading">#</a></h2>
+<h2>June 17th case<a class="headerlink" href="#june-17th-case" title="Link to this heading">#</a></h2>
 <p>This is a case of a storm that was tracked by CSAPR for about 90 minutes during the afternoon of June 17th 2022. We will use the same code from above to plot the radar/LMA overlays over the GOES IR radiance data for this case. This first block of code combines the above code to load and subset all of the necessary data for the overlays.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1718,7 +1726,7 @@ The data are currently available for order at https://data.eol.ucar.edu/cgi-bin/
 </div>
 </section>
 <section id="june-17-rhi">
-<h2>June 17 RHI<a class="headerlink" href="#june-17-rhi" title="Permalink to this heading">#</a></h2>
+<h2>June 17 RHI<a class="headerlink" href="#june-17-rhi" title="Link to this heading">#</a></h2>
 <p>We are also interested in the Range-Height Indicator scans provided by CSAPR2 as this cell evolves. The RHI scans will provide a vertical-cross section of the microphysical properties of the storm as it evolves. Finally, this block of code will plot the altitudes and locations of each lightning strike overlaid over the RHI scan. SciPy’s KDTree is used to find the nearest neighbors between the LMA lightning strike locations and the latitude and longitude locations of each gate in the RHI. After the nearest neighbors are found this provides us the altitude and range where the approximate location of the lightning strike would be.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1813,7 +1821,7 @@ The data are currently available for order at https://data.eol.ucar.edu/cgi-bin/
               
               
                 <footer class="prev-next-footer">
-                  <!-- Previous / next buttons -->
+                  
 <div class="prev-next-area">
 </div>
                 </footer>
@@ -1825,6 +1833,7 @@ The data are currently available for order at https://data.eol.ucar.edu/cgi-bin/
                 <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
   <div class="sidebar-secondary-item">
+
   <div class="page-toc tocsection onthispage">
     <i class="fa-solid fa-list"></i> On this page
   </div>
@@ -1846,6 +1855,7 @@ The data are currently available for order at https://data.eol.ucar.edu/cgi-bin/
   </nav></div>
 
   <div class="sidebar-secondary-item">
+
   <div class="tocsection sourcelink">
     <a href="../../_sources/blog_posts/2022/TRACER.ipynb.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
@@ -1866,8 +1876,8 @@ The data are currently available for order at https://data.eol.ucar.edu/cgi-bin/
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=365ca57ee442770a23c6"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=365ca57ee442770a23c6"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1875,6 +1885,7 @@ The data are currently available for order at https://data.eol.ucar.edu/cgi-bin/
     <div class="footer-items__start">
       
         <div class="footer-item">
+
   <p class="copyright">
     
       © Copyright 2013-2022, Py-ART developers.
@@ -1884,8 +1895,9 @@ The data are currently available for order at https://data.eol.ucar.edu/cgi-bin/
 </div>
       
         <div class="footer-item">
+
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.3.0.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
     <br/>
   </p>
 </div>
@@ -1896,8 +1908,9 @@ The data are currently available for order at https://data.eol.ucar.edu/cgi-bin/
   
     <div class="footer-items__end">
       
-        <div class="footer-item"><p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.3.
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.14.4.
 </p></div>
       
     </div>
