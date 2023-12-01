@@ -449,7 +449,7 @@ class Radar:
 
         Returns
         -------
-        azimuths : array
+        elevation : array
             Array containing the elevation angles for a given sweep.
 
         """
