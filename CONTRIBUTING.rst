@@ -160,7 +160,7 @@ documentation style.
 
 For more on the NumPy documentation style:
 
-- https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt
+- https://github.com/numpy/numpy/blob/main/doc/HOWTO_DOCUMENT.rst.txt
 
 An example:
 
@@ -340,9 +340,9 @@ GitHub
 
 When contributing to pyart, the changes created should be in a new branch
 under your forked repository. Let's say the user is adding a new map display.
-Instead of creating that new function in your master branch. Create a new
+Instead of creating that new function in your main branch. Create a new
 branch called ‘cartopy_map’. If everything checks out and the admin
-accepts the pull request, you can then merge the master branch and
+accepts the pull request, you can then merge the main branch and
 cartopy_map branch.
 
 To delete a branch both locally and remotely, if done with it::
@@ -362,16 +362,15 @@ To create a new branch::
 
 If you have a branch with changes that have not been added to a pull request
 but you would like to start a new branch with a different task in mind. It
-is recommended that your new branch is based on your master. First::
+is recommended that your new branch is based on your main. First::
 
-                git checkout master
-
+                git checkout main
 Then::
 
                 git checkout -b <branch_name>
 
 This way, your new branch is not a combination of your other task branch and
-the new task branch, but is based on the original master branch.
+the new task branch, but is based on the original main branch.
 
 Typing `git status` will not only inform the user of what files have been
 modified and untracked, it will also inform the user of which branch they

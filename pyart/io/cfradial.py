@@ -192,8 +192,12 @@ def read_cfradial(
         ray_angle_res = None
 
     # Uses ARM scan name if present.
-    if hasattr(ncobj, "scan_name"):
-        mode = ncobj.scan_name
+    if not hasattr(ncobj, "scan_name"):
+        scan_name = ""
+    else:
+        scan_name = ncobj.scan_name
+    if len(scan_name) > 0:
+        mode = scan_name
     else:
         # first sweep mode determines scan_type
         try:

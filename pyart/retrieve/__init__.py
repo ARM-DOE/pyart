@@ -5,6 +5,7 @@ Radar retrievals.
 
 from .advection import grid_displacement_pc, grid_shift  # noqa
 from .comp_z import composite_reflectivity  # noqa
+from .echo_class import feature_detection  # noqa
 from .echo_class import conv_strat_yuter  # noqa
 from .echo_class import get_freq_band  # noqa
 from .echo_class import hydroclass_semisupervised  # noqa
@@ -18,6 +19,7 @@ from .qpe import est_rain_rate_z  # noqa
 from .qpe import est_rain_rate_za  # noqa
 from .qpe import est_rain_rate_zkdp  # noqa
 from .qpe import est_rain_rate_zpoly  # noqa
+from .qpe import ZtoR  # noqa
 from .qvp import quasi_vertical_profile  # noqa
 from .simple_moment_calculations import calculate_snr_from_reflectivity  # noqa
 from .simple_moment_calculations import calculate_velocity_texture  # noqa

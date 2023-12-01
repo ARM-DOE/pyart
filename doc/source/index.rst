@@ -161,6 +161,8 @@ Short Courses
 Various short courses on Py-ART and open source radar software have been given
 which contain tutorial like materials and additional examples.
 
+* `2023 AMS, Open Source Radar Short Course <https://github.com/openradar/ams-open-radar-2023>`_
+* `2022 ERAD, Open Source Radar Short Course <https://github.com/openradar/erad2022>`_
 * `2015 AMS, Open Source Radar Short Course <https://github.com/openradar/AMS-Short-Course-on-Open-Source-Radar-Software>`_
 * `2015 ARM/ASR Meeting, PyART, the Python ARM Radar Toolkit  <https://github.com/ARM-DOE/notebooks/tree/master/ASR_PI_2015>`_
 * `2014 ARM/ASM Meeting, Py-ART tutorial <https://github.com/ARM-DOE/notebooks/tree/master/ASR_PI_2014>`_
@@ -183,7 +185,7 @@ environment based on the `environment.yml <https://github.com/ARM-DOE/pyart/blob
 
 Or for a basic environment and downloading optional dependencies as needed::
 
-    conda create -n pyart_env -c conda-forge python=3.8 arm_pyart
+    conda create -n pyart_env -c conda-forge arm_pyart
 
 Basic command in a terminal or command prompt to install the latest version of
 Py-ART::
@@ -205,7 +207,7 @@ Additional detail on installing Py-ART can be found in the installation section.
 Dependencies
 ============
 
-Py-ART is tested to work under Python 3.6, 3.7 and 3.8
+Py-ART is tested to work under Python 3.9, 3.10, 3.11, and 3.12.
 
 The required dependencies to install Py-ART in addition to Python are:
 
