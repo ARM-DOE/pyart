@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Masking Data With Py-ART Gatefilters &#8212; Py-ART 1.16.1.post8 documentation</title>
+    <title>Masking Data With Py-ART Gatefilters &#8212; Py-ART 1.16.1.post9 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="../_static/documentation_options.js?v=6966a4bb"></script>
+    <script src="../_static/documentation_options.js?v=cd1e20a2"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -154,7 +154,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post8 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post9 documentation</p>
   
 </a></div>
     
@@ -615,7 +615,7 @@ document.write(`
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># The below example shows how you can use a gatefilter to exclude values where gate_id is</span>
 <span class="c1"># equal to a certain value. (You can exclude values based on conditions from multiple</span>
 <span class="c1"># fields. In this example, we are excluding regions identified as second trip echoes</span>
-<span class="c1"># (gate_id = 0), nonhydrometeors (gate_id = 1), and clutter (gate_id = 2).</span>
+<span class="c1"># (gate_id = 0), nonhydrometeors (gate_id = 3), and clutter (gate_id = 5).</span>
 <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_equal</span><span class="p">(</span><span class="s2">&quot;gate_id&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_equal</span><span class="p">(</span><span class="s2">&quot;gate_id&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_equal</span><span class="p">(</span><span class="s2">&quot;gate_id&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>

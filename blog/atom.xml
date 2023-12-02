@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
   <id>arm-doe.github.io/pyart/</id>
   <title>PyART Blog</title>
-  <updated>2023-12-01T06:20:50.254735+00:00</updated>
+  <updated>2023-12-02T00:33:07.920822+00:00</updated>
   <link href="arm-doe.github.io/pyart/"/>
   <link href="arm-doe.github.io/pyart/blog/atom.xml" rel="self"/>
   <generator uri="https://ablog.readthedocs.io/" version="0.11.6">ABlog</generator>
@@ -30,7 +30,7 @@
     <title>Hail Storm Visualization Using Py-ART and Pandas!</title>
     <updated>2022-11-23T00:00:00+00:00</updated>
     <author>
-      <name>Russ Schumacher</name>
+      <name>Max Grover</name>
     </author>
     <content type="html">&lt;p class="ablog-post-excerpt"&gt;&lt;p&gt;Within this post, we will walk through how to combine radar and storm report data, creating an animation of the two!&lt;/p&gt;
 &lt;p&gt;On September 7, 2021, a strong line of thunderstorms passed through Southern Wisconsin and Northern Illinois, leaving a trail of hail and wind damage in its path.&lt;/p&gt;
