@@ -9,6 +9,7 @@ import numpy as np
 
 from ..config import get_field_name, get_fillvalue, get_metadata
 from ._echo_class import _feature_detection, steiner_class_buff
+from ._echo_class_wt import getWTClass
 
 
 def steiner_conv_strat(
@@ -978,3 +979,44 @@ def get_freq_band(freq):
     warn("Unknown frequency band")
 
     return None
+
+
+def conv_strat_mywt(grid, conv_scale_km=20, refl_field="reflectivity"):
+    """
+    This function classifies radar echoes using the ATWT algorithm.
+
+    Parameters
+    ----------
+    grid : Grid
+        Grid object containing radar data.
+    conv_scale_km : float
+        Approximate scale break (in km) between convective and stratiform scales.
+        Default is = 20.
+    refl_field : str
+        Field name for reflectivity data in the pyart grid object.
+        Default is "reflectivity_horizontal".
+
+    Returns
+    -------
+    ndarray
+        Precipitation type classification.
+        Copy the other docs string
+    """
+
+    # Call the actual getWTClass function with provided arguments
+    reclass = getWTClass(grid, conv_scale_km, refl_field)
+    reclass = np.expand_dims(reclass, axis=0)
+
+    # put data into a dictionary to be added as a field
+    reclass_dict = {
+        "wt_reclass": {
+            "data": reclass,
+            "standard_name": "echo_class",
+            "long_name": "Wavelet transform radar echo class",
+            "valid_min": 0,
+            "valid_max": 3,
+            "comment_1": ('0 = Undefined'),
+        }
+    }
+
+    return(reclass_dict)
