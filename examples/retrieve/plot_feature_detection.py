@@ -398,7 +398,6 @@ plt.show()
 ######################################
 # Part 2: Cool-season feature detection
 # ----------
-######################################
 # **Winter storm example**
 #
 # In this example, we will show how to algorithm can be used to detect features (snow bands) in winter storms. Here, we
