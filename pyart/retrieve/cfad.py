@@ -49,8 +49,11 @@ def create_cfad(
 
     """
     # get raw bin counts
-    freq, height_edges, field_edges = np.histogram2d(altitude_data.compressed(), field_data.compressed(),
-                                                     bins=[altitude_bins, field_bins])
+    freq, height_edges, field_edges = np.histogram2d(
+        altitude_data.compressed(),
+        field_data.compressed(),
+        bins=[altitude_bins, field_bins],
+    )
 
     # sum counts over y axis (height)
     freq_sum = np.sum(freq, axis=1)
