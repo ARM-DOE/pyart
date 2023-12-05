@@ -13,11 +13,39 @@ print(__doc__)
 
 import matplotlib.pyplot as plt
 import numpy as np
+from open_radar_data import DATASETS
 
 import pyart
 
+
 ######################################
-# Example 1
+# Description of a CFAD
+# ----------
+# A contoured frequency by altitude diagram (CFAD) is essentially a 2D histogram used to depict the vertical
+# distribution of a particular variable, such as radar reflectivity. The x-axis represents the frequency of the
+# field and the y-axis represents the frequency of the altitude. A key feature that distinguishes a CFAD from a
+# regular 2D histogram is that it is normalized by altitude and altitudes where there is insufficient data are
+# removed. See Yuter and Houze (1995) for full details of the diagram.
+#
+# **Interpretation**
+# In a CFAD diagram, for a given altitude, the normalized frequency values will sum to a value of 1. When
+# interpreting a CFAD diagram, the normalized frequency for a given bin will be the frequency of that value for the
+# associated altitude (i.e. each bin can be interpreted as the fraction of data points at each altitude).
+#
+# **Minimum fraction threshold**
+# In a CFAD diagram, altitudes where there is insufficient data are removed. This feature is controlled with the
+# `min_frac_thres` value. The default value is 0.1, meaning that altitudes where the number of observations is less
+# than one tenth of the maximum number of observations across all altitudes are removed. Increasing the value will
+# act to be more aggressive in removing altitudes and decreasing the value will act to include more data. Setting
+# this value to zero will include all altitudes with data, but use caution when interpreting CFADs with all data
+# available as those altitudes with less data will not be as representative as other altitudes with sufficient data.
+######################################
+# Basic example with reflectivity from RHI
+# ----------
+# **Example with RHI**
+# First, we will show an example from an RHI scan. We will get the reflectivity data and mask outside -15 and 35 dBZ
+# to remove any noisy data. For the best results, we recommend cleaning up the field as much as possible (i.e.
+# despeckling, filtering, etc.)
 
 # get test data
 filename = pyart.testing.get_test_data("sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc")
@@ -26,76 +54,243 @@ radar = pyart.io.read_cfradial(filename)
 # compute CFAD
 # get reflectivity data and mask extremes
 subset_slice = radar.get_slice(0)
-ref_data = radar.fields['reflectivity_horizontal']['data'][subset_slice]
+ref_data = radar.fields["reflectivity_horizontal"]["data"][subset_slice]
 ref_data_masked = np.ma.masked_outside(ref_data, -15, 35)
 # get altitude data
 _, _, gate_z = radar.get_gate_x_y_z(0)
 gate_z_masked = np.ma.masked_where(ref_data_masked.mask, gate_z)
 
-freq_norm, height_edges, field_edges = createCFAD(ref_data_masked, gate_z_masked, field_bins=np.linspace(-15,35,100),
-                                                  altitude_bins=np.linspace(0,15000,100), min_frac_thres=0.1)
+freq_norm, height_edges, field_edges = pyart.retrieve.create_cfad(
+    ref_data_masked,
+    gate_z_masked,
+    field_bins=np.linspace(-15, 35, 100),
+    altitude_bins=np.linspace(0, 15000, 50),
+    min_frac_thres=0.1,
+)
 
 # plot CFAD
 freq_norm_masked = np.ma.masked_less_equal(freq_norm, 0)
 
 fig = plt.figure()
 ax = plt.axes()
-cfad_pm = ax.pcolormesh(field_edges, height_edges, freq_norm_masked, cmap='plasma', vmin=0, vmax=0.10)
+cfad_pm = ax.pcolormesh(
+    field_edges, height_edges/1000, freq_norm_masked, cmap="plasma", vmin=0, vmax=0.10
+)
 plt.colorbar(cfad_pm)
-ax.set_xlabel('Reflectivity [dBZ]')
-ax.set_ylabel('Height [m]')
-ax.grid(ls='--', color='gray', lw=0.5, alpha=0.7)
+ax.set_xlabel("Reflectivity [dBZ]")
+ax.set_ylabel("Height [km]")
+ax.grid(ls="--", color="gray", lw=0.5, alpha=0.7)
 plt.show()
 
 # plot RHI data
 display = pyart.graph.RadarDisplay(radar)
 
-fig = plt.figure(figsize=[12,3])
+plt.figure(figsize=[12, 3])
 ax = plt.axes()
 plt.tight_layout()
-display.plot('reflectivity_horizontal', 0, vmin=-15, vmax=35, mask_outside=True, cmap='magma_r', ax=ax)
-display.set_limits(ylim=[0,15], ax=ax)
-ax.set_aspect('equal')
+display.plot(
+    "reflectivity_horizontal",
+    0,
+    vmin=-15,
+    vmax=35,
+    mask_outside=True,
+    cmap="magma_r",
+    ax=ax,
+)
+display.set_limits(ylim=[0, 15], ax=ax)
+ax.set_aspect("equal")
 plt.show()
 
 ######################################
-# Example 2
+# Minimum fraction threshold example
+# ----------
+# Previously, we used the default `min_frac_thres` of 0.1. Next, we will increase the threshold and set the threshold
+# to 0 (not recommended) so show how the CFAD changes.
 
-# get test data
-filename = pyart.testing.get_test_data("034142.mdv")
-radar = pyart.io.read_mdv(filename)
+# Let's see the effect of changing the minimum fraction threshold:
+freq_norm2, height_edges, field_edges = pyart.retrieve.create_cfad(
+    ref_data_masked,
+    gate_z_masked,
+    field_bins=np.linspace(-15, 35, 100),
+    altitude_bins=np.linspace(0, 15000, 50),
+    min_frac_thres=0.2,
+)
+freq_norm0, height_edges, field_edges = pyart.retrieve.create_cfad(
+    ref_data_masked,
+    gate_z_masked,
+    field_bins=np.linspace(-15, 35, 100),
+    altitude_bins=np.linspace(0, 15000, 50),
+    min_frac_thres=0,
+)
 
-# compute CFAD
-# get reflectivity data and mask extremes
-subset_slice = radar.get_slice(0)
-ref_data = radar.fields['reflectivity']['data'][subset_slice]
-ref_data_masked = np.ma.masked_outside(ref_data, -5, 60)
-# get altitude data
-_, _, gate_z = radar.get_gate_x_y_z(0)
-gate_z_masked = np.ma.masked_where(ref_data_masked.mask, gate_z)
+# plot CFAD
+freq_norm2_masked = np.ma.masked_less_equal(freq_norm2, 0)
+freq_norm0_masked = np.ma.masked_less_equal(freq_norm0, 0)
 
-freq_norm, height_edges, field_edges = createCFAD(ref_data_masked, gate_z_masked, field_bins=np.linspace(-5,60,100),
-                                                  altitude_bins=np.linspace(0,20000,100), min_frac_thres=0.1)
+plt.figure(figsize=(12,3))
+ax1 = plt.subplot(1, 3, 3)
+cfad_pm = ax1.pcolormesh(
+    field_edges, height_edges/1000, freq_norm2_masked, cmap="plasma", vmin=0, vmax=0.10
+)
+plt.colorbar(cfad_pm, ax=ax1)
+ax1.set_xlabel("Reflectivity [dBZ]")
+ax1.grid(ls="--", color="gray", lw=0.5, alpha=0.7)
+ax1.set_title("min_frac_thres = 0.2")
+
+ax2 = plt.subplot(1, 3, 2)
+cfad_pm = ax2.pcolormesh(
+    field_edges, height_edges/1000, freq_norm_masked, cmap="plasma", vmin=0, vmax=0.10
+)
+plt.colorbar(cfad_pm, ax=ax2)
+ax2.set_xlabel("Reflectivity [dBZ]")
+ax2.grid(ls="--", color="gray", lw=0.5, alpha=0.7)
+ax2.set_title("min_frac_thres = 0.1")
+
+ax3 = plt.subplot(1, 3, 1)
+cfad_pm = ax3.pcolormesh(
+    field_edges, height_edges/1000, freq_norm0_masked, cmap="plasma", vmin=0, vmax=0.10
+)
+plt.colorbar(cfad_pm, ax=ax3)
+ax3.set_xlabel("Reflectivity [dBZ]")
+ax3.set_ylabel("Height [km]")
+ax3.grid(ls="--", color="gray", lw=0.5, alpha=0.7)
+ax3.set_title("min_frac_thres = 0")
+plt.show()
+
+######################################
+# Setting the `min_frac_thres` to 0 (left panel) shows all data, even near the top of the chart (14km) where there is
+# limited echo. Setting the `min_frac_thres` higher to 0.2 (right panel) removed altitudes between 1 and 5 km where
+# there is less echo.
+#
+#
+# Velocity example
+# ----------
+# Next, we will show a CFAD for the doppler velocity from the above example. First, we have to dealias the velocity
+
+# create a gatefilter
+gatefilter = pyart.filters.GateFilter(radar)
+gatefilter.exclude_invalid("reflectivity_horizontal")
+gatefilter.exclude_outside("reflectivity_horizontal", -15, 30)
+gatefilter.exclude_invalid("mean_doppler_velocity")
+
+velocity_dealias = pyart.correct.dealias_region_based(
+    radar,
+    gatefilter=gatefilter,
+    vel_field="mean_doppler_velocity",
+    nyquist_vel=13,
+)
+radar.add_field("corrected_velocity", velocity_dealias)
+
+# plot RHI data
+display = pyart.graph.RadarDisplay(radar)
+
+plt.figure(figsize=[12, 3])
+ax = plt.axes()
+plt.tight_layout()
+display.plot(
+    "corrected_velocity",
+    0,
+    vmin=-20,
+    vmax=20,
+    mask_outside=True,
+    cmap="RdBu_r",
+    ax=ax,
+)
+display.set_limits(ylim=[0, 15], ax=ax)
+ax.set_aspect("equal")
+plt.show()
+
+# now do the CFAD
+vel_data = radar.fields["corrected_velocity"]["data"][subset_slice]
+vel_data_masked = np.ma.masked_where(gate_z_masked.mask, vel_data)
+gate_z_masked = np.ma.masked_where(vel_data_masked.mask, gate_z_masked)
+
+freq_norm, height_edges, field_edges = pyart.retrieve.create_cfad(
+    vel_data_masked,
+    gate_z_masked,
+    field_bins=np.linspace(-30, 30, 50),
+    altitude_bins=np.linspace(0, 15000, 50),
+    min_frac_thres=0.2,
+)
 
 # plot CFAD
 freq_norm_masked = np.ma.masked_less_equal(freq_norm, 0)
 
 fig = plt.figure()
 ax = plt.axes()
-cfad_pm = ax.pcolormesh(field_edges, height_edges, freq_norm_masked, cmap='plasma', vmin=0, vmax=0.10)
+cfad_pm = ax.pcolormesh(
+    field_edges,
+    height_edges/1000,
+    freq_norm_masked,
+    cmap="plasma",
+    vmin=0,
+    vmax=0.20,
+)
 plt.colorbar(cfad_pm)
-ax.set_xlabel('Reflectivity [dBZ]')
-ax.set_ylabel('Height [m]')
-ax.grid(ls='--', color='gray', lw=0.5, alpha=0.7)
+ax.set_xlabel("Velocity [m s$^{-1}$]")
+ax.set_ylabel("Height [km]")
+ax.grid(ls="--", color="gray", lw=0.5, alpha=0.7)
 plt.show()
 
-# plot RHI data
-display = pyart.graph.RadarDisplay(radar)
 
-fig = plt.figure(figsize=[12,3])
+######################################
+# Validation
+# ----------
+# Finally, we wanted to compare this function with the original method, so here we recreate Fig. 2c from Yuter and
+# Houze (1995) to demonstrate that it works the same.
+
+# get test data
+filename = DATASETS.fetch("ddop.910815.213931.cdf")
+grid = pyart.io.read_grid(filename)
+
+# get fields
+altitude_data = grid.point_z["data"]
+field_data = grid.fields["maxdz"]["data"][:]
+vvel_data = grid.fields["w_wind"]["data"][:]
+
+# now mask data and correct altitude
+vvel_masked = np.ma.masked_invalid(vvel_data)
+field_data_masked = np.ma.masked_less_equal(field_data, -15)
+field_data_masked = np.ma.masked_where(vvel_masked.mask, field_data_masked)
+altitude_data_masked = np.ma.masked_where(field_data_masked.mask, altitude_data - 800)
+
+# define histogram bins
+field_bins = np.arange(-20, 65, 5)
+altitude_bins = np.arange(-0.2, 18.5, 0.4)
+
+freq_norm, height_edges, field_edges = pyart.retrieve.create_cfad(
+    field_data_masked,
+    altitude_data_masked / 1000,
+    field_bins=field_bins,
+    altitude_bins=altitude_bins,
+    min_frac_thres=0.1,
+)
+
+# plot CFAD with contour plot
+freq_norm_masked = np.ma.masked_less_equal(freq_norm, 0)
+h, f = np.meshgrid(height_edges, field_edges)
+
+plt.figure(figsize=(6, 3))
 ax = plt.axes()
-plt.tight_layout()
-display.plot('reflectivity', 0, vmin=-5, vmax=60, cmap='magma_r', ax=ax)
-display.set_limits(ylim=[0,20], xlim=[0,80], ax=ax)
-ax.set_aspect('equal')
+cont = ax.contour(
+    f[:-1, :-1] + 2.5,
+    h[:-1, :-1] + 0.2,
+    freq_norm.T,
+    levels=np.arange(0.05, 0.3, 0.05),
+    colors='black',
+)
+ax.set_yticks([0, 5, 10, 15])
+ax.set_xticks([-10, 0, 10, 20, 30, 40, 50])
+ax.set_xlim([-12, 58])
+ax.set_ylim([-0.5, 16])
+ax.set_ylabel("Height [km]")
+ax.set_xlabel("Reflectivity [dBZ]")
+ax.axhline(8, ls="--", lw=0.75, color="black")
+ax.set_title("Recreation of Yuter and Houze (1995) Fig. 2c")
 plt.show()
+
+# References
+# ----------
+# Yuter, S. E., and R. A. Houze, 1995: Three-Dimensional Kinematic and Microphysical Evolution of Florida
+# Cumulonimbus. Part II: Frequency Distributions of Vertical Velocity, Reflectivity, and Differential Reflectivity.
+# Mon. Wea. Rev. 123, 1941-1963. https://doi.org/10.1175/1520-0493(1995)123%3C1941:TDKAME%3E2.0.CO;2
