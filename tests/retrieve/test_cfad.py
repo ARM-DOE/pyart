@@ -6,7 +6,6 @@ import pyart
 
 
 def test_cfad_default():
-
     # set row to mask and test
     verify_index = 5
     # create random grid of reflectivity data

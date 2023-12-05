@@ -268,7 +268,8 @@ plt.show()
 # ----------
 # Finally, we wanted to compare this function with the original method, so here we recreate Fig. 2c from Yuter and
 # Houze (1995) to demonstrate that it works the same. Instead of using the `pcolormesh` function, we are using
-# contour lines. 
+# contour lines.
+
 
 # get test data
 filename = DATASETS.fetch("ddop.910815.213931.cdf")
