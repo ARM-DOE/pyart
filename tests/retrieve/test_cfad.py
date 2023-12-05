@@ -21,11 +21,12 @@ def test_cfad_default():
     z_full = np.repeat(z_col[..., np.newaxis], 10, axis=1)
     z_mask = np.ma.masked_where(ref_random_mask.mask, z_full)
     # compute CFAD
-    freq_norm, height_edges, field_edges = pyart.retrieve.create_cfad(ref_random_mask,
-                                                                      z_mask,
-                                                                      field_bins=np.linspace(0, 30, 20),
-                                                                      altitude_bins=np.linspace(0, 12000, 10)
-                                                                      )
+    freq_norm, height_edges, field_edges = pyart.retrieve.create_cfad(
+        ref_random_mask,
+        z_mask,
+        field_bins=np.linspace(0, 30, 20),
+        altitude_bins=np.linspace(0, 12000, 10),
+    )
     # if CFAD code works correctly, all values in this row should be false since this altitude has only 1 value (less
     # than the necessary fraction needed)
     assert freq_norm[verify_index, :].mask.all()
