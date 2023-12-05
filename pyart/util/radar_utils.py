@@ -147,6 +147,8 @@ def determine_sweeps(radar,
     angle_bins = np.arange(deg_rng[0] - max_offset, deg_rng[1] + max_offset + 1e-10, max_offset * 2.)
     sample_dt = np.nanmean(np.diff(radar.time['data']))
     win_size = int(np.ceil(running_win_dt / sample_dt))
+    if win_size < 2:
+        raise ValueError('Window size <= 1; consider decreasing the value of running_win_dt')
     sweep_start_index, sweep_end_index = [], []
     in_sweep = False  # determine if sweep is underway in current index
 
@@ -163,10 +165,12 @@ def determine_sweeps(radar,
         bincounts, _ = np.histogram(fix_win, bins=angle_bins)
         moving_radar = np.sum(bincounts > 0) > 1  # radar is likely moving to a new sweep position
         if in_sweep == True:
-            if moving_radar | (t == radar.time['data'].size - win_size):
+            if t == radar.time['data'].size - win_size:
+                sweep_end_index.append(radar.time['data'].size - 1)
+            elif moving_radar:
                 in_sweep = False
-                sweep_end_index.append(t + win_size - 1)
-                t += win_size - 1
+                sweep_end_index.append(t + win_size - 2)
+                t += win_size - 2
         elif np.all(idle_sweep == False) & (moving_radar == False):
             in_sweep = True
             sweep_start_index.append(t)
