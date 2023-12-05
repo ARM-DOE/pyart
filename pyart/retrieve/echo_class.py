@@ -1004,15 +1004,15 @@ def conv_strat_raut(grid, conv_scale_km=20, refl_field="reflectivity"):
     """
 
     # Call the actual get_relass function 
-    reclass = get_reclass(grid, conv_scale_km, refl_field)
+    reclass = get_relass(grid, conv_scale_km, refl_field)
     reclass = np.expand_dims(reclass, axis=0)
 
     # put data into a dictionary to be added as a field
     reclass_dict = {
         "wt_reclass": {
             "data": reclass,
-            "standard_name": "wavelet_echo_class",
-            "long_name": "Wavelet-based multiresolution radar echo classification",
+            "standard_name": "echo_class",
+            "long_name": "Wavelet transform radar echo class",
             "valid_min": 0,
             "valid_max": 3,
             "comment_1": ('0 = Undefined'),
