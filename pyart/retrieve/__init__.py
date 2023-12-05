@@ -29,5 +29,6 @@ from .simple_moment_calculations import compute_noisedBZ  # noqa
 from .simple_moment_calculations import compute_snr  # noqa
 from .spectra_calculations import dealias_spectra, spectra_moments  # noqa
 from .vad import vad_browning, vad_michelson  # noqa
+from .cfad import create_cfad  # noqa
 
 __all__ = [s for s in dir() if not s.startswith("_")]
