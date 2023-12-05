@@ -60,6 +60,7 @@ ref_data_masked = np.ma.masked_outside(ref_data, -15, 35)
 _, _, gate_z = radar.get_gate_x_y_z(0)
 gate_z_masked = np.ma.masked_where(ref_data_masked.mask, gate_z)
 
+# get CFAD
 freq_norm, height_edges, field_edges = pyart.retrieve.create_cfad(
     ref_data_masked,
     gate_z_masked,
@@ -69,12 +70,13 @@ freq_norm, height_edges, field_edges = pyart.retrieve.create_cfad(
 )
 
 # plot CFAD
+# mask frequency values less than zero
 freq_norm_masked = np.ma.masked_less_equal(freq_norm, 0)
-
-fig = plt.figure()
+# plot CFAD
+plt.figure()
 ax = plt.axes()
 cfad_pm = ax.pcolormesh(
-    field_edges, height_edges/1000, freq_norm_masked, cmap="plasma", vmin=0, vmax=0.10
+    field_edges, height_edges / 1000, freq_norm_masked, cmap="plasma", vmin=0, vmax=0.10
 )
 plt.colorbar(cfad_pm)
 ax.set_xlabel("Reflectivity [dBZ]")
@@ -102,6 +104,11 @@ ax.set_aspect("equal")
 plt.show()
 
 ######################################
+# We can see a general increase in reflectivity values from the echo top to around 8km. The maximum frequency value in
+# each altitude row represents the mode of the reflectivity distribution which we can see also increases from echo
+# top to 8km. Below 8km the distribution of reflectivity values widens, likely associated with some of the noise in
+# the RHI.
+
 # Minimum fraction threshold example
 # ----------
 # Previously, we used the default `min_frac_thres` of 0.1. Next, we will increase the threshold and set the threshold
@@ -124,13 +131,19 @@ freq_norm0, height_edges, field_edges = pyart.retrieve.create_cfad(
 )
 
 # plot CFAD
+# mask zero values
 freq_norm2_masked = np.ma.masked_less_equal(freq_norm2, 0)
 freq_norm0_masked = np.ma.masked_less_equal(freq_norm0, 0)
-
-plt.figure(figsize=(12,3))
+# plot
+plt.figure(figsize=(12, 3))
 ax1 = plt.subplot(1, 3, 3)
 cfad_pm = ax1.pcolormesh(
-    field_edges, height_edges/1000, freq_norm2_masked, cmap="plasma", vmin=0, vmax=0.10
+    field_edges,
+    height_edges / 1000,
+    freq_norm2_masked,
+    cmap="plasma",
+    vmin=0,
+    vmax=0.10,
 )
 plt.colorbar(cfad_pm, ax=ax1)
 ax1.set_xlabel("Reflectivity [dBZ]")
@@ -139,7 +152,12 @@ ax1.set_title("min_frac_thres = 0.2")
 
 ax2 = plt.subplot(1, 3, 2)
 cfad_pm = ax2.pcolormesh(
-    field_edges, height_edges/1000, freq_norm_masked, cmap="plasma", vmin=0, vmax=0.10
+    field_edges,
+    height_edges / 1000,
+    freq_norm_masked,
+    cmap="plasma",
+    vmin=0,
+    vmax=0.10,
 )
 plt.colorbar(cfad_pm, ax=ax2)
 ax2.set_xlabel("Reflectivity [dBZ]")
@@ -148,7 +166,12 @@ ax2.set_title("min_frac_thres = 0.1")
 
 ax3 = plt.subplot(1, 3, 1)
 cfad_pm = ax3.pcolormesh(
-    field_edges, height_edges/1000, freq_norm0_masked, cmap="plasma", vmin=0, vmax=0.10
+    field_edges,
+    height_edges / 1000,
+    freq_norm0_masked,
+    cmap="plasma",
+    vmin=0,
+    vmax=0.10,
 )
 plt.colorbar(cfad_pm, ax=ax3)
 ax3.set_xlabel("Reflectivity [dBZ]")
@@ -160,12 +183,13 @@ plt.show()
 ######################################
 # Setting the `min_frac_thres` to 0 (left panel) shows all data, even near the top of the chart (14km) where there is
 # limited echo. Setting the `min_frac_thres` higher to 0.2 (right panel) removed altitudes between 1 and 5 km where
-# there is less echo.
+# there is less echo than between 6 and 12km where there is a consistent swath of reflectivity throughout the entire
+# cross section.
 #
 #
 # Velocity example
 # ----------
-# Next, we will show a CFAD for the doppler velocity from the above example. First, we have to dealias the velocity
+# Next, we will show a CFAD for the doppler velocity from the above example. First, we have to dealias the velocity.
 
 # create a gatefilter
 gatefilter = pyart.filters.GateFilter(radar)
@@ -173,6 +197,7 @@ gatefilter.exclude_invalid("reflectivity_horizontal")
 gatefilter.exclude_outside("reflectivity_horizontal", -15, 30)
 gatefilter.exclude_invalid("mean_doppler_velocity")
 
+# dealias velocity
 velocity_dealias = pyart.correct.dealias_region_based(
     radar,
     gatefilter=gatefilter,
@@ -214,13 +239,15 @@ freq_norm, height_edges, field_edges = pyart.retrieve.create_cfad(
 )
 
 # plot CFAD
+# mask zero values
 freq_norm_masked = np.ma.masked_less_equal(freq_norm, 0)
 
-fig = plt.figure()
+# plot
+plt.figure()
 ax = plt.axes()
 cfad_pm = ax.pcolormesh(
     field_edges,
-    height_edges/1000,
+    height_edges / 1000,
     freq_norm_masked,
     cmap="plasma",
     vmin=0,
@@ -232,12 +259,16 @@ ax.set_ylabel("Height [km]")
 ax.grid(ls="--", color="gray", lw=0.5, alpha=0.7)
 plt.show()
 
-
 ######################################
+# The velocity CFAD is very different from the reflectivity CFAD. In most altitudes, there is more of a bimodal
+# pattern associated with the changing sign of the velocity values on either side of the radar. In general,
+# the distribution of velocity values is consistently wide throughout the profile compared to the reflectivity CFAD.
+#
 # Validation
 # ----------
 # Finally, we wanted to compare this function with the original method, so here we recreate Fig. 2c from Yuter and
-# Houze (1995) to demonstrate that it works the same.
+# Houze (1995) to demonstrate that it works the same. Instead of using the `pcolormesh` function, we are using
+# contour lines. 
 
 # get test data
 filename = DATASETS.fetch("ddop.910815.213931.cdf")
@@ -277,7 +308,7 @@ cont = ax.contour(
     h[:-1, :-1] + 0.2,
     freq_norm.T,
     levels=np.arange(0.05, 0.3, 0.05),
-    colors='black',
+    colors="black",
 )
 ax.set_yticks([0, 5, 10, 15])
 ax.set_xticks([-10, 0, 10, 20, 30, 40, 50])
