@@ -8,10 +8,10 @@ Created on Thu Oct 12 23:12:19 2017
 
 .. autosummary::
     getWTClass
-    labelClasses
+    label_classes
     reflectivity_to_rainrate
-    getScaleBreak
-    getWTSum
+    calc_scale_break
+    sum_conv_wavelets
     atwt2d
 """
 
@@ -20,7 +20,7 @@ from numpy import log, floor
 import sys
 
 
-def getWTClass(grid, conv_scale_km=20, refl_field="reflectivity_horizontal"):
+def get_reclass(grid, conv_scale_km=20, refl_field="reflectivity_horizontal"):
     """
     Compute ATWT described as Raut et al (2008) and classify radar echoes 
     using scheme of Raut et al (2020).
@@ -59,9 +59,9 @@ def getWTClass(grid, conv_scale_km=20, refl_field="reflectivity_horizontal"):
     dbz_data_t = reflectivity_to_rainrate(dbz_data)  # transform the dbz data
     
     # get scale break in pixels
-    scale_break = getScaleBreak(res_km, conv_scale_km)
-    wt_sum = getWTSum(dbz_data_t, scale_break)
-    wt_class = labelClasses(wt_sum, dbz_data)
+    scale_break = calc_scale_break(res_km, conv_scale_km)
+    wt_sum = sum_conv_wavelets(dbz_data_t, scale_break)
+    wt_class = label_classes(wt_sum, dbz_data)
 
     wt_class = wt_class.squeeze()
     return wt_class
@@ -69,7 +69,7 @@ def getWTClass(grid, conv_scale_km=20, refl_field="reflectivity_horizontal"):
 
 
 
-def labelClasses(wt_sum, vol_data):
+def label_classes(wt_sum, vol_data):
     """ 
     Labels classes using given thresholds:
     - 0. no precipitation,
@@ -83,7 +83,7 @@ def labelClasses(wt_sum, vol_data):
     tran_wt_threshold = 2  # WT value for moderate convection
     min_dbz_threshold = 10  # pixels below this value are not classified. 
     conv_dbz_threshold = 30  # pixel below this value are not convective. This works for most cases.
-
+git push -u 
     Parameters:
     ===========
     wt_sum: ndarray    
@@ -97,11 +97,13 @@ def labelClasses(wt_sum, vol_data):
         Precipitation type classification.
     """
 
-    conv_wt_threshold = 5  # WT value more than this is strong convection
-    tran_wt_threshold = 1  # WT value for moderate convection
-    min_dbz_threshold = 5  # pixels below this value are not classified
-    conv_dbz_threshold = 25  # pixel below this value are not convective
-    conv_core_threshold = 40
+    conv_wt_threshold = 5  # WT sum more than this is strong convection or convective cores (reccomended value 4-6).
+    conv_core_threshold = 42 # Reflectivity thrshold for covective cores (User Choice reccomended > 40 dBZ). 
+    
+    tran_wt_threshold = 1.5  # WT value for moderate/intermediate convection (reccomended value 1-2)
+    min_dbz_threshold = 5  # Reflectivities below this value are not classified (reccomended value 0-15)
+    conv_dbz_threshold = 25  # pixel below this value are not convective (reccomended value 25-30 dBZ)
+ 
 
     # I first used negative numbers to annotate the categories. Then multiply it by -1.
     wt_class = np.where((wt_sum >= tran_wt_threshold) & (vol_data >= conv_core_threshold), -2, 0)
@@ -136,12 +138,11 @@ def reflectivity_to_rainrate(dbz, acoeff=200, bcoeff=1.6):
         Rain rate in (mm/h)
     """
     rr = ((10.0 ** (dbz / 10.0)) / acoeff) ** (1.0 / bcoeff)
-    print("rain rate max "+ str(rr.max()))
     return rr
 
 
 
-def getScaleBreak(res_km, conv_scale_km):
+def calc_scale_break(res_km, conv_scale_km):
     """
     Compute scale break for convection and stratiform regions. WT will be
     computed upto this scale and features will be designated as convection.
@@ -163,7 +164,7 @@ def getScaleBreak(res_km, conv_scale_km):
 
 
 
-def getWTSum(vol_data, conv_scale):
+def sum_conv_wavelets(vol_data, conv_scale):
     """
     Returns sum of WT upto given scale. Works with both 2d scans and
     volumetric data.

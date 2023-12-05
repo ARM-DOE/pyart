@@ -9,7 +9,7 @@ import numpy as np
 
 from ..config import get_field_name, get_fillvalue, get_metadata
 from ._echo_class import _feature_detection, steiner_class_buff
-from ._echo_class_wt import getWTClass
+from ._echo_class_wt import get_reclass
 
 
 def steiner_conv_strat(
@@ -981,7 +981,7 @@ def get_freq_band(freq):
     return None
 
 
-def conv_strat_mywt(grid, conv_scale_km=20, refl_field="reflectivity"):
+def conv_strat_raut(grid, conv_scale_km=20, refl_field="reflectivity"):
     """
     This function classifies radar echoes using the ATWT algorithm.
 
@@ -1003,8 +1003,8 @@ def conv_strat_mywt(grid, conv_scale_km=20, refl_field="reflectivity"):
         Copy the other docs string
     """
 
-    # Call the actual getWTClass function with provided arguments
-    reclass = getWTClass(grid, conv_scale_km, refl_field)
+    # Call the actual get_relass function 
+    reclass = get_relass(grid, conv_scale_km, refl_field)
     reclass = np.expand_dims(reclass, axis=0)
 
     # put data into a dictionary to be added as a field
