@@ -17,7 +17,6 @@ from open_radar_data import DATASETS
 
 import pyart
 
-
 ######################################
 # Description of a CFAD
 # ----------
