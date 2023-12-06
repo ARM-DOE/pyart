@@ -105,10 +105,7 @@ def to_vpt(radar, single_scan=True):
     return
 
 
-def determine_sweeps(radar,
-                     max_offset=0.1,
-                     running_win_dt=5.,
-                     deg_rng=(-5., 360.)):
+def determine_sweeps(radar, max_offset=0.1, running_win_dt=5., deg_rng=(-5., 360.)):
     """
     determine the number of sweeps using elevation data (PPI scans) or azimuth
     data (RHI scans) and update the input radar object
@@ -135,38 +132,42 @@ def determine_sweeps(radar,
     """
     # set fixed and variable coordinates depending on scan type
     # ======================
-    if 'rhi' in radar.scan_type.lower():
-        var_array = radar.elevation['data']
-        fix_array = radar.azimuth['data']
+    if "rhi" in radar.scan_type.lower():
+        var_array = radar.elevation["data"]
+        fix_array = radar.azimuth["data"]
     else:  # ppi or vpt
-        var_array = radar.azimuth['data']
-        fix_array = radar.elevation['data']
+        var_array = radar.azimuth["data"]
+        fix_array = radar.elevation["data"]
 
     # set bins and parameters and allocate lists
     # ======================
-    angle_bins = np.arange(deg_rng[0] - max_offset, deg_rng[1] + max_offset + 1e-10, max_offset * 2.)
-    sample_dt = np.nanmean(np.diff(radar.time['data']))
+    angle_bins = np.arange(
+        deg_rng[0] - max_offset, deg_rng[1] + max_offset + 1e-10, max_offset * 2.
+    )
+    sample_dt = np.nanmean(np.diff(radar.time["data"]))
     win_size = int(np.ceil(running_win_dt / sample_dt))
     if win_size < 2:
-        raise ValueError('Window size <= 1; consider decreasing the value of running_win_dt')
+        raise ValueError(
+            'Window size <= 1; consider decreasing the value of running_win_dt'
+        )
     sweep_start_index, sweep_end_index = [], []
     in_sweep = False  # determine if sweep is underway in current index
 
     # Loop through coordinate data and detect sweep edges
     # ======================
     t = 0
-    while t < radar.time['data'].size - win_size + 1:
-        var_win = var_array[t: t + win_size]
-        fix_win = fix_array[t: t + win_size]
+    while t < radar.time["data"].size - win_size + 1:
+        var_win = var_array[t : t + win_size]
+        fix_win = fix_array[t : t + win_size]
         idle_sweep = np.diff(var_win) == 0
         if idle_sweep[0]:  # sweep did not start
             t += 1
             continue
         bincounts, _ = np.histogram(fix_win, bins=angle_bins)
-        moving_radar = np.sum(bincounts > 0) > 1  # radar is likely moving to a new sweep position
+        moving_radar = np.sum(bincounts > 0) > 1  # radar transition to a new sweep
         if in_sweep:
-            if t == radar.time['data'].size - win_size:
-                sweep_end_index.append(radar.time['data'].size - 1)
+            if t == radar.time["data"].size - win_size:
+                sweep_end_index.append(radar.time["data"].size - 1)
             elif moving_radar:
                 in_sweep = False
                 sweep_end_index.append(t + win_size - 2)
@@ -179,9 +180,9 @@ def determine_sweeps(radar,
 
     # Update radar object
     # ======================
-    radar.sweep_start_ray_index['data'] = ma.array(sweep_start_index, dtype='int32')
-    radar.sweep_end_ray_index['data'] = ma.array(sweep_end_index, dtype='int32')
-    radar.sweep_number['data'] = ma.array(sweep_number, dtype='int32')
+    radar.sweep_start_ray_index["data"] = ma.array(sweep_start_index, dtype="int32")
+    radar.sweep_end_ray_index["data"] = ma.array(sweep_end_index, dtype="int32")
+    radar.sweep_number["data"] = ma.array(sweep_number, dtype="int32")
     radar.nsweeps = len(sweep_number)
     return
 

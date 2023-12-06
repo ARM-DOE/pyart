@@ -53,20 +53,24 @@ def test_to_vpt():
 def test_determine_sweeps():
     # ppi
     radar = pyart.testing.make_empty_ppi_radar(10, 36, 3)
-    radar.elevation['data'] = radar.elevation['data'] * np.ceil(np.arange(1, 36*3 + 1) / 36)
+    radar.elevation["data"] = radar.elevation["data"] * np.ceil(
+        np.arange(1, 36*3 + 1) / 36
+    )
     pyart.util.determine_sweeps(radar)
-    assert np.all(radar.sweep_end_ray_index['data'] == [35, 71, 107])
-    assert np.all(radar.sweep_start_ray_index['data'] == [0, 36, 72])
-    assert len(radar.sweep_number['data']) == 3
+    assert np.all(radar.sweep_end_ray_index["data"] == [35, 71, 107])
+    assert np.all(radar.sweep_start_ray_index["data"] == [0, 36, 72])
+    assert len(radar.sweep_number["data"]) == 3
     assert radar.nsweeps == 3
 
     # rhi
     radar = pyart.testing.make_empty_rhi_radar(10, 25, 5)
-    radar.azimuth['data'] = radar.azimuth['data'] * np.ceil(np.arange(1, 25*5 + 1) / 25) * 25
+    radar.azimuth["data"] = (
+        radar.azimuth["data"] * np.ceil(np.arange(1, 25*5 + 1) / 25) * 25
+    )
     pyart.util.determine_sweeps(radar)
-    assert np.all(radar.sweep_end_ray_index['data'] == [ 24,  49,  74,  99, 124])
-    assert np.all(radar.sweep_start_ray_index['data'] == [  0,  25,  50,  75, 100])
-    assert len(radar.sweep_number['data']) == 5
+    assert np.all(radar.sweep_end_ray_index["data"] == [24, 49, 74, 99, 124])
+    assert np.all(radar.sweep_start_ray_index["data"] == [0, 25, 50, 75, 100])
+    assert len(radar.sweep_number["data"]) == 5
     assert radar.nsweeps == 5
 
 
