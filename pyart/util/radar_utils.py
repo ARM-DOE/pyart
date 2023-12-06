@@ -191,7 +191,7 @@ def determine_sweeps(radar, max_offset=0.1, running_win_dt=5.0, deg_rng=(-5.0, 3
     ]
     radar.fixed_angle["data"] = ma.array(fixed_angle, dtype="float32")
     radar.nsweeps = len(sweep_number)
-    transition = np.zeros(radar.antenna_transition["data"].size)
+    transition = np.zeros(radar.nrays)
     for i in range(radar.nsweeps):
         if i == 0:
             transition[: sweep_start_index[i]] = 1

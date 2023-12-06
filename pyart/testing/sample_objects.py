@@ -56,6 +56,7 @@ def make_empty_ppi_radar(ngates, rays_per_sweep, nsweeps):
     sweep_end_ray_index = get_metadata("sweep_end_ray_index")
     azimuth = get_metadata("azimuth")
     elevation = get_metadata("elevation")
+    antenna_transition = get_metadata("antenna_transition")
 
     fields = {}
     scan_type = "ppi"
@@ -76,6 +77,7 @@ def make_empty_ppi_radar(ngates, rays_per_sweep, nsweeps):
     sweep_end_ray_index["data"] = np.arange(
         rays_per_sweep - 1, nrays, rays_per_sweep, dtype="int32"
     )
+    antenna_transition["data"] = np.zeros(nrays)
 
     azimuth["data"] = np.arange(nrays, dtype="float32")
     elevation["data"] = np.array([0.75] * nrays, dtype="float32")
@@ -96,6 +98,7 @@ def make_empty_ppi_radar(ngates, rays_per_sweep, nsweeps):
         sweep_end_ray_index,
         azimuth,
         elevation,
+        antenna_transition=antenna_transition,
         instrument_parameters=None,
     )
 
