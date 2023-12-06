@@ -105,7 +105,7 @@ def to_vpt(radar, single_scan=True):
     return
 
 
-def determine_sweeps(radar, max_offset=0.1, running_win_dt=5., deg_rng=(-5., 360.)):
+def determine_sweeps(radar, max_offset=0.1, running_win_dt=5.0, deg_rng=(-5.0, 360.0)):
     """
     determine the number of sweeps using elevation data (PPI scans) or azimuth
     data (RHI scans) and update the input radar object
@@ -142,13 +142,13 @@ def determine_sweeps(radar, max_offset=0.1, running_win_dt=5., deg_rng=(-5., 360
     # set bins and parameters and allocate lists
     # ======================
     angle_bins = np.arange(
-        deg_rng[0] - max_offset, deg_rng[1] + max_offset + 1e-10, max_offset * 2.
+        deg_rng[0] - max_offset, deg_rng[1] + max_offset + 1e-10, max_offset * 2.0
     )
     sample_dt = np.nanmean(np.diff(radar.time["data"]))
     win_size = int(np.ceil(running_win_dt / sample_dt))
     if win_size < 2:
         raise ValueError(
-            'Window size <= 1; consider decreasing the value of running_win_dt'
+            "Window size <= 1; consider decreasing the value of running_win_dt"
         )
     sweep_start_index, sweep_end_index = [], []
     in_sweep = False  # determine if sweep is underway in current index
@@ -183,9 +183,13 @@ def determine_sweeps(radar, max_offset=0.1, running_win_dt=5., deg_rng=(-5., 360
     radar.sweep_start_ray_index["data"] = ma.array(sweep_start_index, dtype="int32")
     radar.sweep_end_ray_index["data"] = ma.array(sweep_end_index, dtype="int32")
     radar.sweep_number["data"] = ma.array(sweep_number, dtype="int32")
-    fixed_angle = [np.mean(fix_array[si : ei + 1]) for si, ei in zip(
-        radar.sweep_start_ray_index["data"], radar.sweep_end_ray_index["data"])]
-    radar.fixed_angle['data'] = ma.array(fixed_angle, dtype="float32")
+    fixed_angle = [
+        np.mean(fix_array[si : ei + 1])
+        for si, ei in zip(
+            radar.sweep_start_ray_index["data"], radar.sweep_end_ray_index["data"]
+        )
+    ]
+    radar.fixed_angle["data"] = ma.array(fixed_angle, dtype="float32")
     radar.nsweeps = len(sweep_number)
     transition = np.zeros(radar.antenna_transition["data"].size)
     for i in range(radar.nsweeps):
@@ -194,7 +198,7 @@ def determine_sweeps(radar, max_offset=0.1, running_win_dt=5., deg_rng=(-5., 360
         else:
             transition[sweep_end_index[i - 1] : sweep_start_index[i]] = 1
     radar.antenna_transition["data"] = ma.array(transition, dtype="int32")
-    bstr_entry = np.array([x for x in "{:<22}".format(radar.scan_type)], dtype='|S1')
+    bstr_entry = np.array([x for x in f"{radar.scan_type:<22}"], dtype='|S1')
     radar.sweep_mode = ma.array(np.tile(bstr_entry[np.newaxis, :], (radar.nsweeps, 1)))
     return
 
