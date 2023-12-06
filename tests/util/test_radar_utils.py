@@ -58,6 +58,7 @@ def test_determine_sweeps():
     assert np.all(radar.sweep_end_ray_index['data'] == [35, 71, 107])
     assert np.all(radar.sweep_start_ray_index['data'] == [0, 36, 72])
     assert len(radar.sweep_number['data']) == 3
+    assert radar.nsweeps == 3
 
     # rhi
     radar = pyart.testing.make_empty_rhi_radar(10, 25, 5)
@@ -66,6 +67,7 @@ def test_determine_sweeps():
     assert np.all(radar.sweep_end_ray_index['data'] == [ 24,  49,  74,  99, 124])
     assert np.all(radar.sweep_start_ray_index['data'] == [  0,  25,  50,  75, 100])
     assert len(radar.sweep_number['data']) == 5
+    assert radar.nsweeps == 5
 
 
 def test_subset_radar():

@@ -182,6 +182,7 @@ def determine_sweeps(radar,
     radar.sweep_start_ray_index['data'] = ma.array(sweep_start_index, dtype='int32')
     radar.sweep_end_ray_index['data'] = ma.array(sweep_end_index, dtype='int32')
     radar.sweep_number['data'] = ma.array(sweep_number, dtype='int32')
+    radar.nsweeps = len(sweep_number)
     return
 
 
