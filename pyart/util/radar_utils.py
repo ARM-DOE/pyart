@@ -159,19 +159,19 @@ def determine_sweeps(radar,
         var_win = var_array[t: t + win_size]
         fix_win = fix_array[t: t + win_size]
         idle_sweep = np.diff(var_win) == 0
-        if idle_sweep[0] == True:  # sweep did not start
+        if idle_sweep[0]:  # sweep did not start
             t += 1
             continue
         bincounts, _ = np.histogram(fix_win, bins=angle_bins)
         moving_radar = np.sum(bincounts > 0) > 1  # radar is likely moving to a new sweep position
-        if in_sweep == True:
+        if in_sweep:
             if t == radar.time['data'].size - win_size:
                 sweep_end_index.append(radar.time['data'].size - 1)
             elif moving_radar:
                 in_sweep = False
                 sweep_end_index.append(t + win_size - 2)
                 t += win_size - 2
-        elif np.all(idle_sweep == False) & (moving_radar == False):
+        elif np.all(~idle_sweep) & ~moving_radar:
             in_sweep = True
             sweep_start_index.append(t)
         t += 1
