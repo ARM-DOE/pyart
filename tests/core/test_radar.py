@@ -156,7 +156,7 @@ def test_get_gate_x_y_z_transitions():
     radar.azimuth["data"][:] = [0, 90, 180, 270, 0, 90, 180, 270]
     radar.elevation["data"][:] = [0, 0, 0, 0, 10, 10, 10, 10]
     radar.range["data"][:] = [5, 15, 25, 35, 45]
-    radar.antenna_transition = {"data": np.array([0, 0, 1, 0, 0, 0, 0, 0])}
+    radar.antenna_transition["data"][:] = [0, 0, 1, 0, 0, 0, 0, 0]
 
     gate_x, gate_y, gate_z = radar.get_gate_x_y_z(0, filter_transitions=True)
     assert gate_x.shape == (3, 5)
@@ -213,7 +213,7 @@ def test_get_gate_lat_lon_alt():
 
 def test_get_gate_lat_lon_alt_transitions():
     radar = pyart.testing.make_empty_ppi_radar(5, 4, 2)
-    radar.antenna_transition = {"data": np.array([0, 0, 1, 0, 0, 0, 0, 0])}
+    radar.antenna_transition["data"][:] = [0, 0, 1, 0, 0, 0, 0, 0]
     lat, lon, alt = radar.get_gate_lat_lon_alt(0, filter_transitions=True)
     assert lat.shape == (3, 5)
     assert_allclose(lat[0], [36.5, 36.502243, 36.50449, 36.506744, 36.50899], atol=1e-3)
@@ -401,7 +401,7 @@ def test_extract_sweeps():
     assert eradar.azimuth["data"].shape == (720,)
     assert eradar.elevation["data"].shape == (720,)
     assert eradar.scan_rate is None
-    assert eradar.antenna_transition is None
+    assert eradar.antenna_transition["data"].shape == (720,)
 
     assert eradar.instrument_parameters is None
     assert eradar.radar_calibration is None
