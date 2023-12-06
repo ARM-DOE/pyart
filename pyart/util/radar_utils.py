@@ -198,7 +198,7 @@ def determine_sweeps(radar, max_offset=0.1, running_win_dt=5.0, deg_rng=(-5.0, 3
         else:
             transition[sweep_end_index[i - 1] : sweep_start_index[i]] = 1
     radar.antenna_transition["data"] = ma.array(transition, dtype="int32")
-    bstr_entry = np.array([x for x in f"{radar.scan_type:<22}"], dtype='|S1')
+    bstr_entry = np.array([x for x in f"{radar.scan_type:<22}"], dtype="|S1")
     radar.sweep_mode = ma.array(np.tile(bstr_entry[np.newaxis, :], (radar.nsweeps, 1)))
     return
 
