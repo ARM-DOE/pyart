@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.testing.sample_objects &#8212; Py-ART 1.16.1.post9 documentation</title>
+    <title>pyart.testing.sample_objects &#8212; Py-ART 1.16.1.post10 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="../../../_static/documentation_options.js?v=cd1e20a2"></script>
+    <script src="../../../_static/documentation_options.js?v=d3b71a1b"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -151,7 +151,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post9 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post10 documentation</p>
   
 </a></div>
     
@@ -558,6 +558,7 @@ document.write(`
     <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;sweep_end_ray_index&quot;</span><span class="p">)</span>
     <span class="n">azimuth</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;azimuth&quot;</span><span class="p">)</span>
     <span class="n">elevation</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;elevation&quot;</span><span class="p">)</span>
+    <span class="n">antenna_transition</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;antenna_transition&quot;</span><span class="p">)</span>
 
     <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">&quot;ppi&quot;</span>
@@ -578,6 +579,7 @@ document.write(`
     <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
         <span class="n">rays_per_sweep</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span>
     <span class="p">)</span>
+    <span class="n">antenna_transition</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nrays</span><span class="p">)</span>
 
     <span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
     <span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.75</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
@@ -598,6 +600,7 @@ document.write(`
         <span class="n">sweep_end_ray_index</span><span class="p">,</span>
         <span class="n">azimuth</span><span class="p">,</span>
         <span class="n">elevation</span><span class="p">,</span>
+        <span class="n">antenna_transition</span><span class="o">=</span><span class="n">antenna_transition</span><span class="p">,</span>
         <span class="n">instrument_parameters</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">)</span></div>
 

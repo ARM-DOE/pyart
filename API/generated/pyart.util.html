@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyart.util &#8212; Py-ART 1.16.1.post9 documentation</title>
+    <title>pyart.util &#8212; Py-ART 1.16.1.post10 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="../../_static/documentation_options.js?v=cd1e20a2"></script>
+    <script src="../../_static/documentation_options.js?v=d3b71a1b"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -154,7 +154,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post9 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post10 documentation</p>
   
 </a></div>
     
@@ -970,6 +970,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.datetime_from_radar.html">pyart.util.datetime_from_radar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.datetimes_from_dataset.html">pyart.util.datetimes_from_dataset</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.datetimes_from_radar.html">pyart.util.datetimes_from_radar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyart.util.determine_sweeps.html">pyart.util.determine_sweeps</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.estimate_noise_hs74.html">pyart.util.estimate_noise_hs74</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.for_azimuth.html">pyart.util.for_azimuth</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.get_column_rays.html">pyart.util.get_column_rays</a></li>
@@ -1211,58 +1212,61 @@ versions without depreciation, use with caution.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.datetimes_from_radar.html#pyart.util.datetimes_from_radar" title="pyart.util.datetimes_from_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">datetimes_from_radar</span></code></a>(radar[, epoch])</p></td>
 <td><p>Return an array of datetimes for the rays in a Radar.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.estimate_noise_hs74.html#pyart.util.estimate_noise_hs74" title="pyart.util.estimate_noise_hs74"><code class="xref py py-obj docutils literal notranslate"><span class="pre">estimate_noise_hs74</span></code></a>(spectrum[, navg, nnoise_min])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.determine_sweeps.html#pyart.util.determine_sweeps" title="pyart.util.determine_sweeps"><code class="xref py py-obj docutils literal notranslate"><span class="pre">determine_sweeps</span></code></a>(radar[, max_offset, ...])</p></td>
+<td><p>Determine the number of sweeps using elevation data (PPI scans) or azimuth data (RHI scans) and update the input radar object</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.estimate_noise_hs74.html#pyart.util.estimate_noise_hs74" title="pyart.util.estimate_noise_hs74"><code class="xref py py-obj docutils literal notranslate"><span class="pre">estimate_noise_hs74</span></code></a>(spectrum[, navg, nnoise_min])</p></td>
 <td><p>Estimate noise parameters of a Doppler spectrum.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.for_azimuth.html#pyart.util.for_azimuth" title="pyart.util.for_azimuth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">for_azimuth</span></code></a>(radar_latitude, target_latitude, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.for_azimuth.html#pyart.util.for_azimuth" title="pyart.util.for_azimuth"><code class="xref py py-obj docutils literal notranslate"><span class="pre">for_azimuth</span></code></a>(radar_latitude, target_latitude, ...)</p></td>
 <td><p>Calculation of inital bearing alongitudeg a great-circle arc Known as Forward Azimuth Angle.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.get_column_rays.html#pyart.util.get_column_rays" title="pyart.util.get_column_rays"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_column_rays</span></code></a>(radar, azimuth)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.get_column_rays.html#pyart.util.get_column_rays" title="pyart.util.get_column_rays"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_column_rays</span></code></a>(radar, azimuth)</p></td>
 <td><p>Given the location (in latitude,longitude) of a target, return the rays that correspond to radar column above the target.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.get_field_location.html#pyart.util.get_field_location" title="pyart.util.get_field_location"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_field_location</span></code></a>(radar, latitude, longitude)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.get_field_location.html#pyart.util.get_field_location" title="pyart.util.get_field_location"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_field_location</span></code></a>(radar, latitude, longitude)</p></td>
 <td><p>Given the location (in latitude, longitude) of a target, extract the radar column above that point for further analysis.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.image_mute_radar.html#pyart.util.image_mute_radar" title="pyart.util.image_mute_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">image_mute_radar</span></code></a>(radar, field, mute_field, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.image_mute_radar.html#pyart.util.image_mute_radar" title="pyart.util.image_mute_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">image_mute_radar</span></code></a>(radar, field, mute_field, ...)</p></td>
 <td><p>This function will split a field based on thresholds from another field.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.interval_mean.html#pyart.util.interval_mean" title="pyart.util.interval_mean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interval_mean</span></code></a>(dist, interval_min, interval_max)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.interval_mean.html#pyart.util.interval_mean" title="pyart.util.interval_mean"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interval_mean</span></code></a>(dist, interval_min, interval_max)</p></td>
 <td><p>Compute the mean of a distribution within an interval.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.interval_std.html#pyart.util.interval_std" title="pyart.util.interval_std"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interval_std</span></code></a>(dist, interval_min, interval_max)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.interval_std.html#pyart.util.interval_std" title="pyart.util.interval_std"><code class="xref py py-obj docutils literal notranslate"><span class="pre">interval_std</span></code></a>(dist, interval_min, interval_max)</p></td>
 <td><p>Compute the standard deviation of a distribution within an interval.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.is_vpt.html#pyart.util.is_vpt" title="pyart.util.is_vpt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_vpt</span></code></a>(radar[, offset])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.is_vpt.html#pyart.util.is_vpt" title="pyart.util.is_vpt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">is_vpt</span></code></a>(radar[, offset])</p></td>
 <td><p>Determine if a Radar appears to be a vertical pointing scan.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.join_radar.html#pyart.util.join_radar" title="pyart.util.join_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">join_radar</span></code></a>(radar1, radar2)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.join_radar.html#pyart.util.join_radar" title="pyart.util.join_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">join_radar</span></code></a>(radar1, radar2)</p></td>
 <td><p>Combine two radar instances into one.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.mean_of_two_angles.html#pyart.util.mean_of_two_angles" title="pyart.util.mean_of_two_angles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_of_two_angles</span></code></a>(angles1, angles2)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.mean_of_two_angles.html#pyart.util.mean_of_two_angles" title="pyart.util.mean_of_two_angles"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_of_two_angles</span></code></a>(angles1, angles2)</p></td>
 <td><p>Compute the element by element mean of two sets of angles.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.mean_of_two_angles_deg.html#pyart.util.mean_of_two_angles_deg" title="pyart.util.mean_of_two_angles_deg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_of_two_angles_deg</span></code></a>(angle1, angle2)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.mean_of_two_angles_deg.html#pyart.util.mean_of_two_angles_deg" title="pyart.util.mean_of_two_angles_deg"><code class="xref py py-obj docutils literal notranslate"><span class="pre">mean_of_two_angles_deg</span></code></a>(angle1, angle2)</p></td>
 <td><p>Compute the element by element mean of two sets of angles in degrees.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.rolling_window.html#pyart.util.rolling_window" title="pyart.util.rolling_window"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rolling_window</span></code></a>(a, window)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.rolling_window.html#pyart.util.rolling_window" title="pyart.util.rolling_window"><code class="xref py py-obj docutils literal notranslate"><span class="pre">rolling_window</span></code></a>(a, window)</p></td>
 <td><p>Create a rolling window object for application of functions eg: result=np.ma.std(array, 11), 1).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.simulated_vel_from_profile.html#pyart.util.simulated_vel_from_profile" title="pyart.util.simulated_vel_from_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulated_vel_from_profile</span></code></a>(radar, profile[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.simulated_vel_from_profile.html#pyart.util.simulated_vel_from_profile" title="pyart.util.simulated_vel_from_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">simulated_vel_from_profile</span></code></a>(radar, profile[, ...])</p></td>
 <td><p>Create simulated radial velocities from a profile of horizontal winds.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.sphere_distance.html#pyart.util.sphere_distance" title="pyart.util.sphere_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sphere_distance</span></code></a>(radar_latitude, ...)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.sphere_distance.html#pyart.util.sphere_distance" title="pyart.util.sphere_distance"><code class="xref py py-obj docutils literal notranslate"><span class="pre">sphere_distance</span></code></a>(radar_latitude, ...)</p></td>
 <td><p>Calculated of the great circle distance between radar and target</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.subset_radar.html#pyart.util.subset_radar" title="pyart.util.subset_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subset_radar</span></code></a>(radar, field_names[, rng_min, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.subset_radar.html#pyart.util.subset_radar" title="pyart.util.subset_radar"><code class="xref py py-obj docutils literal notranslate"><span class="pre">subset_radar</span></code></a>(radar, field_names[, rng_min, ...])</p></td>
 <td><p>Creates a subset of the radar object along new dimensions.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.texture.html#pyart.util.texture" title="pyart.util.texture"><code class="xref py py-obj docutils literal notranslate"><span class="pre">texture</span></code></a>(radar, var)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.texture.html#pyart.util.texture" title="pyart.util.texture"><code class="xref py py-obj docutils literal notranslate"><span class="pre">texture</span></code></a>(radar, var)</p></td>
 <td><p>Determine a texture field using an 11pt stdev texarray=texture(pyradarobj, field).</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.texture_along_ray.html#pyart.util.texture_along_ray" title="pyart.util.texture_along_ray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">texture_along_ray</span></code></a>(radar, var[, wind_size])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.texture_along_ray.html#pyart.util.texture_along_ray" title="pyart.util.texture_along_ray"><code class="xref py py-obj docutils literal notranslate"><span class="pre">texture_along_ray</span></code></a>(radar, var[, wind_size])</p></td>
 <td><p>Compute field texture along ray using a user specified window size.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.util.to_vpt.html#pyart.util.to_vpt" title="pyart.util.to_vpt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_vpt</span></code></a>(radar[, single_scan])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.util.to_vpt.html#pyart.util.to_vpt" title="pyart.util.to_vpt"><code class="xref py py-obj docutils literal notranslate"><span class="pre">to_vpt</span></code></a>(radar[, single_scan])</p></td>
 <td><p>Convert an existing Radar object to represent a vertical pointing scan.</p></td>
 </tr>
 </tbody>

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.util.radar_utils &#8212; Py-ART 1.16.1.post9 documentation</title>
+    <title>pyart.util.radar_utils &#8212; Py-ART 1.16.1.post10 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="../../../_static/documentation_options.js?v=cd1e20a2"></script>
+    <script src="../../../_static/documentation_options.js?v=d3b71a1b"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -151,7 +151,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post9 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post10 documentation</p>
   
 </a></div>
     
@@ -506,6 +506,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">copy</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">numpy.ma</span> <span class="k">as</span> <span class="nn">ma</span>
 <span class="kn">from</span> <span class="nn">netCDF4</span> <span class="kn">import</span> <span class="n">date2num</span>
 
 <span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_fillvalue</span>
@@ -606,6 +607,107 @@ document.write(`
     <span class="c1"># radar.fields</span>
     <span class="c1"># radar.antenna_transition</span>
     <span class="c1"># radar.scan_rate</span>
+    <span class="k">return</span></div>
+
+
+
+<div class="viewcode-block" id="determine_sweeps">
+<a class="viewcode-back" href="../../../API/generated/pyart.util.determine_sweeps.html#pyart.util.determine_sweeps">[docs]</a>
+<span class="k">def</span> <span class="nf">determine_sweeps</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">max_offset</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">running_win_dt</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span> <span class="n">deg_rng</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">5.0</span><span class="p">,</span> <span class="mf">360.0</span><span class="p">)):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Determine the number of sweeps using elevation data (PPI scans) or azimuth</span>
+<span class="sd">    data (RHI scans) and update the input radar object</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    radar : Radar object</span>
+<span class="sd">        The radar object containing the data.</span>
+<span class="sd">    max_offset : float</span>
+<span class="sd">        Maximum elevation offset (if is_ppi is True) or azimuth offset (if</span>
+<span class="sd">        is_ppi is False) allowed to determine sweeps.</span>
+<span class="sd">    running_win_dt: float</span>
+<span class="sd">        running window period (in seconds) used to determine elevation or</span>
+<span class="sd">        azimuth shifts.</span>
+<span class="sd">        Note: set wisely: the method assumes that a single sweep is longer than this</span>
+<span class="sd">        parameter.</span>
+<span class="sd">    deg_rng: float</span>
+<span class="sd">        angle range (azimuth or elevation) to consider for calculations.</span>
+<span class="sd">        Assuming azimuths between 0 to 360, this should be equal to (0., 360.), but</span>
+<span class="sd">        given that there could be ppi scan strategies at negative elevations,</span>
+<span class="sd">        one might consider a negative values (current default), or , for example,</span>
+<span class="sd">        -180 to 180 if the azimuth range goes from -180 to 180.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># set fixed and variable coordinates depending on scan type</span>
+    <span class="c1"># ======================</span>
+    <span class="k">if</span> <span class="s2">&quot;rhi&quot;</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span><span class="o">.</span><span class="n">lower</span><span class="p">():</span>
+        <span class="n">var_array</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">fix_array</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>  <span class="c1"># ppi or vpt</span>
+        <span class="n">var_array</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">fix_array</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+
+    <span class="c1"># set bins and parameters and allocate lists</span>
+    <span class="c1"># ======================</span>
+    <span class="n">angle_bins</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+        <span class="n">deg_rng</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">max_offset</span><span class="p">,</span> <span class="n">deg_rng</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">max_offset</span> <span class="o">+</span> <span class="mf">1e-10</span><span class="p">,</span> <span class="n">max_offset</span> <span class="o">*</span> <span class="mf">2.0</span>
+    <span class="p">)</span>
+    <span class="n">sample_dt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]))</span>
+    <span class="n">win_size</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">running_win_dt</span> <span class="o">/</span> <span class="n">sample_dt</span><span class="p">))</span>
+    <span class="k">if</span> <span class="n">win_size</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;Window size &lt;= 1; consider decreasing the value of running_win_dt&quot;</span>
+        <span class="p">)</span>
+    <span class="n">sweep_start_index</span><span class="p">,</span> <span class="n">sweep_end_index</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[]</span>
+    <span class="n">in_sweep</span> <span class="o">=</span> <span class="kc">False</span>  <span class="c1"># determine if sweep is underway in current index</span>
+
+    <span class="c1"># Loop through coordinate data and detect sweep edges</span>
+    <span class="c1"># ======================</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">while</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="n">win_size</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="n">var_win</span> <span class="o">=</span> <span class="n">var_array</span><span class="p">[</span><span class="n">t</span> <span class="p">:</span> <span class="n">t</span> <span class="o">+</span> <span class="n">win_size</span><span class="p">]</span>
+        <span class="n">fix_win</span> <span class="o">=</span> <span class="n">fix_array</span><span class="p">[</span><span class="n">t</span> <span class="p">:</span> <span class="n">t</span> <span class="o">+</span> <span class="n">win_size</span><span class="p">]</span>
+        <span class="n">idle_sweep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">var_win</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span>
+        <span class="k">if</span> <span class="n">idle_sweep</span><span class="p">[</span><span class="mi">0</span><span class="p">]:</span>  <span class="c1"># sweep did not start</span>
+            <span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
+            <span class="k">continue</span>
+        <span class="n">bincounts</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram</span><span class="p">(</span><span class="n">fix_win</span><span class="p">,</span> <span class="n">bins</span><span class="o">=</span><span class="n">angle_bins</span><span class="p">)</span>
+        <span class="n">moving_radar</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">bincounts</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span>  <span class="c1"># radar transition to a new sweep</span>
+        <span class="k">if</span> <span class="n">in_sweep</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">t</span> <span class="o">==</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="n">win_size</span><span class="p">:</span>
+                <span class="n">sweep_end_index</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+            <span class="k">elif</span> <span class="n">moving_radar</span><span class="p">:</span>
+                <span class="n">in_sweep</span> <span class="o">=</span> <span class="kc">False</span>
+                <span class="n">sweep_end_index</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">win_size</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+                <span class="n">t</span> <span class="o">+=</span> <span class="n">win_size</span> <span class="o">-</span> <span class="mi">2</span>
+        <span class="k">elif</span> <span class="n">np</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="o">~</span><span class="n">idle_sweep</span><span class="p">)</span> <span class="o">&amp;</span> <span class="o">~</span><span class="n">moving_radar</span><span class="p">:</span>
+            <span class="n">in_sweep</span> <span class="o">=</span> <span class="kc">True</span>
+            <span class="n">sweep_start_index</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">sweep_start_index</span><span class="p">))</span>
+
+    <span class="c1"># Update radar object</span>
+    <span class="c1"># ======================</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sweep_start_index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sweep_end_index</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sweep_number</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">fix_array</span><span class="p">[</span><span class="n">si</span> <span class="p">:</span> <span class="n">ei</span> <span class="o">+</span> <span class="mi">1</span><span class="p">])</span>
+        <span class="k">for</span> <span class="n">si</span><span class="p">,</span> <span class="n">ei</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+    <span class="p">]</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fixed_angle</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">sweep_number</span><span class="p">)</span>
+    <span class="n">transition</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">transition</span><span class="p">[:</span> <span class="n">sweep_start_index</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">transition</span><span class="p">[</span><span class="n">sweep_end_index</span><span class="p">[</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="p">:</span> <span class="n">sweep_start_index</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">antenna_transition</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">transition</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+    <span class="n">bstr_entry</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span><span class="si">:</span><span class="s2">&lt;22</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;|S1&quot;</span><span class="p">)</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">bstr_entry</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:],</span> <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">,</span> <span class="mi">1</span><span class="p">)))</span>
     <span class="k">return</span></div>
 
 
