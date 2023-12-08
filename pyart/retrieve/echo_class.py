@@ -982,7 +982,9 @@ def get_freq_band(freq):
 
 
 def conv_strat_raut(grid, 
-    refl_field="reflectivity",
+    refl_field,
+    zr_a=200,
+    zr_b=1.6,
     conv_wt_threshold=5,
     tran_wt_threshold=1.5,
     conv_scale_km=20,
@@ -1004,6 +1006,14 @@ def conv_strat_raut(grid,
         Field name for reflectivity data in the pyart grid object.
         Default is "reflectivity_horizontal".
 
+        zr_a and zr_b are standard coeeficnets used for C-band radar. change it for the type of radar.
+
+    conv_wt_threshold = 5  # WT sum more than this is strong convection or convective cores (reccomended value 4-6).
+    conv_core_threshold = 42 # Reflectivity thrshold for covective cores (User Choice reccomended > 40 dBZ). 
+    
+    tran_wt_threshold = 1.5  # WT value for moderate/intermediate convection (reccomended value 1-2)
+    min_dbz_threshold = 5  # Reflectivities below this value are not classified (reccomended value 0-15)
+    conv_dbz_threshold = 25  # pixel below this value are not convective (reccomended value 25-30 dBZ)
     Returns
     -------
     ndarray
@@ -1011,8 +1021,18 @@ def conv_strat_raut(grid,
         Copy the other docs string
     """
 
-    # Call the actual get_relass function 
-    reclass = get_reclass(grid, conv_scale_km, refl_field)
+    # Call the actual get_relass function to obtain radar echo classificatino
+    reclass = get_reclass(grid,
+                          refl_field, 
+                          zr_a,
+                          zr_b,
+                          conv_wt_threshold=conv_wt_threshold, 
+                          tran_wt_threshold=tran_wt_threshold, 
+                          conv_scale_km=conv_scale_km, 
+                          min_dbz_threshold=min_dbz_threshold,
+                          conv_dbz_threshold=conv_dbz_threshold,
+                          conv_core_threshold=conv_core_threshold)
+    
     reclass = np.expand_dims(reclass, axis=0)
 
     # put data into a dictionary to be added as a field

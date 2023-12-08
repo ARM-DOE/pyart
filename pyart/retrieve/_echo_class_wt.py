@@ -20,7 +20,16 @@ from numpy import log, floor
 import sys
 
 
-def get_reclass(grid, conv_scale_km=20, refl_field="reflectivity_horizontal"):
+def get_reclass(grid,
+                refl_field, 
+                zr_a,
+                zr_b,
+                conv_wt_threshold, 
+                tran_wt_threshold, 
+                conv_scale_km, 
+                min_dbz_threshold,
+                conv_dbz_threshold,
+                conv_core_threshold):
     """
     Compute ATWT described as Raut et al (2008) and classify radar echoes 
     using scheme of Raut et al (2020).
@@ -58,12 +67,19 @@ def get_reclass(grid, conv_scale_km=20, refl_field="reflectivity_horizontal"):
 
     # save the mask for missing data.
     dbz_data[np.isnan(dbz_data)] = 0
-    dbz_data_t = reflectivity_to_rainrate(dbz_data)  # transform the dbz data
+    dbz_data_t = reflectivity_to_rainrate(dbz_data, acoeff=zr_a, bcoeff=zr_b)  # transform the dbz data
     
     # get scale break in pixels
     scale_break = calc_scale_break(res_km, conv_scale_km)
     wt_sum = sum_conv_wavelets(dbz_data_t, scale_break)
-    wt_class = label_classes(wt_sum, dbz_data)
+
+    wt_class = label_classes(wt_sum, 
+                             dbz_data, 
+                             conv_wt_threshold, 
+                             tran_wt_threshold, 
+                             min_dbz_threshold,
+                             conv_dbz_threshold,
+                             conv_core_threshold)
 
     wt_class_ma = np.ma.masked_where(radar_mask, wt_class) # add mask back
     wt_class_ma = wt_class_ma.squeeze()
@@ -74,7 +90,13 @@ def get_reclass(grid, conv_scale_km=20, refl_field="reflectivity_horizontal"):
 
 
 
-def label_classes(wt_sum, vol_data):
+def label_classes(wt_sum, 
+                  dbz_data,
+                  conv_wt_threshold, 
+                  tran_wt_threshold, 
+                  min_dbz_threshold,
+                  conv_dbz_threshold,
+                  conv_core_threshold):
     """ 
     Labels classes using given thresholds:
     - 0. no precipitation, marked by the given min_dbz threshold.
@@ -101,21 +123,14 @@ git push -u
     wt_class: ndarray
         Precipitation type classification.
     """
-
-    conv_wt_threshold = 5  # WT sum more than this is strong convection or convective cores (reccomended value 4-6).
-    conv_core_threshold = 42 # Reflectivity thrshold for covective cores (User Choice reccomended > 40 dBZ). 
-    
-    tran_wt_threshold = 1.5  # WT value for moderate/intermediate convection (reccomended value 1-2)
-    min_dbz_threshold = 5  # Reflectivities below this value are not classified (reccomended value 0-15)
-    conv_dbz_threshold = 25  # pixel below this value are not convective (reccomended value 25-30 dBZ)
  
 
     # I first used negative numbers to annotate the categories. Then multiply it by -1.
-    wt_class = np.where((wt_sum >= tran_wt_threshold) & (vol_data >= conv_core_threshold), -3, 0)
-    wt_class = np.where((wt_sum >= conv_wt_threshold) & (vol_data >= conv_dbz_threshold), -3, 0)
+    wt_class = np.where((wt_sum >= tran_wt_threshold) & (dbz_data >= conv_core_threshold), -3, 0)
+    wt_class = np.where((wt_sum >= conv_wt_threshold) & (dbz_data >= conv_dbz_threshold), -3, 0)
     wt_class = np.where((wt_sum < conv_wt_threshold) & (wt_sum >= tran_wt_threshold)
-                        & (vol_data >= conv_dbz_threshold), -2, wt_class)
-    wt_class = np.where((wt_class == 0) & (vol_data >= min_dbz_threshold), -1, wt_class)
+                        & (dbz_data >= conv_dbz_threshold), -2, wt_class)
+    wt_class = np.where((wt_class == 0) & (dbz_data >= min_dbz_threshold), -1, wt_class)
 
     wt_class = -1 * wt_class
     wt_class = np.where((wt_class == 0), np.nan, wt_class)
@@ -124,7 +139,7 @@ git push -u
 
 
 
-def reflectivity_to_rainrate(dbz, acoeff=200, bcoeff=1.6):
+def reflectivity_to_rainrate(dbz, acoeff, bcoeff):
     """
     Uses standard values for ZRA=200 and ZRB=1.6.
 
