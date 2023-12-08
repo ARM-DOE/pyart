@@ -981,7 +981,15 @@ def get_freq_band(freq):
     return None
 
 
-def conv_strat_raut(grid, conv_scale_km=20, refl_field="reflectivity"):
+def conv_strat_raut(grid, 
+    refl_field="reflectivity",
+    conv_wt_threshold=5,
+    tran_wt_threshold=1.5,
+    conv_scale_km=20,
+    min_dbz_threshold=5,
+    conv_dbz_threshold = 25,
+    conv_core_threshold=42):
+
     """
     This function classifies radar echoes using the ATWT algorithm.
 

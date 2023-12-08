@@ -44,8 +44,10 @@ def get_reclass(grid, conv_scale_km=20, refl_field="reflectivity_horizontal"):
         regions. 
     """
 
-    # Extract grid data and get the resolution
+    # Extract grid data, save mask and get the resolution
     dbz_data = grid.fields[refl_field]['data']
+    radar_mask = np.ma.getmask(dbz_data)
+
     # Warning: dx and dy are considred to be same (res_km).
     res_km = (grid.x["data"][1] - grid.x["data"][0])/1000
 
@@ -63,8 +65,11 @@ def get_reclass(grid, conv_scale_km=20, refl_field="reflectivity_horizontal"):
     wt_sum = sum_conv_wavelets(dbz_data_t, scale_break)
     wt_class = label_classes(wt_sum, dbz_data)
 
-    wt_class = wt_class.squeeze()
-    return wt_class
+    wt_class_ma = np.ma.masked_where(radar_mask, wt_class) # add mask back
+    wt_class_ma = wt_class_ma.squeeze()
+ 
+
+    return wt_class_ma
 
 
 
@@ -72,10 +77,10 @@ def get_reclass(grid, conv_scale_km=20, refl_field="reflectivity_horizontal"):
 def label_classes(wt_sum, vol_data):
     """ 
     Labels classes using given thresholds:
-    - 0. no precipitation,
+    - 0. no precipitation, marked by the given min_dbz threshold.
     - 1. stratiform,
-    - 2. intense/heavy convective,
-    - 3. transitional/intermediate regions.
+    - 2. transitional/intermediate regions,
+    - 3. intense/heavy convective.
     
     Following hard coded values are optimised and validated using C-band radars
     over Darwin, Australia (2.5 km grid spacing) and tested for Solapur, India (1km grid spacing) [Raut et al. 2020]. 
@@ -106,10 +111,10 @@ git push -u
  
 
     # I first used negative numbers to annotate the categories. Then multiply it by -1.
-    wt_class = np.where((wt_sum >= tran_wt_threshold) & (vol_data >= conv_core_threshold), -2, 0)
-    wt_class = np.where((wt_sum >= conv_wt_threshold) & (vol_data >= conv_dbz_threshold), -2, 0)
+    wt_class = np.where((wt_sum >= tran_wt_threshold) & (vol_data >= conv_core_threshold), -3, 0)
+    wt_class = np.where((wt_sum >= conv_wt_threshold) & (vol_data >= conv_dbz_threshold), -3, 0)
     wt_class = np.where((wt_sum < conv_wt_threshold) & (wt_sum >= tran_wt_threshold)
-                        & (vol_data >= conv_dbz_threshold), -3, wt_class)
+                        & (vol_data >= conv_dbz_threshold), -2, wt_class)
     wt_class = np.where((wt_class == 0) & (vol_data >= min_dbz_threshold), -1, wt_class)
 
     wt_class = -1 * wt_class
