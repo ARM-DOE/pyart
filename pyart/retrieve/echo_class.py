@@ -980,45 +980,72 @@ def get_freq_band(freq):
 
     return None
 
-
-def conv_strat_raut(grid, 
-    refl_field,
-    zr_a=200,
-    zr_b=1.6,
-    conv_wt_threshold=5,
-    tran_wt_threshold=1.5,
-    conv_scale_km=20,
-    min_dbz_threshold=5,
-    conv_dbz_threshold = 25,
-    conv_core_threshold=42):
-
+def conv_strat_raut(grid, refl_field, zr_a=200, zr_b=1.6,
+                    conv_wt_threshold=5, tran_wt_threshold=1.5,
+                    conv_scale_km=20, min_dbz_threshold=5,
+                    conv_dbz_threshold=25, conv_core_threshold=42):
     """
-    This function classifies radar echoes using the ATWT algorithm.
+    Classifies radar echoes into convective cores, mixed convection, and stratiform regions using the ATWT algorithm.
+
+    This function applies the ATWT (A Trous Wavelet Transform) algorithm from Raut et al (2008) to classify
+    radar echoes using the scheme of Raut et al (2020). It differentiates between convective and stratiform precipitation,
+    identifying convective cores, moderate/intermediate mixed convection, and stratiform regions
+    based on wavelet transform and reflectivity thresholds.
 
     Parameters
     ----------
     grid : Grid
         Grid object containing radar data.
-    conv_scale_km : float
-        Approximate scale break (in km) between convective and stratiform scales.
-        Default is = 20.
     refl_field : str
-        Field name for reflectivity data in the pyart grid object.
-        Default is "reflectivity_horizontal".
+        Field name for reflectivity data in the Py-ART grid object.
+    zr_a : float, optional
+        Coefficient 'a' in the Z-R relationship Z = a*R^b for reflectivity to rain rate conversion.
+        Default is 200. The algorithm is not sensitive to precise values of 'zr_a' and 'zr_b'; however, 
+        they must be adjusted based on the type of radar used.
+    zr_b : float, optional
+        Coefficient 'b' in the Z-R relationship Z = a*R^b. Default is 1.6.
+    conv_wt_threshold : float, optional
+        Threshold for sum of small scale wavelet components to identify strong convection.
+        Default is 5. Recommended values are between 4 and 6.
+    tran_wt_threshold : float, optional
+        Threshold for sum of small scale wavelet components to identify moderate/intermediate mixed convection.
+        Default is 1.5. Recommended values are between 1 and 2.
+    conv_scale_km : float, optional
+        Approximate scale break (in km) between convective and stratiform scales. 
+        Scale break may vary between 15 and 30 km over different regions and seasons; however, 
+        the algorithm is not sensitive to small variations in the scale break.
+        Default is 20 km taken from Raut et al (2018).
+    min_dbz_threshold : float, optional
+        Minimum reflectivity threshold. Reflectivities below this value are not classified.
+        Default is 5 dBZ. This value must be greater than or equal to '0'.
+    conv_dbz_threshold : float, optional
+        Reflectivities below this threshold will not be considered to be classified as convective. Default is 25 dBZ.
+        Recommended values are between 25 and 30 dBZ.
+    conv_core_threshold : float, optional
+        Reflectivity threshold to identify convective cores. Default is 42 dBZ.
+        Recommended value must be is greater than or equal to 40 dBZ. The algorithm is not sensitive to this value.
 
-        zr_a and zr_b are standard coeeficnets used for C-band radar. change it for the type of radar.
-
-    conv_wt_threshold = 5  # WT sum more than this is strong convection or convective cores (reccomended value 4-6).
-    conv_core_threshold = 42 # Reflectivity thrshold for covective cores (User Choice reccomended > 40 dBZ). 
-    
-    tran_wt_threshold = 1.5  # WT value for moderate/intermediate convection (reccomended value 1-2)
-    min_dbz_threshold = 5  # Reflectivities below this value are not classified (reccomended value 0-15)
-    conv_dbz_threshold = 25  # pixel below this value are not convective (reccomended value 25-30 dBZ)
     Returns
-    -------
-    ndarray
-        Precipitation type classification.
-        Copy the other docs string
+-------
+    dict
+    A dictionary structured as a Py-ART grid field, suitable for adding to a Py-ART Grid object. The dictionary 
+    contains the classification data and associated metadata. The classification categories are as follows:
+        - 0: No precipitation or unclassified
+        - 1: Stratiform/non-convective
+        - 2: Convective cores
+        - 3: Moderate/Transitional convective regions
+
+    References
+    ----------
+    Raut, B. A., Karekar, R. N., & Puranik, D. M. (2008). Wavelet-based technique to extract convective clouds from 
+    infrared satellite images. IEEE Geoscience and remote sensing letters, 5(3), 328-330.
+
+    Raut, B. A., Seed, A. W., Reeder, M. J., & Jakob, C. (2018). A multiplicative cascade model for high‐resolution 
+    space‐time downscaling of rainfall. Journal of Geophysical Research: Atmospheres, 123(4), 2050-2067.
+
+    Raut, B. A., Louf, V., Gayatri, K., Murugavel, P., Konwar, M., & Prabhakaran, T. (2020). A multiresolution technique 
+    for the classification of precipitation echoes in radar data. IEEE Transactions on Geoscience and Remote Sensing, 
+    58(8), 5409-5415.
     """
 
     # Call the actual get_relass function to obtain radar echo classificatino
