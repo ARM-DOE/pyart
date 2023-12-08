@@ -1070,7 +1070,18 @@ def conv_strat_raut(grid, refl_field, zr_a=200, zr_b=1.6,
             "long_name": "Wavelet-based multiresolution radar echo classification",
             "valid_min": 0,
             "valid_max": 3,
-            "comment_1": ('0 = Undefined'),
+            "comment_1": '0 = Undefined',
+            "parameters": {
+                "refl_field": refl_field,
+                "zr_a": zr_a,
+                "zr_b": zr_b,
+                "conv_wt_threshold": conv_wt_threshold,
+                "tran_wt_threshold": tran_wt_threshold,
+                "conv_scale_km": conv_scale_km,
+                "min_dbz_threshold": min_dbz_threshold,
+                "conv_dbz_threshold": conv_dbz_threshold,
+                "conv_core_threshold": conv_core_threshold
+            }
         }
     }
 
