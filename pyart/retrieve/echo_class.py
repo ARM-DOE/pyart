@@ -980,6 +980,7 @@ def get_freq_band(freq):
 
     return None
 
+
 def conv_strat_raut(grid, refl_field, zr_a=200, zr_b=1.6,
                     conv_wt_threshold=5, tran_wt_threshold=1.5,
                     conv_scale_km=20, min_dbz_threshold=5,
@@ -1031,9 +1032,9 @@ def conv_strat_raut(grid, refl_field, zr_a=200, zr_b=1.6,
     A dictionary structured as a Py-ART grid field, suitable for adding to a Py-ART Grid object. The dictionary 
     contains the classification data and associated metadata. The classification categories are as follows:
         - 0: No precipitation or unclassified
-        - 1: Stratiform/non-convective
-        - 2: Convective cores
-        - 3: Moderate/Transitional convective regions
+        - 1: Stratiform/non-convective regions
+        - 2: Transitional and mixed convective regions 
+        - 3: Convective cores
 
     References
     ----------
