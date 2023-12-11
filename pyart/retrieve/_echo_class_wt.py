@@ -21,7 +21,8 @@ import sys
 
 
 def get_reclass(grid,
-                refl_field, 
+                refl_field,
+                level, 
                 zr_a,
                 zr_b,
                 conv_wt_threshold, 
@@ -54,7 +55,11 @@ def get_reclass(grid,
     """
 
     # Extract grid data, save mask and get the resolution
-    dbz_data = grid.fields[refl_field]['data']
+    try:
+        dbz_data = grid.fields[refl_field]['data'][level, :, :]
+    except:
+        dbz_data = grid.fields[refl_field]['data'][:, :]
+
     radar_mask = np.ma.getmask(dbz_data)
 
     # Warning: dx and dy are considred to be same (res_km).

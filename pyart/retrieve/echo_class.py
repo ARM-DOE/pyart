@@ -981,7 +981,7 @@ def get_freq_band(freq):
     return None
 
 
-def conv_strat_raut(grid, refl_field, zr_a=200, zr_b=1.6,
+def conv_strat_raut(grid, refl_field, cappi_level=0, zr_a=200, zr_b=1.6,
                     conv_wt_threshold=5, tran_wt_threshold=1.5,
                     conv_scale_km=20, min_dbz_threshold=5,
                     conv_dbz_threshold=25, conv_core_threshold=42):
@@ -1028,7 +1028,7 @@ def conv_strat_raut(grid, refl_field, zr_a=200, zr_b=1.6,
 
     Returns
 -------
-    dict
+    dict:
     A dictionary structured as a Py-ART grid field, suitable for adding to a Py-ART Grid object. The dictionary 
     contains the classification data and associated metadata. The classification categories are as follows:
         - 0: No precipitation or unclassified
@@ -1052,6 +1052,7 @@ def conv_strat_raut(grid, refl_field, zr_a=200, zr_b=1.6,
     # Call the actual get_relass function to obtain radar echo classificatino
     reclass = get_reclass(grid,
                           refl_field, 
+                          cappi_level,
                           zr_a,
                           zr_b,
                           conv_wt_threshold=conv_wt_threshold, 
@@ -1071,9 +1072,10 @@ def conv_strat_raut(grid, refl_field, zr_a=200, zr_b=1.6,
             "long_name": "Wavelet-based multiresolution radar echo classification",
             "valid_min": 0,
             "valid_max": 3,
-            "comment_1": '0 = Undefined',
+            "classification_description": "0: No precipitation or unclassified, 1: Stratiform/non-convective, 2: Mixed intermediate convection, 3: Convective cores",
             "parameters": {
                 "refl_field": refl_field,
+                "cappi_level": cappi_level,
                 "zr_a": zr_a,
                 "zr_b": zr_b,
                 "conv_wt_threshold": conv_wt_threshold,
