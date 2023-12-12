@@ -378,6 +378,62 @@ def make_normal_storm(sigma, mu):
     return test_grid
 
 
+def make_gaussian_storm_grid(min_value=5, max_value=45, grid_len=32, 
+                        sigma=0.2, mu=0.0,  masked_boundary=3):
+    """
+    Make a 1 km resolution grid with a Gaussian storm pattern at the center,
+    with two layers having the same data and masked boundaries.
+
+    Parameters:
+    min_value : float
+        Minimum value of the storm intensity.
+    max_value : float
+        Maximum value of the storm intensity.
+    grid_len : int
+        Size of the grid (grid will be grid_len x grid_len).
+    sigma : float
+        Standard deviation of the Gaussian distribution.
+    mu : float
+        Mean of the Gaussian distribution.
+    masked_boundary : int
+        Number of pixels around the edge to be masked.
+
+    Returns:
+    A Py-ART grid with the Gaussian storm field added.
+    """
+
+    # Create an empty Py-ART grid
+    grid_shape = (2, grid_len, grid_len)
+    grid_limits = ((1000, 1000), (-grid_len*1000/2, grid_len*1000/2), (-grid_len*1000/2, grid_len*1000/2))
+    grid = make_empty_grid(grid_shape, grid_limits)
+
+    # Creating a grid with Gaussian distribution values
+    x, y = np.meshgrid(np.linspace(-1, 1, grid_len), np.linspace(-1, 1, grid_len))
+    d = np.sqrt(x*x + y*y)
+    gaussian = np.exp(-((d - mu)**2 / (2.0 * sigma**2)))
+
+    # Normalize and scale the Gaussian distribution
+    gaussian_normalized = (gaussian - np.min(gaussian)) / (np.max(gaussian) - np.min(gaussian))
+    storm_intensity = gaussian_normalized * (max_value - min_value) + min_value
+    storm_intensity = np.stack([storm_intensity, storm_intensity])
+    
+
+    # Apply thresholds for storm intensity and masking
+    mask = np.zeros_like(storm_intensity, dtype=bool)
+    mask[:, :masked_boundary, :] = True
+    mask[:, -masked_boundary:, :] = True
+    mask[:, :, :masked_boundary] = True
+    mask[:, :, -masked_boundary:] = True
+
+
+    storm_intensity = np.ma.array(storm_intensity, mask=mask)
+    # Prepare dictionary for Py-ART grid fields
+    rdic = {"data": storm_intensity, "long_name": "reflectivity", "units": "dBz"}
+    grid.fields = {"reflectivity": rdic}
+
+    return grid
+
+
 def make_empty_spectra_radar(nrays, ngates, npulses_max):
     """
     Return a Spectra Radar object.
