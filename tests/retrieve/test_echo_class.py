@@ -300,3 +300,12 @@ def test_standardize():
     assert_allclose(field_std_no_limits[0], [1.0, 1.0, 1.0, 1.0, 1.0], atol=1e-6)
 
     pytest.raises(ValueError, pyart.retrieve.echo_class._standardize, rhohv, "foo")
+
+
+def test_conv_strat_raut_inGrid_validity():
+    """
+    Test that function raises `TypeError` with invalid grid object as input.
+    """
+    pytest.raises(TypeError, pyart.retrieve.conv_strat_raut, None, "foo")
+
+
