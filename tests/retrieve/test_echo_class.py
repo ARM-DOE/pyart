@@ -314,7 +314,8 @@ def test_conv_strat_raut_valid_outDict():
     """
 
    # Create a Gaussian storm grid 
-    gaussian_storm_2d = pyart.testing.make_gaussian_storm_grid()
+    grid_len = 32
+    gaussian_storm_2d = pyart.testing.make_gaussian_storm_grid(min_value=5, max_value=45, grid_len=grid_len, sigma=0.2, mu=0, masked_boundary=3)
     wtclass = pyart.retrieve.conv_strat_raut(gaussian_storm_2d, "reflectivity", cappi_level=0)
 
     # First check that it's a pthon dictionary
@@ -339,5 +340,45 @@ def test_conv_strat_raut_valid_outDict():
     # Check each expected key
     for key in expected_keys:
         assert key in reclass_keys
+
+    #check grid shape
+    assert wtclass['wt_reclass']['data'].shape==(1, grid_len, grid_len)
+
+
+def test_conv_strat_raut_valid_results():
+    # Create a Gaussian storm grid 
+    grid_len = 32
+    mask_margin = 3
+    gaussian_storm_2d = pyart.testing.make_gaussian_storm_grid(min_value=5, max_value=45, grid_len=grid_len, sigma=0.2, mu=0, masked_boundary=mask_margin)
+    wtclass = pyart.retrieve.conv_strat_raut(gaussian_storm_2d, "reflectivity", cappi_level=0)
+
+    # Create a 32x32 array of ones
+    test_reclass = np.ones((grid_len, grid_len))
+
+    # Mask the edges
+    test_reclass[:mask_margin, :] = np.nan
+    test_reclass[-mask_margin:, :] = np.nan
+    test_reclass[:, :mask_margin] = np.nan
+    test_reclass[:, -mask_margin:] = np.nan
+
+    # Define the center and create the 4x4 area
+    center = grid_len // 2
+
+    #these are actual rsults from sucessful run
+    test_reclass[center-3:center+3, center-3:center+3] = 2
+    test_reclass[center-2:center+2, center-2:center+2] = 3
+
+    test_reclass[13, 13] = 1
+    test_reclass[13, 18] = 1
+    test_reclass[18, 13] = 1
+    test_reclass[18, 18] = 1
+
+    # Creating a mask for NaN values
+    mask = np.isnan(test_reclass)
+    masked_reclass =np.ma.array(test_reclass, mask=mask).astype(np.int32)
+    masked_reclass = np.expand_dims(masked_reclass, axis=0)
+
+    assert_allclose(masked_reclass, wtclass['wt_reclass']['data'])
+
 
 
