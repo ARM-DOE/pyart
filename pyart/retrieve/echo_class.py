@@ -10,7 +10,7 @@ import numpy as np
 from ..config import get_field_name, get_fillvalue, get_metadata
 from ._echo_class import _feature_detection, steiner_class_buff
 from ._echo_class_wt import get_reclass
-
+from ..core import Grid
 
 def steiner_conv_strat(
     grid,
@@ -984,7 +984,7 @@ def get_freq_band(freq):
 
 def conv_strat_raut(
     grid,
-    refl_field,
+    refl_field='reflectivity',
     cappi_level=0,
     zr_a=200,
     zr_b=1.6,
@@ -1065,8 +1065,8 @@ def conv_strat_raut(
     """
 
     # I don't know how to Check if the grid is a Py-ART Grid object
-    #if not isinstance(grid, pyart.core.Grid):
-    #    raise TypeError("The 'grid' is not a Py-ART Grid object.")
+    if not isinstance(grid, Grid):
+        raise TypeError("The 'grid' is not a Py-ART Grid object.")
 
     # Sanity checks for parameters if override_checks is False
     if not override_checks:
@@ -1076,8 +1076,6 @@ def conv_strat_raut(
         conv_scale_km = max(15, min(conv_scale_km, 30))  # conv_scale_km should be between 15 and 30 km
         min_dbz_threshold = max(0, min_dbz_threshold)  # min_dbz_threshold should be non-negative
         conv_dbz_threshold = max(25, min(conv_dbz_threshold, 30))  # conv_dbz_threshold should be between 25 and 30 dBZ
-    
-
 
 
 
