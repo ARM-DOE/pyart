@@ -1059,6 +1059,10 @@ def conv_strat_raut(
         58(8), 5409-5415.
     """
 
+    # Sanity checks for parameters
+    conv_core_threshold = max(conv_core_threshold, 40)  # Ensure conv_core_threshold is at least 40 dBZ
+
+
     # Call the actual get_relass function to obtain radar echo classificatino
     reclass = get_reclass(
         grid,
