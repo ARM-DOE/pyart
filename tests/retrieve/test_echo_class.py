@@ -308,4 +308,36 @@ def test_conv_strat_raut_inGrid_validity():
     """
     pytest.raises(TypeError, pyart.retrieve.conv_strat_raut, None, "foo")
 
+def test_conv_strat_raut_valid_outDict():
+    """
+    Test that function returns a valid dictionary with all expected keys'.
+    """
+
+   # Create a Gaussian storm grid 
+    gaussian_storm_2d = pyart.testing.make_gaussian_storm_grid()
+    wtclass = pyart.retrieve.conv_strat_raut(gaussian_storm_2d, "reflectivity", cappi_level=0)
+
+    # First check that it's a pthon dictionary
+    assert isinstance(wtclass, dict), "Output is not a dictionary"
+    # then test 'wt_reclass' key exists in the dict
+    assert "wt_reclass" in wtclass.keys()
+
+    # Now test other expectd expected keys
+    expected_keys = [
+        "data",
+        "standard_name",
+        "long_name",
+        "valid_min",
+        "valid_max",
+        "classification_description",
+        "parameters",
+    ]
+
+    # Get the keys of the 'wt_reclass' field
+    reclass_keys = wtclass["wt_reclass"].keys()
+
+    # Check each expected key
+    for key in expected_keys:
+        assert key in reclass_keys
+
 
