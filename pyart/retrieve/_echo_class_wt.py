@@ -20,19 +20,21 @@ from numpy import log, floor
 import sys
 
 
-def get_reclass(grid,
-                refl_field,
-                level, 
-                zr_a,
-                zr_b,
-                conv_wt_threshold, 
-                tran_wt_threshold, 
-                conv_scale_km, 
-                min_dbz_threshold,
-                conv_dbz_threshold,
-                conv_core_threshold):
+def get_reclass(
+    grid,
+    refl_field,
+    level,
+    zr_a,
+    zr_b,
+    conv_wt_threshold,
+    tran_wt_threshold,
+    conv_scale_km,
+    min_dbz_threshold,
+    conv_dbz_threshold,
+    conv_core_threshold,
+):
     """
-    Compute ATWT described as Raut et al (2008) and classify radar echoes 
+    Compute ATWT described as Raut et al (2008) and classify radar echoes
     using scheme of Raut et al (2020).
     First, convert dBZ to rain rates using standard Z-R relationship or user given coefiecient. This is to
     transform the normally distributed dBZ to gamma-like distribution, enhancing the structure of the field.
@@ -49,21 +51,21 @@ def get_reclass(grid,
     Returns:
     ========
     wt_class: ndarray
-        Precipitation type classification: 0. N/A 1. stratiform/non-convective, 
-        2. convective cores and 3. moderate+transitional (mix) convective 
-        regions. 
+        Precipitation type classification: 0. N/A 1. stratiform/non-convective,
+        2. convective cores and 3. moderate+transitional (mix) convective
+        regions.
     """
 
     # Extract grid data, save mask and get the resolution
     try:
-        dbz_data = grid.fields[refl_field]['data'][level, :, :]
+        dbz_data = grid.fields[refl_field]["data"][level, :, :]
     except:
-        dbz_data = grid.fields[refl_field]['data'][:, :]
+        dbz_data = grid.fields[refl_field]["data"][:, :]
 
     radar_mask = np.ma.getmask(dbz_data)
 
     # Warning: dx and dy are considred to be same (res_km).
-    res_km = (grid.x["data"][1] - grid.x["data"][0])/1000
+    res_km = (grid.x["data"][1] - grid.x["data"][0]) / 1000
 
     try:
         dbz_data = dbz_data.filled(0)  # In case it's a masked array.
@@ -72,76 +74,86 @@ def get_reclass(grid,
 
     # save the mask for missing data.
     dbz_data[np.isnan(dbz_data)] = 0
-    dbz_data_t = reflectivity_to_rainrate(dbz_data, acoeff=zr_a, bcoeff=zr_b)  # transform the dbz data
-    
+    dbz_data_t = reflectivity_to_rainrate(
+        dbz_data, acoeff=zr_a, bcoeff=zr_b
+    )  # transform the dbz data
+
     # get scale break in pixels
     scale_break = calc_scale_break(res_km, conv_scale_km)
     wt_sum = sum_conv_wavelets(dbz_data_t, scale_break)
 
-    wt_class = label_classes(wt_sum, 
-                             dbz_data, 
-                             conv_wt_threshold, 
-                             tran_wt_threshold, 
-                             min_dbz_threshold,
-                             conv_dbz_threshold,
-                             conv_core_threshold)
+    wt_class = label_classes(
+        wt_sum,
+        dbz_data,
+        conv_wt_threshold,
+        tran_wt_threshold,
+        min_dbz_threshold,
+        conv_dbz_threshold,
+        conv_core_threshold,
+    )
 
-    wt_class_ma = np.ma.masked_where(radar_mask, wt_class) # add mask back
+    wt_class_ma = np.ma.masked_where(radar_mask, wt_class)  # add mask back
     wt_class_ma = wt_class_ma.squeeze()
- 
 
     return wt_class_ma
 
 
-
-
-def label_classes(wt_sum, 
-                  dbz_data,
-                  conv_wt_threshold, 
-                  tran_wt_threshold, 
-                  min_dbz_threshold,
-                  conv_dbz_threshold,
-                  conv_core_threshold):
-    """ 
-    Labels classes using given thresholds:
-    - 0. no precipitation, marked by the given min_dbz threshold.
-    - 1. stratiform,
-    - 2. transitional/intermediate regions,
-    - 3. intense/heavy convective.
-    
-    Following hard coded values are optimised and validated using C-band radars
-    over Darwin, Australia (2.5 km grid spacing) and tested for Solapur, India (1km grid spacing) [Raut et al. 2020]. 
-    conv_wt_threshold = 5  # WT value more than this is strong convection
-    tran_wt_threshold = 2  # WT value for moderate convection
-    min_dbz_threshold = 10  # pixels below this value are not classified. 
-    conv_dbz_threshold = 30  # pixel below this value are not convective. This works for most cases.
-git push -u 
-    Parameters:
-    ===========
-    wt_sum: ndarray    
-        Integrated wavelet transform
-    vol_data: ndarray
-        Array, vector or matrix of data
-
-    Returns:
-    ========
-    wt_class: ndarray
-        Precipitation type classification.
+def label_classes(
+    wt_sum,
+    dbz_data,
+    conv_wt_threshold,
+    tran_wt_threshold,
+    min_dbz_threshold,
+    conv_dbz_threshold,
+    conv_core_threshold,
+):
     """
- 
+        Labels classes using given thresholds:
+        - 0. no precipitation, marked by the given min_dbz threshold.
+        - 1. stratiform,
+        - 2. transitional/intermediate regions,
+        - 3. intense/heavy convective.
+
+        Following hard coded values are optimised and validated using C-band radars
+        over Darwin, Australia (2.5 km grid spacing) and tested for Solapur, India (1km grid spacing) [Raut et al. 2020].
+        conv_wt_threshold = 5  # WT value more than this is strong convection
+        tran_wt_threshold = 2  # WT value for moderate convection
+        min_dbz_threshold = 10  # pixels below this value are not classified.
+        conv_dbz_threshold = 30  # pixel below this value are not convective. This works for most cases.
+    git push -u
+        Parameters:
+        ===========
+        wt_sum: ndarray
+            Integrated wavelet transform
+        vol_data: ndarray
+            Array, vector or matrix of data
+
+        Returns:
+        ========
+        wt_class: ndarray
+            Precipitation type classification.
+    """
 
     # I first used negative numbers to annotate the categories. Then multiply it by -1.
-    wt_class = np.where((wt_sum >= tran_wt_threshold) & (dbz_data >= conv_core_threshold), -3, 0)
-    wt_class = np.where((wt_sum >= conv_wt_threshold) & (dbz_data >= conv_dbz_threshold), -3, 0)
-    wt_class = np.where((wt_sum < conv_wt_threshold) & (wt_sum >= tran_wt_threshold)
-                        & (dbz_data >= conv_dbz_threshold), -2, wt_class)
+    wt_class = np.where(
+        (wt_sum >= tran_wt_threshold) & (dbz_data >= conv_core_threshold), -3, 0
+    )
+    wt_class = np.where(
+        (wt_sum >= conv_wt_threshold) & (dbz_data >= conv_dbz_threshold), -3, 0
+    )
+    wt_class = np.where(
+        (wt_sum < conv_wt_threshold)
+        & (wt_sum >= tran_wt_threshold)
+        & (dbz_data >= conv_dbz_threshold),
+        -2,
+        wt_class,
+    )
     wt_class = np.where((wt_class == 0) & (dbz_data >= min_dbz_threshold), -1, wt_class)
 
     wt_class = -1 * wt_class
     wt_class = np.where((wt_class == 0), np.nan, wt_class)
 
     return wt_class.astype(np.int32)
-
 
 
 def reflectivity_to_rainrate(dbz, acoeff, bcoeff):
@@ -166,7 +178,6 @@ def reflectivity_to_rainrate(dbz, acoeff, bcoeff):
     return rr
 
 
-
 def calc_scale_break(res_km, conv_scale_km):
     """
     Compute scale break for convection and stratiform regions. WT will be
@@ -186,7 +197,6 @@ def calc_scale_break(res_km, conv_scale_km):
     """
     scale_break = log((conv_scale_km / res_km)) / log(2) + 1
     return int(round(scale_break))
-
 
 
 def sum_conv_wavelets(vol_data, conv_scale):
@@ -225,7 +235,7 @@ def sum_conv_wavelets(vol_data, conv_scale):
             wt_sum[lev, :, :] = np.sum(wt, axis=(0)) """
 
     # Only positive WT corresponds to convection in radar
-    # wt_sum[wt_sum<0] = 0 
+    # wt_sum[wt_sum<0] = 0
     return wt_sum
 
 
@@ -254,21 +264,21 @@ def atwt2d(data2d, max_scale=-1):
     tuple of ndarray
         ATWT of input image and the final smoothed image or background image.
     """
-    
+
     if not isinstance(data2d, np.ndarray):
         sys.exit("the input is not a numpy array")
 
     data2d = data2d.squeeze()
-    
+
     dims = data2d.shape
     min_dims = np.min(dims)
     max_possible_scales = int(floor(log(min_dims) / log(2)))
 
     if max_scale < 0 or max_possible_scales <= max_scale:
-        max_scale = max_possible_scales - 1 
+        max_scale = max_possible_scales - 1
 
     ny = dims[0]
-    nx = dims[1]    
+    nx = dims[1]
 
     # For saving wt components
     wt = np.zeros((max_scale, ny, nx))
@@ -309,9 +319,11 @@ def atwt2d(data2d, max_scale=-1):
                 left1 = data2d[j, prev1]
                 right1 = data2d[j, next1]
                 right2 = data2d[j, next2]
-                temp1[j, i] = (sf[0] * (left2 + right2)
-                               + sf[1] * (left1 + right1)
-                               + sf[2] * data2d[j, i])
+                temp1[j, i] = (
+                    sf[0] * (left2 + right2)
+                    + sf[1] * (left1 + right1)
+                    + sf[2] * data2d[j, i]
+                )
 
         # Column-wise smoothing
         for i in range(0, ny):
@@ -334,12 +346,13 @@ def atwt2d(data2d, max_scale=-1):
                 top1 = temp1[prev1, j]
                 bottom1 = temp1[next1, j]
                 bottom2 = temp1[next2, j]
-                temp2[i, j] = (sf[0] * (top2 + bottom2)
-                               + sf[1] * (top1 + bottom1)
-                               + sf[2] * temp1[i, j])
+                temp2[i, j] = (
+                    sf[0] * (top2 + bottom2)
+                    + sf[1] * (top1 + bottom1)
+                    + sf[2] * temp1[i, j]
+                )
 
         wt[scale - 1, :, :] = data2d - temp2
         data2d[:] = temp2
-
 
     return wt, data2d
