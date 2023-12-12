@@ -302,17 +302,14 @@ def test_standardize():
     pytest.raises(ValueError, pyart.retrieve.echo_class._standardize, rhohv, "foo")
 
 
-def test_conv_strat_raut_inGrid_validity():
-    """
-    Test that function raises `TypeError` with invalid grid object as input.
-    """
-    pytest.raises(TypeError, pyart.retrieve.conv_strat_raut, None, "foo")
 
-
-def test_conv_strat_raut_valid_outDict():
+def test_conv_strat_raut_outDict_valid():
     """
     Test that function returns a valid dictionary with all expected keys'.
     """
+
+    # Test that function raises `TypeError` with invalid grid object as input.
+    pytest.raises(TypeError, pyart.retrieve.conv_strat_raut, None, "foo")
 
     # Create a Gaussian storm grid
     grid_len = 32
@@ -350,10 +347,10 @@ def test_conv_strat_raut_valid_outDict():
     assert wtclass["wt_reclass"]["data"].shape == (1, grid_len, grid_len)
 
 
-def test_conv_strat_raut_valid_results():
+def test_conv_strat_raut_results_correct():
     """
     Checks the correctness of the results from the function.
-    
+
     I created a fixed Gaussian storm with masked boundaries as pyart grid and classifed it.
     Then constructed manually the expected classification results and compared it to the actual output from the function. 
     """
