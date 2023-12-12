@@ -994,6 +994,7 @@ def conv_strat_raut(
     min_dbz_threshold=5,
     conv_dbz_threshold=25,
     conv_core_threshold=42,
+    override_checks=False
 ):
     """
         Classifies radar echoes into convective cores, mixed convection, and stratiform regions using the ATWT algorithm.
@@ -1059,8 +1060,15 @@ def conv_strat_raut(
         58(8), 5409-5415.
     """
 
-    # Sanity checks for parameters
-    conv_core_threshold = max(conv_core_threshold, 40)  # Ensure conv_core_threshold is at least 40 dBZ
+    # Sanity checks for parameters if override_checks is False
+    if not override_checks:
+        conv_core_threshold = max(40, conv_core_threshold)  # Ensure conv_core_threshold is at least 40 dBZ
+        conv_wt_threshold = max(4, min(conv_wt_threshold, 6))  # conv_wt_threshold should be between 4 and 6
+        tran_wt_threshold = max(1, min(tran_wt_threshold, 2))  # tran_wt_threshold should be between 1 and 2
+        conv_scale_km = max(15, min(conv_scale_km, 30))  # conv_scale_km should be between 15 and 30 km
+        min_dbz_threshold = max(0, min_dbz_threshold)  # min_dbz_threshold should be non-negative
+        conv_dbz_threshold = max(25, min(conv_dbz_threshold, 30))  # conv_dbz_threshold should be between 25 and 30 dBZ
+
 
 
     # Call the actual get_relass function to obtain radar echo classificatino
