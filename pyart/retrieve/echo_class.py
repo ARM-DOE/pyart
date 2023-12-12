@@ -1039,8 +1039,7 @@ def conv_strat_raut(
         override_checks : bool, optional
             If set to True, the function will bypass the sanity checks for parameter values. 
             This allows the user to use custom values for parameters, even if they fall outside 
-            the recommended or default ranges. The default is False, which means the function 
-            will apply sanity checks to ensure parameter values are within specified limits.
+            the recommended or default ranges. The default is False.
 
         Returns
     -------
@@ -1065,6 +1064,10 @@ def conv_strat_raut(
         58(8), 5409-5415.
     """
 
+    # I don't know how to Check if the grid is a Py-ART Grid object
+    #if not isinstance(grid, pyart.core.Grid):
+    #    raise TypeError("The 'grid' is not a Py-ART Grid object.")
+
     # Sanity checks for parameters if override_checks is False
     if not override_checks:
         conv_core_threshold = max(40, conv_core_threshold)  # Ensure conv_core_threshold is at least 40 dBZ
@@ -1073,6 +1076,8 @@ def conv_strat_raut(
         conv_scale_km = max(15, min(conv_scale_km, 30))  # conv_scale_km should be between 15 and 30 km
         min_dbz_threshold = max(0, min_dbz_threshold)  # min_dbz_threshold should be non-negative
         conv_dbz_threshold = max(25, min(conv_dbz_threshold, 30))  # conv_dbz_threshold should be between 25 and 30 dBZ
+    
+
 
 
 

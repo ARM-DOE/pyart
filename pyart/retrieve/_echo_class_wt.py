@@ -3,11 +3,11 @@ Classification of Precipitation Echoes in Radar Data.
 
 Created on Thu Oct 12 23:12:19 2017
 @author: Bhupendra Raut
-@modifed: 02/13/2020
+@modifed: 11/19/2023
 @references: 10.1109/TGRS.2020.2965649
 
 .. autosummary::
-    getWTClass
+    get_reclass
     label_classes
     reflectivity_to_rainrate
     calc_scale_break
@@ -108,30 +108,30 @@ def label_classes(
     conv_core_threshold,
 ):
     """
-        Labels classes using given thresholds:
-        - 0. no precipitation, marked by the given min_dbz threshold.
-        - 1. stratiform,
-        - 2. transitional/intermediate regions,
-        - 3. intense/heavy convective.
+    Labels classes using given thresholds:
+        - 0: No precipitation or unclassified
+        - 1: Stratiform/non-convective regions
+        - 2: Transitional and mixed convective regions
+        - 3: Convective cores
 
-        Following hard coded values are optimised and validated using C-band radars
-        over Darwin, Australia (2.5 km grid spacing) and tested for Solapur, India (1km grid spacing) [Raut et al. 2020].
-        conv_wt_threshold = 5  # WT value more than this is strong convection
-        tran_wt_threshold = 2  # WT value for moderate convection
-        min_dbz_threshold = 10  # pixels below this value are not classified.
-        conv_dbz_threshold = 30  # pixel below this value are not convective. This works for most cases.
-    git push -u
-        Parameters:
-        ===========
-        wt_sum: ndarray
-            Integrated wavelet transform
-        vol_data: ndarray
-            Array, vector or matrix of data
+    Following hard coded values are optimised and validated using C-band radars
+    over Darwin, Australia (2.5 km grid spacing) and tested for Solapur, India (1km grid spacing) [Raut et al. 2020].
+    conv_wt_threshold = 5  # WT value more than this is strong convection
+    tran_wt_threshold = 2  # WT value for moderate convection
+    min_dbz_threshold = 10  # pixels below this value are not classified.
+    conv_dbz_threshold = 30  # pixel below this value are not convective. This works for most cases.
 
-        Returns:
-        ========
-        wt_class: ndarray
-            Precipitation type classification.
+    Parameters:
+    ===========
+    wt_sum: ndarray
+        Integrated wavelet transform
+    vol_data: ndarray
+        Array, vector or matrix of data
+
+    Returns:
+    ========
+    wt_class: ndarray
+        Precipitation type classification.
     """
 
     # I first used negative numbers to annotate the categories. Then multiply it by -1.
