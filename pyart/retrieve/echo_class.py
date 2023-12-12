@@ -1036,6 +1036,11 @@ def conv_strat_raut(
         conv_core_threshold : float, optional
             Reflectivity threshold to identify convective cores. Default is 42 dBZ.
             Recommended value must be is greater than or equal to 40 dBZ. The algorithm is not sensitive to this value.
+        override_checks : bool, optional
+            If set to True, the function will bypass the sanity checks for parameter values. 
+            This allows the user to use custom values for parameters, even if they fall outside 
+            the recommended or default ranges. The default is False, which means the function 
+            will apply sanity checks to ensure parameter values are within specified limits.
 
         Returns
     -------
