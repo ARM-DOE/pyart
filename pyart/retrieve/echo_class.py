@@ -12,6 +12,7 @@ from ._echo_class import _feature_detection, steiner_class_buff
 from ._echo_class_wt import get_reclass
 from ..core import Grid
 
+
 def steiner_conv_strat(
     grid,
     dx=None,
@@ -981,10 +982,9 @@ def get_freq_band(freq):
     return None
 
 
-
 def conv_strat_raut(
     grid,
-    refl_field='reflectivity',
+    refl_field="reflectivity",
     cappi_level=0,
     zr_a=200,
     zr_b=1.6,
@@ -994,10 +994,10 @@ def conv_strat_raut(
     min_dbz_threshold=5,
     conv_dbz_threshold=25,
     conv_core_threshold=42,
-    override_checks=False
+    override_checks=False,
 ):
     """
-        Classifies radar echoes into convective cores, mixed convection, and stratiform regions using the ATWT algorithm.
+        A fast method to classify radar echoes into convective cores, mixed convection, and stratiform regions using the ATWT algorithm
 
         This function applies the ATWT (A Trous Wavelet Transform) algorithm from Raut et al (2008) to classify
         radar echoes using the scheme of Raut et al (2020). It differentiates between convective and stratiform precipitation,
@@ -1037,8 +1037,8 @@ def conv_strat_raut(
             Reflectivity threshold to identify convective cores. Default is 42 dBZ.
             Recommended value must be is greater than or equal to 40 dBZ. The algorithm is not sensitive to this value.
         override_checks : bool, optional
-            If set to True, the function will bypass the sanity checks for parameter values. 
-            This allows the user to use custom values for parameters, even if they fall outside 
+            If set to True, the function will bypass the sanity checks for parameter values.
+            This allows the user to use custom values for parameters, even if they fall outside
             the recommended or default ranges. The default is False.
 
         Returns
@@ -1070,14 +1070,24 @@ def conv_strat_raut(
 
     # Sanity checks for parameters if override_checks is False
     if not override_checks:
-        conv_core_threshold = max(40, conv_core_threshold)  # Ensure conv_core_threshold is at least 40 dBZ
-        conv_wt_threshold = max(4, min(conv_wt_threshold, 6))  # conv_wt_threshold should be between 4 and 6
-        tran_wt_threshold = max(1, min(tran_wt_threshold, 2))  # tran_wt_threshold should be between 1 and 2
-        conv_scale_km = max(15, min(conv_scale_km, 30))  # conv_scale_km should be between 15 and 30 km
-        min_dbz_threshold = max(0, min_dbz_threshold)  # min_dbz_threshold should be non-negative
-        conv_dbz_threshold = max(25, min(conv_dbz_threshold, 30))  # conv_dbz_threshold should be between 25 and 30 dBZ
-
-
+        conv_core_threshold = max(
+            40, conv_core_threshold
+        )  # Ensure conv_core_threshold is at least 40 dBZ
+        conv_wt_threshold = max(
+            4, min(conv_wt_threshold, 6)
+        )  # conv_wt_threshold should be between 4 and 6
+        tran_wt_threshold = max(
+            1, min(tran_wt_threshold, 2)
+        )  # tran_wt_threshold should be between 1 and 2
+        conv_scale_km = max(
+            15, min(conv_scale_km, 30)
+        )  # conv_scale_km should be between 15 and 30 km
+        min_dbz_threshold = max(
+            0, min_dbz_threshold
+        )  # min_dbz_threshold should be non-negative
+        conv_dbz_threshold = max(
+            25, min(conv_dbz_threshold, 30)
+        )  # conv_dbz_threshold should be between 25 and 30 dBZ
 
     # Call the actual get_relass function to obtain radar echo classificatino
     reclass = get_reclass(
