@@ -196,3 +196,4 @@ def test_write_grid_geotiff_opacity():
             img.show()
     except PermissionError:
         pass
+    
