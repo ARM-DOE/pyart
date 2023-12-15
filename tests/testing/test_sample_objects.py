@@ -1,10 +1,6 @@
 """ Unit Tests for Py-ART's testing/sample_objects.py module. """
 
 import numpy as np
-#import pytest
-from numpy.testing import assert_allclose
-
-import pyart
 
 from pyart.testing.sample_objects import make_gaussian_storm_grid  
 
@@ -19,11 +15,7 @@ def test_gaussian_storm_grid_results_correct():
     grid_len = 32
     min_value = 5
     max_value = 45
-    sigma = 0.2
-    mu = 0.0
     mask_margin = 3
-
-    expected_limits = ((1000, 1000), (-grid_len*1000/2, grid_len*1000/2), (-grid_len*1000/2, grid_len*1000/2))
 
     # Create grid
     gaussian_storm_2d = make_gaussian_storm_grid()

@@ -19,7 +19,6 @@ Created on Thu Oct 12 23:12:19 2017
 
 import numpy as np
 from numpy import log, floor
-import sys
 
 
 def get_reclass(
@@ -36,8 +35,7 @@ def get_reclass(
     conv_core_threshold,
 ):
     """
-    Compute ATWT described as Raut et al (2008) and classify radar echoes
-    using scheme of Raut et al (2020).
+    Compute ATWT described as Raut et al (2008) and classify radar echoes using scheme of Raut et al (2020).
     First, convert dBZ to rain rates using standard Z-R relationship or user given coefficients. This is to
     transform the normally distributed dBZ to gamma-like distribution, enhancing the structure of the field.
 
@@ -58,7 +56,7 @@ def get_reclass(
         regions.
     """
 
-    # Extract grid data, save mask and get the resolution
+    # Extract grid data, save mask and get the resolution in km
     try:
         dbz_data = grid.fields[refl_field]["data"][level, :, :]
     except:
@@ -69,18 +67,19 @@ def get_reclass(
     # Warning: dx and dy are considered to be same (res_km).
     res_km = (grid.x["data"][1] - grid.x["data"][0]) / 1000
 
+    # In case it's a masked array.
     try:
-        dbz_data = dbz_data.filled(0)  # In case it's a masked array.
+        dbz_data = dbz_data.filled(0)  
     except Exception:
         pass
 
-    # save the mask for missing data.
+    # save the radar original mask for missing data.
     dbz_data[np.isnan(dbz_data)] = 0
     dbz_data_t = reflectivity_to_rainrate(
         dbz_data, acoeff=zr_a, bcoeff=zr_b
-    )  # transform the dbz data
+    )  # transform the dbz data to rainrate
 
-    # get scale break in pixels
+    # get scale break in pixels or grid size
     scale_break = calc_scale_break(res_km, conv_scale_km)
     wt_sum = sum_conv_wavelets(dbz_data_t, scale_break)
 
@@ -218,7 +217,6 @@ def sum_conv_wavelets(vol_data, conv_scale):
     wt_sum: ndarray
         Integrated wavelet transform.
     """
-    dims = vol_data.shape
 
     wt, bg = atwt2d(vol_data, max_scale=conv_scale)
     wt_sum = np.sum(wt, axis=(0))
@@ -345,4 +343,3 @@ def atwt2d(data2d, max_scale=-1):
         data2d[:] = temp2
 
     return wt, data2d
-
