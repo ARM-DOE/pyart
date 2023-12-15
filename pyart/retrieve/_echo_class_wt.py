@@ -11,9 +11,7 @@ Created on Thu Oct 12 23:12:19 2017
     label_classes
     reflectivity_to_rainrate
     calc_scale_break
-    sum_conv_wavelets
     atwt2d
-    
 """
 
 
