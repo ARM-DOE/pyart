@@ -2,12 +2,12 @@
 
 import warnings
 
+from pathlib import Path
 import numpy as np
 import pytest
 
 import pyart
 from PIL import Image
-from pathlib import Path
 
 # TODO : inspect the output file to verify their contents, currently only the
 # fact that something was written is confirmed
@@ -196,6 +196,3 @@ def test_write_grid_geotiff_opacity():
             img.show()
     except PermissionError:
         pass
-
-
-
