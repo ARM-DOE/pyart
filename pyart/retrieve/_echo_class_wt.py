@@ -81,7 +81,10 @@ def get_reclass(
 
     # get scale break in pixels or grid size
     scale_break = calc_scale_break(res_km, conv_scale_km)
-    wt_sum = sum_conv_wavelets(dbz_data_t, scale_break)
+
+    # Compute and sum convective scale WT components
+    wt, _ = atwt2d(dbz_data_t, max_scale=scale_break)
+    wt_sum = np.sum(wt, axis=(0))
 
     wt_class = label_classes(
         wt_sum,
@@ -198,32 +201,6 @@ def calc_scale_break(res_km, conv_scale_km):
     """
     scale_break = log((conv_scale_km / res_km)) / log(2) + 1
     return int(round(scale_break))
-
-
-def sum_conv_wavelets(vol_data, conv_scale):
-    """
-    Returns sum of WT upto given scale. Works with both 2d scans and
-    volumetric data.
-
-    Parameters:
-    ===========
-    vol_data: ndarray
-        Array, vector or matrix of data.
-    conv_scale: float
-        Expected size of spatial variations due to convection.
-
-    Returns:
-    ========
-    wt_sum: ndarray
-        Integrated wavelet transform.
-    """
-
-    wt, bg = atwt2d(vol_data, max_scale=conv_scale)
-    wt_sum = np.sum(wt, axis=(0))
-
-    # Only positive WT corresponds to convection in radar
-    # wt_sum[wt_sum<0] = 0
-    return wt_sum
 
 
 def atwt2d(data2d, max_scale=-1):
