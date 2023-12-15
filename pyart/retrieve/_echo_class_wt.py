@@ -39,7 +39,7 @@ def get_reclass(
     Parameters:
     ===========
     dbz_data: ndarray
-        3D array containing radar data. Last dimension should be levels.
+        2D array containing radar data. Last dimension should be levels.
     res_km: float
         Resolution of the radar data in km
     conv_scale_km: float
@@ -59,29 +59,13 @@ def get_reclass(
     except:
         dbz_data = grid.fields[refl_field]["data"][:, :]
 
+    # save the radar original mask for missing data.
     radar_mask = np.ma.getmask(dbz_data)
 
     # Warning: dx and dy are considered to be same (res_km).
     res_km = (grid.x["data"][1] - grid.x["data"][0]) / 1000
 
-    # In case it's a masked array.
-    try:
-        dbz_data = dbz_data.filled(0)  
-    except Exception:
-        pass
-
-    # save the radar original mask for missing data.
-    dbz_data[np.isnan(dbz_data)] = 0
-    
-    # transform the dbz data to rainrate
-    rr_data = ((10.0 ** (dbz_data / 10.0)) / zr_a) ** (1.0 / zr_b)
-
-    # get scale break in pixels or grid size
-    scale_break = calc_scale_break(res_km, conv_scale_km)
-
-    # Compute and sum convective scale WT components
-    wt, _ = atwt2d(rr_data, max_scale=scale_break)
-    wt_sum = np.sum(wt, axis=(0))
+    wt_sum = conv_wavelet_sum(dbz_data, zr_a, zr_b, res_km, conv_scale_km)
 
     wt_class = label_classes(
         wt_sum,
@@ -97,6 +81,40 @@ def get_reclass(
     wt_class_ma = wt_class_ma.squeeze()
 
     return wt_class_ma
+
+
+def conv_wavelet_sum(dbz_data, zr_a, zr_b, res_km, conv_scale_km):
+    """
+    Computes the sum of wavelet transform components for convective scales from dBZ data.
+
+    Parameters:
+    ===========
+    dbz_data: ndarray
+        2D array containing radar dBZ data.
+    zr_a, zr_b: float
+        Coefficients for the Z-R relationship.
+    res_km: float
+        Resolution of the radar data in km.
+    conv_scale_km: float
+        Approximate scale break (in km) between convective and stratiform scales.
+
+    Returns:
+    ========
+    wt_sum: ndarray
+        Sum of convective scale wavelet transform components.
+    """
+    try:
+        dbz_data = dbz_data.filled(0)
+    except Exception:
+        pass
+
+    dbz_data[np.isnan(dbz_data)] = 0
+    rr_data = ((10.0 ** (dbz_data / 10.0)) / zr_a) ** (1.0 / zr_b)
+    scale_break = calc_scale_break(res_km, conv_scale_km)
+    wt, _ = atwt2d(rr_data, max_scale=scale_break)
+    wt_sum = np.sum(wt, axis=(0))
+
+    return wt_sum
 
 
 def label_classes(
@@ -180,7 +198,7 @@ def calc_scale_break(res_km, conv_scale_km):
 
 def atwt2d(data2d, max_scale=-1):
     """
-    Computes a trous wavelet transform (ATWT). Computes ATWT of the 2d array
+    Computes a trous wavelet transform (ATWT). Computes ATWT of the 2D array
     up to max_scale. If max_scale is outside the boundaries, number of scales
     will be reduced.
 
