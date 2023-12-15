@@ -9,7 +9,7 @@ import numpy as np
 
 from ..config import get_field_name, get_fillvalue, get_metadata
 from ._echo_class import _feature_detection, steiner_class_buff
-from ._echo_class_wt import get_reclass
+from ._echo_class_wt import wavelet_reclass
 from ..core import Grid
 
 
@@ -1089,8 +1089,8 @@ def conv_strat_raut(
             25, min(conv_dbz_threshold, 30)
         )  # conv_dbz_threshold should be between 25 and 30 dBZ
 
-    # Call the actual get_relass function to obtain radar echo classificatino
-    reclass = get_reclass(
+    # Call the actual wavelet_relass function to obtain radar echo classificatino
+    reclass = wavelet_reclass(
         grid,
         refl_field,
         cappi_level,

@@ -7,7 +7,7 @@ Created on Thu Oct 12 23:12:19 2017
 @references: 10.1109/TGRS.2020.2965649
 
 .. autosummary::
-    get_reclass
+    wavelet_reclass
     label_classes
     calc_scale_break
     atwt2d
@@ -17,8 +17,7 @@ Created on Thu Oct 12 23:12:19 2017
 import numpy as np
 from numpy import log, floor
 
-
-def get_reclass(
+def wavelet_reclass(
     grid,
     refl_field,
     level,
