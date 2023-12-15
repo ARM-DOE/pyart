@@ -320,12 +320,12 @@ def test_conv_strat_raut_outDict_valid():
         gaussian_storm_2d, "reflectivity", cappi_level=0
     )
 
-    # First check that it's a pthon dictionary
+    # First check that it's a Python dictionary
     assert isinstance(wtclass, dict), "Output is not a dictionary"
     # then test 'wt_reclass' key exists in the dict
     assert "wt_reclass" in wtclass.keys()
 
-    # Now test other expectd expected keys
+    # Now test other expected keys
     expected_keys = [
         "data",
         "standard_name",
@@ -351,7 +351,7 @@ def test_conv_strat_raut_results_correct():
     """
     Checks the correctness of the results from the function.
 
-    I created a fixed Gaussian storm with masked boundaries as pyart grid and classifed it.
+    I created a fixed Gaussian storm with masked boundaries as pyart grid and classified it.
     Then constructed manually the expected classification results and compared it to the actual output from the function. 
     """
 
@@ -383,7 +383,7 @@ def test_conv_strat_raut_results_correct():
 
     # Define the center and create the 4x4 area
     center = grid_len // 2
-    # these are actual rsults from sucessful run
+    # these are actual results from successful run
     test_reclass[center - 3 : center + 3, center - 3 : center + 3] = 2
     test_reclass[center - 2 : center + 2, center - 2 : center + 2] = 3
 
@@ -398,3 +398,4 @@ def test_conv_strat_raut_results_correct():
     masked_reclass = np.expand_dims(masked_reclass, axis=0)
 
     assert_allclose(masked_reclass, wtclass["wt_reclass"]["data"])
+

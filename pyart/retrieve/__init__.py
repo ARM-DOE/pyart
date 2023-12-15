@@ -10,7 +10,7 @@ from .echo_class import conv_strat_yuter  # noqa
 from .echo_class import get_freq_band  # noqa
 from .echo_class import hydroclass_semisupervised  # noqa
 from .echo_class import steiner_conv_strat  # noqa
-from .echo_class import conv_strat_raut
+from .echo_class import conv_strat_raut #noqa
 from .gate_id import fetch_radar_time_profile, map_profile_to_gates  # noqa
 from .kdp_proc import kdp_maesaka, kdp_schneebeli, kdp_vulpiani  # noqa
 from .qpe import est_rain_rate_a  # noqa

@@ -13,7 +13,9 @@ Created on Thu Oct 12 23:12:19 2017
     calc_scale_break
     sum_conv_wavelets
     atwt2d
+    
 """
+
 
 import numpy as np
 from numpy import log, floor
@@ -36,7 +38,7 @@ def get_reclass(
     """
     Compute ATWT described as Raut et al (2008) and classify radar echoes
     using scheme of Raut et al (2020).
-    First, convert dBZ to rain rates using standard Z-R relationship or user given coefiecient. This is to
+    First, convert dBZ to rain rates using standard Z-R relationship or user given coefficients. This is to
     transform the normally distributed dBZ to gamma-like distribution, enhancing the structure of the field.
 
     Parameters:
@@ -64,7 +66,7 @@ def get_reclass(
 
     radar_mask = np.ma.getmask(dbz_data)
 
-    # Warning: dx and dy are considred to be same (res_km).
+    # Warning: dx and dy are considered to be same (res_km).
     res_km = (grid.x["data"][1] - grid.x["data"][0]) / 1000
 
     try:
@@ -114,7 +116,7 @@ def label_classes(
         - 2: Transitional and mixed convective regions
         - 3: Convective cores
 
-    Following hard coded values are optimised and validated using C-band radars
+    Following hard coded values are optimized and validated using C-band radars
     over Darwin, Australia (2.5 km grid spacing) and tested for Solapur, India (1km grid spacing) [Raut et al. 2020].
     conv_wt_threshold = 5  # WT value more than this is strong convection
     tran_wt_threshold = 2  # WT value for moderate convection
@@ -218,21 +220,8 @@ def sum_conv_wavelets(vol_data, conv_scale):
     """
     dims = vol_data.shape
 
-    # if data is 2d
-    # if len(dims) == 2 or any(dims==1):
     wt, bg = atwt2d(vol_data, max_scale=conv_scale)
     wt_sum = np.sum(wt, axis=(0))
-    """ else:  # else for volume data
-        num_levels = min(dims) # too many assumptions here for height of the volume.
-        wt_sum = np.zeros(dims)
-
-        for lev in range(num_levels):
-            if vol_data[:, :, lev].max < 1:
-                next()  # this needs reviewing
-            wt = atwt2d(vol_data[lev, :, :], max_scale=conv_scale)
-
-            # sum all the WT scales.
-            wt_sum[lev, :, :] = np.sum(wt, axis=(0)) """
 
     # Only positive WT corresponds to convection in radar
     # wt_sum[wt_sum<0] = 0
@@ -266,7 +255,7 @@ def atwt2d(data2d, max_scale=-1):
     """
 
     if not isinstance(data2d, np.ndarray):
-        sys.exit("the input is not a numpy array")
+        raise TypeError("The input data2d must be a numpy array.")
 
     data2d = data2d.squeeze()
 
@@ -356,3 +345,4 @@ def atwt2d(data2d, max_scale=-1):
         data2d[:] = temp2
 
     return wt, data2d
+
