@@ -9,7 +9,6 @@ Created on Thu Oct 12 23:12:19 2017
 .. autosummary::
     get_reclass
     label_classes
-    reflectivity_to_rainrate
     calc_scale_break
     atwt2d
 """
