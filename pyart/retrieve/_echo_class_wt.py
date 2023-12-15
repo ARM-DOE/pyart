@@ -74,10 +74,6 @@ def get_reclass(
     # save the radar original mask for missing data.
     dbz_data[np.isnan(dbz_data)] = 0
     
-    dbz_data_t = reflectivity_to_rainrate(
-        dbz_data, acoeff=zr_a, bcoeff=zr_b
-    )  
-    
     # transform the dbz data to rainrate
     rr_data = ((10.0 ** (dbz_data / 10.0)) / zr_a) ** (1.0 / zr_b)
 
