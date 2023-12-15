@@ -73,15 +73,19 @@ def get_reclass(
 
     # save the radar original mask for missing data.
     dbz_data[np.isnan(dbz_data)] = 0
+    
     dbz_data_t = reflectivity_to_rainrate(
         dbz_data, acoeff=zr_a, bcoeff=zr_b
-    )  # transform the dbz data to rainrate
+    )  
+    
+    # transform the dbz data to rainrate
+    rr_data = ((10.0 ** (dbz_data / 10.0)) / zr_a) ** (1.0 / zr_b)
 
     # get scale break in pixels or grid size
     scale_break = calc_scale_break(res_km, conv_scale_km)
 
     # Compute and sum convective scale WT components
-    wt, _ = atwt2d(dbz_data_t, max_scale=scale_break)
+    wt, _ = atwt2d(rr_data, max_scale=scale_break)
     wt_sum = np.sum(wt, axis=(0))
 
     wt_class = label_classes(
@@ -156,28 +160,6 @@ def label_classes(
     wt_class = np.where((wt_class == 0), np.nan, wt_class)
 
     return wt_class.astype(np.int32)
-
-
-def reflectivity_to_rainrate(dbz, acoeff, bcoeff):
-    """
-    Uses standard values for ZRA=200 and ZRB=1.6.
-
-    Parameters:
-    ===========
-    dbz: ndarray
-        Array, vector or matrix of reflectivity in dBZ.
-    acoeff: float
-        Z = a*R^b a coefficient.
-    bcoeff: float
-        Z = a*R^b b coefficient.
-
-    Returns:
-    ========
-    rr: ndarray
-        Rain rate in (mm/h)
-    """
-    rr = ((10.0 ** (dbz / 10.0)) / acoeff) ** (1.0 / bcoeff)
-    return rr
 
 
 def calc_scale_break(res_km, conv_scale_km):
