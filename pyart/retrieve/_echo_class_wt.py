@@ -17,6 +17,7 @@ Created on Thu Oct 12 23:12:19 2017
 import numpy as np
 from numpy import log, floor
 
+
 def wavelet_reclass(
     grid,
     refl_field,
@@ -72,7 +73,7 @@ def wavelet_reclass(
         core_wt_threshold,
         conv_wt_threshold,
         min_reflectivity,
-         conv_min_refl,
+        conv_min_refl,
         conv_core_threshold,
     )
 
@@ -122,7 +123,7 @@ def label_classes(
     core_wt_threshold,
     conv_wt_threshold,
     min_reflectivity,
-     conv_min_refl,
+    conv_min_refl,
     conv_core_threshold,
 ):
     """
@@ -157,12 +158,12 @@ def label_classes(
         (wt_sum >= conv_wt_threshold) & (dbz_data >= conv_core_threshold), -3, 0
     )
     wt_class = np.where(
-        (wt_sum >= core_wt_threshold) & (dbz_data >=  conv_min_refl), -3, 0
+        (wt_sum >= core_wt_threshold) & (dbz_data >= conv_min_refl), -3, 0
     )
     wt_class = np.where(
         (wt_sum < core_wt_threshold)
         & (wt_sum >= conv_wt_threshold)
-        & (dbz_data >=  conv_min_refl),
+        & (dbz_data >= conv_min_refl),
         -2,
         wt_class,
     )

@@ -1035,7 +1035,7 @@ def conv_strat_raut(
         Reflectivity values lower than this threshold won't be categorized as convective.
         Default is 25 dBZ. Recommended values are between 25 and 30 dBZ.
     conv_core_threshold : float, optional
-        Reflectivities above this threshold are classified as convective cores if wavelet components are significant (See: conv_wt_threshold). 
+        Reflectivities above this threshold are classified as convective cores if wavelet components are significant (See: conv_wt_threshold).
         Default is 42 dBZ.
         Recommended value must be is greater than or equal to 40 dBZ. The algorithm is not sensitive to this value.
     override_checks : bool, optional
@@ -1069,14 +1069,14 @@ def conv_strat_raut(
     # Check if the grid is a Py-ART Grid object
     if not isinstance(grid, Grid):
         raise TypeError("The 'grid' is not a Py-ART Grid object.")
-    
+
     # Check if dx and dy are the same, and warn if not
     dx = (grid.x["data"][1] - grid.x["data"][0]) / 1000
     dy = (grid.y["data"][1] - grid.y["data"][0]) / 1000
     if dx != dy:
         warn(
             "Warning: Grid resolution `dx` and `dy` should be comparable for correct results.",
-            UserWarning
+            UserWarning,
         )
 
     # Sanity checks for parameters if override_checks is False
@@ -1098,7 +1098,7 @@ def conv_strat_raut(
         )  # min_reflectivity should be non-negative
         conv_min_refl = max(
             25, min(conv_min_refl, 30)
-        )  #conv_min_refl should be between 25 and 30 dBZ
+        )  # conv_min_refl should be between 25 and 30 dBZ
 
     # Call the actual wavelet_relass function to obtain radar echo classificatino
     reclass = wavelet_reclass(
@@ -1111,7 +1111,7 @@ def conv_strat_raut(
         conv_wt_threshold=conv_wt_threshold,
         conv_scale_km=conv_scale_km,
         min_reflectivity=min_reflectivity,
-       conv_min_refl=conv_min_refl,
+        conv_min_refl=conv_min_refl,
         conv_core_threshold=conv_core_threshold,
     )
 
@@ -1135,7 +1135,7 @@ def conv_strat_raut(
                 "conv_wt_threshold": conv_wt_threshold,
                 "conv_scale_km": conv_scale_km,
                 "min_reflectivity": min_reflectivity,
-                "conv_min_refl":conv_min_refl,
+                "conv_min_refl": conv_min_refl,
                 "conv_core_threshold": conv_core_threshold,
             },
         }
