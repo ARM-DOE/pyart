@@ -23,11 +23,11 @@ def wavelet_reclass(
     level,
     zr_a,
     zr_b,
+    core_wt_threshold,
     conv_wt_threshold,
-    tran_wt_threshold,
     conv_scale_km,
-    min_dbz_threshold,
-    conv_dbz_threshold,
+    min_reflectivity,
+    conv_min_refl,
     conv_core_threshold,
 ):
     """
@@ -69,10 +69,10 @@ def wavelet_reclass(
     wt_class = label_classes(
         wt_sum,
         dbz_data,
+        core_wt_threshold,
         conv_wt_threshold,
-        tran_wt_threshold,
-        min_dbz_threshold,
-        conv_dbz_threshold,
+        min_reflectivity,
+         conv_min_refl,
         conv_core_threshold,
     )
 
@@ -119,10 +119,10 @@ def conv_wavelet_sum(dbz_data, zr_a, zr_b, res_km, conv_scale_km):
 def label_classes(
     wt_sum,
     dbz_data,
+    core_wt_threshold,
     conv_wt_threshold,
-    tran_wt_threshold,
-    min_dbz_threshold,
-    conv_dbz_threshold,
+    min_reflectivity,
+     conv_min_refl,
     conv_core_threshold,
 ):
     """
@@ -134,10 +134,10 @@ def label_classes(
 
     Following hard coded values are optimized and validated using C-band radars
     over Darwin, Australia (2.5 km grid spacing) and tested for Solapur, India (1km grid spacing) [Raut et al. 2020].
-    conv_wt_threshold = 5  # WT value more than this is strong convection
-    tran_wt_threshold = 2  # WT value for moderate convection
-    min_dbz_threshold = 10  # pixels below this value are not classified.
-    conv_dbz_threshold = 30  # pixel below this value are not convective. This works for most cases.
+    core_wt_threshold = 5  # WT value more than this is strong convection
+    conv_wt_threshold = 2  # WT value for moderate convection
+    min_reflectivity = 10  # pixels below this value are not classified.
+     conv_min_refl = 30  # pixel below this value are not convective. This works for most cases.
 
     Parameters:
     ===========
@@ -154,19 +154,19 @@ def label_classes(
 
     # I first used negative numbers to annotate the categories. Then multiply it by -1.
     wt_class = np.where(
-        (wt_sum >= tran_wt_threshold) & (dbz_data >= conv_core_threshold), -3, 0
+        (wt_sum >= conv_wt_threshold) & (dbz_data >= conv_core_threshold), -3, 0
     )
     wt_class = np.where(
-        (wt_sum >= conv_wt_threshold) & (dbz_data >= conv_dbz_threshold), -3, 0
+        (wt_sum >= core_wt_threshold) & (dbz_data >=  conv_min_refl), -3, 0
     )
     wt_class = np.where(
-        (wt_sum < conv_wt_threshold)
-        & (wt_sum >= tran_wt_threshold)
-        & (dbz_data >= conv_dbz_threshold),
+        (wt_sum < core_wt_threshold)
+        & (wt_sum >= conv_wt_threshold)
+        & (dbz_data >=  conv_min_refl),
         -2,
         wt_class,
     )
-    wt_class = np.where((wt_class == 0) & (dbz_data >= min_dbz_threshold), -1, wt_class)
+    wt_class = np.where((wt_class == 0) & (dbz_data >= min_reflectivity), -1, wt_class)
 
     wt_class = -1 * wt_class
     wt_class = np.where((wt_class == 0), np.nan, wt_class)
