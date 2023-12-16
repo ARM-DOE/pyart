@@ -997,13 +997,10 @@ def conv_strat_raut(
     override_checks=False,
 ):
     """
-    A fast method to classify radar echoes into convective cores, mixed convection, and stratiform regions using wavelets.
+    A fast method to classify radar echoes into convective cores, mixed convection, and stratiform regions.
 
-    This function applies the ATWT (A Trous Wavelet Transform) algorithm from Raut et al (2008) to classify
-    radar echoes using the scheme of Raut et al (2020). It differentiates between convective and stratiform precipitation,
-    identifying convective cores, moderate/intermediate mixed convection, and stratiform regions
-    based on intensity of wavelet components. The method is less sensitive to the refelectivity thresholds and primarily considers
-    the scale and structure of the precipitation for classification.
+    This function uses à trous wavelet transform (ATWT) for multiresolution (scale) analysis of radar field,
+    focusing on precipitation structure over reflectivity thresholds for classification (Raut et al 2008, 2020).
 
     Parameters
     ----------
@@ -1013,8 +1010,9 @@ def conv_strat_raut(
         Field name for reflectivity data in the Py-ART grid object.
     zr_a : float, optional
         Coefficient 'a' in the Z-R relationship Z = a*R^b for reflectivity to rain rate conversion.
-        Default is 200. The algorithm is not sensitive to precise values of 'zr_a' and 'zr_b'; however,
+        The algorithm is not sensitive to precise values of 'zr_a' and 'zr_b'; however,
         they must be adjusted based on the type of radar used.
+        Default is 200.
     zr_b : float, optional
         Coefficient 'b' in the Z-R relationship Z = a*R^b. Default is 1.6.
     core_wt_threshold : float, optional
@@ -1025,9 +1023,11 @@ def conv_strat_raut(
         Default is 1.5. Recommended values are between 1 and 2.
     conv_scale_km : float, optional
         Approximate scale break (in km) between convective and stratiform scales.
-        Scale break may vary between 15 and 30 km over different regions and seasons; however,
-        the algorithm is not sensitive to small variations in the scale break.
-        Default is 20 km taken from Raut et al (2018).
+        Scale break may vary between 15 and 30 km over different regions and seasons 
+        (Refere to Raut et al 2018 for more discussion on scale-breaks). Note that the
+        algorithm is insensitive to small variations in the scale break due to the
+        dyadic nature of the scaling.
+        Default is 20 km.
     min_reflectivity : float, optional
         Minimum reflectivity threshold. Reflectivities below this value are not classified.
         Default is 5 dBZ. This value must be greater than or equal to '0'.
