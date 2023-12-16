@@ -1023,7 +1023,7 @@ def conv_strat_raut(
         Default is 1.5. Recommended values are between 1 and 2.
     conv_scale_km : float, optional
         Approximate scale break (in km) between convective and stratiform scales.
-        Scale break may vary between 15 and 30 km over different regions and seasons 
+        Scale break may vary between 15 and 30 km over different regions and seasons
         (Refere to Raut et al 2018 for more discussion on scale-breaks). Note that the
         algorithm is insensitive to small variations in the scale break due to the
         dyadic nature of the scaling.
@@ -1032,7 +1032,7 @@ def conv_strat_raut(
         Minimum reflectivity threshold. Reflectivities below this value are not classified.
         Default is 5 dBZ. This value must be greater than or equal to '0'.
     conv_min_refl : float, optional
-        Reflectivity values lower than this threshold won't be categorized as convective.
+        Reflectivity values lower than this threshold will be always considered as non-convective.
         Default is 25 dBZ. Recommended values are between 25 and 30 dBZ.
     conv_core_threshold : float, optional
         Reflectivities above this threshold are classified as convective cores if wavelet components are significant (See: conv_wt_threshold).
@@ -1045,25 +1045,26 @@ def conv_strat_raut(
 
     Returns
 -------
+
     dict:
     A dictionary structured as a Py-ART grid field, suitable for adding to a Py-ART Grid object. The dictionary
     contains the classification data and associated metadata. The classification categories are as follows:
-        - 0: No precipitation or unclassified
-        - 1: Stratiform/non-convective regions
-        - 2: Transitional and mixed convective regions
-        - 3: Convective cores
+        - 3: Convective Cores: associated with strong updrafts and active collision-coalescence.
+        - 2: Mixed-Intermediate: capturing a wide range of convective activities, excluding the convective cores.
+        - 1: Stratiform: remaining areas with more uniform and less intense precipitation.
+        - 0: Unclassified: for reflectivity below the minimum threshold.
+
 
     References
     ----------
     Raut, B. A., Karekar, R. N., & Puranik, D. M. (2008). Wavelet-based technique to extract convective clouds from
-    infrared satellite images. IEEE Geoscience and remote sensing letters, 5(3), 328-330.
+    infrared satellite images. IEEE Geosci. Remote Sens. Lett., 5(3), 328-330.
 
     Raut, B. A., Seed, A. W., Reeder, M. J., & Jakob, C. (2018). A multiplicative cascade model for high‐resolution
-    space‐time downscaling of rainfall. Journal of Geophysical Research: Atmospheres, 123(4), 2050-2067.
+    space‐time downscaling of rainfall. J. Geophys. Res. Atmos., 123(4), 2050-2067.
 
     Raut, B. A., Louf, V., Gayatri, K., Murugavel, P., Konwar, M., & Prabhakaran, T. (2020). A multiresolution technique
-    for the classification of precipitation echoes in radar data. IEEE Transactions on Geoscience and Remote Sensing,
-    58(8), 5409-5415.
+    for the classification of precipitation echoes in radar data. IEEE Trans. Geosci. Remote Sens., 58(8), 5409-5415.
     """
 
     # Check if the grid is a Py-ART Grid object
@@ -1125,7 +1126,7 @@ def conv_strat_raut(
             "long_name": "Wavelet-based multiresolution radar echo classification",
             "valid_min": 0,
             "valid_max": 3,
-            "classification_description": "0: No precipitation or unclassified, 1: Stratiform/non-convective, 2: Mixed intermediate convection, 3: Convective cores",
+            "classification_description": "0: Unclassified, 1: Stratiform, 2: Mixed-Intermediate, 3: Convective Cores",
             "parameters": {
                 "refl_field": refl_field,
                 "cappi_level": cappi_level,
