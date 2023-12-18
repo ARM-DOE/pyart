@@ -1,13 +1,13 @@
 """ Unit Tests for Py-ART's output_to_geotiff.py module. """
 
 import warnings
-
 from pathlib import Path
+
 import numpy as np
 import pytest
+from PIL import Image
 
 import pyart
-from PIL import Image
 
 # TODO : inspect the output file to verify their contents, currently only the
 # fact that something was written is confirmed
@@ -196,4 +196,3 @@ def test_write_grid_geotiff_opacity():
             img.show()
     except PermissionError:
         pass
-    
