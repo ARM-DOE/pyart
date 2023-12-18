@@ -1,5 +1,5 @@
 """
-Classification of Precipitation Echoes in Radar Data. 
+Classification of Precipitation Echoes in Radar Data.
 
 Created on Thu Oct 12 23:12:19 2017
 @author: Bhupendra Raut
@@ -15,7 +15,6 @@ Created on Thu Oct 12 23:12:19 2017
 
 
 import numpy as np
-from numpy import log, floor
 
 
 def wavelet_reclass(
@@ -61,9 +60,6 @@ def wavelet_reclass(
 
     # save the radar original mask for missing data.
     radar_mask = np.ma.getmask(dbz_data)
-
-    # dx and dy are considered to be same (res_km).
-    res_meters = grid.x["data"][1] - grid.x["data"][0]
 
     wt_sum = conv_wavelet_sum(dbz_data, zr_a, zr_b, scale_break)
 
@@ -193,7 +189,7 @@ def calc_scale_break(res_meters, conv_scale_km):
         integer scale break in dyadic scale.
     """
     res_km = res_meters / 1000
-    scale_break = log((conv_scale_km / res_km)) / log(2) + 1
+    scale_break = np.log((conv_scale_km / res_km)) / np.log(2) + 1
     return int(round(scale_break))
 
 
@@ -230,7 +226,7 @@ def atwt2d(data2d, max_scale=-1):
 
     dims = data2d.shape
     min_dims = np.min(dims)
-    max_possible_scales = int(floor(log(min_dims) / log(2)))
+    max_possible_scales = int(np.floor(np.log(min_dims) / np.log(2)))
 
     if max_scale < 0 or max_possible_scales <= max_scale:
         max_scale = max_possible_scales - 1

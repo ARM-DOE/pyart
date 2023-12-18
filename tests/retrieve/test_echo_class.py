@@ -352,7 +352,7 @@ def test_conv_strat_raut_results_correct():
     Checks the correctness of the results from the function.
 
     I created a fixed Gaussian storm with masked boundaries as pyart grid and classified it.
-    Then constructed manually the expected classification results and compared it to the actual output from the function. 
+    Then constructed manually the expected classification results and compared it to the actual output from the function.
     """
 
     # Create a Gaussian storm grid

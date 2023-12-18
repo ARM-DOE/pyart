@@ -378,7 +378,7 @@ def make_normal_storm(sigma, mu):
     return test_grid
 
 
-def make_gaussian_storm_grid(min_value=5, max_value=45, grid_len=32, 
+def make_gaussian_storm_grid(min_value=5, max_value=45, grid_len=32,
                         sigma=0.2, mu=0.0,  masked_boundary=3):
     """
     Make a 1 km resolution grid with a Gaussian storm pattern at the center,
@@ -416,7 +416,7 @@ def make_gaussian_storm_grid(min_value=5, max_value=45, grid_len=32,
     gaussian_normalized = (gaussian - np.min(gaussian)) / (np.max(gaussian) - np.min(gaussian))
     storm_intensity = gaussian_normalized * (max_value - min_value) + min_value
     storm_intensity = np.stack([storm_intensity, storm_intensity])
-    
+
 
     # Apply thresholds for storm intensity and masking
     mask = np.zeros_like(storm_intensity, dtype=bool)

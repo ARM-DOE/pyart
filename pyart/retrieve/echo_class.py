@@ -984,7 +984,7 @@ def get_freq_band(freq):
 
 def conv_strat_raut(
     grid,
-    refl_field="reflectivity",
+    refl_field,
     cappi_level=0,
     zr_a=200,
     zr_b=1.6,

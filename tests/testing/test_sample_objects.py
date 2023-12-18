@@ -2,7 +2,7 @@
 
 import numpy as np
 
-from pyart.testing.sample_objects import make_gaussian_storm_grid  
+from pyart.testing.sample_objects import make_gaussian_storm_grid
 
 
 def test_gaussian_storm_grid_results_correct():
@@ -38,7 +38,7 @@ def test_gaussian_storm_grid_results_correct():
 
     # Test for Max and Min
     assert np.isclose(np.max(storm_data), max_value), "Maximum value does not match expected"
-    assert np.isclose(np.min(storm_data[storm_data.mask == False]), min_value), "Minimum value does not match expected"
+    assert np.isclose(np.min(storm_data[~storm_data.mask]), min_value), "Minimum value does not match expected"
 
     # Test Mean and SD
     expected_mean = 8.666844653650797
