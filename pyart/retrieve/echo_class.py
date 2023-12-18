@@ -997,75 +997,75 @@ def conv_strat_raut(
     override_checks=False,
 ):
     """
-    A fast method to classify radar echoes into convective cores, mixed convection, and stratiform regions.
+        A fast method to classify radar echoes into convective cores, mixed convection, and stratiform regions.
 
-    This function uses à trous wavelet transform (ATWT) for multiresolution (scale) analysis of radar field,
-    focusing on precipitation structure over reflectivity thresholds for classification (Raut et al 2008, 2020).
+        This function uses à trous wavelet transform (ATWT) for multiresolution (scale) analysis of radar field,
+        focusing on precipitation structure over reflectivity thresholds for classification (Raut et al 2008, 2020).
 
-    Parameters
-    ----------
-    grid : Grid
-        Grid object containing radar data.
-    refl_field : str
-        Field name for reflectivity data in the Py-ART grid object.
-    zr_a : float, optional
-        Coefficient 'a' in the Z-R relationship Z = a*R^b for reflectivity to rain rate conversion.
-        The algorithm is not sensitive to precise values of 'zr_a' and 'zr_b'; however,
-        they must be adjusted based on the type of radar used.
-        Default is 200.
-    zr_b : float, optional
-        Coefficient 'b' in the Z-R relationship Z = a*R^b. Default is 1.6.
-    core_wt_threshold : float, optional
-        Threshold for wavelet components to separate convective cores from mix-intermediate type.
-        Default is 5. Recommended values are between 4 and 6.
-    conv_wt_threshold : float, optional
-        Threshold for significant wavelet components to separate all convection from stratiform.
-        Default is 1.5. Recommended values are between 1 and 2.
-    conv_scale_km : float, optional
-        Approximate scale break (in km) between convective and stratiform scales.
-        Scale break may vary over different regions and seasons
-        (Refere to Raut et al 2018 for more discussion on scale-breaks). Note that the
-        algorithm is insensitive to small variations in the scale break due to the
-        dyadic nature of the scaling. The actual scale break used in the calculation of wavelets 
-        is returned in the output dictionary by parameter `scale_break_used`.
-        Default is 25 km. Recommended values are between 16 and 32 km.
-    min_reflectivity : float, optional
-        Minimum reflectivity threshold. Reflectivities below this value are not classified.
-        Default is 5 dBZ. This value must be greater than or equal to '0'.
-    conv_min_refl : float, optional
-        Reflectivity values lower than this threshold will be always considered as non-convective.
-        Default is 25 dBZ. Recommended values are between 25 and 30 dBZ.
-    conv_core_threshold : float, optional
-        Reflectivities above this threshold are classified as convective cores if wavelet components are significant (See: conv_wt_threshold).
-        Default is 42 dBZ.
-        Recommended value must be is greater than or equal to 40 dBZ. The algorithm is not sensitive to this value.
-    override_checks : bool, optional
-        If set to True, the function will bypass the sanity checks for above parameter values.
-        This allows the user to use custom values for parameters, even if they fall outside
-        the recommended ranges. The default is False.
+        Parameters
+        ----------
+        grid : Grid
+            Grid object containing radar data.
+        refl_field : str
+            Field name for reflectivity data in the Py-ART grid object.
+        zr_a : float, optional
+            Coefficient 'a' in the Z-R relationship Z = a*R^b for reflectivity to rain rate conversion.
+            The algorithm is not sensitive to precise values of 'zr_a' and 'zr_b'; however,
+            they must be adjusted based on the type of radar used.
+            Default is 200.
+        zr_b : float, optional
+            Coefficient 'b' in the Z-R relationship Z = a*R^b. Default is 1.6.
+        core_wt_threshold : float, optional
+            Threshold for wavelet components to separate convective cores from mix-intermediate type.
+            Default is 5. Recommended values are between 4 and 6.
+        conv_wt_threshold : float, optional
+            Threshold for significant wavelet components to separate all convection from stratiform.
+            Default is 1.5. Recommended values are between 1 and 2.
+        conv_scale_km : float, optional
+            Approximate scale break (in km) between convective and stratiform scales.
+            Scale break may vary over different regions and seasons
+            (Refere to Raut et al 2018 for more discussion on scale-breaks). Note that the
+            algorithm is insensitive to small variations in the scale break due to the
+            dyadic nature of the scaling. The actual scale break used in the calculation of wavelets
+            is returned in the output dictionary by parameter `scale_break_used`.
+            Default is 25 km. Recommended values are between 16 and 32 km.
+        min_reflectivity : float, optional
+            Minimum reflectivity threshold. Reflectivities below this value are not classified.
+            Default is 5 dBZ. This value must be greater than or equal to '0'.
+        conv_min_refl : float, optional
+            Reflectivity values lower than this threshold will be always considered as non-convective.
+            Default is 25 dBZ. Recommended values are between 25 and 30 dBZ.
+        conv_core_threshold : float, optional
+            Reflectivities above this threshold are classified as convective cores if wavelet components are significant (See: conv_wt_threshold).
+            Default is 42 dBZ.
+            Recommended value must be is greater than or equal to 40 dBZ. The algorithm is not sensitive to this value.
+        override_checks : bool, optional
+            If set to True, the function will bypass the sanity checks for above parameter values.
+            This allows the user to use custom values for parameters, even if they fall outside
+            the recommended ranges. The default is False.
 
-    Returns
--------
+        Returns
+    -------
 
-    dict:
-    A dictionary structured as a Py-ART grid field, suitable for adding to a Py-ART Grid object. The dictionary
-    contains the classification data and associated metadata. The classification categories are as follows:
-        - 3: Convective Cores: associated with strong updrafts and active collision-coalescence.
-        - 2: Mixed-Intermediate: capturing a wide range of convective activities, excluding the convective cores.
-        - 1: Stratiform: remaining areas with more uniform and less intense precipitation.
-        - 0: Unclassified: for reflectivity below the minimum threshold.
+        dict:
+        A dictionary structured as a Py-ART grid field, suitable for adding to a Py-ART Grid object. The dictionary
+        contains the classification data and associated metadata. The classification categories are as follows:
+            - 3: Convective Cores: associated with strong updrafts and active collision-coalescence.
+            - 2: Mixed-Intermediate: capturing a wide range of convective activities, excluding the convective cores.
+            - 1: Stratiform: remaining areas with more uniform and less intense precipitation.
+            - 0: Unclassified: for reflectivity below the minimum threshold.
 
 
-    References
-    ----------
-    Raut, B. A., Karekar, R. N., & Puranik, D. M. (2008). Wavelet-based technique to extract convective clouds from
-    infrared satellite images. IEEE Geosci. Remote Sens. Lett., 5(3), 328-330.
+        References
+        ----------
+        Raut, B. A., Karekar, R. N., & Puranik, D. M. (2008). Wavelet-based technique to extract convective clouds from
+        infrared satellite images. IEEE Geosci. Remote Sens. Lett., 5(3), 328-330.
 
-    Raut, B. A., Seed, A. W., Reeder, M. J., & Jakob, C. (2018). A multiplicative cascade model for high‐resolution
-    space‐time downscaling of rainfall. J. Geophys. Res. Atmos., 123(4), 2050-2067.
+        Raut, B. A., Seed, A. W., Reeder, M. J., & Jakob, C. (2018). A multiplicative cascade model for high‐resolution
+        space‐time downscaling of rainfall. J. Geophys. Res. Atmos., 123(4), 2050-2067.
 
-    Raut, B. A., Louf, V., Gayatri, K., Murugavel, P., Konwar, M., & Prabhakaran, T. (2020). A multiresolution technique
-    for the classification of precipitation echoes in radar data. IEEE Trans. Geosci. Remote Sens., 58(8), 5409-5415.
+        Raut, B. A., Louf, V., Gayatri, K., Murugavel, P., Konwar, M., & Prabhakaran, T. (2020). A multiresolution technique
+        for the classification of precipitation echoes in radar data. IEEE Trans. Geosci. Remote Sens., 58(8), 5409-5415.
     """
 
     # Check if the grid is a Py-ART Grid object
@@ -1073,8 +1073,8 @@ def conv_strat_raut(
         raise TypeError("The 'grid' is not a Py-ART Grid object.")
 
     # Check if dx and dy are the same, and warn if not
-    dx = (grid.x["data"][1] - grid.x["data"][0]) 
-    dy = (grid.y["data"][1] - grid.y["data"][0]) 
+    dx = grid.x["data"][1] - grid.x["data"][0]
+    dy = grid.y["data"][1] - grid.y["data"][0]
     if dx != dy:
         warn(
             "Warning: Grid resolution `dx` and `dy` should be comparable for correct results.",
@@ -1085,7 +1085,7 @@ def conv_strat_raut(
     scale_break = calc_scale_break(res_meters=dx, conv_scale_km=conv_scale_km)
 
     # From dyadic scale to km
-    scale_break_km = (2 ** (scale_break-1)) * dx / 1000
+    scale_break_km = (2 ** (scale_break - 1)) * dx / 1000
 
     # Sanity checks for parameters if override_checks is False
     if not override_checks:

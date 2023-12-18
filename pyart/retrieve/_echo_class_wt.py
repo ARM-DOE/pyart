@@ -63,7 +63,7 @@ def wavelet_reclass(
     radar_mask = np.ma.getmask(dbz_data)
 
     # dx and dy are considered to be same (res_km).
-    res_meters = (grid.x["data"][1] - grid.x["data"][0])
+    res_meters = grid.x["data"][1] - grid.x["data"][0]
 
     wt_sum = conv_wavelet_sum(dbz_data, zr_a, zr_b, scale_break)
 
