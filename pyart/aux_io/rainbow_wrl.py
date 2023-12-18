@@ -247,7 +247,7 @@ def read_rainbow_wrl(
 
     if single_slice:
         rays_per_sweep[0] = int(common_slice_info["slicedata"]["rawdata"]["@rays"])
-        nbins = int(common_slice_info["slicedata"]["rawdata"]["@bins"])
+        maxbin = int(common_slice_info["slicedata"]["rawdata"]["@bins"])
         ssri = np.array([0], dtype="int32")
         seri = np.array([rays_per_sweep[0] - 1], dtype="int32")
     else:
@@ -263,8 +263,12 @@ def read_rainbow_wrl(
 
         # all sweeps have to have the same number of range bins
         if any(nbins_sweep != nbins_sweep[0]):
-            raise ValueError("number of range bins changes between sweeps")
-        nbins = nbins_sweep[0]
+            # raise ValueError("number of range bins changes between sweeps")
+            print(
+                "WARNING: number of range bins changes between sweeps "
+                + "max number of bins will be used"
+            )
+        maxbin = nbins_sweep.max()
         ssri = np.cumsum(np.append([0], rays_per_sweep[:-1])).astype("int32")
         seri = np.cumsum(rays_per_sweep).astype("int32") - 1
 
@@ -280,7 +284,7 @@ def read_rainbow_wrl(
     else:
         start_range = 0.0
     _range["data"] = np.linspace(
-        start_range + r_res / 2.0, float(nbins - 1.0) * r_res + r_res / 2.0, nbins
+        start_range + r_res / 2.0, float(maxbin - 1.0) * r_res + r_res / 2.0, maxbin
     ).astype("float32")
 
     # containers for data
@@ -289,7 +293,7 @@ def read_rainbow_wrl(
     static_angle = np.empty(total_rays, dtype="float64")
     time_data = np.empty(total_rays, dtype="float64")
     fdata = np.ma.zeros(
-        (total_rays, nbins), dtype="float32", fill_value=get_fillvalue()
+        (total_rays, maxbin), dtype="float32", fill_value=get_fillvalue()
     )
 
     # read data from file
@@ -338,7 +342,7 @@ def read_rainbow_wrl(
 
         # data
         fdata[ssri[i] : seri[i] + 1, :] = _get_data(
-            slice_info["slicedata"]["rawdata"], rays_per_sweep[i], nbins
+            slice_info["slicedata"]["rawdata"], rays_per_sweep[i], nbins_sweep[i], maxbin
         )
 
     if bfile.endswith(".vol") or bfile.endswith(".azi"):
@@ -439,7 +443,7 @@ def _get_angle(ray_info, angle_step=None, scan_type="ppi"):
     return moving_angle, angle_start, angle_stop
 
 
-def _get_data(rawdata, nrays, nbins):
+def _get_data(rawdata, nrays, nbins, maxbin):
     """
     Obtains the raw data
 
@@ -480,7 +484,12 @@ def _get_data(rawdata, nrays, nbins):
     data = np.reshape(data, [nrays, nbins])
     mask = np.reshape(mask, [nrays, nbins])
 
-    masked_data = np.ma.array(data, mask=mask, fill_value=get_fillvalue())
+    data_tmp = np.full((nrays, maxbin), get_fillvalue())
+    data_tmp[:nrays,:nbins] = data
+    mask_tmp = np.full((nrays, maxbin), True)
+    mask_tmp[:nrays,:nbins] = mask
+
+    masked_data = np.ma.array(data_tmp, mask=mask_tmp, fill_value=get_fillvalue())
 
     return masked_data
 
