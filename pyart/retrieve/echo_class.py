@@ -1045,7 +1045,7 @@ def conv_strat_raut(
         the recommended ranges. The default is False.
 
     Returns
--------
+    -------
 
     dict:
     A dictionary structured as a Py-ART grid field, suitable for adding to a Py-ART Grid object. The dictionary
