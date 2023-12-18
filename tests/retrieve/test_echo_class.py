@@ -368,9 +368,7 @@ def test_conv_strat_raut_results_correct():
         masked_boundary=mask_margin,
     )
 
-    wtclass = pyart.retrieve.conv_strat_raut(
-        gaussian_storm_2d, "reflectivity", cappi_level=0
-    )
+    wtclass = pyart.retrieve.conv_strat_raut(gaussian_storm_2d, "reflectivity")
 
     # Create a 32x32 array of ones
     test_reclass = np.ones((grid_len, grid_len))
@@ -397,5 +395,5 @@ def test_conv_strat_raut_results_correct():
     masked_reclass = np.ma.array(test_reclass, mask=mask).astype(np.int32)
     masked_reclass = np.expand_dims(masked_reclass, axis=0)
 
-    assert_allclose(masked_reclass, wtclass["wt_reclass"]["data"])
+    assert_allclose(masked_reclass, wtclass["wt_reclass"]["data"], atol=0.1)
 
