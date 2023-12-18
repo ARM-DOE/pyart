@@ -26,7 +26,7 @@ def wavelet_reclass(
     zr_b,
     core_wt_threshold,
     conv_wt_threshold,
-    conv_scale_km,
+    scale_break,
     min_reflectivity,
     conv_min_refl,
     conv_core_threshold,
@@ -42,8 +42,8 @@ def wavelet_reclass(
         2D array containing radar data. Last dimension should be levels.
     res_km: float
         Resolution of the radar data in km
-    conv_scale_km: float
-        Approximate scale break (in km) between convective and stratiform scales
+    scale_break: int
+        Calculated scale break (in pixels) between convective and stratiform scales
 
     Returns:
     ========
@@ -62,10 +62,10 @@ def wavelet_reclass(
     # save the radar original mask for missing data.
     radar_mask = np.ma.getmask(dbz_data)
 
-    # Warning: dx and dy are considered to be same (res_km).
-    res_km = (grid.x["data"][1] - grid.x["data"][0]) / 1000
+    # dx and dy are considered to be same (res_km).
+    res_meters = (grid.x["data"][1] - grid.x["data"][0])
 
-    wt_sum = conv_wavelet_sum(dbz_data, zr_a, zr_b, res_km, conv_scale_km)
+    wt_sum = conv_wavelet_sum(dbz_data, zr_a, zr_b, scale_break)
 
     wt_class = label_classes(
         wt_sum,
@@ -83,7 +83,7 @@ def wavelet_reclass(
     return wt_class_ma
 
 
-def conv_wavelet_sum(dbz_data, zr_a, zr_b, res_km, conv_scale_km):
+def conv_wavelet_sum(dbz_data, zr_a, zr_b, scale_break):
     """
     Computes the sum of wavelet transform components for convective scales from dBZ data.
 
@@ -95,8 +95,8 @@ def conv_wavelet_sum(dbz_data, zr_a, zr_b, res_km, conv_scale_km):
         Coefficients for the Z-R relationship.
     res_km: float
         Resolution of the radar data in km.
-    conv_scale_km: float
-        Approximate scale break (in km) between convective and stratiform scales.
+    scale_break: int
+        Calculated scale break (in pixels) between convective and stratiform scales
 
     Returns:
     ========
@@ -110,7 +110,7 @@ def conv_wavelet_sum(dbz_data, zr_a, zr_b, res_km, conv_scale_km):
 
     dbz_data[np.isnan(dbz_data)] = 0
     rr_data = ((10.0 ** (dbz_data / 10.0)) / zr_a) ** (1.0 / zr_b)
-    scale_break = calc_scale_break(res_km, conv_scale_km)
+
     wt, _ = atwt2d(rr_data, max_scale=scale_break)
     wt_sum = np.sum(wt, axis=(0))
 
@@ -175,14 +175,14 @@ def label_classes(
     return wt_class.astype(np.int32)
 
 
-def calc_scale_break(res_km, conv_scale_km):
+def calc_scale_break(res_meters, conv_scale_km):
     """
     Compute scale break for convection and stratiform regions. WT will be
     computed upto this scale and features will be designated as convection.
 
     Parameters:
     ===========
-    res_km: float
+    res_meters: float
         resolution of the image.
     conv_scale_km: float
         expected size of spatial variations due to convection.
@@ -192,6 +192,7 @@ def calc_scale_break(res_km, conv_scale_km):
     dyadic: int
         integer scale break in pixels.
     """
+    res_km = res_meters / 1000
     scale_break = log((conv_scale_km / res_km)) / log(2) + 1
     return int(round(scale_break))
 

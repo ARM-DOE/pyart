@@ -9,7 +9,7 @@ import numpy as np
 
 from ..config import get_field_name, get_fillvalue, get_metadata
 from ._echo_class import _feature_detection, steiner_class_buff
-from ._echo_class_wt import wavelet_reclass
+from ._echo_class_wt import wavelet_reclass, calc_scale_break
 from ..core import Grid
 
 
@@ -1026,8 +1026,9 @@ def conv_strat_raut(
         Scale break may vary between 15 and 30 km over different regions and seasons
         (Refere to Raut et al 2018 for more discussion on scale-breaks). Note that the
         algorithm is insensitive to small variations in the scale break due to the
-        dyadic nature of the scaling.
-        Default is 20 km.
+        dyadic nature of the scaling. The actual scale break used in the calculation of wavelets 
+        is return in the output dictionary by parameter `scale_break_used`.
+        Default is 20 km. 
     min_reflectivity : float, optional
         Minimum reflectivity threshold. Reflectivities below this value are not classified.
         Default is 5 dBZ. This value must be greater than or equal to '0'.
@@ -1080,6 +1081,10 @@ def conv_strat_raut(
             UserWarning,
         )
 
+    #Compure scale break (km) here to paas it on as parameter to user dictionary
+    scale_break = calc_scale_break(res_meters=dx, conv_scale_km=conv_scale_km)
+    scale_break_km = scale_break * dx / 1000
+
     # Sanity checks for parameters if override_checks is False
     if not override_checks:
         conv_core_threshold = max(
@@ -1110,7 +1115,7 @@ def conv_strat_raut(
         zr_b,
         core_wt_threshold=core_wt_threshold,
         conv_wt_threshold=conv_wt_threshold,
-        conv_scale_km=conv_scale_km,
+        scale_break=scale_break,
         min_reflectivity=min_reflectivity,
         conv_min_refl=conv_min_refl,
         conv_core_threshold=conv_core_threshold,
@@ -1135,6 +1140,7 @@ def conv_strat_raut(
                 "core_wt_threshold": core_wt_threshold,
                 "conv_wt_threshold": conv_wt_threshold,
                 "conv_scale_km": conv_scale_km,
+                "scale_break_used": scale_break_km,
                 "min_reflectivity": min_reflectivity,
                 "conv_min_refl": conv_min_refl,
                 "conv_core_threshold": conv_core_threshold,
