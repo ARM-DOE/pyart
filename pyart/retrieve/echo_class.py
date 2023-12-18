@@ -990,7 +990,7 @@ def conv_strat_raut(
     zr_b=1.6,
     core_wt_threshold=5,
     conv_wt_threshold=1.5,
-    conv_scale_km=20,
+    conv_scale_km=25,
     min_reflectivity=5,
     conv_min_refl=25,
     conv_core_threshold=42,
@@ -1023,12 +1023,12 @@ def conv_strat_raut(
         Default is 1.5. Recommended values are between 1 and 2.
     conv_scale_km : float, optional
         Approximate scale break (in km) between convective and stratiform scales.
-        Scale break may vary between 15 and 30 km over different regions and seasons
+        Scale break may vary over different regions and seasons
         (Refere to Raut et al 2018 for more discussion on scale-breaks). Note that the
         algorithm is insensitive to small variations in the scale break due to the
         dyadic nature of the scaling. The actual scale break used in the calculation of wavelets 
-        is return in the output dictionary by parameter `scale_break_used`.
-        Default is 20 km. 
+        is returned in the output dictionary by parameter `scale_break_used`.
+        Default is 25 km. Recommended values are between 16 and 32 km.
     min_reflectivity : float, optional
         Minimum reflectivity threshold. Reflectivities below this value are not classified.
         Default is 5 dBZ. This value must be greater than or equal to '0'.
@@ -1073,17 +1073,19 @@ def conv_strat_raut(
         raise TypeError("The 'grid' is not a Py-ART Grid object.")
 
     # Check if dx and dy are the same, and warn if not
-    dx = (grid.x["data"][1] - grid.x["data"][0]) / 1000
-    dy = (grid.y["data"][1] - grid.y["data"][0]) / 1000
+    dx = (grid.x["data"][1] - grid.x["data"][0]) 
+    dy = (grid.y["data"][1] - grid.y["data"][0]) 
     if dx != dy:
         warn(
             "Warning: Grid resolution `dx` and `dy` should be comparable for correct results.",
             UserWarning,
         )
 
-    #Compure scale break (km) here to paas it on as parameter to user dictionary
+    # Compute scale break (dyadic) here to paas it on as parameter to user dictionary
     scale_break = calc_scale_break(res_meters=dx, conv_scale_km=conv_scale_km)
-    scale_break_km = scale_break * dx / 1000
+
+    # From dyadic scale to km
+    scale_break_km = (2 ** (scale_break-1)) * dx / 1000
 
     # Sanity checks for parameters if override_checks is False
     if not override_checks:
@@ -1097,7 +1099,7 @@ def conv_strat_raut(
             1, min(conv_wt_threshold, 2)
         )  # conv_wt_threshold should be between 1 and 2
         conv_scale_km = max(
-            15, min(conv_scale_km, 30)
+            16, min(conv_scale_km, 32)
         )  # conv_scale_km should be between 15 and 30 km
         min_reflectivity = max(
             0, min_reflectivity
@@ -1140,7 +1142,7 @@ def conv_strat_raut(
                 "core_wt_threshold": core_wt_threshold,
                 "conv_wt_threshold": conv_wt_threshold,
                 "conv_scale_km": conv_scale_km,
-                "scale_break_used": scale_break_km,
+                "scale_break_used": int(scale_break_km),
                 "min_reflectivity": min_reflectivity,
                 "conv_min_refl": conv_min_refl,
                 "conv_core_threshold": conv_core_threshold,

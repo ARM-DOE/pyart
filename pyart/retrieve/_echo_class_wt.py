@@ -43,7 +43,7 @@ def wavelet_reclass(
     res_km: float
         Resolution of the radar data in km
     scale_break: int
-        Calculated scale break (in pixels) between convective and stratiform scales
+        Calculated scale break between convective and stratiform scales. Dyadically spaced in grid pixels.
 
     Returns:
     ========
@@ -190,7 +190,7 @@ def calc_scale_break(res_meters, conv_scale_km):
     Returns:
     ========
     dyadic: int
-        integer scale break in pixels.
+        integer scale break in dyadic scale.
     """
     res_km = res_meters / 1000
     scale_break = log((conv_scale_km / res_km)) / log(2) + 1
