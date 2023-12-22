@@ -278,6 +278,13 @@ def read_rainbow_wrl(
     sweep_end_ray_index["data"] = seri
 
     # range
+    if not single_slice:
+        # all sweeps have to have the same range resolution
+        for i in range(nslices):
+            slice_info = rbf["volume"]["scan"]["slice"][i]
+            if (slice_info['rangestep'] != common_slice_info["rangestep"]):
+                raise ValueError("range resolution changes between sweeps")
+
     r_res = float(common_slice_info["rangestep"]) * 1000.0
     if "start_range" in common_slice_info.keys():
         start_range = float(common_slice_info["start_range"]) * 1000.0
