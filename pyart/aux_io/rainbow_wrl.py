@@ -286,6 +286,8 @@ def read_rainbow_wrl(
     _range["data"] = np.linspace(
         start_range + r_res / 2.0, float(maxbin - 1.0) * r_res + r_res / 2.0, maxbin
     ).astype("float32")
+    _range["meters_between_gates"] = r_res
+    _range["meters_to_center_of_first_gate"] = _range["data"][0]
 
     # containers for data
     t_fixed_angle = np.empty(nslices, dtype="float64")
@@ -342,7 +344,10 @@ def read_rainbow_wrl(
 
         # data
         fdata[ssri[i] : seri[i] + 1, :] = _get_data(
-            slice_info["slicedata"]["rawdata"], rays_per_sweep[i], nbins_sweep[i], maxbin
+            slice_info["slicedata"]["rawdata"],
+            rays_per_sweep[i],
+            nbins_sweep[i],
+            maxbin
         )
 
     if bfile.endswith(".vol") or bfile.endswith(".azi"):
@@ -485,9 +490,9 @@ def _get_data(rawdata, nrays, nbins, maxbin):
     mask = np.reshape(mask, [nrays, nbins])
 
     data_tmp = np.full((nrays, maxbin), get_fillvalue())
-    data_tmp[:nrays,:nbins] = data
+    data_tmp[:nrays, :nbins] = data
     mask_tmp = np.full((nrays, maxbin), True)
-    mask_tmp[:nrays,:nbins] = mask
+    mask_tmp[:nrays, :nbins] = mask
 
     masked_data = np.ma.array(data_tmp, mask=mask_tmp, fill_value=get_fillvalue())
 
