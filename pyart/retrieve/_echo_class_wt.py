@@ -189,7 +189,8 @@ def calc_scale_break(res_meters, conv_scale_km):
         integer scale break in dyadic scale.
     """
     res_km = res_meters / 1000
-    scale_break = np.log((conv_scale_km / res_km)) / np.log(2) + 1
+    scale_break = np.log(conv_scale_km / res_km) / np.log(2) + 1
+
     return int(round(scale_break))
 
 
