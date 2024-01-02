@@ -11,7 +11,7 @@ dependencies:
   - netcdf4
   - pytest
   - wradlib
-  - metpy
+  - metpy<1.6
   - cartopy
   - cvxopt
   - xarray
