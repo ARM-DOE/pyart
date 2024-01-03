@@ -2,12 +2,12 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.vad &#8212; Py-ART 1.16.1.post11 documentation</title>
+    <title>pyart.retrieve.vad &#8212; Py-ART 1.16.1.post12 documentation</title>
   
   
   
@@ -43,20 +43,14 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="../../../_static/documentation_options.js?v=77cf9e02"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=63e4a98c"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -151,7 +145,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post11 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post12 documentation</p>
   
 </a></div>
     
@@ -509,9 +503,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">HorizontalWindProfile</span>
 
 
-<div class="viewcode-block" id="vad_michelson">
-<a class="viewcode-back" href="../../../API/generated/pyart.retrieve.vad_michelson.html#pyart.retrieve.vad_michelson">[docs]</a>
-<span class="k">def</span> <span class="nf">vad_michelson</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_want</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="vad_michelson"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.vad_michelson.html#pyart.retrieve.vad_michelson">[docs]</a><span class="k">def</span> <span class="nf">vad_michelson</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_want</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Velocity azimuth display.</span>
 
@@ -608,7 +600,6 @@ document.write(`
     <span class="k">return</span> <span class="n">vad</span></div>
 
 
-
 <span class="k">def</span> <span class="nf">_vad_calculation_m</span><span class="p">(</span><span class="n">velocity_field</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates VAD for a scan, returns speed and angle</span>
 <span class="sd">    outdic = vad_algorithm(velocity_field, azimuth, elevation)</span>
@@ -697,9 +688,7 @@ document.write(`
     <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> <span class="o">*</span> <span class="n">speed</span><span class="p">),</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> <span class="o">*</span> <span class="n">speed</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="vad_browning">
-<a class="viewcode-back" href="../../../API/generated/pyart.retrieve.vad_browning.html#pyart.retrieve.vad_browning">[docs]</a>
-<span class="k">def</span> <span class="nf">vad_browning</span><span class="p">(</span>
+<div class="viewcode-block" id="vad_browning"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.vad_browning.html#pyart.retrieve.vad_browning">[docs]</a><span class="k">def</span> <span class="nf">vad_browning</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">velocity</span><span class="p">,</span>
     <span class="n">z_want</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -798,7 +787,6 @@ document.write(`
 
     <span class="n">vad</span> <span class="o">=</span> <span class="n">HorizontalWindProfile</span><span class="o">.</span><span class="n">from_u_and_v</span><span class="p">(</span><span class="n">z_want</span><span class="p">,</span> <span class="n">u_wanted</span><span class="p">,</span> <span class="n">v_wanted</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">vad</span></div>
-
 
 
 <span class="k">def</span> <span class="nf">_vad_calculation_b</span><span class="p">(</span><span class="n">velocities</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span> <span class="n">valid_ray_min</span><span class="p">):</span>
@@ -974,7 +962,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>

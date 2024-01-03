@@ -2,13 +2,13 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Visualizing Severe Weather in Wisconsin &#8212; Py-ART 1.16.1.post11 documentation</title>
+    <title>Visualizing Severe Weather in Wisconsin &#8212; Py-ART 1.16.1.post12 documentation</title>
   
   
   
@@ -44,20 +44,14 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="../../_static/documentation_options.js?v=77cf9e02"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=63e4a98c"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -152,7 +146,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post11 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post12 documentation</p>
   
 </a></div>
     
@@ -497,7 +491,7 @@ document.write(`
     </span>
   
   
-  <a href="../../blog/tag/visualization.html">visualization</a>
+  <a href="../../blog/tag/severe-weather.html">severe-weather</a>
   
   
   
@@ -509,13 +503,13 @@ document.write(`
   
   
   
-  <a href="../../blog/tag/severe-weather.html">severe-weather</a>
-  
-  
-  
-  
-  
   <a href="../../blog/tag/nexrad.html">NEXRAD</a>
+  
+  
+  
+  
+  
+  <a href="../../blog/tag/visualization.html">visualization</a>
   
   
   
@@ -641,11 +635,11 @@ document.write(`
                 <article class="bd-article" role="main">
                   
 <section class="tex2jax_ignore mathjax_ignore" id="visualizing-severe-weather-in-wisconsin">
-<h1>Visualizing Severe Weather in Wisconsin<a class="headerlink" href="#visualizing-severe-weather-in-wisconsin" title="Link to this heading">#</a></h1>
+<h1>Visualizing Severe Weather in Wisconsin<a class="headerlink" href="#visualizing-severe-weather-in-wisconsin" title="Permalink to this heading">#</a></h1>
 <section id="motivation">
-<h2>Motivation<a class="headerlink" href="#motivation" title="Link to this heading">#</a></h2>
+<h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this heading">#</a></h2>
 <section id="the-outbreak">
-<h3>The Outbreak<a class="headerlink" href="#the-outbreak" title="Link to this heading">#</a></h3>
+<h3>The Outbreak<a class="headerlink" href="#the-outbreak" title="Permalink to this heading">#</a></h3>
 <p>Last Friday (March 31, 2023), a severe weather outbreak impacted a large portion of the Central United States, including the Upper Midwest. There were a total of:</p>
 <ul class="simple">
 <li><p>142 tornado reports</p></li>
@@ -679,7 +673,7 @@ document.write(`
 </div>
 </section>
 <section id="focusing-on-southern-wisconsin">
-<h3>Focusing on Southern Wisconsin<a class="headerlink" href="#focusing-on-southern-wisconsin" title="Link to this heading">#</a></h3>
+<h3>Focusing on Southern Wisconsin<a class="headerlink" href="#focusing-on-southern-wisconsin" title="Permalink to this heading">#</a></h3>
 <p>In this blog post, we explore a single area - Walworth County, Wisconsin, which is located in Southeastern Wisconsin. This county is home to Lake Geneva, Wisconsin, a popular tourist destination, especially for those living in the Chicagoland area.</p>
 <p>3 confirmed tornadoes moved through Walworth county, with those confirmations from the local National Weather Service (NWS Milwaukee). They also found a considerable amount of wind and hail damage around the area.</p>
 <p>NWS Milwaukee assembled an event summary (<a class="reference external" href="https://www.weather.gov/mkx/March_31_Tornadoes_SevereStorms">Link to NWS Event Summary</a>)
@@ -687,7 +681,7 @@ which includes the following radar imagery, which was produced using data from t
 <img alt="NWS Milwaukee Radar Image" src="https://www.weather.gov/images/mkx/top-news/2023/4%20Panel%20KMKX%200105z%20April%201%202023%20Delavan%20Lake%20TDS.png" /></p>
 </section>
 <section id="reproducing-event-images">
-<h3>Reproducing Event Images<a class="headerlink" href="#reproducing-event-images" title="Link to this heading">#</a></h3>
+<h3>Reproducing Event Images<a class="headerlink" href="#reproducing-event-images" title="Permalink to this heading">#</a></h3>
 <p>What if we wanted to reproduce these plots, using free, open-source software, using open data? We can do this using Py-ART. We encourage people check out the <a class="reference external" href="https://projectpythia.org/radar-cookbook/">Radar Cookbook</a>, which walks through how to get started with the software stack, and details how to work with NEXRAD data, as we are in this case.</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://projectpythia.org/radar-cookbook/notebooks/example-workflows/moore-oklahoma-tornado.html">Link to NEXRAD Data from Moore, Oklahoma Tornado Case</a></p></li>
@@ -696,9 +690,9 @@ which includes the following radar imagery, which was produced using data from t
 </section>
 </section>
 <section id="visualizing-the-event">
-<h2>Visualizing the Event<a class="headerlink" href="#visualizing-the-event" title="Link to this heading">#</a></h2>
+<h2>Visualizing the Event<a class="headerlink" href="#visualizing-the-event" title="Permalink to this heading">#</a></h2>
 <section id="imports">
-<h3>Imports<a class="headerlink" href="#imports" title="Link to this heading">#</a></h3>
+<h3>Imports<a class="headerlink" href="#imports" title="Permalink to this heading">#</a></h3>
 <p>We import a variety of python packages, which can be installed using</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda<span class="w"> </span>install<span class="w"> </span>-c<span class="w"> </span>conda-forge<span class="w"> </span>arm_pyart<span class="w"> </span>metpy<span class="w"> </span>cartopy<span class="w"> </span>pandas<span class="w"> </span>numpy<span class="w"> </span>shapely
 </pre></div>
@@ -743,10 +737,10 @@ which includes the following radar imagery, which was produced using data from t
 </div>
 </section>
 <section id="access-the-data">
-<h3>Access the Data<a class="headerlink" href="#access-the-data" title="Link to this heading">#</a></h3>
+<h3>Access the Data<a class="headerlink" href="#access-the-data" title="Permalink to this heading">#</a></h3>
 <p>We start first with some extra map features - in this case, we add interstates to the map (credit to the Census database for the data, and Randy Chase for the code)</p>
 <section id="download-the-road-data">
-<h4>Download the Road Data<a class="headerlink" href="#download-the-road-data" title="Link to this heading">#</a></h4>
+<h4>Download the Road Data<a class="headerlink" href="#download-the-road-data" title="Permalink to this heading">#</a></h4>
 <p>I am running this on a Mac, so I used curl, but if you are on a Linux machine you would want to use <code class="docutils literal notranslate"><span class="pre">wget</span></code> here.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -774,7 +768,7 @@ Archive:  tl_2016_us_primaryroads.zip
 </div>
 </section>
 <section id="add-the-interstate-date-as-a-feature">
-<h4>Add the Interstate Date as a feature<a class="headerlink" href="#add-the-interstate-date-as-a-feature" title="Link to this heading">#</a></h4>
+<h4>Add the Interstate Date as a feature<a class="headerlink" href="#add-the-interstate-date-as-a-feature" title="Permalink to this heading">#</a></h4>
 <p>We can add this data as a feature to be used on the maps using Shapely</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -799,7 +793,7 @@ Archive:  tl_2016_us_primaryroads.zip
 </div>
 </section>
 <section id="investigate-the-nexrad-data-available">
-<h4>Investigate the NEXRAD Data Available<a class="headerlink" href="#investigate-the-nexrad-data-available" title="Link to this heading">#</a></h4>
+<h4>Investigate the NEXRAD Data Available<a class="headerlink" href="#investigate-the-nexrad-data-available" title="Permalink to this heading">#</a></h4>
 <p>The NEXRAD data is available through Amazon Web Services (AWS), and we are using the Level2 data, which has been quality controlled to an extent, but has not been fully cleaned (ex. velocity field may still be aliased).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -837,7 +831,7 @@ Archive:  tl_2016_us_primaryroads.zip
 </section>
 </section>
 <section id="setup-our-plotting-functions">
-<h3>Setup our Plotting Functions<a class="headerlink" href="#setup-our-plotting-functions" title="Link to this heading">#</a></h3>
+<h3>Setup our Plotting Functions<a class="headerlink" href="#setup-our-plotting-functions" title="Permalink to this heading">#</a></h3>
 <p>Now that we have our data, we setup a function to process data, which:</p>
 <ul class="simple">
 <li><p>Reads the data into a Py-ART radar object</p></li>
@@ -994,7 +988,7 @@ Archive:  tl_2016_us_primaryroads.zip
 </div>
 </section>
 <section id="run-our-plotting-functions">
-<h3>Run our Plotting Functions<a class="headerlink" href="#run-our-plotting-functions" title="Link to this heading">#</a></h3>
+<h3>Run our Plotting Functions<a class="headerlink" href="#run-our-plotting-functions" title="Permalink to this heading">#</a></h3>
 <p>Now that we have our plotting functions, we can apply these to the first volume of our file list, when the NWS identified the Sharon to Delavan Lake tornado
 <img alt="NWS Tornado Damage Survey" src="https://www.weather.gov/images/mkx/top-news/2023/SharonDelavanLake.png" /></p>
 <div class="cell docutils container">
@@ -1020,7 +1014,7 @@ Archive:  tl_2016_us_primaryroads.zip
 </section>
 </section>
 <section id="conclusion">
-<h2>Conclusion<a class="headerlink" href="#conclusion" title="Link to this heading">#</a></h2>
+<h2>Conclusion<a class="headerlink" href="#conclusion" title="Permalink to this heading">#</a></h2>
 <p>Within this post, we examined how to use data from the National Weather Service to identify tornado signatures, and create a flexible plotting function to visualize its path. We even added interstates for reference!</p>
 <p>We hope that this will be applicable to NWS offices interested in making colorblind-friendly maps of severe weather events, and automate the data selection and visualization process (where possible).</p>
 </section>
@@ -1143,7 +1137,7 @@ Archive:  tl_2016_us_primaryroads.zip
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>

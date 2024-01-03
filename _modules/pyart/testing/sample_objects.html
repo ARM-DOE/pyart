@@ -2,12 +2,12 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.testing.sample_objects &#8212; Py-ART 1.16.1.post11 documentation</title>
+    <title>pyart.testing.sample_objects &#8212; Py-ART 1.16.1.post12 documentation</title>
   
   
   
@@ -43,20 +43,14 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="../../../_static/documentation_options.js?v=77cf9e02"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=63e4a98c"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -151,7 +145,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post11 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post12 documentation</p>
   
 </a></div>
     
@@ -522,9 +516,7 @@ document.write(`
     <span class="n">_XARRAY_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 
-<div class="viewcode-block" id="make_empty_ppi_radar">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.make_empty_ppi_radar.html#pyart.testing.make_empty_ppi_radar">[docs]</a>
-<span class="k">def</span> <span class="nf">make_empty_ppi_radar</span><span class="p">(</span><span class="n">ngates</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">nsweeps</span><span class="p">):</span>
+<div class="viewcode-block" id="make_empty_ppi_radar"><a class="viewcode-back" href="../../../API/generated/pyart.testing.make_empty_ppi_radar.html#pyart.testing.make_empty_ppi_radar">[docs]</a><span class="k">def</span> <span class="nf">make_empty_ppi_radar</span><span class="p">(</span><span class="n">ngates</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">nsweeps</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return an Radar object, representing a PPI scan.</span>
 
@@ -605,10 +597,7 @@ document.write(`
     <span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="make_empty_rhi_radar">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.make_empty_rhi_radar.html#pyart.testing.make_empty_rhi_radar">[docs]</a>
-<span class="k">def</span> <span class="nf">make_empty_rhi_radar</span><span class="p">(</span><span class="n">ngates</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">nsweeps</span><span class="p">):</span>
+<div class="viewcode-block" id="make_empty_rhi_radar"><a class="viewcode-back" href="../../../API/generated/pyart.testing.make_empty_rhi_radar.html#pyart.testing.make_empty_rhi_radar">[docs]</a><span class="k">def</span> <span class="nf">make_empty_rhi_radar</span><span class="p">(</span><span class="n">ngates</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">nsweeps</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return an Radar object, representing a RHI scan.</span>
 
@@ -637,10 +626,7 @@ document.write(`
     <span class="k">return</span> <span class="n">radar</span></div>
 
 
-
-<div class="viewcode-block" id="make_target_radar">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.make_target_radar.html#pyart.testing.make_target_radar">[docs]</a>
-<span class="k">def</span> <span class="nf">make_target_radar</span><span class="p">():</span>
+<div class="viewcode-block" id="make_target_radar"><a class="viewcode-back" href="../../../API/generated/pyart.testing.make_target_radar.html#pyart.testing.make_target_radar">[docs]</a><span class="k">def</span> <span class="nf">make_target_radar</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a PPI radar with a target like reflectivity field.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -657,10 +643,7 @@ document.write(`
     <span class="k">return</span> <span class="n">radar</span></div>
 
 
-
-<div class="viewcode-block" id="make_velocity_aliased_radar">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.make_velocity_aliased_radar.html#pyart.testing.make_velocity_aliased_radar">[docs]</a>
-<span class="k">def</span> <span class="nf">make_velocity_aliased_radar</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="make_velocity_aliased_radar"><a class="viewcode-back" href="../../../API/generated/pyart.testing.make_velocity_aliased_radar.html#pyart.testing.make_velocity_aliased_radar">[docs]</a><span class="k">def</span> <span class="nf">make_velocity_aliased_radar</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a PPI radar with a target like reflectivity field.</span>
 
@@ -697,10 +680,7 @@ document.write(`
     <span class="k">return</span> <span class="n">radar</span></div>
 
 
-
-<div class="viewcode-block" id="make_velocity_aliased_rhi_radar">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.make_velocity_aliased_rhi_radar.html#pyart.testing.make_velocity_aliased_rhi_radar">[docs]</a>
-<span class="k">def</span> <span class="nf">make_velocity_aliased_rhi_radar</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="make_velocity_aliased_rhi_radar"><a class="viewcode-back" href="../../../API/generated/pyart.testing.make_velocity_aliased_rhi_radar.html#pyart.testing.make_velocity_aliased_rhi_radar">[docs]</a><span class="k">def</span> <span class="nf">make_velocity_aliased_rhi_radar</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a RHI radar with a target like reflectivity field.</span>
 
@@ -737,10 +717,7 @@ document.write(`
     <span class="k">return</span> <span class="n">radar</span></div>
 
 
-
-<div class="viewcode-block" id="make_single_ray_radar">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.make_single_ray_radar.html#pyart.testing.make_single_ray_radar">[docs]</a>
-<span class="k">def</span> <span class="nf">make_single_ray_radar</span><span class="p">():</span>
+<div class="viewcode-block" id="make_single_ray_radar"><a class="viewcode-back" href="../../../API/generated/pyart.testing.make_single_ray_radar.html#pyart.testing.make_single_ray_radar">[docs]</a><span class="k">def</span> <span class="nf">make_single_ray_radar</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a PPI radar with a single ray taken from a ARM C-SAPR Radar.</span>
 
@@ -759,10 +736,7 @@ document.write(`
     <span class="k">return</span> <span class="n">radar</span></div>
 
 
-
-<div class="viewcode-block" id="make_empty_grid">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.make_empty_grid.html#pyart.testing.make_empty_grid">[docs]</a>
-<span class="k">def</span> <span class="nf">make_empty_grid</span><span class="p">(</span><span class="n">grid_shape</span><span class="p">,</span> <span class="n">grid_limits</span><span class="p">):</span>
+<div class="viewcode-block" id="make_empty_grid"><a class="viewcode-back" href="../../../API/generated/pyart.testing.make_empty_grid.html#pyart.testing.make_empty_grid">[docs]</a><span class="k">def</span> <span class="nf">make_empty_grid</span><span class="p">(</span><span class="n">grid_shape</span><span class="p">,</span> <span class="n">grid_limits</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Make an empty grid object without any fields or metadata.</span>
 
@@ -843,10 +817,7 @@ document.write(`
     <span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="make_target_grid">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.make_target_grid.html#pyart.testing.make_target_grid">[docs]</a>
-<span class="k">def</span> <span class="nf">make_target_grid</span><span class="p">():</span>
+<div class="viewcode-block" id="make_target_grid"><a class="viewcode-back" href="../../../API/generated/pyart.testing.make_target_grid.html#pyart.testing.make_target_grid">[docs]</a><span class="k">def</span> <span class="nf">make_target_grid</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Make a sample Grid with a rectangular target.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -864,10 +835,7 @@ document.write(`
     <span class="k">return</span> <span class="n">grid</span></div>
 
 
-
-<div class="viewcode-block" id="make_storm_grid">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.make_storm_grid.html#pyart.testing.make_storm_grid">[docs]</a>
-<span class="k">def</span> <span class="nf">make_storm_grid</span><span class="p">():</span>
+<div class="viewcode-block" id="make_storm_grid"><a class="viewcode-back" href="../../../API/generated/pyart.testing.make_storm_grid.html#pyart.testing.make_storm_grid">[docs]</a><span class="k">def</span> <span class="nf">make_storm_grid</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Make a sample Grid with a rectangular storm target.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -886,10 +854,7 @@ document.write(`
     <span class="k">return</span> <span class="n">grid</span></div>
 
 
-
-<div class="viewcode-block" id="make_normal_storm">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.make_normal_storm.html#pyart.testing.make_normal_storm">[docs]</a>
-<span class="k">def</span> <span class="nf">make_normal_storm</span><span class="p">(</span><span class="n">sigma</span><span class="p">,</span> <span class="n">mu</span><span class="p">):</span>
+<div class="viewcode-block" id="make_normal_storm"><a class="viewcode-back" href="../../../API/generated/pyart.testing.make_normal_storm.html#pyart.testing.make_normal_storm">[docs]</a><span class="k">def</span> <span class="nf">make_normal_storm</span><span class="p">(</span><span class="n">sigma</span><span class="p">,</span> <span class="n">mu</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Make a sample Grid with a gaussian storm target.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -907,10 +872,7 @@ document.write(`
     <span class="k">return</span> <span class="n">test_grid</span></div>
 
 
-
-<div class="viewcode-block" id="make_empty_spectra_radar">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.make_empty_spectra_radar.html#pyart.testing.make_empty_spectra_radar">[docs]</a>
-<span class="k">def</span> <span class="nf">make_empty_spectra_radar</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">ngates</span><span class="p">,</span> <span class="n">npulses_max</span><span class="p">):</span>
+<div class="viewcode-block" id="make_empty_spectra_radar"><a class="viewcode-back" href="../../../API/generated/pyart.testing.make_empty_spectra_radar.html#pyart.testing.make_empty_spectra_radar">[docs]</a><span class="k">def</span> <span class="nf">make_empty_spectra_radar</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">ngates</span><span class="p">,</span> <span class="n">npulses_max</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a Spectra Radar object.</span>
 
@@ -1010,10 +972,7 @@ document.write(`
     <span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="make_target_spectra_radar">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.make_target_spectra_radar.html#pyart.testing.make_target_spectra_radar">[docs]</a>
-<span class="k">def</span> <span class="nf">make_target_spectra_radar</span><span class="p">():</span>
+<div class="viewcode-block" id="make_target_spectra_radar"><a class="viewcode-back" href="../../../API/generated/pyart.testing.make_target_spectra_radar.html#pyart.testing.make_target_spectra_radar">[docs]</a><span class="k">def</span> <span class="nf">make_target_spectra_radar</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a spectra radar with a target like spectra field.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1029,7 +988,6 @@ document.write(`
     <span class="n">fdata</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span> <span class="o">*</span> <span class="n">max_value</span><span class="p">)</span>
     <span class="n">radar</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="s2">&quot;spectra&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">fdata</span>
     <span class="k">return</span> <span class="n">radar</span></div>
-
 </pre></div>
 <div class="section ablog__blog_comments">
   
@@ -1084,7 +1042,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>

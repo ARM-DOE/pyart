@@ -2,13 +2,13 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Contributor’s Guide &#8212; Py-ART 1.16.1.post11 documentation</title>
+    <title>Contributor’s Guide &#8212; Py-ART 1.16.1.post12 documentation</title>
   
   
   
@@ -44,20 +44,14 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="../_static/documentation_options.js?v=77cf9e02"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=63e4a98c"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -154,7 +148,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post11 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post12 documentation</p>
   
 </a></div>
     
@@ -519,9 +513,9 @@ document.write(`
                 <article class="bd-article" role="main">
                   
 <section id="contributor-s-guide">
-<h1>Contributor’s Guide<a class="headerlink" href="#contributor-s-guide" title="Link to this heading">#</a></h1>
+<h1>Contributor’s Guide<a class="headerlink" href="#contributor-s-guide" title="Permalink to this heading">#</a></h1>
 <section id="the-python-arm-radar-toolkit-py-art">
-<h2>The Python ARM Radar Toolkit (Py-ART)<a class="headerlink" href="#the-python-arm-radar-toolkit-py-art" title="Link to this heading">#</a></h2>
+<h2>The Python ARM Radar Toolkit (Py-ART)<a class="headerlink" href="#the-python-arm-radar-toolkit-py-art" title="Permalink to this heading">#</a></h2>
 <p>The Python ARM Radar Toolkit, Py-ART, is an open source Python module
 containing a growing collection of weather radar algorithms and utilities
 build on top of the Scientific Python stack and distributed under the
@@ -532,7 +526,7 @@ the radar and atmospheric communities to examine, processes, and analyze
 data from many types of weather radars.</p>
 </section>
 <section id="important-links">
-<h2>Important Links<a class="headerlink" href="#important-links" title="Link to this heading">#</a></h2>
+<h2>Important Links<a class="headerlink" href="#important-links" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Official source code repository: <a class="github reference external" href="https://github.com/ARM-DOE/pyart">ARM-DOE/pyart</a></p></li>
 <li><p>HTML documentation: <a class="reference external" href="https://arm-doe.github.io/pyart">https://arm-doe.github.io/pyart</a></p></li>
@@ -542,7 +536,7 @@ data from many types of weather radars.</p>
 </ul>
 </section>
 <section id="citing">
-<h2>Citing<a class="headerlink" href="#citing" title="Link to this heading">#</a></h2>
+<h2>Citing<a class="headerlink" href="#citing" title="Permalink to this heading">#</a></h2>
 <p>If you use the Python ARM Radar Toolkit (Py-ART) to prepare a publication
 please cite:</p>
 <blockquote>
@@ -556,7 +550,7 @@ cited if you make use of them. Refer to the <strong>References</strong> section 
 documentation of the functions used for information on these citations.</p>
 </section>
 <section id="install">
-<h2>Install<a class="headerlink" href="#install" title="Link to this heading">#</a></h2>
+<h2>Install<a class="headerlink" href="#install" title="Permalink to this heading">#</a></h2>
 <p>The easiest method for installing Py-ART is to use the conda packages from
 the latest release and use Python 3, as Python 2 support ended January 1st,
 2020 and many packages including Py-ART no longer support Python 2.
@@ -578,7 +572,7 @@ the latest version of Py-ART:</p>
 </div>
 </section>
 <section id="resources">
-<h2>Resources<a class="headerlink" href="#resources" title="Link to this heading">#</a></h2>
+<h2>Resources<a class="headerlink" href="#resources" title="Permalink to this heading">#</a></h2>
 <p>Pyart:</p>
 <ul class="simple">
 <li><p><a class="github reference external" href="https://github.com/openradar/AMS-Short-Course-on-Open-Source-Radar-Software">openradar/AMS-Short-Course-on-Open-Source-Radar-Software</a></p></li>
@@ -593,7 +587,7 @@ the latest version of Py-ART:</p>
 </ul>
 </section>
 <section id="code-style">
-<h2>Code Style<a class="headerlink" href="#code-style" title="Link to this heading">#</a></h2>
+<h2>Code Style<a class="headerlink" href="#code-style" title="Permalink to this heading">#</a></h2>
 <p>Py-ART follows pep8 coding standards. To make sure your code follows the
 pep8 style, you can use a variety of tools that can check for you. Two
 popular pep8 check modules are pycodestyle and pylint.</p>
@@ -629,7 +623,7 @@ the tools documentation for details on this process.</p>
 </ul>
 </section>
 <section id="python-file-setup">
-<h2>Python File Setup<a class="headerlink" href="#python-file-setup" title="Link to this heading">#</a></h2>
+<h2>Python File Setup<a class="headerlink" href="#python-file-setup" title="Permalink to this heading">#</a></h2>
 <p>In a new .py file, the top of the code should have a brief introduction to
 the module.</p>
 <p>An example:</p>
@@ -736,7 +730,7 @@ statement of what that default value is and why.</p>
 </div>
 </section>
 <section id="testing">
-<h2>Testing<a class="headerlink" href="#testing" title="Link to this heading">#</a></h2>
+<h2>Testing<a class="headerlink" href="#testing" title="Permalink to this heading">#</a></h2>
 <p>When adding a new function to pyart it is important to add your function to
 the __init__.py file under the corresponding pyart folder.</p>
 <p>Create a test for your function and have assert from numpy testing test the
@@ -828,7 +822,7 @@ From within the main pyart directory:</p>
 </ul>
 </section>
 <section id="github">
-<h2>GitHub<a class="headerlink" href="#github" title="Link to this heading">#</a></h2>
+<h2>GitHub<a class="headerlink" href="#github" title="Permalink to this heading">#</a></h2>
 <p>When contributing to pyart, the changes created should be in a new branch
 under your forked repository. Let’s say the user is adding a new map display.
 Instead of creating that new function in your main branch. Create a new
@@ -1017,7 +1011,7 @@ to PEP8 standards.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>

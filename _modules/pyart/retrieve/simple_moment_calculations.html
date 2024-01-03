@@ -2,12 +2,12 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.simple_moment_calculations &#8212; Py-ART 1.16.1.post11 documentation</title>
+    <title>pyart.retrieve.simple_moment_calculations &#8212; Py-ART 1.16.1.post12 documentation</title>
   
   
   
@@ -43,20 +43,14 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="../../../_static/documentation_options.js?v=77cf9e02"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=63e4a98c"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -151,7 +145,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post11 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post12 documentation</p>
   
 </a></div>
     
@@ -511,9 +505,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">angular_texture_2d</span>
 
 
-<div class="viewcode-block" id="calculate_snr_from_reflectivity">
-<a class="viewcode-back" href="../../../API/generated/pyart.retrieve.calculate_snr_from_reflectivity.html#pyart.retrieve.calculate_snr_from_reflectivity">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_snr_from_reflectivity</span><span class="p">(</span>
+<div class="viewcode-block" id="calculate_snr_from_reflectivity"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.calculate_snr_from_reflectivity.html#pyart.retrieve.calculate_snr_from_reflectivity">[docs]</a><span class="k">def</span> <span class="nf">calculate_snr_from_reflectivity</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">snr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">toa</span><span class="o">=</span><span class="mf">25000.0</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -567,10 +559,7 @@ document.write(`
     <span class="k">return</span> <span class="n">snr_dict</span></div>
 
 
-
-<div class="viewcode-block" id="compute_noisedBZ">
-<a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_noisedBZ.html#pyart.retrieve.compute_noisedBZ">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_noisedBZ</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">noisedBZ_val</span><span class="p">,</span> <span class="n">_range</span><span class="p">,</span> <span class="n">ref_dist</span><span class="p">,</span> <span class="n">noise_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_noisedBZ"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_noisedBZ.html#pyart.retrieve.compute_noisedBZ">[docs]</a><span class="k">def</span> <span class="nf">compute_noisedBZ</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">noisedBZ_val</span><span class="p">,</span> <span class="n">_range</span><span class="p">,</span> <span class="n">ref_dist</span><span class="p">,</span> <span class="n">noise_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes noise in dBZ from reference noise value.</span>
 
@@ -605,10 +594,7 @@ document.write(`
     <span class="k">return</span> <span class="n">noisedBZ</span></div>
 
 
-
-<div class="viewcode-block" id="compute_snr">
-<a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_snr.html#pyart.retrieve.compute_snr">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_snr</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">noise_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">snr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_snr"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_snr.html#pyart.retrieve.compute_snr">[docs]</a><span class="k">def</span> <span class="nf">compute_snr</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">noise_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">snr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes SNR from a reflectivity field and the noise in dBZ.</span>
 
@@ -655,10 +641,7 @@ document.write(`
     <span class="k">return</span> <span class="n">snr</span></div>
 
 
-
-<div class="viewcode-block" id="compute_l">
-<a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_l.html#pyart.retrieve.compute_l">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_l</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">rhohv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">l_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_l"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_l.html#pyart.retrieve.compute_l">[docs]</a><span class="k">def</span> <span class="nf">compute_l</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">rhohv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">l_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes Rhohv in logarithmic scale according to L=-log10(1-RhoHV).</span>
 
@@ -698,10 +681,7 @@ document.write(`
     <span class="k">return</span> <span class="n">l_field_out</span></div>
 
 
-
-<div class="viewcode-block" id="compute_cdr">
-<a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_cdr.html#pyart.retrieve.compute_cdr">[docs]</a>
-<span class="k">def</span> <span class="nf">compute_cdr</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">rhohv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_cdr"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_cdr.html#pyart.retrieve.compute_cdr">[docs]</a><span class="k">def</span> <span class="nf">compute_cdr</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">rhohv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the Circular Depolarization Ratio.</span>
 
@@ -753,10 +733,7 @@ document.write(`
     <span class="k">return</span> <span class="n">cdr</span></div>
 
 
-
-<div class="viewcode-block" id="calculate_velocity_texture">
-<a class="viewcode-back" href="../../../API/generated/pyart.retrieve.calculate_velocity_texture.html#pyart.retrieve.calculate_velocity_texture">[docs]</a>
-<span class="k">def</span> <span class="nf">calculate_velocity_texture</span><span class="p">(</span>
+<div class="viewcode-block" id="calculate_velocity_texture"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.calculate_velocity_texture.html#pyart.retrieve.calculate_velocity_texture">[docs]</a><span class="k">def</span> <span class="nf">calculate_velocity_texture</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wind_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">nyq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">check_nyq_uniform</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -825,7 +802,6 @@ document.write(`
     <span class="p">)</span>
     <span class="n">vel_texture_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">median_filter</span><span class="p">(</span><span class="n">vel_texture</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">wind_size</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">vel_texture_field</span></div>
-
 </pre></div>
 <div class="section ablog__blog_comments">
   
@@ -880,7 +856,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>

@@ -2,13 +2,13 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Extract a radar column above a point &#8212; Py-ART 1.16.1.post11 documentation</title>
+    <title>Extract a radar column above a point &#8212; Py-ART 1.16.1.post12 documentation</title>
   
   
   
@@ -44,20 +44,14 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="../../_static/documentation_options.js?v=77cf9e02"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=63e4a98c"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -154,7 +148,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post11 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post12 documentation</p>
   
 </a></div>
     
@@ -569,13 +563,16 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article" role="main">
                   
-<section class="tex2jax_ignore mathjax_ignore" id="extract-a-radar-column-above-a-point">
-<h1>Extract a radar column above a point<a class="headerlink" href="#extract-a-radar-column-above-a-point" title="Link to this heading">#</a></h1>
+<div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-examples-retrieve-plot-column-subset-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code</p>
+</div>
+<section class="sphx-glr-example-title" id="extract-a-radar-column-above-a-point">
+<span id="sphx-glr-examples-retrieve-plot-column-subset-py"></span><h1>Extract a radar column above a point<a class="headerlink" href="#extract-a-radar-column-above-a-point" title="Permalink to this heading">#</a></h1>
 <p>Given a radar and a point, extract the column of radar data values above
 a point</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Author: Maxwell Grover (mgrover@anl.gov)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Author: Maxwell Grover (mgrover@anl.gov)</span>
 <span class="c1"># License: BSD 3 clause</span>
 
 <span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
@@ -590,16 +587,12 @@ a point</p>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
 <p><strong>Plot the first sweep and our desired point</strong></p>
 <p>Let’s visualize our radar data from a single sweep, and plot
 the location of our desired point on a map.
 This will provide some context as to where we are extracting our
 column of values.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site_lon</span></a> <span class="o">=</span> <span class="o">-</span><span class="mf">97.73</span>  <span class="c1"># longitude in degrees</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site_lon</span></a> <span class="o">=</span> <span class="o">-</span><span class="mf">97.73</span>  <span class="c1"># longitude in degrees</span>
 <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site_lat</span></a> <span class="o">=</span> <span class="mf">36.41</span>  <span class="c1"># latitdue in degrees</span>
 
 <span class="c1"># Setup the RadarMapDisplay and add our projection</span>
@@ -622,35 +615,62 @@ column of values.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.scatter.html#matplotlib.axes.Axes.scatter" title="matplotlib.axes.Axes.scatter" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site_lon</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site_lat</span></a><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
+<img src="../../_images/sphx_glr_plot_column_subset_001.png" srcset="../../_images/sphx_glr_plot_column_subset_001.png" alt="xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection object at 0x7f22c8658380&gt;
+</pre></div>
 </div>
 <p>Now that we have our point defined, and our radar object, we can use the following
 utility function in Py-ART to subset a column</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">columnsect</span><span class="o">.</span><span class="n">get_field_location</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site_lat</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site_lon</span></a><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">columnsect</span><span class="o">.</span><span class="n">get_field_location</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site_lat</span></a><span class="p">,</span> <a href="https://docs.python.org/3/library/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site_lon</span></a><span class="p">)</span>
 </pre></div>
-</div>
-</div>
 </div>
 <p>This function returns an xarray dataset, with all of our data fields!</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;xarray.Dataset&gt;
+Dimensions:                            (height: 22)
+Coordinates:
+  * height                             (height) float64 350.6 ... 1.818e+04
+Data variables: (12/15)
+    corrected_reflectivity_horizontal  (height) float64 39.2 37.52 ... nan nan
+    reflectivity_horizontal            (height) float64 32.88 31.46 ... nan nan
+    recalculated_diff_phase            (height) float64 1.555 1.32 ... -0.0 -0.0
+    specific_attenuation               (height) float64 0.2778 0.1806 ... 0.0
+    unf_dp_phase_shift                 (height) float32 58.05 56.55 ... 36.27
+    mean_doppler_velocity              (height) float32 -9.133 -9.953 ... 5.688
+    ...                                 ...
+    dp_phase_shift                     (height) float64 145.5 144.0 ... nan nan
+    diff_reflectivity                  (height) float32 0.0 0.0 0.0 ... 0.0 0.0
+    proc_dp_phase_shift                (height) float32 51.8 50.25 ... 36.27
+    copol_coeff                        (height) float64 0.95 0.92 ... nan nan
+    base_time                          datetime64[ns] 2011-05-20T06:42:11
+    time_offset                        (height) datetime64[ns] 2011-05-20T06:...
+Attributes:
+    distance_from_radar:    15.113 km
+    azimuth:                233.545 degrees
+    latitude_of_location:   36.41 degrees
+    longitude_of_location:  -97.73 degrees
+</pre></div>
 </div>
 <p><strong>Visualize the Reflectivity Values in the Column</strong></p>
 <p>Let’s visualize the reflectivity values in the column
 above our point, which is stored in our new dataset</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">corrected_reflectivity_horizontal</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s2">&quot;height&quot;</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">corrected_reflectivity_horizontal</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s2">&quot;height&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<img src="../../_images/sphx_glr_plot_column_subset_002.png" srcset="../../_images/sphx_glr_plot_column_subset_002.png" alt="plot column subset" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D object at 0x7f22c8807140&gt;]
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.213 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-retrieve-plot-column-subset-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/29e917515f98fa59b8a108483891105d/plot_column_subset.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_column_subset.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/bff98815fc760389142a2ba81fd4392d/plot_column_subset.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_column_subset.py</span></code></a></p>
 </div>
 </div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
 
 <div class="section ablog__blog_comments">
@@ -697,7 +717,7 @@ above our point, which is stored in our new dataset</p>
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../../_sources/examples/retrieve/plot_column_subset.ipynb.txt">
+    <a href="../../_sources/examples/retrieve/plot_column_subset.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
@@ -737,7 +757,7 @@ above our point, which is stored in our new dataset</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>

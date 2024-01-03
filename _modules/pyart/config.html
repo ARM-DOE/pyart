@@ -2,12 +2,12 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.config &#8212; Py-ART 1.16.1.post11 documentation</title>
+    <title>pyart.config &#8212; Py-ART 1.16.1.post12 documentation</title>
   
   
   
@@ -43,20 +43,14 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="../../_static/documentation_options.js?v=77cf9e02"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=63e4a98c"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -151,7 +145,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post11 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post12 documentation</p>
   
 </a></div>
     
@@ -512,9 +506,7 @@ document.write(`
 <span class="n">_DEFAULT_CONFIG_FILE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_dirname</span><span class="p">,</span> <span class="s2">&quot;default_config.py&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="load_config">
-<a class="viewcode-back" href="../../API/generated/pyart.config.load_config.html#pyart.config.load_config">[docs]</a>
-<span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="load_config"><a class="viewcode-back" href="../../API/generated/pyart.config.load_config.html#pyart.config.load_config">[docs]</a><span class="k">def</span> <span class="nf">load_config</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Load a Py-ART configuration from a config file.</span>
 
@@ -589,7 +581,6 @@ document.write(`
     <span class="k">return</span></div>
 
 
-
 <span class="c1"># load the configuration from the enviromental parameter if it is set</span>
 <span class="c1"># if the load fails issue a warning and load the default config.</span>
 <span class="n">_config_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYART_CONFIG&quot;</span><span class="p">)</span>
@@ -611,9 +602,7 @@ document.write(`
         <span class="n">load_config</span><span class="p">(</span><span class="n">_DEFAULT_CONFIG_FILE</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="get_metadata">
-<a class="viewcode-back" href="../../API/generated/pyart.testing.get_metadata.html#pyart.config.get_metadata">[docs]</a>
-<span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
+<div class="viewcode-block" id="get_metadata"><a class="viewcode-back" href="../../API/generated/pyart.testing.get_metadata.html#pyart.config.get_metadata">[docs]</a><span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a dictionary of metadata for a given parameter, p.</span>
 
@@ -626,30 +615,21 @@ document.write(`
         <span class="k">return</span> <span class="p">{}</span></div>
 
 
-
-<div class="viewcode-block" id="get_fillvalue">
-<a class="viewcode-back" href="../../API/generated/pyart.config.get_fillvalue.html#pyart.config.get_fillvalue">[docs]</a>
-<span class="k">def</span> <span class="nf">get_fillvalue</span><span class="p">():</span>
+<div class="viewcode-block" id="get_fillvalue"><a class="viewcode-back" href="../../API/generated/pyart.config.get_fillvalue.html#pyart.config.get_fillvalue">[docs]</a><span class="k">def</span> <span class="nf">get_fillvalue</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the current fill value.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="n">_FILL_VALUE</span></div>
 
 
-
-<div class="viewcode-block" id="get_field_name">
-<a class="viewcode-back" href="../../API/generated/pyart.config.get_field_name.html#pyart.config.get_field_name">[docs]</a>
-<span class="k">def</span> <span class="nf">get_field_name</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+<div class="viewcode-block" id="get_field_name"><a class="viewcode-back" href="../../API/generated/pyart.config.get_field_name.html#pyart.config.get_field_name">[docs]</a><span class="k">def</span> <span class="nf">get_field_name</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the field name from the configuration file for a given field.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">_DEFAULT_FIELD_NAMES</span><span class="p">[</span><span class="n">field</span><span class="p">])</span></div>
 
 
-
-<div class="viewcode-block" id="get_field_colormap">
-<a class="viewcode-back" href="../../API/generated/pyart.config.get_field_colormap.html#pyart.config.get_field_colormap">[docs]</a>
-<span class="k">def</span> <span class="nf">get_field_colormap</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
+<div class="viewcode-block" id="get_field_colormap"><a class="viewcode-back" href="../../API/generated/pyart.config.get_field_colormap.html#pyart.config.get_field_colormap">[docs]</a><span class="k">def</span> <span class="nf">get_field_colormap</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the colormap name from the configuration file for a field name.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -661,10 +641,7 @@ document.write(`
         <span class="k">return</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">cm</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">()</span><span class="o">.</span><span class="n">name</span></div>
 
 
-
-<div class="viewcode-block" id="get_field_limits">
-<a class="viewcode-back" href="../../API/generated/pyart.config.get_field_limits.html#pyart.config.get_field_limits">[docs]</a>
-<span class="k">def</span> <span class="nf">get_field_limits</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="get_field_limits"><a class="viewcode-back" href="../../API/generated/pyart.config.get_field_limits.html#pyart.config.get_field_limits">[docs]</a><span class="k">def</span> <span class="nf">get_field_limits</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the data limits from the configuration file for a given field,</span>
 <span class="sd">    radar and sweep.</span>
@@ -696,10 +673,7 @@ document.write(`
         <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span></div>
 
 
-
-<div class="viewcode-block" id="get_field_mapping">
-<a class="viewcode-back" href="../../API/generated/pyart.config.get_field_mapping.html#pyart.config.get_field_mapping">[docs]</a>
-<span class="k">def</span> <span class="nf">get_field_mapping</span><span class="p">(</span><span class="n">filetype</span><span class="p">):</span>
+<div class="viewcode-block" id="get_field_mapping"><a class="viewcode-back" href="../../API/generated/pyart.config.get_field_mapping.html#pyart.config.get_field_mapping">[docs]</a><span class="k">def</span> <span class="nf">get_field_mapping</span><span class="p">(</span><span class="n">filetype</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a copy of the default field mapping for a given file type.</span>
 
@@ -717,10 +691,7 @@ document.write(`
     <span class="k">return</span> <span class="n">_FIELD_MAPPINGS</span><span class="p">[</span><span class="n">filetype</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
 
 
-
-<div class="viewcode-block" id="FileMetadata">
-<a class="viewcode-back" href="../../API/generated/pyart.config.FileMetadata.html#pyart.config.FileMetadata">[docs]</a>
-<span class="k">class</span> <span class="nc">FileMetadata</span><span class="p">:</span>
+<div class="viewcode-block" id="FileMetadata"><a class="viewcode-back" href="../../API/generated/pyart.config.FileMetadata.html#pyart.config.FileMetadata">[docs]</a><span class="k">class</span> <span class="nc">FileMetadata</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class for accessing metadata needed when reading files.</span>
 
@@ -785,9 +756,7 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_include_fields</span> <span class="o">=</span> <span class="n">include_fields</span>
 
-<div class="viewcode-block" id="FileMetadata.get_metadata">
-<a class="viewcode-back" href="../../API/generated/pyart.config.FileMetadata.get_metadata.html#pyart.config.FileMetadata.get_metadata">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<div class="viewcode-block" id="FileMetadata.get_metadata"><a class="viewcode-back" href="../../API/generated/pyart.config.FileMetadata.get_metadata.html#pyart.config.FileMetadata.get_metadata">[docs]</a>    <span class="k">def</span> <span class="nf">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve metadata for a parameter `p`.</span>
 
@@ -818,19 +787,13 @@ document.write(`
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="p">{}</span></div>
 
-
-<div class="viewcode-block" id="FileMetadata.__call__">
-<a class="viewcode-back" href="../../API/generated/pyart.config.FileMetadata.__call__.html#pyart.config.FileMetadata.__call__">[docs]</a>
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
+<div class="viewcode-block" id="FileMetadata.__call__"><a class="viewcode-back" href="../../API/generated/pyart.config.FileMetadata.__call__.html#pyart.config.FileMetadata.__call__">[docs]</a>    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Retrieve metadata for parameter `p`.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="n">p</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="FileMetadata.get_field_name">
-<a class="viewcode-back" href="../../API/generated/pyart.config.FileMetadata.get_field_name.html#pyart.config.FileMetadata.get_field_name">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_field_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_field_name</span><span class="p">):</span>
+<div class="viewcode-block" id="FileMetadata.get_field_name"><a class="viewcode-back" href="../../API/generated/pyart.config.FileMetadata.get_field_name.html#pyart.config.FileMetadata.get_field_name">[docs]</a>    <span class="k">def</span> <span class="nf">get_field_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_field_name</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the name radar field for a given file field name</span>
 
@@ -861,9 +824,7 @@ document.write(`
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">field_name</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="n">field_name</span></div>
-</div>
-
+            <span class="k">return</span> <span class="n">field_name</span></div></div>
 </pre></div>
 <div class="section ablog__blog_comments">
   
@@ -918,7 +879,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>

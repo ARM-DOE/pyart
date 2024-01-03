@@ -2,12 +2,12 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.core.transforms &#8212; Py-ART 1.16.1.post11 documentation</title>
+    <title>pyart.core.transforms &#8212; Py-ART 1.16.1.post12 documentation</title>
   
   
   
@@ -43,20 +43,14 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="../../../_static/documentation_options.js?v=77cf9e02"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=63e4a98c"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -151,7 +145,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post11 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post12 documentation</p>
   
 </a></div>
     
@@ -521,9 +515,7 @@ document.write(`
 <span class="n">PI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
 
 
-<div class="viewcode-block" id="antenna_to_cartesian">
-<a class="viewcode-back" href="../../../API/generated/pyart.core.antenna_to_cartesian.html#pyart.core.antenna_to_cartesian">[docs]</a>
-<span class="k">def</span> <span class="nf">antenna_to_cartesian</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span><span class="p">):</span>
+<div class="viewcode-block" id="antenna_to_cartesian"><a class="viewcode-back" href="../../../API/generated/pyart.core.antenna_to_cartesian.html#pyart.core.antenna_to_cartesian">[docs]</a><span class="k">def</span> <span class="nf">antenna_to_cartesian</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return Cartesian coordinates from antenna coordinates.</span>
 
@@ -580,10 +572,7 @@ document.write(`
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span></div>
 
 
-
-<div class="viewcode-block" id="antenna_vectors_to_cartesian">
-<a class="viewcode-back" href="../../../API/generated/pyart.core.antenna_vectors_to_cartesian.html#pyart.core.antenna_vectors_to_cartesian">[docs]</a>
-<span class="k">def</span> <span class="nf">antenna_vectors_to_cartesian</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="antenna_vectors_to_cartesian"><a class="viewcode-back" href="../../../API/generated/pyart.core.antenna_vectors_to_cartesian.html#pyart.core.antenna_vectors_to_cartesian">[docs]</a><span class="k">def</span> <span class="nf">antenna_vectors_to_cartesian</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate Cartesian coordinate for gates from antenna coordinate vectors.</span>
 
@@ -622,7 +611,6 @@ document.write(`
     <span class="n">rg</span><span class="p">,</span> <span class="n">azg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">)</span>
     <span class="n">rg</span><span class="p">,</span> <span class="n">eleg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">elevations</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">antenna_to_cartesian</span><span class="p">(</span><span class="n">rg</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="n">azg</span><span class="p">,</span> <span class="n">eleg</span><span class="p">)</span></div>
-
 
 
 <span class="k">def</span> <span class="nf">_interpolate_range_edges</span><span class="p">(</span><span class="n">ranges</span><span class="p">):</span>
@@ -850,9 +838,7 @@ document.write(`
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
 
 
-<div class="viewcode-block" id="geographic_to_cartesian">
-<a class="viewcode-back" href="../../../API/generated/pyart.core.geographic_to_cartesian.html#pyart.core.geographic_to_cartesian">[docs]</a>
-<span class="k">def</span> <span class="nf">geographic_to_cartesian</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">projparams</span><span class="p">):</span>
+<div class="viewcode-block" id="geographic_to_cartesian"><a class="viewcode-back" href="../../../API/generated/pyart.core.geographic_to_cartesian.html#pyart.core.geographic_to_cartesian">[docs]</a><span class="k">def</span> <span class="nf">geographic_to_cartesian</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">projparams</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Geographic to Cartesian coordinate transform.</span>
 
@@ -902,10 +888,7 @@ document.write(`
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span></div>
 
 
-
-<div class="viewcode-block" id="geographic_to_cartesian_aeqd">
-<a class="viewcode-back" href="../../../API/generated/pyart.core.geographic_to_cartesian_aeqd.html#pyart.core.geographic_to_cartesian_aeqd">[docs]</a>
-<span class="k">def</span> <span class="nf">geographic_to_cartesian_aeqd</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon_0</span><span class="p">,</span> <span class="n">lat_0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">6370997.0</span><span class="p">):</span>
+<div class="viewcode-block" id="geographic_to_cartesian_aeqd"><a class="viewcode-back" href="../../../API/generated/pyart.core.geographic_to_cartesian_aeqd.html#pyart.core.geographic_to_cartesian_aeqd">[docs]</a><span class="k">def</span> <span class="nf">geographic_to_cartesian_aeqd</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon_0</span><span class="p">,</span> <span class="n">lat_0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">6370997.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Azimuthal equidistant geographic to Cartesian coordinate transform.</span>
 
@@ -989,10 +972,7 @@ document.write(`
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span></div>
 
 
-
-<div class="viewcode-block" id="cartesian_to_geographic">
-<a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_to_geographic.html#pyart.core.cartesian_to_geographic">[docs]</a>
-<span class="k">def</span> <span class="nf">cartesian_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">):</span>
+<div class="viewcode-block" id="cartesian_to_geographic"><a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_to_geographic.html#pyart.core.cartesian_to_geographic">[docs]</a><span class="k">def</span> <span class="nf">cartesian_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Cartesian to Geographic coordinate transform.</span>
 
@@ -1042,10 +1022,7 @@ document.write(`
     <span class="k">return</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span></div>
 
 
-
-<div class="viewcode-block" id="cartesian_vectors_to_geographic">
-<a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_vectors_to_geographic.html#pyart.core.cartesian_vectors_to_geographic">[docs]</a>
-<span class="k">def</span> <span class="nf">cartesian_vectors_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="cartesian_vectors_to_geographic"><a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_vectors_to_geographic.html#pyart.core.cartesian_vectors_to_geographic">[docs]</a><span class="k">def</span> <span class="nf">cartesian_vectors_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Cartesian vectors to Geographic coordinate transform.</span>
 
@@ -1086,10 +1063,7 @@ document.write(`
     <span class="k">return</span> <span class="n">cartesian_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">)</span></div>
 
 
-
-<div class="viewcode-block" id="cartesian_to_geographic_aeqd">
-<a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_to_geographic_aeqd.html#pyart.core.cartesian_to_geographic_aeqd">[docs]</a>
-<span class="k">def</span> <span class="nf">cartesian_to_geographic_aeqd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">lon_0</span><span class="p">,</span> <span class="n">lat_0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">6370997.0</span><span class="p">):</span>
+<div class="viewcode-block" id="cartesian_to_geographic_aeqd"><a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_to_geographic_aeqd.html#pyart.core.cartesian_to_geographic_aeqd">[docs]</a><span class="k">def</span> <span class="nf">cartesian_to_geographic_aeqd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">lon_0</span><span class="p">,</span> <span class="n">lat_0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">6370997.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Azimuthal equidistant Cartesian to geographic coordinate transform.</span>
 
@@ -1166,7 +1140,6 @@ document.write(`
     <span class="n">lon_deg</span><span class="p">[</span><span class="n">lon_deg</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mi">180</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">360.0</span>
 
     <span class="k">return</span> <span class="n">lon_deg</span><span class="p">,</span> <span class="n">lat_deg</span></div>
-
 </pre></div>
 <div class="section ablog__blog_comments">
   
@@ -1221,7 +1194,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>

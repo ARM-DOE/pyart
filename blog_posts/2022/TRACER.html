@@ -2,13 +2,13 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Blending Observations from TRACER using Py-ART &#8212; Py-ART 1.16.1.post11 documentation</title>
+    <title>Blending Observations from TRACER using Py-ART &#8212; Py-ART 1.16.1.post12 documentation</title>
   
   
   
@@ -44,20 +44,14 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="../../_static/documentation_options.js?v=77cf9e02"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=63e4a98c"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -154,7 +148,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post11 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post12 documentation</p>
   
 </a></div>
     
@@ -499,6 +493,12 @@ document.write(`
     </span>
   
   
+  <a href="../../blog/tag/cloud.html">cloud</a>
+  
+  
+  
+  
+  
   <a href="../../blog/tag/radar.html">radar</a>
   
   
@@ -506,12 +506,6 @@ document.write(`
   
   
   <a href="../../blog/tag/tracer.html">TRACER</a>
-  
-  
-  
-  
-  
-  <a href="../../blog/tag/cloud.html">cloud</a>
   
   
   
@@ -643,11 +637,11 @@ document.write(`
                 <article class="bd-article" role="main">
                   
 <section class="tex2jax_ignore mathjax_ignore" id="blending-observations-from-tracer-using-py-art">
-<h1>Blending Observations from TRACER using Py-ART<a class="headerlink" href="#blending-observations-from-tracer-using-py-art" title="Link to this heading">#</a></h1>
+<h1>Blending Observations from TRACER using Py-ART<a class="headerlink" href="#blending-observations-from-tracer-using-py-art" title="Permalink to this heading">#</a></h1>
 <p>The TRacking Aerosol Convection Interactions (TRACER) field experiment was a U.S. Department of Energy IOP with the goal of studying the lifecycle of convection over Houston as well as potential aerosol impacts on this lifecycle. Houston is uniquely suited for this kind of field experiment where seabreeze convection forms off of the coast of Houston in cleaner air conditions and then approaches the more polluted Houston region. For more information about the TRACER field experiment, click <a class="reference external" href="https://www.arm.gov/research/campaigns/amf2021tracer">here</a>.</p>
 <p>This post will show how to plot overlays of Texas A&amp;M University Lightning Mapping Array data over GOES and ARM CSAPR2 data for a case of wildfire smoke entraining into developing convection sampled during July 12 and 13, 2022. In addition, we highlight a case that was tracked by CSAPR2 for 90 minutes on June 17, 2022.</p>
 <section id="imports">
-<h2>Imports<a class="headerlink" href="#imports" title="Link to this heading">#</a></h2>
+<h2>Imports<a class="headerlink" href="#imports" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyart</span>
@@ -669,7 +663,7 @@ document.write(`
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="goes-data-access">
-<h1>GOES data access<a class="headerlink" href="#goes-data-access" title="Link to this heading">#</a></h1>
+<h1>GOES data access<a class="headerlink" href="#goes-data-access" title="Permalink to this heading">#</a></h1>
 <p>All of the NOAA GOES satellite data are available on Amazon Web Services for download. Therefore, you can use the s3fs tool to download the required data. We will download band 13, which is the longwave infrared band of GOES. In order to only download the band 13 files, we will ensure that there is a “C13” in the filename as this denotes the band number for each file.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1213,7 +1207,7 @@ Attributes: (12/30)
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="csapr-data-access">
-<h1>CSAPR data access<a class="headerlink" href="#csapr-data-access" title="Link to this heading">#</a></h1>
+<h1>CSAPR data access<a class="headerlink" href="#csapr-data-access" title="Permalink to this heading">#</a></h1>
 <p>The a1-level CSAPR data are available for public use on <a class="reference external" href="https://adc.arm.gov/discovery/">ARM Data Disovery</a>. In addition, we can use the Atmospheric Community Toolkit to download the July 12 and 13 CSAPR data. The DOI for the CSAPR2 a1-level data is 10.5439/1467901, which if accessed will bring you to the download page on ARM Data Discovery.</p>
 <p>The first block of code below will look at the automated catalogue of CSAPR data created by Adam Theisen. This provides us with a view of what scanning mode the CSAPR was in for a given time period as well as the scanning geometry and precipitation coverage.</p>
 <div class="cell docutils container">
@@ -1619,7 +1613,7 @@ Attributes: (12/30)
 </div>
 </div>
 <section id="load-lma-flash-data">
-<h2>Load LMA Flash data<a class="headerlink" href="#load-lma-flash-data" title="Link to this heading">#</a></h2>
+<h2>Load LMA Flash data<a class="headerlink" href="#load-lma-flash-data" title="Permalink to this heading">#</a></h2>
 <p>Here we load the data from the Houston Lightning Mapping Array. The data are in standard netCDF format that is easily read by xarray.
 The data are currently available for order at https://data.eol.ucar.edu/cgi-bin/codiac/fgr_form/id=100.016. Both the flash density data and locations of each flash are stored in the file.</p>
 <div class="cell docutils container">
@@ -1633,7 +1627,7 @@ The data are currently available for order at https://data.eol.ucar.edu/cgi-bin/
 </div>
 </section>
 <section id="june-17th-case">
-<h2>June 17th case<a class="headerlink" href="#june-17th-case" title="Link to this heading">#</a></h2>
+<h2>June 17th case<a class="headerlink" href="#june-17th-case" title="Permalink to this heading">#</a></h2>
 <p>This is a case of a storm that was tracked by CSAPR for about 90 minutes during the afternoon of June 17th 2022. We will use the same code from above to plot the radar/LMA overlays over the GOES IR radiance data for this case. This first block of code combines the above code to load and subset all of the necessary data for the overlays.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1726,7 +1720,7 @@ The data are currently available for order at https://data.eol.ucar.edu/cgi-bin/
 </div>
 </section>
 <section id="june-17-rhi">
-<h2>June 17 RHI<a class="headerlink" href="#june-17-rhi" title="Link to this heading">#</a></h2>
+<h2>June 17 RHI<a class="headerlink" href="#june-17-rhi" title="Permalink to this heading">#</a></h2>
 <p>We are also interested in the Range-Height Indicator scans provided by CSAPR2 as this cell evolves. The RHI scans will provide a vertical-cross section of the microphysical properties of the storm as it evolves. Finally, this block of code will plot the altitudes and locations of each lightning strike overlaid over the RHI scan. SciPy’s KDTree is used to find the nearest neighbors between the LMA lightning strike locations and the latitude and longitude locations of each gate in the RHI. After the nearest neighbors are found this provides us the altitude and range where the approximate location of the lightning strike would be.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1897,7 +1891,7 @@ The data are currently available for order at https://data.eol.ucar.edu/cgi-bin/
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>

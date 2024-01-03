@@ -2,12 +2,12 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.graph.radardisplay &#8212; Py-ART 1.16.1.post11 documentation</title>
+    <title>pyart.graph.radardisplay &#8212; Py-ART 1.16.1.post12 documentation</title>
   
   
   
@@ -43,20 +43,14 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="../../../_static/documentation_options.js?v=77cf9e02"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=63e4a98c"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -151,7 +145,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post11 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post12 documentation</p>
   
 </a></div>
     
@@ -515,9 +509,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">common</span>
 
 
-<div class="viewcode-block" id="RadarDisplay">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.html#pyart.graph.RadarDisplay">[docs]</a>
-<span class="k">class</span> <span class="nc">RadarDisplay</span><span class="p">:</span>
+<div class="viewcode-block" id="RadarDisplay"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.html#pyart.graph.RadarDisplay">[docs]</a><span class="k">class</span> <span class="nc">RadarDisplay</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A display object for creating plots from data in a radar object.</span>
 
@@ -610,9 +602,7 @@ document.write(`
     <span class="c1"># Plotting methods #</span>
     <span class="c1">####################</span>
 
-<div class="viewcode-block" id="RadarDisplay.plot">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot.html#pyart.graph.RadarDisplay.plot">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="RadarDisplay.plot"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot.html#pyart.graph.RadarDisplay.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a plot appropiate for the radar.</span>
 
@@ -645,10 +635,7 @@ document.write(`
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;unknown scan_type </span><span class="si">% s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_type</span><span class="p">))</span>
         <span class="k">return</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.plot_ray">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_ray.html#pyart.graph.RadarDisplay.plot_ray">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_ray</span><span class="p">(</span>
+<div class="viewcode-block" id="RadarDisplay.plot_ray"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_ray.html#pyart.graph.RadarDisplay.plot_ray">[docs]</a>    <span class="k">def</span> <span class="nf">plot_ray</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">field</span><span class="p">,</span>
         <span class="n">ray</span><span class="p">,</span>
@@ -735,10 +722,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">plots</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plot_vars</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">field</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.plot_ppi">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_ppi.html#pyart.graph.RadarDisplay.plot_ppi">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_ppi</span><span class="p">(</span>
+<div class="viewcode-block" id="RadarDisplay.plot_ppi"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_ppi.html#pyart.graph.RadarDisplay.plot_ppi">[docs]</a>    <span class="k">def</span> <span class="nf">plot_ppi</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">field</span><span class="p">,</span>
         <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -908,10 +892,7 @@ document.write(`
                 <span class="n">ticklabs</span><span class="o">=</span><span class="n">ticklabs</span><span class="p">,</span>
             <span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.plot_rhi">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_rhi.html#pyart.graph.RadarDisplay.plot_rhi">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_rhi</span><span class="p">(</span>
+<div class="viewcode-block" id="RadarDisplay.plot_rhi"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_rhi.html#pyart.graph.RadarDisplay.plot_rhi">[docs]</a>    <span class="k">def</span> <span class="nf">plot_rhi</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">field</span><span class="p">,</span>
         <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -1095,10 +1076,7 @@ document.write(`
                 <span class="n">ticklabs</span><span class="o">=</span><span class="n">ticklabs</span><span class="p">,</span>
             <span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.plot_vpt">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_vpt.html#pyart.graph.RadarDisplay.plot_vpt">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_vpt</span><span class="p">(</span>
+<div class="viewcode-block" id="RadarDisplay.plot_vpt"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_vpt.html#pyart.graph.RadarDisplay.plot_vpt">[docs]</a>    <span class="k">def</span> <span class="nf">plot_vpt</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">field</span><span class="p">,</span>
         <span class="n">mask_tuple</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1281,10 +1259,7 @@ document.write(`
                 <span class="n">ticklabs</span><span class="o">=</span><span class="n">ticklabs</span><span class="p">,</span>
             <span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.plot_azimuth_to_rhi">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_azimuth_to_rhi.html#pyart.graph.RadarDisplay.plot_azimuth_to_rhi">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_azimuth_to_rhi</span><span class="p">(</span>
+<div class="viewcode-block" id="RadarDisplay.plot_azimuth_to_rhi"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_azimuth_to_rhi.html#pyart.graph.RadarDisplay.plot_azimuth_to_rhi">[docs]</a>    <span class="k">def</span> <span class="nf">plot_azimuth_to_rhi</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">field</span><span class="p">,</span>
         <span class="n">target_azimuth</span><span class="p">,</span>
@@ -1449,10 +1424,7 @@ document.write(`
                 <span class="n">ticklabs</span><span class="o">=</span><span class="n">ticklabs</span><span class="p">,</span>
             <span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.plot_cr_raster">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_cr_raster.html#pyart.graph.RadarDisplay.plot_cr_raster">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_cr_raster</span><span class="p">(</span>
+<div class="viewcode-block" id="RadarDisplay.plot_cr_raster"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_cr_raster.html#pyart.graph.RadarDisplay.plot_cr_raster">[docs]</a>    <span class="k">def</span> <span class="nf">plot_cr_raster</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
         <span class="n">target_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1637,10 +1609,7 @@ document.write(`
                 <span class="n">ticklabs</span><span class="o">=</span><span class="n">ticklabs</span><span class="p">,</span>
             <span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.plot_range_rings">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_range_rings.html#pyart.graph.RadarDisplay.plot_range_rings">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_range_rings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">range_rings</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
+<div class="viewcode-block" id="RadarDisplay.plot_range_rings"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_range_rings.html#pyart.graph.RadarDisplay.plot_range_rings">[docs]</a>    <span class="k">def</span> <span class="nf">plot_range_rings</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">range_rings</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a series of range rings.</span>
 
@@ -1659,10 +1628,7 @@ document.write(`
         <span class="k">for</span> <span class="n">range_ring_location_km</span> <span class="ow">in</span> <span class="n">range_rings</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">plot_range_ring</span><span class="p">(</span><span class="n">range_ring_location_km</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="n">ls</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.plot_range_ring">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_range_ring.html#pyart.graph.RadarDisplay.plot_range_ring">[docs]</a>
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="RadarDisplay.plot_range_ring"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_range_ring.html#pyart.graph.RadarDisplay.plot_range_ring">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">plot_range_ring</span><span class="p">(</span>
         <span class="n">range_ring_location_km</span><span class="p">,</span> <span class="n">npts</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span>
     <span class="p">):</span>
@@ -1690,10 +1656,7 @@ document.write(`
         <span class="n">y</span> <span class="o">=</span> <span class="n">r</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="n">ls</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="n">lw</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.plot_grid_lines">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_grid_lines.html#pyart.graph.RadarDisplay.plot_grid_lines">[docs]</a>
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="RadarDisplay.plot_grid_lines"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_grid_lines.html#pyart.graph.RadarDisplay.plot_grid_lines">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">plot_grid_lines</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">col</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot grid lines.</span>
@@ -1711,10 +1674,7 @@ document.write(`
         <span class="n">ax</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_ax</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">grid</span><span class="p">(</span><span class="n">c</span><span class="o">=</span><span class="n">col</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="n">ls</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.plot_labels">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_labels.html#pyart.graph.RadarDisplay.plot_labels">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">locations</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s2">&quot;r+&quot;</span><span class="p">,</span> <span class="n">text_color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="RadarDisplay.plot_labels"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_labels.html#pyart.graph.RadarDisplay.plot_labels">[docs]</a>    <span class="k">def</span> <span class="nf">plot_labels</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">locations</span><span class="p">,</span> <span class="n">symbols</span><span class="o">=</span><span class="s2">&quot;r+&quot;</span><span class="p">,</span> <span class="n">text_color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot symbols and labels at given locations.</span>
 
@@ -1747,10 +1707,7 @@ document.write(`
         <span class="k">for</span> <span class="n">loc</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">sym</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">locations</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">symbols</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">plot_label</span><span class="p">(</span><span class="n">label</span><span class="p">,</span> <span class="n">loc</span><span class="p">,</span> <span class="n">sym</span><span class="p">,</span> <span class="n">text_color</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.plot_label">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_label.html#pyart.graph.RadarDisplay.plot_label">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;r+&quot;</span><span class="p">,</span> <span class="n">text_color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="RadarDisplay.plot_label"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_label.html#pyart.graph.RadarDisplay.plot_label">[docs]</a>    <span class="k">def</span> <span class="nf">plot_label</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">location</span><span class="p">,</span> <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;r+&quot;</span><span class="p">,</span> <span class="n">text_color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a single symbol and label at a given location.</span>
 
@@ -1785,10 +1742,7 @@ document.write(`
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">location_x</span><span class="p">],</span> <span class="p">[</span><span class="n">location_y</span><span class="p">],</span> <span class="n">symbol</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">location_x</span> <span class="o">-</span> <span class="mf">5.0</span><span class="p">,</span> <span class="n">location_y</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">text_color</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.plot_cross_hair">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_cross_hair.html#pyart.graph.RadarDisplay.plot_cross_hair">[docs]</a>
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="RadarDisplay.plot_cross_hair"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_cross_hair.html#pyart.graph.RadarDisplay.plot_cross_hair">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">plot_cross_hair</span><span class="p">(</span><span class="n">size</span><span class="p">,</span> <span class="n">npts</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a cross-hair on a ppi plot.</span>
@@ -1809,10 +1763,7 @@ document.write(`
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s2">&quot;k-&quot;</span><span class="p">)</span>  <span class="c1"># verticle</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="s2">&quot;k-&quot;</span><span class="p">)</span>  <span class="c1"># horizontal</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.plot_colorbar">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_colorbar.html#pyart.graph.RadarDisplay.plot_colorbar">[docs]</a>
-    <span class="k">def</span> <span class="nf">plot_colorbar</span><span class="p">(</span>
+<div class="viewcode-block" id="RadarDisplay.plot_colorbar"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.plot_colorbar.html#pyart.graph.RadarDisplay.plot_colorbar">[docs]</a>    <span class="k">def</span> <span class="nf">plot_colorbar</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">mappable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1871,14 +1822,11 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">cbs</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cb</span><span class="p">)</span></div>
 
-
     <span class="c1">##########################</span>
     <span class="c1"># Plot adjusting methods #</span>
     <span class="c1">##########################</span>
 
-<div class="viewcode-block" id="RadarDisplay.set_limits">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.set_limits.html#pyart.graph.RadarDisplay.set_limits">[docs]</a>
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="RadarDisplay.set_limits"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.set_limits.html#pyart.graph.RadarDisplay.set_limits">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">set_limits</span><span class="p">(</span><span class="n">xlim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ylim</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the display limits.</span>
@@ -1895,73 +1843,48 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">common</span><span class="o">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">xlim</span><span class="p">,</span> <span class="n">ylim</span><span class="p">,</span> <span class="n">ax</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.label_xaxis_x">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.label_xaxis_x.html#pyart.graph.RadarDisplay.label_xaxis_x">[docs]</a>
-    <span class="k">def</span> <span class="nf">label_xaxis_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="RadarDisplay.label_xaxis_x"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.label_xaxis_x.html#pyart.graph.RadarDisplay.label_xaxis_x">[docs]</a>    <span class="k">def</span> <span class="nf">label_xaxis_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Label the xaxis with the default label for x units.&quot;&quot;&quot;</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_ax</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;East West distance from &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s2">&quot; (km)&quot;</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.label_yaxis_y">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.label_yaxis_y.html#pyart.graph.RadarDisplay.label_yaxis_y">[docs]</a>
-    <span class="k">def</span> <span class="nf">label_yaxis_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="RadarDisplay.label_yaxis_y"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.label_yaxis_y.html#pyart.graph.RadarDisplay.label_yaxis_y">[docs]</a>    <span class="k">def</span> <span class="nf">label_yaxis_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Label the yaxis with the default label for y units.&quot;&quot;&quot;</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_ax</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;North South distance from &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s2">&quot; (km)&quot;</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.label_xaxis_r">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.label_xaxis_r.html#pyart.graph.RadarDisplay.label_xaxis_r">[docs]</a>
-    <span class="k">def</span> <span class="nf">label_xaxis_r</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="RadarDisplay.label_xaxis_r"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.label_xaxis_r.html#pyart.graph.RadarDisplay.label_xaxis_r">[docs]</a>    <span class="k">def</span> <span class="nf">label_xaxis_r</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Label the xaxis with the default label for r units.&quot;&quot;&quot;</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_ax</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Distance from &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s2">&quot; (km)&quot;</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.label_yaxis_z">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.label_yaxis_z.html#pyart.graph.RadarDisplay.label_yaxis_z">[docs]</a>
-    <span class="k">def</span> <span class="nf">label_yaxis_z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="RadarDisplay.label_yaxis_z"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.label_yaxis_z.html#pyart.graph.RadarDisplay.label_yaxis_z">[docs]</a>    <span class="k">def</span> <span class="nf">label_yaxis_z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Label the yaxis with the default label for z units.&quot;&quot;&quot;</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_ax</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Distance Above &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s2">&quot;  (km)&quot;</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.label_xaxis_rays">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.label_xaxis_rays.html#pyart.graph.RadarDisplay.label_xaxis_rays">[docs]</a>
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="RadarDisplay.label_xaxis_rays"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.label_xaxis_rays.html#pyart.graph.RadarDisplay.label_xaxis_rays">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">label_xaxis_rays</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Label the yaxis with the default label for rays.&quot;&quot;&quot;</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_ax</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Ray number (unitless)&quot;</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.label_xaxis_time">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.label_xaxis_time.html#pyart.graph.RadarDisplay.label_xaxis_time">[docs]</a>
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="RadarDisplay.label_xaxis_time"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.label_xaxis_time.html#pyart.graph.RadarDisplay.label_xaxis_time">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">label_xaxis_time</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Label the yaxis with the default label for rays.&quot;&quot;&quot;</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_ax</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Time (HH:MM)&quot;</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.label_yaxis_field">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.label_yaxis_field.html#pyart.graph.RadarDisplay.label_yaxis_field">[docs]</a>
-    <span class="k">def</span> <span class="nf">label_yaxis_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="RadarDisplay.label_yaxis_field"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.label_yaxis_field.html#pyart.graph.RadarDisplay.label_yaxis_field">[docs]</a>    <span class="k">def</span> <span class="nf">label_yaxis_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Label the yaxis with the default label for a field units.&quot;&quot;&quot;</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_ax</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_colorbar_label</span><span class="p">(</span><span class="n">field</span><span class="p">))</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.set_aspect_ratio">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.set_aspect_ratio.html#pyart.graph.RadarDisplay.set_aspect_ratio">[docs]</a>
-    <span class="nd">@staticmethod</span>
+<div class="viewcode-block" id="RadarDisplay.set_aspect_ratio"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.set_aspect_ratio.html#pyart.graph.RadarDisplay.set_aspect_ratio">[docs]</a>    <span class="nd">@staticmethod</span>
     <span class="k">def</span> <span class="nf">set_aspect_ratio</span><span class="p">(</span><span class="n">aspect_ratio</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the aspect ratio for plot area.&quot;&quot;&quot;</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_ax</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="n">aspect_ratio</span><span class="p">)</span></div>
-
 
     <span class="k">def</span> <span class="nf">_set_title</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">title</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">datetime_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_sweep_time</span><span class="o">=</span><span class="kc">True</span>
@@ -2075,9 +1998,7 @@ document.write(`
     <span class="c1"># name generator methods #</span>
     <span class="c1">##########################</span>
 
-<div class="viewcode-block" id="RadarDisplay.generate_filename">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.generate_filename.html#pyart.graph.RadarDisplay.generate_filename">[docs]</a>
-    <span class="k">def</span> <span class="nf">generate_filename</span><span class="p">(</span>
+<div class="viewcode-block" id="RadarDisplay.generate_filename"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.generate_filename.html#pyart.graph.RadarDisplay.generate_filename">[docs]</a>    <span class="k">def</span> <span class="nf">generate_filename</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">field</span><span class="p">,</span>
         <span class="n">sweep</span><span class="p">,</span>
@@ -2114,10 +2035,7 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">ext</span><span class="p">,</span> <span class="n">datetime_format</span><span class="p">,</span> <span class="n">use_sweep_time</span>
         <span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.generate_title">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.generate_title.html#pyart.graph.RadarDisplay.generate_title">[docs]</a>
-    <span class="k">def</span> <span class="nf">generate_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">datetime_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_sweep_time</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+<div class="viewcode-block" id="RadarDisplay.generate_title"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.generate_title.html#pyart.graph.RadarDisplay.generate_title">[docs]</a>    <span class="k">def</span> <span class="nf">generate_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">datetime_format</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">use_sweep_time</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a title for a plot.</span>
 
@@ -2142,10 +2060,7 @@ document.write(`
             <span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">datetime_format</span><span class="p">,</span> <span class="n">use_sweep_time</span>
         <span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.generate_vpt_title">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.generate_vpt_title.html#pyart.graph.RadarDisplay.generate_vpt_title">[docs]</a>
-    <span class="k">def</span> <span class="nf">generate_vpt_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
+<div class="viewcode-block" id="RadarDisplay.generate_vpt_title"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.generate_vpt_title.html#pyart.graph.RadarDisplay.generate_vpt_title">[docs]</a>    <span class="k">def</span> <span class="nf">generate_vpt_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a title for a VPT plot.</span>
 
@@ -2162,10 +2077,7 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">common</span><span class="o">.</span><span class="n">generate_vpt_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.generate_ray_title">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.generate_ray_title.html#pyart.graph.RadarDisplay.generate_ray_title">[docs]</a>
-    <span class="k">def</span> <span class="nf">generate_ray_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">ray</span><span class="p">):</span>
+<div class="viewcode-block" id="RadarDisplay.generate_ray_title"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.generate_ray_title.html#pyart.graph.RadarDisplay.generate_ray_title">[docs]</a>    <span class="k">def</span> <span class="nf">generate_ray_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">ray</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a title for a ray plot.</span>
 
@@ -2184,10 +2096,7 @@ document.write(`
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">common</span><span class="o">.</span><span class="n">generate_ray_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">ray</span><span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="RadarDisplay.generate_az_rhi_title">
-<a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.generate_az_rhi_title.html#pyart.graph.RadarDisplay.generate_az_rhi_title">[docs]</a>
-    <span class="k">def</span> <span class="nf">generate_az_rhi_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">):</span>
+<div class="viewcode-block" id="RadarDisplay.generate_az_rhi_title"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarDisplay.generate_az_rhi_title.html#pyart.graph.RadarDisplay.generate_az_rhi_title">[docs]</a>    <span class="k">def</span> <span class="nf">generate_az_rhi_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a title for a ray plot.</span>
 
@@ -2205,7 +2114,6 @@ document.write(`
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">common</span><span class="o">.</span><span class="n">generate_az_rhi_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">)</span></div>
-
 
     <span class="c1">###############</span>
     <span class="c1"># Get methods #</span>
@@ -2360,7 +2268,6 @@ document.write(`
         <span class="k">return</span> <span class="n">common</span><span class="o">.</span><span class="n">generate_colorbar_label</span><span class="p">(</span><span class="n">standard_name</span><span class="p">,</span> <span class="n">units</span><span class="p">)</span></div>
 
 
-
 <span class="k">def</span> <span class="nf">_mask_outside</span><span class="p">(</span><span class="n">flag</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the data masked outside of v1 and v2 when flag is True.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">flag</span><span class="p">:</span>
@@ -2429,7 +2336,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>

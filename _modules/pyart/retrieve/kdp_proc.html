@@ -2,12 +2,12 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.kdp_proc &#8212; Py-ART 1.16.1.post11 documentation</title>
+    <title>pyart.retrieve.kdp_proc &#8212; Py-ART 1.16.1.post12 documentation</title>
   
   
   
@@ -43,20 +43,14 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="../../../_static/documentation_options.js?v=77cf9e02"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=63e4a98c"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -151,7 +145,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post11 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post12 documentation</p>
   
 </a></div>
     
@@ -538,9 +532,7 @@ document.write(`
 <span class="n">SHIFT</span> <span class="o">=</span> <span class="mi">13</span>  <span class="c1"># Shifting of the final signal</span>
 
 
-<div class="viewcode-block" id="kdp_schneebeli">
-<a class="viewcode-back" href="../../../API/generated/pyart.retrieve.kdp_schneebeli.html#pyart.retrieve.kdp_schneebeli">[docs]</a>
-<span class="k">def</span> <span class="nf">kdp_schneebeli</span><span class="p">(</span>
+<div class="viewcode-block" id="kdp_schneebeli"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.kdp_schneebeli.html#pyart.retrieve.kdp_schneebeli">[docs]</a><span class="k">def</span> <span class="nf">kdp_schneebeli</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -703,7 +695,6 @@ document.write(`
         <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">kdp_dict</span><span class="p">,</span> <span class="n">kdp_stdev_dict</span><span class="p">,</span> <span class="n">phidpr_dict</span></div>
-
 
 
 <span class="k">def</span> <span class="nf">_kdp_estimation_backward_fixed</span><span class="p">(</span>
@@ -1268,9 +1259,7 @@ document.write(`
     <span class="k">return</span> <span class="n">kdp_filter_out</span><span class="p">,</span> <span class="n">kdp_std</span><span class="p">,</span> <span class="n">phidp_filter_out</span>
 
 
-<div class="viewcode-block" id="kdp_vulpiani">
-<a class="viewcode-back" href="../../../API/generated/pyart.retrieve.kdp_vulpiani.html#pyart.retrieve.kdp_vulpiani">[docs]</a>
-<span class="k">def</span> <span class="nf">kdp_vulpiani</span><span class="p">(</span>
+<div class="viewcode-block" id="kdp_vulpiani"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.kdp_vulpiani.html#pyart.retrieve.kdp_vulpiani">[docs]</a><span class="k">def</span> <span class="nf">kdp_vulpiani</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1439,7 +1428,6 @@ document.write(`
         <span class="n">pool</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
     <span class="k">return</span> <span class="n">kdp_dict</span><span class="p">,</span> <span class="n">phidpr_dict</span></div>
-
 
 
 <span class="k">def</span> <span class="nf">_kdp_vulpiani_profile</span><span class="p">(</span><span class="n">psidp_in</span><span class="p">,</span> <span class="n">dr</span><span class="p">,</span> <span class="n">windsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">interp</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
@@ -1699,9 +1687,7 @@ document.write(`
 <span class="c1">#   function of iteration.</span>
 
 
-<div class="viewcode-block" id="kdp_maesaka">
-<a class="viewcode-back" href="../../../API/generated/pyart.retrieve.kdp_maesaka.html#pyart.retrieve.kdp_maesaka">[docs]</a>
-<span class="k">def</span> <span class="nf">kdp_maesaka</span><span class="p">(</span>
+<div class="viewcode-block" id="kdp_maesaka"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.kdp_maesaka.html#pyart.retrieve.kdp_maesaka">[docs]</a><span class="k">def</span> <span class="nf">kdp_maesaka</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">method</span><span class="o">=</span><span class="s2">&quot;cg&quot;</span><span class="p">,</span>
@@ -1966,7 +1952,6 @@ document.write(`
     <span class="n">phidpr_dict</span><span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Retrieved in reverse direction&quot;</span>
 
     <span class="k">return</span> <span class="n">kdp_dict</span><span class="p">,</span> <span class="n">phidpf_dict</span><span class="p">,</span> <span class="n">phidpr_dict</span></div>
-
 
 
 <span class="k">def</span> <span class="nf">boundary_conditions_maesaka</span><span class="p">(</span>
@@ -2534,7 +2519,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>

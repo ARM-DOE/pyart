@@ -2,12 +2,12 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.map.grid_mapper &#8212; Py-ART 1.16.1.post11 documentation</title>
+    <title>pyart.map.grid_mapper &#8212; Py-ART 1.16.1.post12 documentation</title>
   
   
   
@@ -43,20 +43,14 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../../../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="../../../_static/documentation_options.js?v=77cf9e02"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=63e4a98c"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -151,7 +145,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post11 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post12 documentation</p>
   
 </a></div>
     
@@ -520,9 +514,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.gates_to_grid</span> <span class="kn">import</span> <span class="n">map_gates_to_grid</span>
 
 
-<div class="viewcode-block" id="grid_from_radars">
-<a class="viewcode-back" href="../../../API/generated/pyart.map.grid_from_radars.html#pyart.map.grid_from_radars">[docs]</a>
-<span class="k">def</span> <span class="nf">grid_from_radars</span><span class="p">(</span>
+<div class="viewcode-block" id="grid_from_radars"><a class="viewcode-back" href="../../../API/generated/pyart.map.grid_from_radars.html#pyart.map.grid_from_radars">[docs]</a><span class="k">def</span> <span class="nf">grid_from_radars</span><span class="p">(</span>
     <span class="n">radars</span><span class="p">,</span>
     <span class="n">grid_shape</span><span class="p">,</span>
     <span class="n">grid_limits</span><span class="p">,</span>
@@ -706,7 +698,6 @@ document.write(`
     <span class="p">)</span></div>
 
 
-
 <span class="k">def</span> <span class="nf">_unify_times_for_radars</span><span class="p">(</span><span class="n">radars</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return unified start times and units for a number of radars.&quot;&quot;&quot;</span>
     <span class="n">dates</span> <span class="o">=</span> <span class="p">[</span>
@@ -776,9 +767,7 @@ document.write(`
             <span class="k">return</span> <span class="n">ind</span><span class="p">,</span> <span class="n">dist</span>
 
 
-<div class="viewcode-block" id="map_to_grid">
-<a class="viewcode-back" href="../../../API/generated/pyart.map.map_to_grid.html#pyart.map.map_to_grid">[docs]</a>
-<span class="k">def</span> <span class="nf">map_to_grid</span><span class="p">(</span>
+<div class="viewcode-block" id="map_to_grid"><a class="viewcode-back" href="../../../API/generated/pyart.map.map_to_grid.html#pyart.map.map_to_grid">[docs]</a><span class="k">def</span> <span class="nf">map_to_grid</span><span class="p">(</span>
     <span class="n">radars</span><span class="p">,</span>
     <span class="n">grid_shape</span><span class="p">,</span>
     <span class="n">grid_limits</span><span class="p">,</span>
@@ -1222,13 +1211,10 @@ document.write(`
     <span class="k">return</span> <span class="n">grids</span></div>
 
 
-
 <span class="c1"># Radius of Influence (RoI) functions</span>
 
 
-<div class="viewcode-block" id="example_roi_func_constant">
-<a class="viewcode-back" href="../../../API/generated/pyart.map.example_roi_func_constant.html#pyart.map.example_roi_func_constant">[docs]</a>
-<span class="k">def</span> <span class="nf">example_roi_func_constant</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
+<div class="viewcode-block" id="example_roi_func_constant"><a class="viewcode-back" href="../../../API/generated/pyart.map.example_roi_func_constant.html#pyart.map.example_roi_func_constant">[docs]</a><span class="k">def</span> <span class="nf">example_roi_func_constant</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Example RoI function which returns a constant radius.</span>
 
@@ -1247,7 +1233,6 @@ document.write(`
     <span class="k">return</span> <span class="n">constant</span></div>
 
 
-
 <span class="k">def</span> <span class="nf">_gen_roi_func_constant</span><span class="p">(</span><span class="n">constant_roi</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a RoI function which returns a constant radius.</span>
@@ -1262,9 +1247,7 @@ document.write(`
     <span class="k">return</span> <span class="n">roi</span>
 
 
-<div class="viewcode-block" id="example_roi_func_dist">
-<a class="viewcode-back" href="../../../API/generated/pyart.map.example_roi_func_dist.html#pyart.map.example_roi_func_dist">[docs]</a>
-<span class="k">def</span> <span class="nf">example_roi_func_dist</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
+<div class="viewcode-block" id="example_roi_func_dist"><a class="viewcode-back" href="../../../API/generated/pyart.map.example_roi_func_dist.html#pyart.map.example_roi_func_dist">[docs]</a><span class="k">def</span> <span class="nf">example_roi_func_dist</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Example RoI function which returns a radius which grows with distance.</span>
 
@@ -1296,7 +1279,6 @@ document.write(`
     <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">r</span><span class="p">)</span></div>
 
 
-
 <span class="k">def</span> <span class="nf">_gen_roi_func_dist</span><span class="p">(</span><span class="n">z_factor</span><span class="p">,</span> <span class="n">xy_factor</span><span class="p">,</span> <span class="n">min_radius</span><span class="p">,</span> <span class="n">offsets</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a RoI function whose radius grows with distance.</span>
@@ -1320,9 +1302,7 @@ document.write(`
     <span class="k">return</span> <span class="n">roi</span>
 
 
-<div class="viewcode-block" id="example_roi_func_dist_beam">
-<a class="viewcode-back" href="../../../API/generated/pyart.map.example_roi_func_dist_beam.html#pyart.map.example_roi_func_dist_beam">[docs]</a>
-<span class="k">def</span> <span class="nf">example_roi_func_dist_beam</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
+<div class="viewcode-block" id="example_roi_func_dist_beam"><a class="viewcode-back" href="../../../API/generated/pyart.map.example_roi_func_dist_beam.html#pyart.map.example_roi_func_dist_beam">[docs]</a><span class="k">def</span> <span class="nf">example_roi_func_dist_beam</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Example RoI function which returns a radius which grows with distance</span>
 <span class="sd">    and whose parameters are based on virtual beam size.</span>
@@ -1355,7 +1335,6 @@ document.write(`
         <span class="n">min_radius</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">r</span><span class="p">)</span></div>
-
 
 
 <span class="k">def</span> <span class="nf">_gen_roi_func_dist_beam</span><span class="p">(</span><span class="n">h_factor</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">bsp</span><span class="p">,</span> <span class="n">min_radius</span><span class="p">,</span> <span class="n">offsets</span><span class="p">):</span>
@@ -1435,7 +1414,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>

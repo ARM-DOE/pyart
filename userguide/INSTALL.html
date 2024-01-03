@@ -2,13 +2,13 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Building and installing Py-ART &#8212; Py-ART 1.16.1.post11 documentation</title>
+    <title>Building and installing Py-ART &#8212; Py-ART 1.16.1.post12 documentation</title>
   
   
   
@@ -44,20 +44,14 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
   <script src="../_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
 
-    <script src="../_static/documentation_options.js?v=77cf9e02"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=63e4a98c"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
-    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
     <script src="../_static/design-tabs.js?v=36754332"></script>
     <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -154,7 +148,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post11 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post12 documentation</p>
   
 </a></div>
     
@@ -521,9 +515,9 @@ document.write(`
                 <article class="bd-article" role="main">
                   
 <section id="building-and-installing-py-art">
-<h1>Building and installing Py-ART<a class="headerlink" href="#building-and-installing-py-art" title="Link to this heading">#</a></h1>
+<h1>Building and installing Py-ART<a class="headerlink" href="#building-and-installing-py-art" title="Permalink to this heading">#</a></h1>
 <section id="required-dependencies">
-<h2>Required Dependencies<a class="headerlink" href="#required-dependencies" title="Link to this heading">#</a></h2>
+<h2>Required Dependencies<a class="headerlink" href="#required-dependencies" title="Permalink to this heading">#</a></h2>
 <p>Py-ART requires the following software.</p>
 <ul class="simple">
 <li><p><a class="reference external" href="http://www.python.org">Python</a> 3.9x, 3.10x or 3.11x</p></li>
@@ -545,7 +539,7 @@ document.write(`
 </ul>
 </section>
 <section id="optional-dependencies">
-<h2>Optional Dependencies<a class="headerlink" href="#optional-dependencies" title="Link to this heading">#</a></h2>
+<h2>Optional Dependencies<a class="headerlink" href="#optional-dependencies" title="Permalink to this heading">#</a></h2>
 <p>The following packages are recommended for a fully-functional Py-ART
 installation, but the package will install and work with reduced functionality
 without these packages.</p>
@@ -563,7 +557,7 @@ basemap will no longer have support.</p></li>
 </ul>
 </section>
 <section id="obtaining-the-latest-source">
-<h2>Obtaining the latest source<a class="headerlink" href="#obtaining-the-latest-source" title="Link to this heading">#</a></h2>
+<h2>Obtaining the latest source<a class="headerlink" href="#obtaining-the-latest-source" title="Permalink to this heading">#</a></h2>
 <p>The latest source code for Py-ART can be obtained from the GitHub repository,
 <a class="github reference external" href="https://github.com/ARM-DOE/pyart">ARM-DOE/pyart</a>.</p>
 <p>The latest source can be checked out using</p>
@@ -572,7 +566,7 @@ basemap will no longer have support.</p></li>
 </div>
 </section>
 <section id="installing-from-source">
-<h2>Installing from Source<a class="headerlink" href="#installing-from-source" title="Link to this heading">#</a></h2>
+<h2>Installing from Source<a class="headerlink" href="#installing-from-source" title="Permalink to this heading">#</a></h2>
 <p>The path to the TRMM RSL library must be provided during install. This can
 either be done by setting the <code class="docutils literal notranslate"><span class="pre">RSL_PATH</span></code> environmentation variable. In bash
 this can be done using <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">RSL_PATH=/path/to/rsl/</span></code>. If this location is
@@ -603,7 +597,7 @@ in-place.</p>
 </div>
 </section>
 <section id="frequently-asked-questions">
-<h2>Frequently asked questions<a class="headerlink" href="#frequently-asked-questions" title="Link to this heading">#</a></h2>
+<h2>Frequently asked questions<a class="headerlink" href="#frequently-asked-questions" title="Permalink to this heading">#</a></h2>
 <ul>
 <li><p>I’m getting a no ‘io’ module after installing pyart with pip.</p>
 <p>There is a pyart on pip that is a different package. Make sure to do:</p>
@@ -749,7 +743,7 @@ To get basemap working, but again Cartopy should be used instead of Basemap.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.2.6.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>
