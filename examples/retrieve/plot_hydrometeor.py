@@ -1,7 +1,7 @@
 """
-=========================================
+=============================================
 Calculate and Plot hydrometeor classification
-=========================================
+=============================================
 
 Calculates a hydrometeor classification and displays the results
 """
