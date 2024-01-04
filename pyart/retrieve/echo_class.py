@@ -10,8 +10,8 @@ import numpy as np
 # Local imports
 from ..config import get_field_name, get_fillvalue, get_metadata
 from ..core import Grid
-from ._echo_class_wt import wavelet_reclass, calc_scale_break
 from ._echo_class import _feature_detection, steiner_class_buff
+from ._echo_class_wt import calc_scale_break, wavelet_reclass
 
 
 def steiner_conv_strat(
