@@ -49,7 +49,6 @@ extensions = [
     "sphinx.ext.napoleon",
     "sphinx_copybutton",
     "sphinx_gallery.gen_gallery",
-    "sphinx_gallery.load_style",
     "sphinx_design",
     "nbsphinx",
     "myst_nb",
@@ -57,10 +56,11 @@ extensions = [
 ]
 
 exclude_patterns = ["_build", "**.ipynb_checkpoints"]
-
-# only include examples if the BUILD_PYART_EXAMPLES env. variable is set
-extensions.append("sphinx_gallery.gen_gallery")
-sphinx_gallery_conf = {"examples_dirs": "../../examples", "gallery_dirs": "examples"}
+sphinx_gallery_conf = {
+    "examples_dirs": "../../examples",
+    "gallery_dirs": "examples",
+    "abort_on_example_error": True,
+}
 
 
 # Configuration options for plot_directive. See:
@@ -124,7 +124,7 @@ if "CI" in os.environ and os.environ["CI"] == "true":
 #
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
-language = None
+language = "en"
 
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
@@ -203,7 +203,7 @@ post_auto_image = 1
 post_auto_excerpt = 2
 
 # Don't execute the jupyter notebooks
-jupyter_execute_notebooks = "off"
+nb_execution_mode = "off"
 
 # Extra variables that will be available to the templates. Used to create the
 # links to the Github repository sources and issues
@@ -262,6 +262,9 @@ man_pages = [(master_doc, "pyart", "The Python ARM Radar Toolkit", [author], 1)]
 # Grouping the document tree into Texinfo files. List of tuples
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
+
+# Make MyST generate anchors for headings
+myst_heading_anchors = 2
 
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {

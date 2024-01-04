@@ -11,11 +11,11 @@ dependencies:
   - netcdf4
   - pytest
   - wradlib
-  - metpy
+  - metpy<1.6
   - cartopy
   - cvxopt
   - xarray
-  - sphinx
+  - sphinx<7.2
   - ipython
   - pandoc
   - pkg-config
