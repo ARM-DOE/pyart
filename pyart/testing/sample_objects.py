@@ -378,8 +378,9 @@ def make_normal_storm(sigma, mu):
     return test_grid
 
 
-def make_gaussian_storm_grid(min_value=5, max_value=45, grid_len=32,
-                        sigma=0.2, mu=0.0,  masked_boundary=3):
+def make_gaussian_storm_grid(
+    min_value=5, max_value=45, grid_len=32, sigma=0.2, mu=0.0, masked_boundary=3
+):
     """
     Make a 1 km resolution grid with a Gaussian storm pattern at the center,
     with two layers having the same data and masked boundaries.
@@ -404,19 +405,24 @@ def make_gaussian_storm_grid(min_value=5, max_value=45, grid_len=32,
 
     # Create an empty Py-ART grid
     grid_shape = (2, grid_len, grid_len)
-    grid_limits = ((1000, 1000), (-grid_len*1000/2, grid_len*1000/2), (-grid_len*1000/2, grid_len*1000/2))
+    grid_limits = (
+        (1000, 1000),
+        (-grid_len * 1000 / 2, grid_len * 1000 / 2),
+        (-grid_len * 1000 / 2, grid_len * 1000 / 2),
+    )
     grid = make_empty_grid(grid_shape, grid_limits)
 
     # Creating a grid with Gaussian distribution values
     x, y = np.meshgrid(np.linspace(-1, 1, grid_len), np.linspace(-1, 1, grid_len))
-    d = np.sqrt(x*x + y*y)
-    gaussian = np.exp(-((d - mu)**2 / (2.0 * sigma**2)))
+    d = np.sqrt(x * x + y * y)
+    gaussian = np.exp(-((d - mu) ** 2 / (2.0 * sigma**2)))
 
     # Normalize and scale the Gaussian distribution
-    gaussian_normalized = (gaussian - np.min(gaussian)) / (np.max(gaussian) - np.min(gaussian))
+    gaussian_normalized = (gaussian - np.min(gaussian)) / (
+        np.max(gaussian) - np.min(gaussian)
+    )
     storm_intensity = gaussian_normalized * (max_value - min_value) + min_value
     storm_intensity = np.stack([storm_intensity, storm_intensity])
-
 
     # Apply thresholds for storm intensity and masking
     mask = np.zeros_like(storm_intensity, dtype=bool)
@@ -424,7 +430,6 @@ def make_gaussian_storm_grid(min_value=5, max_value=45, grid_len=32,
     mask[:, -masked_boundary:, :] = True
     mask[:, :, :masked_boundary] = True
     mask[:, :, -masked_boundary:] = True
-
 
     storm_intensity = np.ma.array(storm_intensity, mask=mask)
     # Prepare dictionary for Py-ART grid fields

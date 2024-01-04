@@ -302,7 +302,6 @@ def test_standardize():
     pytest.raises(ValueError, pyart.retrieve.echo_class._standardize, rhohv, "foo")
 
 
-
 def test_conv_strat_raut_outDict_valid():
     """
     Test that function returns a valid dictionary with all expected keys'.
@@ -396,4 +395,3 @@ def test_conv_strat_raut_results_correct():
     masked_reclass = np.expand_dims(masked_reclass, axis=0)
 
     assert_allclose(masked_reclass, wtclass["wt_reclass"]["data"], atol=0.1)
-
