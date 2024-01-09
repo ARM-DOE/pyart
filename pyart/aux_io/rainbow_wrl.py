@@ -282,7 +282,7 @@ def read_rainbow_wrl(
         # all sweeps have to have the same range resolution
         for i in range(nslices):
             slice_info = rbf["volume"]["scan"]["slice"][i]
-            if slice_info['rangestep'] != common_slice_info["rangestep"]:
+            if slice_info["rangestep"] != common_slice_info["rangestep"]:
                 raise ValueError("range resolution changes between sweeps")
 
     r_res = float(common_slice_info["rangestep"]) * 1000.0
