@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Contributor’s Guide &#8212; Py-ART 1.16.1.post14 documentation</title>
+    <title>Contributor’s Guide &#8212; Py-ART 1.16.1.post15 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
 <link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
   <script src="../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
 
-    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=0c15bd58"></script>
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js?v=a86d3941"></script>
     <script src="../_static/doctools.js?v=888ff710"></script>
     <script src="../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -150,7 +150,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post14 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post15 documentation</p>
   
 </a></div>
     
@@ -584,39 +584,16 @@ the latest version of Py-ART:</p>
 </section>
 <section id="code-style">
 <h2>Code Style<a class="headerlink" href="#code-style" title="Permalink to this heading">#</a></h2>
-<p>Py-ART follows pep8 coding standards. To make sure your code follows the
-pep8 style, you can use a variety of tools that can check for you. Two
-popular pep8 check modules are pycodestyle and pylint.</p>
+<p>Py-ART uses pre-commit for linting, which applies a variety of pep8 and other code style rules.</p>
 <p>For more on pep8 style:</p>
 <ul class="simple">
 <li><p><a class="reference external" href="https://www.python.org/dev/peps/pep-0008/">https://www.python.org/dev/peps/pep-0008/</a></p></li>
 </ul>
-<p>To install pycodestyle:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">pycodestyle</span>
+<p>To install pre-commit hooks for the Py-ART repo:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pre</span><span class="o">-</span><span class="n">commit</span> <span class="n">install</span>
 </pre></div>
 </div>
-<p>To use pycodestyle:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pycodestyle</span> <span class="n">filename</span>
-</pre></div>
-</div>
-<p>To install pylint:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="n">pylint</span>
-</pre></div>
-</div>
-<p>To get a detailed pylint report:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pylint</span> <span class="n">filename</span>
-</pre></div>
-</div>
-<p>If you want to just see what line number and the issue, just use:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pylint</span> <span class="o">-</span><span class="n">r</span> <span class="n">n</span> <span class="n">filename</span>
-</pre></div>
-</div>
-<p>Both of these tools are highly configurable to suit a user’s taste. Refer to
-the tools documentation for details on this process.</p>
-<ul class="simple">
-<li><p><a class="reference external" href="https://pycodestyle.readthedocs.io/en/latest/">https://pycodestyle.readthedocs.io/en/latest/</a></p></li>
-<li><p><a class="reference external" href="https://www.pylint.org/">https://www.pylint.org/</a></p></li>
-</ul>
+<p>Afterwards, pre-commit will run on every commit to the repository. It will re-format files as neccessary.</p>
 </section>
 <section id="python-file-setup">
 <h2>Python File Setup<a class="headerlink" href="#python-file-setup" title="Permalink to this heading">#</a></h2>
