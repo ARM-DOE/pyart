@@ -385,7 +385,8 @@ def make_gaussian_storm_grid(
     Make a 1 km resolution grid with a Gaussian storm pattern at the center,
     with two layers having the same data and masked boundaries.
 
-    Parameters:
+    Parameters
+    -----------
     min_value : float
         Minimum value of the storm intensity.
     max_value : float
@@ -399,7 +400,8 @@ def make_gaussian_storm_grid(
     masked_boundary : int
         Number of pixels around the edge to be masked.
 
-    Returns:
+    Returns
+    --------
     A Py-ART grid with the Gaussian storm field added.
     """
 

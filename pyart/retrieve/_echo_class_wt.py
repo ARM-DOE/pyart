@@ -35,18 +35,18 @@ def wavelet_reclass(
     First, convert dBZ to rain rates using standard Z-R relationship or user given coefficients. This is to
     transform the normally distributed dBZ to gamma-like distribution, enhancing the structure of the field.
 
-    Parameters:
-    ===========
-    dbz_data: ndarray
+    Parameters
+    ----------
+    dbz_data : ndarray
         2D array containing radar data. Last dimension should be levels.
-    res_km: float
+    res_km : float
         Resolution of the radar data in km
-    scale_break: int
+    scale_break : int
         Calculated scale break between convective and stratiform scales. Dyadically spaced in grid pixels.
 
-    Returns:
-    ========
-    wt_class: ndarray
+    Returns
+    -------
+    wt_class : ndarray
         Precipitation type classification: 0. N/A 1. stratiform/non-convective,
         2. convective cores and 3. moderate+transitional (mix) convective
         regions.
@@ -83,20 +83,20 @@ def conv_wavelet_sum(dbz_data, zr_a, zr_b, scale_break):
     """
     Computes the sum of wavelet transform components for convective scales from dBZ data.
 
-    Parameters:
-    ===========
-    dbz_data: ndarray
+    Parameters
+    ------------
+    dbz_data : ndarray
         2D array containing radar dBZ data.
-    zr_a, zr_b: float
+    zr_a, zr_b : float
         Coefficients for the Z-R relationship.
-    res_km: float
+    res_km : float
         Resolution of the radar data in km.
-    scale_break: int
+    scale_break : int
         Calculated scale break (in pixels) between convective and stratiform scales
 
-    Returns:
-    ========
-    wt_sum: ndarray
+    Returns
+    ---------
+    wt_sum : ndarray
         Sum of convective scale wavelet transform components.
     """
     try:
@@ -136,16 +136,16 @@ def label_classes(
     min_reflectivity = 10  # pixels below this value are not classified.
      conv_min_refl = 30  # pixel below this value are not convective. This works for most cases.
 
-    Parameters:
-    ===========
-    wt_sum: ndarray
+    Parameters
+    -----------
+    wt_sum : ndarray
         Integrated wavelet transform
-    vol_data: ndarray
+    vol_data : ndarray
         Array, vector or matrix of data
 
-    Returns:
-    ========
-    wt_class: ndarray
+    Returns
+    ---------
+    wt_class : ndarray
         Precipitation type classification.
     """
 
@@ -176,16 +176,16 @@ def calc_scale_break(res_meters, conv_scale_km):
     Compute scale break for convection and stratiform regions. WT will be
     computed upto this scale and features will be designated as convection.
 
-    Parameters:
-    ===========
-    res_meters: float
+    Parameters
+    -----------
+    res_meters : float
         resolution of the image.
-    conv_scale_km: float
+    conv_scale_km : float
         expected size of spatial variations due to convection.
 
-    Returns:
-    ========
-    dyadic: int
+    Returns
+    --------
+    dyadic scale break : int
         integer scale break in dyadic scale.
     """
     res_km = res_meters / 1000
@@ -206,16 +206,16 @@ def atwt2d(data2d, max_scale=-1):
     @authors: Bhupendra A. Raut and Dileep M. Puranik
     @references: Press et al. (1992) Numerical Recipes in C.
 
-    Parameters:
-    ===========
-    data2d: ndarray
+    Parameters
+    -----------
+    data2d : ndarray
         2D image as array or matrix.
-    max_scale:
+    max_scale :
         Computes wavelets up to max_scale. Leave blank for maximum possible
         scales.
 
-    Returns:
-    ===========
+    Returns
+    ---------
     tuple of ndarray
         ATWT of input image and the final smoothed image or background image.
     """
