@@ -998,14 +998,15 @@ def conv_strat_raut(
     override_checks=False,
 ):
     """
-    A fast method to classify radar echoes into convective cores, mixed convection, and stratiform regions.
+    A computationally efficient method to classify radar echoes into convective cores, mixed convection,
+    and stratiform regions for gridded radar reflectivity field.
 
-    This function uses à trous wavelet transform (ATWT) for multiresolution (scale) analysis of radar field,
-    focusing on precipitation structure over reflectivity thresholds for classification (Raut et al 2008, 2020).
+    This function uses à trous wavelet transform (ATWT) for multiresolution (i.e. scale) analysis of radar field,
+    focusing on precipitation structure over reflectivity thresholds for robust echo classification (Raut et al 2008, 2020).
 
     Parameters
     ----------
-    grid : Grid
+    grid : PyART Grid
         Grid object containing radar data.
     refl_field : str
         Field name for reflectivity data in the Py-ART grid object.
@@ -1048,7 +1049,7 @@ def conv_strat_raut(
     Returns
     -------
 
-    dict:
+    dict :
     A dictionary structured as a Py-ART grid field, suitable for adding to a Py-ART Grid object. The dictionary
     contains the classification data and associated metadata. The classification categories are as follows:
         - 3: Convective Cores: associated with strong updrafts and active collision-coalescence.
