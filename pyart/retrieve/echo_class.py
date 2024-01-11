@@ -7,8 +7,11 @@ from warnings import warn
 
 import numpy as np
 
+# Local imports
 from ..config import get_field_name, get_fillvalue, get_metadata
+from ..core import Grid
 from ._echo_class import _feature_detection, steiner_class_buff
+from ._echo_class_wt import calc_scale_break, wavelet_reclass
 
 
 def steiner_conv_strat(
@@ -978,3 +981,175 @@ def get_freq_band(freq):
     warn("Unknown frequency band")
 
     return None
+
+
+def conv_strat_raut(
+    grid,
+    refl_field,
+    cappi_level=0,
+    zr_a=200,
+    zr_b=1.6,
+    core_wt_threshold=5,
+    conv_wt_threshold=1.5,
+    conv_scale_km=25,
+    min_reflectivity=5,
+    conv_min_refl=25,
+    conv_core_threshold=42,
+    override_checks=False,
+):
+    """
+    A computationally efficient method to classify radar echoes into convective cores, mixed convection,
+    and stratiform regions for gridded radar reflectivity field.
+
+    This function uses à trous wavelet transform (ATWT) for multiresolution (i.e. scale) analysis of radar field,
+    focusing on precipitation structure over reflectivity thresholds for robust echo classification (Raut et al 2008, 2020).
+
+    Parameters
+    ----------
+    grid : PyART Grid
+        Grid object containing radar data.
+    refl_field : str
+        Field name for reflectivity data in the Py-ART grid object.
+    zr_a : float, optional
+        Coefficient 'a' in the Z-R relationship Z = a*R^b for reflectivity to rain rate conversion.
+        The algorithm is not sensitive to precise values of 'zr_a' and 'zr_b'; however,
+        they must be adjusted based on the type of radar used.
+        Default is 200.
+    zr_b : float, optional
+        Coefficient 'b' in the Z-R relationship Z = a*R^b. Default is 1.6.
+    core_wt_threshold : float, optional
+        Threshold for wavelet components to separate convective cores from mix-intermediate type.
+        Default is 5. Recommended values are between 4 and 6.
+    conv_wt_threshold : float, optional
+        Threshold for significant wavelet components to separate all convection from stratiform.
+        Default is 1.5. Recommended values are between 1 and 2.
+    conv_scale_km : float, optional
+        Approximate scale break (in km) between convective and stratiform scales.
+        Scale break may vary over different regions and seasons
+        (Refere to Raut et al 2018 for more discussion on scale-breaks). Note that the
+        algorithm is insensitive to small variations in the scale break due to the
+        dyadic nature of the scaling. The actual scale break used in the calculation of wavelets
+        is returned in the output dictionary by parameter `scale_break_used`.
+        Default is 25 km. Recommended values are between 16 and 32 km.
+    min_reflectivity : float, optional
+        Minimum reflectivity threshold. Reflectivities below this value are not classified.
+        Default is 5 dBZ. This value must be greater than or equal to '0'.
+    conv_min_refl : float, optional
+        Reflectivity values lower than this threshold will be always considered as non-convective.
+        Default is 25 dBZ. Recommended values are between 25 and 30 dBZ.
+    conv_core_threshold : float, optional
+        Reflectivities above this threshold are classified as convective cores if wavelet components are significant (See: conv_wt_threshold).
+        Default is 42 dBZ.
+        Recommended value must be is greater than or equal to 40 dBZ. The algorithm is not sensitive to this value.
+    override_checks : bool, optional
+        If set to True, the function will bypass the sanity checks for above parameter values.
+        This allows the user to use custom values for parameters, even if they fall outside
+        the recommended ranges. The default is False.
+
+    Returns
+    -------
+
+    dict :
+    A dictionary structured as a Py-ART grid field, suitable for adding to a Py-ART Grid object. The dictionary
+    contains the classification data and associated metadata. The classification categories are as follows:
+        - 3: Convective Cores: associated with strong updrafts and active collision-coalescence.
+        - 2: Mixed-Intermediate: capturing a wide range of convective activities, excluding the convective cores.
+        - 1: Stratiform: remaining areas with more uniform and less intense precipitation.
+        - 0: Unclassified: for reflectivity below the minimum threshold.
+
+
+    References
+    ----------
+    Raut, B. A., Karekar, R. N., & Puranik, D. M. (2008). Wavelet-based technique to extract convective clouds from
+    infrared satellite images. IEEE Geosci. Remote Sens. Lett., 5(3), 328-330.
+
+    Raut, B. A., Seed, A. W., Reeder, M. J., & Jakob, C. (2018). A multiplicative cascade model for high‐resolution
+    space‐time downscaling of rainfall. J. Geophys. Res. Atmos., 123(4), 2050-2067.
+
+    Raut, B. A., Louf, V., Gayatri, K., Murugavel, P., Konwar, M., & Prabhakaran, T. (2020). A multiresolution technique
+    for the classification of precipitation echoes in radar data. IEEE Trans. Geosci. Remote Sens., 58(8), 5409-5415.
+    """
+
+    # Check if the grid is a Py-ART Grid object
+    if not isinstance(grid, Grid):
+        raise TypeError("The 'grid' is not a Py-ART Grid object.")
+
+    # Check if dx and dy are the same, and warn if not
+    dx = grid.x["data"][1] - grid.x["data"][0]
+    dy = grid.y["data"][1] - grid.y["data"][0]
+    if dx != dy:
+        warn(
+            "Warning: Grid resolution `dx` and `dy` should be comparable for correct results.",
+            UserWarning,
+        )
+
+    # Compute scale break (dyadic) here to paas it on as parameter to user dictionary
+    scale_break = calc_scale_break(res_meters=dx, conv_scale_km=conv_scale_km)
+
+    # From dyadic scale to km
+    scale_break_km = (2 ** (scale_break - 1)) * dx / 1000
+
+    # Sanity checks for parameters if override_checks is False
+    if not override_checks:
+        conv_core_threshold = max(
+            40, conv_core_threshold
+        )  # Ensure conv_core_threshold is at least 40 dBZ
+        core_wt_threshold = max(
+            4, min(core_wt_threshold, 6)
+        )  # core_wt_threshold should be between 4 and 6
+        conv_wt_threshold = max(
+            1, min(conv_wt_threshold, 2)
+        )  # conv_wt_threshold should be between 1 and 2
+        conv_scale_km = max(
+            16, min(conv_scale_km, 32)
+        )  # conv_scale_km should be between 15 and 30 km
+        min_reflectivity = max(
+            0, min_reflectivity
+        )  # min_reflectivity should be non-negative
+        conv_min_refl = max(
+            25, min(conv_min_refl, 30)
+        )  # conv_min_refl should be between 25 and 30 dBZ
+
+    # Call the actual wavelet_relass function to obtain radar echo classificatino
+    reclass = wavelet_reclass(
+        grid,
+        refl_field,
+        cappi_level,
+        zr_a,
+        zr_b,
+        core_wt_threshold=core_wt_threshold,
+        conv_wt_threshold=conv_wt_threshold,
+        scale_break=scale_break,
+        min_reflectivity=min_reflectivity,
+        conv_min_refl=conv_min_refl,
+        conv_core_threshold=conv_core_threshold,
+    )
+
+    reclass = np.expand_dims(reclass, axis=0)
+
+    # put data into a dictionary to be added as a field
+    reclass_dict = {
+        "wt_reclass": {
+            "data": reclass,
+            "standard_name": "wavelet_echo_class",
+            "long_name": "Wavelet-based multiresolution radar echo classification",
+            "valid_min": 0,
+            "valid_max": 3,
+            "classification_description": "0: Unclassified, 1: Stratiform, 2: Mixed-Intermediate, 3: Convective Cores",
+            "parameters": {
+                "refl_field": refl_field,
+                "cappi_level": cappi_level,
+                "zr_a": zr_a,
+                "zr_b": zr_b,
+                "core_wt_threshold": core_wt_threshold,
+                "conv_wt_threshold": conv_wt_threshold,
+                "conv_scale_km": conv_scale_km,
+                "scale_break_used": int(scale_break_km),
+                "min_reflectivity": min_reflectivity,
+                "conv_min_refl": conv_min_refl,
+                "conv_core_threshold": conv_core_threshold,
+            },
+        }
+    }
+
+    return reclass_dict
