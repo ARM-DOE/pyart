@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.testing.sample_objects &#8212; Py-ART 1.16.1.post15 documentation</title>
+    <title>pyart.testing.sample_objects &#8212; Py-ART 1.16.1.post16 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=a86d3941"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=9f95b32b"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -147,7 +147,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post15 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post16 documentation</p>
   
 </a></div>
     
@@ -870,6 +870,69 @@ document.write(`
     <span class="n">rdic</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span> <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;dBz&quot;</span><span class="p">}</span>
     <span class="n">test_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">:</span> <span class="n">rdic</span><span class="p">})</span>
     <span class="k">return</span> <span class="n">test_grid</span></div>
+
+
+<div class="viewcode-block" id="make_gaussian_storm_grid"><a class="viewcode-back" href="../../../API/generated/pyart.testing.make_gaussian_storm_grid.html#pyart.testing.make_gaussian_storm_grid">[docs]</a><span class="k">def</span> <span class="nf">make_gaussian_storm_grid</span><span class="p">(</span>
+    <span class="n">min_value</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_value</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">grid_len</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">masked_boundary</span><span class="o">=</span><span class="mi">3</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Make a 1 km resolution grid with a Gaussian storm pattern at the center,</span>
+<span class="sd">    with two layers having the same data and masked boundaries.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    min_value : float</span>
+<span class="sd">        Minimum value of the storm intensity.</span>
+<span class="sd">    max_value : float</span>
+<span class="sd">        Maximum value of the storm intensity.</span>
+<span class="sd">    grid_len : int</span>
+<span class="sd">        Size of the grid (grid will be grid_len x grid_len).</span>
+<span class="sd">    sigma : float</span>
+<span class="sd">        Standard deviation of the Gaussian distribution.</span>
+<span class="sd">    mu : float</span>
+<span class="sd">        Mean of the Gaussian distribution.</span>
+<span class="sd">    masked_boundary : int</span>
+<span class="sd">        Number of pixels around the edge to be masked.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    --------</span>
+<span class="sd">    A Py-ART grid with the Gaussian storm field added.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Create an empty Py-ART grid</span>
+    <span class="n">grid_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">grid_len</span><span class="p">,</span> <span class="n">grid_len</span><span class="p">)</span>
+    <span class="n">grid_limits</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">1000</span><span class="p">),</span>
+        <span class="p">(</span><span class="o">-</span><span class="n">grid_len</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">grid_len</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span>
+        <span class="p">(</span><span class="o">-</span><span class="n">grid_len</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">/</span> <span class="mi">2</span><span class="p">,</span> <span class="n">grid_len</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">/</span> <span class="mi">2</span><span class="p">),</span>
+    <span class="p">)</span>
+    <span class="n">grid</span> <span class="o">=</span> <span class="n">make_empty_grid</span><span class="p">(</span><span class="n">grid_shape</span><span class="p">,</span> <span class="n">grid_limits</span><span class="p">)</span>
+
+    <span class="c1"># Creating a grid with Gaussian distribution values</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">grid_len</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">grid_len</span><span class="p">))</span>
+    <span class="n">d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span>
+    <span class="n">gaussian</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">((</span><span class="n">d</span> <span class="o">-</span> <span class="n">mu</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">)))</span>
+
+    <span class="c1"># Normalize and scale the Gaussian distribution</span>
+    <span class="n">gaussian_normalized</span> <span class="o">=</span> <span class="p">(</span><span class="n">gaussian</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">gaussian</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">gaussian</span><span class="p">)</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">gaussian</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">storm_intensity</span> <span class="o">=</span> <span class="n">gaussian_normalized</span> <span class="o">*</span> <span class="p">(</span><span class="n">max_value</span> <span class="o">-</span> <span class="n">min_value</span><span class="p">)</span> <span class="o">+</span> <span class="n">min_value</span>
+    <span class="n">storm_intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">storm_intensity</span><span class="p">,</span> <span class="n">storm_intensity</span><span class="p">])</span>
+
+    <span class="c1"># Apply thresholds for storm intensity and masking</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">storm_intensity</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">bool</span><span class="p">)</span>
+    <span class="n">mask</span><span class="p">[:,</span> <span class="p">:</span><span class="n">masked_boundary</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">mask</span><span class="p">[:,</span> <span class="o">-</span><span class="n">masked_boundary</span><span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">mask</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="n">masked_boundary</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="n">mask</span><span class="p">[:,</span> <span class="p">:,</span> <span class="o">-</span><span class="n">masked_boundary</span><span class="p">:]</span> <span class="o">=</span> <span class="kc">True</span>
+
+    <span class="n">storm_intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">storm_intensity</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
+    <span class="c1"># Prepare dictionary for Py-ART grid fields</span>
+    <span class="n">rdic</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">storm_intensity</span><span class="p">,</span> <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;dBz&quot;</span><span class="p">}</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">:</span> <span class="n">rdic</span><span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">grid</span></div>
 
 
 <div class="viewcode-block" id="make_empty_spectra_radar"><a class="viewcode-back" href="../../../API/generated/pyart.testing.make_empty_spectra_radar.html#pyart.testing.make_empty_spectra_radar">[docs]</a><span class="k">def</span> <span class="nf">make_empty_spectra_radar</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">ngates</span><span class="p">,</span> <span class="n">npulses_max</span><span class="p">):</span>

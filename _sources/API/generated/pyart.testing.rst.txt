@@ -42,6 +42,8 @@
     
     make_empty_spectra_radar
     
+    make_gaussian_storm_grid
+    
     make_normal_storm
     
     make_single_ray_radar

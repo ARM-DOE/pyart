@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.16.1.post15 documentation</title>
+    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.16.1.post16 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=bd9e20870c6007c4c509" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=bd9e20870c6007c4c509"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=a86d3941"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=9f95b32b"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -147,7 +147,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.16.1.post15 documentation</p>
+    <p class="title logo__title">Py-ART 1.16.1.post16 documentation</p>
   
 </a></div>
     
@@ -501,8 +501,11 @@ document.write(`
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 
+<span class="c1"># Local imports</span>
 <span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
+<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">Grid</span>
 <span class="kn">from</span> <span class="nn">._echo_class</span> <span class="kn">import</span> <span class="n">_feature_detection</span><span class="p">,</span> <span class="n">steiner_class_buff</span>
+<span class="kn">from</span> <span class="nn">._echo_class_wt</span> <span class="kn">import</span> <span class="n">calc_scale_break</span><span class="p">,</span> <span class="n">wavelet_reclass</span>
 
 
 <div class="viewcode-block" id="steiner_conv_strat"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.steiner_conv_strat.html#pyart.retrieve.steiner_conv_strat">[docs]</a><span class="k">def</span> <span class="nf">steiner_conv_strat</span><span class="p">(</span>
@@ -1472,6 +1475,178 @@ document.write(`
     <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown frequency band&quot;</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">None</span></div>
+
+
+<div class="viewcode-block" id="conv_strat_raut"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.conv_strat_raut.html#pyart.retrieve.conv_strat_raut">[docs]</a><span class="k">def</span> <span class="nf">conv_strat_raut</span><span class="p">(</span>
+    <span class="n">grid</span><span class="p">,</span>
+    <span class="n">refl_field</span><span class="p">,</span>
+    <span class="n">cappi_level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">zr_a</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
+    <span class="n">zr_b</span><span class="o">=</span><span class="mf">1.6</span><span class="p">,</span>
+    <span class="n">core_wt_threshold</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">conv_wt_threshold</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
+    <span class="n">conv_scale_km</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+    <span class="n">min_reflectivity</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">conv_min_refl</span><span class="o">=</span><span class="mi">25</span><span class="p">,</span>
+    <span class="n">conv_core_threshold</span><span class="o">=</span><span class="mi">42</span><span class="p">,</span>
+    <span class="n">override_checks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    A computationally efficient method to classify radar echoes into convective cores, mixed convection,</span>
+<span class="sd">    and stratiform regions for gridded radar reflectivity field.</span>
+
+<span class="sd">    This function uses à trous wavelet transform (ATWT) for multiresolution (i.e. scale) analysis of radar field,</span>
+<span class="sd">    focusing on precipitation structure over reflectivity thresholds for robust echo classification (Raut et al 2008, 2020).</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    grid : PyART Grid</span>
+<span class="sd">        Grid object containing radar data.</span>
+<span class="sd">    refl_field : str</span>
+<span class="sd">        Field name for reflectivity data in the Py-ART grid object.</span>
+<span class="sd">    zr_a : float, optional</span>
+<span class="sd">        Coefficient &#39;a&#39; in the Z-R relationship Z = a*R^b for reflectivity to rain rate conversion.</span>
+<span class="sd">        The algorithm is not sensitive to precise values of &#39;zr_a&#39; and &#39;zr_b&#39;; however,</span>
+<span class="sd">        they must be adjusted based on the type of radar used.</span>
+<span class="sd">        Default is 200.</span>
+<span class="sd">    zr_b : float, optional</span>
+<span class="sd">        Coefficient &#39;b&#39; in the Z-R relationship Z = a*R^b. Default is 1.6.</span>
+<span class="sd">    core_wt_threshold : float, optional</span>
+<span class="sd">        Threshold for wavelet components to separate convective cores from mix-intermediate type.</span>
+<span class="sd">        Default is 5. Recommended values are between 4 and 6.</span>
+<span class="sd">    conv_wt_threshold : float, optional</span>
+<span class="sd">        Threshold for significant wavelet components to separate all convection from stratiform.</span>
+<span class="sd">        Default is 1.5. Recommended values are between 1 and 2.</span>
+<span class="sd">    conv_scale_km : float, optional</span>
+<span class="sd">        Approximate scale break (in km) between convective and stratiform scales.</span>
+<span class="sd">        Scale break may vary over different regions and seasons</span>
+<span class="sd">        (Refere to Raut et al 2018 for more discussion on scale-breaks). Note that the</span>
+<span class="sd">        algorithm is insensitive to small variations in the scale break due to the</span>
+<span class="sd">        dyadic nature of the scaling. The actual scale break used in the calculation of wavelets</span>
+<span class="sd">        is returned in the output dictionary by parameter `scale_break_used`.</span>
+<span class="sd">        Default is 25 km. Recommended values are between 16 and 32 km.</span>
+<span class="sd">    min_reflectivity : float, optional</span>
+<span class="sd">        Minimum reflectivity threshold. Reflectivities below this value are not classified.</span>
+<span class="sd">        Default is 5 dBZ. This value must be greater than or equal to &#39;0&#39;.</span>
+<span class="sd">    conv_min_refl : float, optional</span>
+<span class="sd">        Reflectivity values lower than this threshold will be always considered as non-convective.</span>
+<span class="sd">        Default is 25 dBZ. Recommended values are between 25 and 30 dBZ.</span>
+<span class="sd">    conv_core_threshold : float, optional</span>
+<span class="sd">        Reflectivities above this threshold are classified as convective cores if wavelet components are significant (See: conv_wt_threshold).</span>
+<span class="sd">        Default is 42 dBZ.</span>
+<span class="sd">        Recommended value must be is greater than or equal to 40 dBZ. The algorithm is not sensitive to this value.</span>
+<span class="sd">    override_checks : bool, optional</span>
+<span class="sd">        If set to True, the function will bypass the sanity checks for above parameter values.</span>
+<span class="sd">        This allows the user to use custom values for parameters, even if they fall outside</span>
+<span class="sd">        the recommended ranges. The default is False.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    dict :</span>
+<span class="sd">    A dictionary structured as a Py-ART grid field, suitable for adding to a Py-ART Grid object. The dictionary</span>
+<span class="sd">    contains the classification data and associated metadata. The classification categories are as follows:</span>
+<span class="sd">        - 3: Convective Cores: associated with strong updrafts and active collision-coalescence.</span>
+<span class="sd">        - 2: Mixed-Intermediate: capturing a wide range of convective activities, excluding the convective cores.</span>
+<span class="sd">        - 1: Stratiform: remaining areas with more uniform and less intense precipitation.</span>
+<span class="sd">        - 0: Unclassified: for reflectivity below the minimum threshold.</span>
+
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Raut, B. A., Karekar, R. N., &amp; Puranik, D. M. (2008). Wavelet-based technique to extract convective clouds from</span>
+<span class="sd">    infrared satellite images. IEEE Geosci. Remote Sens. Lett., 5(3), 328-330.</span>
+
+<span class="sd">    Raut, B. A., Seed, A. W., Reeder, M. J., &amp; Jakob, C. (2018). A multiplicative cascade model for high‐resolution</span>
+<span class="sd">    space‐time downscaling of rainfall. J. Geophys. Res. Atmos., 123(4), 2050-2067.</span>
+
+<span class="sd">    Raut, B. A., Louf, V., Gayatri, K., Murugavel, P., Konwar, M., &amp; Prabhakaran, T. (2020). A multiresolution technique</span>
+<span class="sd">    for the classification of precipitation echoes in radar data. IEEE Trans. Geosci. Remote Sens., 58(8), 5409-5415.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># Check if the grid is a Py-ART Grid object</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">Grid</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;The &#39;grid&#39; is not a Py-ART Grid object.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Check if dx and dy are the same, and warn if not</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">dx</span> <span class="o">!=</span> <span class="n">dy</span><span class="p">:</span>
+        <span class="n">warn</span><span class="p">(</span>
+            <span class="s2">&quot;Warning: Grid resolution `dx` and `dy` should be comparable for correct results.&quot;</span><span class="p">,</span>
+            <span class="ne">UserWarning</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Compute scale break (dyadic) here to paas it on as parameter to user dictionary</span>
+    <span class="n">scale_break</span> <span class="o">=</span> <span class="n">calc_scale_break</span><span class="p">(</span><span class="n">res_meters</span><span class="o">=</span><span class="n">dx</span><span class="p">,</span> <span class="n">conv_scale_km</span><span class="o">=</span><span class="n">conv_scale_km</span><span class="p">)</span>
+
+    <span class="c1"># From dyadic scale to km</span>
+    <span class="n">scale_break_km</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="p">(</span><span class="n">scale_break</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span> <span class="o">*</span> <span class="n">dx</span> <span class="o">/</span> <span class="mi">1000</span>
+
+    <span class="c1"># Sanity checks for parameters if override_checks is False</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">override_checks</span><span class="p">:</span>
+        <span class="n">conv_core_threshold</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="mi">40</span><span class="p">,</span> <span class="n">conv_core_threshold</span>
+        <span class="p">)</span>  <span class="c1"># Ensure conv_core_threshold is at least 40 dBZ</span>
+        <span class="n">core_wt_threshold</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="mi">4</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">core_wt_threshold</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+        <span class="p">)</span>  <span class="c1"># core_wt_threshold should be between 4 and 6</span>
+        <span class="n">conv_wt_threshold</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="mi">1</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">conv_wt_threshold</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
+        <span class="p">)</span>  <span class="c1"># conv_wt_threshold should be between 1 and 2</span>
+        <span class="n">conv_scale_km</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="mi">16</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">conv_scale_km</span><span class="p">,</span> <span class="mi">32</span><span class="p">)</span>
+        <span class="p">)</span>  <span class="c1"># conv_scale_km should be between 15 and 30 km</span>
+        <span class="n">min_reflectivity</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="mi">0</span><span class="p">,</span> <span class="n">min_reflectivity</span>
+        <span class="p">)</span>  <span class="c1"># min_reflectivity should be non-negative</span>
+        <span class="n">conv_min_refl</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span>
+            <span class="mi">25</span><span class="p">,</span> <span class="nb">min</span><span class="p">(</span><span class="n">conv_min_refl</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
+        <span class="p">)</span>  <span class="c1"># conv_min_refl should be between 25 and 30 dBZ</span>
+
+    <span class="c1"># Call the actual wavelet_relass function to obtain radar echo classificatino</span>
+    <span class="n">reclass</span> <span class="o">=</span> <span class="n">wavelet_reclass</span><span class="p">(</span>
+        <span class="n">grid</span><span class="p">,</span>
+        <span class="n">refl_field</span><span class="p">,</span>
+        <span class="n">cappi_level</span><span class="p">,</span>
+        <span class="n">zr_a</span><span class="p">,</span>
+        <span class="n">zr_b</span><span class="p">,</span>
+        <span class="n">core_wt_threshold</span><span class="o">=</span><span class="n">core_wt_threshold</span><span class="p">,</span>
+        <span class="n">conv_wt_threshold</span><span class="o">=</span><span class="n">conv_wt_threshold</span><span class="p">,</span>
+        <span class="n">scale_break</span><span class="o">=</span><span class="n">scale_break</span><span class="p">,</span>
+        <span class="n">min_reflectivity</span><span class="o">=</span><span class="n">min_reflectivity</span><span class="p">,</span>
+        <span class="n">conv_min_refl</span><span class="o">=</span><span class="n">conv_min_refl</span><span class="p">,</span>
+        <span class="n">conv_core_threshold</span><span class="o">=</span><span class="n">conv_core_threshold</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">reclass</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">reclass</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># put data into a dictionary to be added as a field</span>
+    <span class="n">reclass_dict</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;wt_reclass&quot;</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">reclass</span><span class="p">,</span>
+            <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;wavelet_echo_class&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Wavelet-based multiresolution radar echo classification&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;valid_min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">&quot;valid_max&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="s2">&quot;classification_description&quot;</span><span class="p">:</span> <span class="s2">&quot;0: Unclassified, 1: Stratiform, 2: Mixed-Intermediate, 3: Convective Cores&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">&quot;refl_field&quot;</span><span class="p">:</span> <span class="n">refl_field</span><span class="p">,</span>
+                <span class="s2">&quot;cappi_level&quot;</span><span class="p">:</span> <span class="n">cappi_level</span><span class="p">,</span>
+                <span class="s2">&quot;zr_a&quot;</span><span class="p">:</span> <span class="n">zr_a</span><span class="p">,</span>
+                <span class="s2">&quot;zr_b&quot;</span><span class="p">:</span> <span class="n">zr_b</span><span class="p">,</span>
+                <span class="s2">&quot;core_wt_threshold&quot;</span><span class="p">:</span> <span class="n">core_wt_threshold</span><span class="p">,</span>
+                <span class="s2">&quot;conv_wt_threshold&quot;</span><span class="p">:</span> <span class="n">conv_wt_threshold</span><span class="p">,</span>
+                <span class="s2">&quot;conv_scale_km&quot;</span><span class="p">:</span> <span class="n">conv_scale_km</span><span class="p">,</span>
+                <span class="s2">&quot;scale_break_used&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">scale_break_km</span><span class="p">),</span>
+                <span class="s2">&quot;min_reflectivity&quot;</span><span class="p">:</span> <span class="n">min_reflectivity</span><span class="p">,</span>
+                <span class="s2">&quot;conv_min_refl&quot;</span><span class="p">:</span> <span class="n">conv_min_refl</span><span class="p">,</span>
+                <span class="s2">&quot;conv_core_threshold&quot;</span><span class="p">:</span> <span class="n">conv_core_threshold</span><span class="p">,</span>
+            <span class="p">},</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">return</span> <span class="n">reclass_dict</span></div>
 </pre></div>
 <div class="section ablog__blog_comments">
   
