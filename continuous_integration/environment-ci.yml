@@ -13,7 +13,7 @@ dependencies:
   - cartopy
   - cvxopt
   - xarray
-  - metpy<1.6
+  - metpy
   - pytest-cov
   - pytest-mpl
   - coveralls
