@@ -107,12 +107,12 @@ def to_vpt(radar, single_scan=True):
 
 def determine_sweeps(radar, max_offset=0.1, running_win_dt=5.0, deg_rng=(-5.0, 360.0)):
     """
-    determine the number of sweeps using elevation data (PPI scans) or azimuth
+    Determine the number of sweeps using elevation data (PPI scans) or azimuth
     data (RHI scans) and update the input radar object
 
     Parameters
     ----------
-    radar : radar object
+    radar : Radar object
         The radar object containing the data.
     max_offset : float
         Maximum elevation offset (if is_ppi is True) or azimuth offset (if
