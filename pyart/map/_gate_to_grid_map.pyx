@@ -305,7 +305,7 @@ cdef class GateToGridMapper:
                       int weighting_function, float zdist_factor):
         """ Map a single gate to the grid. """
 
-        cdef float xg, yg, zg, dist, weight, roi2, dist2, min_dist2
+        cdef float xg, yg, zg, weight, roi2, dist2, min_dist2
         cdef int x_min, x_max, y_min, y_max, z_min, z_max
         cdef int xi, yi, zi, x_argmin, y_argmin, z_argmin
 
@@ -348,12 +348,12 @@ cdef class GateToGridMapper:
                         xg = self.x_step * xi
                         yg = self.y_step * yi
                         zg = self.z_step * zi
-                        dist = ((xg - x)**2 + (yg - y)**2 + zdist_factor * (zg - z)**2)
-                        if dist >= roi2:
+                        dist2 = ((xg - x)**2 + (yg - y)**2 + zdist_factor * (zg - z)**2)
+                        if dist2 >= roi2:
                             continue
                         for i in range(self.nfields):
-                            if dist < self.min_dist2[zi, yi, xi, i]:
-                                self.min_dist2[zi, yi, xi, i] = dist
+                            if dist2 < self.min_dist2[zi, yi, xi, i]:
+                                self.min_dist2[zi, yi, xi, i] = dist2
                                 x_argmin = xi
                                 y_argmin = yi
                                 z_argmin = zi
