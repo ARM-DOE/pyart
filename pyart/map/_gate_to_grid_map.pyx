@@ -232,7 +232,7 @@ cdef class GateToGridMapper:
             float[:, ::1] gate_z, float[:, ::1] gate_y, float[:, ::1] gate_x,
             float[:, :, ::1] field_data,
             char[:, :, ::1] field_mask, char[:, ::1] excluded_gates,
-            float toa, RoIFunction roi_func, int weighting_function,
+            RoIFunction roi_func, int weighting_function,
             float zdist_factor):
         """
         Map radar gates unto the regular grid.
