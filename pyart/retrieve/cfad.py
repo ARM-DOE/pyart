@@ -58,12 +58,12 @@ def create_cfad(
     # get altitude data
     # first try to get altitude data from a radar object
     try:
-        altitude_data = radar.gate_z['data']
+        altitude_data = radar.gate_z["data"]
     # if it fails, try to get altitude data from a grid object
     except:
         try:
             altitude_data = radar.point_z["data"]
-        finally:
+        except:
             print("No altitude data found")
             raise
 
