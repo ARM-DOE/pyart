@@ -30,6 +30,7 @@ def map_gates_to_grid(
     gatefilters=False,
     map_roi=True,
     weighting_function="Barnes2",
+    toa=17000.0,
     roi_func="dist_beam",
     constant_roi=None,
     z_factor=0.05,
