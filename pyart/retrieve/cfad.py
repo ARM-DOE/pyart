@@ -7,10 +7,11 @@ import numpy as np
 
 
 def create_cfad(
-    field_data,
-    altitude_data,
+    radar,
     field_bins,
     altitude_bins,
+    field="reflectivity",
+    field_mask=None,
     min_frac_thres=0.1,
 ):
     """
@@ -18,15 +19,17 @@ def create_cfad(
     histogram that is normalized by the number of points at each altitude. Altitude bins are masked where the counts
     are less than a minimum fraction of the largest number of counts for any altitude row.
 
-    field_data : array
-        Array of radar data to use for CFAD calculation.
-    altitude_data : array
-        Array of corresponding altitude data to use for CFAD calculation.
-        Note: must be the same shape as `field_data`
+    radar : Radar
+        Radar object used. Can be Radar or Grid object.
     field_bins : list
         List of bin edges for field values to use for CFAD creation.
     altitude_bins : list
         List of bin edges for height values to use for CFAD creation.
+    field : str
+        Field name to use to look up reflectivity data. In the
+        radar object. Default field name is 'reflectivity'.
+    field_mask : array
+        An array the same size as the field array used to mask values.
     min_frac_thres : float, optional
         Fraction of values to remove in CFAD normalization (default 0.1). If an altitude row has a total count that
         is less than min_frac_thres of the largest number of total counts for any altitude row, the bins in that
@@ -48,6 +51,27 @@ def create_cfad(
 
 
     """
+
+    # get field data
+    field_data = radar.fields[field]["data"][:]
+
+    # get altitude data
+    # first try to get altitude data from a radar object
+    try:
+        altitude_data = radar.gate_z['data']
+    # if it fails, try to get altitude data from a grid object
+    except:
+        try:
+            altitude_data = radar.point_z["data"]
+        finally:
+            print("No altitude data found")
+            raise
+
+    # option to mask data if a mask is given
+    if field_mask is not None:
+        field_data = np.ma.masked_where(field_mask, field_data)
+        altitude_data = np.ma.masked_where(field_data.mask, altitude_data)
+
     # get raw bin counts
     freq, height_edges, field_edges = np.histogram2d(
         altitude_data.compressed(),
