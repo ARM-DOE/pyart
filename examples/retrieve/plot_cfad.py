@@ -52,19 +52,20 @@ radar = pyart.io.read_cfradial(filename)
 
 # compute CFAD
 # get reflectivity data and mask extremes
-subset_slice = radar.get_slice(0)
-ref_data = radar.fields["reflectivity_horizontal"]["data"][subset_slice]
+# extract first sweep
+radar = radar.extract_sweeps([0])
+# get mask array
+ref_data = radar.fields["reflectivity_horizontal"]["data"][:]
 ref_data_masked = np.ma.masked_outside(ref_data, -15, 35)
-# get altitude data
-_, _, gate_z = radar.get_gate_x_y_z(0)
-gate_z_masked = np.ma.masked_where(ref_data_masked.mask, gate_z)
+field_mask = ref_data_masked.mask
 
 # get CFAD
 freq_norm, height_edges, field_edges = pyart.retrieve.create_cfad(
-    ref_data_masked,
-    gate_z_masked,
+    radar,
     field_bins=np.linspace(-15, 35, 100),
     altitude_bins=np.linspace(0, 15000, 50),
+    field="reflectivity_horizontal",
+    field_mask=field_mask,
     min_frac_thres=0.1,
 )
 
@@ -115,17 +116,19 @@ plt.show()
 
 # Let's see the effect of changing the minimum fraction threshold:
 freq_norm2, height_edges, field_edges = pyart.retrieve.create_cfad(
-    ref_data_masked,
-    gate_z_masked,
+    radar,
     field_bins=np.linspace(-15, 35, 100),
     altitude_bins=np.linspace(0, 15000, 50),
+    field="reflectivity_horizontal",
+    field_mask=field_mask,
     min_frac_thres=0.2,
 )
 freq_norm0, height_edges, field_edges = pyart.retrieve.create_cfad(
-    ref_data_masked,
-    gate_z_masked,
+    radar,
     field_bins=np.linspace(-15, 35, 100),
     altitude_bins=np.linspace(0, 15000, 50),
+    field="reflectivity_horizontal",
+    field_mask=field_mask,
     min_frac_thres=0,
 )
 
@@ -224,16 +227,12 @@ display.set_limits(ylim=[0, 15], ax=ax)
 ax.set_aspect("equal")
 plt.show()
 
-# now do the CFAD
-vel_data = radar.fields["corrected_velocity"]["data"][subset_slice]
-vel_data_masked = np.ma.masked_where(gate_z_masked.mask, vel_data)
-gate_z_masked = np.ma.masked_where(vel_data_masked.mask, gate_z_masked)
-
 freq_norm, height_edges, field_edges = pyart.retrieve.create_cfad(
-    vel_data_masked,
-    gate_z_masked,
+    radar,
     field_bins=np.linspace(-30, 30, 50),
     altitude_bins=np.linspace(0, 15000, 50),
+    field="corrected_velocity",
+    field_mask=field_mask,
     min_frac_thres=0.2,
 )
 
@@ -265,7 +264,7 @@ plt.show()
 #
 # Validation
 # ----------
-# Finally, we wanted to compare this function with the original method, so here we recreate Fig. 2c from Yuter and
+# Finally, we wanted to compare this function with the original method, so here we reproduce Fig. 2c from Yuter and
 # Houze (1995) to demonstrate that it works the same. Instead of using the `pcolormesh` function, we are using
 # contour lines.
 
@@ -274,26 +273,27 @@ plt.show()
 filename = DATASETS.fetch("ddop.910815.213931.cdf")
 grid = pyart.io.read_grid(filename)
 
-# get fields
+# make corrections to altitude field
 altitude_data = grid.point_z["data"]
+grid.point_z["data"] = (altitude_data - 800) / 1000
+
+# get fields to create a mask
 field_data = grid.fields["maxdz"]["data"][:]
 vvel_data = grid.fields["w_wind"]["data"][:]
-
-# now mask data and correct altitude
 vvel_masked = np.ma.masked_invalid(vvel_data)
 field_data_masked = np.ma.masked_less_equal(field_data, -15)
 field_data_masked = np.ma.masked_where(vvel_masked.mask, field_data_masked)
-altitude_data_masked = np.ma.masked_where(field_data_masked.mask, altitude_data - 800)
 
 # define histogram bins
 field_bins = np.arange(-20, 65, 5)
 altitude_bins = np.arange(-0.2, 18.5, 0.4)
 
 freq_norm, height_edges, field_edges = pyart.retrieve.create_cfad(
-    field_data_masked,
-    altitude_data_masked / 1000,
+    grid,
     field_bins=field_bins,
     altitude_bins=altitude_bins,
+    field="maxdz",
+    field_mask=field_data_masked.mask,
     min_frac_thres=0.1,
 )
 
@@ -317,7 +317,7 @@ ax.set_ylim([-0.5, 16])
 ax.set_ylabel("Height [km]")
 ax.set_xlabel("Reflectivity [dBZ]")
 ax.axhline(8, ls="--", lw=0.75, color="black")
-ax.set_title("Recreation of Yuter and Houze (1995) Fig. 2c")
+ax.set_title("Yuter and Houze (1995) Fig. 2c")
 plt.show()
 
 # References
