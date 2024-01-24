@@ -39,6 +39,7 @@ def map_gates_to_grid(
     h_factor=1.0,
     nb=1.5,
     bsp=1.0,
+    zdist_factor=1.0,
     **kwargs
 ):
     """
@@ -172,9 +173,9 @@ def map_gates_to_grid(
             field_data,
             field_mask,
             excluded_gates,
-            toa,
             roi_func,
             cy_weighting_function,
+            zdist_factor,
         )
 
     # create and return the grid dictionary
