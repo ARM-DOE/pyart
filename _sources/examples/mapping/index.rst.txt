@@ -52,6 +52,23 @@ Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of a single PPI sweep from Antenna (polar) coordinates to a Cartesia...">
+
+.. only:: html
+
+  .. image:: /examples/mapping/images/thumb/sphx_glr_plot_grid_single_sweep_ppi_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_mapping_plot_grid_single_sweep_ppi.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Map a single PPI sweep to a Cartesian grid using 2D weighting</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of a single radar in Antenna coordinates to another radar in Antenna...">
 
 .. only:: html
@@ -77,5 +94,6 @@ Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
 
    /examples/mapping/plot_map_one_radar_to_grid
    /examples/mapping/plot_map_two_radars_to_grid
+   /examples/mapping/plot_grid_single_sweep_ppi
    /examples/mapping/plot_compare_two_radars_gatemapper
 
