@@ -12,7 +12,7 @@ def test_cfad_default():
 
     # set every value to 20
     radar.fields[ref_field]["data"] = (
-            np.ones(radar.fields[ref_field]["data"].shape) * 20
+        np.ones(radar.fields[ref_field]["data"].shape) * 20
     )
 
     # set mask to none
