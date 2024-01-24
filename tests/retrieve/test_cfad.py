@@ -11,7 +11,9 @@ def test_cfad_default():
     ref_field = "reflectivity"
 
     # set every value to 20
-    radar.fields[ref_field]["data"] = np.ones(radar.fields[ref_field]["data"].shape) * 20
+    radar.fields[ref_field]["data"] = (
+            np.ones(radar.fields[ref_field]["data"].shape) * 20
+    )
 
     # set mask to none
     field_mask = np.zeros(radar.fields[ref_field]["data"].shape)
