@@ -6,26 +6,30 @@ import pyart
 
 
 def test_cfad_default():
-    # set row to mask and test
-    verify_index = 5
-    # create random grid of reflectivity data
-    ref_random_full = np.random.random((10, 10)) * 30
-    # create a mask to mask 90% data from a specific altitude
-    mask = np.zeros_like(ref_random_full)
-    mask[verify_index, 1:] = 1
-    # mask reflectivity data
-    ref_random_mask = np.ma.masked_where(mask, ref_random_full)
-    # create altitude data
-    z_col = np.linspace(0, 12000, 10)
-    z_full = np.repeat(z_col[..., np.newaxis], 10, axis=1)
-    z_mask = np.ma.masked_where(ref_random_mask.mask, z_full)
-    # compute CFAD
+    # initalize test radar object
+    radar = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
+    ref_field = "reflectivity"
+
+    # set every value to 20
+    radar.fields[ref_field]["data"] = np.ones(radar.fields[ref_field]["data"].shape) * 20
+
+    # set mask to none
+    field_mask = np.zeros(radar.fields[ref_field]["data"].shape)
+
+    # calculate CFAD
     freq_norm, height_edges, field_edges = pyart.retrieve.create_cfad(
-        ref_random_mask,
-        z_mask,
+        radar,
         field_bins=np.linspace(0, 30, 20),
-        altitude_bins=np.linspace(0, 12000, 10),
+        altitude_bins=np.arange(0, 18000, 100),
+        field="reflectivity",
+        field_mask=field_mask,
     )
-    # if CFAD code works correctly, all values in this row should be false since this altitude has only 1 value (less
-    # than the necessary fraction needed)
-    assert freq_norm[verify_index, :].mask.all()
+
+    # set row to mask and test
+    verify_index = 12
+
+    # if CFAD code works correctly, each column should have the same values and only 1 column should have a value of 1
+    # check all columns are the same
+    assert freq_norm.all(axis=0).any()
+    # check column 12 is all ones
+    assert (freq_norm[:, verify_index] == 1).all()
