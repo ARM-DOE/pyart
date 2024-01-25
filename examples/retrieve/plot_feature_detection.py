@@ -395,7 +395,7 @@ cb = plt.colorbar(csopm, ax=axs[1, 1], ticks=[4 / 3, 2, 8 / 3])
 cb.ax.set_yticklabels(["Stratiform", "Convective", "Weak Echo"])
 plt.show()
 
-######################################
+#######################################
 # Part 2: Cool-season feature detection
 # -------------------------------------
 # **Winter storm example**
