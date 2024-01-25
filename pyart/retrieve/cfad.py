@@ -34,6 +34,7 @@ def create_cfad(
         Fraction of values to remove in CFAD normalization (default 0.1). If an altitude row has a total count that
         is less than min_frac_thres of the largest number of total counts for any altitude row, the bins in that
         altitude row are masked.
+
     Returns
     -------
     freq_norm : array
@@ -42,6 +43,7 @@ def create_cfad(
         Array of bin edges for height data.
     field_edges : array of x coordinates
         Array of bin edges for field data.
+
     References
     ----------
     Yuter, S. E., and R. A. Houze, 1995: Three-Dimensional Kinematic and
