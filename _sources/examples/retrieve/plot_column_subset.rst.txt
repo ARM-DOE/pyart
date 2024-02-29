@@ -101,7 +101,7 @@ column of values.
  .. code-block:: none
 
 
-    <matplotlib.collections.PathCollection object at 0x7f6131618650>
+    <matplotlib.collections.PathCollection object at 0x7f8db5908b90>
 
 
 
@@ -141,24 +141,24 @@ This function returns an xarray dataset, with all of our data fields!
 
  .. code-block:: none
 
-    <xarray.Dataset>
+    <xarray.Dataset> Size: 2kB
     Dimensions:                            (height: 22)
     Coordinates:
-      * height                             (height) float64 350.6 ... 1.818e+04
+      * height                             (height) float64 176B 350.6 ... 1.818e+04
     Data variables: (12/15)
-        corrected_reflectivity_horizontal  (height) float64 39.2 37.52 ... nan nan
-        reflectivity_horizontal            (height) float64 32.88 31.46 ... nan nan
-        recalculated_diff_phase            (height) float64 1.555 1.32 ... -0.0 -0.0
-        specific_attenuation               (height) float64 0.2778 0.1806 ... 0.0
-        unf_dp_phase_shift                 (height) float32 58.05 56.55 ... 36.27
-        mean_doppler_velocity              (height) float32 -9.133 -9.953 ... 5.688
+        corrected_reflectivity_horizontal  (height) float64 176B 39.2 37.52 ... nan
+        reflectivity_horizontal            (height) float64 176B 32.88 31.46 ... nan
+        recalculated_diff_phase            (height) float64 176B 1.555 1.32 ... -0.0
+        specific_attenuation               (height) float64 176B 0.2778 ... 0.0
+        unf_dp_phase_shift                 (height) float32 88B 58.05 ... 36.27
+        mean_doppler_velocity              (height) float32 88B -9.133 ... 5.688
         ...                                 ...
-        dp_phase_shift                     (height) float64 145.5 144.0 ... nan nan
-        diff_reflectivity                  (height) float32 0.0 0.0 0.0 ... 0.0 0.0
-        proc_dp_phase_shift                (height) float32 51.8 50.25 ... 36.27
-        copol_coeff                        (height) float64 0.95 0.92 ... nan nan
-        base_time                          datetime64[ns] 2011-05-20T06:42:11
-        time_offset                        (height) datetime64[ns] 2011-05-20T06:...
+        dp_phase_shift                     (height) float64 176B 145.5 144.0 ... nan
+        diff_reflectivity                  (height) float32 88B 0.0 0.0 ... 0.0 0.0
+        proc_dp_phase_shift                (height) float32 88B 51.8 50.25 ... 36.27
+        copol_coeff                        (height) float64 176B 0.95 0.92 ... nan
+        base_time                          datetime64[ns] 8B 2011-05-20T06:42:11
+        time_offset                        (height) datetime64[ns] 176B 2011-05-2...
     Attributes:
         distance_from_radar:    15.113 km
         azimuth:                233.545 degrees
@@ -194,14 +194,14 @@ above our point, which is stored in our new dataset
  .. code-block:: none
 
 
-    [<matplotlib.lines.Line2D object at 0x7f613194b170>]
+    [<matplotlib.lines.Line2D object at 0x7f8db59de1b0>]
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 2.149 seconds)
+   **Total running time of the script:** (0 minutes 2.150 seconds)
 
 
 .. _sphx_glr_download_examples_retrieve_plot_column_subset.py:
