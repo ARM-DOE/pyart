@@ -264,7 +264,7 @@ setup(
     scripts=SCRIPTS,
     python_requires=">=3.9",
     install_requires=requirements,
-    setup_requires="setuptools_scm",
+    setup_requires=["setuptools_scm", "setuptools"],
     license=LICENSE,
     platforms=PLATFORMS,
     classifiers=CLASSIFIERS,
