@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.correct.attenuation &#8212; Py-ART 1.17.0.post4 documentation</title>
+    <title>pyart.correct.attenuation &#8212; Py-ART 1.17.0.post5 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=d160bc31"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=75183828"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -144,7 +144,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.17.0.post4 documentation</p>
+    <p class="title logo__title">Py-ART 1.17.0.post5 documentation</p>
   
 </a></div>
     
@@ -496,7 +496,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">cumtrapz</span>
+<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">cumulative_trapezoid</span>
 
 <span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
 <span class="kn">from</span> <span class="nn">..filters</span> <span class="kn">import</span> <span class="n">GateFilter</span><span class="p">,</span> <span class="n">iso0_based_gate_filter</span><span class="p">,</span> <span class="n">temp_based_gate_filter</span>
@@ -764,7 +764,7 @@ document.write(`
             <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">last_six_good</span><span class="p">))</span> <span class="o">==</span> <span class="mi">6</span><span class="p">:</span>
                 <span class="n">phidp_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">ray_phase_shift</span><span class="p">[</span><span class="n">last_six_good</span><span class="p">])</span>
                 <span class="n">self_cons_number</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">**</span> <span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">a_coef</span> <span class="o">*</span> <span class="n">phidp_max</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span>
-                <span class="n">I_indef</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="mf">0.46</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">dr</span> <span class="o">*</span> <span class="n">ray_refl_linear</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+                <span class="n">I_indef</span> <span class="o">=</span> <span class="n">cumulative_trapezoid</span><span class="p">(</span><span class="mf">0.46</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">dr</span> <span class="o">*</span> <span class="n">ray_refl_linear</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
                 <span class="n">I_indef</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">I_indef</span><span class="p">,</span> <span class="n">I_indef</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
                 <span class="c1"># set the specific attenutation and attenuation</span>
@@ -774,7 +774,7 @@ document.write(`
                     <span class="o">/</span> <span class="p">(</span><span class="n">I_indef</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">self_cons_number</span> <span class="o">*</span> <span class="n">I_indef</span><span class="p">)</span>
                 <span class="p">)</span>
 
-                <span class="n">pia</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">ah</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="p">:])</span> <span class="o">*</span> <span class="n">dr</span> <span class="o">*</span> <span class="mf">2.0</span>
+                <span class="n">pia</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">cumulative_trapezoid</span><span class="p">(</span><span class="n">ah</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="p">:])</span> <span class="o">*</span> <span class="n">dr</span> <span class="o">*</span> <span class="mf">2.0</span>
                 <span class="n">pia</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pia</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">]</span>
 
                 <span class="c1"># if ZDR exists, set the specific differential attenuation</span>
@@ -784,7 +784,7 @@ document.write(`
                         <span class="n">ah</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="mi">0</span> <span class="p">:</span> <span class="n">end_gate_arr</span><span class="p">[</span><span class="n">ray</span><span class="p">]],</span> <span class="n">d</span>
                     <span class="p">)</span>
 
-                    <span class="n">pida</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">adiff</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="p">:])</span> <span class="o">*</span> <span class="n">dr</span> <span class="o">*</span> <span class="mf">2.0</span>
+                    <span class="n">pida</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">cumulative_trapezoid</span><span class="p">(</span><span class="n">adiff</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="p">:])</span> <span class="o">*</span> <span class="n">dr</span> <span class="o">*</span> <span class="mf">2.0</span>
                     <span class="n">pida</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">pida</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">]</span>
 
     <span class="c1"># prepare output field dictionaries</span>
@@ -1521,7 +1521,7 @@ document.write(`
             <span class="n">sm_refl</span> <span class="o">=</span> <span class="n">smooth_and_trim</span><span class="p">(</span><span class="n">ray_init_refl</span><span class="p">,</span> <span class="n">window_len</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
             <span class="n">reflectivity_linear</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">**</span> <span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">sm_refl</span><span class="p">)</span>
             <span class="n">self_cons_number</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">**</span> <span class="p">(</span><span class="mf">0.1</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">a_coef</span> <span class="o">*</span> <span class="n">phidp_max</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span>
-            <span class="n">I_indef</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="mf">0.46</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">dr</span> <span class="o">*</span> <span class="n">reflectivity_linear</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+            <span class="n">I_indef</span> <span class="o">=</span> <span class="n">cumulative_trapezoid</span><span class="p">(</span><span class="mf">0.46</span> <span class="o">*</span> <span class="n">beta</span> <span class="o">*</span> <span class="n">dr</span> <span class="o">*</span> <span class="n">reflectivity_linear</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
             <span class="n">I_indef</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">I_indef</span><span class="p">,</span> <span class="n">I_indef</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
 
             <span class="c1"># set the specific attenutation and attenuation</span>
@@ -1531,7 +1531,7 @@ document.write(`
                 <span class="o">/</span> <span class="p">(</span><span class="n">I_indef</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">self_cons_number</span> <span class="o">*</span> <span class="n">I_indef</span><span class="p">)</span>
             <span class="p">)</span>
 
-            <span class="n">atten</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">cumtrapz</span><span class="p">(</span><span class="n">specific_atten</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span> <span class="o">*</span> <span class="n">dr</span> <span class="o">*</span> <span class="mf">2.0</span>
+            <span class="n">atten</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">cumulative_trapezoid</span><span class="p">(</span><span class="n">specific_atten</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:])</span> <span class="o">*</span> <span class="n">dr</span> <span class="o">*</span> <span class="mf">2.0</span>
             <span class="n">atten</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">atten</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="o">-</span><span class="mi">2</span><span class="p">]</span>
 
     <span class="c1"># prepare output field dictionaries</span>
