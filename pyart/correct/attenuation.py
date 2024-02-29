@@ -10,7 +10,7 @@ from copy import deepcopy
 from warnings import warn
 
 import numpy as np
-from scipy.integrate import cumtrapz
+from scipy.integrate import cumulative_trapezoid
 
 from ..config import get_field_name, get_fillvalue, get_metadata
 from ..filters import GateFilter, iso0_based_gate_filter, temp_based_gate_filter
@@ -278,7 +278,7 @@ def calculate_attenuation_zphi(
             if (len(last_six_good)) == 6:
                 phidp_max = np.median(ray_phase_shift[last_six_good])
                 self_cons_number = 10.0 ** (0.1 * beta * a_coef * phidp_max) - 1.0
-                I_indef = cumtrapz(0.46 * beta * dr * ray_refl_linear[::-1])
+                I_indef = cumulative_trapezoid(0.46 * beta * dr * ray_refl_linear[::-1])
                 I_indef = np.append(I_indef, I_indef[-1])[::-1]
 
                 # set the specific attenutation and attenuation
@@ -288,7 +288,7 @@ def calculate_attenuation_zphi(
                     / (I_indef[0] + self_cons_number * I_indef)
                 )
 
-                pia[ray, :-1] = cumtrapz(ah[ray, :]) * dr * 2.0
+                pia[ray, :-1] = cumulative_trapezoid(ah[ray, :]) * dr * 2.0
                 pia[ray, -1] = pia[ray, -2]
 
                 # if ZDR exists, set the specific differential attenuation
@@ -298,7 +298,7 @@ def calculate_attenuation_zphi(
                         ah[ray, 0 : end_gate_arr[ray]], d
                     )
 
-                    pida[ray, :-1] = cumtrapz(adiff[ray, :]) * dr * 2.0
+                    pida[ray, :-1] = cumulative_trapezoid(adiff[ray, :]) * dr * 2.0
                     pida[ray, -1] = pida[ray, -2]
 
     # prepare output field dictionaries
@@ -1035,7 +1035,7 @@ def calculate_attenuation(
             sm_refl = smooth_and_trim(ray_init_refl, window_len=5)
             reflectivity_linear = 10.0 ** (0.1 * beta * sm_refl)
             self_cons_number = 10.0 ** (0.1 * beta * a_coef * phidp_max) - 1.0
-            I_indef = cumtrapz(0.46 * beta * dr * reflectivity_linear[::-1])
+            I_indef = cumulative_trapezoid(0.46 * beta * dr * reflectivity_linear[::-1])
             I_indef = np.append(I_indef, I_indef[-1])[::-1]
 
             # set the specific attenutation and attenuation
@@ -1045,7 +1045,7 @@ def calculate_attenuation(
                 / (I_indef[0] + self_cons_number * I_indef)
             )
 
-            atten[i, :-1] = cumtrapz(specific_atten[i, :]) * dr * 2.0
+            atten[i, :-1] = cumulative_trapezoid(specific_atten[i, :]) * dr * 2.0
             atten[i, -1] = atten[i, -2]
 
     # prepare output field dictionaries
