@@ -36,6 +36,9 @@ jobs:
       - name: Checkout repo
         uses: actions/checkout@v4
 
+      - name: Install python
+        uses: actions/setup-python@v3
+
       - name: Fetch all history for all tags and branches
         run: |
            git fetch --prune --unshallow
