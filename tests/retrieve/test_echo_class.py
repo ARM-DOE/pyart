@@ -67,15 +67,15 @@ def test_steiner_conv_strat_modify_area(area_relation):
     assert eclass["data"].max() == 2
 
 
-def test_conv_strat__yuter_default():
+def test_feature_detection_default():
     grid = pyart.testing.make_storm_grid()
-    dict = pyart.retrieve.conv_strat_yuter(grid, bkg_rad_km=50)
+    dict = pyart.retrieve.feature_detection(grid, bkg_rad_km=50)
 
-    assert "convsf" in dict.keys()
-    assert "convsf_under" in dict.keys()
-    assert "convsf_over" in dict.keys()
+    assert "feature_detection" in dict.keys()
+    assert "feature_under" in dict.keys()
+    assert "feature_over" in dict.keys()
     assert np.all(
-        dict["convsf"]["data"][25]
+        dict["feature_detection"]["data"][0, 25, :]
         == np.array(
             [
                 0,
@@ -123,13 +123,13 @@ def test_conv_strat__yuter_default():
     )
 
 
-def test_conv_strat_yuter_noest():
+def test_feature_detection_noest():
     grid = pyart.testing.make_storm_grid()
-    dict = pyart.retrieve.conv_strat_yuter(grid, bkg_rad_km=50, estimate_flag=False)
+    dict = pyart.retrieve.feature_detection(grid, bkg_rad_km=50, estimate_flag=False)
 
-    assert "convsf" in dict.keys()
-    assert "convsf_under" not in dict.keys()
-    assert "convsf_over" not in dict.keys()
+    assert "feature_detection" in dict.keys()
+    assert "feature_under" not in dict.keys()
+    assert "feature_over" not in dict.keys()
 
 
 def test_hydroclass_semisupervised():
@@ -300,3 +300,98 @@ def test_standardize():
     assert_allclose(field_std_no_limits[0], [1.0, 1.0, 1.0, 1.0, 1.0], atol=1e-6)
 
     pytest.raises(ValueError, pyart.retrieve.echo_class._standardize, rhohv, "foo")
+
+
+def test_conv_strat_raut_outDict_valid():
+    """
+    Test that function returns a valid dictionary with all expected keys'.
+    """
+
+    # Test that function raises `TypeError` with invalid grid object as input.
+    pytest.raises(TypeError, pyart.retrieve.conv_strat_raut, None, "foo")
+
+    # Create a Gaussian storm grid
+    grid_len = 32
+    gaussian_storm_2d = pyart.testing.make_gaussian_storm_grid(
+        min_value=5, max_value=45, grid_len=grid_len, sigma=0.2, mu=0, masked_boundary=3
+    )
+    wtclass = pyart.retrieve.conv_strat_raut(
+        gaussian_storm_2d, "reflectivity", cappi_level=0
+    )
+
+    # First check that it's a Python dictionary
+    assert isinstance(wtclass, dict), "Output is not a dictionary"
+    # then test 'wt_reclass' key exists in the dict
+    assert "wt_reclass" in wtclass.keys()
+
+    # Now test other expected keys
+    expected_keys = [
+        "data",
+        "standard_name",
+        "long_name",
+        "valid_min",
+        "valid_max",
+        "classification_description",
+        "parameters",
+    ]
+
+    # Get the keys of the 'wt_reclass' field
+    reclass_keys = wtclass["wt_reclass"].keys()
+
+    # Check each expected key
+    for key in expected_keys:
+        assert key in reclass_keys
+
+    # check grid shape
+    assert wtclass["wt_reclass"]["data"].shape == (1, grid_len, grid_len)
+
+
+def test_conv_strat_raut_results_correct():
+    """
+    Checks the correctness of the results from the function.
+
+    I created a fixed Gaussian storm with masked boundaries as pyart grid and classified it.
+    Then constructed manually the expected classification results and compared it to the actual output from the function.
+    """
+
+    # Create a Gaussian storm grid
+    grid_len = 32
+    mask_margin = 3
+
+    gaussian_storm_2d = pyart.testing.make_gaussian_storm_grid(
+        min_value=5,
+        max_value=45,
+        grid_len=grid_len,
+        sigma=0.2,
+        mu=0,
+        masked_boundary=mask_margin,
+    )
+
+    wtclass = pyart.retrieve.conv_strat_raut(gaussian_storm_2d, "reflectivity")
+
+    # Create a 32x32 array of ones
+    test_reclass = np.ones((grid_len, grid_len))
+
+    # Mask the edges
+    test_reclass[:mask_margin, :] = np.nan
+    test_reclass[-mask_margin:, :] = np.nan
+    test_reclass[:, :mask_margin] = np.nan
+    test_reclass[:, -mask_margin:] = np.nan
+
+    # Define the center and create the 4x4 area
+    center = grid_len // 2
+    # these are actual results from successful run
+    test_reclass[center - 3 : center + 3, center - 3 : center + 3] = 2
+    test_reclass[center - 2 : center + 2, center - 2 : center + 2] = 3
+
+    test_reclass[13, 13] = 1
+    test_reclass[13, 18] = 1
+    test_reclass[18, 13] = 1
+    test_reclass[18, 18] = 1
+
+    # Creating a mask for NaN values
+    mask = np.isnan(test_reclass)
+    masked_reclass = np.ma.array(test_reclass, mask=mask).astype(np.int32)
+    masked_reclass = np.expand_dims(masked_reclass, axis=0)
+
+    assert_allclose(masked_reclass, wtclass["wt_reclass"]["data"], atol=0.1)

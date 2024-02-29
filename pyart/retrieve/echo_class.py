@@ -7,8 +7,11 @@ from warnings import warn
 
 import numpy as np
 
+# Local imports
 from ..config import get_field_name, get_fillvalue, get_metadata
-from ._echo_class import _revised_conv_strat, steiner_class_buff
+from ..core import Grid
+from ._echo_class import _feature_detection, steiner_class_buff
+from ._echo_class_wt import calc_scale_break, wavelet_reclass
 
 
 def steiner_conv_strat(
@@ -245,14 +248,191 @@ def conv_strat_yuter(
 
     """
 
-    # Maxmimum convective radius must be less than 5 km
-    if max_conv_rad_km > 5:
-        print("Max conv radius must be less than 5 km, exiting")
+    warn(
+        "This function will be deprecated in Py-ART 2.0."
+        " Please use feature_detection function.",
+        DeprecationWarning,
+    )
+
+    feature_dict = feature_detection(
+        grid,
+        dx=dx,
+        dy=dy,
+        level_m=level_m,
+        always_core_thres=always_core_thres,
+        bkg_rad_km=bkg_rad_km,
+        use_cosine=use_cosine,
+        max_diff=max_diff,
+        zero_diff_cos_val=zero_diff_cos_val,
+        scalar_diff=scalar_diff,
+        use_addition=use_addition,
+        calc_thres=calc_thres,
+        weak_echo_thres=weak_echo_thres,
+        min_val_used=min_dBZ_used,
+        dB_averaging=dB_averaging,
+        remove_small_objects=remove_small_objects,
+        min_km2_size=min_km2_size,
+        binary_close=False,
+        val_for_max_rad=val_for_max_conv_rad,
+        max_rad_km=max_conv_rad_km,
+        core_val=cs_core,
+        nosfcecho=nosfcecho,
+        weakecho=weakecho,
+        bkgd_val=sf,
+        feat_val=conv,
+        field=refl_field,
+        estimate_flag=estimate_flag,
+        estimate_offset=5,
+        overest_field=None,
+        underest_field=None,
+    )
+
+    return feature_dict
+
+
+def feature_detection(
+    grid,
+    dx=None,
+    dy=None,
+    level_m=None,
+    always_core_thres=42,
+    bkg_rad_km=11,
+    use_cosine=True,
+    max_diff=5,
+    zero_diff_cos_val=55,
+    scalar_diff=1.5,
+    use_addition=True,
+    calc_thres=0.75,
+    weak_echo_thres=5.0,
+    min_val_used=5.0,
+    dB_averaging=True,
+    remove_small_objects=True,
+    min_km2_size=10,
+    binary_close=False,
+    val_for_max_rad=30,
+    max_rad_km=5.0,
+    core_val=3,
+    nosfcecho=0,
+    weakecho=3,
+    bkgd_val=1,
+    feat_val=2,
+    field=None,
+    estimate_flag=True,
+    estimate_offset=5,
+    overest_field=None,
+    underest_field=None,
+):
+    """
+    This function can be used to detect features in a field (e.g. reflectivity, rain rate, snow rate,
+    etc.) described by Tomkins et al. (2023) and based on original convective-stratiform algorithms developed by
+    Steiner et al. (1995), Yuter et al. (2005) and Yuter and Houze (1997) algorithm.
+
+    Author: Laura Tomkins (@lauratomkins)
+
+    Parameters
+    ----------
+    grid : Grid
+        Grid containing reflectivity field to partition.
+    dx, dy : float, optional
+        The x- and y-dimension resolutions in meters, respectively. If None
+        the resolution is determined from the first two axes values parsed from grid object.
+    level_m : float, optional
+        Desired height in meters to run feature detection algorithm.
+    always_core_thres : float, optional
+        Threshold for points that are always features. All values above the threshold are classified as features.
+    bkg_rad_km : float, optional
+        Radius to compute background reflectivity in kilometers. Default is 11 km. Recommended to be at least 3 x
+        grid spacing
+    use_cosine : bool, optional
+        Boolean used to determine if a cosine scheme (see Yuter and Houze (1997)) should be used for identifying
+        cores (True) or if a simpler scalar scheme (False) should be used.
+    max_diff : float, optional
+        Maximum difference between background average and reflectivity in order to be classified as features.
+        "a" value in Eqn. B1 in Yuter and Houze (1997)
+    zero_diff_cos_val : float, optional
+        Value where difference between background average and reflectivity is zero in the cosine function
+        "b" value in Eqn. B1 in Yuter and Houze (1997)
+    scalar_diff : float, optional
+        If using a scalar difference scheme, this value is the multiplier or addition to the background average
+    use_addition : bool, optional
+        Determines if a multiplier (False) or addition (True) in the scalar difference scheme should be used
+    calc_thres : float, optional
+        Minimum percentage of points needed to be considered in background average calculation
+    weak_echo_thres : float, optional
+        Threshold for determining weak echo. All values below this threshold will be considered weak echo
+    min_val_used : float, optional
+        Minimum value used for classification. All values below this threshold will be considered no surface echo
+        See Yuter and Houze (1997) and Yuter et al. (2005) for more detail. Units based on input field
+    dB_averaging : bool, optional
+        True if using dBZ reflectivity values that need to be converted to linear Z before averaging. False for
+        other non-dBZ values (i.e. snow rate)
+    remove_small_objects : bool, optional
+        Determines if small objects should be removed from core array. Default is True.
+    min_km2_size : float, optional
+        Minimum size of Cores to be considered. Cores less than this size will be removed. Default is 10 km^2.
+    binary_close : bool, optional
+        Determines if a binary closing should be performed on the cores. Default is False.
+    val_for_max_rad : float, optional
+        value used for maximum radius. Cores with values above this will have the maximum radius incorporated.
+    max_rad_km : float, optional
+        Maximum radius around cores to classify as feature. Default is 5 km
+    core_val : int, optional
+        Value for points classified as cores
+    nosfcecho : int, optional
+        Value for points classified as no surface echo, based on min_val_used
+    weakecho : int, optional
+        Value for points classified as weak echo, based on weak_echo_thres.
+    bkgd_val : int, optional
+        Value for points classified as background echo.
+    feat_val : int, optional
+        Value for points classified as features.
+    field : str, optional
+        Field in grid to find objects in. None will use the default reflectivity field name from the Py-ART
+        configuration file.
+    estimate_flag : bool, optional
+        Determines if over/underestimation should be applied. If true, the algorithm will also be run on the same field
+        wih the estimate_offset added and the same field with the estimate_offset subtracted.
+        Default is True (recommended)
+    estimate_offset : float, optional
+        Value used to offset the field values by for the over/underestimation application. Default value is 5 dBZ.
+    overest_field : str, optional
+        Name of field in grid object used to calculate the overestimate if estimate_flag is True.
+    underest_field : str, optional
+        Name of field in grid object used to calculate the underestimate if estimate_flag is True.
+
+    Returns
+    -------
+    feature_dict : dict
+        Feature detection classification dictionary.
+
+    References
+    ----------
+    Steiner, M. R., R. A. Houze Jr., and S. E. Yuter, 1995: Climatological
+    Characterization of Three-Dimensional Storm Structure from Operational
+    Radar and Rain Gauge Data. J. Appl. Meteor., 34, 1978-2007.
+
+    Yuter, S. E., and R. A. Houze, Jr., 1997: Measurements of raindrop size
+    distributions over the Pacific warm pool and implications for Z-R relations.
+    J. Appl. Meteor., 36, 847-867.
+    https://doi.org/10.1175/1520-0450(1997)036%3C0847:MORSDO%3E2.0.CO;2
+
+    Yuter, S. E., R. A. Houze, Jr., E. A. Smith, T. T. Wilheit, and E. Zipser,
+    2005: Physical characterization of tropical oceanic convection observed in
+    KWAJEX. J. Appl. Meteor., 44, 385-415. https://doi.org/10.1175/JAM2206.1
+
+    Tomkins, L. M., S. E. Yuter, and M. A. Miller, 2024: Objective identification
+    of faint and strong features in radar observations of winter storms. in prep.
+
+    """
+
+    # Maxmimum radius must be less than 5 km
+    if max_rad_km > 5:
+        print("Max radius must be less than 5 km, exiting")
         raise
 
     # Parse field parameters
-    if refl_field is None:
-        refl_field = get_field_name("reflectivity")
+    if field is None:
+        field = get_field_name("reflectivity")
         dB_averaging = True
 
     # parse dx and dy if None
@@ -274,15 +454,15 @@ def conv_strat_yuter(
     # Get reflectivity data at desired level
     if level_m is None:
         try:
-            ze = np.ma.copy(grid.fields[refl_field]["data"][0, :, :])
+            ze = np.ma.copy(grid.fields[field]["data"][0, :, :])
         except:
-            ze = np.ma.copy(grid.fields[refl_field]["data"][:, :])
+            ze = np.ma.copy(grid.fields[field]["data"][:, :])
     else:
         zslice = np.argmin(np.abs(z - level_m))
-        ze = np.ma.copy(grid.fields[refl_field]["data"][zslice, :, :])
+        ze = np.ma.copy(grid.fields[field]["data"][zslice, :, :])
 
-    # run convective stratiform algorithm
-    _, _, convsf_best = _revised_conv_strat(
+    # run feature detection algorithm
+    _, _, feature_best = _feature_detection(
         ze,
         dx,
         dy,
@@ -295,43 +475,47 @@ def conv_strat_yuter(
         use_addition=use_addition,
         calc_thres=calc_thres,
         weak_echo_thres=weak_echo_thres,
-        min_dBZ_used=min_dBZ_used,
+        min_val_used=min_val_used,
         dB_averaging=dB_averaging,
         remove_small_objects=remove_small_objects,
         min_km2_size=min_km2_size,
-        val_for_max_conv_rad=val_for_max_conv_rad,
-        max_conv_rad_km=max_conv_rad_km,
-        cs_core=cs_core,
+        binary_close=binary_close,
+        val_for_max_rad=val_for_max_rad,
+        max_rad_km=max_rad_km,
+        core_val=core_val,
         nosfcecho=nosfcecho,
         weakecho=weakecho,
-        sf=sf,
-        conv=conv,
+        bkgd_val=bkgd_val,
+        feat_val=feat_val,
     )
 
     # put data into a dictionary to be added as a field
-    convsf_dict = {
-        "convsf": {
-            "data": convsf_best,
-            "standard_name": "convsf",
-            "long_name": "Convective stratiform classification",
+    feature_dict = {
+        "feature_detection": {
+            "data": feature_best[None, :, :],
+            "standard_name": "feature_detection",
+            "long_name": "Feature Detection",
             "valid_min": 0,
             "valid_max": 3,
             "comment_1": (
-                "Convective-stratiform echo "
-                "classification based on "
-                "Yuter and Houze (1997) and Yuter et al. (2005)"
-            ),
-            "comment_2": (
-                "0 = No surface echo/Undefined, 1 = Stratiform, "
-                "2 = Convective, 3 = weak echo"
+                "{} = No surface echo/Undefined, {} = Background echo, {} = Features, {} = weak echo".format(
+                    nosfcecho, bkgd_val, feat_val, weakecho
+                )
             ),
         }
     }
 
     # If estimation is True, run the algorithm on the field with offset subtracted and the field with the offset added
     if estimate_flag:
-        _, _, convsf_under = _revised_conv_strat(
-            ze - estimate_offset,
+        # get underestimate field
+        if underest_field is None:
+            under_field = ze - estimate_offset
+        elif underest_field is not None:
+            under_field = np.ma.copy(grid.fields[underest_field]["data"][0, :, :])
+
+        # run algorithm to get feature detection underestimate
+        _, _, feature_under = _feature_detection(
+            under_field,
             dx,
             dy,
             always_core_thres=always_core_thres,
@@ -343,21 +527,29 @@ def conv_strat_yuter(
             use_addition=use_addition,
             calc_thres=calc_thres,
             weak_echo_thres=weak_echo_thres,
-            min_dBZ_used=min_dBZ_used,
+            min_val_used=min_val_used,
             dB_averaging=dB_averaging,
             remove_small_objects=remove_small_objects,
             min_km2_size=min_km2_size,
-            val_for_max_conv_rad=val_for_max_conv_rad,
-            max_conv_rad_km=max_conv_rad_km,
-            cs_core=cs_core,
+            binary_close=binary_close,
+            val_for_max_rad=val_for_max_rad,
+            max_rad_km=max_rad_km,
+            core_val=core_val,
             nosfcecho=nosfcecho,
             weakecho=weakecho,
-            sf=sf,
-            conv=conv,
+            bkgd_val=bkgd_val,
+            feat_val=feat_val,
         )
 
-        _, _, convsf_over = _revised_conv_strat(
-            ze + estimate_offset,
+        # get overestimate field
+        if overest_field is None:
+            over_field = ze + estimate_offset
+        elif overest_field is not None:
+            over_field = np.ma.copy(grid.fields[overest_field]["data"][0, :, :])
+
+        # run algorithm to get feature detection underestimate
+        _, _, feature_over = _feature_detection(
+            over_field,
             dx,
             dy,
             always_core_thres=always_core_thres,
@@ -369,53 +561,48 @@ def conv_strat_yuter(
             use_addition=use_addition,
             calc_thres=calc_thres,
             weak_echo_thres=weak_echo_thres,
-            min_dBZ_used=min_dBZ_used,
+            min_val_used=min_val_used,
             dB_averaging=dB_averaging,
             remove_small_objects=remove_small_objects,
             min_km2_size=min_km2_size,
-            val_for_max_conv_rad=val_for_max_conv_rad,
-            max_conv_rad_km=max_conv_rad_km,
-            cs_core=cs_core,
+            binary_close=binary_close,
+            val_for_max_rad=val_for_max_rad,
+            max_rad_km=max_rad_km,
+            core_val=core_val,
             nosfcecho=nosfcecho,
             weakecho=weakecho,
-            sf=sf,
-            conv=conv,
+            bkgd_val=bkgd_val,
+            feat_val=feat_val,
         )
 
         # save into dictionaries
-        convsf_dict["convsf_under"] = {
-            "data": convsf_under,
-            "standard_name": "convsf_under",
-            "long_name": "Convective stratiform classification (Underestimate)",
+        feature_dict["feature_under"] = {
+            "data": feature_under[None, :, :],
+            "standard_name": "feature_detection_under",
+            "long_name": "Feature Detection Underestimate",
             "valid_min": 0,
             "valid_max": 3,
             "comment_1": (
-                "Convective-stratiform echo "
-                "classification based on "
-                "Yuter and Houze (1997) and Yuter et al. (2005)"
-            ),
-            "comment_2": (
-                "0 = Undefined, 1 = Stratiform, " "2 = Convective, 3 = weak echo"
+                "{} = No surface echo/Undefined, {} = Background echo, {} = Features, {} = weak echo".format(
+                    nosfcecho, bkgd_val, feat_val, weakecho
+                )
             ),
         }
 
-        convsf_dict["convsf_over"] = {
-            "data": convsf_over,
-            "standard_name": "convsf_under",
-            "long_name": "Convective stratiform classification (Overestimate)",
+        feature_dict["feature_over"] = {
+            "data": feature_over[None, :, :],
+            "standard_name": "feature_detection_over",
+            "long_name": "Feature Detection Overestimate",
             "valid_min": 0,
             "valid_max": 3,
             "comment_1": (
-                "Convective-stratiform echo "
-                "classification based on "
-                "Yuter and Houze (1997)"
-            ),
-            "comment_2": (
-                "0 = Undefined, 1 = Stratiform, " "2 = Convective, 3 = weak echo"
+                "{} = No surface echo/Undefined, {} = Background echo, {} = Features, {} = weak echo".format(
+                    nosfcecho, bkgd_val, feat_val, weakecho
+                )
             ),
         }
 
-    return convsf_dict
+    return feature_dict
 
 
 def hydroclass_semisupervised(
@@ -794,3 +981,175 @@ def get_freq_band(freq):
     warn("Unknown frequency band")
 
     return None
+
+
+def conv_strat_raut(
+    grid,
+    refl_field,
+    cappi_level=0,
+    zr_a=200,
+    zr_b=1.6,
+    core_wt_threshold=5,
+    conv_wt_threshold=1.5,
+    conv_scale_km=25,
+    min_reflectivity=5,
+    conv_min_refl=25,
+    conv_core_threshold=42,
+    override_checks=False,
+):
+    """
+    A computationally efficient method to classify radar echoes into convective cores, mixed convection,
+    and stratiform regions for gridded radar reflectivity field.
+
+    This function uses à trous wavelet transform (ATWT) for multiresolution (i.e. scale) analysis of radar field,
+    focusing on precipitation structure over reflectivity thresholds for robust echo classification (Raut et al 2008, 2020).
+
+    Parameters
+    ----------
+    grid : PyART Grid
+        Grid object containing radar data.
+    refl_field : str
+        Field name for reflectivity data in the Py-ART grid object.
+    zr_a : float, optional
+        Coefficient 'a' in the Z-R relationship Z = a*R^b for reflectivity to rain rate conversion.
+        The algorithm is not sensitive to precise values of 'zr_a' and 'zr_b'; however,
+        they must be adjusted based on the type of radar used.
+        Default is 200.
+    zr_b : float, optional
+        Coefficient 'b' in the Z-R relationship Z = a*R^b. Default is 1.6.
+    core_wt_threshold : float, optional
+        Threshold for wavelet components to separate convective cores from mix-intermediate type.
+        Default is 5. Recommended values are between 4 and 6.
+    conv_wt_threshold : float, optional
+        Threshold for significant wavelet components to separate all convection from stratiform.
+        Default is 1.5. Recommended values are between 1 and 2.
+    conv_scale_km : float, optional
+        Approximate scale break (in km) between convective and stratiform scales.
+        Scale break may vary over different regions and seasons
+        (Refere to Raut et al 2018 for more discussion on scale-breaks). Note that the
+        algorithm is insensitive to small variations in the scale break due to the
+        dyadic nature of the scaling. The actual scale break used in the calculation of wavelets
+        is returned in the output dictionary by parameter `scale_break_used`.
+        Default is 25 km. Recommended values are between 16 and 32 km.
+    min_reflectivity : float, optional
+        Minimum reflectivity threshold. Reflectivities below this value are not classified.
+        Default is 5 dBZ. This value must be greater than or equal to '0'.
+    conv_min_refl : float, optional
+        Reflectivity values lower than this threshold will be always considered as non-convective.
+        Default is 25 dBZ. Recommended values are between 25 and 30 dBZ.
+    conv_core_threshold : float, optional
+        Reflectivities above this threshold are classified as convective cores if wavelet components are significant (See: conv_wt_threshold).
+        Default is 42 dBZ.
+        Recommended value must be is greater than or equal to 40 dBZ. The algorithm is not sensitive to this value.
+    override_checks : bool, optional
+        If set to True, the function will bypass the sanity checks for above parameter values.
+        This allows the user to use custom values for parameters, even if they fall outside
+        the recommended ranges. The default is False.
+
+    Returns
+    -------
+
+    dict :
+    A dictionary structured as a Py-ART grid field, suitable for adding to a Py-ART Grid object. The dictionary
+    contains the classification data and associated metadata. The classification categories are as follows:
+        - 3: Convective Cores: associated with strong updrafts and active collision-coalescence.
+        - 2: Mixed-Intermediate: capturing a wide range of convective activities, excluding the convective cores.
+        - 1: Stratiform: remaining areas with more uniform and less intense precipitation.
+        - 0: Unclassified: for reflectivity below the minimum threshold.
+
+
+    References
+    ----------
+    Raut, B. A., Karekar, R. N., & Puranik, D. M. (2008). Wavelet-based technique to extract convective clouds from
+    infrared satellite images. IEEE Geosci. Remote Sens. Lett., 5(3), 328-330.
+
+    Raut, B. A., Seed, A. W., Reeder, M. J., & Jakob, C. (2018). A multiplicative cascade model for high‐resolution
+    space‐time downscaling of rainfall. J. Geophys. Res. Atmos., 123(4), 2050-2067.
+
+    Raut, B. A., Louf, V., Gayatri, K., Murugavel, P., Konwar, M., & Prabhakaran, T. (2020). A multiresolution technique
+    for the classification of precipitation echoes in radar data. IEEE Trans. Geosci. Remote Sens., 58(8), 5409-5415.
+    """
+
+    # Check if the grid is a Py-ART Grid object
+    if not isinstance(grid, Grid):
+        raise TypeError("The 'grid' is not a Py-ART Grid object.")
+
+    # Check if dx and dy are the same, and warn if not
+    dx = grid.x["data"][1] - grid.x["data"][0]
+    dy = grid.y["data"][1] - grid.y["data"][0]
+    if dx != dy:
+        warn(
+            "Warning: Grid resolution `dx` and `dy` should be comparable for correct results.",
+            UserWarning,
+        )
+
+    # Compute scale break (dyadic) here to paas it on as parameter to user dictionary
+    scale_break = calc_scale_break(res_meters=dx, conv_scale_km=conv_scale_km)
+
+    # From dyadic scale to km
+    scale_break_km = (2 ** (scale_break - 1)) * dx / 1000
+
+    # Sanity checks for parameters if override_checks is False
+    if not override_checks:
+        conv_core_threshold = max(
+            40, conv_core_threshold
+        )  # Ensure conv_core_threshold is at least 40 dBZ
+        core_wt_threshold = max(
+            4, min(core_wt_threshold, 6)
+        )  # core_wt_threshold should be between 4 and 6
+        conv_wt_threshold = max(
+            1, min(conv_wt_threshold, 2)
+        )  # conv_wt_threshold should be between 1 and 2
+        conv_scale_km = max(
+            16, min(conv_scale_km, 32)
+        )  # conv_scale_km should be between 15 and 30 km
+        min_reflectivity = max(
+            0, min_reflectivity
+        )  # min_reflectivity should be non-negative
+        conv_min_refl = max(
+            25, min(conv_min_refl, 30)
+        )  # conv_min_refl should be between 25 and 30 dBZ
+
+    # Call the actual wavelet_relass function to obtain radar echo classificatino
+    reclass = wavelet_reclass(
+        grid,
+        refl_field,
+        cappi_level,
+        zr_a,
+        zr_b,
+        core_wt_threshold=core_wt_threshold,
+        conv_wt_threshold=conv_wt_threshold,
+        scale_break=scale_break,
+        min_reflectivity=min_reflectivity,
+        conv_min_refl=conv_min_refl,
+        conv_core_threshold=conv_core_threshold,
+    )
+
+    reclass = np.expand_dims(reclass, axis=0)
+
+    # put data into a dictionary to be added as a field
+    reclass_dict = {
+        "wt_reclass": {
+            "data": reclass,
+            "standard_name": "wavelet_echo_class",
+            "long_name": "Wavelet-based multiresolution radar echo classification",
+            "valid_min": 0,
+            "valid_max": 3,
+            "classification_description": "0: Unclassified, 1: Stratiform, 2: Mixed-Intermediate, 3: Convective Cores",
+            "parameters": {
+                "refl_field": refl_field,
+                "cappi_level": cappi_level,
+                "zr_a": zr_a,
+                "zr_b": zr_b,
+                "core_wt_threshold": core_wt_threshold,
+                "conv_wt_threshold": conv_wt_threshold,
+                "conv_scale_km": conv_scale_km,
+                "scale_break_used": int(scale_break_km),
+                "min_reflectivity": min_reflectivity,
+                "conv_min_refl": conv_min_refl,
+                "conv_core_threshold": conv_core_threshold,
+            },
+        }
+    }
+
+    return reclass_dict
