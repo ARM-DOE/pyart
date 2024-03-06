@@ -25,6 +25,7 @@ dependencies:
   - setuptools
   - shapely
   - ruff
+  - mda-xdrlib
   - pip
   - pip:
     - cibuildwheel
