@@ -70,9 +70,9 @@ import struct
 import warnings
 from collections import namedtuple
 from datetime import datetime, timedelta
-from xdrlib import Unpacker
 
 import numpy as np
+from mda_xdrlib.xdrlib import Unpacker
 
 
 class NEXRADLevel3File:
