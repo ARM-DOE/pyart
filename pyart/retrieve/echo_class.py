@@ -498,9 +498,7 @@ def feature_detection(
             "valid_min": 0,
             "valid_max": 3,
             "comment_1": (
-                "{} = No surface echo/Undefined, {} = Background echo, {} = Features, {} = weak echo".format(
-                    nosfcecho, bkgd_val, feat_val, weakecho
-                )
+                f"{nosfcecho} = No surface echo/Undefined, {bkgd_val} = Background echo, {feat_val} = Features, {weakecho} = weak echo"
             ),
         }
     }
@@ -583,9 +581,7 @@ def feature_detection(
             "valid_min": 0,
             "valid_max": 3,
             "comment_1": (
-                "{} = No surface echo/Undefined, {} = Background echo, {} = Features, {} = weak echo".format(
-                    nosfcecho, bkgd_val, feat_val, weakecho
-                )
+                f"{nosfcecho} = No surface echo/Undefined, {bkgd_val} = Background echo, {feat_val} = Features, {weakecho} = weak echo"
             ),
         }
 
@@ -596,9 +592,7 @@ def feature_detection(
             "valid_min": 0,
             "valid_max": 3,
             "comment_1": (
-                "{} = No surface echo/Undefined, {} = Background echo, {} = Features, {} = weak echo".format(
-                    nosfcecho, bkgd_val, feat_val, weakecho
-                )
+                f"{nosfcecho} = No surface echo/Undefined, {bkgd_val} = Background echo, {feat_val} = Features, {weakecho} = weak echo"
             ),
         }
 
