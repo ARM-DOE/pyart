@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.17.0.post8 documentation</title>
+    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.18.0 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=0e829599"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=5d495ce7"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -144,7 +144,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.17.0.post8 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.0 documentation</p>
   
 </a></div>
     
@@ -984,9 +984,7 @@ document.write(`
             <span class="s2">&quot;valid_min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
             <span class="s2">&quot;valid_max&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
             <span class="s2">&quot;comment_1&quot;</span><span class="p">:</span> <span class="p">(</span>
-                <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> = No surface echo/Undefined, </span><span class="si">{}</span><span class="s2"> = Background echo, </span><span class="si">{}</span><span class="s2"> = Features, </span><span class="si">{}</span><span class="s2"> = weak echo&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">nosfcecho</span><span class="p">,</span> <span class="n">bkgd_val</span><span class="p">,</span> <span class="n">feat_val</span><span class="p">,</span> <span class="n">weakecho</span>
-                <span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">nosfcecho</span><span class="si">}</span><span class="s2"> = No surface echo/Undefined, </span><span class="si">{</span><span class="n">bkgd_val</span><span class="si">}</span><span class="s2"> = Background echo, </span><span class="si">{</span><span class="n">feat_val</span><span class="si">}</span><span class="s2"> = Features, </span><span class="si">{</span><span class="n">weakecho</span><span class="si">}</span><span class="s2"> = weak echo&quot;</span>
             <span class="p">),</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -1069,9 +1067,7 @@ document.write(`
             <span class="s2">&quot;valid_min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
             <span class="s2">&quot;valid_max&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
             <span class="s2">&quot;comment_1&quot;</span><span class="p">:</span> <span class="p">(</span>
-                <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> = No surface echo/Undefined, </span><span class="si">{}</span><span class="s2"> = Background echo, </span><span class="si">{}</span><span class="s2"> = Features, </span><span class="si">{}</span><span class="s2"> = weak echo&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">nosfcecho</span><span class="p">,</span> <span class="n">bkgd_val</span><span class="p">,</span> <span class="n">feat_val</span><span class="p">,</span> <span class="n">weakecho</span>
-                <span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">nosfcecho</span><span class="si">}</span><span class="s2"> = No surface echo/Undefined, </span><span class="si">{</span><span class="n">bkgd_val</span><span class="si">}</span><span class="s2"> = Background echo, </span><span class="si">{</span><span class="n">feat_val</span><span class="si">}</span><span class="s2"> = Features, </span><span class="si">{</span><span class="n">weakecho</span><span class="si">}</span><span class="s2"> = weak echo&quot;</span>
             <span class="p">),</span>
         <span class="p">}</span>
 
@@ -1082,9 +1078,7 @@ document.write(`
             <span class="s2">&quot;valid_min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
             <span class="s2">&quot;valid_max&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
             <span class="s2">&quot;comment_1&quot;</span><span class="p">:</span> <span class="p">(</span>
-                <span class="s2">&quot;</span><span class="si">{}</span><span class="s2"> = No surface echo/Undefined, </span><span class="si">{}</span><span class="s2"> = Background echo, </span><span class="si">{}</span><span class="s2"> = Features, </span><span class="si">{}</span><span class="s2"> = weak echo&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
-                    <span class="n">nosfcecho</span><span class="p">,</span> <span class="n">bkgd_val</span><span class="p">,</span> <span class="n">feat_val</span><span class="p">,</span> <span class="n">weakecho</span>
-                <span class="p">)</span>
+                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">nosfcecho</span><span class="si">}</span><span class="s2"> = No surface echo/Undefined, </span><span class="si">{</span><span class="n">bkgd_val</span><span class="si">}</span><span class="s2"> = Background echo, </span><span class="si">{</span><span class="n">feat_val</span><span class="si">}</span><span class="s2"> = Features, </span><span class="si">{</span><span class="n">weakecho</span><span class="si">}</span><span class="s2"> = weak echo&quot;</span>
             <span class="p">),</span>
         <span class="p">}</span>
 
