@@ -353,6 +353,7 @@ def read_sinarame_h5(
         instrument_parameters = None
     # Grab each instrument parameter and its value for the hfile object.
     else:
+        instrument_parameters = {}
         for i in hfile["how"].attrs.keys():
             instrument_parameters[i] = hfile["how"].attrs[i]
 
