@@ -2,10 +2,29 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
   <id>arm-doe.github.io/pyart/</id>
   <title>PyART Blog</title>
-  <updated>2024-03-20T19:42:19.940777+00:00</updated>
+  <updated>2024-03-21T21:26:50.677576+00:00</updated>
   <link href="arm-doe.github.io/pyart/"/>
   <link href="arm-doe.github.io/pyart/blog/atom.xml" rel="self"/>
   <generator uri="https://ablog.readthedocs.io/" version="0.11.6">ABlog</generator>
+  <entry>
+    <id>arm-doe.github.io/pyart/blog_posts/2024/epcape-blog-post.html</id>
+    <title>Investigating ARM Scanning Cloud Radar Data from EPCAPE</title>
+    <updated>2024-03-21T00:00:00+00:00</updated>
+    <author>
+      <name>Max Grover</name>
+    </author>
+    <content type="html">&lt;p class="ablog-post-excerpt"&gt;&lt;p&gt;We would like to find data from a relevant case, and visualize using Py-ART!&lt;/p&gt;
+&lt;p&gt;Include a walk through of the solution, with some sort of final figure or notable insight!&lt;/p&gt;
+&lt;img alt="dq plot browser epcape" src="arm-doe.github.io/pyart/_images/dq-browser-epcape.png" /&gt;&lt;/p&gt;
+</content>
+    <link href="arm-doe.github.io/pyart/blog_posts/2024/epcape-blog-post.html"/>
+    <summary>We would like to find data from a relevant case, and visualize using Py-ART!Include a walk through of the solution, with some sort of final figure or notable insight!dq plot browser epcape</summary>
+    <category term="ARM" label="ARM"/>
+    <category term="EPCAPE" label="EPCAPE"/>
+    <category term="data-viz" label="data-viz"/>
+    <category term="radar" label="radar"/>
+    <published>2024-03-21T00:00:00+00:00</published>
+  </entry>
   <entry>
     <id>arm-doe.github.io/pyart/blog_posts/2023/severe-storms-southern-wisconsin.html</id>
     <title>Plotting Severe Weather in Wisconsin</title>
@@ -30,7 +49,7 @@
     <title>Hail Storm Visualization Using Py-ART and Pandas!</title>
     <updated>2022-11-23T00:00:00+00:00</updated>
     <author>
-      <name>Max Grover</name>
+      <name>Russ Schumacher</name>
     </author>
     <content type="html">&lt;p class="ablog-post-excerpt"&gt;&lt;p&gt;Within this post, we will walk through how to combine radar and storm report data, creating an animation of the two!&lt;/p&gt;
 &lt;p&gt;On September 7, 2021, a strong line of thunderstorms passed through Southern Wisconsin and Northern Illinois, leaving a trail of hail and wind damage in its path.&lt;/p&gt;

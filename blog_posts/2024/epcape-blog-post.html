@@ -1,0 +1,1442 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Investigating ARM Scanning Cloud Radar Data from EPCAPE &#8212; Py-ART 1.18.0.post5 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.1e8bd061cd6da7fc9cf755528e8ffc24.min.css?v=0a3b3ea7" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
+  <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=81311c72"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=36754332"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-JJEG3CV376');
+            </script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'blog_posts/2024/epcape-blog-post';</script>
+    <script src="../../_static/doc_shared.js?v=6c7402a7"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+<link
+  rel="alternate"
+  type="application/atom+xml"
+  href="../../blog/atom.xml"
+  title="PyART Blog"
+/>
+
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Py-ART 1.18.0.post5 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../examples/index.html">
+                        Example Gallery
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../API/index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../dev/index.html">
+                        Developer’s Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../notebook-gallery.html">
+                        Notebook Gallery
+                      </a>
+                    </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link dropdown-item nav-internal" href="../../blog.html">
+                        Blog
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link dropdown-item nav-internal" href="../../changelog.html">
+                        Changelog
+                      </a>
+                    </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ARM-DOE/pyart" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/Py_ART" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+      <span class="fa-solid fa-outdent"></span>
+    </label>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../userguide/index.html">
+                        User Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../examples/index.html">
+                        Example Gallery
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../API/index.html">
+                        API Reference Manual
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../dev/index.html">
+                        Developer’s Guide
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="../../notebook-gallery.html">
+                        Notebook Gallery
+                      </a>
+                    </li>
+                
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links-2">
+                    More
+                </button>
+                <ul id="pst-nav-more-links-2" class="dropdown-menu">
+                    
+                    <li class="nav-item">
+                      <a class="nav-link dropdown-item nav-internal" href="../../blog.html">
+                        Blog
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link dropdown-item nav-internal" href="../../changelog.html">
+                        Changelog
+                      </a>
+                    </li>
+                
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ARM-DOE/pyart" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/Py_ART" title="Twitter" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<div id="searchbox"></div></div>
+        <div class="sidebar-primary-item">
+<div class="ablog-sidebar-item ablog__postcard">
+
+
+<h2>
+  
+  
+  <i class="fa fa-calendar"></i>
+  
+  21 March 2024
+  
+</h2>
+<ul>
+  <div class="ablog-sidebar-item ablog__postcard2">
+
+
+<li id="ablog-sidebar-item author ablog__author">
+  <span>
+    
+    <i class="fa-fw fa fa-user"></i>
+    
+    </span>
+  
+  
+  <a href="../../blog/author/max-grover.html">Max Grover</a>
+  
+  
+  
+</li>
+
+
+
+
+
+<li id="ablog-sidebar-item tags ablog__tags">
+  <span>
+    
+    
+    <i class="fa-fw fa fa-tags"></i>
+    
+    
+    </span>
+  
+  
+  <a href="../../blog/tag/epcape.html">EPCAPE</a>
+  
+  
+  
+  
+  
+  <a href="../../blog/tag/arm.html">ARM</a>
+  
+  
+  
+  
+  
+  <a href="../../blog/tag/data-viz.html">data-viz</a>
+  
+  
+  
+  
+  
+  <a href="../../blog/tag/radar.html">radar</a>
+  
+  
+  
+</li>
+
+
+</div>
+</ul>
+</div>
+</div>
+        <div class="sidebar-primary-item">
+<div class="ablog-sidebar-item ablog__recentposts">
+<h3>
+  <a href="../../blog.html">Recent Posts</a>
+</h3>
+<ul>
+  
+  
+  <li>
+    <a href="../2023/severe-storms-southern-wisconsin.html">
+      07 April - Plotting Severe Weather in Wisconsin
+    </a>
+  </li>
+  
+  <li>
+    <a href="../2022/hail-analysis-spc.html">
+      23 November - Hail Storm Visualization Using Py-ART and Pandas!
+    </a>
+  </li>
+  
+  <li>
+    <a href="../2022/TRACER.html">
+      21 October - Blending Observations from TRACER using Py-ART
+    </a>
+  </li>
+  
+  <li>
+    <a href="../2022/first_pullrequest.html">
+      26 April - Active Py-ART Development - Submitting a Pull Request (PR)
+    </a>
+  </li>
+  
+  <li>
+    <a href="../2022/plot-nexrad-level3.html">
+      12 April - Fixing Weird Patterns When Plotting NEXRAD Level 3 Data
+    </a>
+  </li>
+  
+</ul>
+</div>
+</div>
+        <div class="sidebar-primary-item">
+<div class="ablog-sidebar-item ablog__archive">
+<h3>
+  <a href="../../blog/archive.html">Archives</a>
+</h3>
+<ul>
+  
+  
+  <li>
+    <a href="../../blog/2024.html">2024 (1)</a>
+  </li>
+  
+  
+  
+  <li>
+    <a href="../../blog/2023.html">2023 (1)</a>
+  </li>
+  
+  
+  
+  <li>
+    <a href="../../blog/2022.html">2022 (6)</a>
+  </li>
+  
+  
+</ul>
+</div>
+</div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Investigatin...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+<section class="tex2jax_ignore mathjax_ignore" id="investigating-arm-scanning-cloud-radar-data-from-epcape">
+<h1>Investigating ARM Scanning Cloud Radar Data from EPCAPE<a class="headerlink" href="#investigating-arm-scanning-cloud-radar-data-from-epcape" title="Permalink to this heading">#</a></h1>
+<section id="motivation">
+<h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this heading">#</a></h2>
+</section>
+<section id="the-problem">
+<h2>The Problem<a class="headerlink" href="#the-problem" title="Permalink to this heading">#</a></h2>
+<p>We would like to find data from a relevant case, and visualize using Py-ART!</p>
+</section>
+<section id="the-solution">
+<h2>The Solution<a class="headerlink" href="#the-solution" title="Permalink to this heading">#</a></h2>
+<p>Include a walk through of the solution, with some sort of final figure or notable insight!</p>
+<section id="searching-for-data-through-the-dq-plot-browser">
+<h3>Searching for data through the DQ Plot Browser<a class="headerlink" href="#searching-for-data-through-the-dq-plot-browser" title="Permalink to this heading">#</a></h3>
+<p>We do not know exactly what date/time we would like to analyze! Instead of downloading the entire record, making our own visualizations, and deciding on an analysis time from there, we can utilize a tool provided by ARM - the Data Quality quicklooks!</p>
+<p>These are automated plots that are generated for a variety of ARM instruments - including the scanning radars!</p>
+<p>We filled out the query using the following link, adding in which specific instrument we are interested in, and a general time frame. We know that January 2024 was the wettest January on record for La Jolla, California, so we can use that as a time frame to find an event!</p>
+<p><img alt="dq plot browser epcape" src="../../_images/dq-browser-epcape.png" /></p>
+<p><a class="reference external" href="https://dq.arm.gov/dq-plotbrowser/?comp=true&amp;amp;s=epc&amp;amp;c=kasacr&amp;amp;f=S2&amp;amp;l=a1&amp;amp;p=ppiv&amp;amp;p=rhi&amp;amp;sd=20240101&amp;amp;ed=20240131&amp;amp;">Link to access this in your browser</a></p>
+</section>
+<section id="use-act-to-retrieve-data-from-epcape">
+<h3>Use ACT to retrieve data from EPCAPE<a class="headerlink" href="#use-act-to-retrieve-data-from-epcape" title="Permalink to this heading">#</a></h3>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">glob</span>
+<span class="kn">import</span> <span class="nn">tarfile</span>
+
+<span class="kn">import</span> <span class="nn">act</span>
+<span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
+<span class="kn">import</span> <span class="nn">cartopy.feature</span> <span class="k">as</span> <span class="nn">cfeature</span>
+<span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="retrieve-you-api-token-from-arm-live">
+<h4>Retrieve you API token from ARM Live<a class="headerlink" href="#retrieve-you-api-token-from-arm-live" title="Permalink to this heading">#</a></h4>
+<p>You will need to go to ARM Live to access your individual token. Follow <a class="reference external" href="https://adc.arm.gov/armlive/livedata/home">this link</a>, or it is accessible through the documentation for the <code class="docutils literal notranslate"><span class="pre">download_arm_data</span></code> function from the Atmospheric data Community Toolkit (ACT).</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">?</span>act.discovery.download_arm_data
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Red">Signature:</span>
+act<span class=" -Color -Color-Blue">.</span>discovery<span class=" -Color -Color-Blue">.</span>download_arm_data<span class=" -Color -Color-Blue">(</span>
+    username<span class=" -Color -Color-Blue">,</span>
+    token<span class=" -Color -Color-Blue">,</span>
+    datastream<span class=" -Color -Color-Blue">,</span>
+    startdate<span class=" -Color -Color-Blue">,</span>
+    enddate<span class=" -Color -Color-Blue">,</span>
+    time<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+    output<span class=" -Color -Color-Blue">=</span><span class=" -Color -Color-Green">None</span><span class=" -Color -Color-Blue">,</span>
+<span class=" -Color -Color-Blue">)</span>
+<span class=" -Color -Color-Red">Docstring:</span>
+This tool will help users utilize the ARM Live Data Webservice to download
+ARM data.
+
+Parameters
+----------
+username : str
+    The username to use for logging into the ADC archive.
+token : str
+    The access token for accessing the ADC archive.
+datastream : str
+    The name of the datastream to acquire.
+startdate : str
+    The start date of the data to acquire. Formats accepted are
+    YYYY-MM-DD, DD.MM.YYYY, DD/MM/YYYY, YYYYMMDD, YYYY/MM/DD or
+    any of the previous formats with THH:MM:SS added onto the end
+    (ex. 2020-09-15T12:00:00).
+enddate : str
+    The end date of the data to acquire. Formats accepted are
+    YYYY-MM-DD, DD.MM.YYYY, DD/MM/YYYY, YYYYMMDD or YYYY/MM/DD, or
+    any of the previous formats with THH:MM:SS added onto the end
+    (ex. 2020-09-15T13:00:00).
+time: str or None
+    The specific time. Format is HHMMSS. Set to None to download all files
+    in the given date interval.
+output : str
+    The output directory for the data. Set to None to make a folder in the
+    current working directory with the same name as *datastream* to place
+    the files in.
+
+Returns
+-------
+files : list
+    Returns list of files retrieved
+
+Notes
+-----
+This programmatic interface allows users to query and automate
+machine-to-machine downloads of ARM data. This tool uses a REST URL and
+specific parameters (saveData, query), user ID and access token, a
+datastream name, a start date, and an end date, and data files matching
+the criteria will be returned to the user and downloaded.
+
+By using this web service, users can setup cron jobs and automatically
+download data from /data/archive into their workspace. This will also
+eliminate the manual step of following a link in an email to download data.
+All other data files, which are not on the spinning
+disk (on HPSS), will have to go through the regular ordering process.
+More information about this REST API and tools can be found on `ARM Live
+&lt;https://adc.arm.gov/armlive/#scripts&gt;`_.
+
+To login/register for an access token click `here
+&lt;https://adc.arm.gov/armlive/livedata/home&gt;`_.
+
+Author: Michael Giansiracusa
+Email: giansiracumt@ornl.gov
+
+Examples
+--------
+This code will download the netCDF files from the sgpmetE13.b1 datastream
+and place them in a directory named sgpmetE13.b1. The data from 14 Jan to
+20 Jan 2017 will be downloaded. Replace *userName* and *XXXXXXXXXXXXXXXX*
+with your username and token for ARM Data Discovery. See the Notes for
+information on how to obtain a username and token.
+
+.. code-block:: python
+
+    act.discovery.download_data(
+        &quot;userName&quot;, &quot;XXXXXXXXXXXXXXXX&quot;, &quot;sgpmetE13.b1&quot;, &quot;2017-01-14&quot;, &quot;2017-01-20&quot;
+    )
+<span class=" -Color -Color-Red">File:</span>      ~/mambaforge/envs/pyart-dev/lib/python3.11/site-packages/act/discovery/arm.py
+<span class=" -Color -Color-Red">Type:</span>      function
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="pass-your-credentials-into-the-search">
+<h4>Pass your Credentials into the Search<a class="headerlink" href="#pass-your-credentials-into-the-search" title="Permalink to this heading">#</a></h4>
+<p>Use your ARM username and token in the following cell to search and download your data!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">username</span> <span class="o">=</span> <span class="s2">&quot;USERNAME&quot;</span>
+<span class="n">token</span> <span class="o">=</span> <span class="s2">&quot;TOKEN&quot;</span>
+<span class="n">datastream</span> <span class="o">=</span> <span class="s2">&quot;epckasacrcfrS2.a1&quot;</span>
+<span class="n">startdate</span> <span class="o">=</span> <span class="s2">&quot;2024-01-21T01:00:00&quot;</span>
+<span class="n">enddate</span> <span class="o">=</span> <span class="s2">&quot;2024-01-21T01:30:00&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">files</span> <span class="o">=</span> <span class="n">act</span><span class="o">.</span><span class="n">discovery</span><span class="o">.</span><span class="n">download_arm_data</span><span class="p">(</span><span class="n">username</span><span class="p">,</span> <span class="n">token</span><span class="p">,</span> <span class="n">datastream</span><span class="p">,</span> <span class="n">startdate</span><span class="p">,</span> <span class="n">enddate</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[DOWNLOADING] epckasacrcfrS2.a1.20240121.010020.nc
+[DOWNLOADING] epckasacrcfrS2.a1.20240121.010436.nc
+[DOWNLOADING] epckasacrcfrS2.a1.20240121.011116.nc
+[DOWNLOADING] epckasacrcfrS2.a1.20240121.012914.nc
+[DOWNLOADING] epckasacrcfrS2.a1.20240121.012503.nc
+[DOWNLOADING] epckasacrcfrS2.a1.20240121.011845.nc
+[DOWNLOADING] epckasacrcfrS2.a1.20240121.012257.nc
+[DOWNLOADING] epckasacrcfrS2.a1.20240121.010757.nc
+[DOWNLOADING] epckasacrcfrS2.a1.20240121.010118.nc
+[DOWNLOADING] epckasacrcfrS2.a1.20240121.011434.nc
+[DOWNLOADING] epckasacrcfrS2.a1.20240121.012708.nc
+[DOWNLOADING] epckasacrcfrS2.a1.20240121.011640.nc
+[DOWNLOADING] epckasacrcfrS2.a1.20240121.012051.nc
+
+If you use these data to prepare a publication, please cite:
+
+Bharadwaj, N., Hardin, J., Isom, B., Johnson, K., Lindenmaier, I., Matthews, A.,
+Nelson, D., Feng, Y.-C., Deng, M., Rocque, M., Castro, V., &amp; Wendler, T. Ka-Band
+Scanning ARM Cloud Radar (KASACRCFR). Atmospheric Radiation Measurement (ARM)
+User Facility. https://doi.org/10.5439/1469302
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="read-the-data-into-py-art">
+<h3>Read the Data into Py-ART<a class="headerlink" href="#read-the-data-into-py-art" title="Permalink to this heading">#</a></h3>
+<p>Now that we have a directory full of files, we can read these into Py-ART. The trick is figuring out which ones we are interested in.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;epckasacrcfrS2.a1/*&quot;</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="take-a-peak-at-the-scan-strategy">
+<h4>Take a Peak at the Scan Strategy<a class="headerlink" href="#take-a-peak-at-the-scan-strategy" title="Permalink to this heading">#</a></h4>
+<p>Each of these radar volumes had a different scan strategy. We can check this within the radar’s metadata!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
+    <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mgrover/mambaforge/envs/pyart-dev/lib/python3.11/site-packages/shapely/predicates.py:798: RuntimeWarning: invalid value encountered in intersects
+  return lib.intersects(a, b, **kwargs)
+</pre></div>
+</div>
+<img alt="../../_images/d1d943cb93c2ddcfd051551c9ba4a10b3a581b8c0a9f6ed03a5af49fd2277deb.png" src="../../_images/d1d943cb93c2ddcfd051551c9ba4a10b3a581b8c0a9f6ed03a5af49fd2277deb.png" />
+</div>
+</div>
+<p>This information is stored in the <code class="docutils literal notranslate"><span class="pre">scan_type</span></code> attribute!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;ppi&#39;
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can check the scan types for all of the radar files we downloaded!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> has </span><span class="si">{</span><span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span><span class="si">}</span><span class="s2"> scan strategy!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc has ppi scan strategy!
+epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010118.nc has rhi scan strategy!
+epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010436.nc has rhi scan strategy!
+epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010757.nc has rhi scan strategy!
+epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.011116.nc has rhi scan strategy!
+epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.011434.nc has ppi scan strategy!
+epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.011640.nc has ppi scan strategy!
+epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.011845.nc has ppi scan strategy!
+epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012051.nc has ppi scan strategy!
+epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012257.nc has ppi scan strategy!
+epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012503.nc has ppi scan strategy!
+epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012708.nc has ppi scan strategy!
+epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012914.nc has ppi scan strategy!
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="sort-the-scans-by-scan-strategy">
+<h4>Sort the Scans by Scan Strategy<a class="headerlink" href="#sort-the-scans-by-scan-strategy" title="Permalink to this heading">#</a></h4>
+<p>Now that we know which file has whic can strategy, we can sort them into <code class="docutils literal notranslate"><span class="pre">ppi</span></code> and <code class="docutils literal notranslate"><span class="pre">rhi</span></code> categories!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">ppi_files</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">rhi_files</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">&quot;ppi&quot;</span><span class="p">:</span>
+        <span class="n">ppi_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="k">elif</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">&quot;rhi&quot;</span><span class="p">:</span>
+        <span class="n">rhi_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> is not a PPI or RHI scan&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RHI Files: </span><span class="si">{</span><span class="n">rhi_files</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PPI Files: </span><span class="si">{</span><span class="n">ppi_files</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RHI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010118.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010436.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010757.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.011116.nc&#39;]
+PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.011434.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.011640.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.011845.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012051.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012257.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012503.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012708.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012914.nc&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plot-all-of-the-ppi-scans">
+<h4>Plot all of the PPI Scans<a class="headerlink" href="#plot-all-of-the-ppi-scans" title="Permalink to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">ppi_files</span><span class="p">:</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+    <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
+        <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
+    <span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mgrover/mambaforge/envs/pyart-dev/lib/python3.11/site-packages/shapely/predicates.py:798: RuntimeWarning: invalid value encountered in intersects
+  return lib.intersects(a, b, **kwargs)
+</pre></div>
+</div>
+<img alt="../../_images/d3b141879eb6d94adaf5dbe79b6b38ea12dc83133fb7b2b1bdcd98011b3f8259.png" src="../../_images/d3b141879eb6d94adaf5dbe79b6b38ea12dc83133fb7b2b1bdcd98011b3f8259.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mgrover/mambaforge/envs/pyart-dev/lib/python3.11/site-packages/shapely/predicates.py:798: RuntimeWarning: invalid value encountered in intersects
+  return lib.intersects(a, b, **kwargs)
+</pre></div>
+</div>
+<img alt="../../_images/e2d87a729716334c0e8ea7c2021124e52830e7dc0c3168c4a2b8534b5c98bb5e.png" src="../../_images/e2d87a729716334c0e8ea7c2021124e52830e7dc0c3168c4a2b8534b5c98bb5e.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mgrover/mambaforge/envs/pyart-dev/lib/python3.11/site-packages/shapely/predicates.py:798: RuntimeWarning: invalid value encountered in intersects
+  return lib.intersects(a, b, **kwargs)
+</pre></div>
+</div>
+<img alt="../../_images/e648ef606d7db0640b22be3311fc0f8acc4d9abae60f1fbce7fd452447fd12fb.png" src="../../_images/e648ef606d7db0640b22be3311fc0f8acc4d9abae60f1fbce7fd452447fd12fb.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mgrover/mambaforge/envs/pyart-dev/lib/python3.11/site-packages/shapely/predicates.py:798: RuntimeWarning: invalid value encountered in intersects
+  return lib.intersects(a, b, **kwargs)
+</pre></div>
+</div>
+<img alt="../../_images/acec2bd4db9af9b78c8e71de7d864338def2af537d7552cb81bd353c8f41e69e.png" src="../../_images/acec2bd4db9af9b78c8e71de7d864338def2af537d7552cb81bd353c8f41e69e.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mgrover/mambaforge/envs/pyart-dev/lib/python3.11/site-packages/shapely/predicates.py:798: RuntimeWarning: invalid value encountered in intersects
+  return lib.intersects(a, b, **kwargs)
+</pre></div>
+</div>
+<img alt="../../_images/c720ab99198e0b31faf3f2ab62019788cb6634bac5a5cfe74932e7c685a5cf89.png" src="../../_images/c720ab99198e0b31faf3f2ab62019788cb6634bac5a5cfe74932e7c685a5cf89.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mgrover/mambaforge/envs/pyart-dev/lib/python3.11/site-packages/shapely/predicates.py:798: RuntimeWarning: invalid value encountered in intersects
+  return lib.intersects(a, b, **kwargs)
+</pre></div>
+</div>
+<img alt="../../_images/7be40bb7389d78f49d83b7a75117dc688555882a2274499d27f2d31f85503d66.png" src="../../_images/7be40bb7389d78f49d83b7a75117dc688555882a2274499d27f2d31f85503d66.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mgrover/mambaforge/envs/pyart-dev/lib/python3.11/site-packages/shapely/predicates.py:798: RuntimeWarning: invalid value encountered in intersects
+  return lib.intersects(a, b, **kwargs)
+</pre></div>
+</div>
+<img alt="../../_images/06fdd0c87bcd4261258668d80128b1683cac23dc664cb3711bd74a01b5a58cde.png" src="../../_images/06fdd0c87bcd4261258668d80128b1683cac23dc664cb3711bd74a01b5a58cde.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mgrover/mambaforge/envs/pyart-dev/lib/python3.11/site-packages/shapely/predicates.py:798: RuntimeWarning: invalid value encountered in intersects
+  return lib.intersects(a, b, **kwargs)
+</pre></div>
+</div>
+<img alt="../../_images/0a3b1270dbba450bb276b3b389e30899668ec99d001d2a340bab4067693c108b.png" src="../../_images/0a3b1270dbba450bb276b3b389e30899668ec99d001d2a340bab4067693c108b.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mgrover/mambaforge/envs/pyart-dev/lib/python3.11/site-packages/shapely/predicates.py:798: RuntimeWarning: invalid value encountered in intersects
+  return lib.intersects(a, b, **kwargs)
+</pre></div>
+</div>
+<img alt="../../_images/974455b67dea6be31343583bb2244b29355971f775010edd7642758ad69ae787.png" src="../../_images/974455b67dea6be31343583bb2244b29355971f775010edd7642758ad69ae787.png" />
+</div>
+</div>
+</section>
+<section id="plot-all-the-rhi-scans">
+<h4>Plot all the RHI Scans<a class="headerlink" href="#plot-all-the-rhi-scans" title="Permalink to this heading">#</a></h4>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">rhi_files</span><span class="p">:</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+    <span class="c1"># Plot reflectivity</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+    <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+    <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+    <span class="c1"># Plot velocity</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+    <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+    <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="s2">&quot;mean_doppler_velocity&quot;</span><span class="p">,</span>
+        <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=-</span><span class="mi">12</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_balance&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/86a65ce48e1509098eb81114dd8669232695ef7045dcbb57d061253ae66bc5f0.png" src="../../_images/86a65ce48e1509098eb81114dd8669232695ef7045dcbb57d061253ae66bc5f0.png" />
+<img alt="../../_images/a9e9dd9678a5ea756b5e51979fa66ca3ad9fa41c47c3ff615c59aa05cd49b857.png" src="../../_images/a9e9dd9678a5ea756b5e51979fa66ca3ad9fa41c47c3ff615c59aa05cd49b857.png" />
+<img alt="../../_images/7f017a2297849561ac43864fda53e462b70d6daec03ba46266e1c9b695b24031.png" src="../../_images/7f017a2297849561ac43864fda53e462b70d6daec03ba46266e1c9b695b24031.png" />
+<img alt="../../_images/600eb4f9649be94e0aeabc0bd068163c471228c4aaec04b8e6f18b895d8b9f33.png" src="../../_images/600eb4f9649be94e0aeabc0bd068163c471228c4aaec04b8e6f18b895d8b9f33.png" />
+</div>
+</div>
+</section>
+</section>
+<section id="apply-corrections-to-the-velocity-data">
+<h3>Apply Corrections to the Velocity Data<a class="headerlink" href="#apply-corrections-to-the-velocity-data" title="Permalink to this heading">#</a></h3>
+<p>We notice a couple key data quality issues - mainly:</p>
+<ul class="simple">
+<li><p>Noise in regions with clear-air returns (random velocity values)</p></li>
+<li><p>Ground clutter where reflectivity values are lower, and velocities are around 0 (noticable near the ground ~2 km from the radar)</p></li>
+</ul>
+<p>The signal to noise ratio (SNR) value will help us mask out these regions!</p>
+<section id="explore-a-threshold-for-snr">
+<h4>Explore a Threshold for SNR<a class="headerlink" href="#explore-a-threshold-for-snr" title="Permalink to this heading">#</a></h4>
+<p>Let’s explore a threshold to use for signal to noise ratio. We can start with an initial plot of the data, side by side with reflectivity.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="c1"># Plot reflectivity</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># Plot velocity</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="s2">&quot;signal_to_noise_ratio_copolar_h&quot;</span><span class="p">,</span>
+    <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_ChaseSpectral&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/66ab915cc6dc4db892e50421754a86c84e05de50c7280d4d8061b9730eb90bfa.png" src="../../_images/66ab915cc6dc4db892e50421754a86c84e05de50c7280d4d8061b9730eb90bfa.png" />
+</div>
+</div>
+<p>It appears there are clear differences in the clear-air regions, and where we have scatterers. Looking at the panel on the right, we notice that there is a break ~-10 to 10 that we could use as a potential threshold. Let’s try out -10 to 10 as possible threshold values, masking values less than our threshold value, giving us just the region we are interested in visualizing.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define possible SNR threshold values</span>
+<span class="n">threshold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">threshold_value</span> <span class="ow">in</span> <span class="n">threshold</span><span class="p">:</span>
+    <span class="c1"># Mask the data using the gatefilter</span>
+    <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+    <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">&quot;signal_to_noise_ratio_copolar_h&quot;</span><span class="p">,</span> <span class="n">threshold_value</span><span class="p">)</span>
+
+    <span class="c1"># Plot the figure</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+    <span class="c1"># Plot reflectivity</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+    <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+    <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span>
+    <span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+    <span class="c1"># Plot velocity</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+    <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+    <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="s2">&quot;mean_doppler_velocity&quot;</span><span class="p">,</span>
+        <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=-</span><span class="mi">12</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+        <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_balance&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span>
+        <span class="sa">f</span><span class="s2">&quot;Data Quality Mask with Signal to Noise &lt; </span><span class="si">{</span><span class="n">threshold_value</span><span class="si">}</span><span class="s2"> dB&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span>
+    <span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/256e90d712cf691bfa788bceb67b06408aef1549e60c18163806174b54d821a1.png" src="../../_images/256e90d712cf691bfa788bceb67b06408aef1549e60c18163806174b54d821a1.png" />
+<img alt="../../_images/c3c89cf6faa7ce6fb76a15b2416a46b024e230e9e6bfdd050b9f3b19ca4fab63.png" src="../../_images/c3c89cf6faa7ce6fb76a15b2416a46b024e230e9e6bfdd050b9f3b19ca4fab63.png" />
+<img alt="../../_images/7e33da47bb64dcabc99f81ba743e437f674006da6d0f4f57a4275ac34b19d649.png" src="../../_images/7e33da47bb64dcabc99f81ba743e437f674006da6d0f4f57a4275ac34b19d649.png" />
+<img alt="../../_images/3e54214eba88a9eb28521fee873613b2df62712afdd6c644129cbd7e4562b5e8.png" src="../../_images/3e54214eba88a9eb28521fee873613b2df62712afdd6c644129cbd7e4562b5e8.png" />
+<img alt="../../_images/27564e6fd16f4f70890086abef209d77d503993ab443fe2a7b4d85a47f972f43.png" src="../../_images/27564e6fd16f4f70890086abef209d77d503993ab443fe2a7b4d85a47f972f43.png" />
+</div>
+</div>
+<p>Higher thresholds of minimum SNR value remove too much of the data - especially further from the radar. Let’s go with <code class="docutils literal notranslate"><span class="pre">SNR</span> <span class="pre">&lt;</span> <span class="pre">-5</span></code> as our data quality threshold, as that still preserves the cloud structures, while removing noise from the data.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">&quot;signal_to_noise_ratio_copolar_h&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plot-our-revised-cleaned-data">
+<h4>Plot our Revised, Cleaned Data<a class="headerlink" href="#plot-our-revised-cleaned-data" title="Permalink to this heading">#</a></h4>
+<p>Now that we have a threshold value, let’s plot it!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+<span class="c1"># Plot reflectivity</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+<span class="c1"># Plot velocity</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="s2">&quot;mean_doppler_velocity&quot;</span><span class="p">,</span>
+    <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=-</span><span class="mi">12</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+    <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_balance&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/4fa87eb0bf42773896dfeb82a01fc2d63a40c78da5ba9337a2b16fa1bdde8587.png" src="../../_images/4fa87eb0bf42773896dfeb82a01fc2d63a40c78da5ba9337a2b16fa1bdde8587.png" />
+</div>
+</div>
+<p>And we can apply this to the remainder of the volume scans!</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">rhi_files</span><span class="p">:</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+
+    <span class="c1"># Apply our data quality flag</span>
+    <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+    <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">&quot;signal_to_noise_ratio_copolar_h&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">)</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+
+    <span class="c1"># Plot reflectivity</span>
+    <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
+    <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+    <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span>
+    <span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+
+    <span class="c1"># Plot velocity</span>
+    <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
+    <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+    <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="s2">&quot;mean_doppler_velocity&quot;</span><span class="p">,</span>
+        <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=-</span><span class="mi">12</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+        <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_balance&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mgrover/mambaforge/envs/pyart-dev/lib/python3.11/site-packages/numpy/core/fromnumeric.py:784: UserWarning: Warning: &#39;partition&#39; will ignore the &#39;mask&#39; of the MaskedArray.
+  a.partition(kth, axis=axis, kind=kind, order=order)
+</pre></div>
+</div>
+<img alt="../../_images/2f74cd2a072bb0ce4e35981225ab4414a96d6a8890c767154d4b6550a097f7d7.png" src="../../_images/2f74cd2a072bb0ce4e35981225ab4414a96d6a8890c767154d4b6550a097f7d7.png" />
+<img alt="../../_images/8d1109690120cc7bd6942f15e645121f95f18d796f302b645fba4c3199a3de17.png" src="../../_images/8d1109690120cc7bd6942f15e645121f95f18d796f302b645fba4c3199a3de17.png" />
+<img alt="../../_images/1f131eab2168f733e9e3858e20b8cd0a0fadb0cc6cb0c25215b02db05fd30c62.png" src="../../_images/1f131eab2168f733e9e3858e20b8cd0a0fadb0cc6cb0c25215b02db05fd30c62.png" />
+<img alt="../../_images/4fa87eb0bf42773896dfeb82a01fc2d63a40c78da5ba9337a2b16fa1bdde8587.png" src="../../_images/4fa87eb0bf42773896dfeb82a01fc2d63a40c78da5ba9337a2b16fa1bdde8587.png" />
+</div>
+</div>
+</section>
+<section id="plot-where-the-rhi-scan-is-slicing-through-using-the-ppi-for-a-frame-of-reference">
+<h4>Plot where the RHI scan is slicing through using the PPI for a frame of reference<a class="headerlink" href="#plot-where-the-rhi-scan-is-slicing-through-using-the-ppi-for-a-frame-of-reference" title="Permalink to this heading">#</a></h4>
+<p>To give us a better idea of where we are slicing through the clouds, let’s plot up the the RHI latitude/longitude, as well as the two PPI scans valid for this 0100 to 0115 UTC time period.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">rhi_radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">rhi_files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">alt</span> <span class="o">=</span> <span class="n">rhi_radar</span><span class="o">.</span><span class="n">get_gate_lat_lon_alt</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">ppi_file</span> <span class="ow">in</span> <span class="n">ppi_files</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">2</span><span class="p">]:</span>
+    <span class="n">ppi_radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">ppi_file</span><span class="p">)</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+    <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">ppi_radar</span><span class="p">)</span>
+    <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
+        <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+        <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">resolution</span><span class="o">=</span><span class="s2">&quot;10m&quot;</span><span class="p">,</span>
+        <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+    <span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
+        <span class="n">lon</span><span class="p">,</span>
+        <span class="n">lat</span><span class="p">,</span>
+        <span class="n">s</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;RHI at </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">rhi_radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s1"> degrees&#39;</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">cfeature</span><span class="o">.</span><span class="n">OCEAN</span><span class="p">)</span>
+
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mgrover/mambaforge/envs/pyart-dev/lib/python3.11/site-packages/shapely/predicates.py:798: RuntimeWarning: invalid value encountered in intersects
+  return lib.intersects(a, b, **kwargs)
+</pre></div>
+</div>
+<img alt="../../_images/97e506255fb82be4d805ed8b75e00916af8b8aa7ec1f2042a298bf0a2c28cb16.png" src="../../_images/97e506255fb82be4d805ed8b75e00916af8b8aa7ec1f2042a298bf0a2c28cb16.png" />
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mgrover/mambaforge/envs/pyart-dev/lib/python3.11/site-packages/shapely/predicates.py:798: RuntimeWarning: invalid value encountered in intersects
+  return lib.intersects(a, b, **kwargs)
+</pre></div>
+</div>
+<img alt="../../_images/a03adf55eb377492e2c0463b27d5a30cd204817bf3d8c8aec35f61a9d5636cd8.png" src="../../_images/a03adf55eb377492e2c0463b27d5a30cd204817bf3d8c8aec35f61a9d5636cd8.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+<section id="conclusions">
+<h2>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this heading">#</a></h2>
+<p>Within this post, we explored how to view and access field campaign data from ARM’s data achive, explore the scan strategies, apply an inital quality control of the data, and visualize a sample case!</p>
+</section>
+</section>
+
+<div class="section ablog__blog_comments">
+  
+  
+
+
+<div class="section ablog__prev-next">
+  <span class="ablog__prev">
+    
+    
+    <a href="../2023/severe-storms-southern-wisconsin.html">
+      
+      <i class="fa fa-arrow-circle-left"></i>
+      
+      <span>Plotting Severe Weather in Wisconsin</span>
+    </a>
+    
+  </span>
+  <span class="ablog__spacer">&nbsp;</span>
+  <span class="ablog__next">
+    
+  </span>
+</div>
+
+  
+  
+</div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#motivation">Motivation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-problem">The Problem</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-solution">The Solution</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#searching-for-data-through-the-dq-plot-browser">Searching for data through the DQ Plot Browser</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#use-act-to-retrieve-data-from-epcape">Use ACT to retrieve data from EPCAPE</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#retrieve-you-api-token-from-arm-live">Retrieve you API token from ARM Live</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#pass-your-credentials-into-the-search">Pass your Credentials into the Search</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#read-the-data-into-py-art">Read the Data into Py-ART</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#take-a-peak-at-the-scan-strategy">Take a Peak at the Scan Strategy</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#sort-the-scans-by-scan-strategy">Sort the Scans by Scan Strategy</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-all-of-the-ppi-scans">Plot all of the PPI Scans</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-all-the-rhi-scans">Plot all the RHI Scans</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#apply-corrections-to-the-velocity-data">Apply Corrections to the Velocity Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#explore-a-threshold-for-snr">Explore a Threshold for SNR</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-our-revised-cleaned-data">Plot our Revised, Cleaned Data</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#plot-where-the-rhi-scan-is-slicing-through-using-the-ppi-for-a-frame-of-reference">Plot where the RHI scan is slicing through using the PPI for a frame of reference</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#conclusions">Conclusions</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/blog_posts/2024/epcape-blog-post.ipynb.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2013-2022, Py-ART developers.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
