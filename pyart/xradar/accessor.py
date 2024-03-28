@@ -12,6 +12,7 @@ from datatree import DataTree, formatting, formatting_html
 from datatree.treenode import NodePath
 from xarray import DataArray, Dataset, concat
 from xarray.core import utils
+from xradar.util import get_sweep_keys
 
 from ..config import get_metadata
 from ..core.transforms import (
@@ -271,7 +272,9 @@ class Xradar:
     def __init__(self, xradar, default_sweep="sweep_0", scan_type=None):
         self.xradar = xradar
         self.scan_type = scan_type or "ppi"
-        self.combined_sweeps = self._combine_sweeps(self.xradar)
+        self.sweep_group_names = get_sweep_keys(self.xradar)
+        self.nsweeps = len(self.sweep_group_names)
+        self.combined_sweeps = self._combine_sweeps()
         self.fields = self._find_fields(self.combined_sweeps)
         self.time = dict(
             data=(self.combined_sweeps.time - self.combined_sweeps.time.min()).astype(
@@ -304,8 +307,7 @@ class Xradar:
         self.metadata = dict(**self.xradar.attrs)
         self.ngates = len(self.range["data"])
         self.nrays = len(self.azimuth["data"])
-        self.nsweeps = len(self.xradar.sweep_group_name)
-        self.instrument_parameters = dict(**self.xradar["radar_parameters"].attrs)
+        self.instrument_parameters = self.find_instrument_parameters()
         self.init_gate_x_y_z()
         self.init_gate_alt()
 
@@ -350,6 +352,37 @@ class Xradar:
             raise ValueError(f"Invalid format for key: {key}")
 
         # Iterators
+
+    def find_instrument_parameters(self):
+        # By default, check the radar_parameters first
+        if "radar_parameters" in list(self.xradar.children):
+            radar_param_dict = self.xradar["radar_parameters"].ds.to_dict(data="array")
+            instrument_parameters = radar_param_dict["data_vars"]
+            instrument_parameters.update(radar_param_dict["attrs"])
+
+        else:
+            instrument_parameters = {}
+
+        # Check to see if the root dataset has this info
+        if len(self.xradar.ds) > 0:
+            root_param_dict = self.xradar.ds.to_dict(data="array")
+            instrument_parameters.update(root_param_dict["data_vars"])
+            instrument_parameters.update(root_param_dict["attrs"])
+
+        if len(instrument_parameters.keys()) > 0:
+            for field in instrument_parameters.keys():
+                field_dict = instrument_parameters[field]
+                if isinstance(field_dict, dict):
+                    if "attrs" in field_dict:
+                        for param in field_dict["attrs"]:
+                            field_dict[param] = field_dict["attrs"][param]
+                        del field_dict["attrs"]
+
+                    if "dims" in field_dict:
+                        del field_dict["dims"]
+                instrument_parameters[field] = field_dict
+
+        return instrument_parameters
 
     def iter_start(self):
         """Return an iterator over the sweep start indices."""
@@ -546,11 +579,11 @@ class Xradar:
                 data=np.mean(self.altitude["data"]) + self.gate_z["data"]
             )
 
-    def _combine_sweeps(self, radar):
+    def _combine_sweeps(self):
         # Loop through and extract the different datasets
         ds_list = []
-        for sweep in radar.sweep_group_name.values:
-            ds_list.append(radar[sweep].ds.drop_duplicates("azimuth"))
+        for sweep in self.sweep_group_names:
+            ds_list.append(self.xradar[sweep].ds.drop_duplicates("azimuth"))
 
         # Merge based on the sweep number
         merged = concat(ds_list, dim="sweep_number")

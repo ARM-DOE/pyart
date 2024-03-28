@@ -32,4 +32,5 @@ dependencies:
     - pooch
     - versioneer
     - black
+    - xradar>=0.5.0
     - git+https://github.com/openradar/open-radar-data
