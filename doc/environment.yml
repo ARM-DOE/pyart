@@ -40,3 +40,4 @@ dependencies:
       - pooch
       - versioneer
       - ablog
+      - xradar
