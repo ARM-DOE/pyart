@@ -19,6 +19,21 @@ def test_get_field(filename=filename):
     assert reflectivity.shape == (480, 996)
 
 
+def test_instrument_parameters(filename=filename):
+    dtree = xd.io.open_cfradial1_datatree(
+        filename,
+        optional=False,
+    )
+    radar = pyart.xradar.Xradar(dtree)
+    assert radar.instrument_parameters["instrument_name"] == "SPOLRVP8"
+    assert_allclose(
+        radar.instrument_parameters["latitude"]["data"], np.array(22.52669907)
+    )
+    assert_allclose(
+        radar.instrument_parameters["longitude"]["data"], np.array(120.4335022)
+    )
+
+
 def test_get_gate_x_y_z(filename=filename):
     dtree = xd.io.open_cfradial1_datatree(
         filename,
