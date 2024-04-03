@@ -110,7 +110,7 @@ def determine_sweeps(
     max_offset=0.1,
     running_win_dt=5.0,
     deg_rng=(-5.0, 360.0),
-    consider_2pi_jump=True
+    consider_2pi_jump=True,
 ):
     """
     Determine the number of sweeps using elevation data (PPI scans) or azimuth
