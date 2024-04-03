@@ -105,7 +105,8 @@ def to_vpt(radar, single_scan=True):
     return
 
 
-def determine_sweeps(radar, max_offset=0.1, running_win_dt=5.0, deg_rng=(-5.0, 360.0)):
+def determine_sweeps(radar, max_offset=0.1, running_win_dt=5.0, deg_rng=(-5.0, 360.0),
+                     consider_2pi_jump=True):
     """
     Determine the number of sweeps using elevation data (PPI scans) or azimuth
     data (RHI scans) and update the input radar object
@@ -128,6 +129,10 @@ def determine_sweeps(radar, max_offset=0.1, running_win_dt=5.0, deg_rng=(-5.0, 3
         given that there could be ppi scan strategies at negative elevations,
         one might consider a negative values (current default), or , for example,
         -180 to 180 if the azimuth range goes from -180 to 180.
+    consider_2pi_jump: bool
+        if True and radar scan type is 'rhi', overwriting deg_rng to (0., 360.), and
+        merging the first and last azimuth bins (to have shots just below 360 and
+        just above 0 to be considered part of the same sweep).
 
     """
     # set fixed and variable coordinates depending on scan type
@@ -135,6 +140,8 @@ def determine_sweeps(radar, max_offset=0.1, running_win_dt=5.0, deg_rng=(-5.0, 3
     if "rhi" in radar.scan_type.lower():
         var_array = radar.elevation["data"]
         fix_array = radar.azimuth["data"]
+        if consider_2pi_jump:
+            deg_rng=(0.0, 360.0)
     else:  # ppi or vpt
         var_array = radar.azimuth["data"]
         fix_array = radar.elevation["data"]
@@ -164,6 +171,9 @@ def determine_sweeps(radar, max_offset=0.1, running_win_dt=5.0, deg_rng=(-5.0, 3
             t += 1
             continue
         bincounts, _ = np.histogram(fix_win, bins=angle_bins)
+        if ("rhi" in radar.scan_type.lower()) & consider_2pi_jump:
+            bincounts[0] += bincounts[-1]
+            bincounts = bincounts[:-1]
         moving_radar = np.sum(bincounts > 0) > 1  # radar transition to a new sweep
         if in_sweep:
             if t == radar.time["data"].size - win_size:
