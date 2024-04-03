@@ -105,8 +105,13 @@ def to_vpt(radar, single_scan=True):
     return
 
 
-def determine_sweeps(radar, max_offset=0.1, running_win_dt=5.0, deg_rng=(-5.0, 360.0),
-                     consider_2pi_jump=True):
+def determine_sweeps(
+    radar,
+    max_offset=0.1,
+    running_win_dt=5.0,
+    deg_rng=(-5.0, 360.0),
+    consider_2pi_jump=True
+):
     """
     Determine the number of sweeps using elevation data (PPI scans) or azimuth
     data (RHI scans) and update the input radar object
@@ -141,7 +146,7 @@ def determine_sweeps(radar, max_offset=0.1, running_win_dt=5.0, deg_rng=(-5.0, 3
         var_array = radar.elevation["data"]
         fix_array = radar.azimuth["data"]
         if consider_2pi_jump:
-            deg_rng=(0.0, 360.0)
+            deg_rng = (0.0, 360.0)
     else:  # ppi or vpt
         var_array = radar.azimuth["data"]
         fix_array = radar.elevation["data"]
