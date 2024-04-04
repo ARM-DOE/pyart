@@ -103,7 +103,7 @@ def test_map_to_grid_dist_beam_roi():
         fields=["reflectivity"],
         min_radius=30,
         bsp=0.0,
-        h_factor=0.0,
+        h_factor=(0.0, 1.0, 1.0),
     )
     center_slice = grids["reflectivity"][1, 4, :]
     assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
