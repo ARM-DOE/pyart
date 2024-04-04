@@ -36,10 +36,10 @@ def map_gates_to_grid(
     z_factor=0.05,
     xy_factor=0.02,
     min_radius=500.0,
-    h_factor=1.0,
+    h_factor=(1.0, 1.0, 1.0),
     nb=1.5,
     bsp=1.0,
-    zdist_factor=1.0,
+    dist_factor=(1.0, 1.0, 1.0),
     **kwargs
 ):
     """
@@ -104,6 +104,12 @@ def map_gates_to_grid(
             grid_origin_alt = float(radars[0].altitude["data"])
         except TypeError:
             grid_origin_alt = np.mean(radars[0].altitude["data"])
+
+    # convert input h_factor and dist_factor from tuple or list to array
+    if isinstance(h_factor, (tuple, list)):
+        h_factor = np.array(h_factor, dtype="float32")
+    if isinstance(dist_factor, (tuple, list)):
+        dist_factor = np.array(dist_factor, dtype="float32")
 
     gatefilters = _parse_gatefilters(gatefilters, radars)
     cy_weighting_function = _detemine_cy_weighting_func(weighting_function)
@@ -175,7 +181,7 @@ def map_gates_to_grid(
             excluded_gates,
             roi_func,
             cy_weighting_function,
-            zdist_factor,
+            dist_factor,
         )
 
     # create and return the grid dictionary
