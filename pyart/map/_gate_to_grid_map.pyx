@@ -135,7 +135,8 @@ cdef class DistBeamRoI(RoIFunction):
             y_offset = self.offsets[i, 1]
             x_offset = self.offsets[i, 2]
             roi = (self.h_factor[0] * ((z - z_offset) / 20.0) +
-                   sqrt(self.h_factor[1] * (y - y_offset)**2 + self.h_factor[2] * (x - x_offset)**2) *
+                   sqrt((self.h_factor[1] * (y - y_offset))**2 +
+                        (self.h_factor[2] * (x - x_offset))**2) *
                    self.beam_factor)
             if roi < self.min_radius:
                 roi = self.min_radius
@@ -350,7 +351,9 @@ cdef class GateToGridMapper:
                         xg = self.x_step * xi
                         yg = self.y_step * yi
                         zg = self.z_step * zi
-                        dist2 = (dist_factor[2] * (xg - x)**2 + dist_factor[1] * (yg - y)**2 + dist_factor[0] * (zg - z)**2)
+                        dist2 = (dist_factor[2] * (xg - x)**2 +
+                                 dist_factor[1] * (yg - y)**2 +
+                                 dist_factor[0] * (zg - z)**2)
                         if dist2 >= roi2:
                             continue
                         for i in range(self.nfields):
@@ -372,7 +375,9 @@ cdef class GateToGridMapper:
                         xg = self.x_step * xi
                         yg = self.y_step * yi
                         zg = self.z_step * zi
-                        dist2 = (dist_factor[2] * xg-x)*(xg-x) + dist_factor[1] * (yg-y)*(yg-y) + dist_factor[0] * (zg-z)*(zg-z)
+                        dist2 = (dist_factor[2] * (xg-x)*(xg-x) +
+                                 dist_factor[1] * (yg-y)*(yg-y) +
+                                 dist_factor[0] * (zg-z)*(zg-z))
 
                         if dist2 > roi2:
                             continue
