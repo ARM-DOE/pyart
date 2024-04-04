@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyart.util.determine_sweeps &#8212; Py-ART 1.18.0.post7 documentation</title>
+    <title>pyart.util.determine_sweeps &#8212; Py-ART 1.18.0.post8 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=12b11201"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=faabb1c3"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -147,7 +147,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.0.post7 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.0.post8 documentation</p>
   
 </a></div>
     
@@ -1158,7 +1158,7 @@ document.write(`
 <h1>pyart.util.determine_sweeps<a class="headerlink" href="#pyart-util-determine-sweeps" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyart.util.determine_sweeps">
-<span class="sig-prename descclassname"><span class="pre">pyart.util.</span></span><span class="sig-name descname"><span class="pre">determine_sweeps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">running_win_dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deg_rng</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-5.0,</span> <span class="pre">360.0)</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/util/radar_utils.html#determine_sweeps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.util.determine_sweeps" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyart.util.</span></span><span class="sig-name descname"><span class="pre">determine_sweeps</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">0.1</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">running_win_dt</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">deg_rng</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">(-5.0,</span> <span class="pre">360.0)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">consider_2pi_jump</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/util/radar_utils.html#determine_sweeps"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.util.determine_sweeps" title="Permalink to this definition">#</a></dt>
 <dd><p>Determine the number of sweeps using elevation data (PPI scans) or azimuth
 data (RHI scans) and update the input radar object</p>
 <dl class="field-list simple">
@@ -1176,6 +1176,9 @@ Assuming azimuths between 0 to 360, this should be equal to (0., 360.), but
 given that there could be ppi scan strategies at negative elevations,
 one might consider a negative values (current default), or , for example,
 -180 to 180 if the azimuth range goes from -180 to 180.</p></li>
+<li><p><strong>consider_2pi_jump</strong> (<em>bool</em>) – if True and radar scan type is ‘rhi’, overwriting deg_rng to (0., 360.), and
+merging the first and last azimuth bins (to have shots just below 360 and
+just above 0 to be considered part of the same sweep).</p></li>
 </ul>
 </dd>
 </dl>
