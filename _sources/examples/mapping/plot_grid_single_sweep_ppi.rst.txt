@@ -79,7 +79,7 @@ negligible at low elevation angles common to PPI sweeps.
     ===
     ===
 
-    Using 2D weighting by setting h_factor and zdist_factor to 0.0, the max range looks OK now
+    Using 2D weighting by setting h_factor and dist_factor z component to 0.0, the max range looks OK now
 
     ===
 
@@ -160,7 +160,7 @@ negligible at low elevation angles common to PPI sweeps.
 
     print(
         "===\n\nUsing 2D weighting by "
-        "setting h_factor and zdist_factor to 0.0, the max range looks OK now\n\n==="
+        "setting h_factor and dist_factor z component to 0.0, the max range looks OK now\n\n==="
     )
     fig2 = plt.figure(figsize=(12, 6), tight_layout=True)
     fig2.suptitle("Cartesian gridded")
@@ -171,8 +171,8 @@ negligible at low elevation angles common to PPI sweeps.
             grid_shape=(1, 1601, 1601),
             grid_limits=((0, 10000.0), [-40000, 40000], [-40000, 40000]),
             fields=[processed_field],
-            h_factor=0.0,
-            zdist_factor=0.0,
+            h_factor=(0.0, 1.0, 1.0),
+            dist_factor=(0.0, 1.0, 1.0),
         )
         ax = fig2.add_subplot(1, 2, ax_ind + 1)
         ax.imshow(
@@ -186,7 +186,7 @@ negligible at low elevation angles common to PPI sweeps.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 11.610 seconds)
+   **Total running time of the script:** (0 minutes 12.061 seconds)
 
 
 .. _sphx_glr_download_examples_mapping_plot_grid_single_sweep_ppi.py:

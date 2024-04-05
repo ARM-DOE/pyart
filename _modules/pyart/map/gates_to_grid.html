@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.map.gates_to_grid &#8212; Py-ART 1.18.0.post11 documentation</title>
+    <title>pyart.map.gates_to_grid &#8212; Py-ART 1.18.0.post12 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=2982aa19"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=1e7a2073"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -144,7 +144,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.0.post11 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.0.post12 documentation</p>
   
 </a></div>
     
@@ -522,10 +522,10 @@ document.write(`
     <span class="n">z_factor</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span>
     <span class="n">xy_factor</span><span class="o">=</span><span class="mf">0.02</span><span class="p">,</span>
     <span class="n">min_radius</span><span class="o">=</span><span class="mf">500.0</span><span class="p">,</span>
-    <span class="n">h_factor</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">h_factor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
     <span class="n">nb</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
     <span class="n">bsp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-    <span class="n">zdist_factor</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
+    <span class="n">dist_factor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
     <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -590,6 +590,16 @@ document.write(`
             <span class="n">grid_origin_alt</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">radars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">TypeError</span><span class="p">:</span>
             <span class="n">grid_origin_alt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">radars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+
+    <span class="c1"># convert input h_factor and dist_factor from scalar, tuple, or list to array</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">h_factor</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+        <span class="n">h_factor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">h_factor</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">h_factor</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="n">h_factor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">h_factor</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dist_factor</span><span class="p">,</span> <span class="p">(</span><span class="nb">tuple</span><span class="p">,</span> <span class="nb">list</span><span class="p">)):</span>
+        <span class="n">dist_factor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">dist_factor</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">dist_factor</span><span class="p">,</span> <span class="nb">float</span><span class="p">):</span>
+        <span class="n">dist_factor</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">dist_factor</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
 
     <span class="n">gatefilters</span> <span class="o">=</span> <span class="n">_parse_gatefilters</span><span class="p">(</span><span class="n">gatefilters</span><span class="p">,</span> <span class="n">radars</span><span class="p">)</span>
     <span class="n">cy_weighting_function</span> <span class="o">=</span> <span class="n">_detemine_cy_weighting_func</span><span class="p">(</span><span class="n">weighting_function</span><span class="p">)</span>
@@ -661,7 +671,7 @@ document.write(`
             <span class="n">excluded_gates</span><span class="p">,</span>
             <span class="n">roi_func</span><span class="p">,</span>
             <span class="n">cy_weighting_function</span><span class="p">,</span>
-            <span class="n">zdist_factor</span><span class="p">,</span>
+            <span class="n">dist_factor</span><span class="p">,</span>
         <span class="p">)</span>
 
     <span class="c1"># create and return the grid dictionary</span>
