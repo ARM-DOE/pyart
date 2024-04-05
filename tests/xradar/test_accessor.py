@@ -19,6 +19,16 @@ def test_get_field(filename=filename):
     assert reflectivity.shape == (480, 996)
 
 
+def test_get_azimuth(filename=filename):
+    dtree = xd.io.open_cfradial1_datatree(
+        filename,
+        optional=False,
+    )
+    radar = pyart.xradar.Xradar(dtree)
+    azimuths = radar.get_azimuth(0)
+    assert azimuths.shape == (480,)
+
+
 def test_instrument_parameters(filename=filename):
     dtree = xd.io.open_cfradial1_datatree(
         filename,
