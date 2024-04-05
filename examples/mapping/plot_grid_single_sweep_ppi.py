@@ -81,7 +81,7 @@ plt.show()
 
 print(
     "===\n\nUsing 2D weighting by "
-    "setting h_factor and zdist_factor to 0.0, the max range looks OK now\n\n==="
+    "setting h_factor and dist_factor z component to 0.0, the max range looks OK now\n\n==="
 )
 fig2 = plt.figure(figsize=(12, 6), tight_layout=True)
 fig2.suptitle("Cartesian gridded")
@@ -92,8 +92,8 @@ for sweep, ax_ind in zip([1, 3], range(2)):
         grid_shape=(1, 1601, 1601),
         grid_limits=((0, 10000.0), [-40000, 40000], [-40000, 40000]),
         fields=[processed_field],
-        h_factor=0.0,
-        zdist_factor=0.0,
+        h_factor=(0.0, 1.0, 1.0),
+        dist_factor=(0.0, 1.0, 1.0),
     )
     ax = fig2.add_subplot(1, 2, ax_ind + 1)
     ax.imshow(

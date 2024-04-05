@@ -712,6 +712,32 @@ class Xradar:
                 }
         return fields
 
+    def get_azimuth(self, sweep, copy=False):
+        """
+        Return an array of azimuth angles for a given sweep.
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve data for, 0 based.
+        copy : bool, optional
+            True to return a copy of the azimuths. False, the default, returns
+            a view of the azimuths (when possible), changing this data will
+            change the data in the underlying Radar object.
+
+        Returns
+        -------
+        azimuths : array
+            Array containing the azimuth angles for a given sweep.
+
+        """
+        s = self.get_slice(sweep)
+        azimuths = self.azimuth["data"][s]
+        if copy:
+            return azimuths.copy()
+        else:
+            return azimuths
+
 
 def _point_data_factory(grid, coordinate):
     """Return a function which returns the locations of all points."""
