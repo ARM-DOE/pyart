@@ -105,11 +105,15 @@ def map_gates_to_grid(
         except TypeError:
             grid_origin_alt = np.mean(radars[0].altitude["data"])
 
-    # convert input h_factor and dist_factor from tuple or list to array
+    # convert input h_factor and dist_factor from scalar, tuple, or list to array
     if isinstance(h_factor, (tuple, list)):
         h_factor = np.array(h_factor, dtype="float32")
+    elif isinstance(h_factor, float):
+        h_factor = np.full(3, h_factor, dtype="float32")
     if isinstance(dist_factor, (tuple, list)):
         dist_factor = np.array(dist_factor, dtype="float32")
+    elif isinstance(dist_factor, float):
+        dist_factor = np.full(3, dist_factor, dtype="float32")
 
     gatefilters = _parse_gatefilters(gatefilters, radars)
     cy_weighting_function = _detemine_cy_weighting_func(weighting_function)
