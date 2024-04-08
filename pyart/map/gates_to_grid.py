@@ -35,9 +35,9 @@ def map_gates_to_grid(
     constant_roi=None,
     z_factor=0.05,
     xy_factor=0.02,
-    min_radius=500.0,
+    min_radius=100.0,
     h_factor=(1.0, 1.0, 1.0),
-    nb=1.5,
+    nb=1.0,
     bsp=1.0,
     dist_factor=(1.0, 1.0, 1.0),
     **kwargs
