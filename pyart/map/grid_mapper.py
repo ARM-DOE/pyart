@@ -439,11 +439,15 @@ def map_to_grid(
 
     # set min_radius depending on whether processing ARM radars
     if min_radius is None:
-        min_radius = 250.
-        if 'platform_id' in radars[0].metadata.keys():
-            if np.any([x in radars[0].metadata['platform_id'].lower()
-                       for x in ['sacr', 'sapr']]):
-                min_radius = 100.
+        min_radius = 250.0
+        if "platform_id" in radars[0].metadata.keys():
+            if np.any(
+                [
+                    x in radars[0].metadata["platform_id"].lower()
+                    for x in ["sacr", "sapr"]
+                ]
+            ):
+                min_radius = 100.0
 
     skip_transform = False
     if len(radars) == 1 and grid_origin_alt is None and grid_origin is None:
