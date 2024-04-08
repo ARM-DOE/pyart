@@ -292,9 +292,9 @@ def map_to_grid(
     constant_roi=None,
     z_factor=0.05,
     xy_factor=0.02,
-    min_radius=500.0,
-    h_factor=1.0,
-    nb=1.5,
+    min_radius=None,
+    h_factor=(1.0, 1.0, 1.0),
+    nb=1.0,
     bsp=1.0,
     **kwargs
 ):
@@ -394,8 +394,9 @@ def map_to_grid(
     h_factor, nb, bsp, min_radius : float
         Radius of influence parameters for the built in 'dist_beam' function.
         The parameter correspond to the height scaling, virtual beam width,
-        virtual beam spacing, and minimum radius of influence. These
-        parameters are only used when `roi_func` is 'dist_mean'.
+        virtual beam spacing, and minimum radius of influence (default value
+        smaller for ARM radars).
+        These parameters are only used when `roi_func` is 'dist_mean'.
     copy_field_data : bool
         True to copy the data within the radar fields for faster gridding,
         the dtype for all fields in the grid will be float64. False will not
@@ -435,6 +436,14 @@ def map_to_grid(
 
     if len(radars) == 0:
         raise ValueError("Length of radars tuple cannot be zero")
+
+    # set min_radius depending on whether processing ARM radars
+    if min_radius is None:
+        min_radius = 250.
+        if 'platform_id' in radars[0].metadata.keys():
+            if np.any([x in radars[0].metadata['platform_id'].lower()
+                       for x in ['sacr', 'sapr']]):
+                min_radius = 100.
 
     skip_transform = False
     if len(radars) == 1 and grid_origin_alt is None and grid_origin is None:
