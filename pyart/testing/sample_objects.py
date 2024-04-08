@@ -554,6 +554,6 @@ def make_target_spectra_radar():
     radar = make_empty_spectra_radar(10, 20, 50)
     fdata = np.zeros((10, 20, 50), dtype="float32")
     max_value = 10 ** (-10 / 10)
-    fdata[:, :, :] = 10 * np.log10(scipy.signal.gaussian(50, std=7) * max_value)
+    fdata[:, :, :] = 10 * np.log10(scipy.signal.windows.gaussian(50, std=7) * max_value)
     radar.ds["spectra"].values = fdata
     return radar
