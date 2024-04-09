@@ -97,7 +97,7 @@ def map_gates_to_grid(
 
     # set min_radius depending on whether processing ARM radars
     if min_radius is None:
-        min_radius = 250.0
+        min_radius = 500.0
         if "platform_id" in radars[0].metadata.keys():
             if np.any(
                 [
