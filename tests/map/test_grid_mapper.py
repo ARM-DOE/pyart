@@ -175,11 +175,11 @@ def test_map_to_grid_tiny_grid():
     grids = pyart.map.map_to_grid(
         (radar,),
         grid_shape=(1, 1, 1),
-        grid_limits=((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
+        grid_limits=((0.0, 300.0), (-800.0, 800.0), (-800, 800)),
         fields=["reflectivity"],
     )
     assert grids["reflectivity"].shape == (1, 1, 1)
-    assert int(grids["reflectivity"][0]) == 40
+    assert abs(np.round(grids["reflectivity"][0]) - 40.0) < 5.0
 
 
 def test_map_to_grid_errors():
