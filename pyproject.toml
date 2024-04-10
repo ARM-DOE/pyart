@@ -4,7 +4,7 @@ requires = [
   "setuptools_scm>=6.2",
   "wheel",
   "cython",
-  "oldest-supported-numpy"
+  "numpy>=2.0.0rc1"
 ]
 
 [tool.black]
