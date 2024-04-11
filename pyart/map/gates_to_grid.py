@@ -35,9 +35,9 @@ def map_gates_to_grid(
     constant_roi=None,
     z_factor=0.05,
     xy_factor=0.02,
-    min_radius=500.0,
+    min_radius=250.0,
     h_factor=(1.0, 1.0, 1.0),
-    nb=1.5,
+    nb=1.0,
     bsp=1.0,
     dist_factor=(1.0, 1.0, 1.0),
     **kwargs
@@ -94,6 +94,19 @@ def map_gates_to_grid(
 
     if len(radars) == 0:
         raise ValueError("Length of radars tuple cannot be zero")
+
+    # set min_radius depending on whether processing ARM radars
+    try:
+        if "platform_id" in radars[0].metadata.keys():
+            if np.any(
+                [
+                    x in radars[0].metadata["platform_id"].lower()
+                    for x in ["sacr", "sapr"]
+                ]
+            ):
+                min_radius = 100.0
+    except AttributeError:
+        pass
 
     skip_transform = False
     if len(radars) == 1 and grid_origin_alt is None and grid_origin is None:

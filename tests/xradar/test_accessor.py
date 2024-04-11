@@ -81,9 +81,7 @@ def test_grid(filename=filename):
         fields=["DBZ"],
     )
     assert_allclose(grid.x["data"], np.arange(-100_000, 120_000, 20_000))
-    assert_allclose(
-        grid.fields["DBZ"]["data"][0, -1, 0], np.array(0.4243435), rtol=1e-03
-    )
+    assert_allclose(grid.fields["DBZ"]["data"][0, -1, 0], np.array(-0.511), rtol=1e-03)
 
 
 def _check_attrs_similar(grid1, grid2, attr):
