@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.mdv_grid &#8212; Py-ART 1.18.1.post5 documentation</title>
+    <title>pyart.io.mdv_grid &#8212; Py-ART 1.18.1.post6 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=917424bc"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=a68caed6"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -144,7 +144,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.1.post5 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.1.post6 documentation</p>
   
 </a></div>
     
@@ -595,7 +595,9 @@ document.write(`
     <span class="n">d</span><span class="p">[</span><span class="s2">&quot;max_nx&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nx</span>
     <span class="n">d</span><span class="p">[</span><span class="s2">&quot;max_ny&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ny</span>
     <span class="n">d</span><span class="p">[</span><span class="s2">&quot;max_nz&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nz</span>
-    <span class="n">td</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1970</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">td</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span>
+        <span class="mi">1970</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="p">)</span>
     <span class="n">d</span><span class="p">[</span><span class="s2">&quot;time_written&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
         <span class="nb">round</span><span class="p">(</span><span class="n">td</span><span class="o">.</span><span class="n">microseconds</span> <span class="o">+</span> <span class="p">(</span><span class="n">td</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">td</span><span class="o">.</span><span class="n">days</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="mi">6</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="mi">6</span>
     <span class="p">)</span>
