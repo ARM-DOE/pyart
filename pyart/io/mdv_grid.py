@@ -109,7 +109,9 @@ def write_grid_mdv(filename, grid, mdv_field_names=None, field_write_order=None)
     d["max_nx"] = nx
     d["max_ny"] = ny
     d["max_nz"] = nz
-    td = datetime.datetime.utcnow() - datetime.datetime(1970, 1, 1, 0, 0)
+    td = datetime.datetime.now(datetime.timezone.utc) - datetime.datetime(
+        1970, 1, 1, 0, 0
+    )
     d["time_written"] = int(
         round(td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
     )
