@@ -387,3 +387,9 @@ def test_1byte_datatype():
     result = pyart.io._sigmetfile.convert_sigmet_data(data_type, data, nbins)
     assert np.all(result == -31.5)
     assert result.shape == (2, 2)
+
+
+def test_frequency():
+    frequency = radar.instrument_parameters["frequency"]
+    frequency["units"] == "s-1"
+    assert_almost_equal(frequency["data"], 9.670725e09)
