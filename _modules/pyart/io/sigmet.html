@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.sigmet &#8212; Py-ART 1.18.1.post6 documentation</title>
+    <title>pyart.io.sigmet &#8212; Py-ART 1.18.1.post7 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=a68caed6"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=02f42acf"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -144,7 +144,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.1.post6 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.1.post7 documentation</p>
   
 </a></div>
     
@@ -493,6 +493,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">lambda2nu</span>
 
 <span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">FileMetadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
 <span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
@@ -872,6 +873,7 @@ document.write(`
     <span class="n">beam_width_v</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;radar_beam_width_v&quot;</span><span class="p">)</span>
     <span class="n">pulse_width</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;pulse_width&quot;</span><span class="p">)</span>
     <span class="n">prt_ratio</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;prt_ratio&quot;</span><span class="p">)</span>
+    <span class="n">frequency</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;frequency&quot;</span><span class="p">)</span>
 
     <span class="n">prt_value</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">product_hdr</span><span class="p">[</span><span class="s2">&quot;product_end&quot;</span><span class="p">][</span><span class="s2">&quot;prf&quot;</span><span class="p">]</span>
     <span class="n">prt</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prt_value</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
@@ -889,8 +891,13 @@ document.write(`
         <span class="n">prt_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s2">&quot;fixed&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
         <span class="n">prt_ratio</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
 
-    <span class="n">wavelength_cm</span> <span class="o">=</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">product_hdr</span><span class="p">[</span><span class="s2">&quot;product_end&quot;</span><span class="p">][</span><span class="s2">&quot;wavelength&quot;</span><span class="p">]</span>
-    <span class="n">nv_value</span> <span class="o">=</span> <span class="n">wavelength_cm</span> <span class="o">/</span> <span class="p">(</span><span class="mf">10000.0</span> <span class="o">*</span> <span class="mf">4.0</span> <span class="o">*</span> <span class="n">prt_value</span><span class="p">)</span> <span class="o">*</span> <span class="n">prf_multiplier</span>
+    <span class="n">wavelength_m</span> <span class="o">=</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">product_hdr</span><span class="p">[</span><span class="s2">&quot;product_end&quot;</span><span class="p">][</span><span class="s2">&quot;wavelength&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">10000.0</span>
+
+    <span class="c1"># Compute the frequency from the wavelength</span>
+    <span class="n">frequency</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lambda2nu</span><span class="p">(</span><span class="n">wavelength_m</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Compute the nyquist velocity from the wavelength</span>
+    <span class="n">nv_value</span> <span class="o">=</span> <span class="n">wavelength_m</span> <span class="o">/</span> <span class="p">(</span><span class="mf">4.0</span> <span class="o">*</span> <span class="n">prt_value</span><span class="p">)</span> <span class="o">*</span> <span class="n">prf_multiplier</span>
     <span class="n">nyquist_velocity</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nv_value</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
     <span class="n">beam_width_h</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
         <span class="p">[</span><span class="n">bin4_to_angle</span><span class="p">(</span><span class="n">task_config</span><span class="p">[</span><span class="s2">&quot;task_misc_info&quot;</span><span class="p">][</span><span class="s2">&quot;horizontal_beamwidth&quot;</span><span class="p">])],</span>
@@ -914,6 +921,7 @@ document.write(`
         <span class="s2">&quot;radar_beam_width_h&quot;</span><span class="p">:</span> <span class="n">beam_width_h</span><span class="p">,</span>
         <span class="s2">&quot;radar_beam_width_v&quot;</span><span class="p">:</span> <span class="n">beam_width_v</span><span class="p">,</span>
         <span class="s2">&quot;pulse_width&quot;</span><span class="p">:</span> <span class="n">pulse_width</span><span class="p">,</span>
+        <span class="s2">&quot;frequency&quot;</span><span class="p">:</span> <span class="n">frequency</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="n">prf_multiplier</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">prf_flag</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;prf_flag&quot;</span><span class="p">)</span>
