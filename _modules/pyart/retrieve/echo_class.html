@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.18.2.post1 documentation</title>
+    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.18.2.post2 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=5dca7749"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=6a32fd23"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -144,7 +144,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.2.post1 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.2.post2 documentation</p>
   
 </a></div>
     
@@ -1133,6 +1133,21 @@ document.write(`
 <span class="sd">    of polarimetric radar measurements: a semi-supervised approach,</span>
 <span class="sd">    Atmos. Meas. Tech., 9, 4425-4445, doi:10.5194/amt-9-4425-2016, 2016</span>
 
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The default hydrometeor classification is valid for C-band radars. For X-band radars,</span>
+<span class="sd">    if frequency information is not present in the `radar.instrument_parameters`, a warning that the</span>
+<span class="sd">    algorithm is defaulting to the C band is printed.</span>
+
+<span class="sd">    If the radar frequency information is missing from the radar object, you can add it in</span>
+<span class="sd">    `radar.instrument_parameters`, as follows:</span>
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">        radar.instrument_parameters[&quot;frequency&quot;] = {</span>
+<span class="sd">            &quot;long_name&quot;: &quot;Radar frequency&quot;,</span>
+<span class="sd">            &quot;units&quot;: &quot;Hz&quot;,</span>
+<span class="sd">            &quot;data&quot;: [9.2e9]</span>
+<span class="sd">        }</span>
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">lapse_rate</span> <span class="o">=</span> <span class="o">-</span><span class="mf">6.5</span>
 
