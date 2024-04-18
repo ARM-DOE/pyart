@@ -328,6 +328,6 @@ def test_grid_rhi_sweeps():
 
     # Check gridded values at max range close to 40 dBZ
     assert (
-        np.abs(radar_ds["reflectivity"].isel({{"azimuth": 0, "y": -1, "z": 0}) - 40.0)
+        np.abs(radar_ds["reflectivity"].isel({"azimuth": 0, "y": -1, "z": 0}) - 40.0)
         < 5.0
     )
