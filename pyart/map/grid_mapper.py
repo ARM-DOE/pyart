@@ -889,7 +889,7 @@ def grid_ppi_sweeps(radar,
                     grid_size=801,
                     grid_limits='auto',
                     max_z=12000.,
-                    el_rounding_frac=0.5,
+                    el_rounding_frac=0.25,
                     add_grid_altitude=True,
                     **kwargs,
                    ):
@@ -996,7 +996,7 @@ def grid_rhi_sweeps(radar,
                     grid_size=801,
                     grid_limits='auto',
                     max_z=12000.,
-                    az_rounding_frac=0.5,
+                    az_rounding_frac=0.25,
                     **kwargs,
                    ):
     """
