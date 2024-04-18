@@ -7,8 +7,8 @@ import warnings
 
 import netCDF4
 import numpy as np
-import xarray as xr
 import scipy.spatial
+import xarray as xr
 
 from ..config import get_fillvalue, get_metadata
 from ..core.grid import Grid
@@ -888,8 +888,8 @@ def grid_ppi_sweeps(
     radar,
     target_sweeps=None,
     grid_size=801,
-    grid_limits='auto',
-    max_z=12000.,
+    grid_limits="auto",
+    max_z=12000.0,
     el_rounding_frac=0.25,
     add_grid_altitude=True,
     **kwargs,
@@ -975,18 +975,19 @@ def grid_ppi_sweeps(
         ).round() * el_rounding_frac
         radar_ds_tmp = sweep_grid.to_xarray().squeeze()
         if add_grid_altitude:
-            alt_est = ((radar_ds_tmp["x"] ** 2 + radar_ds_tmp["y"] ** 2) ** 0.5 * np.tan(
-                el_round * np.pi / 180.))
+            alt_est = (radar_ds_tmp["x"] ** 2 + radar_ds_tmp["y"] ** 2) ** 0.5 * np.tan(
+                el_round * np.pi / 180.
+            )
         radar_ds_tmp["altitude_est"] = xr.DataArray(
             alt_est,
             coords=radar_ds_tmp.coords,
             dims=radar_ds_tmp.dims,
-            attrs={"long_name": "Estimated altitude in PPI scan", "units": "m"}
+            attrs={"long_name": "Estimated altitude in PPI scan", "units": "m"},
         )
         radar_ds_tmp = radar_ds_tmp.expand_dims(elevation=[el_round])
         radar_ds_tmp["elevation"].attrs = {
             "long_name": "Elevation angle",
-            "units": "deg"
+            "units": "deg",
         }
         if radar_ds is None:
             radar_ds = radar_ds_tmp
@@ -996,14 +997,15 @@ def grid_ppi_sweeps(
     return radar_ds
 
 
-def grid_rhi_sweeps(radar,
-                    target_sweeps=None,
-                    grid_size=801,
-                    grid_limits='auto',
-                    max_z=12000.,
-                    az_rounding_frac=0.25,
-                    **kwargs,
-                   ):
+def grid_rhi_sweeps(
+    radar,                
+    target_sweeps=None,
+    grid_size=801,
+    grid_limits="auto",
+    max_z=12000.0,
+    az_rounding_frac=0.25,
+    **kwargs,
+):
     """
     Separately grid RHI sweeps to a Y-Z plane considering only cross-sectional distances
     in grid RoI and weighting function.
@@ -1066,17 +1068,17 @@ def grid_rhi_sweeps(radar,
     for sweep in target_sweeps:
         radar_sw = radar.extract_sweeps([sweep])
         if (
-            np.max(radar_sw.azimuth["data"]) - np.min(radar_sw.azimuth["data"]) > 180.
+            np.max(radar_sw.azimuth["data"]) - np.min(radar_sw.azimuth["data"]) > 180.0
         ):  # 0 or 180 deg sweep
-            if np.any(radar_sw.azimuth["data"] > 180.):
+            if np.any(radar_sw.azimuth["data"] > 180.0):
                 diff_center = 180.0  # 0 to 360 deg
             else:
-                diff_center = 0.0 # -180 to 180
+                diff_center = 0.0  # -180 to 180
             az_round = (
                 np.abs(
                     np.mean(
                         radar_sw.azimuth["data"]
-                        - 360. * (radar_sw.azimuth["data"] > diff_center).astype(int)
+                        - 360.0 * (radar_sw.azimuth["data"] > diff_center).astype(int)
                     )
                     / az_rounding_frac
                 ).round()
