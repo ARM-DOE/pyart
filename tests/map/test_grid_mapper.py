@@ -311,8 +311,10 @@ def test_grid_ppi_sweeps():
     assert radar_ds["elevation"].size == 2
 
     # Check gridded values at max range close to 40 dBZ
-    assert np.abs(radar_ds["reflectivity"].isel(
-        {"elevation": 0, "y": -1}).sel(x=0) - 40.0) < 5.0
+    assert (
+        np.abs(radar_ds["reflectivity"].isel({"elevation": 0, "y": -1}).sel(x=0) - 40.0)
+        < 5.0
+    )
 
 
 def test_grid_rhi_sweeps():
@@ -325,5 +327,7 @@ def test_grid_rhi_sweeps():
     assert radar_ds["azimuth"].size == 4
 
     # Check gridded values at max range close to 40 dBZ
-    assert np.abs(radar_ds["reflectivity"].isel(
-        {"azimuth": 0, "y": -1, "z": 0}) - 40.0) < 5.0
+    assert (
+        np.abs(radar_ds["reflectivity"].isel({{"azimuth": 0, "y": -1, "z": 0}) - 40.0)
+        < 5.0
+    )
