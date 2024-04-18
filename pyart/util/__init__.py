@@ -25,10 +25,6 @@ from .datetime_utils import datetime_from_radar  # noqa
 from .datetime_utils import datetimes_from_dataset  # noqa
 from .datetime_utils import datetimes_from_radar  # noqa
 from .hildebrand_sekhon import estimate_noise_hs74  # noqa
-from .map_utils import (  # noqa
-    grid_ppi_sweeps,
-    grid_rhi_sweeps,
-)
 from .radar_utils import (  # noqa
     image_mute_radar,
     is_vpt,
