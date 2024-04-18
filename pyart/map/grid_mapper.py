@@ -998,7 +998,7 @@ def grid_ppi_sweeps(
 
 
 def grid_rhi_sweeps(
-    radar, 
+    radar,
     target_sweeps=None,
     grid_size=801,
     grid_limits="auto",
