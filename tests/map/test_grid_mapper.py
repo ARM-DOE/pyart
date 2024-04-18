@@ -300,3 +300,30 @@ def test_example_roi_funcs():
     assert pyart.map.example_roi_func_constant(0, 0, 0) == 500.0
     assert pyart.map.example_roi_func_dist(0, 0, 0) == 500.0
     assert pyart.map.example_roi_func_dist_beam(0, 0, 0) == 500.0
+
+
+def test_grid_ppi_sweeps():
+    radar1 = pyart.testing.make_target_radar()
+    radar = pyart.util.join_radar(radar1, radar1)  # 2 sweeps in total
+    radar_ds = pyart.map.grid_ppi_sweeps(radar)
+
+    # Check elevation dim has size of 2 reflecting number of sweeps
+    assert radar_ds["elevation"].size == 2
+
+    # Check gridded values at max range close to 40 dBZ
+    assert np.abs(radar_ds["reflectivity"].isel(
+        {"elevation": 0, "y": -1}).sel(x=0) - 40.0) < 5.0
+
+
+def test_grid_rhi_sweeps():
+    radar1 = pyart.testing.make_target_rhi_radar()
+    radar = pyart.util.join_radar(radar1, radar1)
+    radar = pyart.util.join_radar(radar, radar)  # 4 sweeps in total
+    radar_ds = pyart.map.grid_rhi_sweeps(radar)
+
+    # Check azimuth dim has size of 4 reflecting number of sweeps
+    assert radar_ds["azimuth"].size == 4
+
+    # Check gridded values at max range close to 40 dBZ
+    assert np.abs(radar_ds["reflectivity"].isel(
+        {"azimuth": 0, "y": -1, "z": 0}) - 40.0) < 5.0
