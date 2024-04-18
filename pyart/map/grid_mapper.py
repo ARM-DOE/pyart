@@ -27,7 +27,7 @@ def grid_from_radars(
     grid_limits,
     gridding_algo="map_gates_to_grid",
     copy_field_dtypes=True,
-    **kwargs
+    **kwargs,
 ):
     """
     Map one or more radars to a Cartesian grid returning a Grid object.
@@ -297,7 +297,7 @@ def map_to_grid(
     h_factor=(1.0, 1.0, 1.0),
     nb=1.0,
     bsp=1.0,
-    **kwargs
+    **kwargs,
 ):
     """
     Map one or more radars to a Cartesian grid.
@@ -976,7 +976,7 @@ def grid_ppi_sweeps(
         radar_ds_tmp = sweep_grid.to_xarray().squeeze()
         if add_grid_altitude:
             alt_est = (radar_ds_tmp["x"] ** 2 + radar_ds_tmp["y"] ** 2) ** 0.5 * np.tan(
-                el_round * np.pi / 180.
+                el_round * np.pi / 180.0
             )
         radar_ds_tmp["altitude_est"] = xr.DataArray(
             alt_est,
