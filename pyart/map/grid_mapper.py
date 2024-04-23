@@ -396,7 +396,9 @@ def map_to_grid(
         Radius of influence parameters for the built in 'dist_beam' function.
         The parameter correspond to the height scaling, virtual beam width,
         virtual beam spacing, and minimum radius of influence.
-        NOTE: the default `min_radius` value is smaller for ARM radars
+        NOTE: the default `min_radius` value is smaller for ARM SACR and SAPR
+        radars (those radars are operated at range resolution of 100 m or
+        higher).
         to reflect their higher resolution relative to precipitation radars..
         These parameters are only used when `roi_func` is 'dist_mean'.
     copy_field_data : bool
