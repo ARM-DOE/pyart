@@ -647,6 +647,21 @@ def hydroclass_semisupervised(
     of polarimetric radar measurements: a semi-supervised approach,
     Atmos. Meas. Tech., 9, 4425-4445, doi:10.5194/amt-9-4425-2016, 2016
 
+    Notes
+    -----
+    The default hydrometeor classification is valid for C-band radars. For X-band radars,
+    if frequency information is not present in the `radar.instrument_parameters`, a warning that the
+    algorithm is defaulting to the C band is printed.
+
+    If the radar frequency information is missing from the radar object, you can add it in
+    `radar.instrument_parameters`, as follows:
+    .. code-block:: python
+
+        radar.instrument_parameters["frequency"] = {
+            "long_name": "Radar frequency",
+            "units": "Hz",
+            "data": [9.2e9]
+        }
     """
     lapse_rate = -6.5
 
