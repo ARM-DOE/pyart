@@ -52,7 +52,7 @@ def test_radarmapdisplay_cartopy_preexisting_ax(outfile=None):
     display = pyart.graph.RadarMapDisplay(radar, shift=(0.1, 0.0))
     fig = plt.figure()
     ax = plt.axes(projection=cartopy.crs.PlateCarree())
-    tiler = GoogleTiles(style='terrain')
+    tiler = GoogleTiles(style="terrain")
     ax.add_image(tiler, 6)
     display.plot_ppi_map("reflectivity_horizontal", 0, ax=ax, embellish=False)
     if outfile:
