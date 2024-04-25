@@ -27,6 +27,7 @@ dependencies:
   - ruff
   - mda-xdrlib
   - xradar
+  - pyglpk
   - pip
   - pip:
     - cibuildwheel
