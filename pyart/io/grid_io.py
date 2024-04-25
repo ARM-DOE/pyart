@@ -3,8 +3,8 @@ Reading and writing Grid objects.
 
 """
 
-from datetime import datetime, timezone
 import warnings
+from datetime import datetime, timezone
 
 import netCDF4
 import numpy as np

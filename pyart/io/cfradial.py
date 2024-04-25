@@ -3,10 +3,10 @@ Utilities for reading CF/Radial files.
 
 """
 
-from datetime import datetime, timedelta, timezone
 import getpass
 import platform
 import warnings
+from datetime import datetime, timedelta, timezone
 
 import netCDF4
 import numpy as np
@@ -707,9 +707,7 @@ def write_cfradial(
     )
     if end_dt.microsecond != 0:
         # round up to next second
-        end_dt += timedelta(seconds=1) - timedelta(
-            microseconds=end_dt.microsecond
-        )
+        end_dt += timedelta(seconds=1) - timedelta(microseconds=end_dt.microsecond)
     start_dic = {
         "data": np.array(start_dt.isoformat() + "Z", dtype="S"),
         "long_name": "UTC time of first ray in the file",

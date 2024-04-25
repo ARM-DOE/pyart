@@ -89,7 +89,7 @@ def read_chl(
     time["data"] = (tdata - min_time).astype("float64")
     time["units"] = make_time_unit_str(
         datetime.fromtimestamp(min_time, tz=timezone.utc).replace(tzinfo=None)
-        )
+    )
 
     # range
     _range = filemetadata("range")
