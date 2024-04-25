@@ -27,11 +27,11 @@ dependencies:
   - ruff
   - mda-xdrlib
   - xradar
-  - pyglpk
   - pip
   - pip:
     - cibuildwheel
     - pooch
     - versioneer
+    - glpk
     - black
     - git+https://github.com/openradar/open-radar-data
