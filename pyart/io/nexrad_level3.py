@@ -69,7 +69,7 @@ import bz2
 import struct
 import warnings
 from collections import namedtuple
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 
 import numpy as np
 from mda_xdrlib.xdrlib import Unpacker
@@ -371,7 +371,7 @@ class NEXRADLevel3File:
 
 def _datetime_from_mdate_mtime(mdate, mtime):
     """Returns a datetime for a given message date and time."""
-    epoch = datetime.utcfromtimestamp(0)
+    epoch = datetime.fromtimestamp(0, tz=timezone.utc).replace(tzinfo=None)
     return epoch + timedelta(days=mdate - 1, seconds=mtime)
 
 

@@ -105,15 +105,15 @@ class Xgrid:
 
     @property
     def ny(self):
-        return self.ds.dims["y"]
+        return self.ds.sizes["y"]
 
     @property
     def nx(self):
-        return self.ds.dims["x"]
+        return self.ds.sizes["x"]
 
     @property
     def nz(self):
-        return self.ds.dims["z"]
+        return self.ds.sizes["z"]
 
     # Attribute init/reset methods
     def init_point_x_y_z(self):

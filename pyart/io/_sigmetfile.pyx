@@ -597,7 +597,7 @@ SIGMET_DATA_TYPES = {
 def convert_sigmet_data(data_type, data, nbins):
     """ Convert sigmet data. """
     out = np.empty_like(data, dtype='float32')
-    mask = np.zeros_like(data, dtype=np.bool8)
+    mask = np.zeros_like(data, dtype='bool')
 
     data_type_name = SIGMET_DATA_TYPES[data_type]
 
