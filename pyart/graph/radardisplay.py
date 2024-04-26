@@ -85,8 +85,8 @@ class RadarDisplay:
 
         # radar location in latitude and longitude
         if radar.latitude["data"].size == 1:
-            lat = float(radar.latitude["data"])
-            lon = float(radar.longitude["data"])
+            lat = float(radar.latitude["data"][0])
+            lon = float(radar.longitude["data"][0])
         else:
             # for moving platforms stores use the median location.
             # The RadarDisplay object does not give a proper

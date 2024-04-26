@@ -242,7 +242,7 @@ def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
     rarr = []
     garr = []
     barr = []
-    cmap = plt.cm.get_cmap(cmap)
+    cmap = plt.get_cmap(cmap)
     for val in index:
         if not np.isnan(val):
             ind = int(np.round(val))
@@ -287,7 +287,7 @@ def _create_sld(cmap, vmin, vmax, filename, color_levels=None):
         with steps << 255 (e.g., hydrometeor ID).
 
     """
-    cmap = plt.cm.get_cmap(cmap)
+    cmap = plt.get_cmap(cmap)
     if color_levels is None:
         color_levels = 255
     name, _ = filename.split(".")
