@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.cfradial &#8212; Py-ART 1.18.2.post3 documentation</title>
+    <title>pyart.io.cfradial &#8212; Py-ART 1.18.3.post1 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=ce4a793a"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=4d8f4f87"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -144,7 +144,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.2.post3 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.3.post1 documentation</p>
   
 </a></div>
     
@@ -489,10 +489,10 @@ document.write(`
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">datetime</span>
 <span class="kn">import</span> <span class="nn">getpass</span>
 <span class="kn">import</span> <span class="nn">platform</span>
 <span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span><span class="p">,</span> <span class="n">timezone</span>
 
 <span class="kn">import</span> <span class="nn">netCDF4</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -1017,7 +1017,7 @@ document.write(`
     <span class="k">else</span><span class="p">:</span>
         <span class="n">user</span> <span class="o">=</span> <span class="n">getpass</span><span class="o">.</span><span class="n">getuser</span><span class="p">()</span>
         <span class="n">node</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">node</span><span class="p">()</span>
-        <span class="n">time_str</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
+        <span class="n">time_str</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span>
         <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="n">user</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">time_str</span><span class="p">)</span>
         <span class="n">history</span> <span class="o">=</span> <span class="s2">&quot;created by </span><span class="si">{}</span><span class="s2"> on </span><span class="si">{}</span><span class="s2"> at </span><span class="si">{}</span><span class="s2"> using Py-ART&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">t</span><span class="p">)</span>
 
@@ -1037,7 +1037,7 @@ document.write(`
             <span class="n">only_use_cftime_datetimes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">only_use_python_datetimes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">td</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">td</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">fromtimestamp</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">tz</span><span class="o">=</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">tzinfo</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
         <span class="n">base_time</span> <span class="o">=</span> <span class="p">{</span>
             <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">td</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">td</span><span class="o">.</span><span class="n">days</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">],</span> <span class="s2">&quot;int32&quot;</span><span class="p">),</span>
             <span class="s2">&quot;string&quot;</span><span class="p">:</span> <span class="n">dt</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;</span><span class="si">%d</span><span class="s2">-%b-%Y,%H:%M:%S GMT&quot;</span><span class="p">),</span>
@@ -1184,7 +1184,7 @@ document.write(`
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">start_dt</span><span class="o">.</span><span class="n">microsecond</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="c1"># truncate to nearest second</span>
-        <span class="n">start_dt</span> <span class="o">-=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">microseconds</span><span class="o">=</span><span class="n">start_dt</span><span class="o">.</span><span class="n">microsecond</span><span class="p">)</span>
+        <span class="n">start_dt</span> <span class="o">-=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">microseconds</span><span class="o">=</span><span class="n">start_dt</span><span class="o">.</span><span class="n">microsecond</span><span class="p">)</span>
     <span class="n">end_dt</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">num2date</span><span class="p">(</span>
         <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
         <span class="n">units</span><span class="p">,</span>
@@ -1193,9 +1193,7 @@ document.write(`
     <span class="p">)</span>
     <span class="k">if</span> <span class="n">end_dt</span><span class="o">.</span><span class="n">microsecond</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="c1"># round up to next second</span>
-        <span class="n">end_dt</span> <span class="o">+=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span>
-            <span class="n">microseconds</span><span class="o">=</span><span class="n">end_dt</span><span class="o">.</span><span class="n">microsecond</span>
-        <span class="p">)</span>
+        <span class="n">end_dt</span> <span class="o">+=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">microseconds</span><span class="o">=</span><span class="n">end_dt</span><span class="o">.</span><span class="n">microsecond</span><span class="p">)</span>
     <span class="n">start_dic</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">start_dt</span><span class="o">.</span><span class="n">isoformat</span><span class="p">()</span> <span class="o">+</span> <span class="s2">&quot;Z&quot;</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S&quot;</span><span class="p">),</span>
         <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;UTC time of first ray in the file&quot;</span><span class="p">,</span>

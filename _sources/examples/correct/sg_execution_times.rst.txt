@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**01:15.213** total execution time for 2 files **from examples/correct**:
+**01:08.274** total execution time for 2 files **from examples/correct**:
 
 .. container::
 
@@ -33,8 +33,8 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_correct_plot_dealias.py` (``plot_dealias.py``)
-     - 01:03.533
+     - 00:58.853
      - 0.0
    * - :ref:`sphx_glr_examples_correct_plot_attenuation.py` (``plot_attenuation.py``)
-     - 00:11.680
+     - 00:09.421
      - 0.0
