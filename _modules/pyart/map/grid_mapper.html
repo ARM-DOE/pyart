@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.map.grid_mapper &#8212; Py-ART 1.18.3.post1 documentation</title>
+    <title>pyart.map.grid_mapper &#8212; Py-ART 1.18.3.post2 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=4d8f4f87"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=7a77c5ed"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -144,7 +144,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.3.post1 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.3.post2 documentation</p>
   
 </a></div>
     
@@ -512,7 +512,7 @@ document.write(`
     <span class="n">grid_limits</span><span class="p">,</span>
     <span class="n">gridding_algo</span><span class="o">=</span><span class="s2">&quot;map_gates_to_grid&quot;</span><span class="p">,</span>
     <span class="n">copy_field_dtypes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Map one or more radars to a Cartesian grid returning a Grid object.</span>
@@ -782,7 +782,7 @@ document.write(`
     <span class="n">h_factor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
     <span class="n">nb</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
     <span class="n">bsp</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Map one or more radars to a Cartesian grid.</span>
@@ -955,7 +955,7 @@ document.write(`
     <span class="k">if</span> <span class="n">weighting_function</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;CRESSMAN&quot;</span><span class="p">,</span> <span class="s2">&quot;BARNES2&quot;</span><span class="p">,</span> <span class="s2">&quot;BARNES&quot;</span><span class="p">,</span> <span class="s2">&quot;NEAREST&quot;</span><span class="p">]:</span>
         <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;unknown weighting_function&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">algorithm</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;kd_tree&quot;</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;unknown algorithm: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">algorithm</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unknown algorithm: </span><span class="si">{</span><span class="n">algorithm</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
     <span class="n">badval</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
 
     <span class="c1"># parse the grid_projection</span>
@@ -1141,7 +1141,7 @@ document.write(`
         <span class="k">elif</span> <span class="n">roi_func</span> <span class="o">==</span> <span class="s2">&quot;dist_beam&quot;</span><span class="p">:</span>
             <span class="n">roi_func</span> <span class="o">=</span> <span class="n">_gen_roi_func_dist_beam</span><span class="p">(</span><span class="n">h_factor</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">bsp</span><span class="p">,</span> <span class="n">min_radius</span><span class="p">,</span> <span class="n">offsets</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;unknown roi_func: </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">roi_func</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unknown roi_func: </span><span class="si">{</span><span class="n">roi_func</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 
     <span class="c1"># create array to hold interpolated grid data and roi if requested</span>
     <span class="n">grid_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">nfields</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>

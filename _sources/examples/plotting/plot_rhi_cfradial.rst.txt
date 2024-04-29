@@ -67,7 +67,7 @@ a RadarDisplay object.
 
     for snum in radar.sweep_number["data"]:
         fixed_angle = radar.fixed_angle["data"][snum]
-        title = "HSRHI Az=%.3f" % (fixed_angle)
+        title = f"HSRHI Az={fixed_angle:.3f}"
         ax = fig.add_subplot(nplots, 1, snum + 1)
         display.plot(
             "reflectivity_horizontal",
@@ -96,7 +96,7 @@ a RadarDisplay object.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.833 seconds)
+   **Total running time of the script:** (0 minutes 1.806 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_rhi_cfradial.py:
