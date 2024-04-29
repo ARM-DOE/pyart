@@ -214,7 +214,7 @@ fields = [
 
 @pytest.mark.parametrize("field", fields)
 def test_field_dics(field):
-    description = "field : %s, dictionary" % field
+    description = f"field : {field}, dictionary"
     check_field_dic.description = description
     check_field_dic(field)
 
@@ -232,7 +232,7 @@ def check_field_dic(field):
 
 @pytest.mark.parametrize("field", fields)
 def test_field_shapes(field):
-    description = "field : %s, shape" % field
+    description = f"field : {field}, shape"
     check_field_shape.description = description
     check_field_shape(field)
 
@@ -243,7 +243,7 @@ def check_field_shape(field):
 
 @pytest.mark.parametrize("field", fields)
 def test_field_types(field):
-    description = "field : %s, type" % field
+    description = f"field : {field}, type"
     check_field_type.description = description
     check_field_type(field, MaskedArray)
 
@@ -270,7 +270,7 @@ fields = {
 def test_field_first_points(field, field_value):
     # these values can be found using:
     # [round(radar.fields[f]['data'][0,0]) for f in radar.fields]
-    description = "field : %s, first point" % field
+    description = f"field : {field}, first point"
     check_field_first_point.description = description
     check_field_first_point(field, field_value)
 

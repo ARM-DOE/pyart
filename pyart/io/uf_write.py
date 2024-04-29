@@ -389,7 +389,7 @@ class UFRayCreator:
             sweep_mode_number = UF_SWEEP_MODES[self.radar.scan_type]
         else:
             warnings.warn(
-                "Unknown scan_type: %s, defaulting to PPI" % (self.radar.scan_type)
+                f"Unknown scan_type: {self.radar.scan_type}, defaulting to PPI"
             )
             sweep_mode_number = UF_SWEEP_MODES["ppi"]
         header["sweep_mode"] = sweep_mode_number

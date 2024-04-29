@@ -32,7 +32,7 @@ class DisableModules:
 
     def find_module(self, fullname):
         if fullname in self.modules:
-            raise ImportError("Debug import failure for %s" % fullname)
+            raise ImportError(f"Debug import failure for {fullname}")
 
 
 def test_debug_info_all_disabled():

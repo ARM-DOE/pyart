@@ -191,7 +191,7 @@ class Xgrid:
         """
         # check that the field dictionary to add is valid
         if field_name in self.fields and replace_existing is False:
-            err = "A field with name: %s already exists" % (field_name)
+            err = f"A field with name: {field_name} already exists"
             raise ValueError(err)
         if "data" not in dic:
             raise KeyError("dic must contain a 'data' key")
@@ -431,7 +431,7 @@ class Xradar:
         """
         # check that the field dictionary to add is valid
         if field_name in self.fields and replace_existing is False:
-            err = "A field with name: %s already exists" % (field_name)
+            err = f"A field with name: {field_name} already exists"
             raise ValueError(err)
         if "data" not in dic:
             raise KeyError("dic must contain a 'data' key")

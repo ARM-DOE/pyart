@@ -26,7 +26,7 @@ def grid_from_radars(
     grid_limits,
     gridding_algo="map_gates_to_grid",
     copy_field_dtypes=True,
-    **kwargs
+    **kwargs,
 ):
     """
     Map one or more radars to a Cartesian grid returning a Grid object.
@@ -296,7 +296,7 @@ def map_to_grid(
     h_factor=(1.0, 1.0, 1.0),
     nb=1.0,
     bsp=1.0,
-    **kwargs
+    **kwargs,
 ):
     """
     Map one or more radars to a Cartesian grid.
@@ -469,7 +469,7 @@ def map_to_grid(
     if weighting_function.upper() not in ["CRESSMAN", "BARNES2", "BARNES", "NEAREST"]:
         raise ValueError("unknown weighting_function")
     if algorithm not in ["kd_tree"]:
-        raise ValueError("unknown algorithm: %s" % algorithm)
+        raise ValueError(f"unknown algorithm: {algorithm}")
     badval = get_fillvalue()
 
     # parse the grid_projection
@@ -655,7 +655,7 @@ def map_to_grid(
         elif roi_func == "dist_beam":
             roi_func = _gen_roi_func_dist_beam(h_factor, nb, bsp, min_radius, offsets)
         else:
-            raise ValueError("unknown roi_func: %s" % roi_func)
+            raise ValueError(f"unknown roi_func: {roi_func}")
 
     # create array to hold interpolated grid data and roi if requested
     grid_data = np.ma.empty((nz, ny, nx, nfields), dtype=np.float64)
