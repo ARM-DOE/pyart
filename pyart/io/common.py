@@ -93,7 +93,7 @@ def _test_arguments(dic):
     if dic:
         import warnings
 
-        warnings.warn("Unexpected arguments: %s" % dic.keys())
+        warnings.warn(f"Unexpected arguments: {dic.keys()}")
 
 
 def make_time_unit_str(dtobj):

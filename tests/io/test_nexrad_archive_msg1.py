@@ -212,7 +212,7 @@ FIELDS = ["reflectivity", "spectrum_width", "velocity"]
 
 @pytest.mark.parametrize("field", FIELDS)
 def test_field_dics(field):
-    description = "field : %s, dictionary" % field
+    description = f"field : {field}, dictionary"
     check_field_dic.description = description
     check_field_dic(field)
 
@@ -227,7 +227,7 @@ def check_field_dic(field):
 
 @pytest.mark.parametrize("field", FIELDS)
 def test_field_shapes(field):
-    description = "field : %s, shape" % field
+    description = f"field : {field}, shape"
     check_field_shape.description = description
     check_field_shape(field)
 
@@ -245,7 +245,7 @@ fields = {
 
 @pytest.mark.parametrize("field, field_type", fields.items(), ids=list(fields.keys()))
 def test_field_types(field, field_type):
-    description = "field : %s, type" % field
+    description = f"field : {field}, type"
     check_field_type.description = description
     check_field_type(field, field_type)
 

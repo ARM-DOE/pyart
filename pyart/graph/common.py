@@ -474,7 +474,7 @@ def generate_az_rhi_title(radar, field, azimuth):
     """
     time_str = generate_radar_time_begin(radar).isoformat() + "Z"
     l1 = f"{generate_radar_name(radar)} {time_str} "
-    l2 = "Azimuth: %.1f deg" % azimuth
+    l2 = f"Azimuth: {azimuth:.1f} deg"
     field_name = generate_field_name(radar, field)
     return l1 + "\n" + l2 + "\n" + field_name
 

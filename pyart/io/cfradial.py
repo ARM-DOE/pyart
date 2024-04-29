@@ -650,7 +650,7 @@ def write_cfradial(
                 # Do not try to write instrument parameter whose dimensions are
                 # not known, rather issue a warning and skip the parameter
                 message = (
-                    "Unknown instrument parameter: %s, " % (k) + "not written to file."
+                    f"Unknown instrument parameter: {k}, " + "not written to file."
                 )
                 warnings.warn(message)
 
@@ -812,7 +812,7 @@ def _create_ncvar(dic, dataset, name, dimensions):
     # create array from list, etc.
     data = dic["data"]
     if isinstance(data, np.ndarray) is not True:
-        warnings.warn("Warning, converting non-array to array:%s" % name)
+        warnings.warn(f"Warning, converting non-array to array:{name}")
         data = np.array(data)
 
     # convert string/unicode arrays to character arrays

@@ -48,7 +48,7 @@ def read_odim_h5(
     include_fields=None,
     include_datasets=None,
     exclude_datasets=None,
-    **kwargs
+    **kwargs,
 ):
     """
     Read a ODIM_H5 file.
@@ -130,7 +130,7 @@ def read_odim_h5(
     with h5py.File(filename, "r") as hfile:
         odim_object = _to_str(hfile["what"].attrs["object"])
         if odim_object not in ["PVOL", "SCAN", "ELEV", "AZIM"]:
-            raise NotImplementedError("object: %s not implemented." % (odim_object))
+            raise NotImplementedError(f"object: {odim_object} not implemented.")
 
         # determine the number of sweeps by the number of groups which
         # begin with dataset
