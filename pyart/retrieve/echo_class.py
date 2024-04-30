@@ -609,6 +609,7 @@ def hydroclass_semisupervised(
     kdp_field=None,
     temp_field=None,
     hydro_field=None,
+    radar_freq=None,
 ):
     """
     Classifies precipitation echoes following the approach by Besic et al
@@ -668,21 +669,15 @@ def hydroclass_semisupervised(
     # select the centroids as a function of frequency band
     if mass_centers is None:
         # assign coefficients according to radar frequency
-        if radar.instrument_parameters is not None:
-            if "frequency" in radar.instrument_parameters:
-                mass_centers = _get_mass_centers(
-                    radar.instrument_parameters["frequency"]["data"][0]
-                )
-            else:
-                mass_centers = _mass_centers_table()["C"]
-                warn(
-                    "Radar frequency unknown. "
-                    "Default coefficients for C band will be applied."
-                )
+        if radar.instrument_parameters and "frequency" in radar.instrument_parameters:
+            frequency = radar.instrument_parameters["frequency"]["data"][0]
+            mass_centers = _get_mass_centers(frequency)
+        elif radar_freq is not None:
+            mass_centers = _get_mass_centers(radar_freq)
         else:
             mass_centers = _mass_centers_table()["C"]
             warn(
-                "Radar instrument parameters is empty. So frequency is "
+                "Radar instrument parameters and radar_freq param are empty. So frequency is "
                 "unknown. Default coefficients for C band will be applied."
             )
 
