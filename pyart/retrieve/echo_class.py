@@ -672,13 +672,17 @@ def hydroclass_semisupervised(
         if radar.instrument_parameters and "frequency" in radar.instrument_parameters:
             frequency = radar.instrument_parameters["frequency"]["data"][0]
             mass_centers = _get_mass_centers(frequency)
+            warn(f"Using radar frequency from instrument parameters: {frequency}")
         elif radar_freq is not None:
             mass_centers = _get_mass_centers(radar_freq)
+            warn(
+                f"Radar instrument parameters are empty. Using user-supplied radar frequency: {radar_freq}"
+            )
         else:
             mass_centers = _mass_centers_table()["C"]
             warn(
-                "Radar instrument parameters and radar_freq param are empty. So frequency is "
-                "unknown. Default coefficients for C band will be applied."
+                "Radar instrument parameters and radar_freq param are empty."
+                "So frequency is unknown. Default coefficients for C band will be applied."
             )
 
     # parse the field parameters
