@@ -149,6 +149,23 @@ def make_target_radar():
     return radar
 
 
+def make_target_rhi_radar():
+    """
+    Return an RHI radar with a target like reflectivity field.
+    """
+    radar = radar = make_empty_rhi_radar(50, 180, 1)
+    fields = {"reflectivity": get_metadata("reflectivity")}
+    fdata = np.zeros((180, 50), dtype="float32")
+    fdata[:, 0:10] = 0.0
+    fdata[:, 10:20] = 10.0
+    fdata[:, 20:30] = 20.0
+    fdata[:, 30:40] = 30.0
+    fdata[:, 40:50] = 40.0
+    fields["reflectivity"]["data"] = fdata
+    radar.fields = fields
+    return radar
+
+
 def make_velocity_aliased_radar(alias=True):
     """
     Return a PPI radar with a target like reflectivity field.
