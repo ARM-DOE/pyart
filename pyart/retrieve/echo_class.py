@@ -654,8 +654,9 @@ def hydroclass_semisupervised(
     Notes
     -----
     The default hydrometeor classification is valid for C-band radars. For X-band radars,
-    if frequency information is not present in the `radar.instrument_parameters`, a warning that the
-    algorithm is defaulting to the C band is printed.
+    if frequency information is not present in the `radar.instrument_parameters`, the user-supplied
+    `radar_freq` will be used with a warning. If both `radar.instrument_parameters` and
+    `radar_freq` parameter are missing, the algorithm defaults to the C band.
 
     If the radar frequency information is missing from the radar object, you can add it in
     `radar.instrument_parameters`, as follows:
