@@ -636,8 +636,8 @@ def hydroclass_semisupervised(
         A value of None will use the default field name as defined in the
         Py-ART configuration file.
     radar_freq : str, optional
-        Radar frequency used for classification.
-        If the instrument parameters include frequency information, this parameter will be ignored.
+        Radar frequency in Hertz (Hz) used for classification.
+        This parameter will be ignored, if the radar object has frequency information.
 
     Returns
     -------
