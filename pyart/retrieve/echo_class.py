@@ -635,6 +635,9 @@ def hydroclass_semisupervised(
         Output. Field name which represents the hydrometeor class field.
         A value of None will use the default field name as defined in the
         Py-ART configuration file.
+    radar_freq : str, optional
+        Radar frequency used for classification.
+        If the instrument parameters include frequency information, this parameter will be ignored.
 
     Returns
     -------
