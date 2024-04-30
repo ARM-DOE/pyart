@@ -54,6 +54,8 @@
     
     make_target_radar
     
+    make_target_rhi_radar
+    
     make_target_spectra_radar
     
     make_velocity_aliased_radar

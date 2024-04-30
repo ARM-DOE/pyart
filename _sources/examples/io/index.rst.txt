@@ -15,6 +15,7 @@ Reading/writing a variety of radar data using Py-ART.
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
 
 .. raw:: html
 
@@ -49,6 +50,8 @@ Reading/writing a variety of radar data using Py-ART.
       <div class="sphx-glr-thumbnail-title">Reading NEXRAD Data from the AWS Cloud</div>
     </div>
 
+
+.. thumbnail-parent-div-close
 
 .. raw:: html
 

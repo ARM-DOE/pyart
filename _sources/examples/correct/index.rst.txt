@@ -15,6 +15,7 @@ Performing radar moment corrections in antenna (radial) coordinates.
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
 
 .. raw:: html
 
@@ -49,6 +50,8 @@ Performing radar moment corrections in antenna (radial) coordinates.
       <div class="sphx-glr-thumbnail-title">Dealias doppler velocities using the Region Based Algorithm</div>
     </div>
 
+
+.. thumbnail-parent-div-close
 
 .. raw:: html
 

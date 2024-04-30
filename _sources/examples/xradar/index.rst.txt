@@ -15,6 +15,7 @@ Examples of using Xradar with Py-ART to accomplish different tasks.
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
 
 .. raw:: html
 
@@ -66,6 +67,8 @@ Examples of using Xradar with Py-ART to accomplish different tasks.
       <div class="sphx-glr-thumbnail-title">Dealias Radial Velocities Using Xradar and Py-ART</div>
     </div>
 
+
+.. thumbnail-parent-div-close
 
 .. raw:: html
 

@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.map.grid_mapper &#8212; Py-ART 1.18.3.post3 documentation</title>
+    <title>pyart.map.grid_mapper &#8212; Py-ART 1.18.3.post4 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=de0f41f4"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=1586d139"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -144,7 +144,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.3.post3 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.3.post4 documentation</p>
   
 </a></div>
     
@@ -494,6 +494,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">netCDF4</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">import</span> <span class="nn">scipy.spatial</span>
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
 
 <span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
 <span class="kn">from</span> <span class="nn">..core.grid</span> <span class="kn">import</span> <span class="n">Grid</span>
@@ -881,7 +882,9 @@ document.write(`
 <span class="sd">        Radius of influence parameters for the built in &#39;dist_beam&#39; function.</span>
 <span class="sd">        The parameter correspond to the height scaling, virtual beam width,</span>
 <span class="sd">        virtual beam spacing, and minimum radius of influence.</span>
-<span class="sd">        NOTE: the default `min_radius` value is smaller for ARM radars</span>
+<span class="sd">        NOTE: the default `min_radius` value is smaller for ARM SACR and SAPR</span>
+<span class="sd">        radars (those radars are operated at range resolution of 100 m or</span>
+<span class="sd">        higher).</span>
 <span class="sd">        to reflect their higher resolution relative to precipitation radars..</span>
 <span class="sd">        These parameters are only used when `roi_func` is &#39;dist_mean&#39;.</span>
 <span class="sd">    copy_field_data : bool</span>
@@ -1367,6 +1370,234 @@ document.write(`
         <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">roi</span>
+
+
+<div class="viewcode-block" id="grid_ppi_sweeps"><a class="viewcode-back" href="../../../API/generated/pyart.map.grid_ppi_sweeps.html#pyart.map.grid_ppi_sweeps">[docs]</a><span class="k">def</span> <span class="nf">grid_ppi_sweeps</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span>
+    <span class="n">target_sweeps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">grid_size</span><span class="o">=</span><span class="mi">801</span><span class="p">,</span>
+    <span class="n">grid_limits</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="n">max_z</span><span class="o">=</span><span class="mf">12000.0</span><span class="p">,</span>
+    <span class="n">el_rounding_frac</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="n">add_grid_altitude</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Separately grid PPI sweeps to an X-Y plane considering only horizontal distances</span>
+<span class="sd">    in grid RoI and weighting function.</span>
+<span class="sd">    Gridding is performed using the `grid_from_radars` method, which receives any</span>
+<span class="sd">    additional input parameters.</span>
+<span class="sd">    Note that `h_factor` and `dist_factor` should not be included in kwargs (required</span>
+<span class="sd">    for valid gridding results)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    radar : Radar</span>
+<span class="sd">        Radar volume containing PPI sweeps.</span>
+<span class="sd">    target_sweeps : int or list</span>
+<span class="sd">        sweeps to grid. Using all sweeps in `radar` if None.</span>
+<span class="sd">    grid_size: int or 2-tuple</span>
+<span class="sd">        grid dimension size. Using sizes for the X-Y plane if tuple.</span>
+<span class="sd">        This input parameter is ignored if `grid_shape` is given</span>
+<span class="sd">        explicitly via kwargs.</span>
+<span class="sd">    grid_limits: 3-tuple with 2-tuple elements or &#39;auto&#39;</span>
+<span class="sd">        if &#39;auto&#39; using the maximum horizontal range rounded up to the nearest kilometer</span>
+<span class="sd">        and limiting vertically up to `max_z`.</span>
+<span class="sd">    max_z: float</span>
+<span class="sd">        maximum height to consider in gridding (only used if `grid_size` is &#39;auto&#39;)</span>
+<span class="sd">    el_rounding_frac: float</span>
+<span class="sd">        A fraction for rounding the elevation elements. This variables is also used to</span>
+<span class="sd">        represent the sweep for altitude estimation.</span>
+<span class="sd">    add_grid_altitude: bool</span>
+<span class="sd">        adding a sweep-dependent altitude estimate corresponding to the X-Y plane if True.</span>
+<span class="sd">        This output field is useful considering the slanted PPI scans.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    radar_ds : xarray.Dataset</span>
+<span class="sd">        Radar data gridded to the X-Y plane with a third dimension</span>
+<span class="sd">        representing the different sweep elevations.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">target_sweeps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">target_sweeps</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_sweeps</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">target_sweeps</span> <span class="o">=</span> <span class="p">[</span><span class="n">target_sweeps</span><span class="p">]</span>
+
+    <span class="c1"># Set grid shape</span>
+    <span class="k">if</span> <span class="s2">&quot;grid_shape&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">grid_size</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">grid_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">grid_size</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">grid_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="o">*</span><span class="n">grid_size</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;&#39;grid_shape&#39; must be of type int or tuple&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Set grid limits in &#39;auto&#39; option</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">grid_limits</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">grid_limits</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+            <span class="n">max_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">get_gate_x_y_z</span><span class="p">(</span><span class="n">sweep</span><span class="o">=</span><span class="n">sw</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">sw</span> <span class="ow">in</span> <span class="n">target_sweeps</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">max_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">max_xy</span> <span class="o">/</span> <span class="mf">1e3</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e3</span>
+            <span class="n">grid_limits</span> <span class="o">=</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">max_z</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="n">max_xy</span><span class="p">,</span> <span class="n">max_xy</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="n">max_xy</span><span class="p">,</span> <span class="n">max_xy</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown &#39;grid_limits&#39; processing string </span><span class="si">{</span><span class="n">grid_limits</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Calling the gridding method</span>
+    <span class="n">radar_ds</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">sweep</span> <span class="ow">in</span> <span class="n">target_sweeps</span><span class="p">:</span>
+        <span class="n">radar_sw</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">extract_sweeps</span><span class="p">([</span><span class="n">sweep</span><span class="p">])</span>
+        <span class="n">sweep_grid</span> <span class="o">=</span> <span class="n">grid_from_radars</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">radar_sw</span><span class="p">,),</span>
+            <span class="n">grid_shape</span><span class="o">=</span><span class="n">grid_shape</span><span class="p">,</span>
+            <span class="n">grid_limits</span><span class="o">=</span><span class="n">grid_limits</span><span class="p">,</span>
+            <span class="n">h_factor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+            <span class="n">dist_factor</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Convert to xarray.Dataset and finalize</span>
+        <span class="n">el_round</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">radar_sw</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">el_rounding_frac</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">()</span> <span class="o">*</span> <span class="n">el_rounding_frac</span>
+        <span class="n">radar_ds_tmp</span> <span class="o">=</span> <span class="n">sweep_grid</span><span class="o">.</span><span class="n">to_xarray</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">add_grid_altitude</span><span class="p">:</span>
+            <span class="n">alt_est</span> <span class="o">=</span> <span class="p">(</span><span class="n">radar_ds_tmp</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="n">radar_ds_tmp</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">]</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">tan</span><span class="p">(</span>
+                <span class="n">el_round</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mf">180.0</span>
+            <span class="p">)</span>
+        <span class="n">radar_ds_tmp</span><span class="p">[</span><span class="s2">&quot;altitude_est&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+            <span class="n">alt_est</span><span class="p">,</span>
+            <span class="n">coords</span><span class="o">=</span><span class="n">radar_ds_tmp</span><span class="o">.</span><span class="n">coords</span><span class="p">,</span>
+            <span class="n">dims</span><span class="o">=</span><span class="n">radar_ds_tmp</span><span class="o">.</span><span class="n">dims</span><span class="p">,</span>
+            <span class="n">attrs</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Estimated altitude in PPI scan&quot;</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;m&quot;</span><span class="p">},</span>
+        <span class="p">)</span>
+        <span class="n">radar_ds_tmp</span> <span class="o">=</span> <span class="n">radar_ds_tmp</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">elevation</span><span class="o">=</span><span class="p">[</span><span class="n">el_round</span><span class="p">])</span>
+        <span class="n">radar_ds_tmp</span><span class="p">[</span><span class="s2">&quot;elevation&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Elevation angle&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;deg&quot;</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">if</span> <span class="n">radar_ds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">radar_ds</span> <span class="o">=</span> <span class="n">radar_ds_tmp</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">radar_ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">((</span><span class="n">radar_ds</span><span class="p">,</span> <span class="n">radar_ds_tmp</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;elevation&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">radar_ds</span></div>
+
+
+<div class="viewcode-block" id="grid_rhi_sweeps"><a class="viewcode-back" href="../../../API/generated/pyart.map.grid_rhi_sweeps.html#pyart.map.grid_rhi_sweeps">[docs]</a><span class="k">def</span> <span class="nf">grid_rhi_sweeps</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span>
+    <span class="n">target_sweeps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">grid_size</span><span class="o">=</span><span class="mi">801</span><span class="p">,</span>
+    <span class="n">grid_limits</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="n">max_z</span><span class="o">=</span><span class="mf">12000.0</span><span class="p">,</span>
+    <span class="n">az_rounding_frac</span><span class="o">=</span><span class="mf">0.25</span><span class="p">,</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Separately grid RHI sweeps to a Y-Z plane considering only cross-sectional distances</span>
+<span class="sd">    in grid RoI and weighting function.</span>
+<span class="sd">    Gridding is performed using the `grid_from_radars` method, which receives any</span>
+<span class="sd">    additional input parameters.</span>
+<span class="sd">    Note that `h_factor` and `dist_factor` should not be included in kwargs (required</span>
+<span class="sd">    for valid gridding results)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    radar : Radar</span>
+<span class="sd">        Radar volume containing PPI sweeps.</span>
+<span class="sd">    target_sweeps : int or list</span>
+<span class="sd">        sweeps to grid. Using all sweeps in `radar` if None.</span>
+<span class="sd">    grid_size: int or 2-tuple</span>
+<span class="sd">        grid dimension size. Using sizes for the Y-Z plane if tuple.</span>
+<span class="sd">        This input parameter is ignored if `grid_shape` is given</span>
+<span class="sd">        explicitly via kwargs.</span>
+<span class="sd">    max_z: float</span>
+<span class="sd">        maximum height in grid (only used if `grid_size` is &#39;auto&#39;).</span>
+<span class="sd">    grid_limits: 3-tuple with 2-tuple elements or &#39;auto&#39;</span>
+<span class="sd">        if &#39;auto&#39; using the maximum horizontal range and limiting vertically up to 12 km.</span>
+<span class="sd">    az_rounding_frac: float</span>
+<span class="sd">        A fraction for rounding the azimuth elements.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    radar_ds : xarray.Dataset</span>
+<span class="sd">        Radar data gridded to the Y-Z plane with a third dimension</span>
+<span class="sd">        representing the different sweep azimuths.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">target_sweeps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">target_sweeps</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">target_sweeps</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+        <span class="n">target_sweeps</span> <span class="o">=</span> <span class="p">[</span><span class="n">target_sweeps</span><span class="p">]</span>
+
+    <span class="c1"># Set grid shape</span>
+    <span class="k">if</span> <span class="s2">&quot;grid_shape&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">grid_size</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
+            <span class="n">grid_shape</span> <span class="o">=</span> <span class="p">(</span><span class="n">grid_size</span><span class="p">,</span> <span class="n">grid_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">grid_size</span><span class="p">,</span> <span class="nb">tuple</span><span class="p">):</span>
+            <span class="n">grid_shape</span> <span class="o">=</span> <span class="p">(</span><span class="o">*</span><span class="n">grid_size</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;&#39;grid_shape&#39; must be of type int or tuple&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Set grid limits in &#39;auto&#39; option</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">grid_limits</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">grid_limits</span> <span class="o">==</span> <span class="s2">&quot;auto&quot;</span><span class="p">:</span>
+            <span class="n">max_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span>
+                <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">get_gate_x_y_z</span><span class="p">(</span><span class="n">sweep</span><span class="o">=</span><span class="n">sw</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span> <span class="k">for</span> <span class="n">sw</span> <span class="ow">in</span> <span class="n">target_sweeps</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="n">max_xy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ceil</span><span class="p">(</span><span class="n">max_xy</span> <span class="o">/</span> <span class="mf">1e3</span><span class="p">)</span> <span class="o">*</span> <span class="mf">1e3</span>
+            <span class="n">grid_limits</span> <span class="o">=</span> <span class="p">((</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">max_z</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="n">max_xy</span><span class="p">,</span> <span class="n">max_xy</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="n">max_xy</span><span class="p">,</span> <span class="n">max_xy</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown &#39;grid_limits&#39; processing string </span><span class="si">{</span><span class="n">grid_limits</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Calling the gridding method</span>
+    <span class="n">radar_ds</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">for</span> <span class="n">sweep</span> <span class="ow">in</span> <span class="n">target_sweeps</span><span class="p">:</span>
+        <span class="n">radar_sw</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">extract_sweeps</span><span class="p">([</span><span class="n">sweep</span><span class="p">])</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">radar_sw</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span> <span class="o">-</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">radar_sw</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mf">180.0</span>
+        <span class="p">):</span>  <span class="c1"># 0 or 180 deg sweep</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">radar_sw</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">180.0</span><span class="p">):</span>
+                <span class="n">diff_center</span> <span class="o">=</span> <span class="mf">180.0</span>  <span class="c1"># 0 to 360 deg</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">diff_center</span> <span class="o">=</span> <span class="mf">0.0</span>  <span class="c1"># -180 to 180</span>
+            <span class="n">az_round</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span>
+                        <span class="n">radar_sw</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+                        <span class="o">-</span> <span class="mf">360.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">radar_sw</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">diff_center</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="o">/</span> <span class="n">az_rounding_frac</span>
+                <span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">()</span>
+                <span class="o">*</span> <span class="n">az_rounding_frac</span>
+            <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">az_round</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">radar_sw</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span> <span class="o">/</span> <span class="n">az_rounding_frac</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">round</span><span class="p">()</span> <span class="o">*</span> <span class="n">az_rounding_frac</span>
+        <span class="n">radar_sw</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span>
+            <span class="s2">&quot;data&quot;</span>
+        <span class="p">]</span> <span class="o">-=</span> <span class="n">az_round</span>  <span class="c1"># centering azimuth values to 0 to maximize grid range</span>
+        <span class="n">sweep_grid</span> <span class="o">=</span> <span class="n">grid_from_radars</span><span class="p">(</span>
+            <span class="p">(</span><span class="n">radar_sw</span><span class="p">,),</span>
+            <span class="n">grid_shape</span><span class="o">=</span><span class="n">grid_shape</span><span class="p">,</span>
+            <span class="n">grid_limits</span><span class="o">=</span><span class="n">grid_limits</span><span class="p">,</span>
+            <span class="n">h_factor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+            <span class="n">dist_factor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Convert to xarray.Dataset and finalize</span>
+        <span class="n">radar_ds_tmp</span> <span class="o">=</span> <span class="n">sweep_grid</span><span class="o">.</span><span class="n">to_xarray</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
+        <span class="n">radar_ds_tmp</span> <span class="o">=</span> <span class="n">radar_ds_tmp</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">azimuth</span><span class="o">=</span><span class="p">[</span><span class="n">az_round</span><span class="p">])</span>
+        <span class="n">radar_ds_tmp</span><span class="p">[</span><span class="s2">&quot;azimuth&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Azimuth angle&quot;</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;deg&quot;</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">radar_ds</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">radar_ds</span> <span class="o">=</span> <span class="n">radar_ds_tmp</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">radar_ds</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">concat</span><span class="p">((</span><span class="n">radar_ds</span><span class="p">,</span> <span class="n">radar_ds_tmp</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="s2">&quot;azimuth&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">radar_ds</span></div>
 </pre></div>
 <div class="section ablog__blog_comments">
   

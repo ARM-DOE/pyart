@@ -15,6 +15,7 @@ Plotting real world radar data with Py-ART.
 
     <div class="sphx-glr-thumbnails">
 
+.. thumbnail-parent-div-open
 
 .. raw:: html
 
@@ -304,6 +305,8 @@ Plotting real world radar data with Py-ART.
       <div class="sphx-glr-thumbnail-title">Choose a Colormap for your Plot</div>
     </div>
 
+
+.. thumbnail-parent-div-close
 
 .. raw:: html
 
