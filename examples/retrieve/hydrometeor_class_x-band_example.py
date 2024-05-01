@@ -5,6 +5,9 @@ Hydrometeor Classification with Custom Frequency Settings
  This script shows how to use hydrometeor classification for X-band radar data.
  We are reading radar data, plotting some variables of interest and applying the
  classification to identify types of precipitation.
+
+ .. note::
+    The script initially attempts hydrometeor classification without specific radar frequency information for band selection.
 """
 import glob
 
@@ -12,11 +15,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 import pyart
-
-"""
-.. note::
-    The script initially attempts hydrometeor classification without specific radar frequency information for band selection.
-"""
 
 hour = "19"
 day = "25"
@@ -51,10 +49,9 @@ plt.xlim(-20, 20)
 
 print(radar.instrument_parameters)
 
-"""
-.. note::
-This shows an issue where radar frequency information is missing. Without this hydrometeor classification will default to C-band.
-"""
+
+# This shows an issue where radar frequency information is missing. Without this hydrometeor classification will default to C-band.
+
 # Get classification
 hydromet_class = pyart.retrieve.hydroclass_semisupervised(
     radar,
@@ -67,11 +64,10 @@ hydromet_class = pyart.retrieve.hydroclass_semisupervised(
 
 radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 
-"""
-.. note::
-Use `radar_freq` parameters
-To address this issue, radar frequency information can be supplied to the function with `radar_freq` parameter.
-"""
+
+# Use `radar_freq` parameters
+# To address this issue, radar frequency information can be supplied to the function with `radar_freq` parameter.
+
 
 # Get classification
 hydromet_class = pyart.retrieve.hydroclass_semisupervised(
@@ -86,11 +82,9 @@ hydromet_class = pyart.retrieve.hydroclass_semisupervised(
 
 radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 
-"""
-.. note::
-Add radar frequency to the radar object
-Incorporating radar frequency into the radar object enhances processing pipeline.
-"""
+
+# Add radar frequency to the radar object
+# Incorporating radar frequency into the radar object enhances processing pipeline.
 
 # %%
 # Add X-band frequency information to radar.instrument_parameters
@@ -102,10 +96,9 @@ radar.instrument_parameters["frequency"] = {
 
 radar.instrument_parameters
 
-"""
-.. note::
-Let's run the classification again and the warning should change telling the radar frequency from instrument parameters is used.
-"""
+
+# Let's run the classification again and the warning should change telling the radar frequency from instrument parameters is used.
+
 
 # %%
 hydromet_class = pyart.retrieve.hydroclass_semisupervised(
@@ -120,10 +113,9 @@ hydromet_class = pyart.retrieve.hydroclass_semisupervised(
 
 radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 
-"""
-.. note::
+
 # Note that the frequency used here is from the radar object, not the user supplied.
-"""
+
 
 # plotting
 
