@@ -1,4 +1,11 @@
-# %%
+"""
+Hydrometeor Classification with Custom Frequency Settings
+===========================================================
+
+ This script shows how to use hydrometeor classification for X-band radar data.
+ We are reading radar data, plotting some variables of interest and applying the
+ classification to identify types of precipitation.
+"""
 import glob
 
 import matplotlib.pyplot as plt
@@ -6,13 +13,11 @@ import numpy as np
 
 import pyart
 
-# import cartopy.crs as ccrs
+"""
+.. note::
+    The script initially attempts hydrometeor classification without specific radar frequency information for band selection.
+"""
 
-# %% [markdown]
-# The code initially attempts hydrometeor classification without radar frequency information for band selection.
-#
-
-# %%
 hour = "19"
 day = "25"
 month = "08"
@@ -42,16 +47,14 @@ ax3 = plt.subplot(1, 3, 3)
 ax3 = display.plot("corrected_specific_diff_phase", cmap="pyart_Carbone42")  # KDP
 plt.xlim(-20, 20)
 
-# %% [markdown]
 # ### When instrument parameters does not have radar frequency info.
 
-# %%
-radar.instrument_parameters
+print(radar.instrument_parameters)
 
-# %% [markdown]
-# The shows an issue where radar frequency information is missing. Without this hydrometeor classification will default to C-band.
-
-# %%
+"""
+.. note::
+This shows an issue where radar frequency information is missing. Without this hydrometeor classification will default to C-band.
+"""
 # Get classification
 hydromet_class = pyart.retrieve.hydroclass_semisupervised(
     radar,
@@ -64,11 +67,12 @@ hydromet_class = pyart.retrieve.hydroclass_semisupervised(
 
 radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 
-# %% [markdown]
-# # Use `radar_freq` parameters
-# To address this issue, radar frequency information can be supplied to the function with `radar_freq` parameter.
+"""
+.. note::
+Use `radar_freq` parameters
+To address this issue, radar frequency information can be supplied to the function with `radar_freq` parameter.
+"""
 
-# %%
 # Get classification
 hydromet_class = pyart.retrieve.hydroclass_semisupervised(
     radar,
@@ -82,9 +86,11 @@ hydromet_class = pyart.retrieve.hydroclass_semisupervised(
 
 radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 
-# %% [markdown]
-# #### Add radar frequency to the radar object
-# Incorporating radar frequency into the radar object enhances processing pipeline.
+"""
+.. note::
+Add radar frequency to the radar object
+Incorporating radar frequency into the radar object enhances processing pipeline.
+"""
 
 # %%
 # Add X-band frequency information to radar.instrument_parameters
@@ -96,9 +102,10 @@ radar.instrument_parameters["frequency"] = {
 
 radar.instrument_parameters
 
-# %% [markdown]
-# Let's run the classification again and the warning should change telling the radar frequency from instrument parameters is used.
-#
+"""
+.. note::
+Let's run the classification again and the warning should change telling the radar frequency from instrument parameters is used.
+"""
 
 # %%
 hydromet_class = pyart.retrieve.hydroclass_semisupervised(
@@ -113,13 +120,13 @@ hydromet_class = pyart.retrieve.hydroclass_semisupervised(
 
 radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 
-# %% [markdown]
+"""
+.. note::
 # Note that the frequency used here is from the radar object, not the user supplied.
+"""
 
-# %% [markdown]
-# ## plotting
+# plotting
 
-# %%
 import matplotlib.colors as colors
 
 hid_colors = [
@@ -222,7 +229,6 @@ def two_panel_plot(
         return fig, ax1, ax2, display
 
 
-# %%
 lim = [-20, 20]
 fig, ax1, ax2, display = two_panel_plot(
     radar,
