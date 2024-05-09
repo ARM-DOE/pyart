@@ -85,8 +85,8 @@ class RadarDisplay:
 
         # radar location in latitude and longitude
         if radar.latitude["data"].size == 1:
-            lat = float(radar.latitude["data"])
-            lon = float(radar.longitude["data"])
+            lat = float(radar.latitude["data"][0])
+            lon = float(radar.longitude["data"][0])
         else:
             # for moving platforms stores use the median location.
             # The RadarDisplay object does not give a proper
@@ -138,7 +138,7 @@ class RadarDisplay:
         elif self.scan_type == "vpt":
             self.plot_vpt(field, **kwargs)
         else:
-            raise ValueError("unknown scan_type % s" % (self.scan_type))
+            raise ValueError(f"unknown scan_type {self.scan_type: }")
         return
 
     def plot_ray(
@@ -255,7 +255,7 @@ class RadarDisplay:
         raster=False,
         title_datetime_format=None,
         title_use_sweep_time=True,
-        **kwargs
+        **kwargs,
     ):
         """
         Plot a PPI.
@@ -426,7 +426,7 @@ class RadarDisplay:
         raster=False,
         title_datetime_format=None,
         title_use_sweep_time=True,
-        **kwargs
+        **kwargs,
     ):
         """
         Plot a RHI.
@@ -609,7 +609,7 @@ class RadarDisplay:
         ticks=None,
         ticklabs=None,
         raster=False,
-        **kwargs
+        **kwargs,
     ):
         """
         Plot a VPT scan.
@@ -791,7 +791,7 @@ class RadarDisplay:
         ticks=None,
         ticklabs=None,
         raster=False,
-        **kwargs
+        **kwargs,
     ):
         """
         Plot pseudo-RHI scan by extracting the vertical field associated
@@ -1280,7 +1280,7 @@ class RadarDisplay:
         fig=None,
         ticks=None,
         ticklabs=None,
-        **kwargs
+        **kwargs,
     ):
         """
         Plot a colorbar.

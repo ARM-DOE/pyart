@@ -3,10 +3,10 @@ Utilities for reading CF/Radial files.
 
 """
 
-import datetime
 import getpass
 import platform
 import warnings
+from datetime import datetime, timedelta, timezone
 
 import netCDF4
 import numpy as np
@@ -531,7 +531,7 @@ def write_cfradial(
     else:
         user = getpass.getuser()
         node = platform.node()
-        time_str = datetime.datetime.now().isoformat()
+        time_str = datetime.now().isoformat()
         t = (user, node, time_str)
         history = "created by {} on {} at {} using Py-ART".format(*t)
 
@@ -551,7 +551,7 @@ def write_cfradial(
             only_use_cftime_datetimes=False,
             only_use_python_datetimes=True,
         )
-        td = dt - datetime.datetime.utcfromtimestamp(0)
+        td = dt - datetime.fromtimestamp(0, tz=timezone.utc).replace(tzinfo=None)
         base_time = {
             "data": np.array([td.seconds + td.days * 24 * 3600], "int32"),
             "string": dt.strftime("%d-%b-%Y,%H:%M:%S GMT"),
@@ -650,7 +650,7 @@ def write_cfradial(
                 # Do not try to write instrument parameter whose dimensions are
                 # not known, rather issue a warning and skip the parameter
                 message = (
-                    "Unknown instrument parameter: %s, " % (k) + "not written to file."
+                    f"Unknown instrument parameter: {k}, " + "not written to file."
                 )
                 warnings.warn(message)
 
@@ -698,7 +698,7 @@ def write_cfradial(
     )
     if start_dt.microsecond != 0:
         # truncate to nearest second
-        start_dt -= datetime.timedelta(microseconds=start_dt.microsecond)
+        start_dt -= timedelta(microseconds=start_dt.microsecond)
     end_dt = netCDF4.num2date(
         radar.time["data"][-1],
         units,
@@ -707,9 +707,7 @@ def write_cfradial(
     )
     if end_dt.microsecond != 0:
         # round up to next second
-        end_dt += datetime.timedelta(seconds=1) - datetime.timedelta(
-            microseconds=end_dt.microsecond
-        )
+        end_dt += timedelta(seconds=1) - timedelta(microseconds=end_dt.microsecond)
     start_dic = {
         "data": np.array(start_dt.isoformat() + "Z", dtype="S"),
         "long_name": "UTC time of first ray in the file",
@@ -814,7 +812,7 @@ def _create_ncvar(dic, dataset, name, dimensions):
     # create array from list, etc.
     data = dic["data"]
     if isinstance(data, np.ndarray) is not True:
-        warnings.warn("Warning, converting non-array to array:%s" % name)
+        warnings.warn(f"Warning, converting non-array to array:{name}")
         data = np.array(data)
 
     # convert string/unicode arrays to character arrays

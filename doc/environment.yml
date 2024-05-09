@@ -34,6 +34,8 @@ dependencies:
   - nbsphinx
   - pre_commit
   - cmweather
+  - mda-xdrlib
+  - xradar
   - pip
   - pip:
       - pooch

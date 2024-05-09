@@ -12,6 +12,7 @@ from datatree import DataTree, formatting, formatting_html
 from datatree.treenode import NodePath
 from xarray import DataArray, Dataset, concat
 from xarray.core import utils
+from xradar.util import get_sweep_keys
 
 from ..config import get_metadata
 from ..core.transforms import (
@@ -104,15 +105,15 @@ class Xgrid:
 
     @property
     def ny(self):
-        return self.ds.dims["y"]
+        return self.ds.sizes["y"]
 
     @property
     def nx(self):
-        return self.ds.dims["x"]
+        return self.ds.sizes["x"]
 
     @property
     def nz(self):
-        return self.ds.dims["z"]
+        return self.ds.sizes["z"]
 
     # Attribute init/reset methods
     def init_point_x_y_z(self):
@@ -190,7 +191,7 @@ class Xgrid:
         """
         # check that the field dictionary to add is valid
         if field_name in self.fields and replace_existing is False:
-            err = "A field with name: %s already exists" % (field_name)
+            err = f"A field with name: {field_name} already exists"
             raise ValueError(err)
         if "data" not in dic:
             raise KeyError("dic must contain a 'data' key")
@@ -271,7 +272,9 @@ class Xradar:
     def __init__(self, xradar, default_sweep="sweep_0", scan_type=None):
         self.xradar = xradar
         self.scan_type = scan_type or "ppi"
-        self.combined_sweeps = self._combine_sweeps(self.xradar)
+        self.sweep_group_names = get_sweep_keys(self.xradar)
+        self.nsweeps = len(self.sweep_group_names)
+        self.combined_sweeps = self._combine_sweeps()
         self.fields = self._find_fields(self.combined_sweeps)
         self.time = dict(
             data=(self.combined_sweeps.time - self.combined_sweeps.time.min()).astype(
@@ -304,8 +307,7 @@ class Xradar:
         self.metadata = dict(**self.xradar.attrs)
         self.ngates = len(self.range["data"])
         self.nrays = len(self.azimuth["data"])
-        self.nsweeps = len(self.xradar.sweep_group_name)
-        self.instrument_parameters = dict(**self.xradar["radar_parameters"].attrs)
+        self.instrument_parameters = self.find_instrument_parameters()
         self.init_gate_x_y_z()
         self.init_gate_alt()
 
@@ -350,6 +352,37 @@ class Xradar:
             raise ValueError(f"Invalid format for key: {key}")
 
         # Iterators
+
+    def find_instrument_parameters(self):
+        # By default, check the radar_parameters first
+        if "radar_parameters" in list(self.xradar.children):
+            radar_param_dict = self.xradar["radar_parameters"].ds.to_dict(data="array")
+            instrument_parameters = radar_param_dict["data_vars"]
+            instrument_parameters.update(radar_param_dict["attrs"])
+
+        else:
+            instrument_parameters = {}
+
+        # Check to see if the root dataset has this info
+        if len(self.xradar.ds) > 0:
+            root_param_dict = self.xradar.ds.to_dict(data="array")
+            instrument_parameters.update(root_param_dict["data_vars"])
+            instrument_parameters.update(root_param_dict["attrs"])
+
+        if len(instrument_parameters.keys()) > 0:
+            for field in instrument_parameters.keys():
+                field_dict = instrument_parameters[field]
+                if isinstance(field_dict, dict):
+                    if "attrs" in field_dict:
+                        for param in field_dict["attrs"]:
+                            field_dict[param] = field_dict["attrs"][param]
+                        del field_dict["attrs"]
+
+                    if "dims" in field_dict:
+                        del field_dict["dims"]
+                instrument_parameters[field] = field_dict
+
+        return instrument_parameters
 
     def iter_start(self):
         """Return an iterator over the sweep start indices."""
@@ -398,7 +431,7 @@ class Xradar:
         """
         # check that the field dictionary to add is valid
         if field_name in self.fields and replace_existing is False:
-            err = "A field with name: %s already exists" % (field_name)
+            err = f"A field with name: {field_name} already exists"
             raise ValueError(err)
         if "data" not in dic:
             raise KeyError("dic must contain a 'data' key")
@@ -546,11 +579,11 @@ class Xradar:
                 data=np.mean(self.altitude["data"]) + self.gate_z["data"]
             )
 
-    def _combine_sweeps(self, radar):
+    def _combine_sweeps(self):
         # Loop through and extract the different datasets
         ds_list = []
-        for sweep in radar.sweep_group_name.values:
-            ds_list.append(radar[sweep].ds.drop_duplicates("azimuth"))
+        for sweep in self.sweep_group_names:
+            ds_list.append(self.xradar[sweep].ds.drop_duplicates("azimuth"))
 
         # Merge based on the sweep number
         merged = concat(ds_list, dim="sweep_number")
@@ -678,6 +711,32 @@ class Xradar:
                     **self.combined_sweeps[field].attrs,
                 }
         return fields
+
+    def get_azimuth(self, sweep, copy=False):
+        """
+        Return an array of azimuth angles for a given sweep.
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve data for, 0 based.
+        copy : bool, optional
+            True to return a copy of the azimuths. False, the default, returns
+            a view of the azimuths (when possible), changing this data will
+            change the data in the underlying Radar object.
+
+        Returns
+        -------
+        azimuths : array
+            Array containing the azimuth angles for a given sweep.
+
+        """
+        s = self.get_slice(sweep)
+        azimuths = self.azimuth["data"][s]
+        if copy:
+            return azimuths.copy()
+        else:
+            return azimuths
 
 
 def _point_data_factory(grid, coordinate):

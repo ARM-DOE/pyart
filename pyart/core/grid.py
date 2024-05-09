@@ -454,7 +454,7 @@ class Grid:
         if "data" not in field_dict:
             raise KeyError('Field dictionary must contain a "data" key')
         if field_name in self.fields and replace_existing is False:
-            raise ValueError("A field named %s already exists" % (field_name))
+            raise ValueError(f"A field named {field_name} already exists")
         if field_dict["data"].shape != (self.nz, self.ny, self.nx):
             raise ValueError("Field has invalid shape")
 

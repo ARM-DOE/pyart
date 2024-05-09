@@ -128,7 +128,7 @@ def read_sinarame_h5(
     hfile = h5py.File(filename, "r")
     SINARAME_object = _to_str(hfile["what"].attrs["object"])
     if SINARAME_object not in ["PVOL", "SCAN", "ELEV", "AZIM"]:
-        raise NotImplementedError("object: %s not implemented." % (SINARAME_object))
+        raise NotImplementedError(f"object: {SINARAME_object} not implemented.")
 
     # determine the number of sweeps by the number of groups which
     # begin with dataset
@@ -348,7 +348,14 @@ def read_sinarame_h5(
             )
 
     # instrument_parameters
-    instrument_parameters = None
+    # Check if no attributes for instrument parameters.
+    if len(hfile["how"].attrs) == 0:
+        instrument_parameters = None
+    # Grab each instrument parameter and its value for the hfile object.
+    else:
+        instrument_parameters = {}
+        for i in hfile["how"].attrs.keys():
+            instrument_parameters[i] = hfile["how"].attrs[i]
 
     return Radar(
         _time,

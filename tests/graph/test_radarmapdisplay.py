@@ -46,13 +46,14 @@ def test_radarmapdisplay_cartopy_ppi(outfile=None):
 )
 def test_radarmapdisplay_cartopy_preexisting_ax(outfile=None):
     import cartopy
-    from cartopy.io.img_tiles import Stamen
+    from cartopy.io.img_tiles import GoogleTiles
 
     radar = pyart.io.read_cfradial(pyart.testing.CFRADIAL_PPI_FILE)
     display = pyart.graph.RadarMapDisplay(radar, shift=(0.1, 0.0))
     fig = plt.figure()
     ax = plt.axes(projection=cartopy.crs.PlateCarree())
-    ax.add_image(Stamen("terrain-background"), 6)
+    tiler = GoogleTiles(style="terrain")
+    ax.add_image(tiler, 6)
     display.plot_ppi_map("reflectivity_horizontal", 0, ax=ax, embellish=False)
     if outfile:
         fig.savefig(outfile)

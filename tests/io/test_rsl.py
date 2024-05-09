@@ -224,7 +224,7 @@ keys = ["prt", "unambiguous_range", "prt_mode", "nyquist_velocity"]
 @pytest.mark.parametrize("keys", keys)
 def test_instument_parameters(keys):
     # instrument_parameter sub-convention
-    description = "instrument_parameters: %s" % keys
+    description = f"instrument_parameters: {keys}"
     check_instrument_parameter.description = description
     check_instrument_parameter(keys)
 
@@ -242,7 +242,7 @@ def check_instrument_parameter(param):
 @pytest.mark.parametrize("keys", ["radar_beam_width_h", "radar_beam_width_v"])
 def test_radar_parameters(keys):
     # instrument_parameter sub-convention
-    description = "radar_parameters: %s" % keys
+    description = f"radar_parameters: {keys}"
     check_radar_parameter.description = description
     check_radar_parameter(keys)
 
@@ -300,7 +300,7 @@ def test_nsweeps():
     ],
 )
 def test_field_dics(field):
-    description = "field : %s, dictionary" % field
+    description = f"field : {field}, dictionary"
     check_field_dic.description = description
     check_field_dic(field)
 
@@ -326,7 +326,7 @@ def check_field_dic(field):
     ],
 )
 def test_field_shapes(field):
-    description = "field : %s, shape" % field
+    description = f"field : {field}, shape"
     check_field_shape.description = description
     check_field_shape(field)
 
@@ -345,7 +345,7 @@ fields = {
 )
 @pytest.mark.parametrize("field, field_type", fields.items(), ids=list(fields.keys()))
 def test_field_types(field, field_type):
-    description = "field : %s, type" % field
+    description = f"field : {field}, type"
     check_field_type.description = description
     check_field_type(field, field_type)
 
@@ -366,7 +366,7 @@ fields = {
 def test_field_first_points(field, field_value):
     # these values can be found using:
     # [round(radar.fields[f]['data'][0,0]) for f in radar.fields]
-    description = "field : %s, first point" % field
+    description = f"field : {field}, first point"
     check_field_first_point.description = description
     check_field_first_point(field, field_value)
 
