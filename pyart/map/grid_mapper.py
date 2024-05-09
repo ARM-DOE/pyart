@@ -141,14 +141,14 @@ def grid_from_radars(
         origin_latitude["data"] = np.array([kwargs["grid_origin"][0]])
         origin_longitude["data"] = np.array([kwargs["grid_origin"][1]])
     else:
-        origin_latitude["data"] = first_radar.latitude["data"]
-        origin_longitude["data"] = first_radar.longitude["data"]
+        origin_latitude["data"] = first_radar.latitude["data"][:1]
+        origin_longitude["data"] = first_radar.longitude["data"][:1]
 
     origin_altitude = get_metadata("origin_altitude")
     if "grid_origin_alt" in kwargs:
         origin_altitude["data"] = np.array([kwargs["grid_origin_alt"]])
     else:
-        origin_altitude["data"] = first_radar.altitude["data"]
+        origin_altitude["data"] = first_radar.altitude["data"][:1]
 
     # metadata dictionary
     metadata = dict(first_radar.metadata)

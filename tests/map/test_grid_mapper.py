@@ -210,6 +210,14 @@ def test_map_to_grid_errors():
     )
 
 
+def test_grid_from_radars_dims():
+    radar = pyart.testing.make_target_radar()
+    radar.latitude["data"] = np.append(radar.latitude["data"], 0)
+    grids = pyart.map.grid_from_radars(radar, **COMMON_MAP_TO_GRID_ARGS)
+    origin_latitude = grids.origin_latitude["data"]
+    assert_almost_equal(origin_latitude, radar.latitude["data"][:1])
+
+
 def test_grid_from_radars_errors():
     pytest.raises(
         ValueError,
