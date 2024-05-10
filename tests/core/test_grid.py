@@ -101,6 +101,9 @@ def test_grid_to_xarray():
     assert_equal(ds.lat.data, lat)
     assert_equal(ds.time.data, time)
 
+    assert ds.attrs['nradar'] == 1
+    assert ds.attrs['radar_name']['data'][0] == 'ExampleRadar'
+
 
 def _check_dicts_similar(dic1, dic2):
     for k, v in dic1.items():
