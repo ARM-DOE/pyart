@@ -368,8 +368,8 @@ class Grid:
             ds.lon.encoding["_FillValue"] = None
 
             # Grab original radar(s) name and number of radars used to make grid
-            ds.attrs['nradar'] = self.nradar
-            ds.attrs['radar_name'] = self.radar_name
+            ds.attrs["nradar"] = self.nradar
+            ds.attrs["radar_name"] = self.radar_name
 
             # Grab all metadata
             ds.attrs.update(self.metadata)
