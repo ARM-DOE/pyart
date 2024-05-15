@@ -48,6 +48,9 @@ def calculate_attenuation_zphi(
     or up to where temperatures in a temperature field are positive.
     The coefficients are either user-defined or radar frequency dependent.
 
+    NOTE: The base 10 forumulation that uses attenuated radar reflectivity and
+    differential phase that is used in this function can be found in Gu et al (2011).
+
     Parameters
     ----------
     radar : Radar
