@@ -200,14 +200,14 @@ def read_cfradial(
     if use_arm_scan_name:
         # Check if attribute actually exists
         if not hasattr(ncobj, "scan_name"):
-            warning.warn(
+            warnings.warn(
                 UserWarning,
                 "No scan_name attribute present in dataset, using sweep_mode instead.",
             )
             mode = netCDF4.chartostring(sweep_mode["data"][0])[()]
         # Check if attribute is invalid of length 0
         elif len(ncobj.scan_name) < 0 or ncobj.scan_name is None:
-            warning.warn(
+            warnings.warn(
                 UserWarning,
                 "Scan name contains no sweep information, using sweep_mode instead.",
             )
