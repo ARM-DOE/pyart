@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.io.cfradial &#8212; Py-ART 1.18.3.post8 documentation</title>
+    <title>pyart.io.cfradial &#8212; Py-ART 1.18.3.post9 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=ca64f891"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=6e1c7c88"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -144,7 +144,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.3.post8 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.3.post9 documentation</p>
   
 </a></div>
     
@@ -542,6 +542,7 @@ document.write(`
     <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">delay_field_loading</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">use_arm_scan_name</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -578,6 +579,10 @@ document.write(`
 <span class="sd">        LazyLoadDict objects not dict objects. Delayed field loading will not</span>
 <span class="sd">        provide any speedup in file where the number of gates vary between</span>
 <span class="sd">        rays (ngates_vary=True) and is not recommended.</span>
+<span class="sd">    use_arm_scan_name : bool</span>
+<span class="sd">        Whether or not to get the sweep_mode information from the ARM scan_name</span>
+<span class="sd">        attribute. Default is False and will use the sweep_mode information as</span>
+<span class="sd">        defined in the cfradial standards.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -612,7 +617,7 @@ document.write(`
     <span class="k">if</span> <span class="s2">&quot;volume_number&quot;</span> <span class="ow">in</span> <span class="n">ncvars</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">isMaskedArray</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;volume_number&quot;</span><span class="p">][:]):</span>
             <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;volume_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
-                <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getdata</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;volume_number&quot;</span><span class="p">][:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">())</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getdata</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;volume_number&quot;</span><span class="p">][:]</span><span class="o">.</span><span class="n">flatten</span><span class="p">())[</span><span class="mi">0</span><span class="p">]</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;volume_number&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="s2">&quot;volume_number&quot;</span><span class="p">][:])</span>
@@ -677,20 +682,27 @@ document.write(`
     <span class="k">else</span><span class="p">:</span>
         <span class="n">ray_angle_res</span> <span class="o">=</span> <span class="kc">None</span>
 
-    <span class="c1"># Uses ARM scan name if present.</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ncobj</span><span class="p">,</span> <span class="s2">&quot;scan_name&quot;</span><span class="p">):</span>
-        <span class="n">scan_name</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">scan_name</span> <span class="o">=</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">scan_name</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">scan_name</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">mode</span> <span class="o">=</span> <span class="n">scan_name</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># first sweep mode determines scan_type</span>
-        <span class="k">try</span><span class="p">:</span>
-            <span class="n">mode</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">chartostring</span><span class="p">(</span><span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])[()]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
-        <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
-            <span class="c1"># Python 3, all strings are already unicode.</span>
+    <span class="c1"># Use ARM scan_name if chosen by the user</span>
+    <span class="k">if</span> <span class="n">use_arm_scan_name</span><span class="p">:</span>
+        <span class="c1"># Check if attribute actually exists</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ncobj</span><span class="p">,</span> <span class="s2">&quot;scan_name&quot;</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="ne">UserWarning</span><span class="p">,</span>
+                <span class="s2">&quot;No scan_name attribute present in dataset, using sweep_mode instead.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
             <span class="n">mode</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">chartostring</span><span class="p">(</span><span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])[()]</span>
+        <span class="c1"># Check if attribute is invalid of length 0</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">ncobj</span><span class="o">.</span><span class="n">scan_name</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">scan_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+                <span class="ne">UserWarning</span><span class="p">,</span>
+                <span class="s2">&quot;Scan name contains no sweep information, using sweep_mode instead.&quot;</span><span class="p">,</span>
+            <span class="p">)</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">chartostring</span><span class="p">(</span><span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])[()]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">mode</span> <span class="o">=</span> <span class="n">ncobj</span><span class="o">.</span><span class="n">scan_name</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Use sweep_mode if arm_scan_name isn&#39;t used. This is default</span>
+        <span class="n">mode</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">chartostring</span><span class="p">(</span><span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])[()]</span>
 
     <span class="n">mode</span> <span class="o">=</span> <span class="n">mode</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
 
