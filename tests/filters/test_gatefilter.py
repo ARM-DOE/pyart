@@ -239,6 +239,20 @@ def test_gatefilter_ops():
     assert gfilter.gate_excluded[0, 9] is np.True_
 
 
+def test_gatefilter_exclude_last_gates():
+    gfilter = pyart.correct.GateFilter(radar)
+    gfilter.exclude_last_gates("test_field", n_gates=2)
+    assert gfilter.gate_excluded[0, 0] is np.False_
+    assert gfilter.gate_excluded[0, 8] is np.True_
+    assert gfilter.gate_excluded[0, 9] is np.True_
+
+    gfilter = pyart.correct.GateFilter(radar)
+    gfilter.exclude_last_gates("test_field", n_gates=1)
+    assert gfilter.gate_excluded[0, 0] is np.False_
+    assert gfilter.gate_excluded[0, 8] is np.False_
+    assert gfilter.gate_excluded[0, 9] is np.True_
+
+
 def test_gatefilter_raises():
     gfilter = pyart.correct.GateFilter(radar)
     pytest.raises(ValueError, gfilter.exclude_below, "test_field", 0.5, op="fuzz")

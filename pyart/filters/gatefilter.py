@@ -695,6 +695,15 @@ class GateFilter:
         marked = ~np.isfinite(self._get_fdata(field))
         return self._merge(marked, op, exclude_masked)
 
+    def exclude_last_gates(self, field, n_gates=10, exclude_masked=True, op="or"):
+        """
+        Excludes a number of gates at the end of each ray. This is useful
+        for when trying to exclude "ring artifacts" in some datasets.
+        """
+        marked = np.full(self._get_fdata(field).shape, False)
+        marked[:, -n_gates:] = True
+        return self._merge(marked, op, exclude_masked)
+
     def exclude_gates(self, mask, exclude_masked=True, op="or"):
         """
         Exclude gates where a given mask is equal True.
