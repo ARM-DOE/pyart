@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.util.columnsect &#8212; Py-ART 1.18.3.post11 documentation</title>
+    <title>pyart.util.columnsect &#8212; Py-ART 1.18.3.post12 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=acd75588"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=9b2fdfe2"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -144,7 +144,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.3.post11 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.3.post12 documentation</p>
   
 </a></div>
     
@@ -555,7 +555,7 @@ document.write(`
     <span class="n">total_moment</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;time_offset&quot;</span><span class="p">:</span> <span class="p">[]})</span>
 
     <span class="c1"># Define the start of the radar volume</span>
-    <span class="n">base_time</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">][</span><span class="mi">14</span><span class="p">:])</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+    <span class="n">base_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="n">datetime_from_radar</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span> <span class="s2">&quot;ns&quot;</span><span class="p">)</span>
 
     <span class="c1"># call the sphere_distance function</span>
     <span class="n">dis</span> <span class="o">=</span> <span class="n">sphere_distance</span><span class="p">(</span>
