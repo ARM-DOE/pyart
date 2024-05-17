@@ -21,6 +21,7 @@ pyart.filters.GateFilter
    ~GateFilter.exclude_gates
    ~GateFilter.exclude_inside
    ~GateFilter.exclude_invalid
+   ~GateFilter.exclude_last_gates
    ~GateFilter.exclude_masked
    ~GateFilter.exclude_none
    ~GateFilter.exclude_not_equal

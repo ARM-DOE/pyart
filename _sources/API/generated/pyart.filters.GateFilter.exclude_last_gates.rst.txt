@@ -1,0 +1,6 @@
+pyart.filters.GateFilter.exclude\_last\_gates
+=============================================
+
+.. currentmodule:: pyart.filters
+
+.. automethod:: GateFilter.exclude_last_gates

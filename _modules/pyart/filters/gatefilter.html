@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.filters.gatefilter &#8212; Py-ART 1.18.3.post10 documentation</title>
+    <title>pyart.filters.gatefilter &#8212; Py-ART 1.18.3.post11 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
   <script src="../../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=08afd191"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=acd75588"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -144,7 +144,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.3.post10 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.3.post11 documentation</p>
   
 </a></div>
     
@@ -1179,6 +1179,15 @@ document.write(`
 <span class="sd">        Exclude gates where an invalid value occurs in a field (NaNs or infs).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">marked</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="GateFilter.exclude_last_gates"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_last_gates.html#pyart.correct.GateFilter.exclude_last_gates">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_last_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">n_gates</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Excludes a number of gates at the end of each ray. This is useful</span>
+<span class="sd">        for when trying to exclude &quot;ring artifacts&quot; in some datasets.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">marked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="kc">False</span><span class="p">)</span>
+        <span class="n">marked</span><span class="p">[:,</span> <span class="o">-</span><span class="n">n_gates</span><span class="p">:]</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
 <div class="viewcode-block" id="GateFilter.exclude_gates"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_gates.html#pyart.correct.GateFilter.exclude_gates">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
