@@ -638,7 +638,7 @@ class GateFilter:
         return self._merge(marked, op, exclude_masked)
 
     def exclude_above_toa(self, value, exclude_masked=True, op="or", inclusive=False):
-        """Exclude gates where a given field is above a given value."""
+        """Exclude gates above a given toa value."""
         if inclusive:
             marked = self._radar.gate_altitude["data"] >= value
         else:
