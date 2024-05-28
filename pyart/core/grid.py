@@ -178,7 +178,7 @@ class Grid:
         projparams = self.get_projparams()
 
         # Check if projparams is dictionary and check for pyart_aeqd
-        if type(projparams) is dict:
+        if isinstance(projparams, dict):
             if projparams["proj"] == "pyart_aeqd":
                 raise ValueError(
                     "Proj instance can not be made for the pyart_aeqd projection"
@@ -189,7 +189,7 @@ class Grid:
 
     def get_projparams(self):
         """Return a projparam dict or str from the projection attribute."""
-        if type(self.projection) is dict:
+        if isinstance(self.projection, dict):
             projparams = self.projection.copy()
             if projparams.pop("_include_lon_0_lat_0", False):
                 projparams["lon_0"] = self.origin_longitude["data"][0]
