@@ -307,6 +307,13 @@ def test_projection_proj():
     assert isinstance(grid.projection_proj, pyproj.Proj)
 
 
+@pytest.mark.skipif(not _PYPROJ_AVAILABLE, reason="PyProj is not installed.")
+def test_projection_proj_str():
+    grid = pyart.testing.make_target_grid()
+    grid.projection = "+proj=aeqd"
+    assert isinstance(grid.projection_proj, pyproj.Proj)
+
+
 def test_projection_proj_raised():
     grid = pyart.testing.make_target_grid()
 
