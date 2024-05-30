@@ -614,7 +614,7 @@ ELEVATION_ANGLE = [
     159,
     161,
     163,
-    165
+    165,
 ]
 
 PRODUCT_RANGE_RESOLUTION = {
