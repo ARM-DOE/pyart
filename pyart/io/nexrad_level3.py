@@ -598,7 +598,24 @@ _8_OR_16_LEVELS = [19, 20, 25, 27, 28, 30, 56, 78, 79, 80, 169, 171, 181]
 
 # List of product numbers for which Halfword 30 corresponds to sweep elev angle
 # Per Table V of the ICD
-ELEVATION_ANGLE = [19, 20, 25, 27, 28, 30, 56, 94, 99, 153, 154, 155, 159, 161, 163, 165]
+ELEVATION_ANGLE = [
+    19,
+    20,
+    25,
+    27,
+    28,
+    30,
+    56,
+    94,
+    99,
+    153,
+    154,
+    155,
+    159,
+    161,
+    163,
+    165
+]
 
 PRODUCT_RANGE_RESOLUTION = {
     19: 1.0,  # 124 nm
