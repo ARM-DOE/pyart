@@ -810,9 +810,9 @@ SUPPORTED_PRODUCTS = [
     135,  # Enhanced Echo Tops
     138,  # Digital Storm Total
     # Super Resolution
-    153, # Super Resolution Base Reflectivity Data Array
-    154, # Super Resolution Base Velocity Data Array
-    155, # Super Resolution Base Spectrum Width Data Array
+    153,  # Super Resolution Base Reflectivity Data Array
+    154,  # Super Resolution Base Velocity Data Array
+    155,  # Super Resolution Base Spectrum Width Data Array
     # Precipitation
     159,  # Digital Differential
     # Reflectivity
