@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyart.testing.Radar.get_slice &#8212; Py-ART 1.18.3.post15 documentation</title>
+    <title>pyart.testing.Radar.get_slice &#8212; Py-ART 1.18.3.post16 documentation</title>
   
   
   
@@ -18,15 +18,15 @@
   </script>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
 
   
-  <link href="../../_static/vendor/fontawesome/6.5.1/css/all.min.css?digest=8d27b9dea8ad943066ae" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.1/webfonts/fa-regular-400.woff2" />
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=3ee479438cf8b5e0d341" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -40,11 +40,11 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae" />
-  <script src="../../_static/vendor/fontawesome/6.5.1/js/all.min.js?digest=8d27b9dea8ad943066ae"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=50a64f2f"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=675ec545"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -84,27 +84,23 @@
 
   
   
-  <a id="pst-skip-link" class="skip-link" href="#main-content">Skip to main content</a>
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
   
   <div id="pst-scroll-pixel-helper"></div>
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
-    <i class="fa-solid fa-arrow-up"></i>
-    Back to top
-  </button>
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__primary"
-          id="__primary"/>
-  <label class="overlay overlay-primary" for="__primary"></label>
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
   
   <input type="checkbox"
           class="sidebar-toggle"
-          name="__secondary"
-          id="__secondary"/>
-  <label class="overlay overlay-secondary" for="__secondary"></label>
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
   
   <div class="search-button__wrapper">
     <div class="search-button__overlay"></div>
@@ -126,12 +122,17 @@
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
 </form></div>
   </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
   
-    <header class="bd-header navbar navbar-expand-lg bd-navbar">
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <label class="sidebar-toggle primary-toggle" for="__primary">
+  <button class="sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
-  </label>
+  </button>
   
   
   <div class="col-lg-3 navbar-header-items__start">
@@ -147,7 +148,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.3.post15 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.3.post16 documentation</p>
   
 </a></div>
     
@@ -161,59 +162,59 @@
 <nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../userguide/index.html">
-                        User Guide
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../userguide/index.html">
+    User Guide
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../examples/index.html">
-                        Example Gallery
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="../index.html">
-                        API Reference Manual
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../examples/index.html">
+    Example Gallery
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../dev/index.html">
-                        Developer’s Guide
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../notebook-gallery.html">
-                        Notebook Gallery
-                      </a>
-                    </li>
-                
-            <li class="nav-item dropdown">
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API Reference Manual
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../dev/index.html">
+    Developer’s Guide
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../notebook-gallery.html">
+    Notebook Gallery
+  </a>
+</li>
+
+            <li class="nav-item dropdown pst-header-nav-item">
                 <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
                     More
                 </button>
                 <ul id="pst-nav-more-links" class="dropdown-menu">
                     
-                    <li class="nav-item">
-                      <a class="nav-link dropdown-item nav-internal" href="../../blog.html">
-                        Blog
-                      </a>
-                    </li>
-                
+<li class="nav-item ">
+  <a class="nav-link dropdown-item nav-internal" href="../../blog.html">
+    Blog
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link dropdown-item nav-internal" href="../../changelog.html">
-                        Changelog
-                      </a>
-                    </li>
-                
+
+<li class="nav-item ">
+  <a class="nav-link dropdown-item nav-internal" href="../../changelog.html">
+    Changelog
+  </a>
+</li>
+
                 </ul>
             </li>
             
@@ -300,9 +301,9 @@ document.write(`
   
 
   
-    <label class="sidebar-toggle secondary-toggle" for="__secondary" tabindex="0">
+    <button class="sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
-    </label>
+    </button>
   
 </div>
 
@@ -323,68 +324,63 @@ document.write(`
     
       <div class="sidebar-header-items__center">
         
-          <div class="navbar-item">
+          
+          
+            <div class="navbar-item">
 <nav class="navbar-nav">
   <ul class="bd-navbar-elements navbar-nav">
     
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../userguide/index.html">
-                        User Guide
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../userguide/index.html">
+    User Guide
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../examples/index.html">
-                        Example Gallery
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item current active">
-                      <a class="nav-link nav-internal" href="../index.html">
-                        API Reference Manual
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../examples/index.html">
+    Example Gallery
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../dev/index.html">
-                        Developer’s Guide
-                      </a>
-                    </li>
-                
 
-                    <li class="nav-item">
-                      <a class="nav-link nav-internal" href="../../notebook-gallery.html">
-                        Notebook Gallery
-                      </a>
-                    </li>
-                
-            <li class="nav-item dropdown">
-                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links-2">
-                    More
-                </button>
-                <ul id="pst-nav-more-links-2" class="dropdown-menu">
-                    
-                    <li class="nav-item">
-                      <a class="nav-link dropdown-item nav-internal" href="../../blog.html">
-                        Blog
-                      </a>
-                    </li>
-                
+<li class="nav-item pst-header-nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    API Reference Manual
+  </a>
+</li>
 
-                    <li class="nav-item">
-                      <a class="nav-link dropdown-item nav-internal" href="../../changelog.html">
-                        Changelog
-                      </a>
-                    </li>
-                
-                </ul>
-            </li>
-            
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../dev/index.html">
+    Developer’s Guide
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../notebook-gallery.html">
+    Notebook Gallery
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../blog.html">
+    Blog
+  </a>
+</li>
+
+
+<li class="nav-item pst-header-nav-item">
+  <a class="nav-link nav-internal" href="../../changelog.html">
+    Changelog
+  </a>
+</li>
+
   </ul>
 </nav></div>
+          
         
       </div>
     
@@ -442,8 +438,8 @@ document.write(`
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.core.html">pyart.core</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-1"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.core.Grid.html">pyart.core.Grid</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-2"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.core.html">pyart.core</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.core.Grid.html">pyart.core.Grid</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.Grid.add_field.html">pyart.core.Grid.add_field</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.Grid.get_point_longitude_latitude.html">pyart.core.Grid.get_point_longitude_latitude</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.Grid.get_projparams.html">pyart.core.Grid.get_projparams</a></li>
@@ -454,14 +450,14 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.Grid.write.html">pyart.core.Grid.write</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.Grid.projection_proj.html">pyart.core.Grid.projection_proj</a></li>
 </ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.core.HorizontalWindProfile.html">pyart.core.HorizontalWindProfile</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-3"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.core.HorizontalWindProfile.html">pyart.core.HorizontalWindProfile</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.HorizontalWindProfile.from_u_and_v.html">pyart.core.HorizontalWindProfile.from_u_and_v</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.HorizontalWindProfile.u_wind.html">pyart.core.HorizontalWindProfile.u_wind</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.HorizontalWindProfile.v_wind.html">pyart.core.HorizontalWindProfile.v_wind</a></li>
 </ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.core.Radar.html">pyart.core.Radar</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-4"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.core.Radar.html">pyart.core.Radar</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.Radar.add_field.html">pyart.core.Radar.add_field</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.Radar.add_field_like.html">pyart.core.Radar.add_field_like</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.Radar.add_filter.html">pyart.core.Radar.add_filter</a></li>
@@ -491,8 +487,8 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.Radar.iter_start.html">pyart.core.Radar.iter_start</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.Radar.iter_start_end.html">pyart.core.Radar.iter_start_end</a></li>
 </ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.core.RadarSpectra.html">pyart.core.RadarSpectra</a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-5"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.core.RadarSpectra.html">pyart.core.RadarSpectra</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.RadarSpectra.check_field_exists.html">pyart.core.RadarSpectra.check_field_exists</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.RadarSpectra.get_end.html">pyart.core.RadarSpectra.get_end</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.RadarSpectra.get_slice.html">pyart.core.RadarSpectra.get_slice</a></li>
@@ -538,7 +534,7 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.RadarSpectra.time.html">pyart.core.RadarSpectra.time</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.core.RadarSpectra.velocity_bins.html">pyart.core.RadarSpectra.velocity_bins</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.core.antenna_to_cartesian.html">pyart.core.antenna_to_cartesian</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.core.antenna_vectors_to_cartesian.html">pyart.core.antenna_vectors_to_cartesian</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.core.cartesian_to_geographic.html">pyart.core.cartesian_to_geographic</a></li>
@@ -547,8 +543,8 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyart.core.geographic_to_cartesian.html">pyart.core.geographic_to_cartesian</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.core.geographic_to_cartesian_aeqd.html">pyart.core.geographic_to_cartesian_aeqd</a></li>
 </ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.io.html">pyart.io</a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-6"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.io.html">pyart.io</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="pyart.io.prepare_for_read.html">pyart.io.prepare_for_read</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.io.read.html">pyart.io.read</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.io.read_arm_sonde.html">pyart.io.read_arm_sonde</a></li>
@@ -570,8 +566,8 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyart.io.write_grid_mdv.html">pyart.io.write_grid_mdv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.io.write_uf.html">pyart.io.write_uf</a></li>
 </ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.aux_io.html">pyart.aux_io</a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-7"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.aux_io.html">pyart.aux_io</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="pyart.aux_io.read_d3r_gcpex_nc.html">pyart.aux_io.read_d3r_gcpex_nc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.aux_io.read_edge_netcdf.html">pyart.aux_io.read_edge_netcdf</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.aux_io.read_gamic.html">pyart.aux_io.read_gamic</a></li>
@@ -587,14 +583,14 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyart.aux_io.read_sinarame_h5.html">pyart.aux_io.read_sinarame_h5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.aux_io.write_sinarame_cfradial.html">pyart.aux_io.write_sinarame_cfradial</a></li>
 </ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.config.html">pyart.config</a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-8"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.config.FileMetadata.html">pyart.config.FileMetadata</a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-9"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.config.html">pyart.config</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.config.FileMetadata.html">pyart.config.FileMetadata</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.config.FileMetadata.__call__.html">pyart.config.FileMetadata.__call__</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.config.FileMetadata.get_field_name.html">pyart.config.FileMetadata.get_field_name</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.config.FileMetadata.get_metadata.html">pyart.config.FileMetadata.get_metadata</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.config.get_field_colormap.html">pyart.config.get_field_colormap</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.config.get_field_limits.html">pyart.config.get_field_limits</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.config.get_field_mapping.html">pyart.config.get_field_mapping</a></li>
@@ -603,9 +599,9 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyart.config.get_metadata.html">pyart.config.get_metadata</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.config.load_config.html">pyart.config.load_config</a></li>
 </ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.correct.html">pyart.correct</a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-10"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.correct.GateFilter.html">pyart.correct.GateFilter</a><input class="toctree-checkbox" id="toctree-checkbox-11" name="toctree-checkbox-11" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-11"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.correct.html">pyart.correct</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.correct.GateFilter.html">pyart.correct.GateFilter</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.correct.GateFilter.copy.html">pyart.correct.GateFilter.copy</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.correct.GateFilter.exclude_above.html">pyart.correct.GateFilter.exclude_above</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.correct.GateFilter.exclude_all.html">pyart.correct.GateFilter.exclude_all</a></li>
@@ -635,7 +631,7 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="pyart.correct.GateFilter.gate_excluded.html">pyart.correct.GateFilter.gate_excluded</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.correct.GateFilter.gate_included.html">pyart.correct.GateFilter.gate_included</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.correct.calculate_attenuation.html">pyart.correct.calculate_attenuation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.correct.calculate_attenuation_philinear.html">pyart.correct.calculate_attenuation_philinear</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.correct.calculate_attenuation_zphi.html">pyart.correct.calculate_attenuation_zphi</a></li>
@@ -650,9 +646,9 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyart.correct.phase_proc_lp.html">pyart.correct.phase_proc_lp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.correct.phase_proc_lp_gf.html">pyart.correct.phase_proc_lp_gf</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="pyart.exceptions.html">pyart.exceptions</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.retrieve.html">pyart.retrieve</a><input class="toctree-checkbox" id="toctree-checkbox-12" name="toctree-checkbox-12" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-12"><i class="fa-solid fa-chevron-down"></i></label><ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.retrieve.html">pyart.retrieve</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.ZtoR.html">pyart.retrieve.ZtoR</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.calculate_snr_from_reflectivity.html">pyart.retrieve.calculate_snr_from_reflectivity</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.calculate_velocity_texture.html">pyart.retrieve.calculate_velocity_texture</a></li>
@@ -689,9 +685,9 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.vad_browning.html">pyart.retrieve.vad_browning</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.vad_michelson.html">pyart.retrieve.vad_michelson</a></li>
 </ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.graph.html">pyart.graph</a><input class="toctree-checkbox" id="toctree-checkbox-13" name="toctree-checkbox-13" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-13"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.graph.AirborneRadarDisplay.html">pyart.graph.AirborneRadarDisplay</a><input class="toctree-checkbox" id="toctree-checkbox-14" name="toctree-checkbox-14" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-14"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.graph.html">pyart.graph</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.graph.AirborneRadarDisplay.html">pyart.graph.AirborneRadarDisplay</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.AirborneRadarDisplay.generate_az_rhi_title.html">pyart.graph.AirborneRadarDisplay.generate_az_rhi_title</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.AirborneRadarDisplay.generate_filename.html">pyart.graph.AirborneRadarDisplay.generate_filename</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.AirborneRadarDisplay.generate_ray_title.html">pyart.graph.AirborneRadarDisplay.generate_ray_title</a></li>
@@ -722,8 +718,8 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.AirborneRadarDisplay.set_aspect_ratio.html">pyart.graph.AirborneRadarDisplay.set_aspect_ratio</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.AirborneRadarDisplay.set_limits.html">pyart.graph.AirborneRadarDisplay.set_limits</a></li>
 </ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.graph.GridMapDisplay.html">pyart.graph.GridMapDisplay</a><input class="toctree-checkbox" id="toctree-checkbox-15" name="toctree-checkbox-15" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-15"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.graph.GridMapDisplay.html">pyart.graph.GridMapDisplay</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.GridMapDisplay.cartopy_coastlines.html">pyart.graph.GridMapDisplay.cartopy_coastlines</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.GridMapDisplay.cartopy_political_boundaries.html">pyart.graph.GridMapDisplay.cartopy_political_boundaries</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.GridMapDisplay.cartopy_states.html">pyart.graph.GridMapDisplay.cartopy_states</a></li>
@@ -740,8 +736,8 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_longitude_slice.html">pyart.graph.GridMapDisplay.plot_longitude_slice</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.GridMapDisplay.plot_longitudinal_level.html">pyart.graph.GridMapDisplay.plot_longitudinal_level</a></li>
 </ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.graph.GridMapDisplayBasemap.html">pyart.graph.GridMapDisplayBasemap</a><input class="toctree-checkbox" id="toctree-checkbox-16" name="toctree-checkbox-16" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-16"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.graph.GridMapDisplayBasemap.html">pyart.graph.GridMapDisplayBasemap</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.GridMapDisplayBasemap.generate_filename.html">pyart.graph.GridMapDisplayBasemap.generate_filename</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.GridMapDisplayBasemap.generate_grid_title.html">pyart.graph.GridMapDisplayBasemap.generate_grid_title</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.GridMapDisplayBasemap.generate_latitudinal_level_title.html">pyart.graph.GridMapDisplayBasemap.generate_latitudinal_level_title</a></li>
@@ -756,8 +752,8 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.GridMapDisplayBasemap.plot_longitude_slice.html">pyart.graph.GridMapDisplayBasemap.plot_longitude_slice</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.GridMapDisplayBasemap.plot_longitudinal_level.html">pyart.graph.GridMapDisplayBasemap.plot_longitudinal_level</a></li>
 </ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.graph.RadarDisplay.html">pyart.graph.RadarDisplay</a><input class="toctree-checkbox" id="toctree-checkbox-17" name="toctree-checkbox-17" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-17"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.graph.RadarDisplay.html">pyart.graph.RadarDisplay</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.RadarDisplay.generate_az_rhi_title.html">pyart.graph.RadarDisplay.generate_az_rhi_title</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.RadarDisplay.generate_filename.html">pyart.graph.RadarDisplay.generate_filename</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.RadarDisplay.generate_ray_title.html">pyart.graph.RadarDisplay.generate_ray_title</a></li>
@@ -787,8 +783,8 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.RadarDisplay.set_aspect_ratio.html">pyart.graph.RadarDisplay.set_aspect_ratio</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.RadarDisplay.set_limits.html">pyart.graph.RadarDisplay.set_limits</a></li>
 </ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.graph.RadarMapDisplay.html">pyart.graph.RadarMapDisplay</a><input class="toctree-checkbox" id="toctree-checkbox-18" name="toctree-checkbox-18" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-18"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.graph.RadarMapDisplay.html">pyart.graph.RadarMapDisplay</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.RadarMapDisplay.generate_az_rhi_title.html">pyart.graph.RadarMapDisplay.generate_az_rhi_title</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.RadarMapDisplay.generate_filename.html">pyart.graph.RadarMapDisplay.generate_filename</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.RadarMapDisplay.generate_ray_title.html">pyart.graph.RadarMapDisplay.generate_ray_title</a></li>
@@ -822,8 +818,8 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.RadarMapDisplay.set_aspect_ratio.html">pyart.graph.RadarMapDisplay.set_aspect_ratio</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.RadarMapDisplay.set_limits.html">pyart.graph.RadarMapDisplay.set_limits</a></li>
 </ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.graph.RadarMapDisplayBasemap.html">pyart.graph.RadarMapDisplayBasemap</a><input class="toctree-checkbox" id="toctree-checkbox-19" name="toctree-checkbox-19" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-19"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.graph.RadarMapDisplayBasemap.html">pyart.graph.RadarMapDisplayBasemap</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.RadarMapDisplayBasemap.generate_az_rhi_title.html">pyart.graph.RadarMapDisplayBasemap.generate_az_rhi_title</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.RadarMapDisplayBasemap.generate_filename.html">pyart.graph.RadarMapDisplayBasemap.generate_filename</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.RadarMapDisplayBasemap.generate_ray_title.html">pyart.graph.RadarMapDisplayBasemap.generate_ray_title</a></li>
@@ -857,12 +853,12 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.RadarMapDisplayBasemap.set_aspect_ratio.html">pyart.graph.RadarMapDisplayBasemap.set_aspect_ratio</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.graph.RadarMapDisplayBasemap.set_limits.html">pyart.graph.RadarMapDisplayBasemap.set_limits</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.graph.plot_convstrat_scheme.html">pyart.graph.plot_convstrat_scheme</a></li>
 </ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.filters.html">pyart.filters</a><input class="toctree-checkbox" id="toctree-checkbox-20" name="toctree-checkbox-20" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-20"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.filters.GateFilter.html">pyart.filters.GateFilter</a><input class="toctree-checkbox" id="toctree-checkbox-21" name="toctree-checkbox-21" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-21"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.filters.html">pyart.filters</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.filters.GateFilter.html">pyart.filters.GateFilter</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.filters.GateFilter.copy.html">pyart.filters.GateFilter.copy</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.filters.GateFilter.exclude_above.html">pyart.filters.GateFilter.exclude_above</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.filters.GateFilter.exclude_all.html">pyart.filters.GateFilter.exclude_all</a></li>
@@ -892,15 +888,15 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="pyart.filters.GateFilter.gate_excluded.html">pyart.filters.GateFilter.gate_excluded</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.filters.GateFilter.gate_included.html">pyart.filters.GateFilter.gate_included</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.filters.iso0_based_gate_filter.html">pyart.filters.iso0_based_gate_filter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.filters.moment_and_texture_based_gate_filter.html">pyart.filters.moment_and_texture_based_gate_filter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.filters.moment_based_gate_filter.html">pyart.filters.moment_based_gate_filter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.filters.temp_based_gate_filter.html">pyart.filters.temp_based_gate_filter</a></li>
 </ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.lazydict.html">pyart.lazydict</a><input class="toctree-checkbox" id="toctree-checkbox-22" name="toctree-checkbox-22" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-22"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.lazydict.LazyLoadDict.html">pyart.lazydict.LazyLoadDict</a><input class="toctree-checkbox" id="toctree-checkbox-23" name="toctree-checkbox-23" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-23"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.lazydict.html">pyart.lazydict</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.lazydict.LazyLoadDict.html">pyart.lazydict.LazyLoadDict</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.lazydict.LazyLoadDict.clear.html">pyart.lazydict.LazyLoadDict.clear</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.lazydict.LazyLoadDict.copy.html">pyart.lazydict.LazyLoadDict.copy</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.lazydict.LazyLoadDict.get.html">pyart.lazydict.LazyLoadDict.get</a></li>
@@ -914,8 +910,8 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="pyart.lazydict.LazyLoadDict.update.html">pyart.lazydict.LazyLoadDict.update</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.lazydict.LazyLoadDict.values.html">pyart.lazydict.LazyLoadDict.values</a></li>
 </ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.lazydict.MutableMapping.html">pyart.lazydict.MutableMapping</a><input class="toctree-checkbox" id="toctree-checkbox-24" name="toctree-checkbox-24" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-24"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.lazydict.MutableMapping.html">pyart.lazydict.MutableMapping</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.lazydict.MutableMapping.clear.html">pyart.lazydict.MutableMapping.clear</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.lazydict.MutableMapping.get.html">pyart.lazydict.MutableMapping.get</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.lazydict.MutableMapping.items.html">pyart.lazydict.MutableMapping.items</a></li>
@@ -926,16 +922,16 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="pyart.lazydict.MutableMapping.update.html">pyart.lazydict.MutableMapping.update</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.lazydict.MutableMapping.values.html">pyart.lazydict.MutableMapping.values</a></li>
 </ul>
-</li>
+</details></li>
 </ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.map.html">pyart.map</a><input class="toctree-checkbox" id="toctree-checkbox-25" name="toctree-checkbox-25" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-25"><i class="fa-solid fa-chevron-down"></i></label><ul>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.map.GateMapper.html">pyart.map.GateMapper</a><input class="toctree-checkbox" id="toctree-checkbox-26" name="toctree-checkbox-26" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-26"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.map.html">pyart.map</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.map.GateMapper.html">pyart.map.GateMapper</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.map.GateMapper.mapped_radar.html">pyart.map.GateMapper.mapped_radar</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.map.GateMapper.distance_tolerance.html">pyart.map.GateMapper.distance_tolerance</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.map.GateMapper.time_tolerance.html">pyart.map.GateMapper.time_tolerance</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.map.example_roi_func_constant.html">pyart.map.example_roi_func_constant</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.map.example_roi_func_dist.html">pyart.map.example_roi_func_dist</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.map.example_roi_func_dist_beam.html">pyart.map.example_roi_func_dist_beam</a></li>
@@ -945,8 +941,8 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyart.map.map_gates_to_grid.html">pyart.map.map_gates_to_grid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.map.map_to_grid.html">pyart.map.map_to_grid</a></li>
 </ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.util.html">pyart.util</a><input class="toctree-checkbox" id="toctree-checkbox-27" name="toctree-checkbox-27" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-27"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.util.html">pyart.util</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.angular_mean.html">pyart.util.angular_mean</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.angular_mean_deg.html">pyart.util.angular_mean_deg</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.angular_std.html">pyart.util.angular_std</a></li>
@@ -980,13 +976,13 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.texture_along_ray.html">pyart.util.texture_along_ray</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.to_vpt.html">pyart.util.to_vpt</a></li>
 </ul>
-</li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.bridge.html">pyart.bridge</a><input class="toctree-checkbox" id="toctree-checkbox-28" name="toctree-checkbox-28" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-28"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="pyart.bridge.html">pyart.bridge</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="pyart.bridge.texture_of_complex_phase.html">pyart.bridge.texture_of_complex_phase</a></li>
 </ul>
-</li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="pyart.testing.html">pyart.testing</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-29" name="toctree-checkbox-29" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-29"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.testing.Grid.html">pyart.testing.Grid</a><input class="toctree-checkbox" id="toctree-checkbox-30" name="toctree-checkbox-30" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-30"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="pyart.testing.html">pyart.testing</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.testing.Grid.html">pyart.testing.Grid</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.testing.Grid.add_field.html">pyart.testing.Grid.add_field</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.testing.Grid.get_point_longitude_latitude.html">pyart.testing.Grid.get_point_longitude_latitude</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.testing.Grid.get_projparams.html">pyart.testing.Grid.get_projparams</a></li>
@@ -997,12 +993,12 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="pyart.testing.Grid.write.html">pyart.testing.Grid.write</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.testing.Grid.projection_proj.html">pyart.testing.Grid.projection_proj</a></li>
 </ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.testing.InTemporaryDirectory.html">pyart.testing.InTemporaryDirectory</a><input class="toctree-checkbox" id="toctree-checkbox-31" name="toctree-checkbox-31" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-31"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.testing.InTemporaryDirectory.html">pyart.testing.InTemporaryDirectory</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.testing.InTemporaryDirectory.cleanup.html">pyart.testing.InTemporaryDirectory.cleanup</a></li>
 </ul>
-</li>
-<li class="toctree-l2 current active has-children"><a class="reference internal" href="pyart.testing.Radar.html">pyart.testing.Radar</a><input checked="" class="toctree-checkbox" id="toctree-checkbox-32" name="toctree-checkbox-32" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-32"><i class="fa-solid fa-chevron-down"></i></label><ul class="current">
+</details></li>
+<li class="toctree-l2 current active has-children"><a class="reference internal" href="pyart.testing.Radar.html">pyart.testing.Radar</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l3"><a class="reference internal" href="pyart.testing.Radar.add_field.html">pyart.testing.Radar.add_field</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.testing.Radar.add_field_like.html">pyart.testing.Radar.add_field_like</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.testing.Radar.add_filter.html">pyart.testing.Radar.add_filter</a></li>
@@ -1032,8 +1028,8 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="pyart.testing.Radar.iter_start.html">pyart.testing.Radar.iter_start</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.testing.Radar.iter_start_end.html">pyart.testing.Radar.iter_start_end</a></li>
 </ul>
-</li>
-<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.testing.RadarSpectra.html">pyart.testing.RadarSpectra</a><input class="toctree-checkbox" id="toctree-checkbox-33" name="toctree-checkbox-33" type="checkbox"/><label class="toctree-toggle" for="toctree-checkbox-33"><i class="fa-solid fa-chevron-down"></i></label><ul>
+</details></li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="pyart.testing.RadarSpectra.html">pyart.testing.RadarSpectra</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l3"><a class="reference internal" href="pyart.testing.RadarSpectra.check_field_exists.html">pyart.testing.RadarSpectra.check_field_exists</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.testing.RadarSpectra.get_end.html">pyart.testing.RadarSpectra.get_end</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.testing.RadarSpectra.get_slice.html">pyart.testing.RadarSpectra.get_slice</a></li>
@@ -1079,7 +1075,7 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="pyart.testing.RadarSpectra.time.html">pyart.testing.RadarSpectra.time</a></li>
 <li class="toctree-l3"><a class="reference internal" href="pyart.testing.RadarSpectra.velocity_bins.html">pyart.testing.RadarSpectra.velocity_bins</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.testing.get_metadata.html">pyart.testing.get_metadata</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.testing.get_test_data.html">pyart.testing.get_test_data</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.testing.make_empty_grid.html">pyart.testing.make_empty_grid</a></li>
@@ -1097,7 +1093,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyart.testing.make_velocity_aliased_radar.html">pyart.testing.make_velocity_aliased_radar</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.testing.make_velocity_aliased_rhi_radar.html">pyart.testing.make_velocity_aliased_rhi_radar</a></li>
 </ul>
-</li>
+</details></li>
 <li class="toctree-l1"><a class="reference internal" href="pyart._debug_info.html">pyart._debug_info</a></li>
 </ul>
 </div>
@@ -1113,13 +1109,13 @@ document.write(`
 
       </div>
       
-      <main id="main-content" class="bd-main">
+      <main id="main-content" class="bd-main" role="main">
         
         
           <div class="bd-content">
             <div class="bd-article-container">
               
-              <div class="bd-header-article">
+              <div class="bd-header-article d-print-none">
 <div class="header-article-items header-article__inner">
   
     <div class="header-article-items__start">
@@ -1130,7 +1126,7 @@ document.write(`
 
 
 
-<nav aria-label="Breadcrumb">
+<nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
@@ -1185,7 +1181,7 @@ document.write(`
               
               
               
-                <footer class="prev-next-footer">
+                <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
     <a class="left-prev"
@@ -1250,8 +1246,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=8d27b9dea8ad943066ae"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=8d27b9dea8ad943066ae"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=3ee479438cf8b5e0d341"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1284,7 +1280,7 @@ document.write(`
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.2.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.3.
 </p></div>
       
     </div>
