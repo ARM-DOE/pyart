@@ -285,6 +285,7 @@ def map_to_grid(
     gatefilters=False,
     map_roi=True,
     weighting_function="Barnes2",
+    toa=17000.0,
     copy_field_data=True,
     algorithm="kd_tree",
     leafsize=10,
@@ -372,6 +373,9 @@ def map_to_grid(
     weighting_function : 'Barnes' or 'Barnes2' or 'Cressman' or 'Nearest'
         Functions used to weight nearby collected points when interpolating a
         grid point.
+    toa : float
+        Top of atmosphere in meters. Collected points above this height are
+        not included in the interpolation.
 
     Other Parameters
     ----------------
@@ -564,14 +568,14 @@ def map_to_grid(
         gate_locations[start:end, 2] = xg_loc.flatten()
         del xg_loc, yg_loc
 
-        # Include all gates, override if gatefilter is present.
-        gflags = np.ones(zg_loc.shape, dtype=np.bool_)
+        # exclude gates above toa to speed up the interpolation
+        gflags = zg_loc < toa
 
         if gatefilter is not False:
             # excluded gates marked by the gatefilter
             if gatefilter is None:
                 gatefilter = moment_based_gate_filter(radar, **kwargs)
-            gflags = gatefilter.gate_included
+            gflags = np.logical_and(gflags, gatefilter.gate_included)
 
         include_gate[start:end] = gflags.flatten()
 
