@@ -9,25 +9,16 @@ Hydrometeor Classification with Custom Frequency Settings
  .. note::
     The script initially attempts hydrometeor classification without specific radar frequency information for band selection.
 """
-import glob
 
 import matplotlib.pyplot as plt
 import numpy as np
+from open_radar_data import DATASETS
 
 import pyart
 
-hour = "19"
-day = "25"
-month = "08"
-year = "2022"
+filename = DATASETS.fetch("gucxprecipradarcmacppiS2.c1.20220314.025840.nc")
+radar = pyart.io.read_cfradial(filename)
 
-glob_str = f"/Users/bhupendra/projects/sail/data/test/gucxprecipradarcmacS2.c1.{year}{month}{day}.{hour}*"
-files = sorted(glob.glob(glob_str))
-files
-
-# %%
-radar = pyart.io.read(files[0])
-radar = radar.extract_sweeps([0])
 figure = plt.figure(figsize=(15, 4))
 
 ax1 = plt.subplot(1, 3, 1)
@@ -86,7 +77,6 @@ radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 # Add radar frequency to the radar object
 # Incorporating radar frequency into the radar object enhances processing pipeline.
 
-# %%
 # Add X-band frequency information to radar.instrument_parameters
 radar.instrument_parameters["frequency"] = {
     "long_name": "Radar frequency",
@@ -100,7 +90,6 @@ radar.instrument_parameters
 # Let's run the classification again and the warning should change telling the radar frequency from instrument parameters is used.
 
 
-# %%
 hydromet_class = pyart.retrieve.hydroclass_semisupervised(
     radar,
     refl_field="corrected_reflectivity",
