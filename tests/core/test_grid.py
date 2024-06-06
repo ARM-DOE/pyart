@@ -101,6 +101,9 @@ def test_grid_to_xarray():
     assert_equal(ds.lat.data, lat)
     assert_equal(ds.time.data, time)
 
+    assert ds.attrs["nradar"] == 1
+    assert ds.attrs["radar_name"]["data"][0] == "ExampleRadar"
+
 
 def _check_dicts_similar(dic1, dic2):
     for k, v in dic1.items():
@@ -301,6 +304,13 @@ def test_init_point_longitude_latitude():
 def test_projection_proj():
     grid = pyart.testing.make_target_grid()
     grid.projection["proj"] = "aeqd"
+    assert isinstance(grid.projection_proj, pyproj.Proj)
+
+
+@pytest.mark.skipif(not _PYPROJ_AVAILABLE, reason="PyProj is not installed.")
+def test_projection_proj_str():
+    grid = pyart.testing.make_target_grid()
+    grid.projection = "+proj=aeqd"
     assert isinstance(grid.projection_proj, pyproj.Proj)
 
 

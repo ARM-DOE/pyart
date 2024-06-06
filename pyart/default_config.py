@@ -1072,6 +1072,9 @@ nexrad_level3_mapping = {
     134: None,  # High Resolution VIL
     135: None,  # Enhanced Echo Tops
     138: radar_estimated_rain_rate,  # Digital Storm Total Precipitation
+    153: reflectivity,  # Super Resolution Base Reflectivity Data Array
+    154: velocity,  # Super Resolution Base Velocity Data Array
+    155: spectrum_width,  # Super Resolution Base Spectrum Width Data Array
     159: differential_reflectivity,  # Digital Differential Reflectivity
     161: cross_correlation_ratio,  # Digital Correlation Coefficient
     163: specific_differential_phase,  # Digital Specific Differential Phase

@@ -170,26 +170,33 @@ class Grid:
     def projection_proj(self):
         # Proj instance as specified by the projection attribute.
         # Raises a ValueError if the pyart_aeqd projection is specified.
-        projparams = self.get_projparams()
-        if projparams["proj"] == "pyart_aeqd":
-            raise ValueError(
-                "Proj instance can not be made for the pyart_aeqd projection"
-            )
         if not _PYPROJ_AVAILABLE:
             raise MissingOptionalDependency(
                 "PyProj is required to create a Proj instance but it "
                 + "is not installed"
             )
+        projparams = self.get_projparams()
+
+        # Check if projparams is dictionary and check for pyart_aeqd
+        if isinstance(projparams, dict):
+            if projparams["proj"] == "pyart_aeqd":
+                raise ValueError(
+                    "Proj instance can not be made for the pyart_aeqd projection"
+                )
+        # Get proj instance from a proj str or dict
         proj = pyproj.Proj(projparams)
         return proj
 
     def get_projparams(self):
-        """Return a projparam dict from the projection attribute."""
-        projparams = self.projection.copy()
-        if projparams.pop("_include_lon_0_lat_0", False):
-            projparams["lon_0"] = self.origin_longitude["data"][0]
-            projparams["lat_0"] = self.origin_latitude["data"][0]
-        return projparams
+        """Return a projparam dict or str from the projection attribute."""
+        if isinstance(self.projection, dict):
+            projparams = self.projection.copy()
+            if projparams.pop("_include_lon_0_lat_0", False):
+                projparams["lon_0"] = self.origin_longitude["data"][0]
+                projparams["lat_0"] = self.origin_latitude["data"][0]
+            return projparams
+        else:
+            return self.projection
 
     def _find_and_check_nradar(self):
         """
@@ -366,6 +373,14 @@ class Grid:
             ds.z.encoding["_FillValue"] = None
             ds.lat.encoding["_FillValue"] = None
             ds.lon.encoding["_FillValue"] = None
+
+            # Grab original radar(s) name and number of radars used to make grid
+            ds.attrs["nradar"] = self.nradar
+            ds.attrs["radar_name"] = self.radar_name
+
+            # Grab all metadata
+            ds.attrs.update(self.metadata)
+
             ds.close()
         return ds
 
