@@ -568,8 +568,8 @@ def map_to_grid(
         gate_locations[start:end, 2] = xg_loc.flatten()
         del xg_loc, yg_loc
 
-        # exclude gates above toa to speed up the interpolation
-        gflags = zg_loc < toa
+        # determine which gates should be included in the interpolation
+        gflags = zg_loc < toa  # include only those below toa
 
         if gatefilter is not False:
             # excluded gates marked by the gatefilter
