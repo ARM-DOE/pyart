@@ -15,7 +15,7 @@ radar.add_field("test_field", {"data": fdata})
 # more
 fdata2 = np.ma.masked_array(fdata, copy=True)
 fdata2[2, 2] = np.ma.masked
-fdata2[3, 3] = np.NAN
+fdata2[3, 3] = np.nan
 fdata2[4, 4] = np.PINF
 fdata2[5, 5] = np.NINF
 radar.add_field("test_field2", {"data": fdata2})
