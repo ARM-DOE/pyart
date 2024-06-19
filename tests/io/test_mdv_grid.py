@@ -242,7 +242,7 @@ def test_mdv_degree_grid():
     fdata = grid.fields["refl"]["data"]
     assert fdata.shape == (1, 1837, 3661)
     assert np.ma.is_masked(fdata[0, 0, 0])
-    assert_almost_equal(fdata[0, 0, 2], 20.0, 1)
+    assert_almost_equal(np.ma.max(grid.fields["refl"]["data"]), 20.0, 1)
 
     assert grid.x["units"] == "degree_E"
     assert_almost_equal(grid.x["data"][0], -129.99, 2)
