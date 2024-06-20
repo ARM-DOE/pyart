@@ -1,0 +1,6 @@
+pyart.correct.GateFilter.exclude\_above\_toa
+============================================
+
+.. currentmodule:: pyart.correct
+
+.. automethod:: GateFilter.exclude_above_toa

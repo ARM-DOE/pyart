@@ -15,6 +15,7 @@ pyart.filters.GateFilter
 
    ~GateFilter.copy
    ~GateFilter.exclude_above
+   ~GateFilter.exclude_above_toa
    ~GateFilter.exclude_all
    ~GateFilter.exclude_below
    ~GateFilter.exclude_equal
