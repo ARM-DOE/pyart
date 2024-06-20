@@ -374,10 +374,10 @@ def read_odim_h5(
                 try:
                     sweep_data = _get_odim_h5_sweep_data(hfile[dset][h_field_key])
                 except KeyError:
-                    sweep_data = np.zeros((rays_in_sweep, max_nbins)) + np.NaN
+                    sweep_data = np.zeros((rays_in_sweep, max_nbins)) + np.nan
                 sweep_nbins = sweep_data.shape[1]
                 fdata[start : start + rays_in_sweep, :sweep_nbins] = sweep_data[:]
-                # set data to NaN if its beyond the range of this sweep
+                # set data to nan if its beyond the range of this sweep
                 fdata[start : start + rays_in_sweep, sweep_nbins:max_nbins] = np.nan
                 start += rays_in_sweep
             # create field dictionary
