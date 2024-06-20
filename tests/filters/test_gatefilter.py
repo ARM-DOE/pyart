@@ -103,6 +103,17 @@ def test_gatefilter_exclude_above():
     assert gfilter.gate_excluded[0, -1] is np.True_
 
 
+def test_gatefilter_exclude_above_toa():
+    gfilter = pyart.correct.GateFilter(radar)
+    gfilter.exclude_above_toa(211.0)
+    assert gfilter.gate_excluded[0, 0] is np.False_
+    assert gfilter.gate_excluded[0, -1] is np.True_
+
+    assert gfilter.gate_excluded[0, -2] is np.False_
+    gfilter.exclude_above_toa(211.0, inclusive=True)
+    assert gfilter.gate_excluded[0, -2] is np.True_
+
+
 def test_gatefilter_exclude_inside():
     gfilter = pyart.correct.GateFilter(radar)
     gfilter.exclude_inside("test_field", 2, 5, inclusive=False)
