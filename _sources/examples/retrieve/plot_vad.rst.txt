@@ -38,46 +38,46 @@ Calculates a VAD and plots a vertical profile of wind
 
  .. code-block:: none
 
-    max height 2682.0  meters
-    min height -54.0  meters
-    max height 5272.0  meters
-    min height 2.0  meters
-    max height 7815.0  meters
-    min height 4.0  meters
-    max height 10403.0  meters
-    min height 6.0  meters
-    max height 14259.0  meters
-    min height 10.0  meters
-    max height 18533.0  meters
-    min height 15.0  meters
-    max height 22800.0  meters
-    min height 19.0  meters
-    max height 27060.0  meters
-    min height 24.0  meters
-    max height 31310.0  meters
-    min height 28.0  meters
-    max height 35549.0  meters
-    min height 32.0  meters
-    max height 39777.0  meters
-    min height 37.0  meters
-    max height 43991.0  meters
-    min height 41.0  meters
-    max height 50263.0  meters
-    min height 47.0  meters
-    max height 58621.0  meters
-    min height 56.0  meters
-    max height 71002.0  meters
-    min height 69.0  meters
-    max height 87118.0  meters
-    min height 85.0  meters
-    max height 106740.0  meters
-    min height 105.0  meters
-    max height 125476.0  meters
-    min height 124.0  meters
-    max height 143293.0  meters
-    min height 143.0  meters
-    max height 160000.0  meters
-    min height 160.0  meters
+    max height 2682.5470354519784  meters
+    min height -53.447328651323915  meters
+    max height 5273.055615736172  meters
+    min height 1.7533807586878538  meters
+    max height 7815.51210340485  meters
+    min height 4.341798234730959  meters
+    max height 10403.798749463633  meters
+    min height 6.977668723091483  meters
+    max height 14259.735154148191  meters
+    min height 10.905980195850134  meters
+    max height 18533.70608163625  meters
+    min height 15.262251073494554  meters
+    max height 22800.97541932203  meters
+    min height 19.613871516659856  meters
+    max height 27060.25919727981  meters
+    min height 23.959520922973752  meters
+    max height 31310.269606200978  meters
+    min height 28.29787217825651  meters
+    max height 35549.73140401952  meters
+    min height 32.62760841473937  meters
+    max height 39777.36820153147  meters
+    min height 36.94740904122591  meters
+    max height 43991.90973467566  meters
+    min height 41.25595719181001  meters
+    max height 50263.42219179496  meters
+    min height 47.671291364356875  meters
+    max height 58621.52730140835  meters
+    min height 56.22838316485286  meters
+    max height 71003.14627731778  meters
+    min height 68.92013945430517  meters
+    max height 87118.5253265705  meters
+    min height 85.4666496720165  meters
+    max height 106741.22752280161  meters
+    min height 105.65626102685928  meters
+    max height 125477.00644101389  meters
+    min height 124.97631322406232  meters
+    max height 143293.15816160105  meters
+    min height 143.38701202347875  meters
+    max height 160000.28993562795  meters
+    min height 160.68618156574667  meters
 
     Text(0.5, 0.98, 'Wind profile obtained from VAD')
 
@@ -134,7 +134,7 @@ Calculates a VAD and plots a vertical profile of wind
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.358 seconds)
+   **Total running time of the script:** (0 minutes 3.350 seconds)
 
 
 .. _sphx_glr_download_examples_retrieve_plot_vad.py:
