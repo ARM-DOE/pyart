@@ -96,7 +96,7 @@ def steiner_conv_strat(
 
     # Get reflectivity data
     ze = np.ma.copy(grid.fields[refl_field]["data"])
-    ze = ze.filled(np.NaN)
+    ze = ze.filled(np.nan)
 
     eclass = steiner_class_buff(
         ze,
@@ -609,6 +609,7 @@ def hydroclass_semisupervised(
     kdp_field=None,
     temp_field=None,
     hydro_field=None,
+    radar_freq=None,
 ):
     """
     Classifies precipitation echoes following the approach by Besic et al
@@ -634,6 +635,9 @@ def hydroclass_semisupervised(
         Output. Field name which represents the hydrometeor class field.
         A value of None will use the default field name as defined in the
         Py-ART configuration file.
+    radar_freq : str, optional
+        Radar frequency in Hertz (Hz) used for classification.
+        This parameter will be ignored, if the radar object has frequency information.
 
     Returns
     -------
@@ -650,8 +654,9 @@ def hydroclass_semisupervised(
     Notes
     -----
     The default hydrometeor classification is valid for C-band radars. For X-band radars,
-    if frequency information is not present in the `radar.instrument_parameters`, a warning that the
-    algorithm is defaulting to the C band is printed.
+    if frequency information is not present in the `radar.instrument_parameters`, the user-supplied
+    `radar_freq` will be used with a warning. If both `radar.instrument_parameters` and
+    `radar_freq` parameter are missing, the algorithm defaults to the C band.
 
     If the radar frequency information is missing from the radar object, you can add it in
     `radar.instrument_parameters`, as follows:
@@ -668,22 +673,20 @@ def hydroclass_semisupervised(
     # select the centroids as a function of frequency band
     if mass_centers is None:
         # assign coefficients according to radar frequency
-        if radar.instrument_parameters is not None:
-            if "frequency" in radar.instrument_parameters:
-                mass_centers = _get_mass_centers(
-                    radar.instrument_parameters["frequency"]["data"][0]
-                )
-            else:
-                mass_centers = _mass_centers_table()["C"]
-                warn(
-                    "Radar frequency unknown. "
-                    "Default coefficients for C band will be applied."
-                )
+        if radar.instrument_parameters and "frequency" in radar.instrument_parameters:
+            frequency = radar.instrument_parameters["frequency"]["data"][0]
+            mass_centers = _get_mass_centers(frequency)
+            warn(f"Using radar frequency from instrument parameters: {frequency}")
+        elif radar_freq is not None:
+            mass_centers = _get_mass_centers(radar_freq)
+            warn(
+                f"Radar instrument parameters are empty. Using user-supplied radar frequency: {radar_freq}"
+            )
         else:
             mass_centers = _mass_centers_table()["C"]
             warn(
-                "Radar instrument parameters is empty. So frequency is "
-                "unknown. Default coefficients for C band will be applied."
+                "Radar instrument parameters and radar_freq param are empty."
+                "So frequency is unknown. Default coefficients for C band will be applied."
             )
 
     # parse the field parameters
