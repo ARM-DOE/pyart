@@ -89,7 +89,7 @@ def main():
             print("Field:", field)
         legacy_var = dset_legacy.variables[field]
         if legacy_var.shape != field_shape_with_time:
-            warnings.warn("Field %s skipped due to incorrect shape" % (field))
+            warnings.warn(f"Field {field} skipped due to incorrect shape")
             continue
         _transfer_var(dset_modern, field, legacy_var, ("time", "z", "y", "x"))
 
