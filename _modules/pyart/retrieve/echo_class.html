@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.18.3.post18 documentation</title>
+    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.18.3.post19 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=2b3ce29e"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=8f446687"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -145,7 +145,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.3.post18 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.3.post19 documentation</p>
   
 </a></div>
     
@@ -1091,6 +1091,7 @@ document.write(`
     <span class="n">kdp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">temp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">hydro_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">radar_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Classifies precipitation echoes following the approach by Besic et al</span>
@@ -1116,6 +1117,9 @@ document.write(`
 <span class="sd">        Output. Field name which represents the hydrometeor class field.</span>
 <span class="sd">        A value of None will use the default field name as defined in the</span>
 <span class="sd">        Py-ART configuration file.</span>
+<span class="sd">    radar_freq : str, optional</span>
+<span class="sd">        Radar frequency in Hertz (Hz) used for classification.</span>
+<span class="sd">        This parameter will be ignored, if the radar object has frequency information.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -1132,8 +1136,9 @@ document.write(`
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
 <span class="sd">    The default hydrometeor classification is valid for C-band radars. For X-band radars,</span>
-<span class="sd">    if frequency information is not present in the `radar.instrument_parameters`, a warning that the</span>
-<span class="sd">    algorithm is defaulting to the C band is printed.</span>
+<span class="sd">    if frequency information is not present in the `radar.instrument_parameters`, the user-supplied</span>
+<span class="sd">    `radar_freq` will be used with a warning. If both `radar.instrument_parameters` and</span>
+<span class="sd">    `radar_freq` parameter are missing, the algorithm defaults to the C band.</span>
 
 <span class="sd">    If the radar frequency information is missing from the radar object, you can add it in</span>
 <span class="sd">    `radar.instrument_parameters`, as follows:</span>
@@ -1150,22 +1155,20 @@ document.write(`
     <span class="c1"># select the centroids as a function of frequency band</span>
     <span class="k">if</span> <span class="n">mass_centers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># assign coefficients according to radar frequency</span>
-        <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="s2">&quot;frequency&quot;</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">:</span>
-                <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_get_mass_centers</span><span class="p">(</span>
-                    <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">&quot;frequency&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                <span class="p">)</span>
-            <span class="k">else</span><span class="p">:</span>
-                <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_mass_centers_table</span><span class="p">()[</span><span class="s2">&quot;C&quot;</span><span class="p">]</span>
-                <span class="n">warn</span><span class="p">(</span>
-                    <span class="s2">&quot;Radar frequency unknown. &quot;</span>
-                    <span class="s2">&quot;Default coefficients for C band will be applied.&quot;</span>
-                <span class="p">)</span>
+        <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span> <span class="ow">and</span> <span class="s2">&quot;frequency&quot;</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">:</span>
+            <span class="n">frequency</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">&quot;frequency&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_get_mass_centers</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using radar frequency from instrument parameters: </span><span class="si">{</span><span class="n">frequency</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">radar_freq</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_get_mass_centers</span><span class="p">(</span><span class="n">radar_freq</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Radar instrument parameters are empty. Using user-supplied radar frequency: </span><span class="si">{</span><span class="n">radar_freq</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_mass_centers_table</span><span class="p">()[</span><span class="s2">&quot;C&quot;</span><span class="p">]</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;Radar instrument parameters is empty. So frequency is &quot;</span>
-                <span class="s2">&quot;unknown. Default coefficients for C band will be applied.&quot;</span>
+                <span class="s2">&quot;Radar instrument parameters and radar_freq param are empty.&quot;</span>
+                <span class="s2">&quot;So frequency is unknown. Default coefficients for C band will be applied.&quot;</span>
             <span class="p">)</span>
 
     <span class="c1"># parse the field parameters</span>

@@ -610,6 +610,23 @@ Retrievals from various radars, such as additional fields or subsets of the data
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip=" This script shows how to use hydrometeor classification for X-band radar data.  We are reading...">
+
+.. only:: html
+
+  .. image:: /examples/retrieve/images/thumb/sphx_glr_plot_hydrometeor_class_x_band_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_retrieve_plot_hydrometeor_class_x_band.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Hydrometeor Classification with Custom Frequency Settings</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Creating a CFAD diagram">
 
 .. only:: html
