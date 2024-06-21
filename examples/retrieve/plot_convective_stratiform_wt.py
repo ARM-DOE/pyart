@@ -67,6 +67,7 @@ radar = pyart.io.read(filename)
 radar = radar.extract_sweeps([0])
 
 # interpolate to grid
+
 grid = pyart.map.grid_from_radars(
     (radar,),
     grid_shape=(1, 201, 201),
@@ -82,6 +83,7 @@ dy = grid.y["data"][1] - grid.y["data"][0]
 # Lets now performs convective-stratiform classification on the radar data using the Yuter method [4, 5], which is a part of Py-ART's retrieve module. The result is added to the grid as a new field for further analysis or visualization.
 
 # convective stratiform classification Yuter
+
 convsf_dict = pyart.retrieve.conv_strat_yuter(
     grid,
     dx,
@@ -109,6 +111,7 @@ reclass_dict = pyart.retrieve.conv_strat_raut(
 )
 
 # add field
+
 grid.add_field("wt_reclass", reclass_dict["wt_reclass"], replace_existing=True)
 reclass_dict["wt_reclass"]
 
@@ -126,12 +129,15 @@ import matplotlib.pyplot as plt
 display = pyart.graph.GridMapDisplay(grid)
 
 # Create a colormap for reflectivity
+
 magma_r_cmap = plt.get_cmap("magma_r")
+
 ref_cmap = mcolors.LinearSegmentedColormap.from_list(
     "ref_cmap", magma_r_cmap(np.linspace(0, 0.9, magma_r_cmap.N))
 )
 
 # Define the projection
+
 projection = ccrs.AlbersEqualArea(
     central_latitude=radar.latitude["data"][0],
     central_longitude=radar.longitude["data"][0],
@@ -141,7 +147,9 @@ projection = ccrs.AlbersEqualArea(
 plt.figure(figsize=(18, 5))
 
 # First panel - Reflectivity (Top Left)
+
 ax1 = plt.subplot(1, 3, 1, projection=projection)
+
 display.plot_grid(
     "reflectivity_horizontal",
     vmin=0,
@@ -152,7 +160,9 @@ display.plot_grid(
 )
 
 # Second panel - CSY (Top Right)
+
 ax2 = plt.subplot(1, 3, 2, projection=projection)
+
 display.plot_grid(
     "convsf",
     vmin=0,
@@ -165,7 +175,9 @@ display.plot_grid(
 )
 
 # Third panel - WT (Bottom Left)
+
 ax3 = plt.subplot(1, 3, 3, projection=projection)
+
 display.plot_grid(
     "wt_reclass",
     vmin=0,
@@ -191,6 +203,7 @@ radar = pyart.io.read_nexrad_archive(nexrad_file)
 radar = radar.extract_sweeps([0])
 
 # interpolate to grid
+
 grid = pyart.map.grid_from_radars(
     (radar,),
     grid_shape=(1, 201, 201),
@@ -204,6 +217,7 @@ dy = grid.y["data"][1] - grid.y["data"][0]
 
 
 # convective stratiform classification Yuter
+
 convsf_dict = pyart.retrieve.conv_strat_yuter(
     grid,
     dx,
@@ -243,28 +257,36 @@ reclass_dict
 display = pyart.graph.GridMapDisplay(grid)
 
 # Create a colormap for reflectivity
+
 magma_r_cmap = plt.get_cmap("magma_r")
+
 ref_cmap = mcolors.LinearSegmentedColormap.from_list(
     "ref_cmap", magma_r_cmap(np.linspace(0, 0.9, magma_r_cmap.N))
 )
 
 # Define the projection
+
 projection = ccrs.AlbersEqualArea(
     central_latitude=radar.latitude["data"][0],
     central_longitude=radar.longitude["data"][0],
 )
 
 # Create a figure with a 2x2 layout
+
 plt.figure(figsize=(18, 5))
 
 # First panel - Reflectivity (Top Left)
+
 ax1 = plt.subplot(1, 3, 1, projection=projection)
+
 display.plot_grid(
     "reflectivity", vmin=0, vmax=55, cmap=ref_cmap, transform=ccrs.PlateCarree(), ax=ax1
 )
 
 # Second panel - csy (Bottom Left)
+
 ax2 = plt.subplot(1, 3, 2, projection=projection)
+
 display.plot_grid(
     "convsf",
     vmin=0,
@@ -277,7 +299,9 @@ display.plot_grid(
 )
 
 # third  panel - reclass (Bottom Right)
+
 ax3 = plt.subplot(1, 3, 3, projection=projection)
+
 display.plot_grid(
     "wt_reclass",
     vmin=0,
