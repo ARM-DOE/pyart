@@ -8,6 +8,7 @@ Hydrometeor Classification with Custom Frequency Settings
 
  .. note::
     The script initially attempts hydrometeor classification without specific radar frequency information for band selection.
+
 """
 
 import matplotlib.pyplot as plt
@@ -44,6 +45,7 @@ print(radar.instrument_parameters)
 # This shows an issue where radar frequency information is missing. Without this hydrometeor classification will default to C-band.
 
 # Get classification
+
 hydromet_class = pyart.retrieve.hydroclass_semisupervised(
     radar,
     refl_field="corrected_reflectivity",
@@ -61,6 +63,7 @@ radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 
 
 # Get classification
+
 hydromet_class = pyart.retrieve.hydroclass_semisupervised(
     radar,
     refl_field="corrected_reflectivity",
@@ -78,6 +81,7 @@ radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 # Incorporating radar frequency into the radar object enhances processing pipeline.
 
 # Add X-band frequency information to radar.instrument_parameters
+
 radar.instrument_parameters["frequency"] = {
     "long_name": "Radar frequency",
     "units": "Hz",
@@ -123,6 +127,7 @@ hid_colors = [
     "Red",
     "Fuchsia",
 ]
+
 cmaphid = colors.ListedColormap(hid_colors)
 cmapmeth = colors.ListedColormap(hid_colors[0:6])
 cmapmeth_trop = colors.ListedColormap(hid_colors[0:7])
@@ -130,6 +135,7 @@ cmapmeth_trop = colors.ListedColormap(hid_colors[0:7])
 
 def adjust_fhc_colorbar_for_pyart(cb):
     cb.set_ticks(np.arange(1.4, 10, 0.9))
+
     cb.ax.set_yticklabels(
         [
             "Drizzle",
@@ -144,6 +150,7 @@ def adjust_fhc_colorbar_for_pyart(cb):
             "Big Drops",
         ]
     )
+
     cb.ax.set_ylabel("")
     cb.ax.tick_params(length=0)
     return cb
@@ -152,14 +159,17 @@ def adjust_fhc_colorbar_for_pyart(cb):
 def adjust_meth_colorbar_for_pyart(cb, tropical=False):
     if not tropical:
         cb.set_ticks(np.arange(1.25, 5, 0.833))
+
         cb.ax.set_yticklabels(
             ["R(Kdp, Zdr)", "R(Kdp)", "R(Z, Zdr)", "R(Z)", "R(Zrain)"]
         )
     else:
         cb.set_ticks(np.arange(1.3, 6, 0.85))
+
         cb.ax.set_yticklabels(
             ["R(Kdp, Zdr)", "R(Kdp)", "R(Z, Zdr)", "R(Z_all)", "R(Z_c)", "R(Z_s)"]
         )
+
     cb.ax.set_ylabel("")
     cb.ax.tick_params(length=0)
     return cb
@@ -185,6 +195,7 @@ def two_panel_plot(
     display = pyart.graph.RadarDisplay(radar)
     fig = plt.figure(figsize=(13, 5))
     ax1 = fig.add_subplot(121)
+
     display.plot_ppi(
         var1,
         sweep=sweep,
@@ -194,8 +205,11 @@ def two_panel_plot(
         colorbar_label=units1,
         mask_outside=True,
     )
+
     display.set_limits(xlim=xlim, ylim=ylim)
+
     ax2 = fig.add_subplot(122)
+
     display.plot_ppi(
         var2,
         sweep=sweep,
@@ -205,12 +219,15 @@ def two_panel_plot(
         colorbar_label=units2,
         mask_outside=True,
     )
+
     display.set_limits(xlim=xlim, ylim=ylim)
+
     if return_flag:
         return fig, ax1, ax2, display
 
 
 lim = [-20, 20]
+
 fig, ax1, ax2, display = two_panel_plot(
     radar,
     sweep=0,
