@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.comp_z &#8212; Py-ART 1.18.4.post1 documentation</title>
+    <title>pyart.retrieve.comp_z &#8212; Py-ART 1.18.5.post1 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=3ee479438cf8b5e0d341" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=3ee479438cf8b5e0d341"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=3c54e5ed"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=2c11dd23"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -145,7 +145,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.4.post1 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.5.post1 documentation</p>
   
 </a></div>
     
@@ -490,7 +490,7 @@ document.write(`
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
 <span class="kn">from</span> <span class="nn">netCDF4</span> <span class="kn">import</span> <span class="n">num2date</span>
 <span class="kn">from</span> <span class="nn">pandas</span> <span class="kn">import</span> <span class="n">to_datetime</span>
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp2d</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">RectBivariateSpline</span>
 
 <span class="kn">from</span> <span class="nn">pyart.core</span> <span class="kn">import</span> <span class="n">Radar</span>
 
@@ -585,10 +585,10 @@ document.write(`
 
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Configure the intperpolator</span>
-            <span class="n">z_interpolator</span> <span class="o">=</span> <span class="n">interp2d</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">az</span><span class="p">,</span> <span class="n">z</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;linear&quot;</span><span class="p">)</span>
+            <span class="n">z_interpolator</span> <span class="o">=</span> <span class="n">RectBivariateSpline</span><span class="p">(</span><span class="n">az</span><span class="p">,</span> <span class="n">ranges</span><span class="p">,</span> <span class="n">z</span><span class="p">)</span>
 
             <span class="c1"># Apply the interpolation</span>
-            <span class="n">z</span> <span class="o">=</span> <span class="n">z_interpolator</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">azimuth_final</span><span class="p">)</span>
+            <span class="n">z</span> <span class="o">=</span> <span class="n">z_interpolator</span><span class="p">(</span><span class="n">azimuth_final</span><span class="p">,</span> <span class="n">ranges</span><span class="p">)</span>
 
         <span class="c1"># if first sweep, create new dim, otherwise concat them up</span>
         <span class="k">if</span> <span class="n">sweep</span> <span class="o">==</span> <span class="n">minimum_sweep</span><span class="p">:</span>
