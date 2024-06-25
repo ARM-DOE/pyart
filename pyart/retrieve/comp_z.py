@@ -8,7 +8,7 @@ import copy
 import numpy as np
 from netCDF4 import num2date
 from pandas import to_datetime
-from scipy.interpolate import interp2d
+from scipy.interpolate import RectBivariateSpline
 
 from pyart.core import Radar
 
@@ -103,10 +103,10 @@ def composite_reflectivity(radar, field="reflectivity", gatefilter=None):
 
         else:
             # Configure the intperpolator
-            z_interpolator = interp2d(ranges, az, z, kind="linear")
+            z_interpolator = RectBivariateSpline(az, ranges, z)
 
             # Apply the interpolation
-            z = z_interpolator(ranges, azimuth_final)
+            z = z_interpolator(azimuth_final, ranges)
 
         # if first sweep, create new dim, otherwise concat them up
         if sweep == minimum_sweep:
