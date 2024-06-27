@@ -1,0 +1,1292 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Creating animated gifs with NEXRAD Level 2 radar data using Py-ART &#8212; Py-ART 1.18.6.post1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=61a4c737" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=87e54e7c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=1cde9471"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-JJEG3CV376');
+            </script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'blog_posts/2024/Animated_GIFS_With_PyART';</script>
+    <script src="../../_static/doc_shared.js?v=6c7402a7"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+
+<link
+  rel="alternate"
+  type="application/atom+xml"
+  href="../../blog/atom.xml"
+  title="PyART Blog"
+/>
+
+
+
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Py-ART 1.18.6.post1 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../userguide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../examples/index.html">
+    Example Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../API/index.html">
+    API Reference Manual
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../dev/index.html">
+    Developer’s Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../notebook-gallery.html">
+    Notebook Gallery
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../blog.html">
+    Blog
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ARM-DOE/pyart" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/Py_ART" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../userguide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../examples/index.html">
+    Example Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../API/index.html">
+    API Reference Manual
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../dev/index.html">
+    Developer’s Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../notebook-gallery.html">
+    Notebook Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../blog.html">
+    Blog
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../changelog.html">
+    Changelog
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ARM-DOE/pyart" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/Py_ART" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<div id="searchbox"></div></div>
+        <div class="sidebar-primary-item">
+<div class="ablog-sidebar-item ablog__recentposts">
+<h3>
+  <a href="../../blog.html">Recent Posts</a>
+</h3>
+<ul>
+  
+  
+  <li>
+    <a href="epcape-blog-post.html">
+      21 March - Investigating ARM Scanning Cloud Radar Data from EPCAPE
+    </a>
+  </li>
+  
+  <li>
+    <a href="../2023/severe-storms-southern-wisconsin.html">
+      07 April - Plotting Severe Weather in Wisconsin
+    </a>
+  </li>
+  
+  <li>
+    <a href="../2022/hail-analysis-spc.html">
+      23 November - Hail Storm Visualization Using Py-ART and Pandas!
+    </a>
+  </li>
+  
+  <li>
+    <a href="../2022/TRACER.html">
+      21 October - Blending Observations from TRACER using Py-ART
+    </a>
+  </li>
+  
+  <li>
+    <a href="../2022/first_pullrequest.html">
+      26 April - Active Py-ART Development - Submitting a Pull Request (PR)
+    </a>
+  </li>
+  
+</ul>
+</div>
+</div>
+        <div class="sidebar-primary-item">
+<div class="ablog-sidebar-item ablog__archive">
+<h3>
+  <a href="../../blog/archive.html">Archives</a>
+</h3>
+<ul>
+  
+  
+  <li>
+    <a href="../../blog/2024.html">2024 (1)</a>
+  </li>
+  
+  
+  
+  <li>
+    <a href="../../blog/2023.html">2023 (1)</a>
+  </li>
+  
+  
+  
+  <li>
+    <a href="../../blog/2022.html">2022 (6)</a>
+  </li>
+  
+  
+</ul>
+</div>
+</div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page">Creating...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+<section class="tex2jax_ignore mathjax_ignore" id="creating-animated-gifs-with-nexrad-level-2-radar-data-using-py-art">
+<h1>Creating animated gifs with NEXRAD Level 2 radar data using Py-ART<a class="headerlink" href="#creating-animated-gifs-with-nexrad-level-2-radar-data-using-py-art" title="Permalink to this heading">#</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
+<section id="within-this-blog-post-we-will-cover">
+<h3>Within this blog post, we will cover:<a class="headerlink" href="#within-this-blog-post-we-will-cover" title="Permalink to this heading">#</a></h3>
+<section id="accessing-nexrad-data-from-aws">
+<h4>1: Accessing NEXRAD data from AWS<a class="headerlink" href="#accessing-nexrad-data-from-aws" title="Permalink to this heading">#</a></h4>
+</section>
+<section id="how-to-read-the-data-into-py-art-and-create-plots">
+<h4>2: How to read the data into Py-ART and create plots<a class="headerlink" href="#how-to-read-the-data-into-py-art-and-create-plots" title="Permalink to this heading">#</a></h4>
+</section>
+<section id="how-to-create-animated-gifs-with-acquired-radar-data-from-py-art">
+<h4>3: How to create animated gifs with acquired radar data from Py-ART<a class="headerlink" href="#how-to-create-animated-gifs-with-acquired-radar-data-from-py-art" title="Permalink to this heading">#</a></h4>
+</section>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="prerequisites">
+<h1>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading">#</a></h1>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Concepts</p></th>
+<th class="head"><p>Importance</p></th>
+<th class="head"><p>Notes</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference external" href="https://foundations.projectpythia.org/foundations/quickstart.html">Quickstart: Zero to Python</a></p></td>
+<td><p>Required</p></td>
+<td><p>For loops, lists</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://link-to-matplotlib-basics">Matplotlib Basics</a></p></td>
+<td><p>Required</p></td>
+<td><p>Basic plotting</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference external" href="https://link-to-pyart-basics">Py-ART Basics</a></p></td>
+<td><p>Required</p></td>
+<td><p>IO/Visualization</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference external" href="https://projectpythia.org/radar-cookbook/notebooks/radar-basics/radar-basics.html">The Basics of Weather Radar</a></p></td>
+<td><p>Required</p></td>
+<td><p>Competency with Radar and its products</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p><strong>Time to learn:</strong> 30 Minutes</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">import</span> <span class="nn">fsspec</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
+<span class="kn">from</span> <span class="nn">metpy.plots</span> <span class="kn">import</span> <span class="n">USCOUNTIES</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">Image</span> <span class="k">as</span> <span class="n">IPImage</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="set-up-the-aws-s3-filysystem">
+<h2>Set up the AWS S3 filysystem<a class="headerlink" href="#set-up-the-aws-s3-filysystem" title="Permalink to this heading">#</a></h2>
+<p>This allows you to pull nexrad-level-2 data files from the AWS repository.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">filesystem</span><span class="p">(</span><span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="n">anon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="selecting-your-date-station-and-time-period">
+<h2>Selecting your date, station, and time period<a class="headerlink" href="#selecting-your-date-station-and-time-period" title="Permalink to this heading">#</a></h2>
+<p>Once the file system is set up, you can use the following code to specify what time, date, and station you’d like to retrieve data for</p>
+<p>For this example, we will use data from NWS Chicago (KLOT) from 04 UTC, June 5th, 2024</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">start_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2024</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># YYYY/MM/DD HH</span>
+<span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2024</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># YYYY/MM/DD HH</span>
+<span class="n">station</span> <span class="o">=</span> <span class="s2">&quot;KLOT&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="optional-setting-up-individual-locations-to-be-plotted-on-your-map">
+<h2>OPTIONAL* setting up individual locations to be plotted on your map<a class="headerlink" href="#optional-setting-up-individual-locations-to-be-plotted-on-your-map" title="Permalink to this heading">#</a></h2>
+<p>In this example, two plots are pointed due to their relevance to the example weather event: The ATMOS facility at Argonne National Laboratory, Lemont, IL, and Sawmill Creek in Darien, IL. The latitude and longitude for each site should be placed at the same index (IE. Index 0 in both latitude and longitude should contain the latitude and longitude data for that one site. This also applies to the labels, markers, and colors. Any object in the index 0 slot will apply to that same point.)</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">latitude</span> <span class="o">=</span> <span class="p">[</span><span class="mf">41.700937896518866</span><span class="p">,</span> <span class="mf">41.73884644555692</span><span class="p">]</span>
+<span class="n">longitude</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">87.99578103231573</span><span class="p">,</span> <span class="o">-</span><span class="mf">87.98744136114946</span><span class="p">]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Tower&quot;</span><span class="p">,</span> <span class="s2">&quot;SCM&quot;</span><span class="p">]</span>
+<span class="n">markers</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">]</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;magenta&quot;</span><span class="p">,</span> <span class="s2">&quot;cyan&quot;</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="generating-your-file-list">
+<h1>Generating your file list<a class="headerlink" href="#generating-your-file-list" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">current_date</span> <span class="o">=</span> <span class="n">start_date</span>
+
+<span class="k">while</span> <span class="n">current_date</span> <span class="o">&lt;=</span> <span class="n">end_date</span><span class="p">:</span>
+    <span class="n">date_str</span> <span class="o">=</span> <span class="n">current_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y/%m/</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">date_str_compact</span> <span class="o">=</span> <span class="n">current_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">current_date</span><span class="o">.</span><span class="n">date</span><span class="p">()</span> <span class="o">==</span> <span class="n">start_date</span><span class="o">.</span><span class="n">date</span><span class="p">():</span>
+        <span class="n">start_hour</span> <span class="o">=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">hour</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">start_hour</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">current_date</span><span class="o">.</span><span class="n">date</span><span class="p">()</span> <span class="o">==</span> <span class="n">end_date</span><span class="o">.</span><span class="n">date</span><span class="p">():</span>
+        <span class="n">end_hour</span> <span class="o">=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">hour</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">end_hour</span> <span class="o">=</span> <span class="mi">23</span>
+
+    <span class="k">for</span> <span class="n">hour</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_hour</span><span class="p">,</span> <span class="n">end_hour</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">hour_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">hour</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">all_files</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;s3://noaa-nexrad-level2/</span><span class="si">{</span><span class="n">date_str</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">station</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">station</span><span class="si">}{</span><span class="n">date_str_compact</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">hour_str</span><span class="si">}</span><span class="s2">*&quot;</span>
+        <span class="p">)</span>
+        <span class="n">filtered_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">all_files</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_MDM&quot;</span><span class="p">)]</span>
+        <span class="n">files</span> <span class="o">+=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">filtered_files</span><span class="p">)</span>
+
+    <span class="n">current_date</span> <span class="o">=</span> <span class="n">current_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c1"># Print the selected files</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Selected files:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="checking-your-plottable-radar-products">
+<h2>Checking your plottable radar products<a class="headerlink" href="#checking-your-plottable-radar-products" title="Permalink to this heading">#</a></h2>
+<p>This function reads one of the radar files in your file list and prints out the available products for plotting. One file should represent all products available in each radar file in the list. Although if you are pulling data from files pre 2011, dual-pol products won’t be available.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">check_radar_fields</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">radar_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">radar_file</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">(</span><span class="n">radar_data</span><span class="p">)</span>
+        <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><span class="n">radar_file</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Fields in radar data from </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">()))</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to read radar data from </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="c1"># Check the fields for the first file</span>
+<span class="k">if</span> <span class="n">files</span><span class="p">:</span>
+    <span class="n">check_radar_fields</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Fields in radar data from noaa-nexrad-level2/2024/06/05/KLOT/KLOT20240605_040442_V06:
+[&#39;reflectivity&#39;, &#39;clutter_filter_power_removed&#39;, &#39;velocity&#39;, &#39;cross_correlation_ratio&#39;, &#39;spectrum_width&#39;, &#39;differential_reflectivity&#39;, &#39;differential_phase&#39;]
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="reading-the-data-into-pyart">
+<h1>Reading the data into PyART<a class="headerlink" href="#reading-the-data-into-pyart" title="Permalink to this heading">#</a></h1>
+<p>To streamline the process of pulling and processing the radar files, we will create a function called read_radar_data.</p>
+<p>Within this function, some progress tracking code is implemented. Each time a file is successfully read, a message will be printed out letting you know what file in the order it is. This is useful to tell if your code is actually working.
+An exception is added to this code so that the files marked MDM (shown on the list of filed compiled when pulling data) do not halt the process, and are instead skipped as they are not necessary.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">read_radar_data</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">radar_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">radar_file</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">(</span><span class="n">radar_data</span><span class="p">)</span>
+        <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><span class="n">radar_file</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Successfully read radar data from </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">radar</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to read radar data from </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="looping-through-the-radar-data">
+<h2>Looping through the radar data<a class="headerlink" href="#looping-through-the-radar-data" title="Permalink to this heading">#</a></h2>
+<p>This code allows us to loop through each radar file read. A progress message is printed when a new file has started being processed.
+The if statement tells the code to skip files that are unable to be read.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processing file </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">read_radar_data</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping file </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> due to read error.&quot;</span><span class="p">)</span>
+        <span class="k">continue</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="plotting-code-with-added-features-and-plotted-points">
+<h2>Plotting code with added features and plotted points<a class="headerlink" href="#plotting-code-with-added-features-and-plotted-points" title="Permalink to this heading">#</a></h2>
+<p>The radar product being plotted can be changed based on the needs of the individual, but for this example, we will use reflectivity to make a singular gif.</p>
+</section>
+<section id="customizing-the-range-of-plotted-data">
+<h2>Customizing the range of plotted data<a class="headerlink" href="#customizing-the-range-of-plotted-data" title="Permalink to this heading">#</a></h2>
+<p>Vmin and vmax represent the range of dBz values you’d like to plot on the radar. Sometimes, one may want to raise the lower limit to reduce clutter or nonmeteorological scatter that often appears as low reflectivity blobs near the radar. Basically the maximum and minimum values for your colorbar as well.</p>
+<p>The sweep is the elevation being scanned. For example, sweep 0 is the lowest level scanned by the radar.</p>
+</section>
+<section id="counties">
+<h2>Counties<a class="headerlink" href="#counties" title="Permalink to this heading">#</a></h2>
+<p>Counties can be added with the ax.add_feature line. Further additions can be made using cartopy.cfeature if needed.</p>
+</section>
+<section id="location-plotting">
+<h2>Location plotting<a class="headerlink" href="#location-plotting" title="Permalink to this heading">#</a></h2>
+<p>The for loop in this cell is used to plot the location data provided in the aforementioned variables.</p>
+</section>
+<section id="zooming">
+<h2>Zooming<a class="headerlink" href="#zooming" title="Permalink to this heading">#</a></h2>
+<p>The x and ylim functions will allow you to control the zoom on your plot. The grid on the plot is representative of latitude (y) and longitude (x) lines. For this example, we are zoomed in over the points.</p>
+</section>
+<section id="colorbar">
+<h2>Colorbar<a class="headerlink" href="#colorbar" title="Permalink to this heading">#</a></h2>
+<p>The built in colorbar is disabled and one was created manually to make it fit the image better. Purely an aesthetic decision.</p>
+</section>
+<section id="note">
+<h2>NOTE<a class="headerlink" href="#note" title="Permalink to this heading">#</a></h2>
+<p>This code is meant to go under the for loop. Don’t run it on its own as it won’t work as intended. Full code block will be below</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
+        <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+        <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="mi">65</span><span class="p">,</span>
+        <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Z for </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_ChaseSpectral&quot;</span><span class="p">,</span>
+        <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>  <span class="c1"># Disable the built-in colorbar</span>
+    <span class="n">mappable</span> <span class="o">=</span> <span class="n">display</span><span class="o">.</span><span class="n">plots</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+<span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error plotting radar data for file </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+    <span class="k">continue</span>
+
+<span class="c1"># Set the extent to zoom in much closer and centered on the points</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">88.1</span><span class="p">,</span> <span class="o">-</span><span class="mf">87.8</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mf">41.6</span><span class="p">,</span> <span class="mf">41.8</span><span class="p">)</span>
+
+<span class="c1"># Add counties</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">USCOUNTIES</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">marker</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">markers</span><span class="p">,</span> <span class="n">colors</span><span class="p">):</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+        <span class="n">lon</span><span class="p">,</span>
+        <span class="n">lat</span><span class="p">,</span>
+        <span class="n">marker</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+        <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+        <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+    <span class="p">)</span>
+
+<span class="c1"># Create a colorbar manually</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+<span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span><span class="n">mappable</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span><span class="p">)</span>
+<span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;equivalent reflectivity factor (dBZ)&quot;</span><span class="p">)</span>
+
+<span class="c1"># Save the plot to a file</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;radar_frame_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.png&quot;</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;large&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Locations&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+
+<span class="c1"># Add the file to the frames list</span>
+<span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved frame </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="full-code-block-constructed-properly-within-the-for-loop">
+<h2>Full code block constructed properly within the for loop.<a class="headerlink" href="#full-code-block-constructed-properly-within-the-for-loop" title="Permalink to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">read_radar_data</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping file </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> due to read error.&quot;</span><span class="p">)</span>
+        <span class="k">continue</span>
+
+    <span class="c1"># Create a plot for the first sweep&#39;s reflectivity</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+    <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
+            <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+            <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">vmax</span><span class="o">=</span><span class="mi">65</span><span class="p">,</span>
+            <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Z for </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_ChaseSpectral&quot;</span><span class="p">,</span>
+            <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>  <span class="c1"># Disable the built-in colorbar</span>
+        <span class="n">mappable</span> <span class="o">=</span> <span class="n">display</span><span class="o">.</span><span class="n">plots</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error plotting radar data for file </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+        <span class="k">continue</span>
+
+    <span class="c1"># Set the extent to zoom in much closer and centered on the points</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">88.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">87.7</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mf">41.5</span><span class="p">,</span> <span class="mf">41.9</span><span class="p">)</span>
+
+    <span class="c1"># Add counties</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">USCOUNTIES</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">marker</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+        <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">markers</span><span class="p">,</span> <span class="n">colors</span>
+    <span class="p">):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="n">lon</span><span class="p">,</span>
+            <span class="n">lat</span><span class="p">,</span>
+            <span class="n">marker</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+            <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+            <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Create a colorbar manually</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span>
+        <span class="n">mappable</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span>
+    <span class="p">)</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;equivalent reflectivity factor (dBZ)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Save the plot to a file</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;radar_frame_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.png&quot;</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;large&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Locations&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+
+    <span class="c1"># Add the file to the frames list</span>
+    <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Saved frame </span><span class="si">{</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">filename</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="gif-creation">
+<h1>GIF creation<a class="headerlink" href="#gif-creation" title="Permalink to this heading">#</a></h1>
+<p>We can now use the data to create a gif out of the frames we’ve appended to our list.</p>
+<p>This code also includes code to save the gif to your local directory.</p>
+<p>Something to note, if you do not want to save the gif, you can get rid of this code.</p>
+<p>As the frames are processed, they will temporarily save to your directory until the gif is made. They will save as PNG files, which are able to be opened and can be used to make sure everything is plotting on your figure correctly.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create an animated GIF using Pillow</span>
+<span class="k">if</span> <span class="n">frames</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Creating animated GIF...&quot;</span><span class="p">)</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">]</span>
+    <span class="n">gif_filename</span> <span class="o">=</span> <span class="s2">&quot;radar_animation.gif&quot;</span>
+    <span class="n">images</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+        <span class="n">gif_filename</span><span class="p">,</span> <span class="n">save_all</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">append_images</span><span class="o">=</span><span class="n">images</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">duration</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="mi">0</span>
+    <span class="p">)</span>  <span class="c1"># duration in milliseconds</span>
+
+    <span class="c1"># Clean up the saved frames</span>
+    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Animated GIF created as &#39;radar_animation.gif&#39;&quot;</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">gif_filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">IPImage</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;gif&quot;</span><span class="p">))</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No frames were generated.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="code-in-whole">
+<h1>Code in whole<a class="headerlink" href="#code-in-whole" title="Permalink to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">import</span> <span class="nn">fsspec</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">io</span> <span class="kn">import</span> <span class="n">BytesIO</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
+<span class="kn">from</span> <span class="nn">metpy.plots</span> <span class="kn">import</span> <span class="n">USCOUNTIES</span>
+<span class="kn">from</span> <span class="nn">PIL</span> <span class="kn">import</span> <span class="n">Image</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<span class="kn">from</span> <span class="nn">IPython.display</span> <span class="kn">import</span> <span class="n">display</span><span class="p">,</span> <span class="n">Image</span> <span class="k">as</span> <span class="n">IPImage</span>
+
+<span class="o">%</span><span class="k">matplotlib</span> inline
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+
+<span class="n">fs</span> <span class="o">=</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">filesystem</span><span class="p">(</span><span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="n">anon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Define the start and end dates and hours</span>
+<span class="n">start_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2024</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># YYYY/MM/DD HH</span>
+<span class="n">end_date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2024</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>  <span class="c1"># YYYY/MM/DD HH</span>
+<span class="n">station</span> <span class="o">=</span> <span class="s2">&quot;KLOT&quot;</span>
+<span class="n">latitude</span> <span class="o">=</span> <span class="p">[</span><span class="mf">41.700937896518866</span><span class="p">,</span> <span class="mf">41.704120</span><span class="p">]</span>
+<span class="n">longitude</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">87.99578103231573</span><span class="p">,</span> <span class="o">-</span><span class="mf">87.968328</span><span class="p">]</span>
+<span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;Tower&quot;</span><span class="p">,</span> <span class="s2">&quot;SCM&quot;</span><span class="p">]</span>
+<span class="n">markers</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;v&quot;</span><span class="p">,</span> <span class="s2">&quot;o&quot;</span><span class="p">]</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;magenta&quot;</span><span class="p">,</span> <span class="s2">&quot;cyan&quot;</span><span class="p">]</span>
+
+<span class="c1"># Generate the list of files for the specified date and hour range</span>
+<span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">current_date</span> <span class="o">=</span> <span class="n">start_date</span>
+
+<span class="k">while</span> <span class="n">current_date</span> <span class="o">&lt;=</span> <span class="n">end_date</span><span class="p">:</span>
+    <span class="n">date_str</span> <span class="o">=</span> <span class="n">current_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y/%m/</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">date_str_compact</span> <span class="o">=</span> <span class="n">current_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">current_date</span><span class="o">.</span><span class="n">date</span><span class="p">()</span> <span class="o">==</span> <span class="n">start_date</span><span class="o">.</span><span class="n">date</span><span class="p">():</span>
+        <span class="n">start_hour</span> <span class="o">=</span> <span class="n">start_date</span><span class="o">.</span><span class="n">hour</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">start_hour</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">if</span> <span class="n">current_date</span><span class="o">.</span><span class="n">date</span><span class="p">()</span> <span class="o">==</span> <span class="n">end_date</span><span class="o">.</span><span class="n">date</span><span class="p">():</span>
+        <span class="n">end_hour</span> <span class="o">=</span> <span class="n">end_date</span><span class="o">.</span><span class="n">hour</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">end_hour</span> <span class="o">=</span> <span class="mi">23</span>
+
+    <span class="k">for</span> <span class="n">hour</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_hour</span><span class="p">,</span> <span class="n">end_hour</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+        <span class="n">hour_str</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">hour</span><span class="si">:</span><span class="s2">02d</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">all_files</span> <span class="o">=</span> <span class="n">fs</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;s3://noaa-nexrad-level2/</span><span class="si">{</span><span class="n">date_str</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">station</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">station</span><span class="si">}{</span><span class="n">date_str_compact</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">hour_str</span><span class="si">}</span><span class="s2">*&quot;</span>
+        <span class="p">)</span>
+        <span class="n">filtered_files</span> <span class="o">=</span> <span class="p">[</span><span class="n">f</span> <span class="k">for</span> <span class="n">f</span> <span class="ow">in</span> <span class="n">all_files</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">f</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot;_MDM&quot;</span><span class="p">)]</span>
+        <span class="n">files</span> <span class="o">+=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">filtered_files</span><span class="p">)</span>
+
+    <span class="n">current_date</span> <span class="o">=</span> <span class="n">current_date</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">hour</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">days</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+
+<span class="c1"># Function to read radar data</span>
+<span class="k">def</span> <span class="nf">read_radar_data</span><span class="p">(</span><span class="n">file_path</span><span class="p">):</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="k">with</span> <span class="n">fs</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">file_path</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+            <span class="n">radar_data</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+        <span class="n">radar_file</span> <span class="o">=</span> <span class="n">BytesIO</span><span class="p">(</span><span class="n">radar_data</span><span class="p">)</span>
+        <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><span class="n">radar_file</span><span class="p">)</span>
+        <span class="c1"># print(f&quot;Successfully read radar data from {file_path}&quot;)</span>
+        <span class="k">return</span> <span class="n">radar</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Failed to read radar data from </span><span class="si">{</span><span class="n">file_path</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="c1"># Create directories for the frames</span>
+<span class="n">frames_dir</span> <span class="o">=</span> <span class="s2">&quot;frames/PPI&quot;</span>
+<span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">frames_dir</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># Create frames for the animated GIF</span>
+<span class="n">frames</span> <span class="o">=</span> <span class="p">[]</span>
+
+<span class="c1"># Loop through each radar file</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">read_radar_data</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Skipping file </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> due to read error.&quot;</span><span class="p">)</span>
+        <span class="k">continue</span>
+
+    <span class="c1"># Create a plot for the first sweep&#39;s reflectivity</span>
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">12</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
+    <span class="n">radar_display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">radar_display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
+            <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+            <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+            <span class="n">vmax</span><span class="o">=</span><span class="mi">65</span><span class="p">,</span>
+            <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;Z for </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">file</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_ChaseSpectral&quot;</span><span class="p">,</span>
+            <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="p">)</span>  <span class="c1"># Disable the built-in colorbar</span>
+        <span class="n">mappable</span> <span class="o">=</span> <span class="n">radar_display</span><span class="o">.</span><span class="n">plots</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Error plotting radar data for file </span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">e</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+        <span class="k">continue</span>
+
+    <span class="c1"># Set the extent to zoom in much closer and centered on the points</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">88.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">87.7</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mf">41.5</span><span class="p">,</span> <span class="mf">41.9</span><span class="p">)</span>
+
+    <span class="c1"># Add counties</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">USCOUNTIES</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">label</span><span class="p">,</span> <span class="n">marker</span><span class="p">,</span> <span class="n">color</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span>
+        <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">labels</span><span class="p">,</span> <span class="n">markers</span><span class="p">,</span> <span class="n">colors</span>
+    <span class="p">):</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+            <span class="n">lon</span><span class="p">,</span>
+            <span class="n">lat</span><span class="p">,</span>
+            <span class="n">marker</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
+            <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+            <span class="n">markersize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="c1"># Create a colorbar manually</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
+    <span class="n">cbar</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span><span class="p">(</span>
+        <span class="n">mappable</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span> <span class="n">fraction</span><span class="o">=</span><span class="mf">0.046</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.04</span>
+    <span class="p">)</span>
+    <span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="s2">&quot;equivalent reflectivity factor (dBZ)&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Save the plot to a file</span>
+    <span class="n">filename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">frames_dir</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;radar_frame_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;large&quot;</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Locations&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="n">fig</span><span class="p">)</span>
+
+    <span class="c1"># Add the file to the frames list</span>
+    <span class="n">frames</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+
+<span class="c1"># Create an animated GIF using Pillow</span>
+<span class="k">if</span> <span class="n">frames</span><span class="p">:</span>
+    <span class="n">images</span> <span class="o">=</span> <span class="p">[</span><span class="n">Image</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">frame</span><span class="p">)</span> <span class="k">for</span> <span class="n">frame</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">]</span>
+    <span class="n">gif_filename</span> <span class="o">=</span> <span class="s2">&quot;radar_animation.gif&quot;</span>
+    <span class="n">images</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">save</span><span class="p">(</span>
+        <span class="n">gif_filename</span><span class="p">,</span> <span class="n">save_all</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">append_images</span><span class="o">=</span><span class="n">images</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span> <span class="n">duration</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">loop</span><span class="o">=</span><span class="mi">0</span>
+    <span class="p">)</span>  <span class="c1"># duration in milliseconds</span>
+
+    <span class="c1"># Clean up the saved frames</span>
+    <span class="k">for</span> <span class="n">filename</span> <span class="ow">in</span> <span class="n">frames</span><span class="p">:</span>
+        <span class="n">os</span><span class="o">.</span><span class="n">remove</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Animated GIF created as &#39;radar_animation.gif&#39;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Display the GIF in the notebook</span>
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">gif_filename</span><span class="p">,</span> <span class="s2">&quot;rb&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">display</span><span class="p">(</span><span class="n">IPImage</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;gif&quot;</span><span class="p">))</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No frames were generated.&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Animated GIF created as &#39;radar_animation.gif&#39;
+</pre></div>
+</div>
+<img alt="../../_images/f81600ad091928bc71a66002219aceef64b1f2e6dbaaa2e1fa513dca0da722f4.gif" src="../../_images/f81600ad091928bc71a66002219aceef64b1f2e6dbaaa2e1fa513dca0da722f4.gif" />
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="summary">
+<h1>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h1>
+<p>Within this blog post, we walked through how MetPy and PyART can be used to loop through NEXRAD level 2 data from a recent convective rainfall event and create an animated gif over a location.</p>
+</section>
+
+<div class="section ablog__blog_comments">
+  
+  
+</div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Creating animated gifs with NEXRAD Level 2 radar data using Py-ART</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#within-this-blog-post-we-will-cover">Within this blog post, we will cover:</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#accessing-nexrad-data-from-aws">1: Accessing NEXRAD data from AWS</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-read-the-data-into-py-art-and-create-plots">2: How to read the data into Py-ART and create plots</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-create-animated-gifs-with-acquired-radar-data-from-py-art">3: How to create animated gifs with acquired radar data from Py-ART</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#set-up-the-aws-s3-filysystem">Set up the AWS S3 filysystem</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#selecting-your-date-station-and-time-period">Selecting your date, station, and time period</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-setting-up-individual-locations-to-be-plotted-on-your-map">OPTIONAL* setting up individual locations to be plotted on your map</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#generating-your-file-list">Generating your file list</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#checking-your-plottable-radar-products">Checking your plottable radar products</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-the-data-into-pyart">Reading the data into PyART</a><ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#looping-through-the-radar-data">Looping through the radar data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-code-with-added-features-and-plotted-points">Plotting code with added features and plotted points</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#customizing-the-range-of-plotted-data">Customizing the range of plotted data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#counties">Counties</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#location-plotting">Location plotting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#zooming">Zooming</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#colorbar">Colorbar</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#note">NOTE</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#full-code-block-constructed-properly-within-the-for-loop">Full code block constructed properly within the for loop.</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#gif-creation">GIF creation</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#code-in-whole">Code in whole</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/blog_posts/2024/Animated_GIFS_With_PyART.ipynb.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2013-2022, Py-ART developers.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
