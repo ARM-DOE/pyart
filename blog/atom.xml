@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
   <id>arm-doe.github.io/pyart/</id>
   <title>PyART Blog</title>
-  <updated>2024-06-27T20:19:32.772593+00:00</updated>
+  <updated>2024-07-08T15:56:03.664002+00:00</updated>
   <link href="arm-doe.github.io/pyart/"/>
   <link href="arm-doe.github.io/pyart/blog/atom.xml" rel="self"/>
   <generator uri="https://ablog.readthedocs.io/" version="0.11.10">ABlog</generator>
