@@ -2,10 +2,29 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
   <id>arm-doe.github.io/pyart/</id>
   <title>PyART Blog</title>
-  <updated>2024-07-08T15:56:03.664002+00:00</updated>
+  <updated>2024-07-10T15:12:44.142913+00:00</updated>
   <link href="arm-doe.github.io/pyart/"/>
   <link href="arm-doe.github.io/pyart/blog/atom.xml" rel="self"/>
   <generator uri="https://ablog.readthedocs.io/" version="0.11.10">ABlog</generator>
+  <entry>
+    <id>arm-doe.github.io/pyart/blog_posts/2024/animated-gifs-with-pyart.html</id>
+    <title>Creating animated gifs with NEXRAD Level 2 radar data using Py-ART</title>
+    <updated>2024-06-17T00:00:00+00:00</updated>
+    <author>
+      <name>Brandon Weart</name>
+    </author>
+    <content type="html">&lt;p class="ablog-post-excerpt"&gt;&lt;p&gt;Concepts&lt;/p&gt;
+&lt;p&gt;Importance&lt;/p&gt;
+&lt;img alt="arm-doe.github.io/pyart/_images/f81600ad091928bc71a66002219aceef64b1f2e6dbaaa2e1fa513dca0da722f4.gif" src="arm-doe.github.io/pyart/_images/f81600ad091928bc71a66002219aceef64b1f2e6dbaaa2e1fa513dca0da722f4.gif" /&gt;&lt;/p&gt;
+</content>
+    <link href="arm-doe.github.io/pyart/blog_posts/2024/animated-gifs-with-pyart.html"/>
+    <summary>ConceptsImportance</summary>
+    <category term=""/>
+    <category term="CROCUS" label="CROCUS"/>
+    <category term="data-viz" label="data-viz"/>
+    <category term="radar" label="radar"/>
+    <published>2024-06-17T00:00:00+00:00</published>
+  </entry>
   <entry>
     <id>arm-doe.github.io/pyart/blog_posts/2024/epcape-blog-post.html</id>
     <title>Investigating ARM Scanning Cloud Radar Data from EPCAPE</title>
