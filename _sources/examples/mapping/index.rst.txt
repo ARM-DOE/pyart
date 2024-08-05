@@ -36,7 +36,7 @@ Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of two nearby ARM XSARP radars from antenna coordinates to a Cartesi...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of two nearby ARM XSARP radars from antenna coordinates to a Cartesian grid.">
 
 .. only:: html
 
@@ -53,7 +53,7 @@ Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of a single PPI sweep from Antenna (polar) coordinates to a Cartesia...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of a single PPI sweep from Antenna (polar) coordinates to a Cartesian grid, while using a 2D weighting. This solution is valid only for this case (single PPI sweep), yet it is a useful one (an arguably global solution since it overlooks the z-dimension grid limits). The exclusion of the z-dimension from the RoI and weighting calculations results in minor errors, especially considering the high co-variance of neighboring radar volumes and the typically small Cartesian grid separation. Errors are effectively negligible at low elevation angles common to PPI sweeps.">
 
 .. only:: html
 
@@ -70,7 +70,7 @@ Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of a single radar in Antenna coordinates to another radar in Antenna...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of a single radar in Antenna coordinates to another radar in Antenna coordinates and compare the fields.">
 
 .. only:: html
 

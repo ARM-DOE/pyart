@@ -37,7 +37,7 @@ Performing radar moment corrections in antenna (radial) coordinates.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example the reflectivity attenuation is calculated and then corrected for a polarimetri...">
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example the reflectivity attenuation is calculated and then corrected for a polarimetric radar using a Z-PHI method implemented in Py-ART.">
 
 .. only:: html
 
@@ -54,7 +54,7 @@ Performing radar moment corrections in antenna (radial) coordinates.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example doppler velocities are dealiased using the ial condition of the dealiasing, usi...">
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example doppler velocities are dealiased using the ial condition of the dealiasing, using the region-based dealiasing algorithm in Py-ART.">
 
 .. only:: html
 
@@ -91,7 +91,7 @@ Reading/writing a variety of radar data using Py-ART.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example, we will show how to read in older NEXRAD files prior to 2008 that are missing ...">
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example, we will show how to read in older NEXRAD files prior to 2008 that are missing some coordinate metadata.">
 
 .. only:: html
 
@@ -108,7 +108,7 @@ Reading/writing a variety of radar data using Py-ART.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Within this example, we show how you can remotely access Next Generation Weather Radar (NEXRAD)...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Within this example, we show how you can remotely access Next Generation Weather Radar (NEXRAD) Data from Amazon Web Services and plot quick looks of the datasets.">
 
 .. only:: html
 
@@ -162,7 +162,7 @@ Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of two nearby ARM XSARP radars from antenna coordinates to a Cartesi...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of two nearby ARM XSARP radars from antenna coordinates to a Cartesian grid.">
 
 .. only:: html
 
@@ -179,7 +179,7 @@ Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of a single PPI sweep from Antenna (polar) coordinates to a Cartesia...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of a single PPI sweep from Antenna (polar) coordinates to a Cartesian grid, while using a 2D weighting. This solution is valid only for this case (single PPI sweep), yet it is a useful one (an arguably global solution since it overlooks the z-dimension grid limits). The exclusion of the z-dimension from the RoI and weighting calculations results in minor errors, especially considering the high co-variance of neighboring radar volumes and the typically small Cartesian grid separation. Errors are effectively negligible at low elevation angles common to PPI sweeps.">
 
 .. only:: html
 
@@ -196,7 +196,7 @@ Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of a single radar in Antenna coordinates to another radar in Antenna...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of a single radar in Antenna coordinates to another radar in Antenna coordinates and compare the fields.">
 
 .. only:: html
 
@@ -301,7 +301,7 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="An example which extracts a cross section at two azimuth angles from a volume of PPI scans and ...">
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which extracts a cross section at two azimuth angles from a volume of PPI scans and plots both cross sections.">
 
 .. only:: html
 
@@ -335,7 +335,7 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a two panel RHI plot of a cfradial file.  The fields included in the t...">
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a two panel RHI plot of a cfradial file.  The fields included in the two panels are reflectivity and doppler velocity.">
 
 .. only:: html
 
@@ -369,7 +369,7 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a multiple panel RHI plot of a CF/Radial file using a RadarDisplay obj...">
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a multiple panel RHI plot of a CF/Radial file using a RadarDisplay object.">
 
 .. only:: html
 
@@ -386,7 +386,7 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="An example that creates a 3 panel plot of a PPI, latitude slice, and longitude slice using xarr...">
+    <div class="sphx-glr-thumbcontainer" tooltip="An example that creates a 3 panel plot of a PPI, latitude slice, and longitude slice using xarray and a cartopy background.">
 
 .. only:: html
 
@@ -420,7 +420,7 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Image muting reduces the visual prominence of the reflectivities within identified melting and ...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Image muting reduces the visual prominence of the reflectivities within identified melting and mixed precipitation features in winter storms (i.e. regions with low correlation coefficient values). Reflectivities corresponding to melting and mixed precipitation features are deemphasized using a gray scale and the regions with just snow and just rain are depicted in a corresponding full-color scale. The ultimate utility of image muting radar reflectivity is to reduce the misinterpretation of regions of melting or mixed precipitation as opposed to heavy snow or heavy rain.">
 
 .. only:: html
 
@@ -437,7 +437,7 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates an RHI plot of velocity using a RadarDisplay object and adding Reflect...">
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates an RHI plot of velocity using a RadarDisplay object and adding Reflectivity contours from the same MDV file.">
 
 .. only:: html
 
@@ -488,7 +488,7 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates an RHI plot of reflectivity using a RadarDisplay object and adding dif...">
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which creates an RHI plot of reflectivity using a RadarDisplay object and adding differnential Reflectivity contours from the same MDV file.">
 
 .. only:: html
 
@@ -505,7 +505,7 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="This is an example of what colormaps are available in Py-ART, and how to add them to your own p...">
+    <div class="sphx-glr-thumbcontainer" tooltip="This is an example of what colormaps are available in Py-ART, and how to add them to your own plots.">
 
 .. only:: html
 
@@ -559,7 +559,7 @@ Retrievals from various radars, such as additional fields or subsets of the data
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Calculates and plots the composite reflectivity, or the maximum reflectivity across all of the ...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Calculates and plots the composite reflectivity, or the maximum reflectivity across all of the elevations.">
 
 .. only:: html
 
@@ -610,7 +610,7 @@ Retrievals from various radars, such as additional fields or subsets of the data
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip=" This script shows how to use hydrometeor classification for X-band radar data.  We are reading...">
+    <div class="sphx-glr-thumbcontainer" tooltip=" This script shows how to use hydrometeor classification for X-band radar data.  We are reading radar data, plotting some variables of interest and applying the  classification to identify types of precipitation.">
 
 .. only:: html
 

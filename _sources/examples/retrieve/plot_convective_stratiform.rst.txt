@@ -652,7 +652,7 @@ https://doi.org/10.1175/1520-0450(2003)042%3C0020:SNUART%3E2.0.CO;2
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 20.574 seconds)
+   **Total running time of the script:** (0 minutes 22.420 seconds)
 
 
 .. _sphx_glr_download_examples_retrieve_plot_convective_stratiform.py:
@@ -668,6 +668,10 @@ https://doi.org/10.1175/1520-0450(2003)042%3C0020:SNUART%3E2.0.CO;2
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_convective_stratiform.py <plot_convective_stratiform.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: plot_convective_stratiform.zip <plot_convective_stratiform.zip>`
 
 
 .. only:: html

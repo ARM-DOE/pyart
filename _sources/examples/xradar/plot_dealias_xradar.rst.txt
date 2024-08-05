@@ -205,7 +205,7 @@ We can visualize the uncorrected and corrected radial velocity fields
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 10.299 seconds)
+   **Total running time of the script:** (0 minutes 9.865 seconds)
 
 
 .. _sphx_glr_download_examples_xradar_plot_dealias_xradar.py:
@@ -221,6 +221,10 @@ We can visualize the uncorrected and corrected radial velocity fields
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_dealias_xradar.py <plot_dealias_xradar.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: plot_dealias_xradar.zip <plot_dealias_xradar.zip>`
 
 
 .. only:: html

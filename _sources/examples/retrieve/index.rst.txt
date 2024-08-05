@@ -36,7 +36,7 @@ Retrievals from various radars, such as additional fields or subsets of the data
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="Calculates and plots the composite reflectivity, or the maximum reflectivity across all of the ...">
+    <div class="sphx-glr-thumbcontainer" tooltip="Calculates and plots the composite reflectivity, or the maximum reflectivity across all of the elevations.">
 
 .. only:: html
 
@@ -87,7 +87,7 @@ Retrievals from various radars, such as additional fields or subsets of the data
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip=" This script shows how to use hydrometeor classification for X-band radar data.  We are reading...">
+    <div class="sphx-glr-thumbcontainer" tooltip=" This script shows how to use hydrometeor classification for X-band radar data.  We are reading radar data, plotting some variables of interest and applying the  classification to identify types of precipitation.">
 
 .. only:: html
 

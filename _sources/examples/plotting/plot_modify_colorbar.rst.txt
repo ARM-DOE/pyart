@@ -196,7 +196,7 @@ and slightly overlaps the PPI display
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.101 seconds)
+   **Total running time of the script:** (0 minutes 3.062 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_modify_colorbar.py:
@@ -212,6 +212,10 @@ and slightly overlaps the PPI display
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_modify_colorbar.py <plot_modify_colorbar.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: plot_modify_colorbar.zip <plot_modify_colorbar.zip>`
 
 
 .. only:: html

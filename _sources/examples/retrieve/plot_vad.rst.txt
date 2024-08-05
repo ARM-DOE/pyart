@@ -134,7 +134,7 @@ Calculates a VAD and plots a vertical profile of wind
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 2.667 seconds)
+   **Total running time of the script:** (0 minutes 4.178 seconds)
 
 
 .. _sphx_glr_download_examples_retrieve_plot_vad.py:
@@ -150,6 +150,10 @@ Calculates a VAD and plots a vertical profile of wind
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_vad.py <plot_vad.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: plot_vad.zip <plot_vad.zip>`
 
 
 .. only:: html

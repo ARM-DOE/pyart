@@ -19,7 +19,7 @@ Performing radar moment corrections in antenna (radial) coordinates.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example the reflectivity attenuation is calculated and then corrected for a polarimetri...">
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example the reflectivity attenuation is calculated and then corrected for a polarimetric radar using a Z-PHI method implemented in Py-ART.">
 
 .. only:: html
 
@@ -36,7 +36,7 @@ Performing radar moment corrections in antenna (radial) coordinates.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="In this example doppler velocities are dealiased using the ial condition of the dealiasing, usi...">
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example doppler velocities are dealiased using the ial condition of the dealiasing, using the region-based dealiasing algorithm in Py-ART.">
 
 .. only:: html
 

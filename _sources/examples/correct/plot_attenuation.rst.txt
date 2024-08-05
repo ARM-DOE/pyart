@@ -125,7 +125,7 @@ for a polarimetric radar using a Z-PHI method implemented in Py-ART.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 8.622 seconds)
+   **Total running time of the script:** (0 minutes 10.991 seconds)
 
 
 .. _sphx_glr_download_examples_correct_plot_attenuation.py:
@@ -141,6 +141,10 @@ for a polarimetric radar using a Z-PHI method implemented in Py-ART.
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_attenuation.py <plot_attenuation.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: plot_attenuation.zip <plot_attenuation.zip>`
 
 
 .. only:: html

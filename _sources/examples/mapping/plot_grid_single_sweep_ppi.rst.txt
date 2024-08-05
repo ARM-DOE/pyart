@@ -186,7 +186,7 @@ negligible at low elevation angles common to PPI sweeps.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 5.836 seconds)
+   **Total running time of the script:** (0 minutes 6.242 seconds)
 
 
 .. _sphx_glr_download_examples_mapping_plot_grid_single_sweep_ppi.py:
@@ -202,6 +202,10 @@ negligible at low elevation angles common to PPI sweeps.
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_grid_single_sweep_ppi.py <plot_grid_single_sweep_ppi.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: plot_grid_single_sweep_ppi.zip <plot_grid_single_sweep_ppi.zip>`
 
 
 .. only:: html

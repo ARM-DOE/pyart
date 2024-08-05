@@ -74,7 +74,7 @@ NEXRAD file.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.665 seconds)
+   **Total running time of the script:** (0 minutes 2.140 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_nexrad_reflectivity.py:
@@ -90,6 +90,10 @@ NEXRAD file.
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_nexrad_reflectivity.py <plot_nexrad_reflectivity.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: plot_nexrad_reflectivity.zip <plot_nexrad_reflectivity.zip>`
 
 
 .. only:: html

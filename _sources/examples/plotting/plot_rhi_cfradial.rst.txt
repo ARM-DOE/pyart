@@ -96,7 +96,7 @@ a RadarDisplay object.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.849 seconds)
+   **Total running time of the script:** (0 minutes 1.829 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_rhi_cfradial.py:
@@ -112,6 +112,10 @@ a RadarDisplay object.
     .. container:: sphx-glr-download sphx-glr-download-python
 
       :download:`Download Python source code: plot_rhi_cfradial.py <plot_rhi_cfradial.py>`
+
+    .. container:: sphx-glr-download sphx-glr-download-zip
+
+      :download:`Download zipped: plot_rhi_cfradial.zip <plot_rhi_cfradial.zip>`
 
 
 .. only:: html
