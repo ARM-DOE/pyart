@@ -663,7 +663,7 @@ def hydroclass_semisupervised(
     of polarimetric radar measurements: a semi-supervised approach,
     Atmos. Meas. Tech., 9, 4425-4445, doi:10.5194/amt-9-4425-2016, 2016
 
-    USage
+    Usage
     -----
     .. code-block:: python
         hydro_class = pyart.retrieve.hydroclass_semisupervised(
