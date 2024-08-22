@@ -643,6 +643,16 @@ def hydroclass_semisupervised(
     -------
     hydro : dict
         Hydrometeor classification field.
+            - 0: Not classified
+            - 1: Aggregates (large snowflakes or ice particles)
+            - 2: Ice crystals
+            - 3: Light rain
+            - 4: Rimed particles (ice particles coated with supercooled water)
+            - 5: Rain
+            - 6: Vertically oriented ice
+            - 7: Wet snow
+            - 8: Melting hail
+            - 9: Dry hail or high-density graupel
 
     References
     ----------
@@ -660,8 +670,8 @@ def hydroclass_semisupervised(
 
     If the radar frequency information is missing from the radar object, you can add it in
     `radar.instrument_parameters`, as follows:
-    .. code-block:: python
 
+    .. code-block:: python
         radar.instrument_parameters["frequency"] = {
             "long_name": "Radar frequency",
             "units": "Hz",
