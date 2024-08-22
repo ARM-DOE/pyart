@@ -612,10 +612,10 @@ def hydroclass_semisupervised(
     radar_freq=None,
 ):
     """
-    Classifies precipitation echoes following the approach by Besic et al (2016).
+    Classifies precipitation echoes into hydrometeor types.
 
-    The `hydroclass_semisupervised` function classifies polarimetric radar data into 9 hydrometeor types 
-    using a semi-supervised approach (Besic et al., 2016).
+    The `hydroclass_semisupervised` function classifies precipitation echoes in the polarimetric radar data
+    into 9 hydrometeor types using a semi-supervised approach (Besic et al., 2016).
 
     Parameters
     ----------
