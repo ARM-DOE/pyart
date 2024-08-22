@@ -642,12 +642,12 @@ def hydroclass_semisupervised(
     Returns
     -------
     hydro : dict
-        Hydrometeor classification field.
+        Hydrometeor classification.
             - 0: Not classified
-            - 1: Aggregates (large snowflakes or ice particles)
+            - 1: Aggregates
             - 2: Ice crystals
             - 3: Light rain
-            - 4: Rimed particles (ice particles coated with supercooled water)
+            - 4: Rimed particles
             - 5: Rain
             - 6: Vertically oriented ice
             - 7: Wet snow
@@ -660,6 +660,18 @@ def hydroclass_semisupervised(
     and Berne, A.: Hydrometeor classification through statistical clustering
     of polarimetric radar measurements: a semi-supervised approach,
     Atmos. Meas. Tech., 9, 4425-4445, doi:10.5194/amt-9-4425-2016, 2016
+
+    USage
+    -----
+    .. code-block:: python
+        hydro_class = pyart.retrieve.hydroclass_semisupervised(
+            radar,
+            refl_field="corrected_reflectivity",
+            zdr_field="corrected_differential_reflectivity",
+            kdp_field="specific_differential_phase",
+            rhv_field="uncorrected_cross_correlation_ratio",
+            temp_field="temperature",
+        )
 
     Notes
     -----
