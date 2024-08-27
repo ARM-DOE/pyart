@@ -165,6 +165,11 @@ def compute_l(radar, rhohv_field=None, l_field=None):
     l_field_out : dict
         L field.
 
+    References
+    ----------
+    Ryzhkov, A. V., 2001: Interpretation of Polarimetric Radar Covariance Matrix for Meteorological Scatterers: Theoretical Analysis.
+    J. Atmos. Oceanic Technol., 18, 315–328, https://doi.org/10.1175/1520-0426(2001)018<0315:IOPRCM>2.0.CO;2.
+
     """
     # parse the field parameters
     if rhohv_field is None:
