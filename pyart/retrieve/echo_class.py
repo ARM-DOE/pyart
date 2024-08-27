@@ -612,8 +612,10 @@ def hydroclass_semisupervised(
     radar_freq=None,
 ):
     """
-    Classifies precipitation echoes following the approach by Besic et al
-    (2016).
+    Classifies precipitation echoes into hydrometeor types.
+
+    The `hydroclass_semisupervised` function classifies precipitation echoes in the polarimetric radar data
+    into 9 hydrometeor types using a semi-supervised approach (Besic et al., 2016).
 
     Parameters
     ----------
@@ -642,7 +644,17 @@ def hydroclass_semisupervised(
     Returns
     -------
     hydro : dict
-        Hydrometeor classification field.
+        Hydrometeor classification.
+            - 0: Not classified
+            - 1: Aggregates
+            - 2: Ice crystals
+            - 3: Light rain
+            - 4: Rimed particles
+            - 5: Rain
+            - 6: Vertically oriented ice
+            - 7: Wet snow
+            - 8: Melting hail
+            - 9: Dry hail or high-density graupel
 
     References
     ----------
@@ -650,6 +662,18 @@ def hydroclass_semisupervised(
     and Berne, A.: Hydrometeor classification through statistical clustering
     of polarimetric radar measurements: a semi-supervised approach,
     Atmos. Meas. Tech., 9, 4425-4445, doi:10.5194/amt-9-4425-2016, 2016
+
+    Usage
+    -----
+    .. code-block:: python
+        hydro_class = pyart.retrieve.hydroclass_semisupervised(
+            radar,
+            refl_field="corrected_reflectivity",
+            zdr_field="corrected_differential_reflectivity",
+            kdp_field="specific_differential_phase",
+            rhv_field="uncorrected_cross_correlation_ratio",
+            temp_field="temperature",
+        )
 
     Notes
     -----
@@ -660,8 +684,8 @@ def hydroclass_semisupervised(
 
     If the radar frequency information is missing from the radar object, you can add it in
     `radar.instrument_parameters`, as follows:
-    .. code-block:: python
 
+    .. code-block:: python
         radar.instrument_parameters["frequency"] = {
             "long_name": "Radar frequency",
             "units": "Hz",
