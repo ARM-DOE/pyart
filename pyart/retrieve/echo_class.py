@@ -615,8 +615,10 @@ def hydroclass_semisupervised(radar,
                               temp_ref='temperature', compute_entropy=False,
                               output_distances=False, vectorize=False):
     """
-    Classifies precipitation echoes following the approach by Besic et al
-    (2016).
+    Classifies precipitation echoes into hydrometeor types.
+
+    The `hydroclass_semisupervised` function classifies precipitation echoes in the polarimetric radar data
+    into 9 hydrometeor types using a semi-supervised approach (Besic et al., 2016).
 
     Parameters
     ----------
@@ -663,6 +665,30 @@ def hydroclass_semisupervised(radar,
     -------
     fields_dict : dict
         Dictionary containing the retrieved fields
+    
+    The output directionary field_dict has the following keys:
+
+    hydro : dict
+        Hydrometeor classification.
+            - 0: Not classified
+            - 1: Aggregates
+            - 2: Ice crystals
+            - 3: Light rain
+            - 4: Rimed particles
+            - 5: Rain
+            - 6: Vertically oriented ice
+            - 7: Wet snow
+            - 8: Melting hail
+            - 9: Dry hail or high-density graupel
+   
+    if compute_entropy is True:
+
+    entropy : dict
+        Shannon entropy of the hydrometeor demixing
+
+    propX : dict
+        Proportion of a given hydrometeor class in the polarimetric 
+        decomposition of a radar volume
 
     References
     ----------
@@ -671,7 +697,41 @@ def hydroclass_semisupervised(radar,
     of polarimetric radar measurements: a semi-supervised approach,
     Atmos. Meas. Tech., 9, 4425-4445, doi:10.5194/amt-9-4425-2016, 2016
 
+    Besic, N., Gehring, J., Praz, C., Figueras i Ventura, J., Grazioli, J., Gabella, 
+    M., Germann, U., and Berne, A.: Unraveling hydrometeor mixtures in polarimetric
+    radar measurements, Atmos. Meas. Tech., 11, 4847–4866,
+    https://doi.org/10.5194/amt-11-4847-2018, 2018.
+
+    Usage
+    -----
+    .. code-block:: python
+        hydro_class = pyart.retrieve.hydroclass_semisupervised(
+            radar,
+            refl_field="corrected_reflectivity",
+            zdr_field="corrected_differential_reflectivity",
+            kdp_field="specific_differential_phase",
+            rhv_field="uncorrected_cross_correlation_ratio",
+            temp_field="temperature",
+        )
+
+    Notes
+    -----
+    The default hydrometeor classification is valid for C-band radars. For X-band radars,
+    if frequency information is not present in the `radar.instrument_parameters`, the user-supplied
+    `radar_freq` will be used with a warning. If both `radar.instrument_parameters` and
+    `radar_freq` parameter are missing, the algorithm defaults to the C band.
+
+    If the radar frequency information is missing from the radar object, you can add it in
+    `radar.instrument_parameters`, as follows:
+
+    .. code-block:: python
+        radar.instrument_parameters["frequency"] = {
+            "long_name": "Radar frequency",
+            "units": "Hz",
+            "data": [9.2e9]
+        }
     """
+    
     # select the centroids as a function of frequency band
     if mass_centers is None:
         # assign coefficients according to radar frequency
