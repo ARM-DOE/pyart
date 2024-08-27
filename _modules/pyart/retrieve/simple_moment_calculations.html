@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.simple_moment_calculations &#8212; Py-ART 1.18.7.post1 documentation</title>
+    <title>pyart.retrieve.simple_moment_calculations &#8212; Py-ART 1.18.7.post2 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=0c9bacbf"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=3b6326d5"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -143,7 +143,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.7.post1 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.7.post2 documentation</p>
   
 </a></div>
     
@@ -644,6 +644,11 @@ document.write(`
 <span class="sd">    l_field_out : dict</span>
 <span class="sd">        L field.</span>
 
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Ryzhkov, A. V., 2001: Interpretation of Polarimetric Radar Covariance Matrix for Meteorological Scatterers: Theoretical Analysis.</span>
+<span class="sd">    J. Atmos. Oceanic Technol., 18, 315–328, https://doi.org/10.1175/1520-0426(2001)018&lt;0315:IOPRCM&gt;2.0.CO;2.</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">rhohv_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -670,6 +675,8 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the Circular Depolarization Ratio.</span>
 
+
+
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    radar : Radar</span>
@@ -685,6 +692,13 @@ document.write(`
 <span class="sd">    -------</span>
 <span class="sd">    cdr : dict</span>
 <span class="sd">        CDR field.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Matrosov, S. Y., 2004: Depolarization Estimates from Linear H and V Measurements with Weather</span>
+<span class="sd">    Radars Operating in Simultaneous Transmission–Simultaneous Receiving Mode.</span>
+<span class="sd">    J. Atmos. Oceanic Technol., 21, 574–583,</span>
+<span class="sd">    https://doi.org/10.1175/1520-0426(2004)021&lt;0574:DEFLHA&gt;2.0.CO;2.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># parse the field parameters</span>
