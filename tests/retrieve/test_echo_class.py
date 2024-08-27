@@ -144,7 +144,7 @@ def test_hydroclass_semisupervised():
 
     mass_centers = pyart.retrieve.echo_class._get_mass_centers(10e9)
 
-    hydro_nofreq = pyart.retrieve.hydroclass_semisupervised(radar_small)['hydro']
+    hydro_nofreq = pyart.retrieve.hydroclass_semisupervised(radar_small)["hydro"]
 
     assert "units" in hydro_nofreq.keys()
     assert "standard_name" in hydro_nofreq.keys()
@@ -156,16 +156,17 @@ def test_hydroclass_semisupervised():
     assert_allclose(hydro_nofreq["data"][0][-5:], [3, 3, 3, 3, 3])
 
     radar_small.instrument_parameters["frequency"] = {"data": np.array([5e9])}
-    hydro_freq = pyart.retrieve.hydroclass_semisupervised(radar_small)['hydro']
+    hydro_freq = pyart.retrieve.hydroclass_semisupervised(radar_small)["hydro"]
     assert_allclose(hydro_freq["data"][0][0:5], [7, 7, 7, 7, 7])
     assert_allclose(hydro_freq["data"][0][-5:], [3, 3, 3, 3, 3])
 
     hydro = pyart.retrieve.hydroclass_semisupervised(
         radar_small, mass_centers=mass_centers
-    )['hydro']
+    )["hydro"]
 
     assert_allclose(hydro["data"][0][0:5], [7, 7, 7, 7, 7])
     assert_allclose(hydro["data"][0][-5:], [3, 3, 3, 3, 3])
+
 
 def test_data_limits_table():
     dlimits_dict = pyart.retrieve.echo_class._data_limits_table()
@@ -260,7 +261,7 @@ def test_assign_to_class():
     )
 
     mass_centers = pyart.retrieve.echo_class._get_mass_centers(10e9)
-    field_dict = {'Zh':zh, 'ZDR':zdr, 'KDP':kdp, 'RhoHV':rhohv, 'relH':relh}
+    field_dict = {"Zh": zh, "ZDR": zdr, "KDP": kdp, "RhoHV": rhohv, "relH": relh}
 
     hydroclass, _, _ = pyart.retrieve.echo_class._assign_to_class(
         field_dict, mass_centers

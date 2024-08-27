@@ -9,7 +9,8 @@ import numpy as np
 # https://en.wikipedia.org/wiki/Directional_statistics
 # https://en.wikipedia.org/wiki/Mean_of_circular_quantities
 
-def compute_directional_stats(field, avg_type='mean', nvalid_min=1, axis=0):
+
+def compute_directional_stats(field, avg_type="mean", nvalid_min=1, axis=0):
     """
     Computes the mean or the median along one of the axis (ray or range)
 
@@ -31,7 +32,7 @@ def compute_directional_stats(field, avg_type='mean', nvalid_min=1, axis=0):
     nvalid : ndarray 1D
         The number of valid points used in the computation
     """
-    if avg_type == 'mean':
+    if avg_type == "mean":
         values = np.ma.mean(field, axis=axis)
     else:
         values = np.ma.median(field, axis=axis)
@@ -42,6 +43,7 @@ def compute_directional_stats(field, avg_type='mean', nvalid_min=1, axis=0):
     values[nvalid < nvalid_min] = np.ma.masked
 
     return values, nvalid
+
 
 def mean_of_two_angles(angles1, angles2):
     """

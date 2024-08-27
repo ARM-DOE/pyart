@@ -2,7 +2,6 @@
 Functions for reading NEXRAD level 2 files.
 """
 
-
 # This file is part of the Py-ART, the Python ARM Radar Toolkit
 # https://github.com/ARM-DOE/pyart
 

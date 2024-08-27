@@ -3,7 +3,6 @@ A class for plotting grid objects with a basemap.
 
 """
 
-
 import matplotlib.pyplot as plt
 import numpy as np
 

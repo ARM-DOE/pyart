@@ -7,32 +7,34 @@ from pyart.util import circular_stats
 
 
 def test_compute_directional_stats():
-    field_1d = np.ma.array([1,1,3,4,5])
+    field_1d = np.ma.array([1, 1, 3, 4, 5])
     field_1d.mask = [True, False, False, False, False]
     field = np.tile(field_1d, (10, 1))
 
-    mean, nvalid = circular_stats.compute_directional_stats(field, axis = 1)
-    median, nvalid = circular_stats.compute_directional_stats(field, axis = 1,
-                                                              avg_type = 'median')
+    mean, nvalid = circular_stats.compute_directional_stats(field, axis=1)
+    median, nvalid = circular_stats.compute_directional_stats(
+        field, axis=1, avg_type="median"
+    )
 
     assert np.all(mean == 3.25)
     assert np.all(median == 3.5)
     assert np.all(nvalid == 4)
 
     # Test with larger nb of nvalid_min
-    mean, nvalid = circular_stats.compute_directional_stats(field, axis = 1,
-                                                            nvalid_min = 5)
+    mean, nvalid = circular_stats.compute_directional_stats(field, axis=1, nvalid_min=5)
     assert np.all(mean.mask)
 
     # Test other direction
-    mean, nvalid = circular_stats.compute_directional_stats(field, axis = 0)
-    median, nvalid = circular_stats.compute_directional_stats(field, axis = 0,
-                                                              avg_type = 'median')
+    mean, nvalid = circular_stats.compute_directional_stats(field, axis=0)
+    median, nvalid = circular_stats.compute_directional_stats(
+        field, axis=0, avg_type="median"
+    )
 
-    ref = np.ma.array([np.nan, 1, 3, 4, 5], mask = [1, 0 , 0, 0,  0])
+    ref = np.ma.array([np.nan, 1, 3, 4, 5], mask=[1, 0, 0, 0, 0])
     assert np.all(mean == ref)
     assert np.all(median == ref)
     assert np.all(nvalid == [0, 10, 10, 10, 10])
+
 
 def test_mean_of_two_angles():
     mean = circular_stats.mean_of_two_angles(np.pi / 4 + 0.2, 7 * np.pi / 4)

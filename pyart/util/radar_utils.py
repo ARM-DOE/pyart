@@ -414,17 +414,17 @@ def subset_radar(
 
     if radar_aux.instrument_parameters is not None:
         if "nyquist_velocity" in radar_aux.instrument_parameters:
-            radar_aux.instrument_parameters["nyquist_velocity"][
-                "data"
-            ] = radar_aux.instrument_parameters["nyquist_velocity"]["data"][ind_rays]
+            radar_aux.instrument_parameters["nyquist_velocity"]["data"] = (
+                radar_aux.instrument_parameters["nyquist_velocity"]["data"][ind_rays]
+            )
         if "pulse_width" in radar_aux.instrument_parameters:
-            radar_aux.instrument_parameters["pulse_width"][
-                "data"
-            ] = radar_aux.instrument_parameters["pulse_width"]["data"][ind_rays]
+            radar_aux.instrument_parameters["pulse_width"]["data"] = (
+                radar_aux.instrument_parameters["pulse_width"]["data"][ind_rays]
+            )
         if "number_of_pulses" in radar_aux.instrument_parameters:
-            radar_aux.instrument_parameters["number_of_pulses"][
-                "data"
-            ] = radar_aux.instrument_parameters["number_of_pulses"]["data"][ind_rays]
+            radar_aux.instrument_parameters["number_of_pulses"]["data"] = (
+                radar_aux.instrument_parameters["number_of_pulses"]["data"][ind_rays]
+            )
 
     # Get new fields
     if field_names is None:
@@ -690,6 +690,7 @@ def image_mute_radar(radar, field, mute_field, mute_threshold, field_threshold=N
     radar.add_field("muted_" + field, muted_dict)
     return radar
 
+
 def ma_broadcast_to(array, tup):
     """
     Is used to guarantee that a masked array can be broadcasted without
@@ -714,7 +715,7 @@ def ma_broadcast_to(array, tup):
         initial_fill_value = array.fill_value
         broadcasted_mask = np.broadcast_to(initial_mask, tup)
         return np.ma.array(
-            broadcasted_array, mask=broadcasted_mask,
-            fill_value=initial_fill_value)
+            broadcasted_array, mask=broadcasted_mask, fill_value=initial_fill_value
+        )
 
     return broadcasted_array

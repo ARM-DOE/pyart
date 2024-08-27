@@ -77,6 +77,7 @@ def antenna_to_cartesian(ranges, azimuths, elevations):
     y = s * np.cos(theta_a)
     return x, y, z
 
+
 def cartesian_to_antenna(x, y, z):
     """
     Returns antenna coordinates from Cartesian coordinates.
@@ -98,12 +99,13 @@ def cartesian_to_antenna(x, y, z):
         Effective radius scale factor
 
     """
-    ranges = np.sqrt(x ** 2. + y ** 2. + z ** 2.)
-    elevations = np.rad2deg(np.arctan(z / np.sqrt(x ** 2. + y ** 2.)))
+    ranges = np.sqrt(x**2.0 + y**2.0 + z**2.0)
+    elevations = np.rad2deg(np.arctan(z / np.sqrt(x**2.0 + y**2.0)))
     azimuths = np.rad2deg(np.arctan2(x, y))  # [-180, 180]
-    azimuths[azimuths < 0.] += 360.  # [0, 360]
+    azimuths[azimuths < 0.0] += 360.0  # [0, 360]
 
     return ranges, azimuths, elevations
+
 
 def antenna_vectors_to_cartesian(ranges, azimuths, elevations, edges=False):
     """

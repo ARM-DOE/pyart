@@ -601,19 +601,27 @@ def feature_detection(
     return feature_dict
 
 
-def hydroclass_semisupervised(radar,
-                              hydro_names=('AG', 'CR', 'LR', 'RP', 'RN', 'VI',
-                                           'WS', 'MH', 'IH/HDG'),
-                              var_names=('Zh', 'ZDR', 'KDP', 'RhoHV',
-                                         'relH'),
-                              mass_centers=None,
-                              weights=np.array([1., 1., 1., 0.75, 0.5]),
-                              value=50., lapse_rate=-6.5, refl_field=None,
-                              zdr_field=None, rhv_field=None, kdp_field=None,
-                              temp_field=None, iso0_field=None,
-                              hydro_field=None, entropy_field=None,
-                              temp_ref='temperature', compute_entropy=False,
-                              output_distances=False, vectorize=False):
+def hydroclass_semisupervised(
+    radar,
+    hydro_names=("AG", "CR", "LR", "RP", "RN", "VI", "WS", "MH", "IH/HDG"),
+    var_names=("Zh", "ZDR", "KDP", "RhoHV", "relH"),
+    mass_centers=None,
+    weights=np.array([1.0, 1.0, 1.0, 0.75, 0.5]),
+    value=50.0,
+    lapse_rate=-6.5,
+    refl_field=None,
+    zdr_field=None,
+    rhv_field=None,
+    kdp_field=None,
+    temp_field=None,
+    iso0_field=None,
+    hydro_field=None,
+    entropy_field=None,
+    temp_ref="temperature",
+    compute_entropy=False,
+    output_distances=False,
+    vectorize=False,
+):
     """
     Classifies precipitation echoes into hydrometeor types.
 
@@ -665,7 +673,7 @@ def hydroclass_semisupervised(radar,
     -------
     fields_dict : dict
         Dictionary containing the retrieved fields
-    
+
     The output directionary field_dict has the following keys:
 
     hydro : dict
@@ -680,14 +688,14 @@ def hydroclass_semisupervised(radar,
             - 7: Wet snow
             - 8: Melting hail
             - 9: Dry hail or high-density graupel
-   
+
     if compute_entropy is True:
 
     entropy : dict
         Shannon entropy of the hydrometeor demixing
 
     propX : dict
-        Proportion of a given hydrometeor class in the polarimetric 
+        Proportion of a given hydrometeor class in the polarimetric
         decomposition of a radar volume
 
     References
@@ -697,7 +705,7 @@ def hydroclass_semisupervised(radar,
     of polarimetric radar measurements: a semi-supervised approach,
     Atmos. Meas. Tech., 9, 4425-4445, doi:10.5194/amt-9-4425-2016, 2016
 
-    Besic, N., Gehring, J., Praz, C., Figueras i Ventura, J., Grazioli, J., Gabella, 
+    Besic, N., Gehring, J., Praz, C., Figueras i Ventura, J., Grazioli, J., Gabella,
     M., Germann, U., and Berne, A.: Unraveling hydrometeor mixtures in polarimetric
     radar measurements, Atmos. Meas. Tech., 11, 4847–4866,
     https://doi.org/10.5194/amt-11-4847-2018, 2018.
@@ -731,74 +739,76 @@ def hydroclass_semisupervised(radar,
             "data": [9.2e9]
         }
     """
-    
+
     # select the centroids as a function of frequency band
     if mass_centers is None:
         # assign coefficients according to radar frequency
-        if 'frequency' in radar.instrument_parameters:
+        if "frequency" in radar.instrument_parameters:
             mass_centers = _get_mass_centers(
-                radar.instrument_parameters['frequency']['data'][0])
+                radar.instrument_parameters["frequency"]["data"][0]
+            )
         else:
-            mass_centers = _mass_centers_table()['C']
-            warn('Radar frequency unknown. ' +
-                 'Default coefficients for C band will be applied')
+            mass_centers = _mass_centers_table()["C"]
+            warn(
+                "Radar frequency unknown. "
+                + "Default coefficients for C band will be applied"
+            )
 
     if hydro_field is None:
-        hydro_field = get_field_name('radar_echo_classification')
+        hydro_field = get_field_name("radar_echo_classification")
     if compute_entropy:
         if entropy_field is None:
-            entropy_field = get_field_name('hydroclass_entropy')
+            entropy_field = get_field_name("hydroclass_entropy")
 
     # Get the data fields
     fields_dict = {}
     for var_name in var_names:
-        if var_name == 'Zh':
+        if var_name == "Zh":
             if refl_field is None:
-                refl_field = get_field_name('reflectivity')
+                refl_field = get_field_name("reflectivity")
             radar.check_field_exists(refl_field)
-            fields_dict.update({
-                var_name: deepcopy(radar.fields[refl_field]['data'])})
-        elif var_name == 'ZDR':
+            fields_dict.update({var_name: deepcopy(radar.fields[refl_field]["data"])})
+        elif var_name == "ZDR":
             if zdr_field is None:
-                zdr_field = get_field_name('differential_reflectivity')
+                zdr_field = get_field_name("differential_reflectivity")
             radar.check_field_exists(zdr_field)
-            fields_dict.update({
-                var_name: deepcopy(radar.fields[zdr_field]['data'])})
-        elif var_name == 'KDP':
+            fields_dict.update({var_name: deepcopy(radar.fields[zdr_field]["data"])})
+        elif var_name == "KDP":
             if kdp_field is None:
-                kdp_field = get_field_name('specific_differential_phase')
+                kdp_field = get_field_name("specific_differential_phase")
             radar.check_field_exists(kdp_field)
-            fields_dict.update({
-                var_name: deepcopy(radar.fields[kdp_field]['data'])})
-        elif var_name == 'RhoHV':
+            fields_dict.update({var_name: deepcopy(radar.fields[kdp_field]["data"])})
+        elif var_name == "RhoHV":
             if rhv_field is None:
-                rhv_field = get_field_name('cross_correlation_ratio')
+                rhv_field = get_field_name("cross_correlation_ratio")
             radar.check_field_exists(rhv_field)
-            fields_dict.update({
-                var_name: deepcopy(radar.fields[rhv_field]['data'])})
-        elif var_name == 'relH':
-            if temp_ref == 'temperature':
+            fields_dict.update({var_name: deepcopy(radar.fields[rhv_field]["data"])})
+        elif var_name == "relH":
+            if temp_ref == "temperature":
                 if temp_field is None:
-                    temp_field = get_field_name('temperature')
+                    temp_field = get_field_name("temperature")
                 radar.check_field_exists(temp_field)
                 # convert temp in relative height respect to iso0
-                temp = deepcopy(radar.fields[temp_field]['data'])
-                fields_dict.update({var_name: temp * (1000. / lapse_rate)})
+                temp = deepcopy(radar.fields[temp_field]["data"])
+                fields_dict.update({var_name: temp * (1000.0 / lapse_rate)})
             else:
                 if iso0_field is None:
-                    iso0_field = get_field_name('height_over_iso0')
+                    iso0_field = get_field_name("height_over_iso0")
                 radar.check_field_exists(iso0_field)
-                fields_dict.update({
-                    var_name: deepcopy(radar.fields[iso0_field]['data'])})
+                fields_dict.update(
+                    {var_name: deepcopy(radar.fields[iso0_field]["data"])}
+                )
         else:
             raise ValueError(
-                'Variable ' + var_name + ' unknown. '
-                + 'Valid variable names for hydrometeor classification are: '
-                + 'relH, Zh, ZDR, KDP and RhoHV')
+                "Variable "
+                + var_name
+                + " unknown. "
+                + "Valid variable names for hydrometeor classification are: "
+                + "relH, Zh, ZDR, KDP and RhoHV"
+            )
 
     # standardize data and centroids
-    mc_std = np.empty(
-        np.shape(mass_centers), dtype=fields_dict[var_names[0]].dtype)
+    mc_std = np.empty(np.shape(mass_centers), dtype=fields_dict[var_names[0]].dtype)
     for i, var_name in enumerate(var_names):
         mc_std[:, i] = _standardize(mass_centers[:, i], var_name)
         fields_dict[var_name] = _standardize(fields_dict[var_name], var_name)
@@ -806,46 +816,43 @@ def hydroclass_semisupervised(radar,
     # if entropy has to be computed get transformation parameters
     t_vals = None
     if compute_entropy:
-        t_vals = _compute_coeff_transform(
-            mc_std, weights=weights, value=value)
+        t_vals = _compute_coeff_transform(mc_std, weights=weights, value=value)
 
     # assign to class
     if vectorize:
         hydroclass_data, entropy_data, prop_data = _assign_to_class_scan(
-            fields_dict, mc_std, var_names=var_names, weights=weights,
-            t_vals=t_vals)
+            fields_dict, mc_std, var_names=var_names, weights=weights, t_vals=t_vals
+        )
     else:
         hydroclass_data, entropy_data, prop_data = _assign_to_class(
-            fields_dict, mc_std, weights=weights, t_vals=t_vals)
+            fields_dict, mc_std, weights=weights, t_vals=t_vals
+        )
 
     # prepare output fields
     fields_dict = dict()
     hydro = get_metadata(hydro_field)
-    hydro['data'] = hydroclass_data
-    hydro.update({'_FillValue': 0})
-    labels = ['NC']
+    hydro["data"] = hydroclass_data
+    hydro.update({"_FillValue": 0})
+    labels = ["NC"]
     ticks = [1]
     boundaries = [0.5, 1.5]
     for i, hydro_name in enumerate(hydro_names):
         labels.append(hydro_name)
         ticks.append(i + 2)
         boundaries.append(i + 2.5)
-    hydro.update({
-        'labels': labels,
-        'ticks': ticks,
-        'boundaries': boundaries})
-    fields_dict.update({'hydro': hydro})
+    hydro.update({"labels": labels, "ticks": ticks, "boundaries": boundaries})
+    fields_dict.update({"hydro": hydro})
 
     if compute_entropy:
         entropy = get_metadata(entropy_field)
-        entropy['data'] = entropy_data
-        fields_dict.update({'entropy': entropy})
+        entropy["data"] = entropy_data
+        fields_dict.update({"entropy": entropy})
 
         if output_distances:
             for field_name in hydro_names:
-                field_name = 'proportion_' + field_name
+                field_name = "proportion_" + field_name
                 prop = get_metadata(field_name)
-                prop['data'] = prop_data[:, :, i]
+                prop["data"] = prop_data[:, :, i]
                 fields_dict.update({field_name: prop})
 
     return fields_dict
@@ -900,10 +907,14 @@ def _standardize(data, field_name, mx=None, mn=None):
 
     return field_std
 
-def _assign_to_class(fields_dict, mass_centers,
-                     var_names=('Zh', 'ZDR', 'KDP', 'RhoHV', 'relH'),
-                     weights=np.array([1., 1., 1., 0.75, 0.5]),
-                     t_vals=None):
+
+def _assign_to_class(
+    fields_dict,
+    mass_centers,
+    var_names=("Zh", "ZDR", "KDP", "RhoHV", "relH"),
+    weights=np.array([1.0, 1.0, 1.0, 0.75, 0.5]),
+    t_vals=None,
+):
     """
     Assigns an hydrometeor class to a radar range bin computing
     the distance between the radar variables an a centroid.
@@ -953,7 +964,8 @@ def _assign_to_class(fields_dict, mass_centers,
             data.append(fields_dict[var_name][ray, :])
         data = np.ma.array(data, dtype=dtype)
         weights_mat = np.broadcast_to(
-            weights.reshape(nvariables, 1), (nvariables, nbins))
+            weights.reshape(nvariables, 1), (nvariables, nbins)
+        )
         dist = np.ma.zeros((nclasses, nbins), dtype=dtype)
 
         # compute distance: masked entries will not contribute to the distance
@@ -961,9 +973,11 @@ def _assign_to_class(fields_dict, mass_centers,
         for i in range(nclasses):
             centroids_class = mass_centers[i, :]
             centroids_class = np.broadcast_to(
-                centroids_class.reshape(nvariables, 1), (nvariables, nbins))
-            dist_ray = np.ma.sqrt(np.ma.sum(
-                ((centroids_class - data)**2.) * weights_mat, axis=0))
+                centroids_class.reshape(nvariables, 1), (nvariables, nbins)
+            )
+            dist_ray = np.ma.sqrt(
+                np.ma.sum(((centroids_class - data) ** 2.0) * weights_mat, axis=0)
+            )
             dist_ray[mask] = np.ma.masked
             dist[i, :] = dist_ray
 
@@ -978,34 +992,36 @@ def _assign_to_class(fields_dict, mass_centers,
 
         # Transform the distance using the coefficient of the dominant class
         t_vals_ray = np.ma.masked_where(mask, t_vals[class_vec[0, :]])
-        t_vals_ray = ma_broadcast_to(
-            t_vals_ray.reshape(1, nbins), (nclasses, nbins))
+        t_vals_ray = ma_broadcast_to(t_vals_ray.reshape(1, nbins), (nclasses, nbins))
         t_dist_ray = np.ma.exp(-t_vals_ray * dist)
 
         # set transformed distances to a value between 0 and 1
         dist_total = np.ma.sum(t_dist_ray, axis=0)
-        dist_total = ma_broadcast_to(
-            dist_total.reshape(1, nbins), (nclasses, nbins))
+        dist_total = ma_broadcast_to(dist_total.reshape(1, nbins), (nclasses, nbins))
         t_dist_ray /= dist_total
 
         # Compute entropy
         entropy_ray = -np.ma.sum(
-            t_dist_ray * np.ma.log(t_dist_ray) / np.ma.log(nclasses), axis=0)
+            t_dist_ray * np.ma.log(t_dist_ray) / np.ma.log(nclasses), axis=0
+        )
         entropy_ray[mask] = np.ma.masked
         entropy[ray, :] = entropy_ray
 
         t_dist[ray, :, :] = np.ma.transpose(t_dist_ray)
 
     if t_vals is not None:
-        t_dist *= 100.
+        t_dist *= 100.0
 
     return hydroclass, entropy, t_dist
 
 
-def _assign_to_class_scan(fields_dict, mass_centers,
-                          var_names=('Zh', 'ZDR', 'KDP', 'RhoHV', 'relH'),
-                          weights=np.array([1., 1., 1., 0.75, 0.5]),
-                          t_vals=None):
+def _assign_to_class_scan(
+    fields_dict,
+    mass_centers,
+    var_names=("Zh", "ZDR", "KDP", "RhoHV", "relH"),
+    weights=np.array([1.0, 1.0, 1.0, 0.75, 0.5]),
+    t_vals=None,
+):
     """
     assigns an hydrometeor class to a radar range bin computing
     the distance between the radar variables an a centroid.
@@ -1049,7 +1065,8 @@ def _assign_to_class_scan(fields_dict, mass_centers,
         data.append(fields_dict[var_name])
     data = np.ma.array(data, dtype=dtype)
     weights_mat = np.broadcast_to(
-        weights.reshape(nvariables, 1, 1), (nvariables, nrays, nbins))
+        weights.reshape(nvariables, 1, 1), (nvariables, nrays, nbins)
+    )
 
     # compute distance: masked entries will not contribute to the distance
     mask = np.ma.getmaskarray(fields_dict[var_names[0]])
@@ -1059,10 +1076,11 @@ def _assign_to_class_scan(fields_dict, mass_centers,
     for i in range(nclasses):
         centroids_class = mass_centers[i, :]
         centroids_class = np.broadcast_to(
-            centroids_class.reshape(nvariables, 1, 1),
-            (nvariables, nrays, nbins))
-        dist_aux = np.ma.sqrt(np.ma.sum(
-            ((centroids_class - data)**2.) * weights_mat, axis=0))
+            centroids_class.reshape(nvariables, 1, 1), (nvariables, nrays, nbins)
+        )
+        dist_aux = np.ma.sqrt(
+            np.ma.sum(((centroids_class - data) ** 2.0) * weights_mat, axis=0)
+        )
         dist_aux[mask] = np.ma.masked
         dist[:, :, i] = dist_aux
 
@@ -1078,25 +1096,27 @@ def _assign_to_class_scan(fields_dict, mass_centers,
         # Transform the distance using the coefficient of the dominant class
         t_vals_aux = np.ma.masked_where(mask, t_vals[class_vec[:, :, 0]])
         t_vals_aux = ma_broadcast_to(
-            t_vals_aux.reshape(nrays, nbins, 1), (nrays, nbins, nclasses))
+            t_vals_aux.reshape(nrays, nbins, 1), (nrays, nbins, nclasses)
+        )
         t_dist = np.ma.exp(-t_vals_aux * dist)
         del t_vals_aux
 
         # set distance to a value between 0 and 1
         dist_total = np.ma.sum(t_dist, axis=-1)
         dist_total = ma_broadcast_to(
-            dist_total.reshape(nrays, nbins, 1), (nrays, nbins, nclasses))
+            dist_total.reshape(nrays, nbins, 1), (nrays, nbins, nclasses)
+        )
         t_dist /= dist_total
         del dist_total
 
         # compute entroy
-        entropy = -np.ma.sum(
-            t_dist * np.ma.log(t_dist) / np.ma.log(nclasses), axis=-1)
+        entropy = -np.ma.sum(t_dist * np.ma.log(t_dist) / np.ma.log(nclasses), axis=-1)
         entropy[mask] = np.ma.masked
 
-        t_dist *= 100.
+        t_dist *= 100.0
 
     return hydroclass, entropy, t_dist
+
 
 def _get_mass_centers(freq):
     """
@@ -1400,9 +1420,10 @@ def conv_strat_raut(
 
     return reclass_dict
 
-def _compute_coeff_transform(mass_centers,
-                             weights=np.array([1., 1., 1., 0.75, 0.5]),
-                             value=50.):
+
+def _compute_coeff_transform(
+    mass_centers, weights=np.array([1.0, 1.0, 1.0, 0.75, 0.5]), value=50.0
+):
     """
     get the transformation coefficients
 
@@ -1426,13 +1447,18 @@ def _compute_coeff_transform(mass_centers,
     t_vals = np.empty((nclasses, nclasses), dtype=mass_centers.dtype)
     for i in range(nclasses):
         weights_mat = np.broadcast_to(
-            weights.reshape(1, nvariables), (nclasses, nvariables))
+            weights.reshape(1, nvariables), (nclasses, nvariables)
+        )
         centroids_class = mass_centers[i, :]
         centroids_class = np.broadcast_to(
-            centroids_class.reshape(1, nvariables), (nclasses, nvariables))
+            centroids_class.reshape(1, nvariables), (nclasses, nvariables)
+        )
         t_vals[i, :] = np.sqrt(
-            np.sum(weights_mat * np.power(
-                np.abs(centroids_class - mass_centers), 2.), axis=1))
+            np.sum(
+                weights_mat * np.power(np.abs(centroids_class - mass_centers), 2.0),
+                axis=1,
+            )
+        )
 
     # pick the second lowest value (the first is 0)
     t_vals = np.sort(t_vals, axis=-1)[:, 1]
