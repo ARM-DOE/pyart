@@ -9,6 +9,39 @@ import numpy as np
 # https://en.wikipedia.org/wiki/Directional_statistics
 # https://en.wikipedia.org/wiki/Mean_of_circular_quantities
 
+def compute_directional_stats(field, avg_type='mean', nvalid_min=1, axis=0):
+    """
+    Computes the mean or the median along one of the axis (ray or range)
+
+    Parameters
+    ----------
+    field : ndarray
+        the radar field data
+    avg_type :str
+        the type of average: 'mean' or 'median'
+    nvalid_min : int
+        the minimum number of points to consider the stats valid. Default 1
+    axis : int
+        the axis along which to compute (0=ray, 1=range)
+
+    Returns
+    -------
+    values : ndarray 1D
+        The resultant statistics
+    nvalid : ndarray 1D
+        The number of valid points used in the computation
+    """
+    if avg_type == 'mean':
+        values = np.ma.mean(field, axis=axis)
+    else:
+        values = np.ma.median(field, axis=axis)
+
+    # Set to non-valid if there is not a minimum number of valid gates
+    valid = np.logical_not(np.ma.getmaskarray(field))
+    nvalid = np.sum(valid, axis=axis, dtype=int)
+    values[nvalid < nvalid_min] = np.ma.masked
+
+    return values, nvalid
 
 def mean_of_two_angles(angles1, angles2):
     """

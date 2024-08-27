@@ -416,24 +416,11 @@ def est_rain_rate_za(
 
     return rain_main
 
-
-def est_rain_rate_hydro(
-    radar,
-    alphazr=0.0376,
-    betazr=0.6112,
-    alphazs=0.1,
-    betazs=0.5,
-    alphaa=None,
-    betaa=None,
-    mp_factor=0.6,
-    refl_field=None,
-    a_field=None,
-    hydro_field=None,
-    rr_field=None,
-    main_field=None,
-    thresh=None,
-    thresh_max=False,
-):
+def est_rain_rate_hydro(radar, alphazr=0.0376, betazr=0.6112, alphazs=0.1,
+                        betazs=0.5, alphaa=None, betaa=None, mp_factor=0.6,
+                        refl_field=None, a_field=None, hydro_field=None,
+                        rr_field=None, master_field=None, thresh=None,
+                        thresh_max=False):
     """
     Estimates rainfall rate using different relations between R and the
     polarimetric variables depending on the hydrometeor type.
@@ -460,15 +447,15 @@ def est_rain_rate_hydro(
         Name of the hydrometeor classification field to use.
     rr_field : str, optional
         Name of the rainfall rate field.
-    main_field : str, optional
-        Name of the field that is going to act as main. Has to be
+    master_field : str, optional
+        Name of the field that is going to act as master. Has to be
         either refl_field or kdp_field. Default is refl_field.
     thresh : float, optional
-        Value of the threshold that determines when to use the secondary
+        Value of the threshold that determines when to use the slave
         field.
     thresh_max : Bool, optional
-        If true the main field is used up to the thresh value maximum.
-        Otherwise the main field is not used below thresh value.
+        If true the master field is used up to the thresh value maximum.
+        Otherwise the master field is not used below thresh value.
 
     Returns
     -------
@@ -478,90 +465,98 @@ def est_rain_rate_hydro(
     """
     # parse the field parameters
     if refl_field is None:
-        refl_field = get_field_name("reflectivity")
+        refl_field = get_field_name('reflectivity')
     if a_field is None:
-        a_field = get_field_name("specific_attenuation")
+        a_field = get_field_name('specific_attenuation')
     if hydro_field is None:
-        hydro_field = get_field_name("radar_echo_classification")
+        hydro_field = get_field_name('radar_echo_classification')
     if rr_field is None:
-        rr_field = get_field_name("radar_estimated_rain_rate")
+        rr_field = get_field_name('radar_estimated_rain_rate')
+    if master_field is None:
+        master_field = refl_field
 
     # extract fields and parameters from radar
     if hydro_field in radar.fields:
-        hydroclass = radar.fields[hydro_field]["data"]
+        hydroclass = radar.fields[hydro_field]['data']
     else:
-        raise KeyError("Field not available: " + hydro_field)
+        raise KeyError('Field not available: ' + hydro_field)
 
     # get the location of each hydrometeor class
-    is_ds = hydroclass == 1
-    is_cr = hydroclass == 2
-    is_lr = hydroclass == 3
-    is_gr = hydroclass == 4
-    is_rn = hydroclass == 5
-    is_vi = hydroclass == 6
-    is_ws = hydroclass == 7
-    is_mh = hydroclass == 8
-    is_ih = hydroclass == 9
+    is_ds = hydroclass == 2
+    is_cr = hydroclass == 3
+    is_lr = hydroclass == 4
+    is_gr = hydroclass == 5
+    is_rn = hydroclass == 6
+    is_vi = hydroclass == 7
+    is_ws = hydroclass == 8
+    is_mh = hydroclass == 9
+    is_ih = hydroclass == 10
 
     # compute z-r (in rain) z-r in snow and z-a relations
     rain_z = est_rain_rate_z(
-        radar, alpha=alphazr, beta=betazr, refl_field=refl_field, rr_field=rr_field
-    )
+        radar, alpha=alphazr, beta=betazr, refl_field=refl_field,
+        rr_field=rr_field)
     snow_z = est_rain_rate_z(
-        radar, alpha=alphazs, beta=betazs, refl_field=refl_field, rr_field=rr_field
-    )
+        radar, alpha=alphazs, beta=betazs, refl_field=refl_field,
+        rr_field=rr_field)
     rain_a = est_rain_rate_a(
-        radar, alpha=alphaa, beta=betaa, a_field=a_field, rr_field=rr_field
-    )
+        radar, alpha=alphaa, beta=betaa, a_field=a_field, rr_field=rr_field)
 
     # initialize rainfall rate field
-    rr_data = np.ma.zeros(hydroclass.shape, dtype="float32")
+    rr_data = np.ma.zeros(hydroclass.shape, dtype='float32')
     rr_data[:] = np.ma.masked
     rr_data.set_fill_value(get_fillvalue())
 
     # apply the relations for each type
     # solid phase
-    rr_data[is_ds] = snow_z["data"][is_ds]
-    rr_data[is_cr] = snow_z["data"][is_cr]
-    rr_data[is_vi] = snow_z["data"][is_vi]
-    rr_data[is_gr] = snow_z["data"][is_gr]
-    rr_data[is_ih] = snow_z["data"][is_ih]
+    rr_data[is_ds] = snow_z['data'][is_ds]
+    rr_data[is_cr] = snow_z['data'][is_cr]
+    rr_data[is_vi] = snow_z['data'][is_vi]
+    rr_data[is_gr] = snow_z['data'][is_gr]
+    rr_data[is_ih] = snow_z['data'][is_ih]
 
     # rain
-    if main_field == refl_field:
-        rain_main = rain_z
-        rain_secondary = rain_a
-    elif main_field == a_field:
-        rain_main = rain_a
-        rain_secondary = rain_z
-    elif main_field is None:
-        main_field = a_field
-        rain_main = rain_a
-        rain_secondary = rain_z
-    else:
-        main_field = a_field
-        rain_main = rain_a
-        rain_secondary = rain_z
-        thresh = 0.04
+    if master_field == refl_field:
+        rain_master = rain_z
+        rain_slave = rain_a
+        if thresh is None:
+            thresh = 5.
+            thresh_max = True
+    elif master_field == a_field:
+        rain_master = rain_a
+        rain_slave = rain_z
+        if thresh is None:
+            thresh = 5.
+            thresh_max = False
+    elif master_field is None:
+        rain_master = rain_a
+        rain_slave = rain_z
+        thresh = 5.
         thresh_max = False
-        warn("Unknown main field. Using " + a_field + " with threshold " + str(thresh))
+    else:
+        rain_master = rain_a
+        rain_slave = rain_z
+        thresh = 5.
+        thresh_max = False
+        warn('Unknown master field. Using ' + a_field + ' with threshold ' +
+             str(thresh))
 
     if thresh_max:
-        is_secondary = rain_main["data"] > thresh
+        is_slave = rain_master['data'] > thresh
     else:
-        is_secondary = rain_main["data"] < thresh
+        is_slave = rain_master['data'] < thresh
 
-    rain_main["data"][is_secondary] = rain_secondary["data"][is_secondary]
+    rain_master['data'][is_slave] = rain_slave['data'][is_slave]
 
-    rr_data[is_lr] = rain_main["data"][is_lr]
-    rr_data[is_rn] = rain_main["data"][is_rn]
+    rr_data[is_lr] = rain_master['data'][is_lr]
+    rr_data[is_rn] = rain_master['data'][is_rn]
 
     # mixed phase
-    rr_data[is_ws] = mp_factor * rain_z["data"][is_ws]
-    rr_data[is_mh] = mp_factor * rain_z["data"][is_mh]
+    rr_data[is_ws] = mp_factor * rain_z['data'][is_ws]
+    rr_data[is_mh] = mp_factor * rain_z['data'][is_mh]
 
     rain = get_metadata(rr_field)
-    rain["data"] = rr_data
+    rain['data'] = rr_data
 
     return rain
 

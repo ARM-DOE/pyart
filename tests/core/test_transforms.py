@@ -188,3 +188,12 @@ def test_cartesian_to_geographic_aeqd():
         lon, lat = transforms.cartesian_to_geographic_aeqd(x, y, lon_0, lat_0, R)
     assert_almost_equal(lon, -100.0, 3)
     assert_almost_equal(lat, 40.0, 3)
+
+def test_cartesian_to_antenna():
+    r,az,el = transforms.cartesian_to_antenna(np.array([1000,3000,2000]),
+                                            np.array([1000,2000,3000]),
+                                            np.array([500,1000,1500]))
+
+    assert np.allclose(r, [1500, 3741.6573, 3905.1248])
+    assert np.allclose(az, [45., 56.30993247, 33.69006753])
+    assert np.allclose(el, [19.47122063, 15.50135957, 22.5885387])

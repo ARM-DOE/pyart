@@ -77,6 +77,33 @@ def antenna_to_cartesian(ranges, azimuths, elevations):
     y = s * np.cos(theta_a)
     return x, y, z
 
+def cartesian_to_antenna(x, y, z):
+    """
+    Returns antenna coordinates from Cartesian coordinates.
+
+    Parameters
+    ----------
+    x, y, z : array
+        Cartesian coordinates in meters from the radar.
+
+    Returns
+    -------
+    ranges : array
+        Distances to the center of the radar gates (bins) in m.
+    azimuths : array
+        Azimuth angle of the radar in degrees. [-180., 180]
+    elevations : array
+        Elevation angle of the radar in degrees.
+    ke : float, optional
+        Effective radius scale factor
+
+    """
+    ranges = np.sqrt(x ** 2. + y ** 2. + z ** 2.)
+    elevations = np.rad2deg(np.arctan(z / np.sqrt(x ** 2. + y ** 2.)))
+    azimuths = np.rad2deg(np.arctan2(x, y))  # [-180, 180]
+    azimuths[azimuths < 0.] += 360.  # [0, 360]
+
+    return ranges, azimuths, elevations
 
 def antenna_vectors_to_cartesian(ranges, azimuths, elevations, edges=False):
     """
