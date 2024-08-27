@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyart.retrieve.hydroclass_semisupervised &#8212; Py-ART 1.18.6.post7 documentation</title>
+    <title>pyart.retrieve.hydroclass_semisupervised &#8212; Py-ART 1.18.7.post1 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=732f80a5"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=0c9bacbf"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -63,20 +63,16 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
     <link rel="next" title="pyart.retrieve.kdp_maesaka" href="pyart.retrieve.kdp_maesaka.html" />
-    <link rel="prev" title="pyart.retrieve.grid_shift" href="pyart.retrieve.grid_shift.html" />
-
+    <link rel="prev" title="pyart.retrieve.grid_shift" href="pyart.retrieve.grid_shift.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/>
-
+  <meta name="docsearch:language" content="en"/> 
 <link
   rel="alternate"
   type="application/atom+xml"
   href="../../blog/atom.xml"
   title="PyART Blog"
 />
-
-
-
+  
   </head>
   
   
@@ -150,7 +146,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.6.post7 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.7.post1 documentation</p>
   
 </a></div>
     
@@ -1158,14 +1154,14 @@ document.write(`
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                  
-<section id="pyart-retrieve-hydroclass-semisupervised">
+                   <section id="pyart-retrieve-hydroclass-semisupervised">
 <h1>pyart.retrieve.hydroclass_semisupervised<a class="headerlink" href="#pyart-retrieve-hydroclass-semisupervised" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyart.retrieve.hydroclass_semisupervised">
 <span class="sig-prename descclassname"><span class="pre">pyart.retrieve.</span></span><span class="sig-name descname"><span class="pre">hydroclass_semisupervised</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mass_centers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">0.75,</span> <span class="pre">0.5])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refl_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zdr_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rhv_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kdp_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hydro_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/retrieve/echo_class.html#hydroclass_semisupervised"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.retrieve.hydroclass_semisupervised" title="Permalink to this definition">#</a></dt>
-<dd><p>Classifies precipitation echoes following the approach by Besic et al
-(2016).</p>
+<dd><p>Classifies precipitation echoes into hydrometeor types.</p>
+<p>The <cite>hydroclass_semisupervised</cite> function classifies precipitation echoes in the polarimetric radar data
+into 9 hydrometeor types using a semi-supervised approach (Besic et al., 2016).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1187,7 +1183,23 @@ This parameter will be ignored, if the radar object has frequency information.</
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><strong>hydro</strong> (<em>dict</em>) – Hydrometeor classification field.</p>
+<dd class="field-even"><p><p><strong>hydro</strong> (<em>dict</em>) –</p>
+<dl class="simple">
+<dt>Hydrometeor classification.</dt><dd><ul class="simple">
+<li><p>0: Not classified</p></li>
+<li><p>1: Aggregates</p></li>
+<li><p>2: Ice crystals</p></li>
+<li><p>3: Light rain</p></li>
+<li><p>4: Rimed particles</p></li>
+<li><p>5: Rain</p></li>
+<li><p>6: Vertically oriented ice</p></li>
+<li><p>7: Wet snow</p></li>
+<li><p>8: Melting hail</p></li>
+<li><p>9: Dry hail or high-density graupel</p></li>
+</ul>
+</dd>
+</dl>
+</p>
 </dd>
 </dl>
 <p class="rubric">References</p>
@@ -1195,30 +1207,22 @@ This parameter will be ignored, if the radar object has frequency information.</
 and Berne, A.: Hydrometeor classification through statistical clustering
 of polarimetric radar measurements: a semi-supervised approach,
 Atmos. Meas. Tech., 9, 4425-4445, doi:10.5194/amt-9-4425-2016, 2016</p>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
 <p class="rubric">Notes</p>
 <p>The default hydrometeor classification is valid for C-band radars. For X-band radars,
 if frequency information is not present in the <cite>radar.instrument_parameters</cite>, the user-supplied
 <cite>radar_freq</cite> will be used with a warning. If both <cite>radar.instrument_parameters</cite> and
 <cite>radar_freq</cite> parameter are missing, the algorithm defaults to the C band.</p>
 <p>If the radar frequency information is missing from the radar object, you can add it in
-<cite>radar.instrument_parameters</cite>, as follows:
-.. code-block:: python</p>
-<blockquote>
-<div><dl class="simple">
-<dt>radar.instrument_parameters[“frequency”] = {</dt><dd><p>“long_name”: “Radar frequency”,
-“units”: “Hz”,
-“data”: [9.2e9]</p>
-</dd>
-</dl>
-<p>}</p>
-</div></blockquote>
+<cite>radar.instrument_parameters</cite>, as follows:</p>
+</section>
 </dd></dl>
 
 </section>
 
 <div class="section ablog__blog_comments">
-  
-  
+   
 </div>
 
                 </article>

@@ -101,7 +101,7 @@ column of values.
  .. code-block:: none
 
 
-    <matplotlib.collections.PathCollection object at 0x7f3ac19f86e0>
+    <matplotlib.collections.PathCollection object at 0x7fad2de29730>
 
 
 
@@ -157,7 +157,7 @@ This function returns an xarray dataset, with all of our data fields!
         diff_reflectivity                  (height) float32 88B 0.0 0.0 ... 0.0 0.0
         proc_dp_phase_shift                (height) float32 88B 51.8 50.25 ... 36.27
         copol_coeff                        (height) float64 176B 0.95 0.92 ... nan
-        base_time                          datetime64[ns] 8B 2011-05-20T06:42:11
+        base_time                          datetime64[ns] 8B ...
         time_offset                        (height) datetime64[ns] 176B 2011-05-2...
     Attributes:
         distance_from_radar:    15.113 km
@@ -194,14 +194,14 @@ above our point, which is stored in our new dataset
  .. code-block:: none
 
 
-    [<matplotlib.lines.Line2D object at 0x7f3ac1b81160>]
+    [<matplotlib.lines.Line2D object at 0x7fad1ad7a870>]
 
 
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 2.139 seconds)
+   **Total running time of the script:** (0 minutes 2.174 seconds)
 
 
 .. _sphx_glr_download_examples_retrieve_plot_column_subset.py:

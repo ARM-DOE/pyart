@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.18.6.post7 documentation</title>
+    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.18.7.post1 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=732f80a5"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=0c9bacbf"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -60,20 +60,16 @@
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyart/retrieve/echo_class';</script>
     <script src="../../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" />
-
+    <link rel="search" title="Search" href="../../../search.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/>
-
+  <meta name="docsearch:language" content="en"/> 
 <link
   rel="alternate"
   type="application/atom+xml"
   href="../../../blog/atom.xml"
   title="PyART Blog"
 />
-
-
-
+  
   </head>
   
   
@@ -147,7 +143,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.6.post7 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.7.post1 documentation</p>
   
 </a></div>
     
@@ -480,8 +476,7 @@ document.write(`
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                  
-<h1>Source code for pyart.retrieve.echo_class</h1><div class="highlight"><pre>
+                   <h1>Source code for pyart.retrieve.echo_class</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">Functions for echo classification.</span>
 
@@ -1096,8 +1091,10 @@ document.write(`
     <span class="n">radar_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Classifies precipitation echoes following the approach by Besic et al</span>
-<span class="sd">    (2016).</span>
+<span class="sd">    Classifies precipitation echoes into hydrometeor types.</span>
+
+<span class="sd">    The `hydroclass_semisupervised` function classifies precipitation echoes in the polarimetric radar data</span>
+<span class="sd">    into 9 hydrometeor types using a semi-supervised approach (Besic et al., 2016).</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -1126,7 +1123,17 @@ document.write(`
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    hydro : dict</span>
-<span class="sd">        Hydrometeor classification field.</span>
+<span class="sd">        Hydrometeor classification.</span>
+<span class="sd">            - 0: Not classified</span>
+<span class="sd">            - 1: Aggregates</span>
+<span class="sd">            - 2: Ice crystals</span>
+<span class="sd">            - 3: Light rain</span>
+<span class="sd">            - 4: Rimed particles</span>
+<span class="sd">            - 5: Rain</span>
+<span class="sd">            - 6: Vertically oriented ice</span>
+<span class="sd">            - 7: Wet snow</span>
+<span class="sd">            - 8: Melting hail</span>
+<span class="sd">            - 9: Dry hail or high-density graupel</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -1134,6 +1141,18 @@ document.write(`
 <span class="sd">    and Berne, A.: Hydrometeor classification through statistical clustering</span>
 <span class="sd">    of polarimetric radar measurements: a semi-supervised approach,</span>
 <span class="sd">    Atmos. Meas. Tech., 9, 4425-4445, doi:10.5194/amt-9-4425-2016, 2016</span>
+
+<span class="sd">    Usage</span>
+<span class="sd">    -----</span>
+<span class="sd">    .. code-block:: python</span>
+<span class="sd">        hydro_class = pyart.retrieve.hydroclass_semisupervised(</span>
+<span class="sd">            radar,</span>
+<span class="sd">            refl_field=&quot;corrected_reflectivity&quot;,</span>
+<span class="sd">            zdr_field=&quot;corrected_differential_reflectivity&quot;,</span>
+<span class="sd">            kdp_field=&quot;specific_differential_phase&quot;,</span>
+<span class="sd">            rhv_field=&quot;uncorrected_cross_correlation_ratio&quot;,</span>
+<span class="sd">            temp_field=&quot;temperature&quot;,</span>
+<span class="sd">        )</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
@@ -1144,8 +1163,8 @@ document.write(`
 
 <span class="sd">    If the radar frequency information is missing from the radar object, you can add it in</span>
 <span class="sd">    `radar.instrument_parameters`, as follows:</span>
-<span class="sd">    .. code-block:: python</span>
 
+<span class="sd">    .. code-block:: python</span>
 <span class="sd">        radar.instrument_parameters[&quot;frequency&quot;] = {</span>
 <span class="sd">            &quot;long_name&quot;: &quot;Radar frequency&quot;,</span>
 <span class="sd">            &quot;units&quot;: &quot;Hz&quot;,</span>
@@ -1651,8 +1670,7 @@ document.write(`
     <span class="k">return</span> <span class="n">reclass_dict</span></div>
 </pre></div>
 <div class="section ablog__blog_comments">
-  
-  
+   
 </div>
 
                 </article>
