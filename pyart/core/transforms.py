@@ -95,8 +95,6 @@ def cartesian_to_antenna(x, y, z):
         Azimuth angle of the radar in degrees. [-180., 180]
     elevations : array
         Elevation angle of the radar in degrees.
-    ke : float, optional
-        Effective radius scale factor
 
     """
     ranges = np.sqrt(x**2.0 + y**2.0 + z**2.0)
