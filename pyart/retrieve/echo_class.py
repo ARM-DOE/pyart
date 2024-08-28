@@ -698,10 +698,10 @@ def hydroclass_semisupervised(
             - 9: Dry hail or high-density graupel
 
     if compute_entropy is True:
-
     entropy : dict
         Shannon entropy of the hydrometeor demixing
 
+    if output_distances is True:
     propX : dict
         Proportion of a given hydrometeor class in the polarimetric
         decomposition of a radar volume
