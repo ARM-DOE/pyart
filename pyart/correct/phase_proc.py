@@ -108,11 +108,7 @@ def fzl_index(fzl, ranges, elevation, radar_height):
     p_r = 4.0 * Re / 3.0
     z = (
         radar_height
-        + (
-            ranges**2
-            + p_r**2
-            + 2.0 * ranges * p_r * np.sin(elevation * np.pi / 180.0)
-        )
+        + (ranges**2 + p_r**2 + 2.0 * ranges * p_r * np.sin(elevation * np.pi / 180.0))
         ** 0.5
         - p_r
     )
