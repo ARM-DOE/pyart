@@ -373,7 +373,7 @@ class Grid:
         # Delayed import
         from ..io.grid_io import _make_coordinatesystem_dict
 
-        ds["ProjectionCoordinateSystem"] = xarray.DataArray(
+        ds.coords["ProjectionCoordinateSystem"] = xarray.DataArray(
             data=np.array(1, dtype="int32"),
             attrs=_make_coordinatesystem_dict(self),
         )
@@ -384,7 +384,7 @@ class Grid:
         if "_include_lon_0_lat_0" in projection:
             include = projection["_include_lon_0_lat_0"]
             projection["_include_lon_0_lat_0"] = ["false", "true"][include]
-        ds["projection"] = xarray.DataArray(
+        ds.coords["projection"] = xarray.DataArray(
             data=np.array(1, dtype="int32"),
             dims=None,
             attrs=projection,
@@ -402,20 +402,26 @@ class Grid:
             if hasattr(self, attr_name):
                 attr_data = getattr(self, attr_name)
                 if attr_data is not None:
-                    if "radar_time" not in attr_name:
+                    if attr_name in ["origin_latitude", "origin_longitude", "origin_altitude"]:
+                        # Adjusting the dims to 'time' for the origin attributes
                         attr_value = np.ma.expand_dims(attr_data["data"][0], 0)
+                        dims = ("time",)
                     else:
-                        attr_value = [
-                            np.array(
-                                num2date(
-                                    attr_data["data"][0],
-                                    units=attr_data["units"],
-                                ),
-                                dtype="datetime64[ns]",
-                            )
-                        ]
-                    dims = ("nradar",)
-                    ds[attr_name] = xarray.DataArray(
+                        if "radar_time" not in attr_name:
+                            attr_value = np.ma.expand_dims(attr_data["data"][0], 0)
+                        else:
+                            attr_value = [
+                                np.array(
+                                    num2date(
+                                        attr_data["data"][0],
+                                        units=attr_data["units"],
+                                    ),
+                                    dtype="datetime64[ns]",
+                                )
+                            ]
+                        dims = ("nradar",)
+                        
+                    ds.coords[attr_name] = xarray.DataArray(
                         attr_value, dims=dims, attrs=get_metadata(attr_name)
                     )
 
@@ -431,6 +437,13 @@ class Grid:
             )
 
         ds.attrs = self.metadata
+        for key in ds.attrs:
+            try:
+                ds.attrs[key] = ds.attrs[key].decode('utf-8')
+            except AttributeError:
+                # If the attribute is not a byte string, just pass
+                pass
+
         ds.close()
         return ds
 
@@ -454,7 +467,7 @@ class Grid:
         if "data" not in field_dict:
             raise KeyError('Field dictionary must contain a "data" key')
         if field_name in self.fields and replace_existing is False:
-            raise ValueError(f"A field named {field_name} already exists")
+            raise ValueError("A field named %s already exists" % (field_name))
         if field_dict["data"].shape != (self.nz, self.ny, self.nx):
             raise ValueError("Field has invalid shape")
 
