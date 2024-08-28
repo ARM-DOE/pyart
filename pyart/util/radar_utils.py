@@ -414,17 +414,17 @@ def subset_radar(
 
     if radar_aux.instrument_parameters is not None:
         if "nyquist_velocity" in radar_aux.instrument_parameters:
-            radar_aux.instrument_parameters["nyquist_velocity"]["data"] = (
-                radar_aux.instrument_parameters["nyquist_velocity"]["data"][ind_rays]
-            )
+            radar_aux.instrument_parameters["nyquist_velocity"][
+                "data"
+            ] = radar_aux.instrument_parameters["nyquist_velocity"]["data"][ind_rays]
         if "pulse_width" in radar_aux.instrument_parameters:
-            radar_aux.instrument_parameters["pulse_width"]["data"] = (
-                radar_aux.instrument_parameters["pulse_width"]["data"][ind_rays]
-            )
+            radar_aux.instrument_parameters["pulse_width"][
+                "data"
+            ] = radar_aux.instrument_parameters["pulse_width"]["data"][ind_rays]
         if "number_of_pulses" in radar_aux.instrument_parameters:
-            radar_aux.instrument_parameters["number_of_pulses"]["data"] = (
-                radar_aux.instrument_parameters["number_of_pulses"]["data"][ind_rays]
-            )
+            radar_aux.instrument_parameters["number_of_pulses"][
+                "data"
+            ] = radar_aux.instrument_parameters["number_of_pulses"]["data"][ind_rays]
 
     # Get new fields
     if field_names is None:

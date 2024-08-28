@@ -98,7 +98,7 @@ hydromet_class = pyart.retrieve.hydroclass_semisupervised(
     rhv_field="RHOHV",
     temp_field="sounding_temperature",
     radar_freq=9.2e9,
-)
+)["hydro"]
 
 radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 
