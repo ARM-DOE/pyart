@@ -169,27 +169,27 @@ def test_hydroclass_semisupervised():
     assert_allclose(hydro["hydro"]["data"][0][-5:], [2, 2, 2, 2, 2])
     assert_allclose(
         hydro["entropy"]["data"][0][0:5].data,
-        [0.269866, 0.269866, 0.269866, 0.269866, 0.269866],
+        [0.35945634, 0.35945634, 0.35945634, 0.35945634, 0.35945634],
         rtol=1e-5,
     )
     assert_allclose(
         hydro["entropy"]["data"][0][-5:].data,
-        [0.16527913, 0.16527913, 0.16527913, 0.165279136, 0.16527913],
+        [0.232788, 0.232788, 0.232788, 0.232788, 0.232788],
         rtol=1e-5,
     )
     assert_allclose(
         hydro["proportion_CR"]["data"][0][0:5].data,
-        [0.00713444, 0.00713444, 0.00713444, 0.00713444, 0.00713444],
+        [0.03524214, 0.03524214, 0.03524214, 0.03524214, 0.03524214],
         rtol=1e-5,
     )
     assert_allclose(
         hydro["proportion_CR"]["data"][0][-5:].data,
         [
-            3.96782815e-07,
-            3.96782815e-07,
-            3.96782815e-07,
-            3.96782815e-07,
-            3.96782815e-07,
+            8.336829723993246e-05,
+            8.336829723993246e-05,
+            8.336829723993246e-05,
+            8.336829723993246e-05,
+            8.336829723993246e-05,
         ],
         rtol=1e-5,
     )
@@ -199,11 +199,11 @@ def test_data_limits_table():
     dlimits_dict = pyart.retrieve.echo_class._data_limits_table()
     test_dict = {
         "Zh": (60.0, -10.0),
-        "ZDR": (5.0, -5.0),
+        "ZDR": (5, -1.5),
         "KDP": (7.0, -10.0),
         "RhoHV": (-5.23, -50.0),
+        "RelH": (5000, -5000),
     }
-
     assert isinstance(dlimits_dict, dict)
     assert dlimits_dict == test_dict
 

@@ -848,11 +848,11 @@ def hydroclass_semisupervised(
     hydro.update({"_FillValue": 0})
     labels = ["NC"]
     ticks = [1]
-    boundaries = [0.5, 1.5]
+    boundaries = [-0.5, 1.5]
     for i, hydro_name in enumerate(hydro_names):
         labels.append(hydro_name)
-        ticks.append(i + 2)
-        boundaries.append(i + 2.5)
+        ticks.append(i + 1)
+        boundaries.append(i + 1.5)
     hydro.update({"labels": labels, "ticks": ticks, "boundaries": boundaries})
     fields_dict.update({"hydro": hydro})
 
@@ -910,7 +910,9 @@ def _standardize(data, field_name, mx=None, mn=None):
         data[data < -0.5] = -0.5
         data = 10.0 * np.ma.log10(data + 0.6)
     elif field_name == "RhoHV":
-        data = 10.0 * np.ma.log10(1.0 - data)
+        # avoid infinite result
+        data[data > 1.0] = 1.0
+        data = 10.0 * np.ma.log10(1.0000000000001 - data)
 
     mask = np.ma.getmaskarray(data)
     field_std = 2.0 * (data - mn) / (mx - mn) - 1.0
@@ -1228,9 +1230,10 @@ def _data_limits_table():
     """
     dlimits_dict = dict()
     dlimits_dict.update({"Zh": (60.0, -10.0)})
-    dlimits_dict.update({"ZDR": (5.0, -5.0)})
+    dlimits_dict.update({"ZDR": (5.0, -1.5)})
     dlimits_dict.update({"KDP": (7.0, -10.0)})
     dlimits_dict.update({"RhoHV": (-5.23, -50.0)})
+    dlimits_dict.update({"RelH": (5000.0, -5000.0)})
 
     return dlimits_dict
 
