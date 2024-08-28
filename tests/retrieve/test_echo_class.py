@@ -144,29 +144,58 @@ def test_hydroclass_semisupervised():
 
     mass_centers = pyart.retrieve.echo_class._get_mass_centers(10e9)
 
-    hydro_nofreq = pyart.retrieve.hydroclass_semisupervised(radar_small)["hydro"]
-
+    hydro_nofreq = pyart.retrieve.hydroclass_semisupervised(radar_small)['hydro']
     assert "units" in hydro_nofreq.keys()
     assert "standard_name" in hydro_nofreq.keys()
     assert "long_name" in hydro_nofreq.keys()
     assert "coordinates" in hydro_nofreq.keys()
 
     assert hydro_nofreq["data"].dtype == "uint8"
-    assert_allclose(hydro_nofreq["data"][0][0:5], [7, 7, 7, 7, 7])
-    assert_allclose(hydro_nofreq["data"][0][-5:], [3, 3, 3, 3, 3])
+    assert_allclose(hydro_nofreq["data"][0][0:5], [6, 6, 6, 6, 6])
+    assert_allclose(hydro_nofreq["data"][0][-5:], [2, 2, 2, 2, 2])
 
     radar_small.instrument_parameters["frequency"] = {"data": np.array([5e9])}
-    hydro_freq = pyart.retrieve.hydroclass_semisupervised(radar_small)["hydro"]
-    assert_allclose(hydro_freq["data"][0][0:5], [7, 7, 7, 7, 7])
-    assert_allclose(hydro_freq["data"][0][-5:], [3, 3, 3, 3, 3])
+    hydro_freq = pyart.retrieve.hydroclass_semisupervised(radar_small)['hydro']
+    assert_allclose(hydro_freq["data"][0][0:5], [6, 6, 6, 6, 6])
+    assert_allclose(hydro_freq["data"][0][-5:], [2, 2, 2, 2, 2])
 
     hydro = pyart.retrieve.hydroclass_semisupervised(
         radar_small, mass_centers=mass_centers
-    )["hydro"]
+    )['hydro']
+    assert_allclose(hydro["data"][0][0:5], [6, 6, 6, 6, 6])
+    assert_allclose(hydro["data"][0][-5:], [2, 2, 2, 2, 2])
 
-    assert_allclose(hydro["data"][0][0:5], [7, 7, 7, 7, 7])
-    assert_allclose(hydro["data"][0][-5:], [3, 3, 3, 3, 3])
 
+def test_hydroclass_semisupervised_demixing():
+    radar = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
+    temp_dict = pyart.config.get_metadata("temperature")
+    temp = np.empty(radar.fields["reflectivity"]["data"].shape)
+    temp[:] = -10.0
+    temp_dict["data"] = temp
+    radar.add_field("temperature", temp_dict, replace_existing=True)
+    radar.fields["specific_differential_phase"] = radar.fields.pop("differential_phase")
+    radar_small = radar.extract_sweeps([0])
+
+    mass_centers = pyart.retrieve.echo_class._get_mass_centers(10e9)
+
+    hydro = pyart.retrieve.hydroclass_semisupervised(radar_small,
+                                                    mass_centers=mass_centers,
+                                                    compute_entropy=True,
+                                                    output_distances=True)
+
+    assert_allclose(hydro['entropy']["data"][0][0:5].data,
+                    [0.269866, 0.269866, 0.269866, 0.269866, 0.269866],
+                    rtol = 1E-5)
+    assert_allclose(hydro['entropy']["data"][0][-5:].data,
+                    [0.16527913, 0.16527913, 0.16527913, 0.165279136, 0.16527913],
+                    rtol = 1E-5)
+    assert_allclose(hydro['proportion_CR']["data"][0][0:5].data,
+                    [0.00713444, 0.00713444, 0.00713444, 0.00713444, 0.00713444],
+                    rtol = 1E-5)
+    assert_allclose(hydro['proportion_CR']["data"][0][-5:].data,
+                    [3.96782815e-07, 3.96782815e-07, 3.96782815e-07, 3.96782815e-07,
+                    3.96782815e-07],
+                    rtol = 1E-5)
 
 def test_data_limits_table():
     dlimits_dict = pyart.retrieve.echo_class._data_limits_table()
@@ -261,13 +290,12 @@ def test_assign_to_class():
     )
 
     mass_centers = pyart.retrieve.echo_class._get_mass_centers(10e9)
-    field_dict = {"Zh": zh, "ZDR": zdr, "KDP": kdp, "RhoHV": rhohv, "relH": relh}
+    field_dict = {'Zh':zh, 'ZDR':zdr, 'KDP':kdp, 'RhoHV':rhohv, 'relH':relh}
 
     hydroclass, _, _ = pyart.retrieve.echo_class._assign_to_class(
         field_dict, mass_centers
     )
-    assert_allclose(hydroclass[0], [8, 8, 8, 8, 8], atol=1e-7)
-
+    assert_allclose(hydroclass[0], [7, 7, 7, 7, 7], atol=1e-7)
 
 def test_standardize():
     kdp = np.array(
