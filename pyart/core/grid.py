@@ -402,7 +402,11 @@ class Grid:
             if hasattr(self, attr_name):
                 attr_data = getattr(self, attr_name)
                 if attr_data is not None:
-                    if attr_name in ["origin_latitude", "origin_longitude", "origin_altitude"]:
+                    if attr_name in [
+                        "origin_latitude",
+                        "origin_longitude",
+                        "origin_altitude",
+                    ]:
                         # Adjusting the dims to 'time' for the origin attributes
                         attr_value = np.ma.expand_dims(attr_data["data"][0], 0)
                         dims = ("time",)
@@ -420,7 +424,7 @@ class Grid:
                                 )
                             ]
                         dims = ("nradar",)
-                        
+
                     ds.coords[attr_name] = xarray.DataArray(
                         attr_value, dims=dims, attrs=get_metadata(attr_name)
                     )
@@ -439,7 +443,7 @@ class Grid:
         ds.attrs = self.metadata
         for key in ds.attrs:
             try:
-                ds.attrs[key] = ds.attrs[key].decode('utf-8')
+                ds.attrs[key] = ds.attrs[key].decode("utf-8")
             except AttributeError:
                 # If the attribute is not a byte string, just pass
                 pass
