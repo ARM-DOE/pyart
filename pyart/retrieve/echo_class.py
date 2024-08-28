@@ -617,6 +617,7 @@ def hydroclass_semisupervised(
     iso0_field=None,
     hydro_field=None,
     entropy_field=None,
+    radar_freq=None,
     temp_ref="temperature",
     compute_entropy=False,
     output_distances=False,
@@ -657,6 +658,13 @@ def hydroclass_semisupervised(
         Output. Field name which represents the hydrometeor class field.
         A value of None will use the default field name as defined in the
         Py-ART configuration file.
+    entropy_field : str
+        Output. Field name which represents the entropy class field.
+        A value of None will use the default field name as defined in the
+        Py-ART configuration file.
+    radar_freq : str, optional
+        Radar frequency in Hertz (Hz) used for classification.
+        This parameter will be ignored, if the radar object has frequency information.
     temp_ref : str
         the field use as reference for temperature. Can be either temperature
         or height_over_iso0
@@ -743,15 +751,20 @@ def hydroclass_semisupervised(
     # select the centroids as a function of frequency band
     if mass_centers is None:
         # assign coefficients according to radar frequency
-        if "frequency" in radar.instrument_parameters:
-            mass_centers = _get_mass_centers(
-                radar.instrument_parameters["frequency"]["data"][0]
+        if radar.instrument_parameters and "frequency" in radar.instrument_parameters:
+            frequency = radar.instrument_parameters["frequency"]["data"][0]
+            mass_centers = _get_mass_centers(frequency)
+            warn(f"Using radar frequency from instrument parameters: {frequency}")
+        elif radar_freq is not None:
+            mass_centers = _get_mass_centers(radar_freq)
+            warn(
+                f"Radar instrument parameters are empty. Using user-supplied radar frequency: {radar_freq}"
             )
         else:
             mass_centers = _mass_centers_table()["C"]
             warn(
-                "Radar frequency unknown. "
-                + "Default coefficients for C band will be applied"
+                "Radar instrument parameters and radar_freq param are empty."
+                "So frequency is unknown. Default coefficients for C band will be applied."
             )
 
     if hydro_field is None:
@@ -983,8 +996,8 @@ def _assign_to_class(
 
         # Get hydrometeor class
         class_vec = dist.argsort(axis=0, fill_value=10e40)
-        hydroclass_ray = (class_vec[0, :] + 2).astype(np.uint8)
-        hydroclass_ray[mask] = 1
+        hydroclass_ray = (class_vec[0, :] + 1).astype(np.uint8)
+        hydroclass_ray[mask] = 0
         hydroclass[ray, :] = hydroclass_ray
 
         if t_vals is None:
@@ -1089,8 +1102,8 @@ def _assign_to_class_scan(
 
     # Get hydrometeor class
     class_vec = dist.argsort(axis=-1, fill_value=10e40)
-    hydroclass = np.ma.asarray(class_vec[:, :, 0] + 2, dtype=np.uint8)
-    hydroclass[mask] = 1
+    hydroclass = np.ma.asarray(class_vec[:, :, 0] + 1, dtype=np.uint8)
+    hydroclass[mask] = 0
 
     if t_vals is not None:
         # Transform the distance using the coefficient of the dominant class
