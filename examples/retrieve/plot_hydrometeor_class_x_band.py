@@ -51,7 +51,7 @@ hydromet_class = pyart.retrieve.hydroclass_semisupervised(
     kdp_field="filtered_corrected_specific_diff_phase",
     rhv_field="RHOHV",
     temp_field="sounding_temperature",
-)['hydro']
+)["hydro"]
 
 radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 
@@ -69,7 +69,7 @@ hydromet_class = pyart.retrieve.hydroclass_semisupervised(
     rhv_field="RHOHV",
     temp_field="sounding_temperature",
     radar_freq=9.2e9,
-)['hydro']
+)["hydro"]
 
 radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 
@@ -97,8 +97,8 @@ hydromet_class = pyart.retrieve.hydroclass_semisupervised(
     kdp_field="filtered_corrected_specific_diff_phase",
     rhv_field="RHOHV",
     temp_field="sounding_temperature",
-    radar_freq=9.2e9
-)['hydro']
+    radar_freq=9.2e9,
+)["hydro"]
 
 radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 
@@ -145,6 +145,7 @@ def adjust_fhc_colorbar_for_pyart(cb):
     cb.ax.set_ylabel("")
     cb.ax.tick_params(length=0)
     return cb
+
 
 def adjust_meth_colorbar_for_pyart(cb, tropical=False):
     if not tropical:
