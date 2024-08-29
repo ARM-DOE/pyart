@@ -5,12 +5,14 @@ Utilities for interfacing between xradar and Py-ART
 
 import copy
 
+import datatree
 import numpy as np
 import pandas as pd
 from datatree import DataTree, formatting, formatting_html
 from datatree.treenode import NodePath
 from xarray import DataArray, Dataset, concat
 from xarray.core import utils
+from xradar.accessors import XradarAccessor
 from xradar.util import get_sweep_keys
 
 from ..config import get_metadata
@@ -591,7 +593,11 @@ class Xradar:
         # Loop through and extract the different datasets
         ds_list = []
         for sweep in self.sweep_group_names:
-            ds_list.append(self.xradar[sweep].ds.drop_duplicates("azimuth"))
+            ds_list.append(
+                self.xradar[sweep]
+                .ds.drop_duplicates("azimuth")
+                .set_coords("sweep_number")
+            )
 
         # Merge based on the sweep number
         merged = concat(ds_list, dim="sweep_number")
@@ -800,3 +806,23 @@ def _point_altitude_data_factory(grid):
         return grid.origin_altitude["data"][0] + grid.point_z["data"]
 
     return _point_altitude_data
+
+
+@datatree.register_datatree_accessor("pyart")
+class XradarDataTreeAccessor(XradarAccessor):
+    """Adds a number of pyart specific methods to datatree.DataTree objects."""
+
+    def to_radar(self, scan_type=None) -> DataTree:
+        """
+        Add pyart radar object methods to the xradar datatree object
+        Parameters
+        ----------
+        scan_type: string
+            Scan type (ppi, rhi, etc.)
+        Returns
+        -------
+        dt: datatree.Datatree
+            Datatree including pyart.Radar methods
+        """
+        dt = self.xarray_obj
+        return Xradar(dt, scan_type=scan_type)

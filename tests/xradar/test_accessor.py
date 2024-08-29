@@ -154,3 +154,16 @@ def test_grid_write_read():
         assert grid1.radar_name["data"] == grid2.radar_name["data"]
         assert grid1.nradar == grid2.nradar
         grid2.ds.close()
+
+
+def test_to_xradar_object():
+    """Test the to_radar_object"""
+    dtree = xd.io.open_cfradial1_datatree(
+        filename,
+        optional=False,
+    )
+    radar = dtree.pyart.to_radar()
+    reflectivity = radar.get_field(0, "DBZ")
+    assert reflectivity.shape == (480, 996)
+    assert radar.nsweeps == 9
+    assert radar.ngates == 996
