@@ -162,7 +162,7 @@ def calc_zdr_offset(radar, gatefilter=None, height_range=None, zdr_var=None):
 
     Returns
     -------
-    obj : dict
+    profiles : dict
         The mean vertical profiles of each radar moment are extracted along with the ZDR bias.
 
     """
