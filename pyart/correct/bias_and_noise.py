@@ -2,6 +2,7 @@
 Corrects polarimetric variables for noise
 
 """
+
 import warnings
 
 import dask
@@ -198,6 +199,7 @@ def calc_zdr_offset(radar, gatefilter=None, height_range=None, zdr_var=None):
             field_data = np.where(height_mask_tiled, field_data, np.nan)
             results["profile_" + k] = np.nanmean(field_data[:, :], axis=0)
     return results
+
 
 def calc_cloud_mask(
     radar,

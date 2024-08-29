@@ -3,10 +3,10 @@
 import dask
 import numpy as np
 import pytest
-import pyart
-
 from numpy.testing import assert_allclose, assert_almost_equal, assert_array_equal
 from open_radar_data import DATASETS
+
+import pyart
 
 radar = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
 kazr_file = DATASETS.fetch("sgpkazrgeC1.a1.20190529.000002.cdf")
@@ -32,18 +32,22 @@ def test_correct_bias():
 
 
 def test_calc_zdr_offset():
-    xsapr_test_file = DATASETS.fetch('sgpxsaprcfrvptI4.a1.20200205.100827.nc')
+    xsapr_test_file = DATASETS.fetch("sgpxsaprcfrvptI4.a1.20200205.100827.nc")
     ds = pyart.io.read(xsapr_test_file)
     gatefilter = pyart.filters.GateFilter(ds)
-    gatefilter.exclude_below('cross_correlation_ratio_hv', 0.995)
-    gatefilter.exclude_above('cross_correlation_ratio_hv', 1)
-    gatefilter.exclude_below('reflectivity', 10)
-    gatefilter.exclude_above('reflectivity', 30)
+    gatefilter.exclude_below("cross_correlation_ratio_hv", 0.995)
+    gatefilter.exclude_above("cross_correlation_ratio_hv", 1)
+    gatefilter.exclude_below("reflectivity", 10)
+    gatefilter.exclude_above("reflectivity", 30)
 
-    results = pyart.correct.calc_zdr_offset(ds, zdr_var='differential_reflectivity', gatefilter=gatefilter,
-                                        height_range=(1000, 3000))
-    assert_almost_equal(results['bias'], 2.69, decimal=2)
-    assert_almost_equal(results['profile_reflectivity'][15], 14.37, decimal=2)
+    results = pyart.correct.calc_zdr_offset(
+        ds,
+        zdr_var="differential_reflectivity",
+        gatefilter=gatefilter,
+        height_range=(1000, 3000),
+    )
+    assert_almost_equal(results["bias"], 2.69, decimal=2)
+    assert_almost_equal(results["profile_reflectivity"][15], 14.37, decimal=2)
 
 
 def test_calc_noise_floor():
