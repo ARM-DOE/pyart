@@ -79,7 +79,7 @@ def spectra_moments(radar):
     return field_list
 
 
-def dealias_spectra(the_spectra, vel_bins, wavelength):
+def dealias_spectra(the_spectra, vel_bins, wavelength, left_limit, right_limit):
     """Dealias a spectra.
 
     Parameters
