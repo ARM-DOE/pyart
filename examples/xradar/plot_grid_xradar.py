@@ -21,7 +21,7 @@ filename = get_test_data("swx_20120520_0641.nc")
 tree = xd.io.open_cfradial1_datatree(filename)
 
 # Give the tree Py-ART radar methods
-radar = pyart.xradar.Xradar(tree)
+radar = tree.pyart.to_radar()
 
 # Grid using 11 vertical levels, and 101 horizontal grid cells at a resolution on 1 km
 grid = pyart.map.grid_from_radars(
