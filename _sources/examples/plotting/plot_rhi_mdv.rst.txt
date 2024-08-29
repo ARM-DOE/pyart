@@ -24,7 +24,7 @@ Create a RHI plot from a MDV file
 
 An example which creates a RHI plot of a MDV file using a RadarDisplay object.
 
-.. GENERATED FROM PYTHON SOURCE LINES 9-28
+.. GENERATED FROM PYTHON SOURCE LINES 9-29
 
 
 
@@ -38,6 +38,7 @@ An example which creates a RHI plot of a MDV file using a RadarDisplay object.
 
 
 .. code-block:: Python
+
 
     print(__doc__)
 
@@ -62,7 +63,7 @@ An example which creates a RHI plot of a MDV file using a RadarDisplay object.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.867 seconds)
+   **Total running time of the script:** (0 minutes 0.626 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_rhi_mdv.py:

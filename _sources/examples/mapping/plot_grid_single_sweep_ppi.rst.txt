@@ -31,7 +31,7 @@ minor errors, especially considering the high co-variance of neighboring radar
 volumes and the typically small Cartesian grid separation. Errors are effectively
 negligible at low elevation angles common to PPI sweeps.
 
-.. GENERATED FROM PYTHON SOURCE LINES 16-106
+.. GENERATED FROM PYTHON SOURCE LINES 16-107
 
 
 
@@ -91,6 +91,7 @@ negligible at low elevation angles common to PPI sweeps.
 |
 
 .. code-block:: Python
+
 
     print(__doc__)
 
@@ -186,7 +187,7 @@ negligible at low elevation angles common to PPI sweeps.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 5.780 seconds)
+   **Total running time of the script:** (0 minutes 6.101 seconds)
 
 
 .. _sphx_glr_download_examples_mapping_plot_grid_single_sweep_ppi.py:

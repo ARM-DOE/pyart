@@ -25,7 +25,7 @@ Plot a Cross Section from a Grid
 This is an example of how to plot a cross section
 of your radar grid using the GridMapDisplay
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-78
+.. GENERATED FROM PYTHON SOURCE LINES 10-79
 
 
 
@@ -39,6 +39,7 @@ of your radar grid using the GridMapDisplay
 
 
 .. code-block:: Python
+
 
     print(__doc__)
 
@@ -112,7 +113,7 @@ of your radar grid using the GridMapDisplay
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 9.058 seconds)
+   **Total running time of the script:** (0 minutes 9.063 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_cross_section.py:

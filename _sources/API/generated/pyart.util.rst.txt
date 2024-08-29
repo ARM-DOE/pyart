@@ -27,6 +27,8 @@
     
     column_vertical_profile
     
+    compute_directional_stats
+    
     cross_section_ppi
     
     cross_section_rhi
@@ -60,6 +62,8 @@
     is_vpt
     
     join_radar
+    
+    ma_broadcast_to
     
     mean_of_two_angles
     

@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Hydrometeor Classification with Custom Frequency Settings &#8212; Py-ART 1.18.7.post2 documentation</title>
+    <title>Hydrometeor Classification with Custom Frequency Settings &#8212; Py-ART 1.18.7.post3 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=3b6326d5"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=9f1ba2cc"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -146,7 +146,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.7.post2 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.7.post3 documentation</p>
   
 </a></div>
     
@@ -618,7 +618,7 @@ classification to identify types of precipitation.</p>
     <span class="n">kdp_field</span><span class="o">=</span><span class="s2">&quot;filtered_corrected_specific_diff_phase&quot;</span><span class="p">,</span>
     <span class="n">rhv_field</span><span class="o">=</span><span class="s2">&quot;RHOHV&quot;</span><span class="p">,</span>
     <span class="n">temp_field</span><span class="o">=</span><span class="s2">&quot;sounding_temperature&quot;</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="p">)[</span><span class="s2">&quot;hydro&quot;</span><span class="p">]</span>
 
 <span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;hydro_classification&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hydromet_class</span></a><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -636,7 +636,7 @@ classification to identify types of precipitation.</p>
     <span class="n">rhv_field</span><span class="o">=</span><span class="s2">&quot;RHOHV&quot;</span><span class="p">,</span>
     <span class="n">temp_field</span><span class="o">=</span><span class="s2">&quot;sounding_temperature&quot;</span><span class="p">,</span>
     <span class="n">radar_freq</span><span class="o">=</span><span class="mf">9.2e9</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="p">)[</span><span class="s2">&quot;hydro&quot;</span><span class="p">]</span>
 
 <span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;hydro_classification&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hydromet_class</span></a><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -665,7 +665,7 @@ classification to identify types of precipitation.</p>
     <span class="n">rhv_field</span><span class="o">=</span><span class="s2">&quot;RHOHV&quot;</span><span class="p">,</span>
     <span class="n">temp_field</span><span class="o">=</span><span class="s2">&quot;sounding_temperature&quot;</span><span class="p">,</span>
     <span class="n">radar_freq</span><span class="o">=</span><span class="mf">9.2e9</span><span class="p">,</span>
-<span class="p">)</span>
+<span class="p">)[</span><span class="s2">&quot;hydro&quot;</span><span class="p">]</span>
 
 <span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;hydro_classification&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hydromet_class</span></a><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
@@ -688,7 +688,6 @@ classification to identify types of precipitation.</p>
     <span class="s2">&quot;Lime&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Yellow&quot;</span><span class="p">,</span>
     <span class="s2">&quot;Red&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Fuchsia&quot;</span><span class="p">,</span>
 <span class="p">]</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib.colors.ListedColormap" title="matplotlib.colors.ListedColormap" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cmaphid</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib.colors.ListedColormap" title="matplotlib.colors.ListedColormap" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class"><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hid_colors</span></a><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib.colors.ListedColormap" title="matplotlib.colors.ListedColormap" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cmapmeth</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib.colors.ListedColormap" title="matplotlib.colors.ListedColormap" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class"><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hid_colors</span></a><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">])</span>
@@ -696,19 +695,18 @@ classification to identify types of precipitation.</p>
 
 
 <span class="k">def</span> <span class="nf">adjust_fhc_colorbar_for_pyart</span><span class="p">(</span><span class="n">cb</span><span class="p">):</span>
-    <span class="n">cb</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html#numpy.arange" title="numpy.arange" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="mf">1.4</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">))</span>
+    <span class="n">cb</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html#numpy.arange" title="numpy.arange" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="mf">1.4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">))</span>
     <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span>
         <span class="p">[</span>
-            <span class="s2">&quot;Drizzle&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Rain&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Ice Crystals&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Aggregates&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Wet Snow&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Ice Crystals&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Light rain&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Rain&quot;</span><span class="p">,</span>
             <span class="s2">&quot;Vertical Ice&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;LD Graupel&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Wet snow&quot;</span><span class="p">,</span>
             <span class="s2">&quot;HD Graupel&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Hail&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Big Drops&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Melting hail&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Dry hail or high-density graupel&quot;</span><span class="p">,</span>
         <span class="p">]</span>
     <span class="p">)</span>
     <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
@@ -794,7 +792,7 @@ classification to identify types of precipitation.</p>
 <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">display</span><span class="o">.</span><span class="n">cbs</span></a><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">adjust_fhc_colorbar_for_pyart</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">display</span><span class="o">.</span><span class="n">cbs</span></a><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 5.683 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 9.795 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-retrieve-plot-hydrometeor-class-x-band-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/284155deb2676d4078d36e57fe980d9c/plot_hydrometeor_class_x_band.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_hydrometeor_class_x_band.ipynb</span></code></a></p>

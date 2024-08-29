@@ -25,9 +25,10 @@ Reading NEXRAD Data from the AWS Cloud
 Within this example, we show how you can remotely access Next Generation Weather Radar (NEXRAD) Data from Amazon Web Services
 and plot quick looks of the datasets.
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-20
+.. GENERATED FROM PYTHON SOURCE LINES 10-21
 
 .. code-block:: Python
+
 
     print(__doc__)
 
@@ -46,7 +47,7 @@ and plot quick looks of the datasets.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 21-33
+.. GENERATED FROM PYTHON SOURCE LINES 22-34
 
 Read NEXRAD Level 2 Data
 ------------------------
@@ -61,7 +62,7 @@ We will access data from the **noaa-nexrad-level2** bucket, with the data organi
 Where in our case, we are using a sample data file from Houston, Texas (KHGX)
 on March 22, 2022, at 1201:25 UTC. This means our path would look like:
 
-.. GENERATED FROM PYTHON SOURCE LINES 33-38
+.. GENERATED FROM PYTHON SOURCE LINES 34-39
 
 .. code-block:: Python
 
@@ -77,11 +78,11 @@ on March 22, 2022, at 1201:25 UTC. This means our path would look like:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 39-40
+.. GENERATED FROM PYTHON SOURCE LINES 40-41
 
 We can use the **pyart.io.read_nexrad_archive** module to access our data, passing in the filepath.
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-43
+.. GENERATED FROM PYTHON SOURCE LINES 41-44
 
 .. code-block:: Python
 
@@ -95,11 +96,11 @@ We can use the **pyart.io.read_nexrad_archive** module to access our data, passi
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 44-45
+.. GENERATED FROM PYTHON SOURCE LINES 45-46
 
 Let's take a look at a summary of what fields are available.
 
-.. GENERATED FROM PYTHON SOURCE LINES 45-48
+.. GENERATED FROM PYTHON SOURCE LINES 46-49
 
 .. code-block:: Python
 
@@ -115,17 +116,17 @@ Let's take a look at a summary of what fields are available.
  .. code-block:: none
 
 
-    ['reflectivity', 'cross_correlation_ratio', 'clutter_filter_power_removed', 'spectrum_width', 'differential_reflectivity', 'differential_phase', 'velocity']
+    ['differential_reflectivity', 'cross_correlation_ratio', 'reflectivity', 'differential_phase', 'spectrum_width', 'clutter_filter_power_removed', 'velocity']
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 49-52
+.. GENERATED FROM PYTHON SOURCE LINES 50-53
 
 Let's plot the reflectivity/velocity fields as a first step to investigating our dataset.
 
 Note: the reflectivity and velocity fields are in different sweeps, so we will need to specify which sweep to plot in each plot.
 
-.. GENERATED FROM PYTHON SOURCE LINES 52-78
+.. GENERATED FROM PYTHON SOURCE LINES 53-79
 
 .. code-block:: Python
 
@@ -167,11 +168,11 @@ Note: the reflectivity and velocity fields are in different sweeps, so we will n
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 79-80
+.. GENERATED FROM PYTHON SOURCE LINES 80-81
 
 Within this plot, we see that the velocity data still has regions that are folded, indicating the dataset has not yet been dealiased.
 
-.. GENERATED FROM PYTHON SOURCE LINES 82-100
+.. GENERATED FROM PYTHON SOURCE LINES 83-101
 
 Read NEXRAD Level 3 Data
 ------------------------
@@ -192,7 +193,7 @@ using the following naming convention:
 
 For example, we can look at data from that same time as the NEXRAD Level 2 data used previously (March 22, 2022 at 1201 UTC)
 
-.. GENERATED FROM PYTHON SOURCE LINES 100-108
+.. GENERATED FROM PYTHON SOURCE LINES 101-109
 
 .. code-block:: Python
 
@@ -211,11 +212,11 @@ For example, we can look at data from that same time as the NEXRAD Level 2 data 
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 109-110
+.. GENERATED FROM PYTHON SOURCE LINES 110-111
 
 Read our Data using **pyart.io.read_nexrad_level3**
 
-.. GENERATED FROM PYTHON SOURCE LINES 110-116
+.. GENERATED FROM PYTHON SOURCE LINES 111-117
 
 .. code-block:: Python
 
@@ -232,11 +233,11 @@ Read our Data using **pyart.io.read_nexrad_level3**
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 117-118
+.. GENERATED FROM PYTHON SOURCE LINES 118-119
 
 Let's confirm that each radar object has a single field:
 
-.. GENERATED FROM PYTHON SOURCE LINES 118-126
+.. GENERATED FROM PYTHON SOURCE LINES 119-127
 
 .. code-block:: Python
 
@@ -261,7 +262,7 @@ Let's confirm that each radar object has a single field:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 127-132
+.. GENERATED FROM PYTHON SOURCE LINES 128-133
 
 Plot a Quick Look of our NEXRAD Level 3 Data
 
@@ -269,7 +270,7 @@ Let's plot the reflectivity/velocity fields as a first step to investigating our
 
 Note: the reflectivity and velocity fields are in different radars, so we need to setup different displays.
 
-.. GENERATED FROM PYTHON SOURCE LINES 132-157
+.. GENERATED FROM PYTHON SOURCE LINES 133-158
 
 .. code-block:: Python
 
@@ -313,7 +314,7 @@ Note: the reflectivity and velocity fields are in different radars, so we need t
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 14.059 seconds)
+   **Total running time of the script:** (0 minutes 14.435 seconds)
 
 
 .. _sphx_glr_download_examples_io_plot_nexrad_data_aws.py:

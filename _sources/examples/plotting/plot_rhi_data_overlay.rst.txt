@@ -25,7 +25,7 @@ Create an RHI plot with reflectivity contour lines from an MDV file
 An example which creates an RHI plot of velocity using a RadarDisplay object
 and adding Reflectivity contours from the same MDV file.
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-96
+.. GENERATED FROM PYTHON SOURCE LINES 10-97
 
 
 
@@ -39,6 +39,7 @@ and adding Reflectivity contours from the same MDV file.
 
 
 .. code-block:: Python
+
 
     print(__doc__)
 
@@ -130,7 +131,7 @@ and adding Reflectivity contours from the same MDV file.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 1.170 seconds)
+   **Total running time of the script:** (0 minutes 0.998 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_rhi_data_overlay.py:

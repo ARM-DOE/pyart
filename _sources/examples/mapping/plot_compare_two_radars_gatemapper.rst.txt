@@ -25,9 +25,10 @@ Compare Two Radars Using Gatemapper
 Map the reflectivity field of a single radar in Antenna coordinates to
 another radar in Antenna coordinates and compare the fields.
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-26
+.. GENERATED FROM PYTHON SOURCE LINES 10-27
 
 .. code-block:: Python
+
 
     print(__doc__)
 
@@ -52,13 +53,13 @@ another radar in Antenna coordinates and compare the fields.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 27-30
+.. GENERATED FROM PYTHON SOURCE LINES 28-31
 
 **Read in the Data**
 
 For this example, we use two XSAPR radars from our test data.
 
-.. GENERATED FROM PYTHON SOURCE LINES 30-37
+.. GENERATED FROM PYTHON SOURCE LINES 31-38
 
 .. code-block:: Python
 
@@ -76,7 +77,7 @@ For this example, we use two XSAPR radars from our test data.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 38-46
+.. GENERATED FROM PYTHON SOURCE LINES 39-47
 
 **Filter and Configure the GateMapper**
 
@@ -87,7 +88,7 @@ We also need to set a distance (meters) and time (seconds)
 between the source and destination gate allowed for an
 adequate match), using the distance_tolerance/time_tolerance variables.
 
-.. GENERATED FROM PYTHON SOURCE LINES 46-58
+.. GENERATED FROM PYTHON SOURCE LINES 47-59
 
 .. code-block:: Python
 
@@ -110,14 +111,14 @@ adequate match), using the distance_tolerance/time_tolerance variables.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 59-63
+.. GENERATED FROM PYTHON SOURCE LINES 60-64
 
 **Plot the Original Data**
 
 Let's take a look at our original fields - notice the difference
 in reflectivity values!
 
-.. GENERATED FROM PYTHON SOURCE LINES 63-99
+.. GENERATED FROM PYTHON SOURCE LINES 64-100
 
 .. code-block:: Python
 
@@ -169,12 +170,12 @@ in reflectivity values!
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 100-102
+.. GENERATED FROM PYTHON SOURCE LINES 101-103
 
 Now, we can compare our original field from the southwestern radar,
 to the new remapped field - there are similarities...
 
-.. GENERATED FROM PYTHON SOURCE LINES 102-139
+.. GENERATED FROM PYTHON SOURCE LINES 103-140
 
 .. code-block:: Python
 
@@ -227,7 +228,7 @@ to the new remapped field - there are similarities...
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 140-147
+.. GENERATED FROM PYTHON SOURCE LINES 141-148
 
 **Calculate and Plot the Difference**
 
@@ -237,7 +238,7 @@ Keep in mind there is a time difference of ~ 1 minute between these plots,
 leading to small difference due to the precipitation moving through the
 domain over the course of that minute.
 
-.. GENERATED FROM PYTHON SOURCE LINES 147-187
+.. GENERATED FROM PYTHON SOURCE LINES 148-188
 
 .. code-block:: Python
 
@@ -293,7 +294,7 @@ domain over the course of that minute.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 188-193
+.. GENERATED FROM PYTHON SOURCE LINES 189-194
 
 **Plot a Histogram for Comparison**
 
@@ -301,7 +302,7 @@ Another way of plotting the comparison here is using
 a 2-dimensional histogram,which is more helpful in this
 case where our scans don't neccessarily match exactly in time.
 
-.. GENERATED FROM PYTHON SOURCE LINES 193-226
+.. GENERATED FROM PYTHON SOURCE LINES 194-227
 
 .. code-block:: Python
 
@@ -353,7 +354,7 @@ case where our scans don't neccessarily match exactly in time.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 36.188 seconds)
+   **Total running time of the script:** (0 minutes 36.835 seconds)
 
 
 .. _sphx_glr_download_examples_mapping_plot_compare_two_radars_gatemapper.py:

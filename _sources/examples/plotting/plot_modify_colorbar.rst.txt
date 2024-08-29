@@ -25,9 +25,10 @@ Modify a Colorbar for your Plot
 This is an example of how to modify a colobar
 within a Py-ART display object.
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-21
+.. GENERATED FROM PYTHON SOURCE LINES 10-22
 
 .. code-block:: Python
+
 
     print(__doc__)
 
@@ -47,7 +48,7 @@ within a Py-ART display object.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 22-29
+.. GENERATED FROM PYTHON SOURCE LINES 23-30
 
 ** Initial PPI Map Display
 
@@ -57,7 +58,7 @@ and take a look at the colorbar
 Notice: the colorbar is not perfect
 and slightly overlaps the PPI display
 
-.. GENERATED FROM PYTHON SOURCE LINES 29-78
+.. GENERATED FROM PYTHON SOURCE LINES 30-79
 
 .. code-block:: Python
 
@@ -122,11 +123,11 @@ and slightly overlaps the PPI display
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 79-80
+.. GENERATED FROM PYTHON SOURCE LINES 80-81
 
 ** Colorbar Position / Title Manipulation
 
-.. GENERATED FROM PYTHON SOURCE LINES 80-131
+.. GENERATED FROM PYTHON SOURCE LINES 81-132
 
 .. code-block:: Python
 
@@ -196,7 +197,7 @@ and slightly overlaps the PPI display
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.080 seconds)
+   **Total running time of the script:** (0 minutes 3.066 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_modify_colorbar.py:

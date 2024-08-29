@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyart.retrieve.hydroclass_semisupervised &#8212; Py-ART 1.18.7.post2 documentation</title>
+    <title>pyart.retrieve.hydroclass_semisupervised &#8212; Py-ART 1.18.7.post3 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=3b6326d5"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=9f1ba2cc"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -146,7 +146,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.7.post2 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.7.post3 documentation</p>
   
 </a></div>
     
@@ -535,6 +535,7 @@ document.write(`
 </details></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.core.antenna_to_cartesian.html">pyart.core.antenna_to_cartesian</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.core.antenna_vectors_to_cartesian.html">pyart.core.antenna_vectors_to_cartesian</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyart.core.cartesian_to_antenna.html">pyart.core.cartesian_to_antenna</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.core.cartesian_to_geographic.html">pyart.core.cartesian_to_geographic</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.core.cartesian_to_geographic_aeqd.html">pyart.core.cartesian_to_geographic_aeqd</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.core.cartesian_vectors_to_geographic.html">pyart.core.cartesian_vectors_to_geographic</a></li>
@@ -653,9 +654,15 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.calculate_velocity_texture.html">pyart.retrieve.calculate_velocity_texture</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.composite_reflectivity.html">pyart.retrieve.composite_reflectivity</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.compute_cdr.html">pyart.retrieve.compute_cdr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.compute_evp.html">pyart.retrieve.compute_evp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.compute_l.html">pyart.retrieve.compute_l</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.compute_noisedBZ.html">pyart.retrieve.compute_noisedBZ</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.compute_qvp.html">pyart.retrieve.compute_qvp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.compute_rqvp.html">pyart.retrieve.compute_rqvp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.compute_snr.html">pyart.retrieve.compute_snr</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.compute_svp.html">pyart.retrieve.compute_svp</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.compute_ts_along_coord.html">pyart.retrieve.compute_ts_along_coord</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.compute_vp.html">pyart.retrieve.compute_vp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.conv_strat_raut.html">pyart.retrieve.conv_strat_raut</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.conv_strat_yuter.html">pyart.retrieve.conv_strat_yuter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.create_cfad.html">pyart.retrieve.create_cfad</a></li>
@@ -949,6 +956,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.angular_std_deg.html">pyart.util.angular_std_deg</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.angular_texture_2d.html">pyart.util.angular_texture_2d</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.column_vertical_profile.html">pyart.util.column_vertical_profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyart.util.compute_directional_stats.html">pyart.util.compute_directional_stats</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.cross_section_ppi.html">pyart.util.cross_section_ppi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.cross_section_rhi.html">pyart.util.cross_section_rhi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.datetime_from_dataset.html">pyart.util.datetime_from_dataset</a></li>
@@ -966,6 +974,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.interval_std.html">pyart.util.interval_std</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.is_vpt.html">pyart.util.is_vpt</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.join_radar.html">pyart.util.join_radar</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyart.util.ma_broadcast_to.html">pyart.util.ma_broadcast_to</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.mean_of_two_angles.html">pyart.util.mean_of_two_angles</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.mean_of_two_angles_deg.html">pyart.util.mean_of_two_angles_deg</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.util.rolling_window.html">pyart.util.rolling_window</a></li>
@@ -1158,7 +1167,7 @@ document.write(`
 <h1>pyart.retrieve.hydroclass_semisupervised<a class="headerlink" href="#pyart-retrieve-hydroclass-semisupervised" title="Permalink to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyart.retrieve.hydroclass_semisupervised">
-<span class="sig-prename descclassname"><span class="pre">pyart.retrieve.</span></span><span class="sig-name descname"><span class="pre">hydroclass_semisupervised</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mass_centers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">0.75,</span> <span class="pre">0.5])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refl_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zdr_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rhv_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kdp_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hydro_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/retrieve/echo_class.html#hydroclass_semisupervised"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.retrieve.hydroclass_semisupervised" title="Permalink to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyart.retrieve.</span></span><span class="sig-name descname"><span class="pre">hydroclass_semisupervised</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hydro_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('AG',</span> <span class="pre">'CR',</span> <span class="pre">'LR',</span> <span class="pre">'RP',</span> <span class="pre">'RN',</span> <span class="pre">'VI',</span> <span class="pre">'WS',</span> <span class="pre">'MH',</span> <span class="pre">'IH/HDG')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">var_names</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">('Zh',</span> <span class="pre">'ZDR',</span> <span class="pre">'KDP',</span> <span class="pre">'RhoHV',</span> <span class="pre">'relH')</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">mass_centers</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">weights</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">array([1.,</span> <span class="pre">1.,</span> <span class="pre">1.,</span> <span class="pre">0.75,</span> <span class="pre">0.5])</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">value</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">50.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lapse_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-6.5</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">refl_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">zdr_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rhv_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kdp_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">iso0_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">hydro_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">entropy_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar_freq</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">temp_ref</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'temperature'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">compute_entropy</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">output_distances</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vectorize</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/retrieve/echo_class.html#hydroclass_semisupervised"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.retrieve.hydroclass_semisupervised" title="Permalink to this definition">#</a></dt>
 <dd><p>Classifies precipitation echoes into hydrometeor types.</p>
 <p>The <cite>hydroclass_semisupervised</cite> function classifies precipitation echoes in the polarimetric radar data
 into 9 hydrometeor types using a semi-supervised approach (Besic et al., 2016).</p>
@@ -1166,24 +1175,42 @@ into 9 hydrometeor types using a semi-supervised approach (Besic et al., 2016).<
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>radar</strong> (<em>radar</em>) – Radar object.</p></li>
+<li><p><strong>hydro_names</strong> (<em>array of str</em>) – name of the types of hydrometeors</p></li>
+<li><p><strong>var_names</strong> (<em>array of str</em>) – name of the variables</p></li>
 <li><p><strong>mass_centers</strong> (<em>ndarray 2D, optional</em>) – The centroids for each variable and hydrometeor class in (nclasses,
 nvariables).</p></li>
-<li><p><strong>weights</strong> (<em>ndarray 1D, optional</em>) – The weight given to each variable.</p></li>
-<li><p><strong>refl_field, zdr_field, rhv_field, kdp_field, temp_field</strong> (<em>str, optional</em>) – Inputs. Field names within the radar object which represent the
+<li><p><strong>weights</strong> (<em>ndarray 1D, optional</em>) – The weight given to each variable. Ordered by [dBZ, ZDR, KDP, RhoHV,
+H_ISO0]</p></li>
+<li><p><strong>value</strong> (<em>float</em>) – The value controlling the rate of decay in the distance transformation</p></li>
+<li><p><strong>lapse_rate</strong> (<em>float</em>) – The decrease in temperature for each vertical km [deg/km]</p></li>
+<li><p><strong>refl_field, zdr_field, rhv_field, kdp_field, temp_field, iso0_field</strong> (<em>str</em>) – Inputs. Field names within the radar object which represent the
 horizonal reflectivity, the differential reflectivity, the copolar
-correlation coefficient, the specific differential phase and the
-temperature field. A value of None for any of these parameters will
-use the default field name as defined in the Py-ART configuration
-file.</p></li>
-<li><p><strong>hydro_field</strong> (<em>str, optional</em>) – Output. Field name which represents the hydrometeor class field.
+correlation coefficient, the specific differential phase, the
+temperature (in deg celsius) and the height respect to the iso0 fields.
+A value of None for any of these parameters will use the default field
+name as defined in the Py-ART configuration file.</p></li>
+<li><p><strong>hydro_field</strong> (<em>str</em>) – Output. Field name which represents the hydrometeor class field.
+A value of None will use the default field name as defined in the
+Py-ART configuration file.</p></li>
+<li><p><strong>entropy_field</strong> (<em>str</em>) – Output. Field name which represents the entropy class field.
 A value of None will use the default field name as defined in the
 Py-ART configuration file.</p></li>
 <li><p><strong>radar_freq</strong> (<em>str, optional</em>) – Radar frequency in Hertz (Hz) used for classification.
 This parameter will be ignored, if the radar object has frequency information.</p></li>
+<li><p><strong>temp_ref</strong> (<em>str</em>) – the field use as reference for temperature. Can be either temperature
+or height_over_iso0</p></li>
+<li><p><strong>compute_entropy</strong> (<em>bool</em>) – If true, the entropy is computed</p></li>
+<li><p><strong>output_distances</strong> (<em>bool</em>) – If true, the normalized distances to the centroids for each
+hydrometeor are provided as output</p></li>
+<li><p><strong>vectorize</strong> (<em>bool</em>) – If true, a vectorized version of the class assignation is going to be
+used</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><p><strong>hydro</strong> (<em>dict</em>) –</p>
+<dd class="field-even"><p><ul>
+<li><p><strong>fields_dict</strong> (<em>dict</em>) – Dictionary containing the retrieved fields</p></li>
+<li><p><em>The output directionary field_dict has the following keys</em></p></li>
+<li><p><strong>hydro</strong> (<em>dict</em>) –</p>
 <dl class="simple">
 <dt>Hydrometeor classification.</dt><dd><ul class="simple">
 <li><p>0: Not classified</p></li>
@@ -1199,6 +1226,13 @@ This parameter will be ignored, if the radar object has frequency information.</
 </ul>
 </dd>
 </dl>
+</li>
+<li><p><em>if compute_entropy is True</em></p></li>
+<li><p><strong>entropy</strong> (<em>dict</em>) – Shannon entropy of the hydrometeor demixing</p></li>
+<li><p><em>if output_distances is True</em></p></li>
+<li><p><strong>propX</strong> (<em>dict</em>) – Proportion of a given hydrometeor class in the polarimetric
+decomposition of a radar volume</p></li>
+</ul>
 </p>
 </dd>
 </dl>
@@ -1207,6 +1241,10 @@ This parameter will be ignored, if the radar object has frequency information.</
 and Berne, A.: Hydrometeor classification through statistical clustering
 of polarimetric radar measurements: a semi-supervised approach,
 Atmos. Meas. Tech., 9, 4425-4445, doi:10.5194/amt-9-4425-2016, 2016</p>
+<p>Besic, N., Gehring, J., Praz, C., Figueras i Ventura, J., Grazioli, J., Gabella,
+M., Germann, U., and Berne, A.: Unraveling hydrometeor mixtures in polarimetric
+radar measurements, Atmos. Meas. Tech., 11, 4847–4866,
+<a class="reference external" href="https://doi.org/10.5194/amt-11-4847-2018">https://doi.org/10.5194/amt-11-4847-2018</a>, 2018.</p>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">#</a></h2>
 <p class="rubric">Notes</p>

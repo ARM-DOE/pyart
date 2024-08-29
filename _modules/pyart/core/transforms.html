@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.core.transforms &#8212; Py-ART 1.18.7.post2 documentation</title>
+    <title>pyart.core.transforms &#8212; Py-ART 1.18.7.post3 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=3b6326d5"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=9f1ba2cc"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -143,7 +143,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.7.post2 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.7.post3 documentation</p>
   
 </a></div>
     
@@ -555,6 +555,33 @@ document.write(`
     <span class="n">x</span> <span class="o">=</span> <span class="n">s</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">theta_a</span><span class="p">)</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">s</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">theta_a</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span></div>
+
+
+<div class="viewcode-block" id="cartesian_to_antenna"><a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_to_antenna.html#pyart.core.cartesian_to_antenna">[docs]</a><span class="k">def</span> <span class="nf">cartesian_to_antenna</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns antenna coordinates from Cartesian coordinates.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    x, y, z : array</span>
+<span class="sd">        Cartesian coordinates in meters from the radar.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    ranges : array</span>
+<span class="sd">        Distances to the center of the radar gates (bins) in m.</span>
+<span class="sd">    azimuths : array</span>
+<span class="sd">        Azimuth angle of the radar in degrees. [-180., 180]</span>
+<span class="sd">    elevations : array</span>
+<span class="sd">        Elevation angle of the radar in degrees.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ranges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">z</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)</span>
+    <span class="n">elevations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">z</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)))</span>
+    <span class="n">azimuths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>  <span class="c1"># [-180, 180]</span>
+    <span class="n">azimuths</span><span class="p">[</span><span class="n">azimuths</span> <span class="o">&lt;</span> <span class="mf">0.0</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">360.0</span>  <span class="c1"># [0, 360]</span>
+
+    <span class="k">return</span> <span class="n">ranges</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span></div>
 
 
 <div class="viewcode-block" id="antenna_vectors_to_cartesian"><a class="viewcode-back" href="../../../API/generated/pyart.core.antenna_vectors_to_cartesian.html#pyart.core.antenna_vectors_to_cartesian">[docs]</a><span class="k">def</span> <span class="nf">antenna_vectors_to_cartesian</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>

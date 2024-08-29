@@ -28,7 +28,7 @@ Hydrometeor Classification with Custom Frequency Settings
  .. note::
     The script initially attempts hydrometeor classification without specific radar frequency information for band selection.
 
-.. GENERATED FROM PYTHON SOURCE LINES 12-228
+.. GENERATED FROM PYTHON SOURCE LINES 12-226
 
 
 
@@ -109,7 +109,7 @@ Hydrometeor Classification with Custom Frequency Settings
         kdp_field="filtered_corrected_specific_diff_phase",
         rhv_field="RHOHV",
         temp_field="sounding_temperature",
-    )
+    )["hydro"]
 
     radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 
@@ -127,7 +127,7 @@ Hydrometeor Classification with Custom Frequency Settings
         rhv_field="RHOHV",
         temp_field="sounding_temperature",
         radar_freq=9.2e9,
-    )
+    )["hydro"]
 
     radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 
@@ -156,7 +156,7 @@ Hydrometeor Classification with Custom Frequency Settings
         rhv_field="RHOHV",
         temp_field="sounding_temperature",
         radar_freq=9.2e9,
-    )
+    )["hydro"]
 
     radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 
@@ -179,7 +179,6 @@ Hydrometeor Classification with Custom Frequency Settings
         "Lime",
         "Yellow",
         "Red",
-        "Fuchsia",
     ]
     cmaphid = colors.ListedColormap(hid_colors)
     cmapmeth = colors.ListedColormap(hid_colors[0:6])
@@ -187,19 +186,18 @@ Hydrometeor Classification with Custom Frequency Settings
 
 
     def adjust_fhc_colorbar_for_pyart(cb):
-        cb.set_ticks(np.arange(1.4, 10, 0.9))
+        cb.set_ticks(np.arange(1.4, 9, 0.9))
         cb.ax.set_yticklabels(
             [
-                "Drizzle",
-                "Rain",
-                "Ice Crystals",
                 "Aggregates",
-                "Wet Snow",
+                "Ice Crystals",
+                "Light rain",
+                "Rain",
                 "Vertical Ice",
-                "LD Graupel",
+                "Wet snow",
                 "HD Graupel",
-                "Hail",
-                "Big Drops",
+                "Melting hail",
+                "Dry hail or high-density graupel",
             ]
         )
         cb.ax.set_ylabel("")
@@ -287,7 +285,7 @@ Hydrometeor Classification with Custom Frequency Settings
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 5.683 seconds)
+   **Total running time of the script:** (0 minutes 9.795 seconds)
 
 
 .. _sphx_glr_download_examples_retrieve_plot_hydrometeor_class_x_band.py:

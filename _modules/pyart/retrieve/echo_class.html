@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.18.7.post2 documentation</title>
+    <title>pyart.retrieve.echo_class &#8212; Py-ART 1.18.7.post3 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=3b6326d5"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=9f1ba2cc"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -143,7 +143,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.7.post2 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.7.post3 documentation</p>
   
 </a></div>
     
@@ -482,6 +482,7 @@ document.write(`
 
 <span class="sd">&quot;&quot;&quot;</span>
 
+<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
 
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -489,6 +490,7 @@ document.write(`
 <span class="c1"># Local imports</span>
 <span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
 <span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">Grid</span>
+<span class="kn">from</span> <span class="nn">..util.radar_utils</span> <span class="kn">import</span> <span class="n">ma_broadcast_to</span>
 <span class="kn">from</span> <span class="nn">._echo_class</span> <span class="kn">import</span> <span class="n">_feature_detection</span><span class="p">,</span> <span class="n">steiner_class_buff</span>
 <span class="kn">from</span> <span class="nn">._echo_class_wt</span> <span class="kn">import</span> <span class="n">calc_scale_break</span><span class="p">,</span> <span class="n">wavelet_reclass</span>
 
@@ -1080,15 +1082,25 @@ document.write(`
 
 <div class="viewcode-block" id="hydroclass_semisupervised"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.hydroclass_semisupervised.html#pyart.retrieve.hydroclass_semisupervised">[docs]</a><span class="k">def</span> <span class="nf">hydroclass_semisupervised</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
+    <span class="n">hydro_names</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;AG&quot;</span><span class="p">,</span> <span class="s2">&quot;CR&quot;</span><span class="p">,</span> <span class="s2">&quot;LR&quot;</span><span class="p">,</span> <span class="s2">&quot;RP&quot;</span><span class="p">,</span> <span class="s2">&quot;RN&quot;</span><span class="p">,</span> <span class="s2">&quot;VI&quot;</span><span class="p">,</span> <span class="s2">&quot;WS&quot;</span><span class="p">,</span> <span class="s2">&quot;MH&quot;</span><span class="p">,</span> <span class="s2">&quot;IH/HDG&quot;</span><span class="p">),</span>
+    <span class="n">var_names</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Zh&quot;</span><span class="p">,</span> <span class="s2">&quot;ZDR&quot;</span><span class="p">,</span> <span class="s2">&quot;KDP&quot;</span><span class="p">,</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">,</span> <span class="s2">&quot;relH&quot;</span><span class="p">),</span>
     <span class="n">mass_centers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]),</span>
+    <span class="n">value</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span>
+    <span class="n">lapse_rate</span><span class="o">=-</span><span class="mf">6.5</span><span class="p">,</span>
     <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">zdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">rhv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">kdp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">temp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">iso0_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">hydro_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">entropy_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">radar_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">temp_ref</span><span class="o">=</span><span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
+    <span class="n">compute_entropy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">output_distances</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">vectorize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Classifies precipitation echoes into hydrometeor types.</span>
@@ -1100,28 +1112,57 @@ document.write(`
 <span class="sd">    ----------</span>
 <span class="sd">    radar : radar</span>
 <span class="sd">        Radar object.</span>
+<span class="sd">    hydro_names : array of str</span>
+<span class="sd">        name of the types of hydrometeors</span>
+<span class="sd">    var_names : array of str</span>
+<span class="sd">        name of the variables</span>
 <span class="sd">    mass_centers : ndarray 2D, optional</span>
 <span class="sd">        The centroids for each variable and hydrometeor class in (nclasses,</span>
 <span class="sd">        nvariables).</span>
 <span class="sd">    weights : ndarray 1D, optional</span>
-<span class="sd">        The weight given to each variable.</span>
-<span class="sd">    refl_field, zdr_field, rhv_field, kdp_field, temp_field : str, optional</span>
+<span class="sd">        The weight given to each variable. Ordered by [dBZ, ZDR, KDP, RhoHV,</span>
+<span class="sd">        H_ISO0]</span>
+<span class="sd">    value : float</span>
+<span class="sd">        The value controlling the rate of decay in the distance transformation</span>
+<span class="sd">    lapse_rate : float</span>
+<span class="sd">        The decrease in temperature for each vertical km [deg/km]</span>
+<span class="sd">    refl_field, zdr_field, rhv_field, kdp_field, temp_field, iso0_field : str</span>
 <span class="sd">        Inputs. Field names within the radar object which represent the</span>
 <span class="sd">        horizonal reflectivity, the differential reflectivity, the copolar</span>
-<span class="sd">        correlation coefficient, the specific differential phase and the</span>
-<span class="sd">        temperature field. A value of None for any of these parameters will</span>
-<span class="sd">        use the default field name as defined in the Py-ART configuration</span>
-<span class="sd">        file.</span>
-<span class="sd">    hydro_field : str, optional</span>
+<span class="sd">        correlation coefficient, the specific differential phase, the</span>
+<span class="sd">        temperature (in deg celsius) and the height respect to the iso0 fields.</span>
+<span class="sd">        A value of None for any of these parameters will use the default field</span>
+<span class="sd">        name as defined in the Py-ART configuration file.</span>
+<span class="sd">    hydro_field : str</span>
 <span class="sd">        Output. Field name which represents the hydrometeor class field.</span>
+<span class="sd">        A value of None will use the default field name as defined in the</span>
+<span class="sd">        Py-ART configuration file.</span>
+<span class="sd">    entropy_field : str</span>
+<span class="sd">        Output. Field name which represents the entropy class field.</span>
 <span class="sd">        A value of None will use the default field name as defined in the</span>
 <span class="sd">        Py-ART configuration file.</span>
 <span class="sd">    radar_freq : str, optional</span>
 <span class="sd">        Radar frequency in Hertz (Hz) used for classification.</span>
 <span class="sd">        This parameter will be ignored, if the radar object has frequency information.</span>
+<span class="sd">    temp_ref : str</span>
+<span class="sd">        the field use as reference for temperature. Can be either temperature</span>
+<span class="sd">        or height_over_iso0</span>
+<span class="sd">    compute_entropy : bool</span>
+<span class="sd">        If true, the entropy is computed</span>
+<span class="sd">    output_distances : bool</span>
+<span class="sd">        If true, the normalized distances to the centroids for each</span>
+<span class="sd">        hydrometeor are provided as output</span>
+<span class="sd">    vectorize : bool</span>
+<span class="sd">        If true, a vectorized version of the class assignation is going to be</span>
+<span class="sd">        used</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
+<span class="sd">    fields_dict : dict</span>
+<span class="sd">        Dictionary containing the retrieved fields</span>
+
+<span class="sd">    The output directionary field_dict has the following keys:</span>
+
 <span class="sd">    hydro : dict</span>
 <span class="sd">        Hydrometeor classification.</span>
 <span class="sd">            - 0: Not classified</span>
@@ -1135,12 +1176,26 @@ document.write(`
 <span class="sd">            - 8: Melting hail</span>
 <span class="sd">            - 9: Dry hail or high-density graupel</span>
 
+<span class="sd">    if compute_entropy is True:</span>
+<span class="sd">    entropy : dict</span>
+<span class="sd">        Shannon entropy of the hydrometeor demixing</span>
+
+<span class="sd">    if output_distances is True:</span>
+<span class="sd">    propX : dict</span>
+<span class="sd">        Proportion of a given hydrometeor class in the polarimetric</span>
+<span class="sd">        decomposition of a radar volume</span>
+
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
 <span class="sd">    Besic, N., Figueras i Ventura, J., Grazioli, J., Gabella, M., Germann, U.,</span>
 <span class="sd">    and Berne, A.: Hydrometeor classification through statistical clustering</span>
 <span class="sd">    of polarimetric radar measurements: a semi-supervised approach,</span>
 <span class="sd">    Atmos. Meas. Tech., 9, 4425-4445, doi:10.5194/amt-9-4425-2016, 2016</span>
+
+<span class="sd">    Besic, N., Gehring, J., Praz, C., Figueras i Ventura, J., Grazioli, J., Gabella,</span>
+<span class="sd">    M., Germann, U., and Berne, A.: Unraveling hydrometeor mixtures in polarimetric</span>
+<span class="sd">    radar measurements, Atmos. Meas. Tech., 11, 4847–4866,</span>
+<span class="sd">    https://doi.org/10.5194/amt-11-4847-2018, 2018.</span>
 
 <span class="sd">    Usage</span>
 <span class="sd">    -----</span>
@@ -1171,7 +1226,6 @@ document.write(`
 <span class="sd">            &quot;data&quot;: [9.2e9]</span>
 <span class="sd">        }</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">lapse_rate</span> <span class="o">=</span> <span class="o">-</span><span class="mf">6.5</span>
 
     <span class="c1"># select the centroids as a function of frequency band</span>
     <span class="k">if</span> <span class="n">mass_centers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1192,61 +1246,108 @@ document.write(`
                 <span class="s2">&quot;So frequency is unknown. Default coefficients for C band will be applied.&quot;</span>
             <span class="p">)</span>
 
-    <span class="c1"># parse the field parameters</span>
-    <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">zdr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">zdr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;differential_reflectivity&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">rhv_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">rhv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">kdp_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">kdp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;specific_differential_phase&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">temp_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">temp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;temperature&quot;</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">hydro_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">hydro_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;radar_echo_classification&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">compute_entropy</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">entropy_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">entropy_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;hydroclass_entropy&quot;</span><span class="p">)</span>
 
-    <span class="c1"># extract fields and parameters from radar</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">refl_field</span><span class="p">)</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">zdr_field</span><span class="p">)</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">rhv_field</span><span class="p">)</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">kdp_field</span><span class="p">)</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">temp_field</span><span class="p">)</span>
+    <span class="c1"># Get the data fields</span>
+    <span class="n">fields_dict</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">var_names</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s2">&quot;Zh&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">refl_field</span><span class="p">)</span>
+            <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">var_name</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])})</span>
+        <span class="k">elif</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s2">&quot;ZDR&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">zdr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">zdr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;differential_reflectivity&quot;</span><span class="p">)</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">zdr_field</span><span class="p">)</span>
+            <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">var_name</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">zdr_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])})</span>
+        <span class="k">elif</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s2">&quot;KDP&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">kdp_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">kdp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;specific_differential_phase&quot;</span><span class="p">)</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">kdp_field</span><span class="p">)</span>
+            <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">var_name</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">kdp_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])})</span>
+        <span class="k">elif</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">rhv_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">rhv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">)</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">rhv_field</span><span class="p">)</span>
+            <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">var_name</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">rhv_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])})</span>
+        <span class="k">elif</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s2">&quot;relH&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">temp_ref</span> <span class="o">==</span> <span class="s2">&quot;temperature&quot;</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">temp_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">temp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;temperature&quot;</span><span class="p">)</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">temp_field</span><span class="p">)</span>
+                <span class="c1"># convert temp in relative height respect to iso0</span>
+                <span class="n">temp</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">temp_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+                <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">var_name</span><span class="p">:</span> <span class="n">temp</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1000.0</span> <span class="o">/</span> <span class="n">lapse_rate</span><span class="p">)})</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">iso0_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+                    <span class="n">iso0_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;height_over_iso0&quot;</span><span class="p">)</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">iso0_field</span><span class="p">)</span>
+                <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
+                    <span class="p">{</span><span class="n">var_name</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">iso0_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])}</span>
+                <span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;Variable &quot;</span>
+                <span class="o">+</span> <span class="n">var_name</span>
+                <span class="o">+</span> <span class="s2">&quot; unknown. &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;Valid variable names for hydrometeor classification are: &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;relH, Zh, ZDR, KDP and RhoHV&quot;</span>
+            <span class="p">)</span>
 
-    <span class="n">refl</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">zdr</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">zdr_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">rhohv</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">rhv_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">kdp</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">kdp_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">temp</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">temp_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="c1"># standardize data and centroids</span>
+    <span class="n">mc_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">fields_dict</span><span class="p">[</span><span class="n">var_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">var_names</span><span class="p">):</span>
+        <span class="n">mc_std</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> <span class="n">var_name</span><span class="p">)</span>
+        <span class="n">fields_dict</span><span class="p">[</span><span class="n">var_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">fields_dict</span><span class="p">[</span><span class="n">var_name</span><span class="p">],</span> <span class="n">var_name</span><span class="p">)</span>
 
-    <span class="c1"># convert temp in relative height respect to iso0</span>
-    <span class="n">relh</span> <span class="o">=</span> <span class="n">temp</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1000.0</span> <span class="o">/</span> <span class="n">lapse_rate</span><span class="p">)</span>
-
-    <span class="c1"># standardize data</span>
-    <span class="n">refl_std</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">refl</span><span class="p">,</span> <span class="s2">&quot;Zh&quot;</span><span class="p">)</span>
-    <span class="n">zdr_std</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">zdr</span><span class="p">,</span> <span class="s2">&quot;ZDR&quot;</span><span class="p">)</span>
-    <span class="n">kdp_std</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">kdp</span><span class="p">,</span> <span class="s2">&quot;KDP&quot;</span><span class="p">)</span>
-    <span class="n">rhohv_std</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">rhohv</span><span class="p">,</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">)</span>
-    <span class="n">relh_std</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">relh</span><span class="p">,</span> <span class="s2">&quot;relH&quot;</span><span class="p">)</span>
-
-    <span class="c1"># standardize centroids</span>
-    <span class="n">mc_std</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">))</span>
-    <span class="n">mc_std</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;Zh&quot;</span><span class="p">)</span>
-    <span class="n">mc_std</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">],</span> <span class="s2">&quot;ZDR&quot;</span><span class="p">)</span>
-    <span class="n">mc_std</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">],</span> <span class="s2">&quot;KDP&quot;</span><span class="p">)</span>
-    <span class="n">mc_std</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">[:,</span> <span class="mi">3</span><span class="p">],</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">)</span>
-    <span class="n">mc_std</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="n">_standardize</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">[:,</span> <span class="mi">4</span><span class="p">],</span> <span class="s2">&quot;relH&quot;</span><span class="p">)</span>
+    <span class="c1"># if entropy has to be computed get transformation parameters</span>
+    <span class="n">t_vals</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">compute_entropy</span><span class="p">:</span>
+        <span class="n">t_vals</span> <span class="o">=</span> <span class="n">_compute_coeff_transform</span><span class="p">(</span><span class="n">mc_std</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="n">value</span><span class="p">)</span>
 
     <span class="c1"># assign to class</span>
-    <span class="n">hydroclass_data</span><span class="p">,</span> <span class="n">min_dist</span> <span class="o">=</span> <span class="n">_assign_to_class</span><span class="p">(</span>
-        <span class="n">refl_std</span><span class="p">,</span> <span class="n">zdr_std</span><span class="p">,</span> <span class="n">kdp_std</span><span class="p">,</span> <span class="n">rhohv_std</span><span class="p">,</span> <span class="n">relh_std</span><span class="p">,</span> <span class="n">mc_std</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span>
-    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">vectorize</span><span class="p">:</span>
+        <span class="n">hydroclass_data</span><span class="p">,</span> <span class="n">entropy_data</span><span class="p">,</span> <span class="n">prop_data</span> <span class="o">=</span> <span class="n">_assign_to_class_scan</span><span class="p">(</span>
+            <span class="n">fields_dict</span><span class="p">,</span> <span class="n">mc_std</span><span class="p">,</span> <span class="n">var_names</span><span class="o">=</span><span class="n">var_names</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span> <span class="n">t_vals</span><span class="o">=</span><span class="n">t_vals</span>
+        <span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">hydroclass_data</span><span class="p">,</span> <span class="n">entropy_data</span><span class="p">,</span> <span class="n">prop_data</span> <span class="o">=</span> <span class="n">_assign_to_class</span><span class="p">(</span>
+            <span class="n">fields_dict</span><span class="p">,</span> <span class="n">mc_std</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">weights</span><span class="p">,</span> <span class="n">t_vals</span><span class="o">=</span><span class="n">t_vals</span>
+        <span class="p">)</span>
 
     <span class="c1"># prepare output fields</span>
+    <span class="n">fields_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">hydro</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">hydro_field</span><span class="p">)</span>
     <span class="n">hydro</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydroclass_data</span>
+    <span class="n">hydro</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;NC&quot;</span><span class="p">]</span>
+    <span class="n">ticks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">boundaries</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">hydro_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hydro_names</span><span class="p">):</span>
+        <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hydro_name</span><span class="p">)</span>
+        <span class="n">ticks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">boundaries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mf">1.5</span><span class="p">)</span>
+    <span class="n">hydro</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">labels</span><span class="p">,</span> <span class="s2">&quot;ticks&quot;</span><span class="p">:</span> <span class="n">ticks</span><span class="p">,</span> <span class="s2">&quot;boundaries&quot;</span><span class="p">:</span> <span class="n">boundaries</span><span class="p">})</span>
+    <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;hydro&quot;</span><span class="p">:</span> <span class="n">hydro</span><span class="p">})</span>
 
-    <span class="k">return</span> <span class="n">hydro</span></div>
+    <span class="k">if</span> <span class="n">compute_entropy</span><span class="p">:</span>
+        <span class="n">entropy</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">entropy_field</span><span class="p">)</span>
+        <span class="n">entropy</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_data</span>
+        <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;entropy&quot;</span><span class="p">:</span> <span class="n">entropy</span><span class="p">})</span>
+
+        <span class="k">if</span> <span class="n">output_distances</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">hydro_names</span><span class="p">:</span>
+                <span class="n">field_name</span> <span class="o">=</span> <span class="s2">&quot;proportion_&quot;</span> <span class="o">+</span> <span class="n">field_name</span>
+                <span class="n">prop</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
+                <span class="n">prop</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prop_data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span>
+                <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">field_name</span><span class="p">:</span> <span class="n">prop</span><span class="p">})</span>
+
+    <span class="k">return</span> <span class="n">fields_dict</span></div>
 
 
 <span class="k">def</span> <span class="nf">_standardize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">mx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mn</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
@@ -1288,7 +1389,9 @@ document.write(`
         <span class="n">data</span><span class="p">[</span><span class="n">data</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span>
         <span class="n">data</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span> <span class="o">+</span> <span class="mf">0.6</span><span class="p">)</span>
     <span class="k">elif</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">:</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">data</span><span class="p">)</span>
+        <span class="c1"># avoid infinite result</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">data</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">1.0000000000001</span> <span class="o">-</span> <span class="n">data</span><span class="p">)</span>
 
     <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="n">field_std</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">mn</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">mx</span> <span class="o">-</span> <span class="n">mn</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span>
@@ -1300,13 +1403,11 @@ document.write(`
 
 
 <span class="k">def</span> <span class="nf">_assign_to_class</span><span class="p">(</span>
-    <span class="n">zh</span><span class="p">,</span>
-    <span class="n">zdr</span><span class="p">,</span>
-    <span class="n">kdp</span><span class="p">,</span>
-    <span class="n">rhohv</span><span class="p">,</span>
-    <span class="n">relh</span><span class="p">,</span>
+    <span class="n">fields_dict</span><span class="p">,</span>
     <span class="n">mass_centers</span><span class="p">,</span>
+    <span class="n">var_names</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Zh&quot;</span><span class="p">,</span> <span class="s2">&quot;ZDR&quot;</span><span class="p">,</span> <span class="s2">&quot;KDP&quot;</span><span class="p">,</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">,</span> <span class="s2">&quot;relH&quot;</span><span class="p">),</span>
     <span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]),</span>
+    <span class="n">t_vals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Assigns an hydrometeor class to a radar range bin computing</span>
@@ -1314,57 +1415,201 @@ document.write(`
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
-<span class="sd">    zh, zdr, kdp, rhohv, relh : radar fields</span>
-<span class="sd">        Variables used for assignment normalized to [-1, 1] values.</span>
+<span class="sd">    fields_dict : dict</span>
+<span class="sd">        Dictionary containg the variables used for assigment normalized to</span>
+<span class="sd">        [-1, 1] values</span>
 <span class="sd">    mass_centers : matrix</span>
-<span class="sd">        Centroids normalized to [-1, 1] values.</span>
-<span class="sd">    weights : array, optional</span>
-<span class="sd">        The weight given to each variable.</span>
+<span class="sd">        centroids normalized to [-1, 1] values (nclasses, nvariables)</span>
+<span class="sd">    var_names : array of str</span>
+<span class="sd">        Name of the variables</span>
+<span class="sd">    weights : array</span>
+<span class="sd">        optional. The weight given to each variable (nvariables)</span>
+<span class="sd">    t_vals : array</span>
+<span class="sd">        transformation values for the distance to centroids (nclasses)</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    hydroclass : int array</span>
-<span class="sd">        The index corresponding to the assigned class.</span>
-<span class="sd">    mind_dist : float array</span>
-<span class="sd">        The minimum distance to the centroids.</span>
+<span class="sd">        the index corresponding to the assigned class</span>
+<span class="sd">    entropy : float array</span>
+<span class="sd">        the entropy</span>
+<span class="sd">    t_dist : float matrix</span>
+<span class="sd">        if entropy is computed, the transformed distances of each class</span>
+<span class="sd">        (proxy for proportions of each hydrometeor) (nrays, nbins, nclasses)</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># prepare data</span>
-    <span class="n">nrays</span> <span class="o">=</span> <span class="n">zh</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">nbins</span> <span class="o">=</span> <span class="n">zdr</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">nrays</span> <span class="o">=</span> <span class="n">fields_dict</span><span class="p">[</span><span class="n">var_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">nbins</span> <span class="o">=</span> <span class="n">fields_dict</span><span class="p">[</span><span class="n">var_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">nclasses</span> <span class="o">=</span> <span class="n">mass_centers</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">nvariables</span> <span class="o">=</span> <span class="n">mass_centers</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">fields_dict</span><span class="p">[</span><span class="n">var_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">dtype</span>
 
-    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">zh</span><span class="p">,</span> <span class="n">zdr</span><span class="p">,</span> <span class="n">kdp</span><span class="p">,</span> <span class="n">rhohv</span><span class="p">,</span> <span class="n">relh</span><span class="p">])</span>
+    <span class="n">hydroclass</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+    <span class="n">entropy</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">t_dist</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">t_vals</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">entropy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">t_dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_all</span><span class="p">((</span><span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">,</span> <span class="n">nclasses</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">ray</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nrays</span><span class="p">):</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">var_names</span><span class="p">:</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fields_dict</span><span class="p">[</span><span class="n">var_name</span><span class="p">][</span><span class="n">ray</span><span class="p">,</span> <span class="p">:])</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+        <span class="n">weights_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
+            <span class="n">weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="n">nbins</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nclasses</span><span class="p">,</span> <span class="n">nbins</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+
+        <span class="c1"># compute distance: masked entries will not contribute to the distance</span>
+        <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">fields_dict</span><span class="p">[</span><span class="n">var_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="n">ray</span><span class="p">,</span> <span class="p">:])</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nclasses</span><span class="p">):</span>
+            <span class="n">centroids_class</span> <span class="o">=</span> <span class="n">mass_centers</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">centroids_class</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
+                <span class="n">centroids_class</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="n">nbins</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">dist_ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(((</span><span class="n">centroids_class</span> <span class="o">-</span> <span class="n">data</span><span class="p">)</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">weights_mat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="n">dist_ray</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
+            <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">dist_ray</span>
+
+        <span class="c1"># Get hydrometeor class</span>
+        <span class="n">class_vec</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">10e40</span><span class="p">)</span>
+        <span class="n">hydroclass_ray</span> <span class="o">=</span> <span class="p">(</span><span class="n">class_vec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
+        <span class="n">hydroclass_ray</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">hydroclass</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">hydroclass_ray</span>
+
+        <span class="k">if</span> <span class="n">t_vals</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+        <span class="c1"># Transform the distance using the coefficient of the dominant class</span>
+        <span class="n">t_vals_ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">t_vals</span><span class="p">[</span><span class="n">class_vec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:]])</span>
+        <span class="n">t_vals_ray</span> <span class="o">=</span> <span class="n">ma_broadcast_to</span><span class="p">(</span><span class="n">t_vals_ray</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nbins</span><span class="p">),</span> <span class="p">(</span><span class="n">nclasses</span><span class="p">,</span> <span class="n">nbins</span><span class="p">))</span>
+        <span class="n">t_dist_ray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t_vals_ray</span> <span class="o">*</span> <span class="n">dist</span><span class="p">)</span>
+
+        <span class="c1"># set transformed distances to a value between 0 and 1</span>
+        <span class="n">dist_total</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">t_dist_ray</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">dist_total</span> <span class="o">=</span> <span class="n">ma_broadcast_to</span><span class="p">(</span><span class="n">dist_total</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nbins</span><span class="p">),</span> <span class="p">(</span><span class="n">nclasses</span><span class="p">,</span> <span class="n">nbins</span><span class="p">))</span>
+        <span class="n">t_dist_ray</span> <span class="o">/=</span> <span class="n">dist_total</span>
+
+        <span class="c1"># Compute entropy</span>
+        <span class="n">entropy_ray</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+            <span class="n">t_dist_ray</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">t_dist_ray</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">nclasses</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span>
+        <span class="p">)</span>
+        <span class="n">entropy_ray</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
+        <span class="n">entropy</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">entropy_ray</span>
+
+        <span class="n">t_dist</span><span class="p">[</span><span class="n">ray</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">transpose</span><span class="p">(</span><span class="n">t_dist_ray</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">t_vals</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">t_dist</span> <span class="o">*=</span> <span class="mf">100.0</span>
+
+    <span class="k">return</span> <span class="n">hydroclass</span><span class="p">,</span> <span class="n">entropy</span><span class="p">,</span> <span class="n">t_dist</span>
+
+
+<span class="k">def</span> <span class="nf">_assign_to_class_scan</span><span class="p">(</span>
+    <span class="n">fields_dict</span><span class="p">,</span>
+    <span class="n">mass_centers</span><span class="p">,</span>
+    <span class="n">var_names</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Zh&quot;</span><span class="p">,</span> <span class="s2">&quot;ZDR&quot;</span><span class="p">,</span> <span class="s2">&quot;KDP&quot;</span><span class="p">,</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">,</span> <span class="s2">&quot;relH&quot;</span><span class="p">),</span>
+    <span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]),</span>
+    <span class="n">t_vals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    assigns an hydrometeor class to a radar range bin computing</span>
+<span class="sd">    the distance between the radar variables an a centroid.</span>
+<span class="sd">    Computes the entire radar volume at once</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fields_dict : dict</span>
+<span class="sd">        Dictionary containg the variables used for assigment normalized to</span>
+<span class="sd">        [-1, 1] values</span>
+<span class="sd">    mass_centers : matrix</span>
+<span class="sd">        centroids normalized to [-1, 1] values</span>
+<span class="sd">    var_names : array of str</span>
+<span class="sd">        Name of the variables</span>
+<span class="sd">    weights : array</span>
+<span class="sd">        optional. The weight given to each variable</span>
+<span class="sd">    t_vals : matrix</span>
+<span class="sd">        transformation values for the distance to centroids</span>
+<span class="sd">        (nclasses, nvariables)</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    hydroclass : int array</span>
+<span class="sd">        the index corresponding to the assigned class</span>
+<span class="sd">    entropy : float array</span>
+<span class="sd">        the entropy</span>
+<span class="sd">    t_dist : float matrix</span>
+<span class="sd">        if entropy is computed, the transformed distances of each class</span>
+<span class="sd">        (proxy for proportions of each hydrometeor) (nrays, nbins, nclasses)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># prepare data</span>
+    <span class="n">nrays</span> <span class="o">=</span> <span class="n">fields_dict</span><span class="p">[</span><span class="n">var_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">nbins</span> <span class="o">=</span> <span class="n">fields_dict</span><span class="p">[</span><span class="n">var_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">nclasses</span> <span class="o">=</span> <span class="n">mass_centers</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">nvariables</span> <span class="o">=</span> <span class="n">mass_centers</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">dtype</span> <span class="o">=</span> <span class="n">fields_dict</span><span class="p">[</span><span class="n">var_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">dtype</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">var_names</span><span class="p">:</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">fields_dict</span><span class="p">[</span><span class="n">var_name</span><span class="p">])</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
     <span class="n">weights_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
         <span class="n">weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">)</span>
     <span class="p">)</span>
-    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nclasses</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
 
     <span class="c1"># compute distance: masked entries will not contribute to the distance</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">fields_dict</span><span class="p">[</span><span class="n">var_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]])</span>
+    <span class="n">dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">,</span> <span class="n">nclasses</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="n">t_dist</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">entropy</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nclasses</span><span class="p">):</span>
         <span class="n">centroids_class</span> <span class="o">=</span> <span class="n">mass_centers</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
         <span class="n">centroids_class</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
             <span class="n">centroids_class</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">nvariables</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">)</span>
         <span class="p">)</span>
-        <span class="n">dist</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+        <span class="n">dist_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(((</span><span class="n">centroids_class</span> <span class="o">-</span> <span class="n">data</span><span class="p">)</span> <span class="o">**</span> <span class="mf">2.0</span><span class="p">)</span> <span class="o">*</span> <span class="n">weights_mat</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
         <span class="p">)</span>
+        <span class="n">dist_aux</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
+        <span class="n">dist</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">dist_aux</span>
 
-    <span class="c1"># use very large fill_value so that masked entries will be sorted at the</span>
-    <span class="c1"># end. There should not be any masked entry anyway</span>
-    <span class="n">class_vec</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">10e40</span><span class="p">)</span>
+    <span class="k">del</span> <span class="n">data</span>
+    <span class="k">del</span> <span class="n">weights_mat</span>
 
-    <span class="c1"># get minimum distance. Acts as a confidence value</span>
-    <span class="n">dist</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">10e40</span><span class="p">)</span>
-    <span class="n">min_dist</span> <span class="o">=</span> <span class="n">dist</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
-
-    <span class="c1"># Entries with non-valid reflectivity values are set to 0 (No class)</span>
-    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="n">zh</span><span class="p">)</span>
-    <span class="n">hydroclass</span> <span class="o">=</span> <span class="n">class_vec</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="c1"># Get hydrometeor class</span>
+    <span class="n">class_vec</span> <span class="o">=</span> <span class="n">dist</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">10e40</span><span class="p">)</span>
+    <span class="n">hydroclass</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">class_vec</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">)</span>
     <span class="n">hydroclass</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
 
-    <span class="k">return</span> <span class="n">hydroclass</span><span class="p">,</span> <span class="n">min_dist</span>
+    <span class="k">if</span> <span class="n">t_vals</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="c1"># Transform the distance using the coefficient of the dominant class</span>
+        <span class="n">t_vals_aux</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">t_vals</span><span class="p">[</span><span class="n">class_vec</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]])</span>
+        <span class="n">t_vals_aux</span> <span class="o">=</span> <span class="n">ma_broadcast_to</span><span class="p">(</span>
+            <span class="n">t_vals_aux</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">,</span> <span class="n">nclasses</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">t_dist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">t_vals_aux</span> <span class="o">*</span> <span class="n">dist</span><span class="p">)</span>
+        <span class="k">del</span> <span class="n">t_vals_aux</span>
+
+        <span class="c1"># set distance to a value between 0 and 1</span>
+        <span class="n">dist_total</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">t_dist</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">dist_total</span> <span class="o">=</span> <span class="n">ma_broadcast_to</span><span class="p">(</span>
+            <span class="n">dist_total</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">,</span> <span class="n">nclasses</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">t_dist</span> <span class="o">/=</span> <span class="n">dist_total</span>
+        <span class="k">del</span> <span class="n">dist_total</span>
+
+        <span class="c1"># compute entroy</span>
+        <span class="n">entropy</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">t_dist</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">t_dist</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">nclasses</span><span class="p">),</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="n">entropy</span><span class="p">[</span><span class="n">mask</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
+
+        <span class="n">t_dist</span> <span class="o">*=</span> <span class="mf">100.0</span>
+
+    <span class="k">return</span> <span class="n">hydroclass</span><span class="p">,</span> <span class="n">entropy</span><span class="p">,</span> <span class="n">t_dist</span>
 
 
 <span class="k">def</span> <span class="nf">_get_mass_centers</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
@@ -1464,9 +1709,10 @@ document.write(`
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">dlimits_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Zh&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">60.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.0</span><span class="p">)})</span>
-    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;ZDR&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.0</span><span class="p">)})</span>
+    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;ZDR&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.5</span><span class="p">)})</span>
     <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;KDP&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">7.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.0</span><span class="p">)})</span>
     <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;RhoHV&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">5.23</span><span class="p">,</span> <span class="o">-</span><span class="mf">50.0</span><span class="p">)})</span>
+    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;RelH&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">5000.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">5000.0</span><span class="p">)})</span>
 
     <span class="k">return</span> <span class="n">dlimits_dict</span>
 
@@ -1668,6 +1914,52 @@ document.write(`
     <span class="p">}</span>
 
     <span class="k">return</span> <span class="n">reclass_dict</span></div>
+
+
+<span class="k">def</span> <span class="nf">_compute_coeff_transform</span><span class="p">(</span>
+    <span class="n">mass_centers</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]),</span> <span class="n">value</span><span class="o">=</span><span class="mf">50.0</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    get the transformation coefficients</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mass_centers : ndarray 2D</span>
+<span class="sd">        The centroids for each class and variable (nclasses, nvariables)</span>
+<span class="sd">    weights : array</span>
+<span class="sd">        optional. The weight given to each variable (nvariables)</span>
+<span class="sd">    value : float</span>
+<span class="sd">        parameter controlling the rate of decay of the distance transformation</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    t_vals : ndarray 1D</span>
+<span class="sd">        The coefficients used to transform the distances to each centroid for</span>
+<span class="sd">        each class (nclasses)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">nclasses</span><span class="p">,</span> <span class="n">nvariables</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">)</span>
+    <span class="n">t_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">nclasses</span><span class="p">,</span> <span class="n">nclasses</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">mass_centers</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nclasses</span><span class="p">):</span>
+        <span class="n">weights_mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
+            <span class="n">weights</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nvariables</span><span class="p">),</span> <span class="p">(</span><span class="n">nclasses</span><span class="p">,</span> <span class="n">nvariables</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">centroids_class</span> <span class="o">=</span> <span class="n">mass_centers</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">centroids_class</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">broadcast_to</span><span class="p">(</span>
+            <span class="n">centroids_class</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">nvariables</span><span class="p">),</span> <span class="p">(</span><span class="n">nclasses</span><span class="p">,</span> <span class="n">nvariables</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="n">t_vals</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span>
+                <span class="n">weights_mat</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">centroids_class</span> <span class="o">-</span> <span class="n">mass_centers</span><span class="p">),</span> <span class="mf">2.0</span><span class="p">),</span>
+                <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+    <span class="c1"># pick the second lowest value (the first is 0)</span>
+    <span class="n">t_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">t_vals</span><span class="p">,</span> <span class="n">axis</span><span class="o">=-</span><span class="mi">1</span><span class="p">)[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">t_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">/</span> <span class="n">t_vals</span>
+
+    <span class="k">return</span> <span class="n">t_vals</span>
 </pre></div>
 <div class="section ablog__blog_comments">
    

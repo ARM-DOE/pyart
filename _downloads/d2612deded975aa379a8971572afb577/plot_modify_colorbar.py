@@ -7,6 +7,7 @@ This is an example of how to modify a colobar
 within a Py-ART display object.
 
 """
+
 print(__doc__)
 
 # Author: Joe O'Brien (obrienj@anl.gov)

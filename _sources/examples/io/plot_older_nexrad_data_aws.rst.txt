@@ -25,9 +25,10 @@ Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues
 In this example, we will show how to read in older NEXRAD files prior
 to 2008 that are missing some coordinate metadata.
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-16
+.. GENERATED FROM PYTHON SOURCE LINES 10-17
 
 .. code-block:: Python
+
 
     print(__doc__)
 
@@ -42,11 +43,11 @@ to 2008 that are missing some coordinate metadata.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 17-18
+.. GENERATED FROM PYTHON SOURCE LINES 18-19
 
 Import our required packages.
 
-.. GENERATED FROM PYTHON SOURCE LINES 18-24
+.. GENERATED FROM PYTHON SOURCE LINES 19-25
 
 .. code-block:: Python
 
@@ -63,7 +64,7 @@ Import our required packages.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-40
+.. GENERATED FROM PYTHON SOURCE LINES 26-41
 
 Read older NEXRAD Level 2 Data
 ------------------------------
@@ -81,7 +82,7 @@ First we want to get an older file from amazon web service:
 Where in our case, we are using a sample data file from Handford, CA (KHNX)
 on July 24, 2006, at 0203:38 UTC. This means our path would look like this:
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-47
+.. GENERATED FROM PYTHON SOURCE LINES 41-48
 
 .. code-block:: Python
 
@@ -99,11 +100,11 @@ on July 24, 2006, at 0203:38 UTC. This means our path would look like this:
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-49
+.. GENERATED FROM PYTHON SOURCE LINES 49-50
 
 We can use the **pyart.io.read_nexrad_archive** module to access our data, passing in the filepath.
 
-.. GENERATED FROM PYTHON SOURCE LINES 49-52
+.. GENERATED FROM PYTHON SOURCE LINES 50-53
 
 .. code-block:: Python
 
@@ -124,11 +125,11 @@ We can use the **pyart.io.read_nexrad_archive** module to access our data, passi
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 53-54
+.. GENERATED FROM PYTHON SOURCE LINES 54-55
 
 Now let us take a look at the radar latitude and longitude data.
 
-.. GENERATED FROM PYTHON SOURCE LINES 54-57
+.. GENERATED FROM PYTHON SOURCE LINES 55-58
 
 .. code-block:: Python
 
@@ -149,7 +150,7 @@ Now let us take a look at the radar latitude and longitude data.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 58-63
+.. GENERATED FROM PYTHON SOURCE LINES 59-64
 
 This is clearly not correct! The problem is the reader could not find the
 metadata (message 31) for the coordinates.
@@ -157,7 +158,7 @@ metadata (message 31) for the coordinates.
 Lucky for us, we can provide the station in Py-ART's NEXRAD reader, which will
 pull the coordinate information from a dictionary found within Py-ART.
 
-.. GENERATED FROM PYTHON SOURCE LINES 63-66
+.. GENERATED FROM PYTHON SOURCE LINES 64-67
 
 .. code-block:: Python
 
@@ -171,11 +172,11 @@ pull the coordinate information from a dictionary found within Py-ART.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 67-68
+.. GENERATED FROM PYTHON SOURCE LINES 68-69
 
 Again, let us take a look at the radar latitude and longitude data.
 
-.. GENERATED FROM PYTHON SOURCE LINES 68-71
+.. GENERATED FROM PYTHON SOURCE LINES 69-72
 
 .. code-block:: Python
 
@@ -196,11 +197,11 @@ Again, let us take a look at the radar latitude and longitude data.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 72-73
+.. GENERATED FROM PYTHON SOURCE LINES 73-74
 
 Everything now looks correct as this is in Handford CA!
 
-.. GENERATED FROM PYTHON SOURCE LINES 73-87
+.. GENERATED FROM PYTHON SOURCE LINES 74-88
 
 .. code-block:: Python
 
@@ -242,7 +243,7 @@ Everything now looks correct as this is in Handford CA!
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 9.039 seconds)
+   **Total running time of the script:** (0 minutes 9.447 seconds)
 
 
 .. _sphx_glr_download_examples_io_plot_older_nexrad_data_aws.py:
