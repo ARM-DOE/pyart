@@ -45,7 +45,7 @@ An example which uses xradar and Py-ART to dealias radial velocities.
     tree = xd.io.open_cfradial1_datatree(filename)
 
     # Give the tree Py-ART radar methods
-    radar = pyart.xradar.Xradar(tree)
+    radar = tree.pyart.to_radar()
 
     # Determine the nyquist velocity using the maximum radial velocity from the first sweep
     nyq = radar["sweep_0"]["mean_doppler_velocity"].max().values
@@ -205,7 +205,7 @@ We can visualize the uncorrected and corrected radial velocity fields
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 10.353 seconds)
+   **Total running time of the script:** (0 minutes 10.000 seconds)
 
 
 .. _sphx_glr_download_examples_xradar_plot_dealias_xradar.py:

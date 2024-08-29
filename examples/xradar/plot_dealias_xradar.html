@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Dealias Radial Velocities Using Xradar and Py-ART &#8212; Py-ART 1.18.7.post4 documentation</title>
+    <title>Dealias Radial Velocities Using Xradar and Py-ART &#8212; Py-ART 1.18.7.post5 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=54923201"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=f0eab618"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -146,7 +146,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.7.post4 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.7.post5 documentation</p>
   
 </a></div>
     
@@ -573,7 +573,7 @@ to download the full example code.</p>
 <span class="n">tree</span> <span class="o">=</span> <span class="n">xd</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">open_cfradial1_datatree</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
 
 <span class="c1"># Give the tree Py-ART radar methods</span>
-<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">xradar</span><span class="o">.</span><span class="n">Xradar</span><span class="p">(</span><span class="n">tree</span><span class="p">)</span>
+<span class="n">radar</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">pyart</span><span class="o">.</span><span class="n">to_radar</span><span class="p">()</span>
 
 <span class="c1"># Determine the nyquist velocity using the maximum radial velocity from the first sweep</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nyq</span></a> <span class="o">=</span> <span class="n">radar</span><span class="p">[</span><span class="s2">&quot;sweep_0&quot;</span><span class="p">][</span><span class="s2">&quot;mean_doppler_velocity&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span><span class="o">.</span><span class="n">values</span>
@@ -653,7 +653,7 @@ and make use of the region-based dealiasing algorithm</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_dealias_xradar_003.png" srcset="../../_images/sphx_glr_plot_dealias_xradar_003.png" alt="xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Radial velocity of scatterers away from instrument, xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Corrected radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 10.353 seconds)</p>
+<img src="../../_images/sphx_glr_plot_dealias_xradar_003.png" srcset="../../_images/sphx_glr_plot_dealias_xradar_003.png" alt="xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Radial velocity of scatterers away from instrument, xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Corrected radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 10.000 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-xradar-plot-dealias-xradar-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/220b8a65594d85025c6b3d61e5ae378a/plot_dealias_xradar.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_dealias_xradar.ipynb</span></code></a></p>
