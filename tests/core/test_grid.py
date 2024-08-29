@@ -5,7 +5,7 @@ import pickle
 
 import numpy as np
 import pytest
-from numpy.testing import assert_almost_equal, assert_equal
+from numpy.testing import assert_almost_equal
 
 try:
     import pyproj
@@ -88,21 +88,23 @@ def test_grid_to_xarray():
     grid = pyart.testing.make_target_grid()
     ds = grid.to_xarray()
 
-    lon, lat = pyart.core.Grid.get_point_longitude_latitude(grid)
+    lon, lat = grid.get_point_longitude_latitude()
     time = np.array([netCDF4.num2date(grid.time["data"][0], grid.time["units"])])
-    z = grid.z["data"]
-    y = grid.y["data"]
-    x = grid.x["data"]
 
-    assert_equal(ds.x.data, x)
-    assert_equal(ds.y.data, y)
-    assert_equal(ds.z.data, z)
-    assert_equal(ds.lon.data, lon)
-    assert_equal(ds.lat.data, lat)
-    assert_equal(ds.time.data, time)
+    # Check dimensions
+    assert ds.dims == {"time": 1, "z": 2, "y": 400, "x": 320, "nradar": 1}
 
-    assert ds.attrs["nradar"] == 1
-    assert ds.attrs["radar_name"]["data"][0] == "ExampleRadar"
+    # Check coordinate data
+    assert np.array_equal(ds.x.data, grid.x["data"])
+    assert np.array_equal(ds.y.data, grid.y["data"])
+    assert np.array_equal(ds.z.data, grid.z["data"])
+    assert np.array_equal(ds.lon.data, lon)
+    assert np.array_equal(ds.lat.data, lat)
+    assert np.array_equal(ds.time.data, time)
+
+    # Check radar-specific attributes
+    assert "radar_name" in ds.data_vars
+    assert ds.radar_name.data[0] == "ExampleRadar"
 
 
 def _check_dicts_similar(dic1, dic2):
