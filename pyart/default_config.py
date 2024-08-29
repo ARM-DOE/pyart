@@ -91,6 +91,16 @@ noisedBZ_vv = "noisedBZ_vv"
 rain_rate = "rain_rate"
 radar_estimated_rain_rate = "radar_estimated_rain_rate"
 radar_echo_classification = "radar_echo_classification"
+hydroclass_entropy = "hydroclass_entropy"
+proportion_AG = "proportion_AG"
+proportion_CR = "proportion_CR"
+proportion_LR = "proportion_LR"
+proportion_RP = "proportion_RP"
+proportion_RN = "proportion_RN"
+proportion_VI = "proportion_VI"
+proportion_WS = "proportion_WS"
+proportion_MH = "proportion_MH"
+proportion_IH = "proportion_IH"
 specific_attenuation = "specific_attenuation"
 specific_differential_attenuation = "specific_differential_attenuation"
 clutter_filter_power_removed = "clutter_filter_power_removed"
@@ -186,6 +196,16 @@ DEFAULT_FIELD_NAMES = {
     "rain_rate": rain_rate,
     "radar_estimated_rain_rate": radar_estimated_rain_rate,
     "radar_echo_classification": radar_echo_classification,
+    "hydroclass_entropy": hydroclass_entropy,
+    "proportion_AG": proportion_AG,
+    "proportion_CR": proportion_CR,
+    "proportion_LR": proportion_LR,
+    "proportion_RP": proportion_RP,
+    "proportion_RN": proportion_RN,
+    "proportion_VI": proportion_VI,
+    "proportion_WS": proportion_WS,
+    "proportion_MH": proportion_MH,
+    "proportion_IH": proportion_IH,
     "specific_attenuation": specific_attenuation,
     "differential_phase_texture": differential_phase_texture,
     "eastward_wind_component": eastward_wind_component,
@@ -638,6 +658,66 @@ DEFAULT_METADATA = {
         "units": "legend",
         "standard_name": "radar_echo_classification",
         "long_name": "Radar Echo classification",
+        "coordinates": "elevation azimuth range",
+    },
+    hydroclass_entropy: {
+        "units": "-",
+        "standard_name": "hydroclass_entropy",
+        "long_name": "Semi-supervised hydrometeor classification entropy",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_AG: {
+        "units": "percent",
+        "standard_name": "proportion_AG",
+        "long_name": "Aggregates proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_CR: {
+        "units": "percent",
+        "standard_name": "proportion_CR",
+        "long_name": "Crystals proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_LR: {
+        "units": "percent",
+        "standard_name": "proportion_LR",
+        "long_name": "Light Rain proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_RP: {
+        "units": "percent",
+        "standard_name": "proportion_RP",
+        "long_name": "Rimed particles proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_RN: {
+        "units": "percent",
+        "standard_name": "proportion_RN",
+        "long_name": "Rain proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_VI: {
+        "units": "percent",
+        "standard_name": "proportion_VI",
+        "long_name": "Vertical Ice Crystals proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_WS: {
+        "units": "percent",
+        "standard_name": "proportion_WS",
+        "long_name": "Wet Snow proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_MH: {
+        "units": "percent",
+        "standard_name": "proportion_MH",
+        "long_name": "Melting Hail proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_IH: {
+        "units": "percent",
+        "standard_name": "proportion_IH",
+        "long_name": "Ice Hail proportion",
         "coordinates": "elevation azimuth range",
     },
     specific_attenuation: {
@@ -1442,6 +1522,16 @@ DEFAULT_FIELD_COLORMAP = {
     rain_rate: "pyart_RRate11",
     radar_estimated_rain_rate: "pyart_RRate11",
     radar_echo_classification: "pyart_LangRainbow12",
+    hydroclass_entropy: "pyart_LangRainbow12",
+    proportion_AG: "pyart_LangRainbow12",
+    proportion_CR: "pyart_LangRainbow12",
+    proportion_LR: "pyart_LangRainbow12",
+    proportion_RP: "pyart_LangRainbow12",
+    proportion_RN: "pyart_LangRainbow12",
+    proportion_VI: "pyart_LangRainbow12",
+    proportion_WS: "pyart_LangRainbow12",
+    proportion_MH: "pyart_LangRainbow12",
+    proportion_IH: "pyart_LangRainbow12",
     specific_attenuation: "pyart_Carbone17",
     differential_phase_texture: "pyart_BlueBrown11",
     height: "pyart_SCook18",
@@ -1492,6 +1582,16 @@ DEFAULT_FIELD_LIMITS = {
     rain_rate: (0.0, 50.0),
     radar_estimated_rain_rate: (0.0, 50.0),
     radar_echo_classification: (0, 11),
+    hydroclass_entropy: (0.0, 1.0),
+    proportion_AG: (0.0, 100.0),
+    proportion_CR: (0.0, 100.0),
+    proportion_LR: (0.0, 100.0),
+    proportion_RP: (0.0, 100.0),
+    proportion_RN: (0.0, 100.0),
+    proportion_VI: (0.0, 100.0),
+    proportion_WS: (0.0, 100.0),
+    proportion_MH: (0.0, 100.0),
+    proportion_IH: (0.0, 100.0),
     specific_attenuation: (0.0, 10.0),
     differential_phase_texture: (0, 180.0),
     height: (0, 20000),

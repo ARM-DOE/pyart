@@ -2,6 +2,7 @@
 Data for colorblind friendly radar colormaps
 
 """
+
 import os
 
 import numpy as np

@@ -3,7 +3,6 @@ Utilities for interfacing between xradar and Py-ART
 
 """
 
-
 import copy
 
 import numpy as np
