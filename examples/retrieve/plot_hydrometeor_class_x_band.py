@@ -51,7 +51,7 @@ hydromet_class = pyart.retrieve.hydroclass_semisupervised(
     kdp_field="filtered_corrected_specific_diff_phase",
     rhv_field="RHOHV",
     temp_field="sounding_temperature",
-)
+)["hydro"]
 
 radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 
@@ -69,7 +69,7 @@ hydromet_class = pyart.retrieve.hydroclass_semisupervised(
     rhv_field="RHOHV",
     temp_field="sounding_temperature",
     radar_freq=9.2e9,
-)
+)["hydro"]
 
 radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 
@@ -98,7 +98,7 @@ hydromet_class = pyart.retrieve.hydroclass_semisupervised(
     rhv_field="RHOHV",
     temp_field="sounding_temperature",
     radar_freq=9.2e9,
-)
+)["hydro"]
 
 radar.add_field("hydro_classification", hydromet_class, replace_existing=True)
 
@@ -121,7 +121,6 @@ hid_colors = [
     "Lime",
     "Yellow",
     "Red",
-    "Fuchsia",
 ]
 cmaphid = colors.ListedColormap(hid_colors)
 cmapmeth = colors.ListedColormap(hid_colors[0:6])
@@ -129,19 +128,18 @@ cmapmeth_trop = colors.ListedColormap(hid_colors[0:7])
 
 
 def adjust_fhc_colorbar_for_pyart(cb):
-    cb.set_ticks(np.arange(1.4, 10, 0.9))
+    cb.set_ticks(np.arange(1.4, 9, 0.9))
     cb.ax.set_yticklabels(
         [
-            "Drizzle",
-            "Rain",
-            "Ice Crystals",
             "Aggregates",
-            "Wet Snow",
+            "Ice Crystals",
+            "Light rain",
+            "Rain",
             "Vertical Ice",
-            "LD Graupel",
+            "Wet snow",
             "HD Graupel",
-            "Hail",
-            "Big Drops",
+            "Melting hail",
+            "Dry hail or high-density graupel",
         ]
     )
     cb.ax.set_ylabel("")

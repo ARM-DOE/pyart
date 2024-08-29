@@ -2,10 +2,15 @@
 Corrects polarimetric variables for noise
 
 """
+import warnings
 
+import dask
 import numpy as np
+import pint
+from scipy import signal
 
 from ..config import get_field_name, get_metadata
+from ..core.radar import Radar
 
 
 def correct_noise_rhohv(
@@ -193,3 +198,278 @@ def calc_zdr_offset(radar, gatefilter=None, height_range=None, zdr_var=None):
             field_data = np.where(height_mask_tiled, field_data, np.nan)
             results["profile_" + k] = np.nanmean(field_data[:, :], axis=0)
     return results
+
+def calc_cloud_mask(
+    radar,
+    field,
+    height=None,
+    noise_threshold=-45.0,
+    threshold_offset=5.0,
+    counts_threshold=12,
+):
+    """
+    Primary function for calculating the cloud mask.
+
+    Parameters
+    ----------
+    radar : Radar
+        Py-ART Radar object.
+    field : string
+        Reflectivity field name to calculate.
+    height : string
+        Height name to use for calculations.
+    noise_threshold : float
+        Threshold value used for noise detection. Greater than this value.
+    threshold_offset : float
+        Threshold offset value used for noise detection
+    counts_threshold : int
+        Threshold of counts used to determine mask. Greater than or equal to this value.
+
+    Returns
+    -------
+    radar : Radar
+        Returns an updated Radar object with cloud mask fields.
+
+    References
+    ----------
+    Kollias, P., I. Jo, P. Borque, A. Tatarevic, K. Lamer, N. Bharadwaj, K. Widener,
+    K. Johnson, and E.E. Clothiaux, 2014: Scanning ARM Cloud Radars. Part II: Data
+    Quality Control and Processing. J. Atmos. Oceanic Technol., 31, 583–598,
+    https://doi.org/10.1175/JTECH-D-13-00045.1
+
+    """
+
+    if not isinstance(radar, Radar):
+        raise ValueError("Please use a valid Py-ART Radar object")
+
+    if not isinstance(field, str):
+        raise ValueError("Please specify a valid field name.")
+
+    noise = calc_noise_floor(radar, field, height=height)
+
+    noise_thresh = (
+        np.nanmin(
+            np.vstack(
+                [
+                    noise,
+                    np.full(np.shape(radar.fields[field]["data"])[0], noise_threshold),
+                ]
+            ),
+            axis=0,
+        )
+        + threshold_offset
+    )
+
+    data = range_correction(radar, field, height=height)
+
+    task = []
+    for i in range(np.shape(data)[0]):
+        task.append(dask.delayed(_first_mask)(data[i, :], noise_thresh[i]))
+
+    result = dask.compute(task)
+    mask1 = np.array(result[0])
+
+    counts = signal.convolve2d(mask1, np.ones((4, 4), dtype=int), mode="same")
+    mask2 = np.zeros_like(data, dtype=np.int16)
+    mask2[counts >= counts_threshold] = 1
+
+    cloud_mask_1 = {}
+    cloud_mask_1["long_name"] = "Cloud mask 1 (linear profile)"
+    cloud_mask_1["units"] = "1"
+    cloud_mask_1["comment"] = (
+        "The mask is calculated with a " "linear mask along each time profile."
+    )
+    cloud_mask_1["flag_values"] = [0, 1]
+    cloud_mask_1["flag_meanings"] = ["no_cloud", "cloud"]
+    cloud_mask_1["data"] = mask1
+
+    cloud_mask_2 = {}
+    cloud_mask_2["long_name"] = "Cloud mask 2 (2D box)"
+    cloud_mask_2["units"] = "1"
+    cloud_mask_2["comment"] = "The mask uses a 2D box to " "filter out noise."
+    cloud_mask_2["flag_values"] = [0, 1]
+    cloud_mask_2["flag_meanings"] = ["no_cloud", "cloud"]
+    cloud_mask_2["data"] = mask2
+
+    radar.add_field("cloud_mask_1", cloud_mask_1, replace_existing=True)
+    radar.add_field("cloud_mask_2", cloud_mask_2, replace_existing=True)
+
+    return radar
+
+
+def calc_noise_floor(radar, field, height):
+    """
+    Calculation for getting the noise floor
+
+    Parameters
+    ----------
+    radar : Radar
+        Py-ART Radar object containing data.
+    field : string
+        Reflectivity field name to correct.
+    height : string
+        Height name to use in correction.
+
+    Returns
+    -------
+    noise : array
+        Returns the noise floor value for each time sample.
+
+    References
+    ----------
+    Kollias, P., I. Jo, P. Borque, A. Tatarevic, K. Lamer, N. Bharadwaj, K. Widener,
+    K. Johnson, and E.E. Clothiaux, 2014: Scanning ARM Cloud Radars. Part II: Data
+    Quality Control and Processing. J. Atmos. Oceanic Technol., 31, 583–598,
+    https://doi.org/10.1175/JTECH-D-13-00045.1
+
+    """
+
+    if not isinstance(radar, Radar):
+        raise ValueError("Please use a valid Py-ART Radar object.")
+
+    # Range correct data and return the array from the Radar object
+    data = range_correction(radar, field, height=height)
+
+    # Pass each timestep into task list to calculate cloud threshhold
+    # with a delayed dask process
+    task = [dask.delayed(cloud_threshold)(row) for row in data]
+
+    # Perform dask computation
+    noise = dask.compute(*task)
+
+    # Convert returned dask tuple into numpy array
+    noise = np.array(noise, dtype=float)
+
+    return noise
+
+
+def cloud_threshold(data, n_avg=1.0, nffts=None):
+    """
+    Calculates the noise floor from a cloud threshold.
+
+    Parameters
+    ----------
+    data : array
+        Numpy array
+    n_avg : float
+        Number of points to average over
+    nffts : int
+        Number of heights to iterate over. If None will use the size of data.
+
+    Returns
+    -------
+    result : numpy scalar float
+        Returns the noise floor value for each time sample.
+
+    References
+    ----------
+    Kollias, P., I. Jo, P. Borque, A. Tatarevic, K. Lamer, N. Bharadwaj, K. Widener,
+    K. Johnson, and E.E. Clothiaux, 2014: Scanning ARM Cloud Radars. Part II: Data
+    Quality Control and Processing. J. Atmos. Oceanic Technol., 31, 583–598,
+    https://doi.org/10.1175/JTECH-D-13-00045.1
+
+    """
+
+    if nffts is None:
+        nffts = data.size
+
+    data = 10.0 ** (data / 10.0)
+    data = np.sort(data)
+
+    nthld = 10.0**-10.0
+    dsum = 0.0
+    sumSq = 0.0
+    n = 0.0
+    numNs = []
+    sqrt_n_avg = np.sqrt(n_avg)
+    for i in range(nffts):
+        if data[i] > nthld:
+            dsum += data[i]
+            sumSq += data[i] ** 2.0
+            n += 1.0
+            a3 = dsum * dsum
+            a1 = sqrt_n_avg * (n * sumSq - a3)
+            if n > nffts / 4.0:
+                if a1 <= a3:
+                    sumNs = dsum
+                    numNs = [n]
+            else:
+                sumNs = dsum
+                numNs = [n]
+
+    if len(numNs) > 0:
+        n_mean = sumNs / numNs[0]
+    else:
+        n_mean = np.nan
+
+    if n_mean == 0.0:
+        result = np.nan
+    else:
+        result = 10.0 * np.log10(n_mean)
+
+    return result
+
+
+def range_correction(radar, field, height):
+    """
+    Corrects reflectivity for range to help get the
+    correct noise floor values
+
+    Parameters
+    ----------
+    radar : Radar
+        Py-ART Radar object containing data.
+    field : string
+        Reflectivity field name to correct.
+    height : string
+        Height name to use in correction.
+
+    Returns
+    -------
+    data : array
+        Returns a range corrected array matching reflectivity field.
+
+    """
+
+    if not isinstance(radar, Radar):
+        raise ValueError("Please use a valid Py-ART Radar object.")
+
+    try:
+        height_units = getattr(radar, height)["units"]
+    except KeyError:
+        warnings.warn(
+            f"Height '{height} does not have units attribute. "
+            "Assuming units are meters."
+        )
+        height_units = "m"
+
+    height = getattr(radar, height)["data"]
+    desired_unit = "m"
+    if height_units is not desired_unit:
+        if isinstance(height, np.ma.MaskedArray):
+            height = height.filled(np.nan)
+        unit_registry = pint.UnitRegistry()
+        height = height * unit_registry.parse_expression(height_units)
+        height = height.to(desired_unit)
+        height = height.magnitude
+
+    data = radar.fields[field]["data"]
+
+    if isinstance(data, np.ma.MaskedArray) and not data.mask:
+        data = data.data
+    elif isinstance(data, np.ma.MaskedArray) and data.mask:
+        data = data.filled(np.nan)
+
+    with warnings.catch_warnings():
+        warnings.filterwarnings(
+            "ignore", category=RuntimeWarning, message=".*divide by zero encountered.*"
+        )
+        data = data - 20.0 * np.log10(height / 1000.0)
+
+    return data
+
+
+def _first_mask(data, noise_threshold):
+    mask = np.zeros_like(data, dtype=np.int16)
+    mask[data > noise_threshold] = 1
+    return mask

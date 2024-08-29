@@ -3,15 +3,16 @@ Utilities for interfacing between xradar and Py-ART
 
 """
 
-
 import copy
 
+import datatree
 import numpy as np
 import pandas as pd
 from datatree import DataTree, formatting, formatting_html
 from datatree.treenode import NodePath
 from xarray import DataArray, Dataset, concat
 from xarray.core import utils
+from xradar.accessors import XradarAccessor
 from xradar.util import get_sweep_keys
 
 from ..config import get_metadata
@@ -276,17 +277,26 @@ class Xradar:
         self.nsweeps = len(self.sweep_group_names)
         self.combined_sweeps = self._combine_sweeps()
         self.fields = self._find_fields(self.combined_sweeps)
+
+        # Check to see if the time is multidimensional - if it is, collapse it
+        if len(self.combined_sweeps.time.dims) > 1:
+            time = self.combined_sweeps.time.isel(range=0)
+        else:
+            time = self.combined_sweeps.time
         self.time = dict(
-            data=(self.combined_sweeps.time - self.combined_sweeps.time.min()).astype(
-                "int64"
-            )
-            / 1e9,
+            data=(time - time.min()).astype("int64").values / 1e9,
             units=f"seconds since {pd.to_datetime(self.combined_sweeps.time.min().values).strftime('%Y-%m-%d %H:%M:%S.0')}",
             calendar="gregorian",
         )
         self.range = dict(data=self.combined_sweeps.range.values)
         self.azimuth = dict(data=self.combined_sweeps.azimuth.values)
         self.elevation = dict(data=self.combined_sweeps.elevation.values)
+        # Check to see if the time is multidimensional - if it is, collapse it
+        if len(self.combined_sweeps.sweep_fixed_angle.dims) > 1:
+            self.combined_sweeps["sweep_fixed_angle"] = (
+                "sweep_number",
+                np.unique(self.combined_sweeps.sweep_fixed_angle),
+            )
         self.fixed_angle = dict(data=self.combined_sweeps.sweep_fixed_angle.values)
         self.antenna_transition = None
         self.latitude = dict(
@@ -583,13 +593,21 @@ class Xradar:
         # Loop through and extract the different datasets
         ds_list = []
         for sweep in self.sweep_group_names:
-            ds_list.append(self.xradar[sweep].ds.drop_duplicates("azimuth"))
+            ds_list.append(
+                self.xradar[sweep]
+                .ds.drop_duplicates("azimuth")
+                .set_coords("sweep_number")
+            )
 
         # Merge based on the sweep number
         merged = concat(ds_list, dim="sweep_number")
 
         # Stack the sweep number and azimuth together
         stacked = merged.stack(gates=["sweep_number", "azimuth"]).transpose()
+
+        # Select the valid azimuths
+        good_azimuths = stacked.time.dropna("gates", how="all").gates
+        stacked = stacked.sel(gates=good_azimuths)
 
         # Drop the missing gates
         cleaned = stacked.where(stacked.time == stacked.time.dropna("gates"))
@@ -788,3 +806,23 @@ def _point_altitude_data_factory(grid):
         return grid.origin_altitude["data"][0] + grid.point_z["data"]
 
     return _point_altitude_data
+
+
+@datatree.register_datatree_accessor("pyart")
+class XradarDataTreeAccessor(XradarAccessor):
+    """Adds a number of pyart specific methods to datatree.DataTree objects."""
+
+    def to_radar(self, scan_type=None) -> DataTree:
+        """
+        Add pyart radar object methods to the xradar datatree object
+        Parameters
+        ----------
+        scan_type: string
+            Scan type (ppi, rhi, etc.)
+        Returns
+        -------
+        dt: datatree.Datatree
+            Datatree including pyart.Radar methods
+        """
+        dt = self.xarray_obj
+        return Xradar(dt, scan_type=scan_type)

@@ -23,7 +23,7 @@ filename = get_test_data("swx_20120520_0641.nc")
 tree = xd.io.open_cfradial1_datatree(filename)
 
 # Give the tree Py-ART radar methods
-radar = pyart.xradar.Xradar(tree)
+radar = tree.pyart.to_radar()
 
 # Determine the nyquist velocity using the maximum radial velocity from the first sweep
 nyq = radar["sweep_0"]["mean_doppler_velocity"].max().values
