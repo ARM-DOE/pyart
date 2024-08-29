@@ -55,7 +55,7 @@ cloud_mask_radar.add_field_like(
 )
 
 # Now let's apply the mask to the copied reflectivity data.
-cloud_mask_radar.fields["reflectivity_copol"]["data"][
+cloud_mask_radar.fields["reflectivity_cloud_mask"]["data"][
     cloud_mask_radar.fields["cloud_mask_2"]["data"] == 0
 ] = np.nan
 
