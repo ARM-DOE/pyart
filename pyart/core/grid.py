@@ -422,7 +422,7 @@ class Grid:
 
         if self.radar_name is not None:
             radar_name = _process_radar_name(self.radar_name["data"])
-            ds["radar_name"] = xarray.DataArray(
+            ds.coords["radar_name"] = xarray.DataArray(
                 radar_name, dims=("nradar"), attrs=get_metadata("radar_name")
             )
         else:
