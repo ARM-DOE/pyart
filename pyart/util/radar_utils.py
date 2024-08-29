@@ -689,3 +689,33 @@ def image_mute_radar(radar, field, mute_field, mute_threshold, field_threshold=N
     muted_dict["long_name"] = "Muted " + field
     radar.add_field("muted_" + field, muted_dict)
     return radar
+
+
+def ma_broadcast_to(array, tup):
+    """
+    Is used to guarantee that a masked array can be broadcasted without
+    loosing the mask
+
+    Parameters
+    ----------
+    array : Numpy masked array or normal array
+    tup : shape as tuple
+
+    Returns
+    -------
+    broadcasted_array
+        The broadcasted numpy array including its mask if available
+        otherwise only the broadcasted array is returned
+
+    """
+    broadcasted_array = np.broadcast_to(array, tup)
+
+    if np.ma.is_masked(array):
+        initial_mask = np.ma.getmask(array)
+        initial_fill_value = array.fill_value
+        broadcasted_mask = np.broadcast_to(initial_mask, tup)
+        return np.ma.array(
+            broadcasted_array, mask=broadcasted_mask, fill_value=initial_fill_value
+        )
+
+    return broadcasted_array

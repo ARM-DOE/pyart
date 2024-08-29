@@ -7,6 +7,7 @@ An example which creates a multiple panel RHI plot of a CF/Radial file using
 a RadarDisplay object.
 
 """
+
 print(__doc__)
 
 # Author: Jonathan J. Helmus (jhelmus@anl.gov)

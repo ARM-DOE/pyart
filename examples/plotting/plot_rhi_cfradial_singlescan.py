@@ -7,6 +7,7 @@ An example which creates a RHI plot of a CF/Radial file using
 a RadarDisplay object.
 
 """
+
 print(__doc__)
 
 import matplotlib.pyplot as plt

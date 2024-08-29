@@ -6,6 +6,7 @@ Dealias doppler velocities using the Region Based Algorithm
 In this example doppler velocities are dealiased using the ial condition of the dealiasing,
 using the region-based dealiasing algorithm in Py-ART.
 """
+
 print(__doc__)
 
 # Author: Jonathan J. Helmus (jhelmus@anl.gov)
