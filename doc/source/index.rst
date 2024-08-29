@@ -7,6 +7,13 @@ The Python ARM Radar Toolkit - Py-ART
    :hidden:
    :caption: User Guide
 
+   userguide/pyart_2_0.rst
+
+.. toctree::
+   :maxdepth: 2
+   :hidden:
+   :caption: User Guide
+
    userguide/index.rst
 
 .. toctree::
