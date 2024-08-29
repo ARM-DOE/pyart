@@ -1,0 +1,6 @@
+pyart.correct.calc\_cloud\_mask
+===============================
+
+.. currentmodule:: pyart.correct
+
+.. autofunction:: calc_cloud_mask

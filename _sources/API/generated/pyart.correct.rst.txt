@@ -24,11 +24,17 @@
 .. autosummary::
     :toctree: .
     
+    calc_cloud_mask
+    
+    calc_noise_floor
+    
     calculate_attenuation
     
     calculate_attenuation_philinear
     
     calculate_attenuation_zphi
+    
+    cloud_threshold
     
     correct_bias
     
@@ -49,5 +55,7 @@
     phase_proc_lp
     
     phase_proc_lp_gf
+    
+    range_correction
     
 

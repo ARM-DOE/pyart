@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>pyart.correct &#8212; Py-ART 1.18.7.post6 documentation</title>
+    <title>pyart.correct &#8212; Py-ART 1.18.7.post7 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=c7123c72"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=636ab86b"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -146,7 +146,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.7.post6 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.7.post7 documentation</p>
   
 </a></div>
     
@@ -632,9 +632,12 @@ document.write(`
 <li class="toctree-l3"><a class="reference internal" href="pyart.correct.GateFilter.gate_included.html">pyart.correct.GateFilter.gate_included</a></li>
 </ul>
 </details></li>
+<li class="toctree-l2"><a class="reference internal" href="pyart.correct.calc_cloud_mask.html">pyart.correct.calc_cloud_mask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyart.correct.calc_noise_floor.html">pyart.correct.calc_noise_floor</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.correct.calculate_attenuation.html">pyart.correct.calculate_attenuation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.correct.calculate_attenuation_philinear.html">pyart.correct.calculate_attenuation_philinear</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.correct.calculate_attenuation_zphi.html">pyart.correct.calculate_attenuation_zphi</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyart.correct.cloud_threshold.html">pyart.correct.cloud_threshold</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.correct.correct_bias.html">pyart.correct.correct_bias</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.correct.correct_noise_rhohv.html">pyart.correct.correct_noise_rhohv</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.correct.dealias_fourdd.html">pyart.correct.dealias_fourdd</a></li>
@@ -645,6 +648,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyart.correct.moment_based_gate_filter.html">pyart.correct.moment_based_gate_filter</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.correct.phase_proc_lp.html">pyart.correct.phase_proc_lp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.correct.phase_proc_lp_gf.html">pyart.correct.phase_proc_lp_gf</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyart.correct.range_correction.html">pyart.correct.range_correction</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="pyart.exceptions.html">pyart.exceptions</a></li>
@@ -1176,6 +1180,12 @@ document.write(`
 <p class="rubric">Functions</p>
 <div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
 <tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.calc_cloud_mask.html#pyart.correct.calc_cloud_mask" title="pyart.correct.calc_cloud_mask"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_cloud_mask</span></code></a>(radar, field[, height, ...])</p></td>
+<td><p>Primary function for calculating the cloud mask.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.calc_noise_floor.html#pyart.correct.calc_noise_floor" title="pyart.correct.calc_noise_floor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_noise_floor</span></code></a>(radar, field, height)</p></td>
+<td><p>Calculation for getting the noise floor</p></td>
+</tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.calculate_attenuation.html#pyart.correct.calculate_attenuation" title="pyart.correct.calculate_attenuation"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_attenuation</span></code></a>(radar, z_offset[, ...])</p></td>
 <td><p>Calculate the attenuation from a polarimetric radar using Z-PHI method.</p></td>
 </tr>
@@ -1185,35 +1195,41 @@ document.write(`
 <tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.calculate_attenuation_zphi.html#pyart.correct.calculate_attenuation_zphi" title="pyart.correct.calculate_attenuation_zphi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calculate_attenuation_zphi</span></code></a>(radar[, doc, ...])</p></td>
 <td><p>Calculate the attenuation and the differential attenuation from a polarimetric radar using Z-PHI method.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.correct_bias.html#pyart.correct.correct_bias" title="pyart.correct.correct_bias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">correct_bias</span></code></a>(radar[, bias, field_name])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.cloud_threshold.html#pyart.correct.cloud_threshold" title="pyart.correct.cloud_threshold"><code class="xref py py-obj docutils literal notranslate"><span class="pre">cloud_threshold</span></code></a>(data[, n_avg, nffts])</p></td>
+<td><p>Calculates the noise floor from a cloud threshold.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.correct_bias.html#pyart.correct.correct_bias" title="pyart.correct.correct_bias"><code class="xref py py-obj docutils literal notranslate"><span class="pre">correct_bias</span></code></a>(radar[, bias, field_name])</p></td>
 <td><p>Corrects a radar data bias.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.correct_noise_rhohv.html#pyart.correct.correct_noise_rhohv" title="pyart.correct.correct_noise_rhohv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">correct_noise_rhohv</span></code></a>(radar[, urhohv_field, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.correct_noise_rhohv.html#pyart.correct.correct_noise_rhohv" title="pyart.correct.correct_noise_rhohv"><code class="xref py py-obj docutils literal notranslate"><span class="pre">correct_noise_rhohv</span></code></a>(radar[, urhohv_field, ...])</p></td>
 <td><p>Corrects RhoHV for noise according to eq.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.dealias_fourdd.html#pyart.correct.dealias_fourdd" title="pyart.correct.dealias_fourdd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dealias_fourdd</span></code></a>(radar[, last_radar, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.dealias_fourdd.html#pyart.correct.dealias_fourdd" title="pyart.correct.dealias_fourdd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dealias_fourdd</span></code></a>(radar[, last_radar, ...])</p></td>
 <td><p>Dealias Doppler velocities using the 4DD algorithm.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.dealias_region_based.html#pyart.correct.dealias_region_based" title="pyart.correct.dealias_region_based"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dealias_region_based</span></code></a>(radar[, ref_vel_field, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.dealias_region_based.html#pyart.correct.dealias_region_based" title="pyart.correct.dealias_region_based"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dealias_region_based</span></code></a>(radar[, ref_vel_field, ...])</p></td>
 <td><p>Dealias Doppler velocities using a region based algorithm.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.dealias_unwrap_phase.html#pyart.correct.dealias_unwrap_phase" title="pyart.correct.dealias_unwrap_phase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dealias_unwrap_phase</span></code></a>(radar[, unwrap_unit, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.dealias_unwrap_phase.html#pyart.correct.dealias_unwrap_phase" title="pyart.correct.dealias_unwrap_phase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dealias_unwrap_phase</span></code></a>(radar[, unwrap_unit, ...])</p></td>
 <td><p>Dealias Doppler velocities using multi-dimensional phase unwrapping <a href="#id3"><span class="problematic" id="id1">[1]_</span></a> and <a href="#id4"><span class="problematic" id="id2">[2]_</span></a>.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.despeckle_field.html#pyart.correct.despeckle_field" title="pyart.correct.despeckle_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">despeckle_field</span></code></a>(radar, field[, label_dict, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.despeckle_field.html#pyart.correct.despeckle_field" title="pyart.correct.despeckle_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">despeckle_field</span></code></a>(radar, field[, label_dict, ...])</p></td>
 <td><p>Despeckle a radar volume by identifying small objects in each scan and masking them out.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.find_objects.html#pyart.correct.find_objects" title="pyart.correct.find_objects"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_objects</span></code></a>(radar, field, threshold[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.find_objects.html#pyart.correct.find_objects" title="pyart.correct.find_objects"><code class="xref py py-obj docutils literal notranslate"><span class="pre">find_objects</span></code></a>(radar, field, threshold[, ...])</p></td>
 <td><p>Find objects (i.e., contiguous gates) in one or more sweeps that match thresholds.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.moment_based_gate_filter.html#pyart.correct.moment_based_gate_filter" title="pyart.correct.moment_based_gate_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moment_based_gate_filter</span></code></a>(radar[, ncp_field, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.moment_based_gate_filter.html#pyart.correct.moment_based_gate_filter" title="pyart.correct.moment_based_gate_filter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">moment_based_gate_filter</span></code></a>(radar[, ncp_field, ...])</p></td>
 <td><p>Create a filter which removes undesired gates based on moments.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.phase_proc_lp.html#pyart.correct.phase_proc_lp" title="pyart.correct.phase_proc_lp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phase_proc_lp</span></code></a>(radar, offset[, debug, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.phase_proc_lp.html#pyart.correct.phase_proc_lp" title="pyart.correct.phase_proc_lp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phase_proc_lp</span></code></a>(radar, offset[, debug, ...])</p></td>
 <td><p>Phase process using a LP method [1].</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.phase_proc_lp_gf.html#pyart.correct.phase_proc_lp_gf" title="pyart.correct.phase_proc_lp_gf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phase_proc_lp_gf</span></code></a>(radar[, gatefilter, debug, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.phase_proc_lp_gf.html#pyart.correct.phase_proc_lp_gf" title="pyart.correct.phase_proc_lp_gf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phase_proc_lp_gf</span></code></a>(radar[, gatefilter, debug, ...])</p></td>
 <td><p>Phase process using a LP method [1] using Py-ART's Gatefilter.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.range_correction.html#pyart.correct.range_correction" title="pyart.correct.range_correction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">range_correction</span></code></a>(radar, field, height)</p></td>
+<td><p>Corrects reflectivity for range to help get the correct noise floor values</p></td>
 </tr>
 </tbody>
 </table>

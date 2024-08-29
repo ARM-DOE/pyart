@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.correct.bias_and_noise &#8212; Py-ART 1.18.7.post6 documentation</title>
+    <title>pyart.correct.bias_and_noise &#8212; Py-ART 1.18.7.post7 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=c7123c72"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=636ab86b"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -143,7 +143,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.7.post6 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.7.post7 documentation</p>
   
 </a></div>
     
@@ -481,10 +481,15 @@ document.write(`
 <span class="sd">Corrects polarimetric variables for noise</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
 
+<span class="kn">import</span> <span class="nn">dask</span>
 <span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pint</span>
+<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">signal</span>
 
 <span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_metadata</span>
+<span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
 
 
 <div class="viewcode-block" id="correct_noise_rhohv"><a class="viewcode-back" href="../../../API/generated/pyart.correct.correct_noise_rhohv.html#pyart.correct.correct_noise_rhohv">[docs]</a><span class="k">def</span> <span class="nf">correct_noise_rhohv</span><span class="p">(</span>
@@ -616,6 +621,282 @@ document.write(`
     <span class="n">corr_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr_field_data</span>
 
     <span class="k">return</span> <span class="n">corr_field</span></div>
+
+
+<div class="viewcode-block" id="calc_cloud_mask"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calc_cloud_mask.html#pyart.correct.calc_cloud_mask">[docs]</a><span class="k">def</span> <span class="nf">calc_cloud_mask</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span>
+    <span class="n">field</span><span class="p">,</span>
+    <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">noise_threshold</span><span class="o">=-</span><span class="mf">45.0</span><span class="p">,</span>
+    <span class="n">threshold_offset</span><span class="o">=</span><span class="mf">5.0</span><span class="p">,</span>
+    <span class="n">counts_threshold</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Primary function for calculating the cloud mask.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    radar : Radar</span>
+<span class="sd">        Py-ART Radar object.</span>
+<span class="sd">    field : string</span>
+<span class="sd">        Reflectivity field name to calculate.</span>
+<span class="sd">    height : string</span>
+<span class="sd">        Height name to use for calculations.</span>
+<span class="sd">    noise_threshold : float</span>
+<span class="sd">        Threshold value used for noise detection. Greater than this value.</span>
+<span class="sd">    threshold_offset : float</span>
+<span class="sd">        Threshold offset value used for noise detection</span>
+<span class="sd">    counts_threshold : int</span>
+<span class="sd">        Threshold of counts used to determine mask. Greater than or equal to this value.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    radar : Radar</span>
+<span class="sd">        Returns an updated Radar object with cloud mask fields.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Kollias, P., I. Jo, P. Borque, A. Tatarevic, K. Lamer, N. Bharadwaj, K. Widener,</span>
+<span class="sd">    K. Johnson, and E.E. Clothiaux, 2014: Scanning ARM Cloud Radars. Part II: Data</span>
+<span class="sd">    Quality Control and Processing. J. Atmos. Oceanic Technol., 31, 583–598,</span>
+<span class="sd">    https://doi.org/10.1175/JTECH-D-13-00045.1</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">Radar</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Please use a valid Py-ART Radar object&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Please specify a valid field name.&quot;</span><span class="p">)</span>
+
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">calc_noise_floor</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span>
+
+    <span class="n">noise_thresh</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">nanmin</span><span class="p">(</span>
+            <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span>
+                <span class="p">[</span>
+                    <span class="n">noise</span><span class="p">,</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])[</span><span class="mi">0</span><span class="p">],</span> <span class="n">noise_threshold</span><span class="p">),</span>
+                <span class="p">]</span>
+            <span class="p">),</span>
+            <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="o">+</span> <span class="n">threshold_offset</span>
+    <span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">range_correction</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span>
+
+    <span class="n">task</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">data</span><span class="p">)[</span><span class="mi">0</span><span class="p">]):</span>
+        <span class="n">task</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">_first_mask</span><span class="p">)(</span><span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="p">:],</span> <span class="n">noise_thresh</span><span class="p">[</span><span class="n">i</span><span class="p">]))</span>
+
+    <span class="n">result</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="n">task</span><span class="p">)</span>
+    <span class="n">mask1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">result</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+    <span class="n">counts</span> <span class="o">=</span> <span class="n">signal</span><span class="o">.</span><span class="n">convolve2d</span><span class="p">(</span><span class="n">mask1</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">4</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">int</span><span class="p">),</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">)</span>
+    <span class="n">mask2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+    <span class="n">mask2</span><span class="p">[</span><span class="n">counts</span> <span class="o">&gt;=</span> <span class="n">counts_threshold</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="n">cloud_mask_1</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">cloud_mask_1</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Cloud mask 1 (linear profile)&quot;</span>
+    <span class="n">cloud_mask_1</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
+    <span class="n">cloud_mask_1</span><span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">&quot;The mask is calculated with a &quot;</span> <span class="s2">&quot;linear mask along each time profile.&quot;</span>
+    <span class="p">)</span>
+    <span class="n">cloud_mask_1</span><span class="p">[</span><span class="s2">&quot;flag_values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">cloud_mask_1</span><span class="p">[</span><span class="s2">&quot;flag_meanings&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;no_cloud&quot;</span><span class="p">,</span> <span class="s2">&quot;cloud&quot;</span><span class="p">]</span>
+    <span class="n">cloud_mask_1</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mask1</span>
+
+    <span class="n">cloud_mask_2</span> <span class="o">=</span> <span class="p">{}</span>
+    <span class="n">cloud_mask_2</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Cloud mask 2 (2D box)&quot;</span>
+    <span class="n">cloud_mask_2</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;1&quot;</span>
+    <span class="n">cloud_mask_2</span><span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;The mask uses a 2D box to &quot;</span> <span class="s2">&quot;filter out noise.&quot;</span>
+    <span class="n">cloud_mask_2</span><span class="p">[</span><span class="s2">&quot;flag_values&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">cloud_mask_2</span><span class="p">[</span><span class="s2">&quot;flag_meanings&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;no_cloud&quot;</span><span class="p">,</span> <span class="s2">&quot;cloud&quot;</span><span class="p">]</span>
+    <span class="n">cloud_mask_2</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mask2</span>
+
+    <span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;cloud_mask_1&quot;</span><span class="p">,</span> <span class="n">cloud_mask_1</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;cloud_mask_2&quot;</span><span class="p">,</span> <span class="n">cloud_mask_2</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">radar</span></div>
+
+
+<div class="viewcode-block" id="calc_noise_floor"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calc_noise_floor.html#pyart.correct.calc_noise_floor">[docs]</a><span class="k">def</span> <span class="nf">calc_noise_floor</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculation for getting the noise floor</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    radar : Radar</span>
+<span class="sd">        Py-ART Radar object containing data.</span>
+<span class="sd">    field : string</span>
+<span class="sd">        Reflectivity field name to correct.</span>
+<span class="sd">    height : string</span>
+<span class="sd">        Height name to use in correction.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    noise : array</span>
+<span class="sd">        Returns the noise floor value for each time sample.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Kollias, P., I. Jo, P. Borque, A. Tatarevic, K. Lamer, N. Bharadwaj, K. Widener,</span>
+<span class="sd">    K. Johnson, and E.E. Clothiaux, 2014: Scanning ARM Cloud Radars. Part II: Data</span>
+<span class="sd">    Quality Control and Processing. J. Atmos. Oceanic Technol., 31, 583–598,</span>
+<span class="sd">    https://doi.org/10.1175/JTECH-D-13-00045.1</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">Radar</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Please use a valid Py-ART Radar object.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># Range correct data and return the array from the Radar object</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">range_correction</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">height</span><span class="o">=</span><span class="n">height</span><span class="p">)</span>
+
+    <span class="c1"># Pass each timestep into task list to calculate cloud threshhold</span>
+    <span class="c1"># with a delayed dask process</span>
+    <span class="n">task</span> <span class="o">=</span> <span class="p">[</span><span class="n">dask</span><span class="o">.</span><span class="n">delayed</span><span class="p">(</span><span class="n">cloud_threshold</span><span class="p">)(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+
+    <span class="c1"># Perform dask computation</span>
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">dask</span><span class="o">.</span><span class="n">compute</span><span class="p">(</span><span class="o">*</span><span class="n">task</span><span class="p">)</span>
+
+    <span class="c1"># Convert returned dask tuple into numpy array</span>
+    <span class="n">noise</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">noise</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="nb">float</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">noise</span></div>
+
+
+<div class="viewcode-block" id="cloud_threshold"><a class="viewcode-back" href="../../../API/generated/pyart.correct.cloud_threshold.html#pyart.correct.cloud_threshold">[docs]</a><span class="k">def</span> <span class="nf">cloud_threshold</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_avg</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">nffts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Calculates the noise floor from a cloud threshold.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    data : array</span>
+<span class="sd">        Numpy array</span>
+<span class="sd">    n_avg : float</span>
+<span class="sd">        Number of points to average over</span>
+<span class="sd">    nffts : int</span>
+<span class="sd">        Number of heights to iterate over. If None will use the size of data.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    result : numpy scalar float</span>
+<span class="sd">        Returns the noise floor value for each time sample.</span>
+
+<span class="sd">    References</span>
+<span class="sd">    ----------</span>
+<span class="sd">    Kollias, P., I. Jo, P. Borque, A. Tatarevic, K. Lamer, N. Bharadwaj, K. Widener,</span>
+<span class="sd">    K. Johnson, and E.E. Clothiaux, 2014: Scanning ARM Cloud Radars. Part II: Data</span>
+<span class="sd">    Quality Control and Processing. J. Atmos. Oceanic Technol., 31, 583–598,</span>
+<span class="sd">    https://doi.org/10.1175/JTECH-D-13-00045.1</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">nffts</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">nffts</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">size</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">**</span> <span class="p">(</span><span class="n">data</span> <span class="o">/</span> <span class="mf">10.0</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="n">nthld</span> <span class="o">=</span> <span class="mf">10.0</span><span class="o">**-</span><span class="mf">10.0</span>
+    <span class="n">dsum</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">sumSq</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">numNs</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">sqrt_n_avg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">n_avg</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nffts</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">nthld</span><span class="p">:</span>
+            <span class="n">dsum</span> <span class="o">+=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">sumSq</span> <span class="o">+=</span> <span class="n">data</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">**</span> <span class="mf">2.0</span>
+            <span class="n">n</span> <span class="o">+=</span> <span class="mf">1.0</span>
+            <span class="n">a3</span> <span class="o">=</span> <span class="n">dsum</span> <span class="o">*</span> <span class="n">dsum</span>
+            <span class="n">a1</span> <span class="o">=</span> <span class="n">sqrt_n_avg</span> <span class="o">*</span> <span class="p">(</span><span class="n">n</span> <span class="o">*</span> <span class="n">sumSq</span> <span class="o">-</span> <span class="n">a3</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="n">nffts</span> <span class="o">/</span> <span class="mf">4.0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">a1</span> <span class="o">&lt;=</span> <span class="n">a3</span><span class="p">:</span>
+                    <span class="n">sumNs</span> <span class="o">=</span> <span class="n">dsum</span>
+                    <span class="n">numNs</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">sumNs</span> <span class="o">=</span> <span class="n">dsum</span>
+                <span class="n">numNs</span> <span class="o">=</span> <span class="p">[</span><span class="n">n</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">numNs</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">n_mean</span> <span class="o">=</span> <span class="n">sumNs</span> <span class="o">/</span> <span class="n">numNs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">n_mean</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+
+    <span class="k">if</span> <span class="n">n_mean</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">result</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">n_mean</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">result</span></div>
+
+
+<div class="viewcode-block" id="range_correction"><a class="viewcode-back" href="../../../API/generated/pyart.correct.range_correction.html#pyart.correct.range_correction">[docs]</a><span class="k">def</span> <span class="nf">range_correction</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Corrects reflectivity for range to help get the</span>
+<span class="sd">    correct noise floor values</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    radar : Radar</span>
+<span class="sd">        Py-ART Radar object containing data.</span>
+<span class="sd">    field : string</span>
+<span class="sd">        Reflectivity field name to correct.</span>
+<span class="sd">    height : string</span>
+<span class="sd">        Height name to use in correction.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    data : array</span>
+<span class="sd">        Returns a range corrected array matching reflectivity field.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">Radar</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Please use a valid Py-ART Radar object.&quot;</span><span class="p">)</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">height_units</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">height</span><span class="p">)[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Height &#39;</span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s2"> does not have units attribute. &quot;</span>
+            <span class="s2">&quot;Assuming units are meters.&quot;</span>
+        <span class="p">)</span>
+        <span class="n">height_units</span> <span class="o">=</span> <span class="s2">&quot;m&quot;</span>
+
+    <span class="n">height</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">height</span><span class="p">)[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">desired_unit</span> <span class="o">=</span> <span class="s2">&quot;m&quot;</span>
+    <span class="k">if</span> <span class="n">height_units</span> <span class="ow">is</span> <span class="ow">not</span> <span class="n">desired_unit</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">):</span>
+            <span class="n">height</span> <span class="o">=</span> <span class="n">height</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+        <span class="n">unit_registry</span> <span class="o">=</span> <span class="n">pint</span><span class="o">.</span><span class="n">UnitRegistry</span><span class="p">()</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">height</span> <span class="o">*</span> <span class="n">unit_registry</span><span class="o">.</span><span class="n">parse_expression</span><span class="p">(</span><span class="n">height_units</span><span class="p">)</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">height</span><span class="o">.</span><span class="n">to</span><span class="p">(</span><span class="n">desired_unit</span><span class="p">)</span>
+        <span class="n">height</span> <span class="o">=</span> <span class="n">height</span><span class="o">.</span><span class="n">magnitude</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">data</span><span class="o">.</span><span class="n">mask</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">data</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">)</span> <span class="ow">and</span> <span class="n">data</span><span class="o">.</span><span class="n">mask</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span>
+            <span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="n">category</span><span class="o">=</span><span class="ne">RuntimeWarning</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;.*divide by zero encountered.*&quot;</span>
+        <span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span> <span class="o">-</span> <span class="mf">20.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">height</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+<span class="k">def</span> <span class="nf">_first_mask</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">noise_threshold</span><span class="p">):</span>
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+    <span class="n">mask</span><span class="p">[</span><span class="n">data</span> <span class="o">&gt;</span> <span class="n">noise_threshold</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">return</span> <span class="n">mask</span>
 </pre></div>
 <div class="section ablog__blog_comments">
    
