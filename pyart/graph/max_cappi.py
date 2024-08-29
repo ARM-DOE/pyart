@@ -37,7 +37,6 @@ def plot_maxcappi(
     colorbar=True,
     range_rings=False,
     dpi=100,
-    show_progress=False,
     savedir=None,
     show_figure=True,
     add_slogan=False,
@@ -74,8 +73,6 @@ def plot_maxcappi(
         Whether to include range rings at 50 km intervals. Default is True.
     dpi : int, optional
         DPI (dots per inch) for the plot. Default is 100.
-    show_progress : bool, optional
-        Whether to print progress messages. Default is False.
     savedir : str, optional
         Directory where the plot will be saved. If None, the plot is not saved.
     show_figure : bool, optional
@@ -87,6 +84,7 @@ def plot_maxcappi(
     -------
     None
         This function does not return any value. It generates and optionally displays/saves a plot.
+
     Notes
     -----
     Author : Hamid Ali Syed (@syedhamidali)
@@ -168,13 +166,6 @@ def plot_maxcappi(
             )
 
         ax_xy.legend(loc="upper right", prop={"weight": "normal", "size": 8})
-
-    if show_progress:
-        print("...................................")
-        print(
-            f"Plotting {title}: {ds['time'].dt.strftime('%Y%m%d %H:%M:%S').values.item()}"
-        )
-        print("...................................\n")
 
     def _get_projection(ds):
         """
