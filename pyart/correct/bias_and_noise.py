@@ -153,7 +153,7 @@ def calc_cloud_mask(
     counts_threshold=12,
 ):
     """
-    Main function for calculating the cloud mask.
+    Primary function for calculating the cloud mask.
 
     Parameters
     ----------
