@@ -425,8 +425,17 @@ class Grid:
             ds["radar_name"] = xarray.DataArray(
                 radar_name, dims=("nradar"), attrs=get_metadata("radar_name")
             )
+        else:
+            radar_name = np.array(
+                ["ExampleRadar"], dtype="S"
+            )  # or use 'U' for unicode strings
 
-        ds.attrs = self.metadata
+        # Add radar_name to attributes, defaulting to 'ExampleRadar' if radar_name doesn't exist or is empty
+        ds.attrs["radar_name"] = (
+            radar_name.item() if radar_name.size > 0 else "ExampleRadar"
+        )
+        ds.attrs["nradar"] = self.nradar
+        ds.attrs.update(self.metadata)
         for key in ds.attrs:
             try:
                 ds.attrs[key] = ds.attrs[key].decode("utf-8")

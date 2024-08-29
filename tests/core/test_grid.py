@@ -103,8 +103,8 @@ def test_grid_to_xarray():
     assert np.array_equal(ds.time.data, time)
 
     # Check radar-specific attributes
-    assert "radar_name" in ds.data_vars
-    assert ds.radar_name.data[0] == "ExampleRadar"
+    assert ds.attrs["nradar"] == 1
+    assert ds.attrs["radar_name"] == "ExampleRadar"
 
 
 def _check_dicts_similar(dic1, dic2):

@@ -36,8 +36,7 @@ gdisplay.plot_maxcappi(field="REF", range_rings=True, add_slogan=True)
 #########################################
 # ** Second Example
 #
-# Let's read in a cfradial file and
-# create a grid.
+# Let's read in a cfradial file and create a grid.
 
 
 import logging
@@ -82,16 +81,16 @@ file = download_nexrad(timezone, date, site, local_date=False)[0]
 radar = pyart.io.read_nexrad_archive("s3://" + file)
 
 # Create a 3D grid
-# mask out last 10 gates of each ray, this removes the "ring" around the radar.
+# Mask out last 10 gates of each ray, this removes the "ring" around the radar.
 radar.fields["reflectivity"]["data"][:, -10:] = np.ma.masked
 
-# exclude masked gates from the gridding
+# Exclude masked gates from the gridding
 gatefilter = pyart.filters.GateFilter(radar)
 gatefilter.exclude_transition()
 gatefilter.exclude_masked("reflectivity")
 gatefilter.exclude_outside("reflectivity", 10, 80)
 
-# perform Cartesian mapping, limit to the reflectivity field.
+# Perform Cartesian mapping, limit to the reflectivity field.
 max_range = np.ceil(radar.range["data"].max())
 if max_range / 1e3 > 250:
     max_range = 250 * 1e3
