@@ -8,7 +8,7 @@ from ..filters.gatefilter import GateFilter, moment_based_gate_filter  # noqa
 from .attenuation import calculate_attenuation  # noqa
 from .attenuation import calculate_attenuation_philinear  # noqa
 from .attenuation import calculate_attenuation_zphi  # noqa
-from .bias_and_noise import correct_bias, calc_zdr_offset  # noqa
+from .bias_and_noise import calc_zdr_offset  # noqa
 from .bias_and_noise import calc_cloud_mask, calc_noise_floor, correct_bias  # noqa
 from .bias_and_noise import (
     correct_noise_rhohv,  # noqa
