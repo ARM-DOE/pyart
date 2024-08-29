@@ -1,10 +1,11 @@
 """ Unit tests for bias and noise module. """
 
 import pytest
-from numpy.testing import assert_allclose
-
 import pyart
+from open_radar_data import DATASETS
+import numpy as np
 
+from numpy.testing import assert_allclose
 radar = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
 
 
@@ -24,3 +25,18 @@ def test_correct_bias():
     bias = 0
     field_name = "foo"
     pytest.raises(KeyError, pyart.correct.correct_bias, radar, bias, field_name)
+
+def test_calc_zdr_offset():
+    xsapr_test_file = DATASETS.fetch('sgpxsaprcfrvptI4.a1.20200205.100827.nc')
+    ds = pyart.io.read(xsapr_test_file)
+    gatefilter = pyart.filters.GateFilter(ds)
+    gatefilter.exclude_below('cross_correlation_ratio_hv', 0.995)
+    gatefilter.exclude_above('cross_correlation_ratio_hv', 1)
+    gatefilter.exclude_below('reflectivity', 10)
+    gatefilter.exclude_above('reflectivity', 30)
+
+    results = pyart.correct.calc_zdr_offset(ds, zdr_var='differential_reflectivity', gatefilter=gatefilter,
+                                        height_range=(1000, 3000))
+    np.testing.assert_almost_equal(results['bias'], 2.69, decimal=2)
+    print(results['profile_reflectivity'][1:16])
+    np.testing.assert_almost_equal(results['profile_reflectivity'][15], 14.37, decimal=2)

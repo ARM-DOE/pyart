@@ -169,6 +169,56 @@ def det_process_range(radar, sweep, fzl, doc=10):
     ray_end = radar.sweep_end_ray_index["data"][sweep] + 1
     return gate_end, ray_start, ray_end
 
+def det_fzl_mask_rhi(radar, sweep, fzl, doc=10):
+    """
+    Determine the processing mask for an RHI.
+
+    The procedure will return an array of weights for the LP code
+    for all of the points to be included in the processing.
+    
+    Parameters
+    ----------
+    radar : Radar
+        Radar object from which ranges will be determined.
+    sweep : int
+        Sweep (0 indexed) for which to determine processing ranges.
+    fzl : float
+        Maximum altitude in meters. The determined range will not include
+        gates which are above this limit.
+    doc : int, optional
+        Minimum number of gates which will be excluded from the determined
+        range.
+
+    Returns
+    -------
+    gate_end : int
+        Index of last gate below `fzl` and satisfying the `doc` parameter.
+    ray_start : int
+        Ray index which defines the start of the region.
+    ray_end : int
+        Ray index which defined the end of the region.
+    weights : float array
+        Array of weights where all gates below the freezing level are 1 and
+        are 0 above.
+    """
+    ranges = radar.range["data"]
+    elevation = radar.elevation["data"]
+    radar_height = radar.altitude["data"]
+    gate_end = 0
+    ray_start = radar.sweep_start_ray_index["data"][sweep]
+    ray_end = radar.sweep_end_ray_index["data"][sweep] + 1
+    for j in range(ray_start, ray_end):
+        gate_end = max([gate_end, fzl_index(fzl, ranges, elevation[j], radar_height)])
+    if doc is not None:
+        gate_end = min(gate_end, len(ranges) - doc)
+    else:
+        gate_end = min(gate_end, len(ranges))
+
+    radar_z = radar.gate_z["data"] + radar_height
+    radar_z = radar_z[:, :gate_end]
+    weights = np.where(radar_z <= fzl, 1., 0.)
+    return gate_end, ray_start, ray_end, weights
+
 
 def snr(line, wl=11):
     """Return the signal to noise ratio after smoothing."""
@@ -1169,9 +1219,15 @@ def phase_proc_lp(
     for sweep in range(len(radar.sweep_start_ray_index["data"])):
         if debug:
             print("Doing ", sweep)
-        end_gate, start_ray, end_ray = det_process_range(radar, sweep, fzl, doc=15)
-        start_gate = 0
+        if radar.scan_type == 'ppi' or radar.scan_type == "sector":
+            end_gate, start_ray, end_ray = det_process_range(radar, sweep, fzl, doc=15)
+            start_gate = 0
+            weights = np.ones(phidp_mod[start_ray:end_ray, start_gate:end_gate].shape)
+        else:
+            end_gate, start_ray, end_ray, weights = det_fzl_mask_rhi(
+                radar, sweep, fzl, doc=15)
 
+            
         A_Matrix = construct_A_matrix(
             len(radar.range["data"][start_gate:end_gate]), St_Gorlv_differential_5pts
         )
@@ -1183,9 +1239,7 @@ def phase_proc_lp(
             dweight=self_const,
             coef=coef,
         )
-
-        weights = np.ones(phidp_mod[start_ray:end_ray, start_gate:end_gate].shape)
-
+        
         nw = np.bmat([weights, np.zeros(weights.shape)])
 
         if LP_solver == "pyglpk":
@@ -1385,7 +1439,16 @@ def phase_proc_lp_gf(
         if debug:
             print("Doing ", sweep)
 
-        end_gate, start_ray, end_ray = det_process_range(radar, sweep, fzl, doc=doc)
+        if radar.scan_type == 'ppi' or radar.scan_type == "sector":
+            end_gate, start_ray, end_ray = det_process_range(radar, sweep, fzl, doc=15)
+            start_gate = 0
+            weights = np.ones(phidp_mod[start_ray:end_ray, start_gate:end_gate].shape)
+        else:
+            start_gate = 0
+            end_gate, start_ray, end_ray, weights = det_fzl_mask_rhi(
+                radar, sweep, fzl, doc=15)
+            phidp_mod[start_ray:end_ray, start_gate:end_gate] = np.where(
+                weights == 1, phidp_mod[start_ray:end_ray, start_gate:end_gate], min_phidp)
 
         start_gate = 0
 
@@ -1407,8 +1470,6 @@ def phase_proc_lp_gf(
             dweight=self_const,
             coef=coef,
         )
-
-        weights = np.ones(phidp_mod[start_ray:end_ray, start_gate:end_gate].shape)
 
         nw = np.bmat([weights, np.zeros(weights.shape)])
 
