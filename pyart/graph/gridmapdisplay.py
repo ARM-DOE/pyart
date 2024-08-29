@@ -276,14 +276,14 @@ class GridMapDisplay:
         if add_grid_lines:
             if lon_lines is None:
                 lon_lines = np.linspace(
-                    np.around(ds.lon.min() - 0.1, decimals=2),
-                    np.around(ds.lon.max() + 0.1, decimals=2),
+                    np.around(ds.lon.min() - 0.1, decimals=2).values,
+                    np.around(ds.lon.max() + 0.1, decimals=2).values,
                     5,
                 )
             if lat_lines is None:
                 lat_lines = np.linspace(
-                    np.around(ds.lat.min() - 0.1, decimals=2),
-                    np.around(ds.lat.max() + 0.1, decimals=2),
+                    np.around(ds.lat.min() - 0.1, decimals=2).values,
+                    np.around(ds.lat.max() + 0.1, decimals=2).values,
                     5,
                 )
 

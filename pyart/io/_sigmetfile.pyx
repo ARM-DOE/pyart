@@ -715,6 +715,13 @@ def convert_sigmet_data(data_type, data, nbins):
             out[:] = (ndata - 128.) / 127.
             mask[ndata == 0] = True
 
+        elif data_type_name == 'VELC':
+            # VELC, 3, Velocity (1 byte)
+            # 1-byte Corrected Velocity Format, section 4.4.42
+            out[:] = (ndata - 128.) / 127. *75.
+            mask[ndata == 0] = True
+            mask[ndata == 255] = True
+
         elif data_type_name == 'WIDTH':
             # WIDTH, 4, Width (1 byte)
             # 1-byte Width format, section 4.3.25

@@ -3,7 +3,6 @@ Utilities for reading and writing of MDV grid files.
 
 """
 
-
 import datetime
 import warnings
 

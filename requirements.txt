@@ -1,6 +1,6 @@
 numpy
 scipy
-netCDF4
+netCDF4>=1.7.0
 matplotlib
 pooch
 cftime

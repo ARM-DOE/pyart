@@ -392,4 +392,4 @@ def test_1byte_datatype():
 def test_frequency():
     frequency = radar.instrument_parameters["frequency"]
     frequency["units"] == "s-1"
-    assert_almost_equal(frequency["data"], 9.670725e09)
+    assert_almost_equal(frequency["data"][0], np.float32(9.670725e09))

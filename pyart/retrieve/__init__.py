@@ -21,7 +21,8 @@ from .qpe import est_rain_rate_za  # noqa
 from .qpe import est_rain_rate_zkdp  # noqa
 from .qpe import est_rain_rate_zpoly  # noqa
 from .qpe import ZtoR  # noqa
-from .qvp import quasi_vertical_profile  # noqa
+from .qvp import quasi_vertical_profile, compute_qvp, compute_rqvp  # noqa
+from .qvp import compute_evp, compute_svp, compute_vp, compute_ts_along_coord  # noqa
 from .simple_moment_calculations import calculate_snr_from_reflectivity  # noqa
 from .simple_moment_calculations import calculate_velocity_texture  # noqa
 from .simple_moment_calculations import compute_cdr  # noqa

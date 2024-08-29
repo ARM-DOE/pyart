@@ -69,7 +69,7 @@ def column_vertical_profile(
     total_moment.update({"height": [], "time_offset": []})
 
     # Define the start of the radar volume
-    base_time = pd.to_datetime(radar.time["units"][14:]).to_numpy()
+    base_time = np.datetime64(datetime_from_radar(radar).isoformat(), "ns")
 
     # call the sphere_distance function
     dis = sphere_distance(

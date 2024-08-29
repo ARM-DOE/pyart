@@ -56,6 +56,7 @@ def read_cfradial(
     exclude_fields=None,
     include_fields=None,
     delay_field_loading=False,
+    use_arm_scan_name=False,
     **kwargs,
 ):
     """
@@ -92,6 +93,10 @@ def read_cfradial(
         LazyLoadDict objects not dict objects. Delayed field loading will not
         provide any speedup in file where the number of gates vary between
         rays (ngates_vary=True) and is not recommended.
+    use_arm_scan_name : bool
+        Whether or not to get the sweep_mode information from the ARM scan_name
+        attribute. Default is False and will use the sweep_mode information as
+        defined in the cfradial standards.
 
     Returns
     -------
@@ -126,7 +131,7 @@ def read_cfradial(
     if "volume_number" in ncvars:
         if np.ma.isMaskedArray(ncvars["volume_number"][:]):
             metadata["volume_number"] = int(
-                np.ma.getdata(ncvars["volume_number"][:].flatten())
+                np.ma.getdata(ncvars["volume_number"][:].flatten())[0]
             )
         else:
             metadata["volume_number"] = int(ncvars["volume_number"][:])
@@ -191,20 +196,27 @@ def read_cfradial(
     else:
         ray_angle_res = None
 
-    # Uses ARM scan name if present.
-    if not hasattr(ncobj, "scan_name"):
-        scan_name = ""
-    else:
-        scan_name = ncobj.scan_name
-    if len(scan_name) > 0:
-        mode = scan_name
-    else:
-        # first sweep mode determines scan_type
-        try:
-            mode = netCDF4.chartostring(sweep_mode["data"][0])[()].decode("utf-8")
-        except AttributeError:
-            # Python 3, all strings are already unicode.
+    # Use ARM scan_name if chosen by the user
+    if use_arm_scan_name:
+        # Check if attribute actually exists
+        if not hasattr(ncobj, "scan_name"):
+            warnings.warn(
+                UserWarning,
+                "No scan_name attribute present in dataset, using sweep_mode instead.",
+            )
             mode = netCDF4.chartostring(sweep_mode["data"][0])[()]
+        # Check if attribute is invalid of length 0
+        elif len(ncobj.scan_name) < 0 or ncobj.scan_name is None:
+            warnings.warn(
+                UserWarning,
+                "Scan name contains no sweep information, using sweep_mode instead.",
+            )
+            mode = netCDF4.chartostring(sweep_mode["data"][0])[()]
+        else:
+            mode = ncobj.scan_name
+    else:
+        # Use sweep_mode if arm_scan_name isn't used. This is default
+        mode = netCDF4.chartostring(sweep_mode["data"][0])[()]
 
     mode = mode.strip()
 
@@ -910,7 +922,7 @@ def _calculate_scale_and_offset(dic, dtype, minimum=None, maximum=None):
     if "_FillValue" in dic:
         fillvalue = dic["_FillValue"]
     else:
-        fillvalue = np.NaN
+        fillvalue = np.nan
 
     data = dic["data"].copy()
     data = np.ma.array(data, mask=(~np.isfinite(data) | (data == fillvalue)))

@@ -170,26 +170,33 @@ class Grid:
     def projection_proj(self):
         # Proj instance as specified by the projection attribute.
         # Raises a ValueError if the pyart_aeqd projection is specified.
-        projparams = self.get_projparams()
-        if projparams["proj"] == "pyart_aeqd":
-            raise ValueError(
-                "Proj instance can not be made for the pyart_aeqd projection"
-            )
         if not _PYPROJ_AVAILABLE:
             raise MissingOptionalDependency(
                 "PyProj is required to create a Proj instance but it "
                 + "is not installed"
             )
+        projparams = self.get_projparams()
+
+        # Check if projparams is dictionary and check for pyart_aeqd
+        if isinstance(projparams, dict):
+            if projparams["proj"] == "pyart_aeqd":
+                raise ValueError(
+                    "Proj instance can not be made for the pyart_aeqd projection"
+                )
+        # Get proj instance from a proj str or dict
         proj = pyproj.Proj(projparams)
         return proj
 
     def get_projparams(self):
-        """Return a projparam dict from the projection attribute."""
-        projparams = self.projection.copy()
-        if projparams.pop("_include_lon_0_lat_0", False):
-            projparams["lon_0"] = self.origin_longitude["data"][0]
-            projparams["lat_0"] = self.origin_latitude["data"][0]
-        return projparams
+        """Return a projparam dict or str from the projection attribute."""
+        if isinstance(self.projection, dict):
+            projparams = self.projection.copy()
+            if projparams.pop("_include_lon_0_lat_0", False):
+                projparams["lon_0"] = self.origin_longitude["data"][0]
+                projparams["lat_0"] = self.origin_latitude["data"][0]
+            return projparams
+        else:
+            return self.projection
 
     def _find_and_check_nradar(self):
         """
@@ -471,7 +478,7 @@ class Grid:
         if "data" not in field_dict:
             raise KeyError('Field dictionary must contain a "data" key')
         if field_name in self.fields and replace_existing is False:
-            raise ValueError("A field named %s already exists" % (field_name))
+            raise ValueError(f"A field named {field_name} already exists")
         if field_dict["data"].shape != (self.nz, self.ny, self.nx):
             raise ValueError("Field has invalid shape")
 

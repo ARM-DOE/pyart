@@ -280,7 +280,7 @@ class NEXRADLevel3File:
         elif msg_code in [134]:
             mdata = self._get_data_msg_134()
 
-        elif msg_code in [94, 99, 182, 186]:
+        elif msg_code in [94, 99, 153, 154, 155, 182, 186]:
             hw31, hw32 = np.frombuffer(threshold_data[:4], ">i2")
             data = (self.raw_data - 2) * (hw32 / 10.0) + hw31 / 10.0
             mdata = np.ma.array(data, mask=self.raw_data < 2)
@@ -598,7 +598,24 @@ _8_OR_16_LEVELS = [19, 20, 25, 27, 28, 30, 56, 78, 79, 80, 169, 171, 181]
 
 # List of product numbers for which Halfword 30 corresponds to sweep elev angle
 # Per Table V of the ICD
-ELEVATION_ANGLE = [19, 20, 25, 27, 28, 30, 56, 94, 99, 159, 161, 163, 165]
+ELEVATION_ANGLE = [
+    19,
+    20,
+    25,
+    27,
+    28,
+    30,
+    56,
+    94,
+    99,
+    153,
+    154,
+    155,
+    159,
+    161,
+    163,
+    165,
+]
 
 PRODUCT_RANGE_RESOLUTION = {
     19: 1.0,  # 124 nm
@@ -618,6 +635,9 @@ PRODUCT_RANGE_RESOLUTION = {
     134: 1000.0,
     135: 1000.0,
     138: 1.0,
+    153: 0.25,
+    154: 0.25,
+    155: 0.25,
     159: 0.25,
     161: 0.25,
     163: 0.25,
@@ -655,6 +675,9 @@ SUPPORTED_VERSION_NUMBERS = {
     134: 1,
     135: 0,
     138: 2,
+    153: 0,
+    154: 0,
+    155: 0,
     159: 0,
     161: 0,
     163: 0,
@@ -738,7 +761,7 @@ SYMBOLOGY_HEADER = (
     ("block_length", INT4),  # Length of block in bytes
     ("layers", INT2),  # Number of data layers
     ("layer_divider", INT2),  # Delineate data layers, -1
-    ("layer_length", INT4)  # Length of data layer in bytes
+    ("layer_length", INT4),  # Length of data layer in bytes
     # Display data packets
 )
 
@@ -803,6 +826,10 @@ SUPPORTED_PRODUCTS = [
     134,  # High Resolution VIL
     135,  # Enhanced Echo Tops
     138,  # Digital Storm Total
+    # Super Resolution
+    153,  # Super Resolution Base Reflectivity Data Array
+    154,  # Super Resolution Base Velocity Data Array
+    155,  # Super Resolution Base Spectrum Width Data Array
     # Precipitation
     159,  # Digital Differential
     # Reflectivity
@@ -861,9 +888,6 @@ SUPPORTED_PRODUCTS = [
 #    147,    # Storm Total Snow Depth
 #    150,    # User Selectable Snow Water Equivalent
 #    151,    # User Selectable Snow Depth
-#    153,    # Super Resolution Reflectivity Data Array
-#    154,    # Super Resolution Velocity Data Array
-#    155,    # Super Resolution Spectrum Width Data Array
 #    158,    # Differential Reflectivity
 #    160,    # Correlation Coefficient
 #    162,    # Specific Differential Phase
