@@ -102,7 +102,7 @@ of regions of melting or mixed precipitation as opposed to heavy snow or heavy r
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.874 seconds)
+   **Total running time of the script:** (0 minutes 3.504 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_nexrad_image_muted_reflectivity.py:

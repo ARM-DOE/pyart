@@ -481,6 +481,7 @@ document.write(`
 <span class="sd">Corrects polarimetric variables for noise</span>
 
 <span class="sd">&quot;&quot;&quot;</span>
+
 <span class="kn">import</span> <span class="nn">warnings</span>
 
 <span class="kn">import</span> <span class="nn">dask</span>
@@ -621,6 +622,62 @@ document.write(`
     <span class="n">corr_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">corr_field_data</span>
 
     <span class="k">return</span> <span class="n">corr_field</span></div>
+
+
+<div class="viewcode-block" id="calc_zdr_offset"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calc_zdr_offset.html#pyart.correct.calc_zdr_offset">[docs]</a><span class="k">def</span> <span class="nf">calc_zdr_offset</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zdr_var</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function for calculating the ZDR bias from a VPT scan.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    radar : PyART radar object</span>
+<span class="sd">        Radar object with radar data</span>
+<span class="sd">    gatefilter: PyART GateFilter</span>
+<span class="sd">        Gatefilter for filtering out data for calculating ZDR bias</span>
+<span class="sd">    height_range: tuple</span>
+<span class="sd">        The minimum and maximum heights in meters for the scan.</span>
+<span class="sd">    zdr_var: string or None</span>
+<span class="sd">        The name of the ZDR variable. Set to None to have PyART try to determine this automatically.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    profiles : dict</span>
+<span class="sd">        The mean vertical profiles of each radar moment are extracted along with the ZDR bias.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">height_range</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">height_range</span> <span class="o">=</span> <span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">100000.0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">zdr_var</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">zdr_var</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;differential_reflectivity&quot;</span><span class="p">)</span>
+
+    <span class="n">height_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">height_range</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">height_range</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="p">)</span>
+
+    <span class="n">mask</span> <span class="o">=</span> <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_included</span>
+    <span class="n">Zdr</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">zdr_var</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">Zdr</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">):</span>
+        <span class="n">Zdr</span> <span class="o">=</span> <span class="n">Zdr</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="n">Zdr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">Zdr</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="n">bias</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">Zdr</span><span class="p">[:,</span> <span class="n">height_mask</span><span class="p">])</span>
+    <span class="n">height_mask_tiled</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">height_mask</span><span class="p">,</span> <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">Zdr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">height_mask_tiled</span><span class="p">,</span> <span class="n">Zdr</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="n">results</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">&quot;bias&quot;</span><span class="p">:</span> <span class="n">bias</span><span class="p">,</span>
+        <span class="s2">&quot;profile_zdr&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">Zdr</span><span class="p">[:,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">),</span>
+        <span class="s2">&quot;range&quot;</span><span class="p">:</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
+    <span class="p">}</span>
+    <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s2">&quot;range&quot;</span><span class="p">:</span>
+            <span class="n">field_data</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">float</span><span class="p">)</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">):</span>
+                <span class="n">field_data</span> <span class="o">=</span> <span class="n">field_data</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+
+            <span class="n">field_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">field_data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="n">field_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">height_mask_tiled</span><span class="p">,</span> <span class="n">field_data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="n">results</span><span class="p">[</span><span class="s2">&quot;profile_&quot;</span> <span class="o">+</span> <span class="n">k</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nanmean</span><span class="p">(</span><span class="n">field_data</span><span class="p">[:,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">results</span></div>
 
 
 <div class="viewcode-block" id="calc_cloud_mask"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calc_cloud_mask.html#pyart.correct.calc_cloud_mask">[docs]</a><span class="k">def</span> <span class="nf">calc_cloud_mask</span><span class="p">(</span>

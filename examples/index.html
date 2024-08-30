@@ -439,6 +439,7 @@ document.write(`
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
 <li class="toctree-l1 has-children"><a class="reference internal" href="correct/index.html">Moment correction examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="correct/plot_zdr_check.html">ZDR Bias Calculation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="correct/plot_cloud_mask.html">Calculating and Plotting a Cloud Mask</a></li>
 <li class="toctree-l2"><a class="reference internal" href="correct/plot_attenuation.html">Correct reflectivity attenuation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="correct/plot_dealias.html">Dealias doppler velocities using the Region Based Algorithm</a></li>
@@ -553,7 +554,10 @@ document.write(`
 <div class="sphx-glr-thumbnails"></div><section id="moment-correction-examples">
 <h2>Moment correction examples<a class="headerlink" href="#moment-correction-examples" title="Permalink to this heading">#</a></h2>
 <p>Performing radar moment corrections in antenna (radial) coordinates.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to correct and plot reflectivity from an ARM KAZR using a noise floor cloud mask."><img alt="" src="../_images/sphx_glr_plot_cloud_mask_thumb.png" />
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to calculate the ZDR bias from VPT/Birdbath scans. The technique here uses a vertically pointing scan in regions of light rain. In these regions, raindrops should be approximately spherical and therefore their ZDR near zero. Therefore, we want the average ZDR in these regions. This code applies reflectivity and cross correlation ratio-based thresholds to the ZDR bias calculation to ensure that we are taking the average ZDR in light rain."><img alt="" src="../_images/sphx_glr_plot_zdr_check_thumb.png" />
+<p><a class="reference internal" href="correct/plot_zdr_check.html#sphx-glr-examples-correct-plot-zdr-check-py"><span class="std std-ref">ZDR Bias Calculation</span></a></p>
+  <div class="sphx-glr-thumbnail-title">ZDR Bias Calculation</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to correct and plot reflectivity from an ARM KAZR using a noise floor cloud mask."><img alt="" src="../_images/sphx_glr_plot_cloud_mask_thumb.png" />
 <p><a class="reference internal" href="correct/plot_cloud_mask.html#sphx-glr-examples-correct-plot-cloud-mask-py"><span class="std std-ref">Calculating and Plotting a Cloud Mask</span></a></p>
   <div class="sphx-glr-thumbnail-title">Calculating and Plotting a Cloud Mask</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="In this example the reflectivity attenuation is calculated and then corrected for a polarimetric radar using a Z-PHI method implemented in Py-ART."><img alt="" src="../_images/sphx_glr_plot_attenuation_thumb.png" />

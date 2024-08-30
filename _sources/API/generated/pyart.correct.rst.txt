@@ -28,6 +28,8 @@
     
     calc_noise_floor
     
+    calc_zdr_offset
+    
     calculate_attenuation
     
     calculate_attenuation_philinear

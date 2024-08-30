@@ -62,7 +62,7 @@
     <script src="../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Calculating and Plotting a Cloud Mask" href="plot_cloud_mask.html" />
+    <link rel="next" title="ZDR Bias Calculation" href="plot_zdr_check.html" />
     <link rel="prev" title="Example Gallery" href="../index.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/> 
@@ -437,6 +437,7 @@ document.write(`
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Moment correction examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="plot_zdr_check.html">ZDR Bias Calculation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_cloud_mask.html">Calculating and Plotting a Cloud Mask</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_attenuation.html">Correct reflectivity attenuation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_dealias.html">Dealias doppler velocities using the Region Based Algorithm</a></li>
@@ -551,7 +552,10 @@ document.write(`
                    <section id="moment-correction-examples">
 <span id="moment-correct-examples"></span><span id="sphx-glr-examples-correct"></span><h1>Moment correction examples<a class="headerlink" href="#moment-correction-examples" title="Permalink to this heading">#</a></h1>
 <p>Performing radar moment corrections in antenna (radial) coordinates.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to correct and plot reflectivity from an ARM KAZR using a noise floor cloud mask."><img alt="" src="../../_images/sphx_glr_plot_cloud_mask_thumb.png" />
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to calculate the ZDR bias from VPT/Birdbath scans. The technique here uses a vertically pointing scan in regions of light rain. In these regions, raindrops should be approximately spherical and therefore their ZDR near zero. Therefore, we want the average ZDR in these regions. This code applies reflectivity and cross correlation ratio-based thresholds to the ZDR bias calculation to ensure that we are taking the average ZDR in light rain."><img alt="" src="../../_images/sphx_glr_plot_zdr_check_thumb.png" />
+<p><a class="reference internal" href="plot_zdr_check.html#sphx-glr-examples-correct-plot-zdr-check-py"><span class="std std-ref">ZDR Bias Calculation</span></a></p>
+  <div class="sphx-glr-thumbnail-title">ZDR Bias Calculation</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to correct and plot reflectivity from an ARM KAZR using a noise floor cloud mask."><img alt="" src="../../_images/sphx_glr_plot_cloud_mask_thumb.png" />
 <p><a class="reference internal" href="plot_cloud_mask.html#sphx-glr-examples-correct-plot-cloud-mask-py"><span class="std std-ref">Calculating and Plotting a Cloud Mask</span></a></p>
   <div class="sphx-glr-thumbnail-title">Calculating and Plotting a Cloud Mask</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="In this example the reflectivity attenuation is calculated and then corrected for a polarimetric radar using a Z-PHI method implemented in Py-ART."><img alt="" src="../../_images/sphx_glr_plot_attenuation_thumb.png" />
@@ -587,11 +591,11 @@ document.write(`
       </div>
     </a>
     <a class="right-next"
-       href="plot_cloud_mask.html"
+       href="plot_zdr_check.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Calculating and Plotting a Cloud Mask</p>
+        <p class="prev-next-title">ZDR Bias Calculation</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

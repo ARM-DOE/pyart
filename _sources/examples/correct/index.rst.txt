@@ -19,6 +19,23 @@ Performing radar moment corrections in antenna (radial) coordinates.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to calculate the ZDR bias from VPT/Birdbath scans. The technique here uses a vertically pointing scan in regions of light rain. In these regions, raindrops should be approximately spherical and therefore their ZDR near zero. Therefore, we want the average ZDR in these regions. This code applies reflectivity and cross correlation ratio-based thresholds to the ZDR bias calculation to ensure that we are taking the average ZDR in light rain.">
+
+.. only:: html
+
+  .. image:: /examples/correct/images/thumb/sphx_glr_plot_zdr_check_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_correct_plot_zdr_check.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">ZDR Bias Calculation</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="This example shows how to correct and plot reflectivity from an ARM KAZR using a noise floor cloud mask.">
 
 .. only:: html
@@ -78,6 +95,7 @@ Performing radar moment corrections in antenna (radial) coordinates.
 .. toctree::
    :hidden:
 
+   /examples/correct/plot_zdr_check
    /examples/correct/plot_cloud_mask
    /examples/correct/plot_attenuation
    /examples/correct/plot_dealias
