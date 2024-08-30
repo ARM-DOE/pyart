@@ -36,6 +36,23 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This is an example of how to plot a corner reflector.">
+
+.. only:: html
+
+  .. image:: /examples/plotting/images/thumb/sphx_glr_plot_corner_reflector_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_plotting_plot_corner_reflector.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Plot a Corner Reflector</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a PPI plot of a MDV file using a RadarDisplay object.">
 
 .. only:: html
@@ -334,6 +351,7 @@ Plotting real world radar data with Py-ART.
    :hidden:
 
    /examples/plotting/plot_rhi_mdv
+   /examples/plotting/plot_corner_reflector
    /examples/plotting/plot_ppi_mdv
    /examples/plotting/plot_ppi_cfradial
    /examples/plotting/plot_nexrad_reflectivity
