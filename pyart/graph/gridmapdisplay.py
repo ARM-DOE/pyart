@@ -50,6 +50,8 @@ try:
 except ImportError:
     _LAMBERT_GRIDLINES = False
 
+from . import max_cappi  # noqa
+
 
 class GridMapDisplay:
     """
@@ -120,7 +122,7 @@ class GridMapDisplay:
         add_grid_lines=True,
         ticks=None,
         ticklabs=None,
-        **kwargs
+        **kwargs,
     ):
         """
         Plot the grid using xarray and cartopy.
@@ -257,7 +259,7 @@ class GridMapDisplay:
             vmin=vmin,
             vmax=vmax,
             add_colorbar=False,
-            **kwargs
+            **kwargs,
         )
 
         self.mappables.append(pm)
@@ -414,7 +416,7 @@ class GridMapDisplay:
         fig=None,
         ticks=None,
         ticklabs=None,
-        **kwargs
+        **kwargs,
     ):
         """
         Plot a slice along a given latitude.
@@ -575,7 +577,7 @@ class GridMapDisplay:
         fig=None,
         ticks=None,
         ticklabs=None,
-        **kwargs
+        **kwargs,
     ):
         """
         Plot a slice along a given longitude.
@@ -718,7 +720,7 @@ class GridMapDisplay:
         fig=None,
         ticks=None,
         ticklabs=None,
-        **kwargs
+        **kwargs,
     ):
         """
         Plot a cross section through a set of given points (latitude,
@@ -849,7 +851,7 @@ class GridMapDisplay:
             add_colorbar=False,
             ax=ax,
             cmap=cmap,
-            **kwargs
+            **kwargs,
         )
 
         self.mappables.append(plot)
@@ -1108,6 +1110,46 @@ class GridMapDisplay:
         """Get coastlines using cartopy."""
         return cartopy.feature.NaturalEarthFeature(
             category="physical", name="coastline", scale="10m", facecolor="none"
+        )
+
+    def plot_maxcappi(
+        self,
+        field,
+        cmap=None,
+        vmin=None,
+        vmax=None,
+        title=None,
+        lat_lines=None,
+        lon_lines=None,
+        add_map=True,
+        projection=None,
+        colorbar=True,
+        range_rings=False,
+        dpi=100,
+        savedir=None,
+        show_figure=True,
+        add_slogan=False,
+        **kwargs,
+    ):
+        # Call the plot_maxcappi function from the max_cappi module or object
+        max_cappi.plot_maxcappi(
+            grid=self.grid,  # Assuming `self.grid` holds the Grid object in your class
+            field=field,
+            cmap=cmap,
+            vmin=vmin,
+            vmax=vmax,
+            title=title,
+            lat_lines=lat_lines,
+            lon_lines=lon_lines,
+            add_map=add_map,
+            projection=projection,
+            colorbar=colorbar,
+            range_rings=range_rings,
+            dpi=dpi,
+            savedir=savedir,
+            show_figure=show_figure,
+            add_slogan=add_slogan,
+            **kwargs,
         )
 
 

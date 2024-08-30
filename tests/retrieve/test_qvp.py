@@ -498,7 +498,9 @@ def test_find_nearest_gate(test_radar):
     assert ind_ray == 141.0
     assert ind_rng == 145.0
     assert azi == 141.0
-    assert rng == 14514.514
+    assert (
+        abs(rng - 14514.514) < 1e-3
+    )  # Allow for a small tolerance in floating-point comparison
 
 
 def test_find_neighbour_gates(test_radar):
