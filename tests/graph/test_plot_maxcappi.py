@@ -1,7 +1,6 @@
 import os
 
 import matplotlib.pyplot as plt
-import pytest
 
 import pyart
 
@@ -28,9 +27,6 @@ def test_plot_maxcappi_simple(outfile=None):
     plt.close()
 
 
-@pytest.mark.skipif(
-    not pyart.graph.gridmapdisplay._CARTOPY_AVAILABLE, reason="Cartopy is not installed"
-)
 def test_plot_maxcappi_with_save(outfile=None):
     """
     Test plot_maxcappi and save the output to a file.
@@ -59,9 +55,6 @@ def test_plot_maxcappi_with_save(outfile=None):
     assert os.path.exists(outfile), "The plot was not saved as expected."
 
 
-@pytest.mark.skipif(
-    not pyart.graph.gridmapdisplay._CARTOPY_AVAILABLE, reason="Cartopy is not installed"
-)
 def test_plot_maxcappi_with_all_options(outfile=None):
     """
     Test plot_maxcappi with all options enabled.
