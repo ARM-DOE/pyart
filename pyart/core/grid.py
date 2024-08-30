@@ -329,7 +329,7 @@ class Grid:
         def _process_radar_name(radar_name):
             """Process radar_name to handle different formats."""
             if radar_name.dtype.kind in {"S", "U"} and radar_name.ndim > 1:
-                return np.array([b"".join(radar_name.flatten())])
+                return radar_name.flatten()
             return radar_name
 
         lon, lat = self.get_point_longitude_latitude()
@@ -388,10 +388,22 @@ class Grid:
             attrs=projection,
         )
 
+        # Handle origin and radar attributes with appropriate dimensions
         for attr_name in [
             "origin_latitude",
             "origin_longitude",
             "origin_altitude",
+        ]:
+            if hasattr(self, attr_name):
+                attr_data = getattr(self, attr_name)
+                if attr_data is not None:
+                    attr_value = np.ma.expand_dims(attr_data["data"][0], 0)
+                    ds.coords[attr_name] = xarray.DataArray(
+                        attr_value, dims=("time",), attrs=get_metadata(attr_name)
+                    )
+
+        # Radar-specific attributes that should have the nradar dimension
+        for attr_name in [
             "radar_altitude",
             "radar_latitude",
             "radar_longitude",
@@ -400,41 +412,30 @@ class Grid:
             if hasattr(self, attr_name):
                 attr_data = getattr(self, attr_name)
                 if attr_data is not None:
-                    dims = ("time",) if "origin_" in attr_name else ("nradar",)
-                    attr_value = (
-                        np.ma.expand_dims(attr_data["data"][0], 0)
-                        if "radar_time" not in attr_name
-                        else [
-                            np.array(
-                                num2date(
-                                    attr_data["data"][0], units=attr_data["units"]
-                                ),
-                                dtype="datetime64[ns]",
-                            )
-                        ]
-                    )
                     ds.coords[attr_name] = xarray.DataArray(
-                        attr_value, dims=dims, attrs=get_metadata(attr_name)
+                        attr_data["data"],
+                        dims=("nradar",),
+                        attrs=get_metadata(attr_name),
                     )
 
         if "radar_time" in ds.variables:
             ds.radar_time.attrs.pop("calendar")
 
+        # Handle radar_name and ensure it has the correct dimension
         if self.radar_name is not None:
             radar_name = _process_radar_name(self.radar_name["data"])
             ds.coords["radar_name"] = xarray.DataArray(
-                radar_name, dims=("nradar"), attrs=get_metadata("radar_name")
+                radar_name, dims=("nradar",), attrs=get_metadata("radar_name")
             )
         else:
-            radar_name = np.array(
-                ["ExampleRadar"], dtype="S"
-            )  # or use 'U' for unicode strings
+            radar_name = np.array(["ExampleRadar"], dtype="U")
+            ds.coords["radar_name"] = xarray.DataArray(
+                radar_name, dims=("nradar",), attrs=get_metadata("radar_name")
+            )
 
-        # Add radar_name to attributes, defaulting to 'ExampleRadar' if radar_name doesn't exist or is empty
-        ds.attrs["radar_name"] = (
-            radar_name.item() if radar_name.size > 0 else "ExampleRadar"
-        )
-        ds.attrs["nradar"] = self.nradar
+        # Add radar_name to attributes
+        ds.attrs["radar_name"] = radar_name if radar_name.size > 0 else "ExampleRadar"
+        ds.attrs["nradar"] = radar_name.size
         ds.attrs.update(self.metadata)
         for key in ds.attrs:
             try:
