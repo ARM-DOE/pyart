@@ -2,6 +2,7 @@
 Corrects polarimetric variables for noise
 
 """
+
 import warnings
 
 import dask
@@ -142,6 +143,62 @@ def correct_bias(radar, bias=0.0, field_name=None):
     corr_field["data"] = corr_field_data
 
     return corr_field
+
+
+def calc_zdr_offset(radar, gatefilter=None, height_range=None, zdr_var=None):
+    """
+    Function for calculating the ZDR bias from a VPT scan.
+
+    Parameters
+    ----------
+    radar : PyART radar object
+        Radar object with radar data
+    gatefilter: PyART GateFilter
+        Gatefilter for filtering out data for calculating ZDR bias
+    height_range: tuple
+        The minimum and maximum heights in meters for the scan.
+    zdr_var: string or None
+        The name of the ZDR variable. Set to None to have PyART try to determine this automatically.
+
+    Returns
+    -------
+    profiles : dict
+        The mean vertical profiles of each radar moment are extracted along with the ZDR bias.
+
+    """
+    if height_range is None:
+        height_range = (0, 100000.0)
+
+    if zdr_var is None:
+        zdr_var = get_field_name("differential_reflectivity")
+
+    height_mask = np.logical_and(
+        radar.range["data"] >= height_range[0], radar.range["data"] <= height_range[1]
+    )
+
+    mask = gatefilter.gate_included
+    Zdr = radar.fields[zdr_var]["data"]
+    if isinstance(Zdr, np.ma.MaskedArray):
+        Zdr = Zdr.filled(np.nan)
+    Zdr = np.where(mask, Zdr, np.nan)
+    bias = np.nanmean(Zdr[:, height_mask])
+    height_mask_tiled = np.tile(height_mask, (radar.nrays, 1))
+    Zdr = np.where(height_mask_tiled, Zdr, np.nan)
+    results = {
+        "bias": bias,
+        "profile_zdr": np.nanmean(Zdr[:, :], axis=0),
+        "range": radar.range["data"],
+    }
+    for k in radar.fields.keys():
+        if k != "range":
+            field_data = radar.fields[k]["data"].astype(float)
+            if isinstance(field_data, np.ma.MaskedArray):
+                field_data = field_data.filled(np.nan)
+
+            field_data = np.where(mask, field_data, np.nan)
+            field_data = np.where(height_mask_tiled, field_data, np.nan)
+            results["profile_" + k] = np.nanmean(field_data[:, :], axis=0)
+    return results
 
 
 def calc_cloud_mask(
