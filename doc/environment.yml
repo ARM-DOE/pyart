@@ -41,4 +41,4 @@ dependencies:
       - pooch
       - versioneer
       - ablog
-      - e ..
+      - -e ..
