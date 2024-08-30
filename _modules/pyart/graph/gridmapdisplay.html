@@ -7,7 +7,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>pyart.graph.gridmapdisplay &#8212; Py-ART 1.18.7.post10 documentation</title>
+    <title>pyart.graph.gridmapdisplay &#8212; Py-ART 1.18.7.post12 documentation</title>
   
   
   
@@ -43,7 +43,7 @@
 <link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=20ec7dec"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=b36c739f"></script>
     <script src="../../../_static/doctools.js?v=888ff710"></script>
     <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -143,7 +143,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.7.post10 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.7.post12 documentation</p>
   
 </a></div>
     
@@ -529,6 +529,8 @@ document.write(`
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_LAMBERT_GRIDLINES</span> <span class="o">=</span> <span class="kc">False</span>
 
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">max_cappi</span>  <span class="c1"># noqa</span>
+
 
 <div class="viewcode-block" id="GridMapDisplay"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.html#pyart.graph.GridMapDisplay">[docs]</a><span class="k">class</span> <span class="nc">GridMapDisplay</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -599,7 +601,7 @@ document.write(`
         <span class="n">add_grid_lines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">ticklabs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot the grid using xarray and cartopy.</span>
@@ -736,7 +738,7 @@ document.write(`
             <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
             <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
             <span class="n">add_colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">mappables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pm</span><span class="p">)</span>
@@ -893,7 +895,7 @@ document.write(`
         <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">ticklabs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a slice along a given latitude.</span>
@@ -1054,7 +1056,7 @@ document.write(`
         <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">ticklabs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a slice along a given longitude.</span>
@@ -1197,7 +1199,7 @@ document.write(`
         <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">ticklabs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="o">**</span><span class="n">kwargs</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a cross section through a set of given points (latitude,</span>
@@ -1328,7 +1330,7 @@ document.write(`
             <span class="n">add_colorbar</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
             <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
-            <span class="o">**</span><span class="n">kwargs</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">mappables</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">plot</span><span class="p">)</span>
@@ -1587,6 +1589,46 @@ document.write(`
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get coastlines using cartopy.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
             <span class="n">category</span><span class="o">=</span><span class="s2">&quot;physical&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;coastline&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s2">&quot;10m&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span>
+        <span class="p">)</span></div>
+
+<div class="viewcode-block" id="GridMapDisplay.plot_maxcappi"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_maxcappi.html#pyart.graph.GridMapDisplay.plot_maxcappi">[docs]</a>    <span class="k">def</span> <span class="nf">plot_maxcappi</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">field</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">vmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">vmax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">title</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">lat_lines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">lon_lines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">add_map</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">projection</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">colorbar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">range_rings</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">dpi</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span>
+        <span class="n">savedir</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">show_figure</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">add_slogan</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="c1"># Call the plot_maxcappi function from the max_cappi module or object</span>
+        <span class="n">max_cappi</span><span class="o">.</span><span class="n">plot_maxcappi</span><span class="p">(</span>
+            <span class="n">grid</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span>  <span class="c1"># Assuming `self.grid` holds the Grid object in your class</span>
+            <span class="n">field</span><span class="o">=</span><span class="n">field</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="n">cmap</span><span class="p">,</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="n">vmin</span><span class="p">,</span>
+            <span class="n">vmax</span><span class="o">=</span><span class="n">vmax</span><span class="p">,</span>
+            <span class="n">title</span><span class="o">=</span><span class="n">title</span><span class="p">,</span>
+            <span class="n">lat_lines</span><span class="o">=</span><span class="n">lat_lines</span><span class="p">,</span>
+            <span class="n">lon_lines</span><span class="o">=</span><span class="n">lon_lines</span><span class="p">,</span>
+            <span class="n">add_map</span><span class="o">=</span><span class="n">add_map</span><span class="p">,</span>
+            <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
+            <span class="n">colorbar</span><span class="o">=</span><span class="n">colorbar</span><span class="p">,</span>
+            <span class="n">range_rings</span><span class="o">=</span><span class="n">range_rings</span><span class="p">,</span>
+            <span class="n">dpi</span><span class="o">=</span><span class="n">dpi</span><span class="p">,</span>
+            <span class="n">savedir</span><span class="o">=</span><span class="n">savedir</span><span class="p">,</span>
+            <span class="n">show_figure</span><span class="o">=</span><span class="n">show_figure</span><span class="p">,</span>
+            <span class="n">add_slogan</span><span class="o">=</span><span class="n">add_slogan</span><span class="p">,</span>
+            <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
         <span class="p">)</span></div></div>
 
 

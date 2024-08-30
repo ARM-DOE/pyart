@@ -1,0 +1,6 @@
+pyart.graph.plot\_maxcappi
+==========================
+
+.. currentmodule:: pyart.graph
+
+.. autofunction:: plot_maxcappi

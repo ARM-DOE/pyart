@@ -1,0 +1,6 @@
+pyart.graph.GridMapDisplay.plot\_maxcappi
+=========================================
+
+.. currentmodule:: pyart.graph
+
+.. automethod:: GridMapDisplay.plot_maxcappi

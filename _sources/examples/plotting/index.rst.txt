@@ -274,6 +274,23 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This is an example of how to plot a Max-CAPPI within a Py-ART grid display object.">
+
+.. only:: html
+
+  .. image:: /examples/plotting/images/thumb/sphx_glr_plot_max_cappi_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_plotting_plot_max_cappi.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Plot Max-CAPPI</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="An example which creates an RHI plot of reflectivity using a RadarDisplay object and adding differnential Reflectivity contours from the same MDV file.">
 
 .. only:: html
@@ -331,6 +348,7 @@ Plotting real world radar data with Py-ART.
    /examples/plotting/plot_rhi_data_overlay
    /examples/plotting/plot_cross_section
    /examples/plotting/plot_modify_colorbar
+   /examples/plotting/plot_max_cappi
    /examples/plotting/plot_rhi_contours_differential_reflectivity
    /examples/plotting/plot_choose_a_colormap
 

@@ -28,6 +28,7 @@ pyart.graph.GridMapDisplay
    ~GridMapDisplay.plot_latitudinal_level
    ~GridMapDisplay.plot_longitude_slice
    ~GridMapDisplay.plot_longitudinal_level
+   ~GridMapDisplay.plot_maxcappi
 
 
 

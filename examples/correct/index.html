@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Moment correction examples &#8212; Py-ART 1.18.7.post10 documentation</title>
+    <title>Moment correction examples &#8212; Py-ART 1.18.7.post12 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=20ec7dec"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=b36c739f"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -62,7 +62,7 @@
     <script src="../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Correct reflectivity attenuation" href="plot_attenuation.html" />
+    <link rel="next" title="Calculating and Plotting a Cloud Mask" href="plot_cloud_mask.html" />
     <link rel="prev" title="Example Gallery" href="../index.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/> 
@@ -146,7 +146,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.18.7.post10 documentation</p>
+    <p class="title logo__title">Py-ART 1.18.7.post12 documentation</p>
   
 </a></div>
     
@@ -437,6 +437,7 @@ document.write(`
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Moment correction examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="plot_cloud_mask.html">Calculating and Plotting a Cloud Mask</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_attenuation.html">Correct reflectivity attenuation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_dealias.html">Dealias doppler velocities using the Region Based Algorithm</a></li>
 </ul>
@@ -469,6 +470,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="../plotting/plot_rhi_data_overlay.html">Create an RHI plot with reflectivity contour lines from an MDV file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plotting/plot_cross_section.html">Plot a Cross Section from a Grid</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plotting/plot_modify_colorbar.html">Modify a Colorbar for your Plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_max_cappi.html">Plot Max-CAPPI</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plotting/plot_rhi_contours_differential_reflectivity.html">Create an RHI plot with reflectivity contour lines from an MDV file</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../plotting/plot_choose_a_colormap.html">Choose a Colormap for your Plot</a></li>
 </ul>
@@ -549,7 +551,10 @@ document.write(`
                    <section id="moment-correction-examples">
 <span id="moment-correct-examples"></span><span id="sphx-glr-examples-correct"></span><h1>Moment correction examples<a class="headerlink" href="#moment-correction-examples" title="Permalink to this heading">#</a></h1>
 <p>Performing radar moment corrections in antenna (radial) coordinates.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="In this example the reflectivity attenuation is calculated and then corrected for a polarimetric radar using a Z-PHI method implemented in Py-ART."><img alt="" src="../../_images/sphx_glr_plot_attenuation_thumb.png" />
+<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to correct and plot reflectivity from an ARM KAZR using a noise floor cloud mask."><img alt="" src="../../_images/sphx_glr_plot_cloud_mask_thumb.png" />
+<p><a class="reference internal" href="plot_cloud_mask.html#sphx-glr-examples-correct-plot-cloud-mask-py"><span class="std std-ref">Calculating and Plotting a Cloud Mask</span></a></p>
+  <div class="sphx-glr-thumbnail-title">Calculating and Plotting a Cloud Mask</div>
+</div><div class="sphx-glr-thumbcontainer" tooltip="In this example the reflectivity attenuation is calculated and then corrected for a polarimetric radar using a Z-PHI method implemented in Py-ART."><img alt="" src="../../_images/sphx_glr_plot_attenuation_thumb.png" />
 <p><a class="reference internal" href="plot_attenuation.html#sphx-glr-examples-correct-plot-attenuation-py"><span class="std std-ref">Correct reflectivity attenuation</span></a></p>
   <div class="sphx-glr-thumbnail-title">Correct reflectivity attenuation</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="In this example doppler velocities are dealiased using the ial condition of the dealiasing, using the region-based dealiasing algorithm in Py-ART."><img alt="" src="../../_images/sphx_glr_plot_dealias_thumb.png" />
@@ -582,11 +587,11 @@ document.write(`
       </div>
     </a>
     <a class="right-next"
-       href="plot_attenuation.html"
+       href="plot_cloud_mask.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Correct reflectivity attenuation</p>
+        <p class="prev-next-title">Calculating and Plotting a Cloud Mask</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
