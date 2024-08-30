@@ -12,9 +12,6 @@ import pytest
 import pyart
 
 
-@pytest.mark.skipif(
-    not pyart.graph.gridmapdisplay._CARTOPY_AVAILABLE, reason="Cartopy is not installed"
-)
 def test_gridmapdisplay_simple(outfile=None):
     # test basic GridMapDisplat functionally.
     grid = pyart.testing.make_target_grid()
@@ -26,9 +23,6 @@ def test_gridmapdisplay_simple(outfile=None):
         fig.savefig(outfile)
 
 
-@pytest.mark.skipif(
-    not pyart.graph.gridmapdisplay._CARTOPY_AVAILABLE, reason="Cartopy is not installed"
-)
 def test_gridmapdisplay_fancy(outfile=None):
     import cartopy.crs as ccrs
 
@@ -79,9 +73,6 @@ def test_gridmapdisplay_fancy(outfile=None):
         fig.savefig(outfile)
 
 
-@pytest.mark.skipif(
-    not pyart.graph.gridmapdisplay._CARTOPY_AVAILABLE, reason="Cartopy is not installed"
-)
 def test_generate_filename():
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplay(grid)
@@ -89,9 +80,6 @@ def test_generate_filename():
     assert isinstance(filename, str)
 
 
-@pytest.mark.skipif(
-    not pyart.graph.gridmapdisplay._CARTOPY_AVAILABLE, reason="Cartopy is not installed"
-)
 def test_generate_titles():
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplay(grid)
@@ -103,9 +91,6 @@ def test_generate_titles():
     assert isinstance(title, str)
 
 
-@pytest.mark.skipif(
-    not pyart.graph.gridmapdisplay._CARTOPY_AVAILABLE, reason="Cartopy is not installed"
-)
 def test_error_raising():
     grid = pyart.testing.make_target_grid()
     display = pyart.graph.GridMapDisplay(grid)

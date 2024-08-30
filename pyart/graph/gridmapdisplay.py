@@ -6,15 +6,9 @@ and cartopy.
 
 import warnings
 
+import cartopy
 import matplotlib.pyplot as plt
 import numpy as np
-
-try:
-    import cartopy  # noqa
-
-    _CARTOPY_AVAILABLE = True
-except ImportError:
-    _CARTOPY_AVAILABLE = False
 
 try:
     import metpy  # noqa
@@ -76,11 +70,6 @@ class GridMapDisplay:
 
     def __init__(self, grid, debug=False):
         """initalize the object."""
-        # check that cartopy and xarray are available
-        if not _CARTOPY_AVAILABLE:
-            raise MissingOptionalDependency(
-                "Cartopy is required to use GridMapDisplay but is not installed!"
-            )
         if not _XARRAY_AVAILABLE:
             raise MissingOptionalDependency(
                 "Xarray is required to use GridMapDisplay but is not installed!"
