@@ -328,8 +328,12 @@ class Grid:
 
         def _process_radar_name(radar_name):
             """Process radar_name to handle different formats."""
-            if radar_name.dtype.kind in {"S", "U"} and radar_name.ndim > 1:
-                return radar_name.flatten()
+            if radar_name.dtype.kind == "S" and radar_name.ndim > 1:
+                # Join each row of bytes into a single byte string
+                return np.array(
+                    [b"".join(row) for row in radar_name],
+                    dtype=f"|S{radar_name.shape[1]}",
+                )
             return radar_name
 
         lon, lat = self.get_point_longitude_latitude()
@@ -434,7 +438,9 @@ class Grid:
             )
 
         # Add radar_name to attributes
-        ds.attrs["radar_name"] = radar_name if radar_name.size > 0 else "ExampleRadar"
+        ds.attrs["radar_name"] = (
+            radar_name.tolist() if radar_name.size > 1 else radar_name.item()
+        )
         ds.attrs["nradar"] = radar_name.size
         ds.attrs.update(self.metadata)
         for key in ds.attrs:

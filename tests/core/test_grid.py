@@ -104,7 +104,7 @@ def test_grid_to_xarray():
 
     # Check radar-specific attributes
     assert ds.attrs["nradar"] == 1
-    assert ds.attrs["radar_name"][0] == "ExampleRadar"
+    assert ds.attrs["radar_name"] == "ExampleRadar"
 
 
 def _check_dicts_similar(dic1, dic2):
