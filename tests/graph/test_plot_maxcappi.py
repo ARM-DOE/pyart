@@ -6,9 +6,6 @@ import pytest
 import pyart
 
 
-@pytest.mark.skipif(
-    not pyart.graph.gridmapdisplay._CARTOPY_AVAILABLE, reason="Cartopy is not installed"
-)
 def test_plot_maxcappi_simple(outfile=None):
     """
     Test the basic functionality of plot_maxcappi.
