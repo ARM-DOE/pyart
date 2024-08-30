@@ -31,13 +31,6 @@ The Python ARM Radar Toolkit - Py-ART
    dev/index.rst
 
 .. toctree::
-   :maxdepth: 2
-   :hidden:
-   :caption: Notebook Gallery
-
-   notebook-gallery.rst
-
-.. toctree::
    :maxdepth: 1
    :hidden:
    :caption: Blog
@@ -45,11 +38,11 @@ The Python ARM Radar Toolkit - Py-ART
    blog.md
 
 .. toctree::
-   :maxdepth: 1
+   :maxdepth: 2
    :hidden:
-   :caption: Changelog
+   :caption: Notebook Gallery
 
-   changelog.md
+   notebook-gallery.rst
 
 .. grid:: 1 2 2 2
     :gutter: 2
