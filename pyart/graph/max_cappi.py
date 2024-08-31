@@ -285,7 +285,6 @@ def plot_maxcappi(
     )
 
     # Retrieve instrument name
-    # instrument_name = ds.attrs.get("instrument_name", "N/A")[:4]
     # Initialize an empty list to store the processed radar names
     full_title = []
 
