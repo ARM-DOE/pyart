@@ -284,7 +284,6 @@ def plot_maxcappi(
         labelbottom=False,
     )
 
-    # Retrieve instrument name
     # Initialize an empty list to store the processed radar names
     full_title = []
 
