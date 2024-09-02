@@ -106,22 +106,18 @@ def create_cappi(
             sweep_data for i, sweep_data in enumerate(data_stack) if nyquist_mask[i]
         ]
 
-    # Generate CAPPI for each field
+    # Generate CAPPI for each field using data_stack
     fields_data = {}
     for field in fields:
-        # Reshape original data to 3D
-        original_data = radar.fields[field]["data"]
-        dim0 = original_data[radar.get_slice(0)].shape
-        data_3d = original_data.reshape((radar.nsweeps, dim0[0], dim0[1]))
+        # Collect the 3D grid for this field from the stacked data
+        data_3d = np.concatenate(
+            [sweep_data[field] for sweep_data in data_stack], axis=0
+        )
 
         # Sort azimuth for all sweeps
-        for ns in range(radar.nsweeps):
-            sorted_idx = np.argsort(radar.azimuth["data"][radar.get_slice(ns)])
-            data_3d[ns] = data_3d[ns, sorted_idx, :]
-
-        # Generate cartesian coordinates from radar spherical coordinates
+        dim0 = data_3d.shape[1:]
         azimuths = np.linspace(0, 359, dim0[0])
-        elevation_angles = radar.fixed_angle["data"]
+        elevation_angles = radar.fixed_angle["data"][: data_3d.shape[0]]
         ranges = radar.range["data"]
 
         theta = (450 - azimuths) % 360
