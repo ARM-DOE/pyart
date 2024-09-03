@@ -284,14 +284,32 @@ def plot_maxcappi(
         labelbottom=False,
     )
 
-    # Retrieve instrument name
-    instrument_name = ds.attrs.get("instrument_name", "N/A")[:4]
+    # Initialize an empty list to store the processed radar names
+    full_title = []
+
+    # Check if radar_name is a list (or list-like) or a simple string
+    if isinstance(ds.attrs["radar_name"], list):
+        # Iterate over each radar name in the list
+        for name in ds.attrs["radar_name"]:
+            # Decode if it's a byte string and take the first 4 characters
+            if isinstance(name, bytes):
+                site_title = name.decode("utf-8")[:4]
+            else:
+                site_title = name[:4]
+            full_title.append(site_title)
+    else:
+        # Handle the case where radar_name is a single string
+        site_title = ds.attrs["radar_name"][:4]
+        full_title.append(site_title)
+
+    # Join the processed radar names into a single string with commas separating them
+    formatted_title = ", ".join(full_title)
 
     # Center-align text in the corner box
     plt.text(
         0.5,
         0.90,
-        f"Site: {instrument_name}",
+        f"{formatted_title}",
         size=13,
         weight="bold",
         ha="center",
