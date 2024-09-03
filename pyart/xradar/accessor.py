@@ -292,11 +292,10 @@ class Xradar:
         self.azimuth = dict(data=self.combined_sweeps.azimuth.values)
         self.elevation = dict(data=self.combined_sweeps.elevation.values)
         # Check to see if the time is multidimensional - if it is, collapse it
-        if len(self.combined_sweeps.sweep_fixed_angle.dims) > 1:
-            self.combined_sweeps["sweep_fixed_angle"] = (
-                "sweep_number",
-                np.unique(self.combined_sweeps.sweep_fixed_angle),
-            )
+        self.combined_sweeps["sweep_fixed_angle"] = (
+            "sweep_number",
+            np.unique(self.combined_sweeps.sweep_fixed_angle),
+        )
         self.fixed_angle = dict(data=self.combined_sweeps.sweep_fixed_angle.values)
         self.antenna_transition = None
         self.latitude = dict(
