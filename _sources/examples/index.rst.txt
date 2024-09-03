@@ -386,6 +386,23 @@ Plotting real world radar data with Py-ART.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to create and compare PPI (Plan Position Indicator) and CAPPI (Constant Altitude Plan Position Indicator) plots using radar data.">
+
+.. only:: html
+
+  .. image:: /examples/plotting/images/thumb/sphx_glr_plot_cappi_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_plotting_plot_cappi.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Compare PPI vs CAPPI</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="An example which creates a two panel RHI plot of a cfradial file.  The fields included in the two panels are reflectivity and doppler velocity.">
 
 .. only:: html

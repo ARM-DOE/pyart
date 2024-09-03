@@ -47,6 +47,8 @@
     
     conv_strat_yuter
     
+    create_cappi
+    
     create_cfad
     
     dealias_spectra

@@ -670,6 +670,7 @@ document.write(`
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.compute_vp.html">pyart.retrieve.compute_vp</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.conv_strat_raut.html">pyart.retrieve.conv_strat_raut</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.conv_strat_yuter.html">pyart.retrieve.conv_strat_yuter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.create_cappi.html">pyart.retrieve.create_cappi</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.create_cfad.html">pyart.retrieve.create_cfad</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.dealias_spectra.html">pyart.retrieve.dealias_spectra</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.retrieve.est_rain_rate_a.html">pyart.retrieve.est_rain_rate_a</a></li>
@@ -1222,79 +1223,82 @@ document.write(`
 <tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.conv_strat_yuter.html#pyart.retrieve.conv_strat_yuter" title="pyart.retrieve.conv_strat_yuter"><code class="xref py py-obj docutils literal notranslate"><span class="pre">conv_strat_yuter</span></code></a>(grid[, dx, dy, level_m, ...])</p></td>
 <td><p>Partition reflectivity into convective-stratiform using the Yuter et al. (2005) and Yuter and Houze (1997) algorithm.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.create_cfad.html#pyart.retrieve.create_cfad" title="pyart.retrieve.create_cfad"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_cfad</span></code></a>(radar, field_bins, altitude_bins)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.create_cappi.html#pyart.retrieve.create_cappi" title="pyart.retrieve.create_cappi"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_cappi</span></code></a>(radar[, fields, height, ...])</p></td>
+<td><p>Create a Constant Altitude Plan Position Indicator (CAPPI) from radar data.</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.create_cfad.html#pyart.retrieve.create_cfad" title="pyart.retrieve.create_cfad"><code class="xref py py-obj docutils literal notranslate"><span class="pre">create_cfad</span></code></a>(radar, field_bins, altitude_bins)</p></td>
 <td><p>This function returns a Contoured Frequency by Altitude Diagram (CFAD; Yuter et al. 1995), a 2-dimensional histogram that is normalized by the number of points at each altitude.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.dealias_spectra.html#pyart.retrieve.dealias_spectra" title="pyart.retrieve.dealias_spectra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dealias_spectra</span></code></a>(the_spectra, vel_bins, ...)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.dealias_spectra.html#pyart.retrieve.dealias_spectra" title="pyart.retrieve.dealias_spectra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dealias_spectra</span></code></a>(the_spectra, vel_bins, ...)</p></td>
 <td><p>Dealias a spectra.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.est_rain_rate_a.html#pyart.retrieve.est_rain_rate_a" title="pyart.retrieve.est_rain_rate_a"><code class="xref py py-obj docutils literal notranslate"><span class="pre">est_rain_rate_a</span></code></a>(radar[, alpha, beta, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.est_rain_rate_a.html#pyart.retrieve.est_rain_rate_a" title="pyart.retrieve.est_rain_rate_a"><code class="xref py py-obj docutils literal notranslate"><span class="pre">est_rain_rate_a</span></code></a>(radar[, alpha, beta, ...])</p></td>
 <td><p>Estimates rainfall rate from specific attenuation using alpha power law.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.est_rain_rate_hydro.html#pyart.retrieve.est_rain_rate_hydro" title="pyart.retrieve.est_rain_rate_hydro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">est_rain_rate_hydro</span></code></a>(radar[, alphazr, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.est_rain_rate_hydro.html#pyart.retrieve.est_rain_rate_hydro" title="pyart.retrieve.est_rain_rate_hydro"><code class="xref py py-obj docutils literal notranslate"><span class="pre">est_rain_rate_hydro</span></code></a>(radar[, alphazr, ...])</p></td>
 <td><p>Estimates rainfall rate using different relations between R and the polarimetric variables depending on the hydrometeor type.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.est_rain_rate_kdp.html#pyart.retrieve.est_rain_rate_kdp" title="pyart.retrieve.est_rain_rate_kdp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">est_rain_rate_kdp</span></code></a>(radar[, alpha, beta, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.est_rain_rate_kdp.html#pyart.retrieve.est_rain_rate_kdp" title="pyart.retrieve.est_rain_rate_kdp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">est_rain_rate_kdp</span></code></a>(radar[, alpha, beta, ...])</p></td>
 <td><p>Estimates rainfall rate from kdp using alpha power law.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.est_rain_rate_z.html#pyart.retrieve.est_rain_rate_z" title="pyart.retrieve.est_rain_rate_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">est_rain_rate_z</span></code></a>(radar[, alpha, beta, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.est_rain_rate_z.html#pyart.retrieve.est_rain_rate_z" title="pyart.retrieve.est_rain_rate_z"><code class="xref py py-obj docutils literal notranslate"><span class="pre">est_rain_rate_z</span></code></a>(radar[, alpha, beta, ...])</p></td>
 <td><p>Estimates rainfall rate from reflectivity using a power law.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.est_rain_rate_za.html#pyart.retrieve.est_rain_rate_za" title="pyart.retrieve.est_rain_rate_za"><code class="xref py py-obj docutils literal notranslate"><span class="pre">est_rain_rate_za</span></code></a>(radar[, alphaz, betaz, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.est_rain_rate_za.html#pyart.retrieve.est_rain_rate_za" title="pyart.retrieve.est_rain_rate_za"><code class="xref py py-obj docutils literal notranslate"><span class="pre">est_rain_rate_za</span></code></a>(radar[, alphaz, betaz, ...])</p></td>
 <td><p>Estimates rainfall rate from a blending of power law r-alpha and r-z relations.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.est_rain_rate_zkdp.html#pyart.retrieve.est_rain_rate_zkdp" title="pyart.retrieve.est_rain_rate_zkdp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">est_rain_rate_zkdp</span></code></a>(radar[, alphaz, betaz, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.est_rain_rate_zkdp.html#pyart.retrieve.est_rain_rate_zkdp" title="pyart.retrieve.est_rain_rate_zkdp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">est_rain_rate_zkdp</span></code></a>(radar[, alphaz, betaz, ...])</p></td>
 <td><p>Estimates rainfall rate from a blending of power law r-kdp and r-z relations.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.est_rain_rate_zpoly.html#pyart.retrieve.est_rain_rate_zpoly" title="pyart.retrieve.est_rain_rate_zpoly"><code class="xref py py-obj docutils literal notranslate"><span class="pre">est_rain_rate_zpoly</span></code></a>(radar[, refl_field, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.est_rain_rate_zpoly.html#pyart.retrieve.est_rain_rate_zpoly" title="pyart.retrieve.est_rain_rate_zpoly"><code class="xref py py-obj docutils literal notranslate"><span class="pre">est_rain_rate_zpoly</span></code></a>(radar[, refl_field, ...])</p></td>
 <td><p>Estimates rainfall rate from reflectivity using a polynomial Z-R relation developed at McGill University.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.feature_detection.html#pyart.retrieve.feature_detection" title="pyart.retrieve.feature_detection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feature_detection</span></code></a>(grid[, dx, dy, level_m, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.feature_detection.html#pyart.retrieve.feature_detection" title="pyart.retrieve.feature_detection"><code class="xref py py-obj docutils literal notranslate"><span class="pre">feature_detection</span></code></a>(grid[, dx, dy, level_m, ...])</p></td>
 <td><p>This function can be used to detect features in a field (e.g.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.fetch_radar_time_profile.html#pyart.retrieve.fetch_radar_time_profile" title="pyart.retrieve.fetch_radar_time_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_radar_time_profile</span></code></a>(sonde_dset, radar)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.fetch_radar_time_profile.html#pyart.retrieve.fetch_radar_time_profile" title="pyart.retrieve.fetch_radar_time_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">fetch_radar_time_profile</span></code></a>(sonde_dset, radar)</p></td>
 <td><p>Extract the correct profile from a interpolated sonde.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.get_freq_band.html#pyart.retrieve.get_freq_band" title="pyart.retrieve.get_freq_band"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_freq_band</span></code></a>(freq)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.get_freq_band.html#pyart.retrieve.get_freq_band" title="pyart.retrieve.get_freq_band"><code class="xref py py-obj docutils literal notranslate"><span class="pre">get_freq_band</span></code></a>(freq)</p></td>
 <td><p>Returns the frequency band name (S, C, X, ...).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.grid_displacement_pc.html#pyart.retrieve.grid_displacement_pc" title="pyart.retrieve.grid_displacement_pc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">grid_displacement_pc</span></code></a>(grid1, grid2, field, level)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.grid_displacement_pc.html#pyart.retrieve.grid_displacement_pc" title="pyart.retrieve.grid_displacement_pc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">grid_displacement_pc</span></code></a>(grid1, grid2, field, level)</p></td>
 <td><p>Calculate the grid displacement using phase correlation.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.grid_shift.html#pyart.retrieve.grid_shift" title="pyart.retrieve.grid_shift"><code class="xref py py-obj docutils literal notranslate"><span class="pre">grid_shift</span></code></a>(grid, advection[, trim_edges, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.grid_shift.html#pyart.retrieve.grid_shift" title="pyart.retrieve.grid_shift"><code class="xref py py-obj docutils literal notranslate"><span class="pre">grid_shift</span></code></a>(grid, advection[, trim_edges, ...])</p></td>
 <td><p>Shift a grid by a certain number of pixels.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.hydroclass_semisupervised.html#pyart.retrieve.hydroclass_semisupervised" title="pyart.retrieve.hydroclass_semisupervised"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hydroclass_semisupervised</span></code></a>(radar[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.hydroclass_semisupervised.html#pyart.retrieve.hydroclass_semisupervised" title="pyart.retrieve.hydroclass_semisupervised"><code class="xref py py-obj docutils literal notranslate"><span class="pre">hydroclass_semisupervised</span></code></a>(radar[, ...])</p></td>
 <td><p>Classifies precipitation echoes into hydrometeor types.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.kdp_maesaka.html#pyart.retrieve.kdp_maesaka" title="pyart.retrieve.kdp_maesaka"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kdp_maesaka</span></code></a>(radar[, gatefilter, method, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.kdp_maesaka.html#pyart.retrieve.kdp_maesaka" title="pyart.retrieve.kdp_maesaka"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kdp_maesaka</span></code></a>(radar[, gatefilter, method, ...])</p></td>
 <td><p>Compute the specific differential phase (KDP) from corrected (e.g., unfolded) total differential phase data based on the variational method outlined in Maesaka et al. (2012).</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.kdp_schneebeli.html#pyart.retrieve.kdp_schneebeli" title="pyart.retrieve.kdp_schneebeli"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kdp_schneebeli</span></code></a>(radar[, gatefilter, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.kdp_schneebeli.html#pyart.retrieve.kdp_schneebeli" title="pyart.retrieve.kdp_schneebeli"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kdp_schneebeli</span></code></a>(radar[, gatefilter, ...])</p></td>
 <td><p>Estimates Kdp with the Kalman filter method by Schneebeli and al.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.kdp_vulpiani.html#pyart.retrieve.kdp_vulpiani" title="pyart.retrieve.kdp_vulpiani"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kdp_vulpiani</span></code></a>(radar[, gatefilter, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.kdp_vulpiani.html#pyart.retrieve.kdp_vulpiani" title="pyart.retrieve.kdp_vulpiani"><code class="xref py py-obj docutils literal notranslate"><span class="pre">kdp_vulpiani</span></code></a>(radar[, gatefilter, ...])</p></td>
 <td><p>Estimates Kdp with the Vulpiani method for a 2D array of psidp measurements with the first dimension being the distance from radar and the second dimension being the angles (azimuths for PPI, elev for RHI).The input psidp is assumed to be pre-filtered (for ex.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.map_profile_to_gates.html#pyart.retrieve.map_profile_to_gates" title="pyart.retrieve.map_profile_to_gates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">map_profile_to_gates</span></code></a>(profile, heights, radar)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.map_profile_to_gates.html#pyart.retrieve.map_profile_to_gates" title="pyart.retrieve.map_profile_to_gates"><code class="xref py py-obj docutils literal notranslate"><span class="pre">map_profile_to_gates</span></code></a>(profile, heights, radar)</p></td>
 <td><p>Given a profile of a variable map it to the gates of radar assuming 4/3Re.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.quasi_vertical_profile.html#pyart.retrieve.quasi_vertical_profile" title="pyart.retrieve.quasi_vertical_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quasi_vertical_profile</span></code></a>(radar[, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.quasi_vertical_profile.html#pyart.retrieve.quasi_vertical_profile" title="pyart.retrieve.quasi_vertical_profile"><code class="xref py py-obj docutils literal notranslate"><span class="pre">quasi_vertical_profile</span></code></a>(radar[, ...])</p></td>
 <td><p>Quasi Vertical Profile.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.spectra_moments.html#pyart.retrieve.spectra_moments" title="pyart.retrieve.spectra_moments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectra_moments</span></code></a>(radar)</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.spectra_moments.html#pyart.retrieve.spectra_moments" title="pyart.retrieve.spectra_moments"><code class="xref py py-obj docutils literal notranslate"><span class="pre">spectra_moments</span></code></a>(radar)</p></td>
 <td><p>Retrieves the radar moments using a spectra radar object.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.steiner_conv_strat.html#pyart.retrieve.steiner_conv_strat" title="pyart.retrieve.steiner_conv_strat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">steiner_conv_strat</span></code></a>(grid[, dx, dy, intense, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.steiner_conv_strat.html#pyart.retrieve.steiner_conv_strat" title="pyart.retrieve.steiner_conv_strat"><code class="xref py py-obj docutils literal notranslate"><span class="pre">steiner_conv_strat</span></code></a>(grid[, dx, dy, intense, ...])</p></td>
 <td><p>Partition reflectivity into convective-stratiform using the Steiner et al. (1995) algorithm.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.texture_of_complex_phase.html#pyart.retrieve.texture_of_complex_phase" title="pyart.retrieve.texture_of_complex_phase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">texture_of_complex_phase</span></code></a>(radar[, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.texture_of_complex_phase.html#pyart.retrieve.texture_of_complex_phase" title="pyart.retrieve.texture_of_complex_phase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">texture_of_complex_phase</span></code></a>(radar[, ...])</p></td>
 <td><p>Calculate the texture of the differential phase field.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.vad_browning.html#pyart.retrieve.vad_browning" title="pyart.retrieve.vad_browning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vad_browning</span></code></a>(radar, velocity[, z_want, ...])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.vad_browning.html#pyart.retrieve.vad_browning" title="pyart.retrieve.vad_browning"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vad_browning</span></code></a>(radar, velocity[, z_want, ...])</p></td>
 <td><p>Velocity azimuth display.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.retrieve.vad_michelson.html#pyart.retrieve.vad_michelson" title="pyart.retrieve.vad_michelson"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vad_michelson</span></code></a>(radar[, vel_field, z_want, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.retrieve.vad_michelson.html#pyart.retrieve.vad_michelson" title="pyart.retrieve.vad_michelson"><code class="xref py py-obj docutils literal notranslate"><span class="pre">vad_michelson</span></code></a>(radar[, vel_field, z_want, ...])</p></td>
 <td><p>Velocity azimuth display.</p></td>
 </tr>
 </tbody>
