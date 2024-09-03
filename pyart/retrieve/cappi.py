@@ -46,9 +46,9 @@ def create_cappi(
     --------
     CAPPI (Constant Altitude Plan Position Indicator) is a radar visualization
     technique that provides a horizontal view of meteorological data at a fixed altitude.
-    Atlas, David, ed. Radar in Meteorology: Battan Memorial and 40th Anniversary Radar Meteorology Conference. Springer, 2015.
+    Reference : https://glossary.ametsoc.org/wiki/Cappi
 
-    Author: Hamid Ali Syed (@syedhamidali)
+    Author : Hamid Ali Syed (@syedhamidali)
     """
 
     if fields is None:
