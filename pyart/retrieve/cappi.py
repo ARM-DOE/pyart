@@ -21,7 +21,7 @@ def create_cappi(
     """
     Create a Constant Altitude Plan Position Indicator (CAPPI) from radar data.
 
-    Parameters:
+    Parameters
     -----------
     radar : Radar
         Py-ART Radar object containing the radar data.
@@ -37,16 +37,16 @@ def create_cappi(
     nyquist_vector_idx : int, optional
         Index for the Nyquist velocity vector if `same_nyquist` is True (default is 0).
 
-    Returns:
+    Returns
     --------
     Radar
         A Py-ART Radar object containing the CAPPI at the specified height.
 
-    Notes:
+    Notes
     --------
     CAPPI (Constant Altitude Plan Position Indicator) is a radar visualization
     technique that provides a horizontal view of meteorological data at a fixed altitude.
-    For more information, see: https://en.wikipedia.org/wiki/Constant_altitude_plan_position_indicator
+    Atlas, David, ed. Radar in Meteorology: Battan Memorial and 40th Anniversary Radar Meteorology Conference. Springer, 2015.
 
     Author: Hamid Ali Syed (@syedhamidali)
     """
