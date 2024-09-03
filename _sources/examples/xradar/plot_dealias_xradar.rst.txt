@@ -91,7 +91,7 @@ Let's use the RadarMapDisplay to visualize the texture field
 
 
 .. image-sg:: /examples/xradar/images/sphx_glr_plot_dealias_xradar_001.png
-   :alt: xsapr-sg 2.5 Deg. 2011-05-20T06:42:42Z  Texture of radial velocity of scatters away from instrument
+   :alt: xsapr-sg 0.5 Deg. 2011-05-20T06:42:42Z  Texture of radial velocity of scatters away from instrument
    :srcset: /examples/xradar/images/sphx_glr_plot_dealias_xradar_001.png
    :class: sphx-glr-single-img
 
@@ -205,7 +205,7 @@ We can visualize the uncorrected and corrected radial velocity fields
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 10.232 seconds)
+   **Total running time of the script:** (0 minutes 9.657 seconds)
 
 
 .. _sphx_glr_download_examples_xradar_plot_dealias_xradar.py:
