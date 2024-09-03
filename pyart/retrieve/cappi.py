@@ -15,6 +15,7 @@ def create_cappi(
     fields=None,
     height=2000,
     gatefilter=None,
+    vel_field="velocity",
     same_nyquist=True,
     nyquist_vector_idx=0,
 ):
@@ -22,33 +23,41 @@ def create_cappi(
     Create a Constant Altitude Plan Position Indicator (CAPPI) from radar data.
 
     Parameters
-    -----------
+    ----------
     radar : Radar
         Py-ART Radar object containing the radar data.
     fields : list of str, optional
         List of radar fields to be used for creating the CAPPI.
-        If None, all available fields will be used (default is None).
+        If None, all available fields will be used. Default is None.
     height : float, optional
-        The altitude at which to create the CAPPI (default is 2000 meters).
+        The altitude at which to create the CAPPI. Default is 2000 meters.
     gatefilter : GateFilter, optional
-        A GateFilter object to apply masking/filtering to the radar data (default is None).
+        A GateFilter object to apply masking/filtering to the radar data.
+        Default is None.
+    vel_field : str, optional
+        The name of the velocity field to be used for determining the Nyquist velocity.
+        Default is 'velocity'.
     same_nyquist : bool, optional
-        Whether to only stack sweeps with the same Nyquist velocity (default is True).
+        Whether to only stack sweeps with the same Nyquist velocity.
+        Default is True.
     nyquist_vector_idx : int, optional
-        Index for the Nyquist velocity vector if `same_nyquist` is True (default is 0).
+        Index for the Nyquist velocity vector if `same_nyquist` is True.
+        Default is 0.
 
     Returns
-    --------
+    -------
     Radar
         A Py-ART Radar object containing the CAPPI at the specified height.
 
     Notes
-    --------
+    -----
     CAPPI (Constant Altitude Plan Position Indicator) is a radar visualization
     technique that provides a horizontal view of meteorological data at a fixed altitude.
-    Reference : https://glossary.ametsoc.org/wiki/Cappi
+    Reference: https://glossary.ametsoc.org/wiki/Cappi
 
-    Author : Hamid Ali Syed (@syedhamidali)
+    Author
+    ------
+    Hamid Ali Syed (@syedhamidali)
     """
 
     if fields is None:
@@ -64,7 +73,15 @@ def create_cappi(
     # Process each sweep individually
     for sweep in range(radar.nsweeps):
         sweep_slice = radar.get_slice(sweep)
-        nyquist = np.round(radar.get_nyquist_vel(sweep=sweep))
+        try:
+            nyquist = radar.get_nyquist_vel(sweep=sweep)
+            nyquist = np.round(nyquist)
+        except LookupError:
+            print(
+                f"Nyquist velocity unavailable for sweep {sweep}. Estimating using maximum velocity."
+            )
+            nyquist = radar.fields[vel_field]["data"][sweep_slice].max()
+
         sweep_data = {}
 
         for field in fields:
@@ -76,6 +93,7 @@ def create_cappi(
                     data, gatefilter.gate_excluded[sweep_slice, :]
                 )
             time = radar.time["data"][sweep_slice]
+
             # Extract and sort azimuth angles
             azimuth = radar.azimuth["data"][sweep_slice]
             azimuth_sorted_idx = np.argsort(azimuth)
@@ -109,7 +127,6 @@ def create_cappi(
     # Generate CAPPI for each field using data_stack
     fields_data = {}
     for field in fields:
-        # Collect the 3D grid for this field from the stacked data
         data_3d = np.concatenate(
             [sweep_data[field] for sweep_data in data_stack], axis=0
         )
@@ -134,31 +151,51 @@ def create_cappi(
             ]
         ).reshape(dim0)
 
-        # Apply valid_min and valid_max masking if they exist
-        field_attrs = radar.fields[field].get("attrs", {})
-        valid_min = field_attrs.get("valid_min", None)
-        valid_max = field_attrs.get("valid_max", None)
+        # Retrieve units and handle case where units might be missing
+        units = radar.fields[field].get("units", "").lower()
+
+        # Determine valid_min and valid_max based on units
+        if units == "dbz":
+            valid_min, valid_max = -10, 80
+        elif units in ["m/s", "meters per second"]:
+            valid_min, valid_max = -100, 100
+        elif units == "db":
+            valid_min, valid_max = -7.9, 7.9
+        else:
+            # If units are not found or don't match known types, set default values or skip masking
+            valid_min, valid_max = None, None
+
+        # If valid_min or valid_max are still None, set them to conservative defaults or skip
+        if valid_min is None:
+            print(f"Warning: valid_min not set for {field}, using default of -1e10")
+            valid_min = -1e10  # Conservative default
+        if valid_max is None:
+            print(f"Warning: valid_max not set for {field}, using default of 1e10")
+            valid_max = 1e10  # Conservative default
+
+        # Apply valid_min and valid_max masking
         if valid_min is not None:
             CAPPI = np.ma.masked_less(CAPPI, valid_min)
         if valid_max is not None:
             CAPPI = np.ma.masked_greater(CAPPI, valid_max)
 
         # Convert to masked array with the specified fill value
-        CAPPI = np.ma.masked_array(CAPPI, fill_value=1e20)
-        CAPPI.set_fill_value(-32768)
+        CAPPI.set_fill_value(radar.fields[field].get("_FillValue", np.nan))
+        CAPPI = np.ma.masked_invalid(CAPPI)
+        CAPPI = np.ma.masked_outside(CAPPI, valid_min, valid_max)
 
         fields_data[field] = {
             "data": CAPPI,
             "units": radar.fields[field]["units"],
             "long_name": f"CAPPI {field} at {height} meters",
             "comment": f"CAPPI {field} calculated at a height of {height} meters",
-            "_FillValue": -9999.0,
+            "_FillValue": radar.fields[field].get("_FillValue", np.nan),
         }
 
     # Set the elevation to zeros for CAPPI
     elevation_final = np.zeros(dim0[0], dtype="float32")
 
-    # since we are using the whole volume scan, report mean time
+    # Since we are using the whole volume scan, report mean time
     try:
         dtime = to_datetime(
             num2date(radar.time["data"], radar.time["units"]).astype(str),
