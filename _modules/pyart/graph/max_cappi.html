@@ -763,14 +763,32 @@ document.write(`
         <span class="n">labelbottom</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="c1"># Retrieve instrument name</span>
-    <span class="n">instrument_name</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;instrument_name&quot;</span><span class="p">,</span> <span class="s2">&quot;N/A&quot;</span><span class="p">)[:</span><span class="mi">4</span><span class="p">]</span>
+    <span class="c1"># Initialize an empty list to store the processed radar names</span>
+    <span class="n">full_title</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="c1"># Check if radar_name is a list (or list-like) or a simple string</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ds</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">],</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="c1"># Iterate over each radar name in the list</span>
+        <span class="k">for</span> <span class="n">name</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]:</span>
+            <span class="c1"># Decode if it&#39;s a byte string and take the first 4 characters</span>
+            <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">):</span>
+                <span class="n">site_title</span> <span class="o">=</span> <span class="n">name</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)[:</span><span class="mi">4</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">site_title</span> <span class="o">=</span> <span class="n">name</span><span class="p">[:</span><span class="mi">4</span><span class="p">]</span>
+            <span class="n">full_title</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">site_title</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="c1"># Handle the case where radar_name is a single string</span>
+        <span class="n">site_title</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">][:</span><span class="mi">4</span><span class="p">]</span>
+        <span class="n">full_title</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">site_title</span><span class="p">)</span>
+
+    <span class="c1"># Join the processed radar names into a single string with commas separating them</span>
+    <span class="n">formatted_title</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">full_title</span><span class="p">)</span>
 
     <span class="c1"># Center-align text in the corner box</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
         <span class="mf">0.5</span><span class="p">,</span>
         <span class="mf">0.90</span><span class="p">,</span>
-        <span class="sa">f</span><span class="s2">&quot;Site: </span><span class="si">{</span><span class="n">instrument_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">formatted_title</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
         <span class="n">size</span><span class="o">=</span><span class="mi">13</span><span class="p">,</span>
         <span class="n">weight</span><span class="o">=</span><span class="s2">&quot;bold&quot;</span><span class="p">,</span>
         <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
