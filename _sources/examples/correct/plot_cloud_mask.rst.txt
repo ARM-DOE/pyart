@@ -114,7 +114,7 @@ to calculate the mask.
 
     # And now we can plot the masked reflectivity field.
     display = pyart.graph.RadarDisplay(cloud_mask_radar)
-    display.plot("reflectivity_copol")
+    display.plot("reflectivity_cloud_mask")
     display.set_limits(xlim=(0, 55))
     plt.show()
 
@@ -154,7 +154,7 @@ to calculate the mask.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.692 seconds)
+   **Total running time of the script:** (0 minutes 0.774 seconds)
 
 
 .. _sphx_glr_download_examples_correct_plot_cloud_mask.py:
