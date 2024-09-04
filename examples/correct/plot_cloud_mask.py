@@ -61,6 +61,6 @@ cloud_mask_radar.fields["reflectivity_cloud_mask"]["data"][
 
 # And now we can plot the masked reflectivity field.
 display = pyart.graph.RadarDisplay(cloud_mask_radar)
-display.plot("reflectivity_copol")
+display.plot("reflectivity_cloud_mask")
 display.set_limits(xlim=(0, 55))
 plt.show()
