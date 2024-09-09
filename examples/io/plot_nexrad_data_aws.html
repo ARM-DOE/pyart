@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Reading NEXRAD Data from the AWS Cloud &#8212; Py-ART 1.19.0 documentation</title>
+    <title>Reading NEXRAD Data from the AWS Cloud &#8212; Py-ART 1.19.1 documentation</title>
   
   
   
@@ -44,7 +44,7 @@
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
   <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=2c9c16be"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=88e492a7"></script>
     <script src="../../_static/doctools.js?v=888ff710"></script>
     <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -146,7 +146,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 1.19.0 documentation</p>
+    <p class="title logo__title">Py-ART 1.19.1 documentation</p>
   
 </a></div>
     
@@ -598,7 +598,7 @@ on March 22, 2022, at 1201:25 UTC. This means our path would look like:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">fields</span></a><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;velocity&#39;, &#39;differential_reflectivity&#39;, &#39;spectrum_width&#39;, &#39;clutter_filter_power_removed&#39;, &#39;reflectivity&#39;, &#39;differential_phase&#39;, &#39;cross_correlation_ratio&#39;]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;reflectivity&#39;, &#39;spectrum_width&#39;, &#39;clutter_filter_power_removed&#39;, &#39;differential_phase&#39;, &#39;cross_correlation_ratio&#39;, &#39;velocity&#39;, &#39;differential_reflectivity&#39;]
 </pre></div>
 </div>
 <p>Let’s plot the reflectivity/velocity fields as a first step to investigating our dataset.</p>
@@ -703,7 +703,7 @@ using the following naming convention:</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" alt="0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor,  0.5 Deg. 2022-03-22T12:01:25Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 14.306 seconds)</p>
+<img src="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" alt="0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor,  0.5 Deg. 2022-03-22T12:01:25Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 15.466 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-io-plot-nexrad-data-aws-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/41122161573e84ed2249ac58c58fb5d5/plot_nexrad_data_aws.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_nexrad_data_aws.ipynb</span></code></a></p>

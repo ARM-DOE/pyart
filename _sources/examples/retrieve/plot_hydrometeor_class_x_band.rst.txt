@@ -285,7 +285,7 @@ Hydrometeor Classification with Custom Frequency Settings
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 9.975 seconds)
+   **Total running time of the script:** (0 minutes 10.165 seconds)
 
 
 .. _sphx_glr_download_examples_retrieve_plot_hydrometeor_class_x_band.py:

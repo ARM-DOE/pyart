@@ -116,7 +116,7 @@ Let's take a look at a summary of what fields are available.
  .. code-block:: none
 
 
-    ['velocity', 'differential_reflectivity', 'spectrum_width', 'clutter_filter_power_removed', 'reflectivity', 'differential_phase', 'cross_correlation_ratio']
+    ['reflectivity', 'spectrum_width', 'clutter_filter_power_removed', 'differential_phase', 'cross_correlation_ratio', 'velocity', 'differential_reflectivity']
 
 
 
@@ -314,7 +314,7 @@ Note: the reflectivity and velocity fields are in different radars, so we need t
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 14.306 seconds)
+   **Total running time of the script:** (0 minutes 15.466 seconds)
 
 
 .. _sphx_glr_download_examples_io_plot_nexrad_data_aws.py:
