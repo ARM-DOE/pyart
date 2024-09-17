@@ -36,7 +36,7 @@ gdisplay.plot_maxcappi(field="REF", range_rings=True, add_slogan=True)
 #########################################
 # ** Second Example
 #
-# Let's read in a cfradial file and create a grid.
+# Let's read in a Nexrad data and create a grid.
 
 
 import logging

@@ -43,7 +43,7 @@ def plot_maxcappi(
     **kwargs,
 ):
     """
-    Plots a Constant Altitude Plan Position Indicator (CAPPI) using an xarray Dataset.
+    Plot a Maximum Constant Altitude Plan Position Indicator (Max-CAPPI) using an xarray Dataset.
 
     Parameters
     ----------
@@ -52,11 +52,11 @@ def plot_maxcappi(
     field : str
         The radar field to be plotted (e.g., "REF", "VEL", "WIDTH").
     cmap : str or matplotlib colormap, optional
-        Colormap to use for the plot. Default is "SyedSpectral" if available, otherwise "HomeyerRainbow".
+        Colormap to use for the plot. Default is "pyart_NWSRef".
     vmin : float, optional
-        Minimum value for the color scaling. Default is None, which sets it to the minimum value of the data.
+        Minimum value for the color scaling. Default is set to the minimum value of the data if not provided.
     vmax : float, optional
-        Maximum value for the color scaling. Default is None, which sets it to the maximum value of the data.
+        Maximum value for the color scaling. Default is set to the maximum value of the data if not provided.
     title : str, optional
         Title of the plot. If None, the title is set to "Max-{field}".
     lat_lines : array-like, optional
@@ -66,28 +66,36 @@ def plot_maxcappi(
     add_map : bool, optional
         Whether to include a map background in the plot. Default is True.
     projection : cartopy.crs.Projection, optional
-        The map projection for the plot. Default is cartopy.crs.LambertAzimuthalEqualArea().
+        The map projection for the plot. Default is automatically determined based on dataset coordinates.
     colorbar : bool, optional
         Whether to include a colorbar in the plot. Default is True.
     range_rings : bool, optional
-        Whether to include range rings at 50 km intervals. Default is True.
+        Whether to include range rings at 50 km intervals. Default is False.
     dpi : int, optional
         DPI (dots per inch) for the plot. Default is 100.
     savedir : str, optional
         Directory where the plot will be saved. If None, the plot is not saved.
     show_figure : bool, optional
         Whether to display the plot. Default is True.
+    add_slogan : bool, optional
+        Whether to add a slogan like "Powered by Py-ART" to the plot. Default is False.
     **kwargs : dict, optional
         Additional keyword arguments to pass to matplotlib's `pcolormesh` function.
 
     Returns
     -------
     None
-        This function does not return any value. It generates and optionally displays/saves a plot.
+        This function does not return any value. It generates and optionally displays or saves a plot.
 
     Notes
     -----
-    Author : Hamid Ali Syed (@syedhamidali)
+    - The function extracts the maximum value across the altitude (z) dimension to create the Max-CAPPI.
+    - It supports customizations such as map projections, color scales, and range rings.
+    - If the radar_name attribute in the dataset is a byte string, it will be decoded and limited to 4 characters.
+    - If add_map is True, map features and latitude/longitude lines are included.
+    - The plot can be saved to a specified directory in PNG format.
+
+    Author: Syed Hamid Ali (@syedhamidali)
     """
 
     ds = grid.to_xarray().squeeze()
@@ -127,7 +135,7 @@ def plot_maxcappi(
     sideticks = np.arange(max_height / 4, max_height + 1, max_height / 4).astype(int)
 
     if cmap is None:
-        cmap = "pyart_Carbone42"
+        cmap = "pyart_NWSRef"
     if vmin is None:
         vmin = grid.fields[field]["data"].min()
     if vmax is None:
