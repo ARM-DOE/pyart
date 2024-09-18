@@ -84,7 +84,7 @@ within a Py-ART grid display object.
 
 ** Second Example
 
-Let's read in a cfradial file and create a grid.
+Let's read in a Nexrad data and create a grid.
 
 .. GENERATED FROM PYTHON SOURCE LINES 40-112
 
@@ -185,7 +185,7 @@ Let's read in a cfradial file and create a grid.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 13.244 seconds)
+   **Total running time of the script:** (0 minutes 13.076 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_max_cappi.py:

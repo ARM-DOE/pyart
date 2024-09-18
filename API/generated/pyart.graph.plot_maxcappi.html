@@ -1176,34 +1176,42 @@ document.write(`
 <dl class="py function">
 <dt class="sig sig-object py" id="pyart.graph.plot_maxcappi">
 <span class="sig-prename descclassname"><span class="pre">pyart.graph.</span></span><span class="sig-name descname"><span class="pre">plot_maxcappi</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">grid</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">cmap</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">title</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lat_lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">lon_lines</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_map</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">projection</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">colorbar</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">range_rings</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dpi</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">100</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">savedir</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">show_figure</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">add_slogan</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/graph/max_cappi.html#plot_maxcappi"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.graph.plot_maxcappi" title="Permalink to this definition">#</a></dt>
-<dd><p>Plots a Constant Altitude Plan Position Indicator (CAPPI) using an xarray Dataset.</p>
+<dd><p>Plot a Maximum Constant Altitude Plan Position Indicator (Max-CAPPI) using an xarray Dataset.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>grid</strong> (<em>pyart.core.Grid</em>) – The grid object containing the radar data to be plotted.</p></li>
 <li><p><strong>field</strong> (<em>str</em>) – The radar field to be plotted (e.g., “REF”, “VEL”, “WIDTH”).</p></li>
-<li><p><strong>cmap</strong> (<em>str or matplotlib colormap, optional</em>) – Colormap to use for the plot. Default is “SyedSpectral” if available, otherwise “HomeyerRainbow”.</p></li>
-<li><p><strong>vmin</strong> (<em>float, optional</em>) – Minimum value for the color scaling. Default is None, which sets it to the minimum value of the data.</p></li>
-<li><p><strong>vmax</strong> (<em>float, optional</em>) – Maximum value for the color scaling. Default is None, which sets it to the maximum value of the data.</p></li>
+<li><p><strong>cmap</strong> (<em>str or matplotlib colormap, optional</em>) – Colormap to use for the plot. Default is “pyart_HomeyerRainbow”.</p></li>
+<li><p><strong>vmin</strong> (<em>float, optional</em>) – Minimum value for the color scaling. Default is set to the minimum value of the data if not provided.</p></li>
+<li><p><strong>vmax</strong> (<em>float, optional</em>) – Maximum value for the color scaling. Default is set to the maximum value of the data if not provided.</p></li>
 <li><p><strong>title</strong> (<em>str, optional</em>) – Title of the plot. If None, the title is set to “Max-{field}”.</p></li>
 <li><p><strong>lat_lines</strong> (<em>array-like, optional</em>) – Latitude lines to be included in the plot. Default is calculated based on dataset coordinates.</p></li>
 <li><p><strong>lon_lines</strong> (<em>array-like, optional</em>) – Longitude lines to be included in the plot. Default is calculated based on dataset coordinates.</p></li>
 <li><p><strong>add_map</strong> (<em>bool, optional</em>) – Whether to include a map background in the plot. Default is True.</p></li>
-<li><p><strong>projection</strong> (<em>cartopy.crs.Projection, optional</em>) – The map projection for the plot. Default is cartopy.crs.LambertAzimuthalEqualArea().</p></li>
+<li><p><strong>projection</strong> (<em>cartopy.crs.Projection, optional</em>) – The map projection for the plot. Default is automatically determined based on dataset coordinates.</p></li>
 <li><p><strong>colorbar</strong> (<em>bool, optional</em>) – Whether to include a colorbar in the plot. Default is True.</p></li>
-<li><p><strong>range_rings</strong> (<em>bool, optional</em>) – Whether to include range rings at 50 km intervals. Default is True.</p></li>
+<li><p><strong>range_rings</strong> (<em>bool, optional</em>) – Whether to include range rings at 50 km intervals. Default is False.</p></li>
 <li><p><strong>dpi</strong> (<em>int, optional</em>) – DPI (dots per inch) for the plot. Default is 100.</p></li>
 <li><p><strong>savedir</strong> (<em>str, optional</em>) – Directory where the plot will be saved. If None, the plot is not saved.</p></li>
 <li><p><strong>show_figure</strong> (<em>bool, optional</em>) – Whether to display the plot. Default is True.</p></li>
+<li><p><strong>add_slogan</strong> (<em>bool, optional</em>) – Whether to add a slogan like “Powered by Py-ART” to the plot. Default is False.</p></li>
 <li><p><strong>**kwargs</strong> (<em>dict, optional</em>) – Additional keyword arguments to pass to matplotlib’s <cite>pcolormesh</cite> function.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p><em>None</em> – This function does not return any value. It generates and optionally displays/saves a plot.</p>
+<dd class="field-even"><p><em>None</em> – This function does not return any value. It generates and optionally displays or saves a plot.</p>
 </dd>
 </dl>
 <p class="rubric">Notes</p>
-<p>Author : Hamid Ali Syed (&#64;syedhamidali)</p>
+<ul class="simple">
+<li><p>The function extracts the maximum value across the altitude (z) dimension to create the Max-CAPPI.</p></li>
+<li><p>It supports customizations such as map projections, color scales, and range rings.</p></li>
+<li><p>If the radar_name attribute in the dataset is a byte string, it will be decoded and limited to 4 characters.</p></li>
+<li><p>If add_map is True, map features and latitude/longitude lines are included.</p></li>
+<li><p>The plot can be saved to a specified directory in PNG format.</p></li>
+</ul>
+<p>Author: Syed Hamid Ali (&#64;syedhamidali)</p>
 </dd></dl>
 
 </section>

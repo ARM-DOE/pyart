@@ -564,8 +564,7 @@ to download the full example code.</p>
 <p>This example demonstrates how to create and compare PPI (Plan Position Indicator)
 and CAPPI (Constant Altitude Plan Position Indicator) plots using radar data.</p>
 <p>In this example, we load sample radar data, create a CAPPI at 2,000 meters
-for the ‘reflectivity’ field, and then plot
-both the PPI and CAPPI for comparison.</p>
+for the ‘reflectivity’ field, and then plot both the PPI and CAPPI for comparison.</p>
 <img src="../../_images/sphx_glr_plot_cappi_001.png" srcset="../../_images/sphx_glr_plot_cappi_001.png" alt="PPI Reflectivity, CAPPI Reflectivity at 2000 meters" class = "sphx-glr-single-img"/><div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Hamid Ali Syed (syed44@purdue.edu)</span>
@@ -584,7 +583,7 @@ both the PPI and CAPPI for comparison.</p>
 <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_transition</span><span class="p">()</span>
 
-<span class="c1"># Create CAPPI at 2,000 meters for the &#39;reflectivity&#39; and &#39;differential_reflectivity&#39; fields</span>
+<span class="c1"># Create CAPPI at 2,000 meters for the &#39;reflectivity&#39; field</span>
 <span class="n">cappi</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">create_cappi</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">],</span> <span class="n">height</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span>
 <span class="p">)</span>
@@ -608,7 +607,7 @@ both the PPI and CAPPI for comparison.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.958 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.968 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plotting-plot-cappi-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/e9130f601a2f1f496e7d194eaeac2032/plot_cappi.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_cappi.ipynb</span></code></a></p>

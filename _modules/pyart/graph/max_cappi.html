@@ -522,7 +522,7 @@ document.write(`
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Plots a Constant Altitude Plan Position Indicator (CAPPI) using an xarray Dataset.</span>
+<span class="sd">    Plot a Maximum Constant Altitude Plan Position Indicator (Max-CAPPI) using an xarray Dataset.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -531,11 +531,11 @@ document.write(`
 <span class="sd">    field : str</span>
 <span class="sd">        The radar field to be plotted (e.g., &quot;REF&quot;, &quot;VEL&quot;, &quot;WIDTH&quot;).</span>
 <span class="sd">    cmap : str or matplotlib colormap, optional</span>
-<span class="sd">        Colormap to use for the plot. Default is &quot;SyedSpectral&quot; if available, otherwise &quot;HomeyerRainbow&quot;.</span>
+<span class="sd">        Colormap to use for the plot. Default is &quot;pyart_HomeyerRainbow&quot;.</span>
 <span class="sd">    vmin : float, optional</span>
-<span class="sd">        Minimum value for the color scaling. Default is None, which sets it to the minimum value of the data.</span>
+<span class="sd">        Minimum value for the color scaling. Default is set to the minimum value of the data if not provided.</span>
 <span class="sd">    vmax : float, optional</span>
-<span class="sd">        Maximum value for the color scaling. Default is None, which sets it to the maximum value of the data.</span>
+<span class="sd">        Maximum value for the color scaling. Default is set to the maximum value of the data if not provided.</span>
 <span class="sd">    title : str, optional</span>
 <span class="sd">        Title of the plot. If None, the title is set to &quot;Max-{field}&quot;.</span>
 <span class="sd">    lat_lines : array-like, optional</span>
@@ -545,28 +545,36 @@ document.write(`
 <span class="sd">    add_map : bool, optional</span>
 <span class="sd">        Whether to include a map background in the plot. Default is True.</span>
 <span class="sd">    projection : cartopy.crs.Projection, optional</span>
-<span class="sd">        The map projection for the plot. Default is cartopy.crs.LambertAzimuthalEqualArea().</span>
+<span class="sd">        The map projection for the plot. Default is automatically determined based on dataset coordinates.</span>
 <span class="sd">    colorbar : bool, optional</span>
 <span class="sd">        Whether to include a colorbar in the plot. Default is True.</span>
 <span class="sd">    range_rings : bool, optional</span>
-<span class="sd">        Whether to include range rings at 50 km intervals. Default is True.</span>
+<span class="sd">        Whether to include range rings at 50 km intervals. Default is False.</span>
 <span class="sd">    dpi : int, optional</span>
 <span class="sd">        DPI (dots per inch) for the plot. Default is 100.</span>
 <span class="sd">    savedir : str, optional</span>
 <span class="sd">        Directory where the plot will be saved. If None, the plot is not saved.</span>
 <span class="sd">    show_figure : bool, optional</span>
 <span class="sd">        Whether to display the plot. Default is True.</span>
+<span class="sd">    add_slogan : bool, optional</span>
+<span class="sd">        Whether to add a slogan like &quot;Powered by Py-ART&quot; to the plot. Default is False.</span>
 <span class="sd">    **kwargs : dict, optional</span>
 <span class="sd">        Additional keyword arguments to pass to matplotlib&#39;s `pcolormesh` function.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    None</span>
-<span class="sd">        This function does not return any value. It generates and optionally displays/saves a plot.</span>
+<span class="sd">        This function does not return any value. It generates and optionally displays or saves a plot.</span>
 
 <span class="sd">    Notes</span>
 <span class="sd">    -----</span>
-<span class="sd">    Author : Hamid Ali Syed (@syedhamidali)</span>
+<span class="sd">    - The function extracts the maximum value across the altitude (z) dimension to create the Max-CAPPI.</span>
+<span class="sd">    - It supports customizations such as map projections, color scales, and range rings.</span>
+<span class="sd">    - If the radar_name attribute in the dataset is a byte string, it will be decoded and limited to 4 characters.</span>
+<span class="sd">    - If add_map is True, map features and latitude/longitude lines are included.</span>
+<span class="sd">    - The plot can be saved to a specified directory in PNG format.</span>
+
+<span class="sd">    Author: Syed Hamid Ali (@syedhamidali)</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="n">ds</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">to_xarray</span><span class="p">()</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span>
@@ -606,7 +614,7 @@ document.write(`
     <span class="n">sideticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">max_height</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="n">max_height</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">max_height</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">cmap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">cmap</span> <span class="o">=</span> <span class="s2">&quot;pyart_Carbone42&quot;</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="s2">&quot;pyart_HomeyerRainbow&quot;</span>
     <span class="k">if</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">vmin</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
