@@ -7,8 +7,7 @@ This example demonstrates how to create and compare PPI (Plan Position Indicator
 and CAPPI (Constant Altitude Plan Position Indicator) plots using radar data.
 
 In this example, we load sample radar data, create a CAPPI at 2,000 meters
-for the 'reflectivity' field, and then plot
-both the PPI and CAPPI for comparison.
+for the 'reflectivity' field, and then plot both the PPI and CAPPI for comparison.
 
 """
 
@@ -30,7 +29,7 @@ radar = pyart.io.read(file)
 gatefilter = pyart.filters.GateFilter(radar)
 gatefilter.exclude_transition()
 
-# Create CAPPI at 2,000 meters for the 'reflectivity' and 'differential_reflectivity' fields
+# Create CAPPI at 2,000 meters for the 'reflectivity' field
 cappi = pyart.retrieve.create_cappi(
     radar, fields=["reflectivity"], height=2000, gatefilter=gatefilter
 )
