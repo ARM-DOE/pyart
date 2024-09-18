@@ -52,7 +52,7 @@ def plot_maxcappi(
     field : str
         The radar field to be plotted (e.g., "REF", "VEL", "WIDTH").
     cmap : str or matplotlib colormap, optional
-        Colormap to use for the plot. Default is "pyart_NWSRef".
+        Colormap to use for the plot. Default is "pyart_HomeyerRainbow".
     vmin : float, optional
         Minimum value for the color scaling. Default is set to the minimum value of the data if not provided.
     vmax : float, optional
