@@ -1397,7 +1397,7 @@ document.write(`
 <span class="sd">        if &#39;auto&#39; using the maximum horizontal range rounded up to the nearest kilometer</span>
 <span class="sd">        and limiting vertically up to `max_z`.</span>
 <span class="sd">    max_z: float</span>
-<span class="sd">        maximum height to consider in gridding (only used if `grid_size` is &#39;auto&#39;)</span>
+<span class="sd">        maximum height to consider in gridding (only used if `grid_limits` is &#39;auto&#39;)</span>
 <span class="sd">    el_rounding_frac: float</span>
 <span class="sd">        A fraction for rounding the elevation elements. This variables is also used to</span>
 <span class="sd">        represent the sweep for altitude estimation.</span>
@@ -1439,6 +1439,11 @@ document.write(`
 
     <span class="c1"># Calling the gridding method</span>
     <span class="n">radar_ds</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Use all sweeps if no target sweep is provided</span>
+    <span class="k">if</span> <span class="n">target_sweeps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">target_sweeps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">)</span>
+
     <span class="k">for</span> <span class="n">sweep</span> <span class="ow">in</span> <span class="n">target_sweeps</span><span class="p">:</span>
         <span class="n">radar_sw</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">extract_sweeps</span><span class="p">([</span><span class="n">sweep</span><span class="p">])</span>
         <span class="n">sweep_grid</span> <span class="o">=</span> <span class="n">grid_from_radars</span><span class="p">(</span>
@@ -1506,7 +1511,7 @@ document.write(`
 <span class="sd">        This input parameter is ignored if `grid_shape` is given</span>
 <span class="sd">        explicitly via kwargs.</span>
 <span class="sd">    max_z: float</span>
-<span class="sd">        maximum height in grid (only used if `grid_size` is &#39;auto&#39;).</span>
+<span class="sd">        maximum height in grid (only used if `grid_limits` is &#39;auto&#39;).</span>
 <span class="sd">    grid_limits: 3-tuple with 2-tuple elements or &#39;auto&#39;</span>
 <span class="sd">        if &#39;auto&#39; using the maximum horizontal range and limiting vertically up to 12 km.</span>
 <span class="sd">    az_rounding_frac: float</span>
@@ -1546,6 +1551,11 @@ document.write(`
 
     <span class="c1"># Calling the gridding method</span>
     <span class="n">radar_ds</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="c1"># Use all sweeps if no target sweep is provided</span>
+    <span class="k">if</span> <span class="n">target_sweeps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">target_sweeps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">)</span>
+
     <span class="k">for</span> <span class="n">sweep</span> <span class="ow">in</span> <span class="n">target_sweeps</span><span class="p">:</span>
         <span class="n">radar_sw</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">extract_sweeps</span><span class="p">([</span><span class="n">sweep</span><span class="p">])</span>
         <span class="k">if</span> <span class="p">(</span>
