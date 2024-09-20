@@ -918,7 +918,7 @@ def grid_ppi_sweeps(
         if 'auto' using the maximum horizontal range rounded up to the nearest kilometer
         and limiting vertically up to `max_z`.
     max_z: float
-        maximum height to consider in gridding (only used if `grid_size` is 'auto')
+        maximum height to consider in gridding (only used if `grid_limits` is 'auto')
     el_rounding_frac: float
         A fraction for rounding the elevation elements. This variables is also used to
         represent the sweep for altitude estimation.
@@ -960,6 +960,11 @@ def grid_ppi_sweeps(
 
     # Calling the gridding method
     radar_ds = None
+
+    # Use all sweeps if no target sweep is provided
+    if target_sweeps is None:
+        target_sweeps = np.arange(radar.nsweeps)
+
     for sweep in target_sweeps:
         radar_sw = radar.extract_sweeps([sweep])
         sweep_grid = grid_from_radars(
@@ -1027,7 +1032,7 @@ def grid_rhi_sweeps(
         This input parameter is ignored if `grid_shape` is given
         explicitly via kwargs.
     max_z: float
-        maximum height in grid (only used if `grid_size` is 'auto').
+        maximum height in grid (only used if `grid_limits` is 'auto').
     grid_limits: 3-tuple with 2-tuple elements or 'auto'
         if 'auto' using the maximum horizontal range and limiting vertically up to 12 km.
     az_rounding_frac: float
@@ -1067,6 +1072,11 @@ def grid_rhi_sweeps(
 
     # Calling the gridding method
     radar_ds = None
+
+    # Use all sweeps if no target sweep is provided
+    if target_sweeps is None:
+        target_sweeps = np.arange(radar.nsweeps)
+
     for sweep in target_sweeps:
         radar_sw = radar.extract_sweeps([sweep])
         if (
