@@ -32,5 +32,6 @@ dependencies:
     - cibuildwheel
     - pooch
     - versioneer
+    - glpk
     - black
     - git+https://github.com/openradar/open-radar-data
