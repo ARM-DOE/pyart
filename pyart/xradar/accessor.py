@@ -3,15 +3,17 @@ Utilities for interfacing between xradar and Py-ART
 
 """
 
-
 import copy
 
+import datatree
 import numpy as np
 import pandas as pd
 from datatree import DataTree, formatting, formatting_html
 from datatree.treenode import NodePath
 from xarray import DataArray, Dataset, concat
 from xarray.core import utils
+from xradar.accessors import XradarAccessor
+from xradar.util import get_sweep_keys
 
 from ..config import get_metadata
 from ..core.transforms import (
@@ -104,15 +106,15 @@ class Xgrid:
 
     @property
     def ny(self):
-        return self.ds.dims["y"]
+        return self.ds.sizes["y"]
 
     @property
     def nx(self):
-        return self.ds.dims["x"]
+        return self.ds.sizes["x"]
 
     @property
     def nz(self):
-        return self.ds.dims["z"]
+        return self.ds.sizes["z"]
 
     # Attribute init/reset methods
     def init_point_x_y_z(self):
@@ -190,7 +192,7 @@ class Xgrid:
         """
         # check that the field dictionary to add is valid
         if field_name in self.fields and replace_existing is False:
-            err = "A field with name: %s already exists" % (field_name)
+            err = f"A field with name: {field_name} already exists"
             raise ValueError(err)
         if "data" not in dic:
             raise KeyError("dic must contain a 'data' key")
@@ -271,19 +273,29 @@ class Xradar:
     def __init__(self, xradar, default_sweep="sweep_0", scan_type=None):
         self.xradar = xradar
         self.scan_type = scan_type or "ppi"
-        self.combined_sweeps = self._combine_sweeps(self.xradar)
+        self.sweep_group_names = get_sweep_keys(self.xradar)
+        self.nsweeps = len(self.sweep_group_names)
+        self.combined_sweeps = self._combine_sweeps()
         self.fields = self._find_fields(self.combined_sweeps)
+
+        # Check to see if the time is multidimensional - if it is, collapse it
+        if len(self.combined_sweeps.time.dims) > 1:
+            time = self.combined_sweeps.time.isel(range=0)
+        else:
+            time = self.combined_sweeps.time
         self.time = dict(
-            data=(self.combined_sweeps.time - self.combined_sweeps.time.min()).astype(
-                "int64"
-            )
-            / 1e9,
+            data=(time - time.min()).astype("int64").values / 1e9,
             units=f"seconds since {pd.to_datetime(self.combined_sweeps.time.min().values).strftime('%Y-%m-%d %H:%M:%S.0')}",
             calendar="gregorian",
         )
         self.range = dict(data=self.combined_sweeps.range.values)
         self.azimuth = dict(data=self.combined_sweeps.azimuth.values)
         self.elevation = dict(data=self.combined_sweeps.elevation.values)
+        # Check to see if the time is multidimensional - if it is, collapse it
+        self.combined_sweeps["sweep_fixed_angle"] = (
+            "sweep_number",
+            np.unique(self.combined_sweeps.sweep_fixed_angle),
+        )
         self.fixed_angle = dict(data=self.combined_sweeps.sweep_fixed_angle.values)
         self.antenna_transition = None
         self.latitude = dict(
@@ -304,8 +316,7 @@ class Xradar:
         self.metadata = dict(**self.xradar.attrs)
         self.ngates = len(self.range["data"])
         self.nrays = len(self.azimuth["data"])
-        self.nsweeps = len(self.xradar.sweep_group_name)
-        self.instrument_parameters = dict(**self.xradar["radar_parameters"].attrs)
+        self.instrument_parameters = self.find_instrument_parameters()
         self.init_gate_x_y_z()
         self.init_gate_alt()
 
@@ -350,6 +361,37 @@ class Xradar:
             raise ValueError(f"Invalid format for key: {key}")
 
         # Iterators
+
+    def find_instrument_parameters(self):
+        # By default, check the radar_parameters first
+        if "radar_parameters" in list(self.xradar.children):
+            radar_param_dict = self.xradar["radar_parameters"].ds.to_dict(data="array")
+            instrument_parameters = radar_param_dict["data_vars"]
+            instrument_parameters.update(radar_param_dict["attrs"])
+
+        else:
+            instrument_parameters = {}
+
+        # Check to see if the root dataset has this info
+        if len(self.xradar.ds) > 0:
+            root_param_dict = self.xradar.ds.to_dict(data="array")
+            instrument_parameters.update(root_param_dict["data_vars"])
+            instrument_parameters.update(root_param_dict["attrs"])
+
+        if len(instrument_parameters.keys()) > 0:
+            for field in instrument_parameters.keys():
+                field_dict = instrument_parameters[field]
+                if isinstance(field_dict, dict):
+                    if "attrs" in field_dict:
+                        for param in field_dict["attrs"]:
+                            field_dict[param] = field_dict["attrs"][param]
+                        del field_dict["attrs"]
+
+                    if "dims" in field_dict:
+                        del field_dict["dims"]
+                instrument_parameters[field] = field_dict
+
+        return instrument_parameters
 
     def iter_start(self):
         """Return an iterator over the sweep start indices."""
@@ -398,7 +440,7 @@ class Xradar:
         """
         # check that the field dictionary to add is valid
         if field_name in self.fields and replace_existing is False:
-            err = "A field with name: %s already exists" % (field_name)
+            err = f"A field with name: {field_name} already exists"
             raise ValueError(err)
         if "data" not in dic:
             raise KeyError("dic must contain a 'data' key")
@@ -546,17 +588,25 @@ class Xradar:
                 data=np.mean(self.altitude["data"]) + self.gate_z["data"]
             )
 
-    def _combine_sweeps(self, radar):
+    def _combine_sweeps(self):
         # Loop through and extract the different datasets
         ds_list = []
-        for sweep in radar.sweep_group_name.values:
-            ds_list.append(radar[sweep].ds.drop_duplicates("azimuth"))
+        for sweep in self.sweep_group_names:
+            ds_list.append(
+                self.xradar[sweep]
+                .ds.drop_duplicates("azimuth")
+                .set_coords("sweep_number")
+            )
 
         # Merge based on the sweep number
         merged = concat(ds_list, dim="sweep_number")
 
         # Stack the sweep number and azimuth together
         stacked = merged.stack(gates=["sweep_number", "azimuth"]).transpose()
+
+        # Select the valid azimuths
+        good_azimuths = stacked.time.dropna("gates", how="all").gates
+        stacked = stacked.sel(gates=good_azimuths)
 
         # Drop the missing gates
         cleaned = stacked.where(stacked.time == stacked.time.dropna("gates"))
@@ -679,6 +729,32 @@ class Xradar:
                 }
         return fields
 
+    def get_azimuth(self, sweep, copy=False):
+        """
+        Return an array of azimuth angles for a given sweep.
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve data for, 0 based.
+        copy : bool, optional
+            True to return a copy of the azimuths. False, the default, returns
+            a view of the azimuths (when possible), changing this data will
+            change the data in the underlying Radar object.
+
+        Returns
+        -------
+        azimuths : array
+            Array containing the azimuth angles for a given sweep.
+
+        """
+        s = self.get_slice(sweep)
+        azimuths = self.azimuth["data"][s]
+        if copy:
+            return azimuths.copy()
+        else:
+            return azimuths
+
 
 def _point_data_factory(grid, coordinate):
     """Return a function which returns the locations of all points."""
@@ -729,3 +805,23 @@ def _point_altitude_data_factory(grid):
         return grid.origin_altitude["data"][0] + grid.point_z["data"]
 
     return _point_altitude_data
+
+
+@datatree.register_datatree_accessor("pyart")
+class XradarDataTreeAccessor(XradarAccessor):
+    """Adds a number of pyart specific methods to datatree.DataTree objects."""
+
+    def to_radar(self, scan_type=None) -> DataTree:
+        """
+        Add pyart radar object methods to the xradar datatree object
+        Parameters
+        ----------
+        scan_type: string
+            Scan type (ppi, rhi, etc.)
+        Returns
+        -------
+        dt: datatree.Datatree
+            Datatree including pyart.Radar methods
+        """
+        dt = self.xarray_obj
+        return Xradar(dt, scan_type=scan_type)

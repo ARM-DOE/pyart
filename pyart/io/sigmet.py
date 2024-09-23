@@ -7,6 +7,7 @@ import datetime
 import warnings
 
 import numpy as np
+from scipy.constants import lambda2nu
 
 from ..config import FileMetadata, get_fillvalue
 from ..core.radar import Radar
@@ -386,6 +387,7 @@ def read_sigmet(
     beam_width_v = filemetadata("radar_beam_width_v")
     pulse_width = filemetadata("pulse_width")
     prt_ratio = filemetadata("prt_ratio")
+    frequency = filemetadata("frequency")
 
     prt_value = 1.0 / sigmetfile.product_hdr["product_end"]["prf"]
     prt["data"] = prt_value * np.ones(total_rays, dtype="float32")
@@ -403,8 +405,13 @@ def read_sigmet(
         prt_mode["data"] = np.array(nsweeps * ["fixed"], dtype="S")
         prt_ratio["data"] = np.ones(total_rays, dtype="float32")
 
-    wavelength_cm = sigmetfile.product_hdr["product_end"]["wavelength"]
-    nv_value = wavelength_cm / (10000.0 * 4.0 * prt_value) * prf_multiplier
+    wavelength_m = sigmetfile.product_hdr["product_end"]["wavelength"] / 10000.0
+
+    # Compute the frequency from the wavelength
+    frequency["data"] = np.array([lambda2nu(wavelength_m)], dtype="float32")
+
+    # Compute the nyquist velocity from the wavelength
+    nv_value = wavelength_m / (4.0 * prt_value) * prf_multiplier
     nyquist_velocity["data"] = nv_value * np.ones(total_rays, dtype="float32")
     beam_width_h["data"] = np.array(
         [bin4_to_angle(task_config["task_misc_info"]["horizontal_beamwidth"])],
@@ -428,6 +435,7 @@ def read_sigmet(
         "radar_beam_width_h": beam_width_h,
         "radar_beam_width_v": beam_width_v,
         "pulse_width": pulse_width,
+        "frequency": frequency,
     }
     if prf_multiplier != 1:
         prf_flag = filemetadata("prf_flag")

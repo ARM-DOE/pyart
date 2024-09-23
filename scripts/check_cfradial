@@ -67,13 +67,13 @@ class AttributeTable:
         # check for incorrect type
         if attr_obj.type_bad(type(attr)):
             tup = (self.text, attr_name, type(attr), attr_obj._type)
-            t = "%s '%s' has incorrect type: %s should be %s." % tup
+            t = "{} '{}' has incorrect type: {} should be {}.".format(*tup)
             log_error(self.section, t)
 
         # check for incorrect value
         if attr_obj.value_bad(attr):
             tup = (self.text, attr_name, attr, attr_obj.value)
-            t = "%s '%s' has incorrect value: %s should be %s." % tup
+            t = "{} '{}' has incorrect value: {} should be {}.".format(*tup)
             log_error(self.section, t)
 
     def check(self, test_var, verb=False):
@@ -170,12 +170,12 @@ class VariableTable:
         # check for incorrect type
         if var_obj.dtype_bad(var.dtype):
             tup = (self.text, var_name, var.dtype, var_obj.dtype)
-            t = "%s '%s' has incorrect type: %s should be %s" % tup
+            t = "{} '{}' has incorrect type: {} should be {}".format(*tup)
             log_error(self.section, t)
         # check for incorrect dim
         if var_obj.dim_bad(var.dimensions):
             tup = (self.text, var_name, var.dimensions, var_obj.dim)
-            t = "%s '%s' has incorrect dimensions: %s should be %s" % tup
+            t = "{} '{}' has incorrect dimensions: {} should be {}".format(*tup)
             log_error(self.section, t)
         # check for bad units
         if "units" not in var.ncattrs() and var_obj.units is not None:
@@ -184,7 +184,7 @@ class VariableTable:
             return
         if var_obj.units is not None and var_obj.units_bad(var.units):
             tup = (self.text, var_name, var.units, var_obj.units)
-            t = "%s '%s' has incorrect units: %s should be %s" % tup
+            t = "{} '{}' has incorrect units: {} should be {}".format(*tup)
             log_error(self.section, t)
 
     def check(self, dataset, verb=False):
@@ -267,7 +267,7 @@ def check_attribute(section, obj, text, attr_name, valid_choices):
         attr = getattr(obj, attr_name)
         if attr not in valid_choices:
             tup = (text, attr_name, attr, " ".join(valid_choices))
-            t = "%s '%s' has an invalid value: %s must be one of %s" % tup
+            t = "{} '{}' has an invalid value: {} must be one of {}".format(*tup)
             log_error(section, t)
     return
 
@@ -279,7 +279,7 @@ def check_char_variable(section, dataset, text, var_name, valid_options):
         value = var.tostring().strip("\x00").strip()
         if value not in valid_options:
             tup = (text, var_name, value, " ".join(valid_options))
-            t = "%s '%s' has an invalid value: %s must be one of %s" % tup
+            t = "{} '{}' has an invalid value: {} must be one of {}".format(*tup)
             log_error(section, t)
     return
 
@@ -309,7 +309,7 @@ def check_valid_time_format(section, dataset, text, var_name):
             time.strptime(s, "%Y-%m-%dT%H:%M:%SZ")
         except:
             tup = (text, var_name, s, "yyyy-mm-ddThh:mm:ssZ")
-            t = "%s '%s' has an invalid format: %s should be %s" % (tup)
+            t = "{} '{}' has an invalid format: {} should be {}".format(*tup)
             log_error(section, t)
 
 
@@ -322,14 +322,14 @@ def check_metagroup(section, dataset, meta_group_name, valid_meta_group_vars):
             var = dataset.variables[var_name]
             if "meta_group" not in var.ncattrs():
                 tup = (meta_group_name, var_name)
-                text = "%s %s does not have a `meta_group` attribute" % (tup)
+                text = "{} {} does not have a `meta_group` attribute".format(*tup)
                 log_error(section, text)
             else:
                 if var.meta_group != meta_group_name:
                     tup = (meta_group_name, var_name, var.meta_group, meta_group_name)
                     text = (
-                        "%s %s 'meta_group' attribute has incorrect "
-                        "value: %s should be %s" % (tup)
+                        "{} {} 'meta_group' attribute has incorrect "
+                        "value: {} should be {}".format(*tup)
                     )
                     log_error(section, text)
 
@@ -339,8 +339,8 @@ def check_metagroup(section, dataset, meta_group_name, valid_meta_group_vars):
     for var_name in find_all_meta_group_vars(dataset, meta_group_name):
         if var_name not in valid_meta_group_vars:
             text = (
-                "variable {} should not have its meta_group attribute "
-                "set to '{}'".format(var_name, meta_group_name)
+                f"variable {var_name} should not have its meta_group attribute "
+                f"set to '{meta_group_name}'"
             )
             log_error(section, text)
 
@@ -518,7 +518,7 @@ def check_cfradial_compliance(dataset, verb=False):
                 tup = (time_str, "yyyy-mm-ddThh:mm:ssZ")
                 t = (
                     "'time' attribute 'units' has an invalid formatted time"
-                    "value: %s should be %s" % (tup)
+                    "value: {} should be {}".format(*tup)
                 )
                 log_error("4.4.1", t)
 
@@ -530,7 +530,7 @@ def check_cfradial_compliance(dataset, verb=False):
                     tup = (time_str, s)
                     t = (
                         "time attribute 'units' does not match time in "
-                        "time_reference variable: %s verses %s" % (tup)
+                        "time_reference variable: {} verses {}".format(*tup)
                     )
                     log_error("4.4.1", t)
             elif "time_coverage_start" in dataset.variables:
@@ -540,7 +540,7 @@ def check_cfradial_compliance(dataset, verb=False):
                     tup = (time_str, s)
                     t = (
                         "time attribute 'units' does not match time in "
-                        "time_coverage_start variable: %s verses %s" % (tup)
+                        "time_coverage_start variable: {} verses {}".format(*tup)
                     )
                     log_error("4.4.1", t)
 
@@ -657,7 +657,7 @@ def check_cfradial_compliance(dataset, verb=False):
     else:  # fixed platfrom
         for v in ["heading", "roll", "pitch", "drift", "rotation", "tilt"]:
             if v in dataset.variables:
-                t = "variable '%s' must be omitted for fixed platforms" % (v)
+                t = f"variable '{v}' must be omitted for fixed platforms"
                 log_error("4.9", t)
 
     # 4.10 Moments field data variables
@@ -669,7 +669,7 @@ def check_cfradial_compliance(dataset, verb=False):
             # check the data type
             if var.dtype not in [BYTE, SHORT, INT, FLOAT, DOUBLE]:
                 tup = (var_name, var.dtype)
-                t = "field variable '%s' has invalid type: %s" % (tup)
+                t = "field variable '{}' has invalid type: {}".format(*tup)
                 log_error("4.10", t)
 
             # check attributes
@@ -682,7 +682,7 @@ def check_cfradial_compliance(dataset, verb=False):
 
             # TODO check standard_name, against variable name
             # TODO check units correct for given standard_name
-            text = "field variable %s" % var_name
+            text = f"field variable {var_name}"
             field_attrs = AttributeTable(text, "4.10")
             field_attrs.opt_attr("long_name", STRING)
             field_attrs.req_attr("standard_name", STRING)
@@ -719,8 +719,8 @@ def check_cfradial_compliance(dataset, verb=False):
             dim_0 = dataset.variables[v].dimensions[0]
             if dim_0 != "sweep":
                 text = (
-                    "instrument_parameters {} must have a first "
-                    "dimension of sweep, not {}".format(v, dim_0)
+                    f"instrument_parameters {v} must have a first "
+                    f"dimension of sweep, not {dim_0}"
                 )
                 log_error("5.1", text)
 
@@ -917,7 +917,7 @@ def check_cfradial_compliance(dataset, verb=False):
         if dim_0 != "r_calib":
             text = (
                 "radar_calibration r_calib_time must have first "
-                "dimension of 'r_calib' not '%s'" % (dim_0)
+                f"dimension of 'r_calib' not '{dim_0}'"
             )
             log_error("5.4.2", text)
         else:
@@ -967,8 +967,9 @@ def check_cfradial_compliance(dataset, verb=False):
     else:
         for var_name in valid_pv_vars:
             if var_name in dataset.variables:
-                t = "variable %s should not exist as the platform is" "stationary" % (
-                    var_name
+                t = (
+                    f"variable {var_name} should not exist as the platform is"
+                    "stationary"
                 )
                 log_error("5.6", t)
 

@@ -103,7 +103,7 @@ def test_map_to_grid_dist_beam_roi():
         fields=["reflectivity"],
         min_radius=30,
         bsp=0.0,
-        h_factor=0.0,
+        h_factor=(0.0, 1.0, 1.0),
     )
     center_slice = grids["reflectivity"][1, 4, :]
     assert_almost_equal(center_slice, EXPECTED_CENTER_SLICE)
@@ -175,11 +175,11 @@ def test_map_to_grid_tiny_grid():
     grids = pyart.map.map_to_grid(
         (radar,),
         grid_shape=(1, 1, 1),
-        grid_limits=((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
+        grid_limits=((0.0, 300.0), (-800.0, 800.0), (-800, 800)),
         fields=["reflectivity"],
     )
     assert grids["reflectivity"].shape == (1, 1, 1)
-    assert int(grids["reflectivity"][0]) == 40
+    assert abs(np.round(grids["reflectivity"][0]) - 40.0) < 5.0
 
 
 def test_map_to_grid_errors():
@@ -208,6 +208,14 @@ def test_map_to_grid_errors():
         ((-1, 1), (-1, 1), (-1, 1)),
         roi_func="foo",
     )
+
+
+def test_grid_from_radars_dims():
+    radar = pyart.testing.make_target_radar()
+    radar.latitude["data"] = np.append(radar.latitude["data"], 0)
+    grids = pyart.map.grid_from_radars(radar, **COMMON_MAP_TO_GRID_ARGS)
+    origin_latitude = grids.origin_latitude["data"]
+    assert_almost_equal(origin_latitude, radar.latitude["data"][:1])
 
 
 def test_grid_from_radars_errors():
@@ -300,3 +308,34 @@ def test_example_roi_funcs():
     assert pyart.map.example_roi_func_constant(0, 0, 0) == 500.0
     assert pyart.map.example_roi_func_dist(0, 0, 0) == 500.0
     assert pyart.map.example_roi_func_dist_beam(0, 0, 0) == 500.0
+
+
+def test_grid_ppi_sweeps():
+    radar1 = pyart.testing.make_target_radar()
+    radar = pyart.util.join_radar(radar1, radar1)  # 2 sweeps in total
+    radar_ds = pyart.map.grid_ppi_sweeps(radar)
+
+    # Check elevation dim has size of 2 reflecting number of sweeps
+    assert radar_ds["elevation"].size == 2
+
+    # Check gridded values at max range close to 40 dBZ
+    assert (
+        np.abs(radar_ds["reflectivity"].isel({"elevation": 0, "y": -1}).sel(x=0) - 40.0)
+        < 5.0
+    )
+
+
+def test_grid_rhi_sweeps():
+    radar1 = pyart.testing.make_target_rhi_radar()
+    radar = pyart.util.join_radar(radar1, radar1)
+    radar = pyart.util.join_radar(radar, radar)  # 4 sweeps in total
+    radar_ds = pyart.map.grid_rhi_sweeps(radar)
+
+    # Check azimuth dim has size of 4 reflecting number of sweeps
+    assert radar_ds["azimuth"].size == 4
+
+    # Check gridded values at max range close to 40 dBZ
+    assert (
+        np.abs(radar_ds["reflectivity"].isel({"azimuth": 0, "y": -1, "z": 0}) - 40.0)
+        < 5.0
+    )

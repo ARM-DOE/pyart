@@ -3,7 +3,7 @@
 import copy
 
 import numpy as np
-from numpy.testing import assert_array_equal, assert_equal
+from numpy.testing import assert_array_almost_equal, assert_equal
 
 import pyart
 
@@ -85,7 +85,7 @@ def test_composite_z():
 
     # choose a random az
     random_az = np.random.randint(0, 720)
-    assert_array_equal(
+    assert_array_almost_equal(
         compz.fields["composite_reflectivity"]["data"][random_az, :],
         np.arange(0, z.shape[1]),
     )

@@ -23,7 +23,7 @@ def read_nexrad_cdm(
     exclude_fields=None,
     include_fields=None,
     station=None,
-    **kwargs
+    **kwargs,
 ):
     """
     Read a Common Data Model (CDM) NEXRAD Level 2 file.
@@ -99,7 +99,7 @@ def read_nexrad_cdm(
     dattrs = dataset.ncattrs()
     dvars = dataset.variables
     if "cdm_data_type" not in dattrs or dataset.cdm_data_type != "RADIAL":
-        raise OSError("%s is not a valid CDM NetCDF file" % (filename))
+        raise OSError(f"{filename} is not a valid CDM NetCDF file")
 
     # determine the scan information
     scan_info = _scan_info(dvars)

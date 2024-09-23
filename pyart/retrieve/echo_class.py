@@ -3,12 +3,17 @@ Functions for echo classification.
 
 """
 
+from copy import deepcopy
 from warnings import warn
 
 import numpy as np
 
+# Local imports
 from ..config import get_field_name, get_fillvalue, get_metadata
+from ..core import Grid
+from ..util.radar_utils import ma_broadcast_to
 from ._echo_class import _feature_detection, steiner_class_buff
+from ._echo_class_wt import calc_scale_break, wavelet_reclass
 
 
 def steiner_conv_strat(
@@ -93,7 +98,7 @@ def steiner_conv_strat(
 
     # Get reflectivity data
     ze = np.ma.copy(grid.fields[refl_field]["data"])
-    ze = ze.filled(np.NaN)
+    ze = ze.filled(np.nan)
 
     eclass = steiner_class_buff(
         ze,
@@ -495,9 +500,7 @@ def feature_detection(
             "valid_min": 0,
             "valid_max": 3,
             "comment_1": (
-                "{} = No surface echo/Undefined, {} = Background echo, {} = Features, {} = weak echo".format(
-                    nosfcecho, bkgd_val, feat_val, weakecho
-                )
+                f"{nosfcecho} = No surface echo/Undefined, {bkgd_val} = Background echo, {feat_val} = Features, {weakecho} = weak echo"
             ),
         }
     }
@@ -580,9 +583,7 @@ def feature_detection(
             "valid_min": 0,
             "valid_max": 3,
             "comment_1": (
-                "{} = No surface echo/Undefined, {} = Background echo, {} = Features, {} = weak echo".format(
-                    nosfcecho, bkgd_val, feat_val, weakecho
-                )
+                f"{nosfcecho} = No surface echo/Undefined, {bkgd_val} = Background echo, {feat_val} = Features, {weakecho} = weak echo"
             ),
         }
 
@@ -593,9 +594,7 @@ def feature_detection(
             "valid_min": 0,
             "valid_max": 3,
             "comment_1": (
-                "{} = No surface echo/Undefined, {} = Background echo, {} = Features, {} = weak echo".format(
-                    nosfcecho, bkgd_val, feat_val, weakecho
-                )
+                f"{nosfcecho} = No surface echo/Undefined, {bkgd_val} = Background echo, {feat_val} = Features, {weakecho} = weak echo"
             ),
         }
 
@@ -604,44 +603,108 @@ def feature_detection(
 
 def hydroclass_semisupervised(
     radar,
+    hydro_names=("AG", "CR", "LR", "RP", "RN", "VI", "WS", "MH", "IH/HDG"),
+    var_names=("Zh", "ZDR", "KDP", "RhoHV", "relH"),
     mass_centers=None,
     weights=np.array([1.0, 1.0, 1.0, 0.75, 0.5]),
+    value=50.0,
+    lapse_rate=-6.5,
     refl_field=None,
     zdr_field=None,
     rhv_field=None,
     kdp_field=None,
     temp_field=None,
+    iso0_field=None,
     hydro_field=None,
+    entropy_field=None,
+    radar_freq=None,
+    temp_ref="temperature",
+    compute_entropy=False,
+    output_distances=False,
+    vectorize=False,
 ):
     """
-    Classifies precipitation echoes following the approach by Besic et al
-    (2016).
+    Classifies precipitation echoes into hydrometeor types.
+
+    The `hydroclass_semisupervised` function classifies precipitation echoes in the polarimetric radar data
+    into 9 hydrometeor types using a semi-supervised approach (Besic et al., 2016).
 
     Parameters
     ----------
     radar : radar
         Radar object.
+    hydro_names : array of str
+        name of the types of hydrometeors
+    var_names : array of str
+        name of the variables
     mass_centers : ndarray 2D, optional
         The centroids for each variable and hydrometeor class in (nclasses,
         nvariables).
     weights : ndarray 1D, optional
-        The weight given to each variable.
-    refl_field, zdr_field, rhv_field, kdp_field, temp_field : str, optional
+        The weight given to each variable. Ordered by [dBZ, ZDR, KDP, RhoHV,
+        H_ISO0]
+    value : float
+        The value controlling the rate of decay in the distance transformation
+    lapse_rate : float
+        The decrease in temperature for each vertical km [deg/km]
+    refl_field, zdr_field, rhv_field, kdp_field, temp_field, iso0_field : str
         Inputs. Field names within the radar object which represent the
         horizonal reflectivity, the differential reflectivity, the copolar
-        correlation coefficient, the specific differential phase and the
-        temperature field. A value of None for any of these parameters will
-        use the default field name as defined in the Py-ART configuration
-        file.
-    hydro_field : str, optional
+        correlation coefficient, the specific differential phase, the
+        temperature (in deg celsius) and the height respect to the iso0 fields.
+        A value of None for any of these parameters will use the default field
+        name as defined in the Py-ART configuration file.
+    hydro_field : str
         Output. Field name which represents the hydrometeor class field.
         A value of None will use the default field name as defined in the
         Py-ART configuration file.
+    entropy_field : str
+        Output. Field name which represents the entropy class field.
+        A value of None will use the default field name as defined in the
+        Py-ART configuration file.
+    radar_freq : str, optional
+        Radar frequency in Hertz (Hz) used for classification.
+        This parameter will be ignored, if the radar object has frequency information.
+    temp_ref : str
+        the field use as reference for temperature. Can be either temperature
+        or height_over_iso0
+    compute_entropy : bool
+        If true, the entropy is computed
+    output_distances : bool
+        If true, the normalized distances to the centroids for each
+        hydrometeor are provided as output
+    vectorize : bool
+        If true, a vectorized version of the class assignation is going to be
+        used
 
     Returns
     -------
+    fields_dict : dict
+        Dictionary containing the retrieved fields
+
+    The output directionary field_dict has the following keys:
+
     hydro : dict
-        Hydrometeor classification field.
+        Hydrometeor classification.
+            - 0: Not classified
+            - 1: Aggregates
+            - 2: Ice crystals
+            - 3: Light rain
+            - 4: Rimed particles
+            - 5: Rain
+            - 6: Vertically oriented ice
+            - 7: Wet snow
+            - 8: Melting hail
+            - 9: Dry hail or high-density graupel
+
+    if compute_entropy is True:
+    entropy : dict
+        Shannon entropy of the hydrometeor demixing
+
+    if output_distances is True:
+    propX : dict
+        Proportion of a given hydrometeor class in the polarimetric
+        decomposition of a radar volume
 
     References
     ----------
@@ -650,85 +713,162 @@ def hydroclass_semisupervised(
     of polarimetric radar measurements: a semi-supervised approach,
     Atmos. Meas. Tech., 9, 4425-4445, doi:10.5194/amt-9-4425-2016, 2016
 
+    Besic, N., Gehring, J., Praz, C., Figueras i Ventura, J., Grazioli, J., Gabella,
+    M., Germann, U., and Berne, A.: Unraveling hydrometeor mixtures in polarimetric
+    radar measurements, Atmos. Meas. Tech., 11, 4847–4866,
+    https://doi.org/10.5194/amt-11-4847-2018, 2018.
+
+    Usage
+    -----
+    .. code-block:: python
+        hydro_class = pyart.retrieve.hydroclass_semisupervised(
+            radar,
+            refl_field="corrected_reflectivity",
+            zdr_field="corrected_differential_reflectivity",
+            kdp_field="specific_differential_phase",
+            rhv_field="uncorrected_cross_correlation_ratio",
+            temp_field="temperature",
+        )
+
+    Notes
+    -----
+    The default hydrometeor classification is valid for C-band radars. For X-band radars,
+    if frequency information is not present in the `radar.instrument_parameters`, the user-supplied
+    `radar_freq` will be used with a warning. If both `radar.instrument_parameters` and
+    `radar_freq` parameter are missing, the algorithm defaults to the C band.
+
+    If the radar frequency information is missing from the radar object, you can add it in
+    `radar.instrument_parameters`, as follows:
+
+    .. code-block:: python
+        radar.instrument_parameters["frequency"] = {
+            "long_name": "Radar frequency",
+            "units": "Hz",
+            "data": [9.2e9]
+        }
     """
-    lapse_rate = -6.5
 
     # select the centroids as a function of frequency band
     if mass_centers is None:
         # assign coefficients according to radar frequency
-        if radar.instrument_parameters is not None:
-            if "frequency" in radar.instrument_parameters:
-                mass_centers = _get_mass_centers(
-                    radar.instrument_parameters["frequency"]["data"][0]
-                )
-            else:
-                mass_centers = _mass_centers_table()["C"]
-                warn(
-                    "Radar frequency unknown. "
-                    "Default coefficients for C band will be applied."
-                )
+        if radar.instrument_parameters and "frequency" in radar.instrument_parameters:
+            frequency = radar.instrument_parameters["frequency"]["data"][0]
+            mass_centers = _get_mass_centers(frequency)
+            warn(f"Using radar frequency from instrument parameters: {frequency}")
+        elif radar_freq is not None:
+            mass_centers = _get_mass_centers(radar_freq)
+            warn(
+                f"Radar instrument parameters are empty. Using user-supplied radar frequency: {radar_freq}"
+            )
         else:
             mass_centers = _mass_centers_table()["C"]
             warn(
-                "Radar instrument parameters is empty. So frequency is "
-                "unknown. Default coefficients for C band will be applied."
+                "Radar instrument parameters and radar_freq param are empty."
+                "So frequency is unknown. Default coefficients for C band will be applied."
             )
 
-    # parse the field parameters
-    if refl_field is None:
-        refl_field = get_field_name("reflectivity")
-    if zdr_field is None:
-        zdr_field = get_field_name("differential_reflectivity")
-    if rhv_field is None:
-        rhv_field = get_field_name("cross_correlation_ratio")
-    if kdp_field is None:
-        kdp_field = get_field_name("specific_differential_phase")
-    if temp_field is None:
-        temp_field = get_field_name("temperature")
     if hydro_field is None:
         hydro_field = get_field_name("radar_echo_classification")
+    if compute_entropy:
+        if entropy_field is None:
+            entropy_field = get_field_name("hydroclass_entropy")
 
-    # extract fields and parameters from radar
-    radar.check_field_exists(refl_field)
-    radar.check_field_exists(zdr_field)
-    radar.check_field_exists(rhv_field)
-    radar.check_field_exists(kdp_field)
-    radar.check_field_exists(temp_field)
+    # Get the data fields
+    fields_dict = {}
+    for var_name in var_names:
+        if var_name == "Zh":
+            if refl_field is None:
+                refl_field = get_field_name("reflectivity")
+            radar.check_field_exists(refl_field)
+            fields_dict.update({var_name: deepcopy(radar.fields[refl_field]["data"])})
+        elif var_name == "ZDR":
+            if zdr_field is None:
+                zdr_field = get_field_name("differential_reflectivity")
+            radar.check_field_exists(zdr_field)
+            fields_dict.update({var_name: deepcopy(radar.fields[zdr_field]["data"])})
+        elif var_name == "KDP":
+            if kdp_field is None:
+                kdp_field = get_field_name("specific_differential_phase")
+            radar.check_field_exists(kdp_field)
+            fields_dict.update({var_name: deepcopy(radar.fields[kdp_field]["data"])})
+        elif var_name == "RhoHV":
+            if rhv_field is None:
+                rhv_field = get_field_name("cross_correlation_ratio")
+            radar.check_field_exists(rhv_field)
+            fields_dict.update({var_name: deepcopy(radar.fields[rhv_field]["data"])})
+        elif var_name == "relH":
+            if temp_ref == "temperature":
+                if temp_field is None:
+                    temp_field = get_field_name("temperature")
+                radar.check_field_exists(temp_field)
+                # convert temp in relative height respect to iso0
+                temp = deepcopy(radar.fields[temp_field]["data"])
+                fields_dict.update({var_name: temp * (1000.0 / lapse_rate)})
+            else:
+                if iso0_field is None:
+                    iso0_field = get_field_name("height_over_iso0")
+                radar.check_field_exists(iso0_field)
+                fields_dict.update(
+                    {var_name: deepcopy(radar.fields[iso0_field]["data"])}
+                )
+        else:
+            raise ValueError(
+                "Variable "
+                + var_name
+                + " unknown. "
+                + "Valid variable names for hydrometeor classification are: "
+                + "relH, Zh, ZDR, KDP and RhoHV"
+            )
 
-    refl = radar.fields[refl_field]["data"]
-    zdr = radar.fields[zdr_field]["data"]
-    rhohv = radar.fields[rhv_field]["data"]
-    kdp = radar.fields[kdp_field]["data"]
-    temp = radar.fields[temp_field]["data"]
+    # standardize data and centroids
+    mc_std = np.empty(np.shape(mass_centers), dtype=fields_dict[var_names[0]].dtype)
+    for i, var_name in enumerate(var_names):
+        mc_std[:, i] = _standardize(mass_centers[:, i], var_name)
+        fields_dict[var_name] = _standardize(fields_dict[var_name], var_name)
 
-    # convert temp in relative height respect to iso0
-    relh = temp * (1000.0 / lapse_rate)
-
-    # standardize data
-    refl_std = _standardize(refl, "Zh")
-    zdr_std = _standardize(zdr, "ZDR")
-    kdp_std = _standardize(kdp, "KDP")
-    rhohv_std = _standardize(rhohv, "RhoHV")
-    relh_std = _standardize(relh, "relH")
-
-    # standardize centroids
-    mc_std = np.zeros(np.shape(mass_centers))
-    mc_std[:, 0] = _standardize(mass_centers[:, 0], "Zh")
-    mc_std[:, 1] = _standardize(mass_centers[:, 1], "ZDR")
-    mc_std[:, 2] = _standardize(mass_centers[:, 2], "KDP")
-    mc_std[:, 3] = _standardize(mass_centers[:, 3], "RhoHV")
-    mc_std[:, 4] = _standardize(mass_centers[:, 4], "relH")
+    # if entropy has to be computed get transformation parameters
+    t_vals = None
+    if compute_entropy:
+        t_vals = _compute_coeff_transform(mc_std, weights=weights, value=value)
 
     # assign to class
-    hydroclass_data, min_dist = _assign_to_class(
-        refl_std, zdr_std, kdp_std, rhohv_std, relh_std, mc_std, weights=weights
-    )
+    if vectorize:
+        hydroclass_data, entropy_data, prop_data = _assign_to_class_scan(
+            fields_dict, mc_std, var_names=var_names, weights=weights, t_vals=t_vals
+        )
+    else:
+        hydroclass_data, entropy_data, prop_data = _assign_to_class(
+            fields_dict, mc_std, weights=weights, t_vals=t_vals
+        )
 
     # prepare output fields
+    fields_dict = dict()
     hydro = get_metadata(hydro_field)
     hydro["data"] = hydroclass_data
+    hydro.update({"_FillValue": 0})
+    labels = ["NC"]
+    ticks = [1]
+    boundaries = [-0.5, 1.5]
+    for i, hydro_name in enumerate(hydro_names):
+        labels.append(hydro_name)
+        ticks.append(i + 1)
+        boundaries.append(i + 1.5)
+    hydro.update({"labels": labels, "ticks": ticks, "boundaries": boundaries})
+    fields_dict.update({"hydro": hydro})
 
-    return hydro
+    if compute_entropy:
+        entropy = get_metadata(entropy_field)
+        entropy["data"] = entropy_data
+        fields_dict.update({"entropy": entropy})
+
+        if output_distances:
+            for field_name in hydro_names:
+                field_name = "proportion_" + field_name
+                prop = get_metadata(field_name)
+                prop["data"] = prop_data[:, :, i]
+                fields_dict.update({field_name: prop})
+
+    return fields_dict
 
 
 def _standardize(data, field_name, mx=None, mn=None):
@@ -770,7 +910,9 @@ def _standardize(data, field_name, mx=None, mn=None):
         data[data < -0.5] = -0.5
         data = 10.0 * np.ma.log10(data + 0.6)
     elif field_name == "RhoHV":
-        data = 10.0 * np.ma.log10(1.0 - data)
+        # avoid infinite result
+        data[data > 1.0] = 1.0
+        data = 10.0 * np.ma.log10(1.0000000000001 - data)
 
     mask = np.ma.getmaskarray(data)
     field_std = 2.0 * (data - mn) / (mx - mn) - 1.0
@@ -782,13 +924,11 @@ def _standardize(data, field_name, mx=None, mn=None):
 
 
 def _assign_to_class(
-    zh,
-    zdr,
-    kdp,
-    rhohv,
-    relh,
+    fields_dict,
     mass_centers,
+    var_names=("Zh", "ZDR", "KDP", "RhoHV", "relH"),
     weights=np.array([1.0, 1.0, 1.0, 0.75, 0.5]),
+    t_vals=None,
 ):
     """
     Assigns an hydrometeor class to a radar range bin computing
@@ -796,57 +936,201 @@ def _assign_to_class(
 
     Parameters
     ----------
-    zh, zdr, kdp, rhohv, relh : radar fields
-        Variables used for assignment normalized to [-1, 1] values.
+    fields_dict : dict
+        Dictionary containg the variables used for assigment normalized to
+        [-1, 1] values
     mass_centers : matrix
-        Centroids normalized to [-1, 1] values.
-    weights : array, optional
-        The weight given to each variable.
+        centroids normalized to [-1, 1] values (nclasses, nvariables)
+    var_names : array of str
+        Name of the variables
+    weights : array
+        optional. The weight given to each variable (nvariables)
+    t_vals : array
+        transformation values for the distance to centroids (nclasses)
 
     Returns
     -------
     hydroclass : int array
-        The index corresponding to the assigned class.
-    mind_dist : float array
-        The minimum distance to the centroids.
+        the index corresponding to the assigned class
+    entropy : float array
+        the entropy
+    t_dist : float matrix
+        if entropy is computed, the transformed distances of each class
+        (proxy for proportions of each hydrometeor) (nrays, nbins, nclasses)
 
     """
     # prepare data
-    nrays = zh.shape[0]
-    nbins = zdr.shape[1]
+    nrays = fields_dict[var_names[0]].shape[0]
+    nbins = fields_dict[var_names[0]].shape[1]
     nclasses = mass_centers.shape[0]
     nvariables = mass_centers.shape[1]
+    dtype = fields_dict[var_names[0]].dtype
 
-    data = np.ma.array([zh, zdr, kdp, rhohv, relh])
+    hydroclass = np.ma.empty((nrays, nbins), dtype=np.uint8)
+    entropy = None
+    t_dist = None
+    if t_vals is not None:
+        entropy = np.ma.empty((nrays, nbins), dtype=dtype)
+        t_dist = np.ma.masked_all((nrays, nbins, nclasses), dtype=dtype)
+
+    for ray in range(nrays):
+        data = []
+        for var_name in var_names:
+            data.append(fields_dict[var_name][ray, :])
+        data = np.ma.array(data, dtype=dtype)
+        weights_mat = np.broadcast_to(
+            weights.reshape(nvariables, 1), (nvariables, nbins)
+        )
+        dist = np.ma.zeros((nclasses, nbins), dtype=dtype)
+
+        # compute distance: masked entries will not contribute to the distance
+        mask = np.ma.getmaskarray(fields_dict[var_names[0]][ray, :])
+        for i in range(nclasses):
+            centroids_class = mass_centers[i, :]
+            centroids_class = np.broadcast_to(
+                centroids_class.reshape(nvariables, 1), (nvariables, nbins)
+            )
+            dist_ray = np.ma.sqrt(
+                np.ma.sum(((centroids_class - data) ** 2.0) * weights_mat, axis=0)
+            )
+            dist_ray[mask] = np.ma.masked
+            dist[i, :] = dist_ray
+
+        # Get hydrometeor class
+        class_vec = dist.argsort(axis=0, fill_value=10e40)
+        hydroclass_ray = (class_vec[0, :] + 1).astype(np.uint8)
+        hydroclass_ray[mask] = 0
+        hydroclass[ray, :] = hydroclass_ray
+
+        if t_vals is None:
+            continue
+
+        # Transform the distance using the coefficient of the dominant class
+        t_vals_ray = np.ma.masked_where(mask, t_vals[class_vec[0, :]])
+        t_vals_ray = ma_broadcast_to(t_vals_ray.reshape(1, nbins), (nclasses, nbins))
+        t_dist_ray = np.ma.exp(-t_vals_ray * dist)
+
+        # set transformed distances to a value between 0 and 1
+        dist_total = np.ma.sum(t_dist_ray, axis=0)
+        dist_total = ma_broadcast_to(dist_total.reshape(1, nbins), (nclasses, nbins))
+        t_dist_ray /= dist_total
+
+        # Compute entropy
+        entropy_ray = -np.ma.sum(
+            t_dist_ray * np.ma.log(t_dist_ray) / np.ma.log(nclasses), axis=0
+        )
+        entropy_ray[mask] = np.ma.masked
+        entropy[ray, :] = entropy_ray
+
+        t_dist[ray, :, :] = np.ma.transpose(t_dist_ray)
+
+    if t_vals is not None:
+        t_dist *= 100.0
+
+    return hydroclass, entropy, t_dist
+
+
+def _assign_to_class_scan(
+    fields_dict,
+    mass_centers,
+    var_names=("Zh", "ZDR", "KDP", "RhoHV", "relH"),
+    weights=np.array([1.0, 1.0, 1.0, 0.75, 0.5]),
+    t_vals=None,
+):
+    """
+    assigns an hydrometeor class to a radar range bin computing
+    the distance between the radar variables an a centroid.
+    Computes the entire radar volume at once
+
+    Parameters
+    ----------
+    fields_dict : dict
+        Dictionary containg the variables used for assigment normalized to
+        [-1, 1] values
+    mass_centers : matrix
+        centroids normalized to [-1, 1] values
+    var_names : array of str
+        Name of the variables
+    weights : array
+        optional. The weight given to each variable
+    t_vals : matrix
+        transformation values for the distance to centroids
+        (nclasses, nvariables)
+
+    Returns
+    -------
+    hydroclass : int array
+        the index corresponding to the assigned class
+    entropy : float array
+        the entropy
+    t_dist : float matrix
+        if entropy is computed, the transformed distances of each class
+        (proxy for proportions of each hydrometeor) (nrays, nbins, nclasses)
+
+    """
+    # prepare data
+    nrays = fields_dict[var_names[0]].shape[0]
+    nbins = fields_dict[var_names[0]].shape[1]
+    nclasses = mass_centers.shape[0]
+    nvariables = mass_centers.shape[1]
+    dtype = fields_dict[var_names[0]].dtype
+
+    data = []
+    for var_name in var_names:
+        data.append(fields_dict[var_name])
+    data = np.ma.array(data, dtype=dtype)
     weights_mat = np.broadcast_to(
         weights.reshape(nvariables, 1, 1), (nvariables, nrays, nbins)
     )
-    dist = np.ma.zeros((nclasses, nrays, nbins), dtype="float64")
 
     # compute distance: masked entries will not contribute to the distance
+    mask = np.ma.getmaskarray(fields_dict[var_names[0]])
+    dist = np.ma.zeros((nrays, nbins, nclasses), dtype=dtype)
+    t_dist = None
+    entropy = None
     for i in range(nclasses):
         centroids_class = mass_centers[i, :]
         centroids_class = np.broadcast_to(
             centroids_class.reshape(nvariables, 1, 1), (nvariables, nrays, nbins)
         )
-        dist[i, :, :] = np.ma.sqrt(
+        dist_aux = np.ma.sqrt(
             np.ma.sum(((centroids_class - data) ** 2.0) * weights_mat, axis=0)
         )
+        dist_aux[mask] = np.ma.masked
+        dist[:, :, i] = dist_aux
 
-    # use very large fill_value so that masked entries will be sorted at the
-    # end. There should not be any masked entry anyway
-    class_vec = dist.argsort(axis=0, fill_value=10e40)
+    del data
+    del weights_mat
 
-    # get minimum distance. Acts as a confidence value
-    dist.sort(axis=0, fill_value=10e40)
-    min_dist = dist[0, :, :]
-
-    # Entries with non-valid reflectivity values are set to 0 (No class)
-    mask = np.ma.getmaskarray(zh)
-    hydroclass = class_vec[0, :, :] + 1
+    # Get hydrometeor class
+    class_vec = dist.argsort(axis=-1, fill_value=10e40)
+    hydroclass = np.ma.asarray(class_vec[:, :, 0] + 1, dtype=np.uint8)
     hydroclass[mask] = 0
 
-    return hydroclass, min_dist
+    if t_vals is not None:
+        # Transform the distance using the coefficient of the dominant class
+        t_vals_aux = np.ma.masked_where(mask, t_vals[class_vec[:, :, 0]])
+        t_vals_aux = ma_broadcast_to(
+            t_vals_aux.reshape(nrays, nbins, 1), (nrays, nbins, nclasses)
+        )
+        t_dist = np.ma.exp(-t_vals_aux * dist)
+        del t_vals_aux
+
+        # set distance to a value between 0 and 1
+        dist_total = np.ma.sum(t_dist, axis=-1)
+        dist_total = ma_broadcast_to(
+            dist_total.reshape(nrays, nbins, 1), (nrays, nbins, nclasses)
+        )
+        t_dist /= dist_total
+        del dist_total
+
+        # compute entroy
+        entropy = -np.ma.sum(t_dist * np.ma.log(t_dist) / np.ma.log(nclasses), axis=-1)
+        entropy[mask] = np.ma.masked
+
+        t_dist *= 100.0
+
+    return hydroclass, entropy, t_dist
 
 
 def _get_mass_centers(freq):
@@ -946,9 +1230,10 @@ def _data_limits_table():
     """
     dlimits_dict = dict()
     dlimits_dict.update({"Zh": (60.0, -10.0)})
-    dlimits_dict.update({"ZDR": (5.0, -5.0)})
+    dlimits_dict.update({"ZDR": (5.0, -1.5)})
     dlimits_dict.update({"KDP": (7.0, -10.0)})
     dlimits_dict.update({"RhoHV": (-5.23, -50.0)})
+    dlimits_dict.update({"RelH": (5000.0, -5000.0)})
 
     return dlimits_dict
 
@@ -978,3 +1263,221 @@ def get_freq_band(freq):
     warn("Unknown frequency band")
 
     return None
+
+
+def conv_strat_raut(
+    grid,
+    refl_field,
+    cappi_level=0,
+    zr_a=200,
+    zr_b=1.6,
+    core_wt_threshold=5,
+    conv_wt_threshold=1.5,
+    conv_scale_km=25,
+    min_reflectivity=5,
+    conv_min_refl=25,
+    conv_core_threshold=42,
+    override_checks=False,
+):
+    """
+    A computationally efficient method to classify radar echoes into convective cores, mixed convection,
+    and stratiform regions for gridded radar reflectivity field.
+
+    This function uses à trous wavelet transform (ATWT) for multiresolution (i.e. scale) analysis of radar field,
+    focusing on precipitation structure over reflectivity thresholds for robust echo classification (Raut et al 2008, 2020).
+
+    Parameters
+    ----------
+    grid : PyART Grid
+        Grid object containing radar data.
+    refl_field : str
+        Field name for reflectivity data in the Py-ART grid object.
+    zr_a : float, optional
+        Coefficient 'a' in the Z-R relationship Z = a*R^b for reflectivity to rain rate conversion.
+        The algorithm is not sensitive to precise values of 'zr_a' and 'zr_b'; however,
+        they must be adjusted based on the type of radar used.
+        Default is 200.
+    zr_b : float, optional
+        Coefficient 'b' in the Z-R relationship Z = a*R^b. Default is 1.6.
+    core_wt_threshold : float, optional
+        Threshold for wavelet components to separate convective cores from mix-intermediate type.
+        Default is 5. Recommended values are between 4 and 6.
+    conv_wt_threshold : float, optional
+        Threshold for significant wavelet components to separate all convection from stratiform.
+        Default is 1.5. Recommended values are between 1 and 2.
+    conv_scale_km : float, optional
+        Approximate scale break (in km) between convective and stratiform scales.
+        Scale break may vary over different regions and seasons
+        (Refere to Raut et al 2018 for more discussion on scale-breaks). Note that the
+        algorithm is insensitive to small variations in the scale break due to the
+        dyadic nature of the scaling. The actual scale break used in the calculation of wavelets
+        is returned in the output dictionary by parameter `scale_break_used`.
+        Default is 25 km. Recommended values are between 16 and 32 km.
+    min_reflectivity : float, optional
+        Minimum reflectivity threshold. Reflectivities below this value are not classified.
+        Default is 5 dBZ. This value must be greater than or equal to '0'.
+    conv_min_refl : float, optional
+        Reflectivity values lower than this threshold will be always considered as non-convective.
+        Default is 25 dBZ. Recommended values are between 25 and 30 dBZ.
+    conv_core_threshold : float, optional
+        Reflectivities above this threshold are classified as convective cores if wavelet components are significant (See: conv_wt_threshold).
+        Default is 42 dBZ.
+        Recommended value must be is greater than or equal to 40 dBZ. The algorithm is not sensitive to this value.
+    override_checks : bool, optional
+        If set to True, the function will bypass the sanity checks for above parameter values.
+        This allows the user to use custom values for parameters, even if they fall outside
+        the recommended ranges. The default is False.
+
+    Returns
+    -------
+
+    dict :
+    A dictionary structured as a Py-ART grid field, suitable for adding to a Py-ART Grid object. The dictionary
+    contains the classification data and associated metadata. The classification categories are as follows:
+        - 3: Convective Cores: associated with strong updrafts and active collision-coalescence.
+        - 2: Mixed-Intermediate: capturing a wide range of convective activities, excluding the convective cores.
+        - 1: Stratiform: remaining areas with more uniform and less intense precipitation.
+        - 0: Unclassified: for reflectivity below the minimum threshold.
+
+
+    References
+    ----------
+    Raut, B. A., Karekar, R. N., & Puranik, D. M. (2008). Wavelet-based technique to extract convective clouds from
+    infrared satellite images. IEEE Geosci. Remote Sens. Lett., 5(3), 328-330.
+
+    Raut, B. A., Seed, A. W., Reeder, M. J., & Jakob, C. (2018). A multiplicative cascade model for high‐resolution
+    space‐time downscaling of rainfall. J. Geophys. Res. Atmos., 123(4), 2050-2067.
+
+    Raut, B. A., Louf, V., Gayatri, K., Murugavel, P., Konwar, M., & Prabhakaran, T. (2020). A multiresolution technique
+    for the classification of precipitation echoes in radar data. IEEE Trans. Geosci. Remote Sens., 58(8), 5409-5415.
+    """
+
+    # Check if the grid is a Py-ART Grid object
+    if not isinstance(grid, Grid):
+        raise TypeError("The 'grid' is not a Py-ART Grid object.")
+
+    # Check if dx and dy are the same, and warn if not
+    dx = grid.x["data"][1] - grid.x["data"][0]
+    dy = grid.y["data"][1] - grid.y["data"][0]
+    if dx != dy:
+        warn(
+            "Warning: Grid resolution `dx` and `dy` should be comparable for correct results.",
+            UserWarning,
+        )
+
+    # Compute scale break (dyadic) here to paas it on as parameter to user dictionary
+    scale_break = calc_scale_break(res_meters=dx, conv_scale_km=conv_scale_km)
+
+    # From dyadic scale to km
+    scale_break_km = (2 ** (scale_break - 1)) * dx / 1000
+
+    # Sanity checks for parameters if override_checks is False
+    if not override_checks:
+        conv_core_threshold = max(
+            40, conv_core_threshold
+        )  # Ensure conv_core_threshold is at least 40 dBZ
+        core_wt_threshold = max(
+            4, min(core_wt_threshold, 6)
+        )  # core_wt_threshold should be between 4 and 6
+        conv_wt_threshold = max(
+            1, min(conv_wt_threshold, 2)
+        )  # conv_wt_threshold should be between 1 and 2
+        conv_scale_km = max(
+            16, min(conv_scale_km, 32)
+        )  # conv_scale_km should be between 15 and 30 km
+        min_reflectivity = max(
+            0, min_reflectivity
+        )  # min_reflectivity should be non-negative
+        conv_min_refl = max(
+            25, min(conv_min_refl, 30)
+        )  # conv_min_refl should be between 25 and 30 dBZ
+
+    # Call the actual wavelet_relass function to obtain radar echo classificatino
+    reclass = wavelet_reclass(
+        grid,
+        refl_field,
+        cappi_level,
+        zr_a,
+        zr_b,
+        core_wt_threshold=core_wt_threshold,
+        conv_wt_threshold=conv_wt_threshold,
+        scale_break=scale_break,
+        min_reflectivity=min_reflectivity,
+        conv_min_refl=conv_min_refl,
+        conv_core_threshold=conv_core_threshold,
+    )
+
+    reclass = np.expand_dims(reclass, axis=0)
+
+    # put data into a dictionary to be added as a field
+    reclass_dict = {
+        "wt_reclass": {
+            "data": reclass,
+            "standard_name": "wavelet_echo_class",
+            "long_name": "Wavelet-based multiresolution radar echo classification",
+            "valid_min": 0,
+            "valid_max": 3,
+            "classification_description": "0: Unclassified, 1: Stratiform, 2: Mixed-Intermediate, 3: Convective Cores",
+            "parameters": {
+                "refl_field": refl_field,
+                "cappi_level": cappi_level,
+                "zr_a": zr_a,
+                "zr_b": zr_b,
+                "core_wt_threshold": core_wt_threshold,
+                "conv_wt_threshold": conv_wt_threshold,
+                "conv_scale_km": conv_scale_km,
+                "scale_break_used": int(scale_break_km),
+                "min_reflectivity": min_reflectivity,
+                "conv_min_refl": conv_min_refl,
+                "conv_core_threshold": conv_core_threshold,
+            },
+        }
+    }
+
+    return reclass_dict
+
+
+def _compute_coeff_transform(
+    mass_centers, weights=np.array([1.0, 1.0, 1.0, 0.75, 0.5]), value=50.0
+):
+    """
+    get the transformation coefficients
+
+    Parameters
+    ----------
+    mass_centers : ndarray 2D
+        The centroids for each class and variable (nclasses, nvariables)
+    weights : array
+        optional. The weight given to each variable (nvariables)
+    value : float
+        parameter controlling the rate of decay of the distance transformation
+
+    Returns
+    -------
+    t_vals : ndarray 1D
+        The coefficients used to transform the distances to each centroid for
+        each class (nclasses)
+
+    """
+    nclasses, nvariables = np.shape(mass_centers)
+    t_vals = np.empty((nclasses, nclasses), dtype=mass_centers.dtype)
+    for i in range(nclasses):
+        weights_mat = np.broadcast_to(
+            weights.reshape(1, nvariables), (nclasses, nvariables)
+        )
+        centroids_class = mass_centers[i, :]
+        centroids_class = np.broadcast_to(
+            centroids_class.reshape(1, nvariables), (nclasses, nvariables)
+        )
+        t_vals[i, :] = np.sqrt(
+            np.sum(
+                weights_mat * np.power(np.abs(centroids_class - mass_centers), 2.0),
+                axis=1,
+            )
+        )
+
+    # pick the second lowest value (the first is 0)
+    t_vals = np.sort(t_vals, axis=-1)[:, 1]
+    t_vals = np.log(value) / t_vals
+
+    return t_vals

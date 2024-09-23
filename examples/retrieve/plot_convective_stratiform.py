@@ -21,7 +21,7 @@ import pyart
 
 ######################################
 # How the algorithm works
-# ----------
+# -----------------------
 # This first section describes how the convective-stratiform algorithm works (see references for full details). This
 # algorithm is a feature detection algorithm and classifies fields as "convective" or "stratiform". The algorithm is
 # designed to detect features in a reflectivity field but can also detect features in fields such as rain rate or
@@ -446,7 +446,7 @@ plt.show()
 
 ######################################
 # Summary of recommendations and best practices
-# ----------
+# ---------------------------------------------
 # * Tune your parameters to your specific purpose
 # * Use a rescaled field if possible (i.e. linear reflectivity, rain or snow rate)
 # * Keep ``estimate_flag=True`` to see uncertainty in classification

@@ -24,7 +24,9 @@ dependencies:
   - cftime
   - setuptools
   - shapely
-  - ruff
+  - ruff==0.4.2
+  - mda-xdrlib
+  - xradar
   - pip
   - pip:
     - cibuildwheel

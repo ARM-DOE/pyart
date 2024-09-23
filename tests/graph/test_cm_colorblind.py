@@ -1,6 +1,5 @@
 """ Unit Tests for Py-ART's graph/cm_colorblind.py module. """
 
-
 import matplotlib
 
 from pyart.graph import cm_colorblind

@@ -2,7 +2,6 @@
 Functions for reading NEXRAD level 2 files.
 """
 
-
 # This file is part of the Py-ART, the Python ARM Radar Toolkit
 # https://github.com/ARM-DOE/pyart
 
@@ -592,7 +591,7 @@ def _decompress_records(file_handler):
     cbuf = file_handler.read()  # read all data from the file
     decompressor = bz2.BZ2Decompressor()
     skip = _structure_size(VOLUME_HEADER) + CONTROL_WORD_SIZE
-    buf = decompressor.decompress(cbuf[skip:])
+    buf = bytearray(decompressor.decompress(cbuf[skip:]))
     while len(decompressor.unused_data):
         cbuf = decompressor.unused_data
         decompressor = bz2.BZ2Decompressor()

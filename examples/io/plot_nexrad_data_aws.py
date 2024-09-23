@@ -7,6 +7,7 @@ Within this example, we show how you can remotely access Next Generation Weather
 and plot quick looks of the datasets.
 
 """
+
 print(__doc__)
 
 # Author: Max Grover (mgrover@anl.gov)

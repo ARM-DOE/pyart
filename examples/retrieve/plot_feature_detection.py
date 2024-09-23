@@ -23,7 +23,7 @@ import pyart
 
 ######################################
 # How the algorithm works
-# ----------
+# -----------------------
 # The feature detection algorithm works by identifying features that exceed the background value by an amount that
 # varies with the background value. The algorithm is heavily customizable and is designed to work with a variety of
 # datasets. Here, we show several examples of how to use the algorithm with different types of radar data.
@@ -33,7 +33,7 @@ import pyart
 
 ######################################
 # Part 1: Warm-season convective-stratiform classification
-# ----------
+# --------------------------------------------------------
 # **Classification of summer convective example**
 #
 # Our first example classifies echo from a summer convective event.
@@ -395,10 +395,9 @@ cb = plt.colorbar(csopm, ax=axs[1, 1], ticks=[4 / 3, 2, 8 / 3])
 cb.ax.set_yticklabels(["Stratiform", "Convective", "Weak Echo"])
 plt.show()
 
-######################################
+#######################################
 # Part 2: Cool-season feature detection
-# ----------
-######################################
+# -------------------------------------
 # **Winter storm example**
 #
 # In this example, we will show how to algorithm can be used to detect features (snow bands) in winter storms. Here, we
@@ -778,7 +777,7 @@ cb.ax.set_yticklabels(["Background", "Strong Feature", "Faint Feature"])
 plt.show()
 ######################################
 # Summary of recommendations and best practices
-# ----------
+# ---------------------------------------------
 # * Tune your parameters to your specific purpose
 # * Use a rescaled field if possible (i.e. linear reflectivity, rain or snow rate)
 # * Keep ``estimate_flag=True`` to see uncertainty in classification

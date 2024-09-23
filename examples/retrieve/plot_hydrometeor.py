@@ -1,7 +1,7 @@
 """
-=========================================
+=============================================
 Calculate and Plot hydrometeor classification
-=========================================
+=============================================
 
 Calculates a hydrometeor classification and displays the results
 """
@@ -53,7 +53,7 @@ hydro = pyart.retrieve.hydroclass_semisupervised(
     kdp_field="specific_differential_phase",
     rhv_field="uncorrected_cross_correlation_ratio",
     temp_field="temperature",
-)
+)["hydro"]
 
 radar.add_field("radar_echo_classification", hydro)
 

@@ -144,37 +144,66 @@ def test_hydroclass_semisupervised():
 
     mass_centers = pyart.retrieve.echo_class._get_mass_centers(10e9)
 
-    hydro_nofreq = pyart.retrieve.hydroclass_semisupervised(radar_small)
+    hydro_nofreq = pyart.retrieve.hydroclass_semisupervised(radar_small)["hydro"]
     assert "units" in hydro_nofreq.keys()
     assert "standard_name" in hydro_nofreq.keys()
     assert "long_name" in hydro_nofreq.keys()
     assert "coordinates" in hydro_nofreq.keys()
 
-    assert hydro_nofreq["data"].dtype == "int64"
+    assert hydro_nofreq["data"].dtype == "uint8"
     assert_allclose(hydro_nofreq["data"][0][0:5], [6, 6, 6, 6, 6])
     assert_allclose(hydro_nofreq["data"][0][-5:], [2, 2, 2, 2, 2])
 
     radar_small.instrument_parameters["frequency"] = {"data": np.array([5e9])}
-    hydro_freq = pyart.retrieve.hydroclass_semisupervised(radar_small)
+    hydro_freq = pyart.retrieve.hydroclass_semisupervised(radar_small)["hydro"]
     assert_allclose(hydro_freq["data"][0][0:5], [6, 6, 6, 6, 6])
     assert_allclose(hydro_freq["data"][0][-5:], [2, 2, 2, 2, 2])
 
     hydro = pyart.retrieve.hydroclass_semisupervised(
-        radar_small, mass_centers=mass_centers
+        radar_small,
+        mass_centers=mass_centers,
+        compute_entropy=True,
+        output_distances=True,
     )
-    assert_allclose(hydro["data"][0][0:5], [6, 6, 6, 6, 6])
-    assert_allclose(hydro["data"][0][-5:], [2, 2, 2, 2, 2])
+    assert_allclose(hydro["hydro"]["data"][0][0:5], [6, 6, 6, 6, 6])
+    assert_allclose(hydro["hydro"]["data"][0][-5:], [2, 2, 2, 2, 2])
+    assert_allclose(
+        hydro["entropy"]["data"][0][0:5].data,
+        [0.35945634, 0.35945634, 0.35945634, 0.35945634, 0.35945634],
+        rtol=1e-5,
+    )
+    assert_allclose(
+        hydro["entropy"]["data"][0][-5:].data,
+        [0.232788, 0.232788, 0.232788, 0.232788, 0.232788],
+        rtol=1e-5,
+    )
+    assert_allclose(
+        hydro["proportion_CR"]["data"][0][0:5].data,
+        [0.03524214, 0.03524214, 0.03524214, 0.03524214, 0.03524214],
+        rtol=1e-5,
+    )
+    assert_allclose(
+        hydro["proportion_CR"]["data"][0][-5:].data,
+        [
+            8.336829723993246e-05,
+            8.336829723993246e-05,
+            8.336829723993246e-05,
+            8.336829723993246e-05,
+            8.336829723993246e-05,
+        ],
+        rtol=1e-5,
+    )
 
 
 def test_data_limits_table():
     dlimits_dict = pyart.retrieve.echo_class._data_limits_table()
     test_dict = {
         "Zh": (60.0, -10.0),
-        "ZDR": (5.0, -5.0),
+        "ZDR": (5, -1.5),
         "KDP": (7.0, -10.0),
         "RhoHV": (-5.23, -50.0),
+        "RelH": (5000, -5000),
     }
-
     assert isinstance(dlimits_dict, dict)
     assert dlimits_dict == test_dict
 
@@ -259,16 +288,12 @@ def test_assign_to_class():
     )
 
     mass_centers = pyart.retrieve.echo_class._get_mass_centers(10e9)
-    hydroclass, min_dist = pyart.retrieve.echo_class._assign_to_class(
-        zh, zdr, kdp, rhohv, relh, mass_centers
-    )
+    field_dict = {"Zh": zh, "ZDR": zdr, "KDP": kdp, "RhoHV": rhohv, "relH": relh}
 
-    assert_allclose(hydroclass[0], [7, 7, 7, 7, 7], atol=1e-7)
-    assert_allclose(
-        min_dist[0],
-        [227.0343910, 227.0343910, 227.0343910, 227.0343910, 227.0343910],
-        atol=1e-7,
+    hydroclass, _, _ = pyart.retrieve.echo_class._assign_to_class(
+        field_dict, mass_centers
     )
+    assert_allclose(hydroclass[0], [7, 7, 7, 7, 7], atol=1e-7)
 
 
 def test_standardize():
@@ -300,3 +325,98 @@ def test_standardize():
     assert_allclose(field_std_no_limits[0], [1.0, 1.0, 1.0, 1.0, 1.0], atol=1e-6)
 
     pytest.raises(ValueError, pyart.retrieve.echo_class._standardize, rhohv, "foo")
+
+
+def test_conv_strat_raut_outDict_valid():
+    """
+    Test that function returns a valid dictionary with all expected keys'.
+    """
+
+    # Test that function raises `TypeError` with invalid grid object as input.
+    pytest.raises(TypeError, pyart.retrieve.conv_strat_raut, None, "foo")
+
+    # Create a Gaussian storm grid
+    grid_len = 32
+    gaussian_storm_2d = pyart.testing.make_gaussian_storm_grid(
+        min_value=5, max_value=45, grid_len=grid_len, sigma=0.2, mu=0, masked_boundary=3
+    )
+    wtclass = pyart.retrieve.conv_strat_raut(
+        gaussian_storm_2d, "reflectivity", cappi_level=0
+    )
+
+    # First check that it's a Python dictionary
+    assert isinstance(wtclass, dict), "Output is not a dictionary"
+    # then test 'wt_reclass' key exists in the dict
+    assert "wt_reclass" in wtclass.keys()
+
+    # Now test other expected keys
+    expected_keys = [
+        "data",
+        "standard_name",
+        "long_name",
+        "valid_min",
+        "valid_max",
+        "classification_description",
+        "parameters",
+    ]
+
+    # Get the keys of the 'wt_reclass' field
+    reclass_keys = wtclass["wt_reclass"].keys()
+
+    # Check each expected key
+    for key in expected_keys:
+        assert key in reclass_keys
+
+    # check grid shape
+    assert wtclass["wt_reclass"]["data"].shape == (1, grid_len, grid_len)
+
+
+def test_conv_strat_raut_results_correct():
+    """
+    Checks the correctness of the results from the function.
+
+    I created a fixed Gaussian storm with masked boundaries as pyart grid and classified it.
+    Then constructed manually the expected classification results and compared it to the actual output from the function.
+    """
+
+    # Create a Gaussian storm grid
+    grid_len = 32
+    mask_margin = 3
+
+    gaussian_storm_2d = pyart.testing.make_gaussian_storm_grid(
+        min_value=5,
+        max_value=45,
+        grid_len=grid_len,
+        sigma=0.2,
+        mu=0,
+        masked_boundary=mask_margin,
+    )
+
+    wtclass = pyart.retrieve.conv_strat_raut(gaussian_storm_2d, "reflectivity")
+
+    # Create a 32x32 array of ones
+    test_reclass = np.ones((grid_len, grid_len))
+
+    # Mask the edges
+    test_reclass[:mask_margin, :] = np.nan
+    test_reclass[-mask_margin:, :] = np.nan
+    test_reclass[:, :mask_margin] = np.nan
+    test_reclass[:, -mask_margin:] = np.nan
+
+    # Define the center and create the 4x4 area
+    center = grid_len // 2
+    # these are actual results from successful run
+    test_reclass[center - 3 : center + 3, center - 3 : center + 3] = 2
+    test_reclass[center - 2 : center + 2, center - 2 : center + 2] = 3
+
+    test_reclass[13, 13] = 1
+    test_reclass[13, 18] = 1
+    test_reclass[18, 13] = 1
+    test_reclass[18, 18] = 1
+
+    # Creating a mask for NaN values
+    mask = np.isnan(test_reclass)
+    masked_reclass = np.ma.array(test_reclass, mask=mask).astype(np.int32)
+    masked_reclass = np.expand_dims(masked_reclass, axis=0)
+
+    assert_allclose(masked_reclass, wtclass["wt_reclass"]["data"], atol=0.1)

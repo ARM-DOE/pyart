@@ -95,7 +95,7 @@ headers = [
 @pytest.mark.parametrize("i", headers)
 def test_determine_filetype(i):
     string, filetype = i
-    check_filetype.description = "determine filetype: %s" % (filetype)
+    check_filetype.description = f"determine filetype: {filetype}"
     check_filetype(string, filetype)
 
 

@@ -161,7 +161,7 @@ def read_radx_grid(filename, exclude_fields=None, **kwargs):
             field_dic["data"].shape = field_shape
             fields[field] = field_dic
         else:
-            warnings.warn("Field %s skipped due to incorrect shape" % (field))
+            warnings.warn(f"Field {field} skipped due to incorrect shape")
 
     # radar_ variables
     if "radar_latitude" in dset.variables:

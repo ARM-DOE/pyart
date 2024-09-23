@@ -83,39 +83,17 @@ Git:
 Code Style
 ----------
 
-Py-ART follows pep8 coding standards. To make sure your code follows the
-pep8 style, you can use a variety of tools that can check for you. Two
-popular pep8 check modules are pycodestyle and pylint.
+Py-ART uses pre-commit for linting, which applies a variety of pep8 and other code style rules.
 
 For more on pep8 style:
 
 - https://www.python.org/dev/peps/pep-0008/
 
-To install pycodestyle::
+To install pre-commit hooks for the Py-ART repo::
 
-        conda install pycodestyle
+        pre-commit install
 
-To use pycodestyle::
-
-        pycodestyle filename
-
-To install pylint::
-
-        conda install pylint
-
-To get a detailed pylint report::
-
-        pylint filename
-
-If you want to just see what line number and the issue, just use::
-
-        pylint -r n filename
-
-Both of these tools are highly configurable to suit a user's taste. Refer to
-the tools documentation for details on this process.
-
-- https://pycodestyle.readthedocs.io/en/latest/
-- https://www.pylint.org/
+Afterwards, pre-commit will run on every commit to the repository. It will re-format files as neccessary.
 
 
 Python File Setup
