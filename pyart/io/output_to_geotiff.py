@@ -34,7 +34,7 @@ def write_grid_geotiff(
     sld=False,
     use_doublequotes=True,
     transparent_bg=True,
-    opacity=1.0
+    opacity=1.0,
 ):
     """
     Write a Py-ART Grid object to a GeoTIFF file.
@@ -169,8 +169,9 @@ def write_grid_geotiff(
         )
     else:
         # Assign data RGB levels based on value relative to vmax/vmin
-        rarr, garr, barr, aarr = _get_rgb_values(data, vmin, vmax, color_levels, cmap,
-                                                 transparent_bg, opacity)
+        rarr, garr, barr, aarr = _get_rgb_values(
+            data, vmin, vmax, color_levels, cmap, transparent_bg, opacity
+        )
         dst_ds = out_driver.Create(
             ofile, data.shape[1], data.shape[0], 4, gdal.GDT_Byte
         )
@@ -282,7 +283,6 @@ def _get_rgb_values(data, vmin, vmax, color_levels, cmap, transpbg, op):
                 aarr.append(int(np.round(op * 255)))
             else:
                 aarr.append(0)
-
 
     rarr = np.reshape(rarr, data.shape)
     garr = np.reshape(garr, data.shape)

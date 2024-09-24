@@ -26,7 +26,6 @@ def test__get_rgb_values_nan():
     assert np.isnan(garr[5])
 
 
-
 def test_raise_missingoptionaldepedency():
     backup = bool(pyart.io.output_to_geotiff.IMPORT_FLAG)
     pyart.io.output_to_geotiff.IMPORT_FLAG = False
@@ -55,6 +54,7 @@ def make_tiny_grid():
     grid.fields = {"reflectivity": rdic}
     return grid
 
+
 def make_tiny_grid_with_mask():
     """Make a tiny grid."""
     grid_shape = (2, 10, 8)
@@ -69,6 +69,7 @@ def make_tiny_grid_with_mask():
     rdic = {"data": fdata, "long_name": "reflectivity", "units": "dBz"}
     grid.fields = {"reflectivity": rdic}
     return grid
+
 
 @pytest.mark.skipif(
     not pyart.io.output_to_geotiff.IMPORT_FLAG, reason="GDAL is not installed."
@@ -150,6 +151,7 @@ def test_write_grid_geotiff_missing_field():
     grid = make_tiny_grid()
     pytest.raises(KeyError, pyart.io.write_grid_geotiff, grid, "test.foo", "foobar")
 
+
 @pytest.mark.skipif(
     not pyart.io.output_to_geotiff.IMPORT_FLAG, reason="GDAL is not installed."
 )
@@ -160,19 +162,22 @@ def test_write_grid_geotiff_transparent_background():
         with pyart.testing.InTemporaryDirectory() as tmpdir:
             tmp = Path(tmpdir)
             outname = tmp / "transparent_bg.tif"
-            pyart.io.write_grid_geotiff(grid, str(outname), "reflectivity",
-                                        rgb=True,
-                                        cmap='pyart_HomeyerRainbow',
-                                        vmin=0,
-                                        vmax=40,
-                                        transparent_bg=True,
-                                        opacity=1)
+            pyart.io.write_grid_geotiff(
+                grid,
+                str(outname),
+                "reflectivity",
+                rgb=True,
+                cmap="pyart_HomeyerRainbow",
+                vmin=0,
+                vmax=40,
+                transparent_bg=True,
+                opacity=1,
+            )
             imgname = outname.rename(tmp / "transparent_bg.tiff")
             img = Image.open(imgname)
             img.show()
     except PermissionError:
         pass
-
 
 
 @pytest.mark.skipif(
@@ -184,13 +189,17 @@ def test_write_grid_geotiff_opacity():
         with pyart.testing.InTemporaryDirectory() as tmpdir:
             tmp = Path(tmpdir)
             outname = tmp / "opacity.tif"
-            pyart.io.write_grid_geotiff(grid, str(outname), 'reflectivity',
-                                        rgb=True,
-                                        cmap='pyart_HomeyerRainbow',
-                                        vmin=0,
-                                        vmax=40,
-                                        transparent_bg=False,
-                                        opacity=0.25)
+            pyart.io.write_grid_geotiff(
+                grid,
+                str(outname),
+                "reflectivity",
+                rgb=True,
+                cmap="pyart_HomeyerRainbow",
+                vmin=0,
+                vmax=40,
+                transparent_bg=False,
+                opacity=0.25,
+            )
             imgname = outname.rename(tmp / "opacity.tiff")
             img = Image.open(imgname)
             img.show()
