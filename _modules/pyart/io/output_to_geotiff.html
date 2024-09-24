@@ -512,6 +512,8 @@ document.write(`
     <span class="n">warp</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">sld</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">use_doublequotes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">transparent_bg</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">opacity</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Write a Py-ART Grid object to a GeoTIFF file.</span>
@@ -579,6 +581,17 @@ document.write(`
 
 <span class="sd">        False - Use single quotes instead.</span>
 
+<span class="sd">    transparent_bg : bool, optional</span>
+<span class="sd">        True - Sets alpha value of masked pixels to zero producing a</span>
+<span class="sd">               transparent background</span>
+
+<span class="sd">        False - Sets alpha value of masked pixels to value assigned by</span>
+<span class="sd">                opacity parameter</span>
+
+<span class="sd">    opacity : float, optional</span>
+<span class="sd">        Alpha value to be assigned to all pixels (except for transparent background)</span>
+<span class="sd">        Value must be between 0 (transparent) and 1 (opaque)</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">IMPORT_FLAG</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span><span class="s2">&quot;GDAL not detected, GeoTIFF output failure!&quot;</span><span class="p">)</span>
@@ -635,9 +648,11 @@ document.write(`
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># Assign data RGB levels based on value relative to vmax/vmin</span>
-        <span class="n">rarr</span><span class="p">,</span> <span class="n">garr</span><span class="p">,</span> <span class="n">barr</span> <span class="o">=</span> <span class="n">_get_rgb_values</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">color_levels</span><span class="p">,</span> <span class="n">cmap</span><span class="p">)</span>
+        <span class="n">rarr</span><span class="p">,</span> <span class="n">garr</span><span class="p">,</span> <span class="n">barr</span><span class="p">,</span> <span class="n">aarr</span> <span class="o">=</span> <span class="n">_get_rgb_values</span><span class="p">(</span>
+            <span class="n">data</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">color_levels</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">transparent_bg</span><span class="p">,</span> <span class="n">opacity</span>
+        <span class="p">)</span>
         <span class="n">dst_ds</span> <span class="o">=</span> <span class="n">out_driver</span><span class="o">.</span><span class="n">Create</span><span class="p">(</span>
-            <span class="n">ofile</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">3</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Byte</span>
+            <span class="n">ofile</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="mi">4</span><span class="p">,</span> <span class="n">gdal</span><span class="o">.</span><span class="n">GDT_Byte</span>
         <span class="p">)</span>
 
     <span class="c1"># Common Projection and GeoTransform</span>
@@ -651,6 +666,7 @@ document.write(`
         <span class="n">dst_ds</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">WriteArray</span><span class="p">(</span><span class="n">rarr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
         <span class="n">dst_ds</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">WriteArray</span><span class="p">(</span><span class="n">garr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
         <span class="n">dst_ds</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span><span class="o">.</span><span class="n">WriteArray</span><span class="p">(</span><span class="n">barr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
+        <span class="n">dst_ds</span><span class="o">.</span><span class="n">GetRasterBand</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">WriteArray</span><span class="p">(</span><span class="n">aarr</span><span class="p">[::</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="p">:])</span>
     <span class="n">dst_ds</span><span class="o">.</span><span class="n">FlushCache</span><span class="p">()</span>
     <span class="n">dst_ds</span> <span class="o">=</span> <span class="kc">None</span>
 
@@ -681,7 +697,7 @@ document.write(`
         <span class="n">shutil</span><span class="o">.</span><span class="n">move</span><span class="p">(</span><span class="n">ofile</span> <span class="o">+</span> <span class="s2">&quot;_tmp.tif&quot;</span><span class="p">,</span> <span class="n">ofile</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">_get_rgb_values</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">color_levels</span><span class="p">,</span> <span class="n">cmap</span><span class="p">):</span>
+<span class="k">def</span> <span class="nf">_get_rgb_values</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">color_levels</span><span class="p">,</span> <span class="n">cmap</span><span class="p">,</span> <span class="n">transpbg</span><span class="p">,</span> <span class="n">op</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get RGB values for later output to GeoTIFF, given a 2D data field,</span>
 <span class="sd">    display min/max and color table info. Missing data get numpy.nan.</span>
@@ -700,6 +716,11 @@ document.write(`
 <span class="sd">        with steps &lt;&lt; 255 (e.g., hydrometeor ID).</span>
 <span class="sd">    cmap : str or matplotlib.colors.Colormap object, optional</span>
 <span class="sd">        Colormap to use for RGB output or SLD file.</span>
+<span class="sd">    transpbg : bool</span>
+<span class="sd">        True - generate alpha channel with masked values set to 0</span>
+<span class="sd">        False - generate alpha channel with masked values set to op value</span>
+<span class="sd">    op : float</span>
+<span class="sd">        Opacity of image, value of 0 is transparent, value of 1 is opaque</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -709,6 +730,8 @@ document.write(`
 <span class="sd">        Blue channel indices (range = 0-255).</span>
 <span class="sd">    garr : numpy.ndarray object, dtype int</span>
 <span class="sd">        Green channel indices (range = 0-255).</span>
+<span class="sd">    aarr : numpy.ndarray object, dtype int</span>
+<span class="sd">        Alpha channel indices (range = 0-255).</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">frac</span> <span class="o">=</span> <span class="p">(</span><span class="n">data</span> <span class="o">-</span> <span class="n">vmin</span><span class="p">)</span> <span class="o">/</span> <span class="nb">float</span><span class="p">(</span><span class="n">vmax</span> <span class="o">-</span> <span class="n">vmin</span><span class="p">)</span>
@@ -721,6 +744,7 @@ document.write(`
     <span class="n">rarr</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">garr</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">barr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">aarr</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">val</span> <span class="ow">in</span> <span class="n">index</span><span class="p">:</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
@@ -729,14 +753,21 @@ document.write(`
             <span class="n">rarr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">r</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)))</span>
             <span class="n">garr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">g</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)))</span>
             <span class="n">barr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">b</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)))</span>
+            <span class="n">aarr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">op</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)))</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">rarr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
             <span class="n">garr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
             <span class="n">barr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">transpbg</span><span class="p">:</span>
+                <span class="n">aarr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">op</span> <span class="o">*</span> <span class="mi">255</span><span class="p">)))</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">aarr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
     <span class="n">rarr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">rarr</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">garr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">garr</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
     <span class="n">barr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">barr</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">rarr</span><span class="p">,</span> <span class="n">garr</span><span class="p">,</span> <span class="n">barr</span>
+    <span class="n">aarr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">aarr</span><span class="p">,</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rarr</span><span class="p">,</span> <span class="n">garr</span><span class="p">,</span> <span class="n">barr</span><span class="p">,</span> <span class="n">aarr</span>
 
 
 <span class="k">def</span> <span class="nf">_create_sld</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">color_levels</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
