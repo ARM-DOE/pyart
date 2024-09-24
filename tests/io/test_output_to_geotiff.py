@@ -1,9 +1,11 @@
 """ Unit Tests for Py-ART's output_to_geotiff.py module. """
 
 import warnings
+from pathlib import Path
 
 import numpy as np
 import pytest
+from PIL import Image
 
 import pyart
 
@@ -16,8 +18,8 @@ def test__get_rgb_values_nan():
     data[5] = np.nan
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=RuntimeWarning)
-        rarr, barr, garr = pyart.io.output_to_geotiff._get_rgb_values(
-            data, 0, 10, None, "jet"
+        rarr, barr, garr, aarr = pyart.io.output_to_geotiff._get_rgb_values(
+            data, 0, 10, None, "jet", False, 1
         )
     assert np.isnan(rarr[5])
     assert np.isnan(barr[5])
@@ -48,6 +50,22 @@ def make_tiny_grid():
     fdata[:, 3:-3, 2:-2] = 20.0
     fdata[:, 4:-4, 3:-3] = 30.0
     fdata[1] += 5
+    rdic = {"data": fdata, "long_name": "reflectivity", "units": "dBz"}
+    grid.fields = {"reflectivity": rdic}
+    return grid
+
+
+def make_tiny_grid_with_mask():
+    """Make a tiny grid."""
+    grid_shape = (2, 10, 8)
+    grid_limits = ((0, 500), (-400000, 400000), (-300000, 300000))
+    grid = pyart.testing.make_empty_grid(grid_shape, grid_limits)
+    fdata = np.zeros((2, 10, 8), dtype="float32")
+    fdata[:, 2:-2, 1:-1] = 10.0
+    fdata[:, 3:-3, 2:-2] = 20.0
+    fdata[:, 4:-4, 3:-3] = 30.0
+    fdata[1] += 5
+    fdata[fdata == 0] = np.nan
     rdic = {"data": fdata, "long_name": "reflectivity", "units": "dBz"}
     grid.fields = {"reflectivity": rdic}
     return grid
@@ -132,3 +150,58 @@ def test_write_grid_geotiff_sld():
 def test_write_grid_geotiff_missing_field():
     grid = make_tiny_grid()
     pytest.raises(KeyError, pyart.io.write_grid_geotiff, grid, "test.foo", "foobar")
+
+
+@pytest.mark.skipif(
+    not pyart.io.output_to_geotiff.IMPORT_FLAG, reason="GDAL is not installed."
+)
+def test_write_grid_geotiff_transparent_background():
+    grid = make_tiny_grid_with_mask()
+
+    try:
+        with pyart.testing.InTemporaryDirectory() as tmpdir:
+            tmp = Path(tmpdir)
+            outname = tmp / "transparent_bg.tif"
+            pyart.io.write_grid_geotiff(
+                grid,
+                str(outname),
+                "reflectivity",
+                rgb=True,
+                cmap="pyart_HomeyerRainbow",
+                vmin=0,
+                vmax=40,
+                transparent_bg=True,
+                opacity=1,
+            )
+            imgname = outname.rename(tmp / "transparent_bg.tiff")
+            img = Image.open(imgname)
+            img.show()
+    except PermissionError:
+        pass
+
+
+@pytest.mark.skipif(
+    not pyart.io.output_to_geotiff.IMPORT_FLAG, reason="GDAL is not installed."
+)
+def test_write_grid_geotiff_opacity():
+    grid = make_tiny_grid_with_mask()
+    try:
+        with pyart.testing.InTemporaryDirectory() as tmpdir:
+            tmp = Path(tmpdir)
+            outname = tmp / "opacity.tif"
+            pyart.io.write_grid_geotiff(
+                grid,
+                str(outname),
+                "reflectivity",
+                rgb=True,
+                cmap="pyart_HomeyerRainbow",
+                vmin=0,
+                vmax=40,
+                transparent_bg=False,
+                opacity=0.25,
+            )
+            imgname = outname.rename(tmp / "opacity.tiff")
+            img = Image.open(imgname)
+            img.show()
+    except PermissionError:
+        pass
