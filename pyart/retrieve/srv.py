@@ -4,12 +4,13 @@ Calculation of storm-relative velocity from a radar object.
 """
 
 import numpy as np
+import math
 
 from ..config import get_field_name 
 
 
 def storm_relative_velocity(
-        radar, direction, speed, field):
+        radar, direction=None, speed=None, field=None, u=None, v=None):
     """
     This function calculates storm-relative Doppler velocities.
 
@@ -24,15 +25,21 @@ def storm_relative_velocity(
     direction: float or string
         Direction of the storm motion vector (where north equals 0 degrees). 
         Accepts a float or a string with the abbreviation of a cardinal or 
-        ordinal/intercardinal direction (for example: N, SE, etc.).
+        ordinal/intercardinal direction (for example: N, SE, etc.). If both
+        speed/direction and u/v are specified, speed/direction will be used.
     speed: string
         Speed of the storm motion vector.
         Units should be identical to those in the provided radar 
-        object.
-    field: string
+        object. If both speed/direction and u/v are specified, speed/direction
+        will be used.
+    field: string, optional
         Velocity field to use for storm-relative calculation. A value of None 
         will use the default field name as defined in the Py-ART configuration
         file.
+    u: float, optional
+        U-component of the storm motion
+    v: float, optional
+        V-component of the storm motion
 
     Returns
     -------
@@ -62,15 +69,29 @@ def storm_relative_velocity(
     }
 
     # Set the direction of the storm motion vector
-    if isinstance(direction, int) or isinstance(direction, float):
-        alpha = direction
-    elif isinstance(direction, str):
-        if direction in direction_dict.keys():
-            alpha = direction_dict[direction]
+    # When speed and direction are specified
+    if direction is not None:
+        if isinstance(direction, int) or isinstance(direction, float):
+            alpha = direction
+        elif isinstance(direction, str):
+            if direction in direction_dict.keys():
+                alpha = direction_dict[direction]
+            else:
+                raise ValueError('Direction string must be cardinal/ordinal direction')
         else:
-            raise ValueError('Direction string must be cardinal/ordinal direction')
+            raise ValueError('Direction must be an integer, float, or string')
+    # When u and v are specified
+    elif u is not None:
+        if v is not None:
+            speed = np.sqrt((u**2)+(v**2))
+            direction = 90-np.rad2deg(math.atan2(v/speed, u/speed))
+            if direction < 0:
+                direction = direction+360
+        else:
+            raise ValueError('Must specify both u and v components')
     else:
-        raise ValueError('Direction must be an integer, float, or string')
+        raise ValueError('Must specify either speed and direction or u and v')
+
 
     # Calculates the storm relative velocities
     # If the radar file contains only one sweep (e.g. some research radars)
