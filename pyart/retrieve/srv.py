@@ -1,5 +1,7 @@
 """
-Calculation of storm-relative velocity from a radar object.
+Calculation of storm-relative velocity from a radar object. Code written by 
+Edward C. Wolff. Modifications for single-sweep files suggested by Leanne
+Blind.
 
 """
 
@@ -13,10 +15,6 @@ def storm_relative_velocity(
         radar, direction=None, speed=None, field=None, u=None, v=None):
     """
     This function calculates storm-relative Doppler velocities.
-
-    Created by: Edward C Wolff, 2024-06-17
-    Modified by: Leanne Blind, 2024-09-12, added having a single sweep in a 
-    radar file that does not start at 0
 
     Parameters
     ----------
