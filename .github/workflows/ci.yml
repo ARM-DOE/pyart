@@ -35,10 +35,11 @@ jobs:
 
       # Install dependencies
       - name: Setup Conda Environment
-        uses: mamba-org/setup-micromamba@v1
+        uses: mamba-org/setup-micromamba@v1.9.0
         with:
           environment-file: continuous_integration/environment-ci.yml
           environment-name: pyart-dev
+          micromamba-version: '2.0.0-0'
           init-shell: >-
             bash
           cache-downloads: true
