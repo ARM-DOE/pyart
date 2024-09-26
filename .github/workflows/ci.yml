@@ -39,7 +39,10 @@ jobs:
         with:
           environment-file: continuous_integration/environment-ci.yml
           environment-name: pyart-dev
+          init-shell: >-
+            bash
           cache-downloads: true
+          post-cleanup: "all"
           create-args: python=${{ matrix.python-version }}
 
       - name: Fetch all history for all tags and branches
