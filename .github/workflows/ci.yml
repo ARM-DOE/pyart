@@ -41,7 +41,7 @@ jobs:
           environment-name: pyart-dev
           init-shell: >-
             bash
-          cache-downloads: false
+          cache-downloads: true
           post-cleanup: "all"
           create-args: python=${{ matrix.python-version }}
 
