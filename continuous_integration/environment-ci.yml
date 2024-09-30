@@ -27,10 +27,7 @@ dependencies:
   - ruff==0.4.2
   - mda-xdrlib
   - xradar
-  - pip
-  - pip:
-    - cibuildwheel
-    - pooch
-    - versioneer
-    - black
-    - git+https://github.com/openradar/open-radar-data
+  - pooch
+  - versioneer
+  - black
+  - open-radar-data
