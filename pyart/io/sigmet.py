@@ -115,6 +115,11 @@ def read_sigmet(
         Radar object.
 
     """
+    warnings.warn(
+        "Py-ART's SIGMET module is deprecated, please use xradar to read in the file using "
+        "xd.io.open_iris_datatree",
+        UserWarning,
+    )
     # test for non empty kwargs
     _test_arguments(kwargs)
 
