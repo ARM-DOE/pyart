@@ -27,7 +27,7 @@ display = pyart.graph.RadarDisplay(radar)
 # Fields to plot and ranges
 fields_to_plot = ["reflectivity_horizontal", "mean_doppler_velocity"]
 ranges = [(-20, 20), (-17.0, 17.0)]
-cmaps = ["pyart_HomeyerRainbow", "pyart_balance"]
+cmaps = ["HomeyerRainbow", "balance"]
 
 # Plot the data
 nplots = len(fields_to_plot)

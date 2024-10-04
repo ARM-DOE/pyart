@@ -170,7 +170,7 @@ ax = plt.subplot(111, projection=ccrs.PlateCarree())
 disp1 = pyart.graph.RadarMapDisplay(radar_se)
 disp1.plot_ppi_map(
     "reflectivity_bias",
-    cmap="pyart_balance",
+    cmap="balance",
     title="Reflectivity Difference \n XSAPR Southwest - XSPAR Southeast",
     sweep=1,
     ax=ax,
@@ -216,7 +216,7 @@ fig = plt.figure(figsize=(8, 6))
 
 # Create a 1-1 comparison
 x, y = np.meshgrid((bins[:-1] + bins[1:]) / 2.0, (bins[:-1] + bins[1:]) / 2.0)
-c = plt.pcolormesh(x, y, np.log10(hist.T), cmap="pyart_HomeyerRainbow")
+c = plt.pcolormesh(x, y, np.log10(hist.T), cmap="HomeyerRainbow")
 
 # Add a colorbar and labels
 plt.colorbar(c, label="$log_{10}$ counts")

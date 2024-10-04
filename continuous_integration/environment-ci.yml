@@ -31,3 +31,5 @@ dependencies:
   - versioneer
   - black
   - open-radar-data
+  - ruff
+  - cmweather

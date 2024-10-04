@@ -13,3 +13,4 @@ mda-xdrlib
 xarray!=0.21.0
 cartopy
 pint
+cmweather
