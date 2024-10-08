@@ -60,6 +60,7 @@ import cmweather  # noqa: F401
 from .convstrat_scheme_plot import plot_convstrat_scheme  # noqa
 from .gridmapdisplay import GridMapDisplay  # noqa
 from .gridmapdisplay_basemap import GridMapDisplayBasemap  # noqa
+from .max_cappi import plot_maxcappi  # noqa
 from .radardisplay import RadarDisplay  # noqa
 from .radardisplay_airborne import AirborneRadarDisplay  # noqa
 from .radarmapdisplay import RadarMapDisplay  # noqa

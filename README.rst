@@ -173,7 +173,7 @@ Other related open source software for working with weather radar data:
 Dependencies
 ============
 
-Py-ART is tested to work under Python 3.9, 3.10 and 3.11
+Py-ART is tested to work under Python 3.9, 3.10, 3.11, and 3.12.
 
 The required dependencies to install Py-ART in addition to Python are:
 
@@ -184,6 +184,7 @@ The required dependencies to install Py-ART in addition to Python are:
 * `pooch <https://pypi.org/project/pooch/>`_
 * `Cython <https://cython.readthedocs.io/en/latest/>`_
 * `setuptools <https://setuptools.pypa.io/en/latest/index.html>`_
+* `cartopy <https://scitools.org.uk/cartopy/docs/latest/>`_
 * `cmweather <https://cmweather.readthedocs.io/en/latest/>`_
 
 A working C/C++ compiler is required for some optional modules. An easy method

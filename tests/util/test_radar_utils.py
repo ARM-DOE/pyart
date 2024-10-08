@@ -50,6 +50,30 @@ def test_to_vpt():
     assert len(radar.instrument_parameters["prt_mode"]["data"]) == 108
 
 
+def test_determine_sweeps():
+    # ppi
+    radar = pyart.testing.make_empty_ppi_radar(10, 36, 3)
+    radar.elevation["data"] = radar.elevation["data"] * np.ceil(
+        np.arange(1, 36 * 3 + 1) / 36
+    )
+    pyart.util.determine_sweeps(radar)
+    assert np.all(radar.sweep_end_ray_index["data"] == [35, 71, 107])
+    assert np.all(radar.sweep_start_ray_index["data"] == [0, 36, 72])
+    assert len(radar.sweep_number["data"]) == 3
+    assert radar.nsweeps == 3
+
+    # rhi
+    radar = pyart.testing.make_empty_rhi_radar(10, 25, 5)
+    radar.azimuth["data"] = (
+        radar.azimuth["data"] * np.ceil(np.arange(1, 25 * 5 + 1) / 25) * 25
+    )
+    pyart.util.determine_sweeps(radar)
+    assert np.all(radar.sweep_end_ray_index["data"] == [24, 49, 74, 99, 124])
+    assert np.all(radar.sweep_start_ray_index["data"] == [0, 25, 50, 75, 100])
+    assert len(radar.sweep_number["data"]) == 5
+    assert radar.nsweeps == 5
+
+
 def test_subset_radar():
     radar = pyart.testing.make_empty_ppi_radar(10, 36, 3)
     field = {"data": np.ones((36 * 3, 10))}
@@ -79,6 +103,16 @@ def test_subset_radar():
     assert radarcut.elevation["data"].min() >= ele_min
     assert radarcut.elevation["data"].max() <= ele_max
     assert list(radarcut.fields) == ["f1"]
+
+
+def test_ma_broadcast_to():
+    buf = np.ma.zeros(5)
+    buf.mask = [1, 1, 0, 0, 0]
+    buf_broad = pyart.util.radar_utils.ma_broadcast_to(buf, (10, 5))
+    assert buf_broad.shape == (10, 5)
+    assert buf_broad.mask.shape == (10, 5)
+    expected_mask = np.tile(np.array([True, True, False, False, False]), [10, 1])
+    assert np.all(expected_mask == buf_broad.mask)
 
 
 # read in example file

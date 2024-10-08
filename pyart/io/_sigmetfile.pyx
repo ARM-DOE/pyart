@@ -597,7 +597,7 @@ SIGMET_DATA_TYPES = {
 def convert_sigmet_data(data_type, data, nbins):
     """ Convert sigmet data. """
     out = np.empty_like(data, dtype='float32')
-    mask = np.zeros_like(data, dtype=np.bool8)
+    mask = np.zeros_like(data, dtype='bool')
 
     data_type_name = SIGMET_DATA_TYPES[data_type]
 
@@ -714,6 +714,13 @@ def convert_sigmet_data(data_type, data, nbins):
             # this is done in the get_data method of the SigmetFile class.
             out[:] = (ndata - 128.) / 127.
             mask[ndata == 0] = True
+
+        elif data_type_name == 'VELC':
+            # VELC, 3, Velocity (1 byte)
+            # 1-byte Corrected Velocity Format, section 4.4.42
+            out[:] = (ndata - 128.) / 127. *75.
+            mask[ndata == 0] = True
+            mask[ndata == 255] = True
 
         elif data_type_name == 'WIDTH':
             # WIDTH, 4, Width (1 byte)

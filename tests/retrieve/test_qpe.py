@@ -153,3 +153,19 @@ def test_get_coeff_rkdp():
 
     coeff_rkdp_use_x = pyart.retrieve.qpe._get_coeff_rkdp(13e9)
     assert coeff_rkdp_use_x == (15.81, 0.7992)
+
+
+def test_precip_rate():
+    grid = pyart.testing.make_storm_grid()
+    grid = pyart.retrieve.ZtoR(grid)
+
+    # check that field is in grid object
+    assert "NWS_primary_prate" in grid.fields.keys()
+
+    # Calculate the estimated value
+    correct = (
+        (10 ** (grid.fields["reflectivity"]["data"][0, 10, 10] / 10.0)) / 300.0
+    ) ** (1 / 1.4)
+
+    # Check for correctness
+    assert_allclose(grid.fields["NWS_primary_prate"]["data"][0, 10, 10], correct)

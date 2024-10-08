@@ -38,7 +38,7 @@ def read_gamic(
     valid_range_from_file=True,
     units_from_file=True,
     pulse_width=None,
-    **kwargs
+    **kwargs,
 ):
     """
     Read a GAMIC hdf5 file.
@@ -167,7 +167,7 @@ def read_gamic(
     if not gfile.is_file_single_scan_type():
         raise NotImplementedError("Mixed scan_type volume.")
     if scan_type not in ["ppi", "rhi"]:
-        message = "Unknown scan type: %s, reading as RHI scans." % (scan_type)
+        message = f"Unknown scan type: {scan_type}, reading as RHI scans."
         warnings.warn(message)
         scan_type = "rhi"
 

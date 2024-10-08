@@ -15,7 +15,7 @@ dependencies:
   - cartopy
   - cvxopt
   - xarray
-  - sphinx
+  - sphinx<7.2
   - ipython
   - pandoc
   - pkg-config
@@ -34,8 +34,11 @@ dependencies:
   - nbsphinx
   - pre_commit
   - cmweather
+  - mda-xdrlib
+  - xradar
   - pip
   - pip:
       - pooch
       - versioneer
       - ablog
+      - -e ..

@@ -83,39 +83,17 @@ Git:
 Code Style
 ----------
 
-Py-ART follows pep8 coding standards. To make sure your code follows the
-pep8 style, you can use a variety of tools that can check for you. Two
-popular pep8 check modules are pycodestyle and pylint.
+Py-ART uses pre-commit for linting, which applies a variety of pep8 and other code style rules.
 
 For more on pep8 style:
 
 - https://www.python.org/dev/peps/pep-0008/
 
-To install pycodestyle::
+To install pre-commit hooks for the Py-ART repo::
 
-        conda install pycodestyle
+        pre-commit install
 
-To use pycodestyle::
-
-        pycodestyle filename
-
-To install pylint::
-
-        conda install pylint
-
-To get a detailed pylint report::
-
-        pylint filename
-
-If you want to just see what line number and the issue, just use::
-
-        pylint -r n filename
-
-Both of these tools are highly configurable to suit a user's taste. Refer to
-the tools documentation for details on this process.
-
-- https://pycodestyle.readthedocs.io/en/latest/
-- https://www.pylint.org/
+Afterwards, pre-commit will run on every commit to the repository. It will re-format files as neccessary.
 
 
 Python File Setup
@@ -160,7 +138,7 @@ documentation style.
 
 For more on the NumPy documentation style:
 
-- https://github.com/numpy/numpy/blob/master/doc/HOWTO_DOCUMENT.rst.txt
+- https://github.com/numpy/numpy/blob/main/doc/HOWTO_DOCUMENT.rst.txt
 
 An example:
 
@@ -340,9 +318,9 @@ GitHub
 
 When contributing to pyart, the changes created should be in a new branch
 under your forked repository. Let's say the user is adding a new map display.
-Instead of creating that new function in your master branch. Create a new
+Instead of creating that new function in your main branch. Create a new
 branch called ‘cartopy_map’. If everything checks out and the admin
-accepts the pull request, you can then merge the master branch and
+accepts the pull request, you can then merge the main branch and
 cartopy_map branch.
 
 To delete a branch both locally and remotely, if done with it::
@@ -362,16 +340,15 @@ To create a new branch::
 
 If you have a branch with changes that have not been added to a pull request
 but you would like to start a new branch with a different task in mind. It
-is recommended that your new branch is based on your master. First::
+is recommended that your new branch is based on your main. First::
 
-                git checkout master
-
+                git checkout main
 Then::
 
                 git checkout -b <branch_name>
 
 This way, your new branch is not a combination of your other task branch and
-the new task branch, but is based on the original master branch.
+the new task branch, but is based on the original main branch.
 
 Typing `git status` will not only inform the user of what files have been
 modified and untracked, it will also inform the user of which branch they

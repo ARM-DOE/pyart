@@ -7,6 +7,7 @@ This is an example of how to plot a cross section
 of your radar grid using the GridMapDisplay
 
 """
+
 print(__doc__)
 
 # Author: Max Grover (mgrover@anl.gov)

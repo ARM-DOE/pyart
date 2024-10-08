@@ -475,6 +475,12 @@ def est_rain_rate_hydro(
     rain : dict
         Field dictionary containing the rainfall rate.
 
+    References
+    ----------
+    Besic, N., Figueras i Ventura, J., Grazioli, J., Gabella, M., Germann, U., and Berne, A.: Hydrometeor classification
+    through statistical clustering of polarimetric radar measurements: a semi-supervised approach,
+    Atmos. Meas. Tech., 9, 4425–4445, https://doi.org/10.5194/amt-9-4425-2016, 2016.
+
     """
     # parse the field parameters
     if refl_field is None:
@@ -684,3 +690,58 @@ def _coeff_ra_table():
     coeff_ra_dict.update({"X": (45.5, 0.83)})
 
     return coeff_ra_dict
+
+
+def ZtoR(radar, ref_field="reflectivity", a=300, b=1.4, save_name="NWS_primary_prate"):
+    """
+    Convert reflectivity (dBZ) to precipitation rate (mm/hr)
+
+    Author: Laura Tomkins
+
+    Parameters
+    ----------
+    radar : Radar
+        Radar object used.
+    ref_field : str
+        Reflectivity field name to use to look up reflectivity data. In the
+        radar object. Default field name is 'reflectivity'. Units are expected
+        to be dBZ.
+    a : float
+        a value (coefficient) in the Z-R relationship
+    b: float
+        b value (exponent) in the Z-R relationship
+
+    Returns
+    -------
+    radar : Radar
+        The radar object containing the precipitation rate field
+
+    References
+    ----------
+    American Meteorological Society, 2022: "Z-R relation". Glossary of Meteorology,
+    https://glossary.ametsoc.org/wiki/Z-r_relation
+
+    """
+
+    # get reflectivity data
+    ref_data = radar.fields[ref_field]["data"]
+    ref_data = np.ma.masked_invalid(ref_data)
+
+    # convert to linear reflectivity
+    ref_linear = 10 ** (ref_data / 10)
+    precip_rate = (ref_linear / a) ** (1 / b)
+
+    # create dictionary
+    prate_dict = {
+        "data": precip_rate,
+        "standard_name": save_name,
+        "long_name": f"{save_name} rescaled from linear reflectivity",
+        "units": "mm/hr",
+        "valid_min": 0,
+        "valid_max": 10000,
+    }
+
+    # add field to radar object
+    radar.add_field(save_name, prate_dict, replace_existing=True)
+
+    return radar

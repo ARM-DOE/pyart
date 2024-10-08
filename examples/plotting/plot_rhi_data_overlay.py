@@ -7,6 +7,7 @@ An example which creates an RHI plot of velocity using a RadarDisplay object
 and adding Reflectivity contours from the same MDV file.
 
 """
+
 print(__doc__)
 
 # Author: Cory Weber (cweber@anl.gov)

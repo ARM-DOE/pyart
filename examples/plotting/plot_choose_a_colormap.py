@@ -7,6 +7,7 @@ This is an example of what colormaps are available in Py-ART,
 and how to add them to your own plots.
 
 """
+
 print(__doc__)
 
 # Author: Max Grover (mgrover@anl.gov)

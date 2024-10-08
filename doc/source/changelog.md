@@ -1,5 +1,141 @@
 # Changelog
 
+## Py-ART 1.18.1
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.18.0...v1.18.1))
+
+### Enhancements made
+
+- ENH: Dimension-dependent weighting factor flexibility in gridding [#1545](https://github.com/ARM-DOE/pyart/pull/1545) ([@isilber](https://github.com/isilber))
+- ENH: Add instrument parameter check for sinarame. [#1532](https://github.com/ARM-DOE/pyart/pull/1532) ([@zssherman](https://github.com/zssherman))
+
+### Bugs fixed
+
+- FIX: Add get_azimuth xradar [#1547](https://github.com/ARM-DOE/pyart/pull/1547) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix scipy gaussian deprecation in testing [#1544](https://github.com/ARM-DOE/pyart/pull/1544) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Update xradar requirements [#1542](https://github.com/ARM-DOE/pyart/pull/1542) ([@mgrover1](https://github.com/mgrover1))
+- FIX: consistent sweep determination for RHI at 0 degrees azimuth [#1541](https://github.com/ARM-DOE/pyart/pull/1541) ([@isilber](https://github.com/isilber))
+- FIX: Add more robust xradar/Py-ART bridge [#1537](https://github.com/ARM-DOE/pyart/pull/1537) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Use existing time extraction in Py-ART in columnsect [#1529](https://github.com/ARM-DOE/pyart/pull/1529) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Possible fix for upload failure for wheels. [#1526](https://github.com/ARM-DOE/pyart/pull/1526) ([@zssherman](https://github.com/zssherman))
+
+### Other merged PRs
+
+- Build(deps): Bump the actions group with 1 update [#1539](https://github.com/ARM-DOE/pyart/pull/1539) ([@dependabot](https://github.com/dependabot))
+- ADD: Add blog post on EPCAPE [#1534](https://github.com/ARM-DOE/pyart/pull/1534) ([@mgrover1](https://github.com/mgrover1))
+- Build(deps): Bump the actions group with 1 update [#1530](https://github.com/ARM-DOE/pyart/pull/1530) ([@dependabot](https://github.com/dependabot))
+- Build(deps): Bump the actions group with 3 updates [#1528](https://github.com/ARM-DOE/pyart/pull/1528) ([@dependabot](https://github.com/dependabot))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2024-03-07&to=2024-04-05&type=c))
+
+[@dependabot](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Adependabot+updated%3A2024-03-07..2024-04-05&type=Issues) | [@isilber](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Aisilber+updated%3A2024-03-07..2024-04-05&type=Issues) | [@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2024-03-07..2024-04-05&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2024-03-07..2024-04-05&type=Issues)
+
+## Py-ART 1.18.0
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.17.0...v1.18.0))
+
+### Enhancements made
+
+- ENH: add 'zdist_factor' input parameter to 'map_gates_to_grid'. [#1509](https://github.com/ARM-DOE/pyart/pull/1509) ([@isilber](https://github.com/isilber))
+
+### Bugs fixed
+
+- FIX: Possible fix for upload failure for wheels. [#1526](https://github.com/ARM-DOE/pyart/pull/1526) ([@zssherman](https://github.com/zssherman))
+- FIX: Fix the name of download-upload-artifact action [#1524](https://github.com/ARM-DOE/pyart/pull/1524) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix warning errors for scipy and numpy [#1519](https://github.com/ARM-DOE/pyart/pull/1519) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Update codeql.yml [#1515](https://github.com/ARM-DOE/pyart/pull/1515) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Remove the metpy pin for doc build and CI [#1507](https://github.com/ARM-DOE/pyart/pull/1507) ([@mgrover1](https://github.com/mgrover1))
+
+### Other merged PRs
+
+- ADD: Add new xdrlib drop in replacement [#1525](https://github.com/ARM-DOE/pyart/pull/1525) ([@mgrover1](https://github.com/mgrover1))
+- Build(deps): Bump the actions group with 10 updates [#1520](https://github.com/ARM-DOE/pyart/pull/1520) ([@dependabot](https://github.com/dependabot))
+- ADD: Add dependabot to track new github actions [#1518](https://github.com/ARM-DOE/pyart/pull/1518) ([@mgrover1](https://github.com/mgrover1))
+- ADD: function to create CFADs [#1492](https://github.com/ARM-DOE/pyart/pull/1492) ([@lauratomkins](https://github.com/lauratomkins))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2024-01-12&to=2024-03-07&type=c))
+
+[@dependabot](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Adependabot+updated%3A2024-01-12..2024-03-07&type=Issues) | [@dopplershift](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Adopplershift+updated%3A2024-01-12..2024-03-07&type=Issues) | [@isilber](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Aisilber+updated%3A2024-01-12..2024-03-07&type=Issues) | [@kmuehlbauer](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Akmuehlbauer+updated%3A2024-01-12..2024-03-07&type=Issues) | [@lauratomkins](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Alauratomkins+updated%3A2024-01-12..2024-03-07&type=Issues) | [@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2024-01-12..2024-03-07&type=Issues) | [@rtanamachi](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Artanamachi+updated%3A2024-01-12..2024-03-07&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2024-01-12..2024-03-07&type=Issues)
+
+## Py-ART 1.17.0
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.16.1...v1.17.0))
+
+### Enhancements made
+
+- ENH: Speed up IO for nexrad level2 file [#1504](https://github.com/ARM-DOE/pyart/pull/1504) ([@mgrover1](https://github.com/mgrover1))
+- ENH: updated feature detection function and example [#1487](https://github.com/ARM-DOE/pyart/pull/1487) ([@lauratomkins](https://github.com/lauratomkins))
+- ENH: Column Vertical Profile (CVP) Addition [#1478](https://github.com/ARM-DOE/pyart/pull/1478) ([@jrobrien91](https://github.com/jrobrien91))
+
+### Bugs fixed
+
+- FIX: Remove the metpy pin for doc build and CI [#1507](https://github.com/ARM-DOE/pyart/pull/1507) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix the failing build of the gallery [#1503](https://github.com/ARM-DOE/pyart/pull/1503) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix failing CI by pinning older metpy versions [#1501](https://github.com/ARM-DOE/pyart/pull/1501) ([@mgrover1](https://github.com/mgrover1))
+- FIX: outdated text in masking_data_with_gatefilters.ipynb [#1490](https://github.com/ARM-DOE/pyart/pull/1490) ([@isilber](https://github.com/isilber))
+- FIX: Fix setting scan_mode when scan_name is empty [#1484](https://github.com/ARM-DOE/pyart/pull/1484) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix python version used in CI system [#1482](https://github.com/ARM-DOE/pyart/pull/1482) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix the colormap in xradar examples [#1474](https://github.com/ARM-DOE/pyart/pull/1474) ([@mgrover1](https://github.com/mgrover1))
+
+### Documentation improvements
+
+- DOC: Add pre-commit section to docs [#1506](https://github.com/ARM-DOE/pyart/pull/1506) ([@mgrover1](https://github.com/mgrover1))
+- DOC: Add updated changelog for new release [#1475](https://github.com/ARM-DOE/pyart/pull/1475) ([@mgrover1](https://github.com/mgrover1))
+
+### Other merged PRs
+
+- Update rainbow_wrl.py [#1497](https://github.com/ARM-DOE/pyart/pull/1497) ([@HappyXiaoAnAn](https://github.com/HappyXiaoAnAn))
+- Reclass: Addition of New Radar Echo Classification Function [#1495](https://github.com/ARM-DOE/pyart/pull/1495) ([@RBhupi](https://github.com/RBhupi))
+- Add method to automatically determine radar sweep indices [#1493](https://github.com/ARM-DOE/pyart/pull/1493) ([@isilber](https://github.com/isilber))
+- Minor metadata correction to core.radar.get_elevation [#1489](https://github.com/ARM-DOE/pyart/pull/1489) ([@isilber](https://github.com/isilber))
+- ADD: function to rescale reflectivity to a precipitation rate [#1486](https://github.com/ARM-DOE/pyart/pull/1486) ([@lauratomkins](https://github.com/lauratomkins))
+- ADD: Ability to create a Py-ART Grid FROM an xarray object [#1479](https://github.com/ARM-DOE/pyart/pull/1479) ([@rcjackson](https://github.com/rcjackson))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2023-10-13&to=2024-01-12&type=c))
+
+[@HappyXiaoAnAn](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3AHappyXiaoAnAn+updated%3A2023-10-13..2024-01-12&type=Issues) | [@isilber](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Aisilber+updated%3A2023-10-13..2024-01-12&type=Issues) | [@jrobrien91](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ajrobrien91+updated%3A2023-10-13..2024-01-12&type=Issues) | [@kmuehlbauer](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Akmuehlbauer+updated%3A2023-10-13..2024-01-12&type=Issues) | [@lauratomkins](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Alauratomkins+updated%3A2023-10-13..2024-01-12&type=Issues) | [@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2023-10-13..2024-01-12&type=Issues) | [@RBhupi](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3ARBhupi+updated%3A2023-10-13..2024-01-12&type=Issues) | [@rcjackson](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Arcjackson+updated%3A2023-10-13..2024-01-12&type=Issues) | [@review-notebook-app](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Areview-notebook-app+updated%3A2023-10-13..2024-01-12&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2023-10-13..2024-01-12&type=Issues)
+
+## Py-ART 1.16.1
+
+([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.16.0...a91195baac7e8afcffa9aae3a62dc27f32e8ab1a))
+
+### Enhancements made
+
+- ENH: cmweather used to now import colormaps [#1452](https://github.com/ARM-DOE/pyart/pull/1452) ([@zssherman](https://github.com/zssherman))
+- EN: Update accessor.py [#1457](https://github.com/ARM-DOE/pyart/pull/1457) ([@syedhamidali](https://github.com/syedhamidali))
+- ENH: Add new xradar functionality [#1456](https://github.com/ARM-DOE/pyart/pull/1456) ([@mgrover1](https://github.com/mgrover1))
+
+### Bugs fixed
+
+- FIX: Fix the colormap in xradar examples [#1474](https://github.com/ARM-DOE/pyart/pull/1474) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix the small typo in xradar grid example [#1471](https://github.com/ARM-DOE/pyart/pull/1471) ([@mgrover1](https://github.com/mgrover1))
+- FIX: Fix failing ci isinstance [#1448](https://github.com/ARM-DOE/pyart/pull/1448) ([@mgrover1](https://github.com/mgrover1))
+
+### Documentation improvements
+
+- DOC: Add dealias example with xradar [#1472](https://github.com/ARM-DOE/pyart/pull/1472) ([@mgrover1](https://github.com/mgrover1))
+- DOC: Add xradar gridding example [#1470](https://github.com/ARM-DOE/pyart/pull/1470) ([@mgrover1](https://github.com/mgrover1))
+- DOC: Add docs for using xradar and Py-ART together [#1469](https://github.com/ARM-DOE/pyart/pull/1469) ([@mgrover1](https://github.com/mgrover1))
+- DOC: Update outdated installation instructions [#1462](https://github.com/ARM-DOE/pyart/pull/1462) ([@mgrover1](https://github.com/mgrover1))
+
+### Other merged PRs
+
+- ADD: Add python 3.12 to ci and wheels [#1473](https://github.com/ARM-DOE/pyart/pull/1473) ([@mgrover1](https://github.com/mgrover1))
+- ADD: Add gridding support from the xradar object [#1468](https://github.com/ARM-DOE/pyart/pull/1468) ([@mgrover1](https://github.com/mgrover1))
+- ADD: Update changelog for recent releases [#1450](https://github.com/ARM-DOE/pyart/pull/1450) ([@mgrover1](https://github.com/mgrover1))
+
+### Contributors to this release
+
+([GitHub contributors page for this release](https://github.com/ARM-DOE/pyart/graphs/contributors?from=2023-08-18&to=2023-10-13&type=c))
+
+[@mgrover1](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Amgrover1+updated%3A2023-08-18..2023-10-13&type=Issues) | [@review-notebook-app](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Areview-notebook-app+updated%3A2023-08-18..2023-10-13&type=Issues) | [@scollis](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Ascollis+updated%3A2023-08-18..2023-10-13&type=Issues) | [@syedhamidali](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Asyedhamidali+updated%3A2023-08-18..2023-10-13&type=Issues) | [@zssherman](https://github.com/search?q=repo%3AARM-DOE%2Fpyart+involves%3Azssherman+updated%3A2023-08-18..2023-10-13&type=Issues)
+
 ## Py-ART 1.16.0
 
 ([full changelog](https://github.com/ARM-DOE/pyart/compare/v1.15.2...ba7f3533438db44b60e1c41e7ba17dfd6350497f))

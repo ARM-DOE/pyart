@@ -6,6 +6,7 @@ Create a PPI plot from a MDV file
 An example which creates a PPI plot of a MDV file using a RadarDisplay object.
 
 """
+
 print(__doc__)
 
 # Author: Jonathan J. Helmus (jhelmus@anl.gov)

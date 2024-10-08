@@ -7,6 +7,7 @@ An example which creates a two panel RHI plot of a cfradial file.  The fields
 included in the two panels are reflectivity and doppler velocity.
 
 """
+
 print(__doc__)
 
 # Author: Max Grover (mgrover@anl.gov)

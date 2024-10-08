@@ -14,10 +14,12 @@ from .circular_stats import interval_mean  # noqa
 from .circular_stats import interval_std  # noqa
 from .circular_stats import mean_of_two_angles  # noqa
 from .circular_stats import mean_of_two_angles_deg  # noqa
+from .circular_stats import compute_directional_stats  # noqa
 from .columnsect import for_azimuth  # noqa
 from .columnsect import get_column_rays  # noqa
 from .columnsect import get_field_location  # noqa
 from .columnsect import sphere_distance  # noqa
+from .columnsect import column_vertical_profile  # noqa
 from .datetime_utils import datetime_from_dataset  # noqa
 from .datetime_utils import datetime_from_grid  # noqa
 from .datetime_utils import datetime_from_radar  # noqa
@@ -28,8 +30,10 @@ from .radar_utils import (  # noqa
     image_mute_radar,
     is_vpt,
     join_radar,
+    determine_sweeps,
     subset_radar,
     to_vpt,
+    ma_broadcast_to,
 )
 from .sigmath import (  # noqa
     angular_texture_2d,

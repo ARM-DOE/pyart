@@ -226,7 +226,7 @@ def dealias_region_based(
         if ref_vdata is not None:
             sref = ref_vdata[sweep_slice]
             gfold = (sref - scorr).mean() / nyquist_interval
-            gfold = np.ma.round(gfold)
+            gfold = round(gfold)
 
             # Anchor specific regions against reference velocity
             # Do this by constraining cost function due to difference

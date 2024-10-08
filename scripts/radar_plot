@@ -74,7 +74,7 @@ if __name__ == "__main__":
         "-v",
         "--version",
         action="version",
-        version="Py-ART version %s" % (pyart.__version__),
+        version=f"Py-ART version {pyart.__version__}",
     )
 
     # ingest arguments

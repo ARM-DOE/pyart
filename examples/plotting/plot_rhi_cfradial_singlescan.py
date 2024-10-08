@@ -7,6 +7,7 @@ An example which creates a RHI plot of a CF/Radial file using
 a RadarDisplay object.
 
 """
+
 print(__doc__)
 
 import matplotlib.pyplot as plt
@@ -29,7 +30,7 @@ colorbar_label = "Equivalent reflectivity factor (dBZ)"
 # nplots = radar.nsweeps
 
 fixed_angle = radar.fixed_angle["data"][0]
-title = "HSRHI Az=%.3f" % (fixed_angle)
+title = f"HSRHI Az={fixed_angle:.3f}"
 ax = fig.add_subplot(1, 1, 1)
 display.plot(
     "reflectivity_horizontal",

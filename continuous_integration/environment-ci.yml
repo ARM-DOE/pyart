@@ -17,19 +17,19 @@ dependencies:
   - pytest-cov
   - pytest-mpl
   - coveralls
-  - libnetcdf<=4.9.1
+  - libnetcdf
   - flake8
   - fsspec
   - glpk
   - cftime
   - setuptools
   - shapely
+  - ruff==0.4.2
+  - mda-xdrlib
+  - xradar
+  - pooch
+  - versioneer
+  - black
+  - open-radar-data
   - ruff
   - cmweather
-  - pip
-  - pip:
-    - cibuildwheel
-    - pooch
-    - versioneer
-    - black
-    - git+https://github.com/openradar/open-radar-data

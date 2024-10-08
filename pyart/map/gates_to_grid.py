@@ -2,6 +2,7 @@
 Generate a Cartesian grid by mapping from radar gates onto the grid.
 
 """
+
 import gc
 import warnings
 
@@ -35,11 +36,12 @@ def map_gates_to_grid(
     constant_roi=None,
     z_factor=0.05,
     xy_factor=0.02,
-    min_radius=500.0,
-    h_factor=1.0,
-    nb=1.5,
+    min_radius=250.0,
+    h_factor=(1.0, 1.0, 1.0),
+    nb=1.0,
     bsp=1.0,
-    **kwargs
+    dist_factor=(1.0, 1.0, 1.0),
+    **kwargs,
 ):
     """
     Map gates from one or more radars to a Cartesian grid.
@@ -94,6 +96,19 @@ def map_gates_to_grid(
     if len(radars) == 0:
         raise ValueError("Length of radars tuple cannot be zero")
 
+    # set min_radius depending on whether processing ARM radars
+    try:
+        if "platform_id" in radars[0].metadata.keys():
+            if np.any(
+                [
+                    x in radars[0].metadata["platform_id"].lower()
+                    for x in ["sacr", "sapr"]
+                ]
+            ):
+                min_radius = 100.0
+    except AttributeError:
+        pass
+
     skip_transform = False
     if len(radars) == 1 and grid_origin_alt is None and grid_origin is None:
         skip_transform = True
@@ -103,6 +118,16 @@ def map_gates_to_grid(
             grid_origin_alt = float(radars[0].altitude["data"])
         except TypeError:
             grid_origin_alt = np.mean(radars[0].altitude["data"])
+
+    # convert input h_factor and dist_factor from scalar, tuple, or list to array
+    if isinstance(h_factor, (tuple, list)):
+        h_factor = np.array(h_factor, dtype="float32")
+    elif isinstance(h_factor, float):
+        h_factor = np.full(3, h_factor, dtype="float32")
+    if isinstance(dist_factor, (tuple, list)):
+        dist_factor = np.array(dist_factor, dtype="float32")
+    elif isinstance(dist_factor, float):
+        dist_factor = np.full(3, dist_factor, dtype="float32")
 
     gatefilters = _parse_gatefilters(gatefilters, radars)
     cy_weighting_function = _detemine_cy_weighting_func(weighting_function)
@@ -172,9 +197,9 @@ def map_gates_to_grid(
             field_data,
             field_mask,
             excluded_gates,
-            toa,
             roi_func,
             cy_weighting_function,
+            dist_factor,
         )
 
     # create and return the grid dictionary
@@ -319,5 +344,5 @@ def _parse_roi_func(
         elif roi_func == "dist_beam":
             roi_func = DistBeamRoI(h_factor, nb, bsp, min_radius, offsets)
         else:
-            raise ValueError("unknown roi_func: %s" % roi_func)
+            raise ValueError(f"unknown roi_func: {roi_func}")
     return roi_func

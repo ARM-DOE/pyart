@@ -91,6 +91,16 @@ noisedBZ_vv = "noisedBZ_vv"
 rain_rate = "rain_rate"
 radar_estimated_rain_rate = "radar_estimated_rain_rate"
 radar_echo_classification = "radar_echo_classification"
+hydroclass_entropy = "hydroclass_entropy"
+proportion_AG = "proportion_AG"
+proportion_CR = "proportion_CR"
+proportion_LR = "proportion_LR"
+proportion_RP = "proportion_RP"
+proportion_RN = "proportion_RN"
+proportion_VI = "proportion_VI"
+proportion_WS = "proportion_WS"
+proportion_MH = "proportion_MH"
+proportion_IH = "proportion_IH"
 specific_attenuation = "specific_attenuation"
 specific_differential_attenuation = "specific_differential_attenuation"
 clutter_filter_power_removed = "clutter_filter_power_removed"
@@ -186,6 +196,16 @@ DEFAULT_FIELD_NAMES = {
     "rain_rate": rain_rate,
     "radar_estimated_rain_rate": radar_estimated_rain_rate,
     "radar_echo_classification": radar_echo_classification,
+    "hydroclass_entropy": hydroclass_entropy,
+    "proportion_AG": proportion_AG,
+    "proportion_CR": proportion_CR,
+    "proportion_LR": proportion_LR,
+    "proportion_RP": proportion_RP,
+    "proportion_RN": proportion_RN,
+    "proportion_VI": proportion_VI,
+    "proportion_WS": proportion_WS,
+    "proportion_MH": proportion_MH,
+    "proportion_IH": proportion_IH,
     "specific_attenuation": specific_attenuation,
     "differential_phase_texture": differential_phase_texture,
     "eastward_wind_component": eastward_wind_component,
@@ -640,6 +660,66 @@ DEFAULT_METADATA = {
         "long_name": "Radar Echo classification",
         "coordinates": "elevation azimuth range",
     },
+    hydroclass_entropy: {
+        "units": "-",
+        "standard_name": "hydroclass_entropy",
+        "long_name": "Semi-supervised hydrometeor classification entropy",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_AG: {
+        "units": "percent",
+        "standard_name": "proportion_AG",
+        "long_name": "Aggregates proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_CR: {
+        "units": "percent",
+        "standard_name": "proportion_CR",
+        "long_name": "Crystals proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_LR: {
+        "units": "percent",
+        "standard_name": "proportion_LR",
+        "long_name": "Light Rain proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_RP: {
+        "units": "percent",
+        "standard_name": "proportion_RP",
+        "long_name": "Rimed particles proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_RN: {
+        "units": "percent",
+        "standard_name": "proportion_RN",
+        "long_name": "Rain proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_VI: {
+        "units": "percent",
+        "standard_name": "proportion_VI",
+        "long_name": "Vertical Ice Crystals proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_WS: {
+        "units": "percent",
+        "standard_name": "proportion_WS",
+        "long_name": "Wet Snow proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_MH: {
+        "units": "percent",
+        "standard_name": "proportion_MH",
+        "long_name": "Melting Hail proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_IH: {
+        "units": "percent",
+        "standard_name": "proportion_IH",
+        "long_name": "Ice Hail proportion",
+        "coordinates": "elevation azimuth range",
+    },
     specific_attenuation: {
         "units": "dB/km",
         "standard_name": "specific_attenuation",
@@ -1072,6 +1152,9 @@ nexrad_level3_mapping = {
     134: None,  # High Resolution VIL
     135: None,  # Enhanced Echo Tops
     138: radar_estimated_rain_rate,  # Digital Storm Total Precipitation
+    153: reflectivity,  # Super Resolution Base Reflectivity Data Array
+    154: velocity,  # Super Resolution Base Velocity Data Array
+    155: spectrum_width,  # Super Resolution Base Spectrum Width Data Array
     159: differential_reflectivity,  # Digital Differential Reflectivity
     161: cross_correlation_ratio,  # Digital Correlation Coefficient
     163: specific_differential_phase,  # Digital Specific Differential Phase
@@ -1489,6 +1572,16 @@ DEFAULT_FIELD_LIMITS = {
     rain_rate: (0.0, 50.0),
     radar_estimated_rain_rate: (0.0, 50.0),
     radar_echo_classification: (0, 11),
+    hydroclass_entropy: (0.0, 1.0),
+    proportion_AG: (0.0, 100.0),
+    proportion_CR: (0.0, 100.0),
+    proportion_LR: (0.0, 100.0),
+    proportion_RP: (0.0, 100.0),
+    proportion_RN: (0.0, 100.0),
+    proportion_VI: (0.0, 100.0),
+    proportion_WS: (0.0, 100.0),
+    proportion_MH: (0.0, 100.0),
+    proportion_IH: (0.0, 100.0),
     specific_attenuation: (0.0, 10.0),
     differential_phase_texture: (0, 180.0),
     height: (0, 20000),

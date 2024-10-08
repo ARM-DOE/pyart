@@ -3,8 +3,8 @@ requires = [
   "setuptools",
   "setuptools_scm>=6.2",
   "wheel",
-  "cython",
-  "oldest-supported-numpy"
+  "cython>=3.0",
+  "numpy>=2.0.0rc1"
 ]
 
 [tool.black]
@@ -18,6 +18,7 @@ exclude = [
     "doc",
 ]
 
+[tool.ruff.lint]
 # E402: module level import not at top of file
 # E501: line too long - let black worry about that
 # E731: do not assign a lambda expression, use a def

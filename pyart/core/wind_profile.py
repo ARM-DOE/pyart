@@ -3,7 +3,6 @@ Storage of wind profiles.
 
 """
 
-
 import numpy as np
 
 

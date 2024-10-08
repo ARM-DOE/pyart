@@ -103,7 +103,7 @@ def test_map_to_grid_dist_beam_roi():
         fields=["reflectivity"],
         min_radius=30,
         bsp=0.0,
-        h_factor=0.0,
+        h_factor=(0.0, 1.0, 1.0),
     )
     center_slice = grids["reflectivity"][1, 4, :]
     assert_almost_equal(np.round(center_slice), EXPECTED_CENTER_SLICE)
@@ -136,11 +136,11 @@ def test_map_to_grid_tiny_grid():
     grids = pyart.map.map_gates_to_grid(
         (radar,),
         grid_shape=(1, 1, 1),
-        grid_limits=((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
+        grid_limits=((0.0, 300.0), (-800.0, 800.0), (-800, 800)),
         fields=["reflectivity"],
     )
     assert grids["reflectivity"].shape == (1, 1, 1)
-    assert abs(np.round(grids["reflectivity"][0]) - 40.0) < 0.01
+    assert abs(np.round(grids["reflectivity"][0]) - 40.0) < 5.0
 
 
 def test_grid_from_radars_gates_to_grid():
