@@ -135,7 +135,7 @@ def plot_maxcappi(
     sideticks = np.arange(max_height / 4, max_height + 1, max_height / 4).astype(int)
 
     if cmap is None:
-        cmap = "pyart_HomeyerRainbow"
+        cmap = "HomeyerRainbow"
     if vmin is None:
         vmin = grid.fields[field]["data"].min()
     if vmax is None:
