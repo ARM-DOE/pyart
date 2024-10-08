@@ -155,7 +155,7 @@ def test_write_grid_geotiff_missing_field():
 @pytest.mark.skipif(
     not pyart.io.output_to_geotiff.IMPORT_FLAG, reason="GDAL is not installed."
 )
-def test_write_grid_geotiff_transparent_background(outfile=None):
+def test_write_grid_geotiff_transparent_background():
     grid = make_tiny_grid_with_mask()
     with pyart.testing.InTemporaryDirectory() as tmpdir:
         tmp = Path(tmpdir)
