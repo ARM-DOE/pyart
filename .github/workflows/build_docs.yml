@@ -20,7 +20,7 @@ jobs:
 
       # Create environment using micromamba
       - name: Install Conda environment with Micromamba
-        uses: mamba-org/setup-micromamba@v1
+        uses: mamba-org/setup-micromamba@v2
         with:
           environment-file: doc/environment.yml
           environment-name: pyart-docs
