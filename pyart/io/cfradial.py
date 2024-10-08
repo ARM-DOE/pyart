@@ -108,6 +108,11 @@ def read_cfradial(
     This function has not been tested on "stream" Cfradial files.
 
     """
+    warnings.warn(
+        "Py-ART's CfRadial module is deprecated, please use xradar to read in the file using "
+        "xd.io.open_cfradial1_datatree",
+        UserWarning,
+    )
     # test for non empty kwargs
     _test_arguments(kwargs)
 
