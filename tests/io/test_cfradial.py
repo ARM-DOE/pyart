@@ -486,7 +486,7 @@ def attribute_equal(class1, class2, key, allow_str_case_diff=True):
     a1 = getattr(class1, key)
     a2 = getattr(class2, key)
 
-    assert type(a1) == type(a2)
+    assert isinstance(a1, a2)
 
     if isinstance(a1, str) and allow_str_case_diff:
         assert a1.upper() == a2.upper()
