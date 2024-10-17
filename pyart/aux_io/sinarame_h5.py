@@ -128,7 +128,7 @@ def read_sinarame_h5(
     hfile = h5py.File(filename, "r")
     SINARAME_object = _to_str(hfile["what"].attrs["object"])
     if SINARAME_object not in ["PVOL", "SCAN", "ELEV", "AZIM"]:
-        raise NotImplementedError("object: %s not implemented." % (SINARAME_object))
+        raise NotImplementedError(f"object: {SINARAME_object} not implemented.")
 
     # determine the number of sweeps by the number of groups which
     # begin with dataset

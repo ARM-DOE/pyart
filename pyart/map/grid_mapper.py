@@ -8,6 +8,7 @@ import warnings
 import netCDF4
 import numpy as np
 import scipy.spatial
+import xarray as xr
 
 from ..config import get_fillvalue, get_metadata
 from ..core.grid import Grid
@@ -26,7 +27,7 @@ def grid_from_radars(
     grid_limits,
     gridding_algo="map_gates_to_grid",
     copy_field_dtypes=True,
-    **kwargs
+    **kwargs,
 ):
     """
     Map one or more radars to a Cartesian grid returning a Grid object.
@@ -140,14 +141,14 @@ def grid_from_radars(
         origin_latitude["data"] = np.array([kwargs["grid_origin"][0]])
         origin_longitude["data"] = np.array([kwargs["grid_origin"][1]])
     else:
-        origin_latitude["data"] = first_radar.latitude["data"]
-        origin_longitude["data"] = first_radar.longitude["data"]
+        origin_latitude["data"] = first_radar.latitude["data"][:1]
+        origin_longitude["data"] = first_radar.longitude["data"][:1]
 
     origin_altitude = get_metadata("origin_altitude")
     if "grid_origin_alt" in kwargs:
         origin_altitude["data"] = np.array([kwargs["grid_origin_alt"]])
     else:
-        origin_altitude["data"] = first_radar.altitude["data"]
+        origin_altitude["data"] = first_radar.altitude["data"][:1]
 
     # metadata dictionary
     metadata = dict(first_radar.metadata)
@@ -296,7 +297,7 @@ def map_to_grid(
     h_factor=(1.0, 1.0, 1.0),
     nb=1.0,
     bsp=1.0,
-    **kwargs
+    **kwargs,
 ):
     """
     Map one or more radars to a Cartesian grid.
@@ -395,7 +396,9 @@ def map_to_grid(
         Radius of influence parameters for the built in 'dist_beam' function.
         The parameter correspond to the height scaling, virtual beam width,
         virtual beam spacing, and minimum radius of influence.
-        NOTE: the default `min_radius` value is smaller for ARM radars
+        NOTE: the default `min_radius` value is smaller for ARM SACR and SAPR
+        radars (those radars are operated at range resolution of 100 m or
+        higher).
         to reflect their higher resolution relative to precipitation radars..
         These parameters are only used when `roi_func` is 'dist_mean'.
     copy_field_data : bool
@@ -469,7 +472,7 @@ def map_to_grid(
     if weighting_function.upper() not in ["CRESSMAN", "BARNES2", "BARNES", "NEAREST"]:
         raise ValueError("unknown weighting_function")
     if algorithm not in ["kd_tree"]:
-        raise ValueError("unknown algorithm: %s" % algorithm)
+        raise ValueError(f"unknown algorithm: {algorithm}")
     badval = get_fillvalue()
 
     # parse the grid_projection
@@ -655,7 +658,7 @@ def map_to_grid(
         elif roi_func == "dist_beam":
             roi_func = _gen_roi_func_dist_beam(h_factor, nb, bsp, min_radius, offsets)
         else:
-            raise ValueError("unknown roi_func: %s" % roi_func)
+            raise ValueError(f"unknown roi_func: {roi_func}")
 
     # create array to hold interpolated grid data and roi if requested
     grid_data = np.ma.empty((nz, ny, nx, nfields), dtype=np.float64)
@@ -881,3 +884,241 @@ def _gen_roi_func_dist_beam(h_factor, nb, bsp, min_radius, offsets):
         return min(r)
 
     return roi
+
+
+def grid_ppi_sweeps(
+    radar,
+    target_sweeps=None,
+    grid_size=801,
+    grid_limits="auto",
+    max_z=12000.0,
+    el_rounding_frac=0.25,
+    add_grid_altitude=True,
+    **kwargs,
+):
+    """
+    Separately grid PPI sweeps to an X-Y plane considering only horizontal distances
+    in grid RoI and weighting function.
+    Gridding is performed using the `grid_from_radars` method, which receives any
+    additional input parameters.
+    Note that `h_factor` and `dist_factor` should not be included in kwargs (required
+    for valid gridding results)
+
+    Parameters
+    ----------
+    radar : Radar
+        Radar volume containing PPI sweeps.
+    target_sweeps : int or list
+        sweeps to grid. Using all sweeps in `radar` if None.
+    grid_size: int or 2-tuple
+        grid dimension size. Using sizes for the X-Y plane if tuple.
+        This input parameter is ignored if `grid_shape` is given
+        explicitly via kwargs.
+    grid_limits: 3-tuple with 2-tuple elements or 'auto'
+        if 'auto' using the maximum horizontal range rounded up to the nearest kilometer
+        and limiting vertically up to `max_z`.
+    max_z: float
+        maximum height to consider in gridding (only used if `grid_limits` is 'auto')
+    el_rounding_frac: float
+        A fraction for rounding the elevation elements. This variables is also used to
+        represent the sweep for altitude estimation.
+    add_grid_altitude: bool
+        adding a sweep-dependent altitude estimate corresponding to the X-Y plane if True.
+        This output field is useful considering the slanted PPI scans.
+
+    Returns
+    -------
+    radar_ds : xarray.Dataset
+        Radar data gridded to the X-Y plane with a third dimension
+        representing the different sweep elevations.
+
+    """
+    if target_sweeps is None:
+        target_sweeps = radar.sweep_number["data"]
+    elif isinstance(target_sweeps, int):
+        target_sweeps = [target_sweeps]
+
+    # Set grid shape
+    if "grid_shape" not in kwargs.keys():
+        if isinstance(grid_size, int):
+            grid_shape = (1, grid_size, grid_size)
+        elif isinstance(grid_size, tuple):
+            grid_shape = (1, *grid_size)
+        else:
+            raise TypeError("'grid_shape' must be of type int or tuple")
+
+    # Set grid limits in 'auto' option
+    if isinstance(grid_limits, str):
+        if grid_limits == "auto":
+            max_xy = np.max(
+                [np.max(radar.get_gate_x_y_z(sweep=sw)[0]) for sw in target_sweeps]
+            )
+            max_xy = np.ceil(max_xy / 1e3) * 1e3
+            grid_limits = ((0.0, max_z), (-max_xy, max_xy), (-max_xy, max_xy))
+        else:
+            raise ValueError(f"Unknown 'grid_limits' processing string {grid_limits}")
+
+    # Calling the gridding method
+    radar_ds = None
+
+    # Use all sweeps if no target sweep is provided
+    if target_sweeps is None:
+        target_sweeps = np.arange(radar.nsweeps)
+
+    for sweep in target_sweeps:
+        radar_sw = radar.extract_sweeps([sweep])
+        sweep_grid = grid_from_radars(
+            (radar_sw,),
+            grid_shape=grid_shape,
+            grid_limits=grid_limits,
+            h_factor=(0.0, 1.0, 1.0),
+            dist_factor=(0.0, 1.0, 1.0),
+            **kwargs,
+        )
+
+        # Convert to xarray.Dataset and finalize
+        el_round = (
+            np.mean(radar_sw.elevation["data"]) / el_rounding_frac
+        ).round() * el_rounding_frac
+        radar_ds_tmp = sweep_grid.to_xarray().squeeze()
+        if add_grid_altitude:
+            alt_est = (radar_ds_tmp["x"] ** 2 + radar_ds_tmp["y"] ** 2) ** 0.5 * np.tan(
+                el_round * np.pi / 180.0
+            )
+        radar_ds_tmp["altitude_est"] = xr.DataArray(
+            alt_est,
+            coords=radar_ds_tmp.coords,
+            dims=radar_ds_tmp.dims,
+            attrs={"long_name": "Estimated altitude in PPI scan", "units": "m"},
+        )
+        radar_ds_tmp = radar_ds_tmp.expand_dims(elevation=[el_round])
+        radar_ds_tmp["elevation"].attrs = {
+            "long_name": "Elevation angle",
+            "units": "deg",
+        }
+        if radar_ds is None:
+            radar_ds = radar_ds_tmp
+        else:
+            radar_ds = xr.concat((radar_ds, radar_ds_tmp), dim="elevation")
+
+    return radar_ds
+
+
+def grid_rhi_sweeps(
+    radar,
+    target_sweeps=None,
+    grid_size=801,
+    grid_limits="auto",
+    max_z=12000.0,
+    az_rounding_frac=0.25,
+    **kwargs,
+):
+    """
+    Separately grid RHI sweeps to a Y-Z plane considering only cross-sectional distances
+    in grid RoI and weighting function.
+    Gridding is performed using the `grid_from_radars` method, which receives any
+    additional input parameters.
+    Note that `h_factor` and `dist_factor` should not be included in kwargs (required
+    for valid gridding results)
+
+    Parameters
+    ----------
+    radar : Radar
+        Radar volume containing PPI sweeps.
+    target_sweeps : int or list
+        sweeps to grid. Using all sweeps in `radar` if None.
+    grid_size: int or 2-tuple
+        grid dimension size. Using sizes for the Y-Z plane if tuple.
+        This input parameter is ignored if `grid_shape` is given
+        explicitly via kwargs.
+    max_z: float
+        maximum height in grid (only used if `grid_limits` is 'auto').
+    grid_limits: 3-tuple with 2-tuple elements or 'auto'
+        if 'auto' using the maximum horizontal range and limiting vertically up to 12 km.
+    az_rounding_frac: float
+        A fraction for rounding the azimuth elements.
+
+    Returns
+    -------
+    radar_ds : xarray.Dataset
+        Radar data gridded to the Y-Z plane with a third dimension
+        representing the different sweep azimuths.
+
+    """
+    if target_sweeps is None:
+        target_sweeps = radar.sweep_number["data"]
+    elif isinstance(target_sweeps, int):
+        target_sweeps = [target_sweeps]
+
+    # Set grid shape
+    if "grid_shape" not in kwargs.keys():
+        if isinstance(grid_size, int):
+            grid_shape = (grid_size, grid_size, 1)
+        elif isinstance(grid_size, tuple):
+            grid_shape = (*grid_size, 1)
+        else:
+            raise TypeError("'grid_shape' must be of type int or tuple")
+
+    # Set grid limits in 'auto' option
+    if isinstance(grid_limits, str):
+        if grid_limits == "auto":
+            max_xy = np.max(
+                [np.max(radar.get_gate_x_y_z(sweep=sw)[0]) for sw in target_sweeps]
+            )
+            max_xy = np.ceil(max_xy / 1e3) * 1e3
+            grid_limits = ((0.0, max_z), (-max_xy, max_xy), (-max_xy, max_xy))
+        else:
+            raise ValueError(f"Unknown 'grid_limits' processing string {grid_limits}")
+
+    # Calling the gridding method
+    radar_ds = None
+
+    # Use all sweeps if no target sweep is provided
+    if target_sweeps is None:
+        target_sweeps = np.arange(radar.nsweeps)
+
+    for sweep in target_sweeps:
+        radar_sw = radar.extract_sweeps([sweep])
+        if (
+            np.max(radar_sw.azimuth["data"]) - np.min(radar_sw.azimuth["data"]) > 180.0
+        ):  # 0 or 180 deg sweep
+            if np.any(radar_sw.azimuth["data"] > 180.0):
+                diff_center = 180.0  # 0 to 360 deg
+            else:
+                diff_center = 0.0  # -180 to 180
+            az_round = (
+                np.abs(
+                    np.mean(
+                        radar_sw.azimuth["data"]
+                        - 360.0 * (radar_sw.azimuth["data"] > diff_center).astype(int)
+                    )
+                    / az_rounding_frac
+                ).round()
+                * az_rounding_frac
+            )
+        else:
+            az_round = (
+                np.mean(radar_sw.azimuth["data"]) / az_rounding_frac
+            ).round() * az_rounding_frac
+        radar_sw.azimuth[
+            "data"
+        ] -= az_round  # centering azimuth values to 0 to maximize grid range
+        sweep_grid = grid_from_radars(
+            (radar_sw,),
+            grid_shape=grid_shape,
+            grid_limits=grid_limits,
+            h_factor=(1.0, 1.0, 0.0),
+            dist_factor=(1.0, 1.0, 0.0),
+            **kwargs,
+        )
+
+        # Convert to xarray.Dataset and finalize
+        radar_ds_tmp = sweep_grid.to_xarray().squeeze()
+        radar_ds_tmp = radar_ds_tmp.expand_dims(azimuth=[az_round])
+        radar_ds_tmp["azimuth"].attrs = {"long_name": "Azimuth angle", "units": "deg"}
+        if radar_ds is None:
+            radar_ds = radar_ds_tmp
+        else:
+            radar_ds = xr.concat((radar_ds, radar_ds_tmp), dim="azimuth")
+
+    return radar_ds

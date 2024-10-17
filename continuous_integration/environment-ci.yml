@@ -24,14 +24,14 @@ dependencies:
   - cftime
   - setuptools
   - shapely
-  - ruff
+  - ruff==0.4.2
   - mda-xdrlib
   - xradar
+  - pooch
+  - versioneer
+  - black
+  - open-radar-data
   - pip
   - pip:
     - cibuildwheel
-    - pooch
-    - versioneer
     - glpk
-    - black
-    - git+https://github.com/openradar/open-radar-data

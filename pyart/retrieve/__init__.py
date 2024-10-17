@@ -21,7 +21,8 @@ from .qpe import est_rain_rate_za  # noqa
 from .qpe import est_rain_rate_zkdp  # noqa
 from .qpe import est_rain_rate_zpoly  # noqa
 from .qpe import ZtoR  # noqa
-from .qvp import quasi_vertical_profile  # noqa
+from .qvp import quasi_vertical_profile, compute_qvp, compute_rqvp  # noqa
+from .qvp import compute_evp, compute_svp, compute_vp, compute_ts_along_coord  # noqa
 from .simple_moment_calculations import calculate_snr_from_reflectivity  # noqa
 from .simple_moment_calculations import calculate_velocity_texture  # noqa
 from .simple_moment_calculations import compute_cdr  # noqa
@@ -31,5 +32,6 @@ from .simple_moment_calculations import compute_snr  # noqa
 from .spectra_calculations import dealias_spectra, spectra_moments  # noqa
 from .vad import vad_browning, vad_michelson  # noqa
 from .cfad import create_cfad  # noqa
+from .cappi import create_cappi  # noqa
 
 __all__ = [s for s in dir() if not s.startswith("_")]

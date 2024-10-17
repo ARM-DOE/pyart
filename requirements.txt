@@ -1,6 +1,6 @@
 numpy
 scipy
-netCDF4
+netCDF4>=1.7.0
 matplotlib
 pooch
 cftime
@@ -11,3 +11,5 @@ xradar>=0.5.0
 pandas
 mda-xdrlib
 xarray!=0.21.0
+cartopy
+pint

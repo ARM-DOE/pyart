@@ -3,7 +3,6 @@ Utilities for reading and writing of MDV grid files.
 
 """
 
-
 import datetime
 import warnings
 
@@ -160,9 +159,9 @@ def write_grid_mdv(filename, grid, mdv_field_names=None, field_write_order=None)
             d["data_element_nbytes"] = 4
         else:
             raise TypeError(
-                "Unsuported encoding %s, encoding must be "
+                f"Unsuported encoding {dtype}, encoding must be "
                 "uint8, uint16 or float32 as specfied by "
-                "the '_Write_as_dtype key" % dtype
+                "the '_Write_as_dtype key"
             )
         d["compression_type"] = 3  # zlib
 
@@ -233,7 +232,7 @@ def read_grid_mdv(
     file_field_names=False,
     exclude_fields=None,
     delay_field_loading=False,
-    **kwargs
+    **kwargs,
 ):
     """
     Read a MDV file to a Grid Object.

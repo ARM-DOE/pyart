@@ -69,7 +69,7 @@ def column_vertical_profile(
     total_moment.update({"height": [], "time_offset": []})
 
     # Define the start of the radar volume
-    base_time = pd.to_datetime(radar.time["units"][14:]).to_numpy()
+    base_time = np.datetime64(datetime_from_radar(radar).isoformat(), "ns")
 
     # call the sphere_distance function
     dis = sphere_distance(
@@ -351,7 +351,7 @@ def get_field_location(radar, latitude, longitude):
 
     # Determine the time at the center of each ray within the column
     # Define the start of the radar volume as a numpy datetime object for xr
-    base_time = np.datetime64(datetime_from_radar(radar).isoformat())
+    base_time = np.datetime64(datetime_from_radar(radar).isoformat(), "ns")
     # Convert Py-ART radar object time (time since volume start) to time delta
     # Add to base time to have sequential time within the xr Dataset
     # for easier future merging/work

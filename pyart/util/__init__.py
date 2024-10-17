@@ -14,6 +14,7 @@ from .circular_stats import interval_mean  # noqa
 from .circular_stats import interval_std  # noqa
 from .circular_stats import mean_of_two_angles  # noqa
 from .circular_stats import mean_of_two_angles_deg  # noqa
+from .circular_stats import compute_directional_stats  # noqa
 from .columnsect import for_azimuth  # noqa
 from .columnsect import get_column_rays  # noqa
 from .columnsect import get_field_location  # noqa
@@ -32,6 +33,7 @@ from .radar_utils import (  # noqa
     determine_sweeps,
     subset_radar,
     to_vpt,
+    ma_broadcast_to,
 )
 from .sigmath import (  # noqa
     angular_texture_2d,

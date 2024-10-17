@@ -7,6 +7,7 @@ An example which creates an RHI plot of reflectivity using a RadarDisplay object
 and adding differnential Reflectivity contours from the same MDV file.
 
 """
+
 print(__doc__)
 
 # Author: Cory Weber (cweber@anl.gov)

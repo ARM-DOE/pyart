@@ -2,6 +2,7 @@
 Generate a Cartesian grid by mapping from radar gates onto the grid.
 
 """
+
 import gc
 import warnings
 
@@ -40,7 +41,7 @@ def map_gates_to_grid(
     nb=1.0,
     bsp=1.0,
     dist_factor=(1.0, 1.0, 1.0),
-    **kwargs
+    **kwargs,
 ):
     """
     Map gates from one or more radars to a Cartesian grid.
@@ -343,5 +344,5 @@ def _parse_roi_func(
         elif roi_func == "dist_beam":
             roi_func = DistBeamRoI(h_factor, nb, bsp, min_radius, offsets)
         else:
-            raise ValueError("unknown roi_func: %s" % roi_func)
+            raise ValueError(f"unknown roi_func: {roi_func}")
     return roi_func
