@@ -288,7 +288,7 @@ class RadarMapDisplayBasemap(RadarDisplay):
             data = np.ma.masked_outside(data, vmin, vmax)
 
         # create the basemap if not provided
-        if type(basemap) != Basemap:
+        if not isinstance(basemap, Basemap):
             using_corners = None not in [min_lon, min_lat, max_lon, max_lat]
             if using_corners:
                 basemap = Basemap(
