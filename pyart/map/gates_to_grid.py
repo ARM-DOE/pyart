@@ -114,9 +114,9 @@ def map_gates_to_grid(
         skip_transform = True
 
     if grid_origin_alt is None:
-        try:
-            grid_origin_alt = float(radars[0].altitude["data"])
-        except TypeError:
+        if len(radars[0].altitude["data"]) == 1:
+            grid_origin_alt = float(radars[0].altitude["data"].item())
+        else:
             grid_origin_alt = np.mean(radars[0].altitude["data"])
 
     # convert input h_factor and dist_factor from scalar, tuple, or list to array
@@ -242,10 +242,10 @@ def _find_projparams(grid_origin, radars, grid_projection):
 
     # parse grid_origin
     if grid_origin is None:
-        try:
-            lat = float(radars[0].latitude["data"])
-            lon = float(radars[0].longitude["data"])
-        except TypeError:
+        if len(radars[0].latitude["data"]) == 1 & len(radars[0].longitude["data"]) == 1:
+            lat = float(radars[0].latitude["data"].item())
+            lon = float(radars[0].longitude["data"].item())
+        else:
             lat = np.mean(radars[0].latitude["data"])
             lon = np.mean(radars[0].longitude["data"])
         grid_origin = (lat, lon)
@@ -293,10 +293,15 @@ def _find_offsets(radars, projparams, grid_origin_alt):
         x_disp, y_disp = geographic_to_cartesian(
             radar.longitude["data"], radar.latitude["data"], projparams
         )
-        try:
-            z_disp = float(radar.altitude["data"]) - grid_origin_alt
-            offsets.append((z_disp, float(y_disp), float(x_disp)))
-        except TypeError:
+        if (
+            len(radars[0].latitude["data"])
+            == 1 & len(radars[0].longitude["data"])
+            == 1 & len(radars[0].altitude["data"])
+            == 1
+        ):
+            z_disp = float(radar.altitude["data"].item()) - grid_origin_alt
+            offsets.append((z_disp, float(y_disp.item()), float(x_disp.item())))
+        else:
             z_disp = np.mean(radar.altitude["data"]) - grid_origin_alt
             offsets.append((z_disp, np.mean(y_disp), np.mean(x_disp)))
     return offsets
