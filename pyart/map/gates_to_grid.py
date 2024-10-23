@@ -294,9 +294,9 @@ def _find_offsets(radars, projparams, grid_origin_alt):
             radar.longitude["data"], radar.latitude["data"], projparams
         )
         if (
-            len(radars[0].latitude["data"])
-            == 1 & len(radars[0].longitude["data"])
-            == 1 & len(radars[0].altitude["data"])
+            len(radar.latitude["data"])
+            == 1 & len(radar.longitude["data"])
+            == 1 & len(radar.altitude["data"])
             == 1
         ):
             z_disp = float(radar.altitude["data"].item()) - grid_origin_alt
