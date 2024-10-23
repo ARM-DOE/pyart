@@ -20,7 +20,7 @@ dependencies:
   - libnetcdf
   - flake8
   - fsspec
-  - glpk
+  - pyglpk
   - cftime
   - setuptools
   - shapely
@@ -31,3 +31,4 @@ dependencies:
   - versioneer
   - black
   - open-radar-data
+  - glpk
