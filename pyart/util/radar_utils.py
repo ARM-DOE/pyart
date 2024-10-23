@@ -573,12 +573,12 @@ def join_radar(radar1, radar2):
         == 1 & len(radar2.altitude["data"])
         == 1
     ):
-        lat1 = float(radar1.latitude["data"])
-        lon1 = float(radar1.longitude["data"])
-        alt1 = float(radar1.altitude["data"])
-        lat2 = float(radar2.latitude["data"])
-        lon2 = float(radar2.longitude["data"])
-        alt2 = float(radar2.altitude["data"])
+        lat1 = float(radar1.latitude["data"].item())
+        lon1 = float(radar1.longitude["data"].item())
+        alt1 = float(radar1.altitude["data"].item())
+        lat2 = float(radar2.latitude["data"].item())
+        lon2 = float(radar2.longitude["data"].item())
+        alt2 = float(radar2.altitude["data"].item())
 
         if (lat1 != lat2) or (lon1 != lon2) or (alt1 != alt2):
             ones1 = np.ones(len(radar1.time["data"]), dtype="float32")
