@@ -16,17 +16,19 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
@@ -39,10 +41,11 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/pyart-theme.css?v=40b48845" />
   
+  <!-- So that users can add custom icons -->
+  <script src="_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
     <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js?v=88e492a7"></script>
     <script src="_static/doctools.js?v=888ff710"></script>
@@ -63,7 +66,8 @@
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/> 
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.19" /> 
 <link
   rel="alternate"
   type="application/atom+xml"
@@ -86,19 +90,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="search.html"
       method="get">
@@ -106,7 +99,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -114,8 +106,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -225,29 +217,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -284,15 +268,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -313,7 +293,8 @@ document.write(`
       
         
       
-      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
 
   
@@ -388,15 +369,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -452,8 +429,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -462,7 +437,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page">Computation times</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Computation times</span></li>
   </ul>
 </nav>
 </div>
@@ -480,7 +455,7 @@ document.write(`
                 <article class="bd-article">
                    <section id="computation-times">
 <span id="sphx-glr-sg-execution-times"></span><h1>Computation times<a class="headerlink" href="#computation-times" title="Permalink to this heading">#</a></h1>
-<p><strong>05:41.655</strong> total execution time for 41 files <strong>from all galleries</strong>:</p>
+<p><strong>05:07.830</strong> total execution time for 41 files <strong>from all galleries</strong>:</p>
 <div class="docutils container">
 <style scoped>
 <link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
@@ -502,167 +477,167 @@ $(document).ready( function () {
 </thead>
 <tbody>
 <tr class="row-even"><td><p><a class="reference internal" href="examples/correct/plot_dealias.html#sphx-glr-examples-correct-plot-dealias-py"><span class="std std-ref">Dealias doppler velocities using the Region Based Algorithm</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/correct/plot_dealias.py</span></code>)</p></td>
-<td><p>01:04.249</p></td>
+<td><p>00:58.978</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="examples/mapping/plot_compare_two_radars_gatemapper.html#sphx-glr-examples-mapping-plot-compare-two-radars-gatemapper-py"><span class="std std-ref">Compare Two Radars Using Gatemapper</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/mapping/plot_compare_two_radars_gatemapper.py</span></code>)</p></td>
-<td><p>00:35.709</p></td>
+<td><p>00:35.513</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="examples/retrieve/plot_feature_detection.html#sphx-glr-examples-retrieve-plot-feature-detection-py"><span class="std std-ref">Feature Detection classification</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/retrieve/plot_feature_detection.py</span></code>)</p></td>
-<td><p>00:28.412</p></td>
+<td><p>00:25.577</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="examples/retrieve/plot_convective_stratiform.html#sphx-glr-examples-retrieve-plot-convective-stratiform-py"><span class="std std-ref">Convective-Stratiform classification</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/retrieve/plot_convective_stratiform.py</span></code>)</p></td>
-<td><p>00:22.356</p></td>
+<td><p>00:19.470</p></td>
 <td><p>0.0</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="examples/plotting/plot_three_panel_gridmapdisplay.html#sphx-glr-examples-plotting-plot-three-panel-gridmapdisplay-py"><span class="std std-ref">Create a 3 panel plot using GridMapDisplay</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_three_panel_gridmapdisplay.py</span></code>)</p></td>
-<td><p>00:15.813</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="examples/io/plot_nexrad_data_aws.html#sphx-glr-examples-io-plot-nexrad-data-aws-py"><span class="std std-ref">Reading NEXRAD Data from the AWS Cloud</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/io/plot_nexrad_data_aws.py</span></code>)</p></td>
-<td><p>00:15.612</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="examples/mapping/plot_map_two_radars_to_grid.html#sphx-glr-examples-mapping-plot-map-two-radars-to-grid-py"><span class="std std-ref">Map two radars to a Cartesian grid</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/mapping/plot_map_two_radars_to_grid.py</span></code>)</p></td>
-<td><p>00:13.645</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="examples/io/plot_nexrad_data_aws.html#sphx-glr-examples-io-plot-nexrad-data-aws-py"><span class="std std-ref">Reading NEXRAD Data from the AWS Cloud</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/io/plot_nexrad_data_aws.py</span></code>)</p></td>
+<td><p>00:14.419</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_max_cappi.html#sphx-glr-examples-plotting-plot-max-cappi-py"><span class="std std-ref">Plot Max-CAPPI</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_max_cappi.py</span></code>)</p></td>
-<td><p>00:12.746</p></td>
+<td><p>00:13.055</p></td>
 <td><p>0.0</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="examples/correct/plot_attenuation.html#sphx-glr-examples-correct-plot-attenuation-py"><span class="std std-ref">Correct reflectivity attenuation</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/correct/plot_attenuation.py</span></code>)</p></td>
-<td><p>00:11.981</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="examples/mapping/plot_map_two_radars_to_grid.html#sphx-glr-examples-mapping-plot-map-two-radars-to-grid-py"><span class="std std-ref">Map two radars to a Cartesian grid</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/mapping/plot_map_two_radars_to_grid.py</span></code>)</p></td>
+<td><p>00:11.139</p></td>
 <td><p>0.0</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="examples/retrieve/plot_hydrometeor_class_x_band.html#sphx-glr-examples-retrieve-plot-hydrometeor-class-x-band-py"><span class="std std-ref">Hydrometeor Classification with Custom Frequency Settings</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/retrieve/plot_hydrometeor_class_x_band.py</span></code>)</p></td>
-<td><p>00:10.223</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="examples/xradar/plot_dealias_xradar.html#sphx-glr-examples-xradar-plot-dealias-xradar-py"><span class="std std-ref">Dealias Radial Velocities Using Xradar and Py-ART</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/xradar/plot_dealias_xradar.py</span></code>)</p></td>
+<td><p>00:10.134</p></td>
 <td><p>0.0</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="examples/xradar/plot_dealias_xradar.html#sphx-glr-examples-xradar-plot-dealias-xradar-py"><span class="std std-ref">Dealias Radial Velocities Using Xradar and Py-ART</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/xradar/plot_dealias_xradar.py</span></code>)</p></td>
-<td><p>00:09.845</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="examples/retrieve/plot_hydrometeor_class_x_band.html#sphx-glr-examples-retrieve-plot-hydrometeor-class-x-band-py"><span class="std std-ref">Hydrometeor Classification with Custom Frequency Settings</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/retrieve/plot_hydrometeor_class_x_band.py</span></code>)</p></td>
+<td><p>00:09.851</p></td>
 <td><p>0.0</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="examples/mapping/plot_map_one_radar_to_grid.html#sphx-glr-examples-mapping-plot-map-one-radar-to-grid-py"><span class="std std-ref">Map a single radar to a Cartesian grid</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/mapping/plot_map_one_radar_to_grid.py</span></code>)</p></td>
-<td><p>00:09.659</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="examples/plotting/plot_ppi_with_rings.html#sphx-glr-examples-plotting-plot-ppi-with-rings-py"><span class="std std-ref">Create a PPI plot on a cartopy map</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_ppi_with_rings.py</span></code>)</p></td>
-<td><p>00:09.134</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_cross_section.html#sphx-glr-examples-plotting-plot-cross-section-py"><span class="std std-ref">Plot a Cross Section from a Grid</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_cross_section.py</span></code>)</p></td>
-<td><p>00:08.780</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="examples/correct/plot_attenuation.html#sphx-glr-examples-correct-plot-attenuation-py"><span class="std std-ref">Correct reflectivity attenuation</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/correct/plot_attenuation.py</span></code>)</p></td>
+<td><p>00:09.340</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="examples/io/plot_older_nexrad_data_aws.html#sphx-glr-examples-io-plot-older-nexrad-data-aws-py"><span class="std std-ref">Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/io/plot_older_nexrad_data_aws.py</span></code>)</p></td>
-<td><p>00:08.423</p></td>
+<td><p>00:09.105</p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_cross_section.html#sphx-glr-examples-plotting-plot-cross-section-py"><span class="std std-ref">Plot a Cross Section from a Grid</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_cross_section.py</span></code>)</p></td>
+<td><p>00:08.836</p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="examples/plotting/plot_three_panel_gridmapdisplay.html#sphx-glr-examples-plotting-plot-three-panel-gridmapdisplay-py"><span class="std std-ref">Create a 3 panel plot using GridMapDisplay</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_three_panel_gridmapdisplay.py</span></code>)</p></td>
+<td><p>00:08.725</p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_ppi_with_rings.html#sphx-glr-examples-plotting-plot-ppi-with-rings-py"><span class="std std-ref">Create a PPI plot on a cartopy map</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_ppi_with_rings.py</span></code>)</p></td>
+<td><p>00:07.978</p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="examples/mapping/plot_map_one_radar_to_grid.html#sphx-glr-examples-mapping-plot-map-one-radar-to-grid-py"><span class="std std-ref">Map a single radar to a Cartesian grid</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/mapping/plot_map_one_radar_to_grid.py</span></code>)</p></td>
+<td><p>00:06.901</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="examples/mapping/plot_grid_single_sweep_ppi.html#sphx-glr-examples-mapping-plot-grid-single-sweep-ppi-py"><span class="std std-ref">Map a single PPI sweep to a Cartesian grid using 2D weighting</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/mapping/plot_grid_single_sweep_ppi.py</span></code>)</p></td>
-<td><p>00:06.049</p></td>
+<td><p>00:05.859</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="examples/xradar/plot_grid_xradar.html#sphx-glr-examples-xradar-plot-grid-xradar-py"><span class="std std-ref">Grid Data Using Xradar and Py-ART</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/xradar/plot_grid_xradar.py</span></code>)</p></td>
-<td><p>00:04.736</p></td>
+<td><p>00:04.600</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_nexrad_image_muted_reflectivity.html#sphx-glr-examples-plotting-plot-nexrad-image-muted-reflectivity-py"><span class="std std-ref">Create an image-muted reflectivity plot</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_nexrad_image_muted_reflectivity.py</span></code>)</p></td>
-<td><p>00:04.604</p></td>
+<td><p>00:03.756</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="examples/plotting/plot_nexrad_multiple_moments.html#sphx-glr-examples-plotting-plot-nexrad-multiple-moments-py"><span class="std std-ref">Create a plot of multiple moments from a NEXRAD file</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_nexrad_multiple_moments.py</span></code>)</p></td>
-<td><p>00:04.335</p></td>
+<td><p>00:03.613</p></td>
 <td><p>0.0</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="examples/retrieve/plot_hydrometeor.html#sphx-glr-examples-retrieve-plot-hydrometeor-py"><span class="std std-ref">Calculate and Plot hydrometeor classification</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/retrieve/plot_hydrometeor.py</span></code>)</p></td>
-<td><p>00:03.623</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="examples/xradar/plot_xradar.html#sphx-glr-examples-xradar-plot-xradar-py"><span class="std std-ref">Plot a PPI Using Xradar and Py-ART</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/xradar/plot_xradar.py</span></code>)</p></td>
-<td><p>00:03.619</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="examples/retrieve/plot_vad.html#sphx-glr-examples-retrieve-plot-vad-py"><span class="std std-ref">Calculate and Plot VAD profile</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/retrieve/plot_vad.py</span></code>)</p></td>
-<td><p>00:03.410</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="examples/xradar/plot_xradar.html#sphx-glr-examples-xradar-plot-xradar-py"><span class="std std-ref">Plot a PPI Using Xradar and Py-ART</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/xradar/plot_xradar.py</span></code>)</p></td>
+<td><p>00:03.555</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="examples/retrieve/plot_composite_reflectivity.html#sphx-glr-examples-retrieve-plot-composite-reflectivity-py"><span class="std std-ref">Calculate and Plot Composite Reflectivity</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/retrieve/plot_composite_reflectivity.py</span></code>)</p></td>
-<td><p>00:03.307</p></td>
+<td><p>00:03.206</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_modify_colorbar.html#sphx-glr-examples-plotting-plot-modify-colorbar-py"><span class="std std-ref">Modify a Colorbar for your Plot</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_modify_colorbar.py</span></code>)</p></td>
-<td><p>00:03.132</p></td>
+<td><p>00:03.136</p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="examples/retrieve/plot_vad.html#sphx-glr-examples-retrieve-plot-vad-py"><span class="std std-ref">Calculate and Plot VAD profile</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/retrieve/plot_vad.py</span></code>)</p></td>
+<td><p>00:02.892</p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="examples/retrieve/plot_hydrometeor.html#sphx-glr-examples-retrieve-plot-hydrometeor-py"><span class="std std-ref">Calculate and Plot hydrometeor classification</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/retrieve/plot_hydrometeor.py</span></code>)</p></td>
+<td><p>00:02.771</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="examples/retrieve/plot_cfad.html#sphx-glr-examples-retrieve-plot-cfad-py"><span class="std std-ref">Creating a CFAD diagram</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/retrieve/plot_cfad.py</span></code>)</p></td>
-<td><p>00:02.657</p></td>
+<td><p>00:02.505</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_cappi.html#sphx-glr-examples-plotting-plot-cappi-py"><span class="std std-ref">Compare PPI vs CAPPI</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_cappi.py</span></code>)</p></td>
-<td><p>00:02.206</p></td>
+<td><p>00:02.194</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="examples/retrieve/plot_column_subset.html#sphx-glr-examples-retrieve-plot-column-subset-py"><span class="std std-ref">Extract a radar column above a point</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/retrieve/plot_column_subset.py</span></code>)</p></td>
-<td><p>00:02.181</p></td>
+<td><p>00:02.168</p></td>
 <td><p>0.0</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_nexrad_reflectivity.html#sphx-glr-examples-plotting-plot-nexrad-reflectivity-py"><span class="std std-ref">Create a plot of NEXRAD reflectivity</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_nexrad_reflectivity.py</span></code>)</p></td>
-<td><p>00:02.165</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-even"><td><p><a class="reference internal" href="examples/plotting/plot_ppi_mdv.html#sphx-glr-examples-plotting-plot-ppi-mdv-py"><span class="std std-ref">Create a PPI plot from a MDV file</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_ppi_mdv.py</span></code>)</p></td>
-<td><p>00:02.155</p></td>
-<td><p>0.0</p></td>
-</tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_rhi_contours_differential_reflectivity.html#sphx-glr-examples-plotting-plot-rhi-contours-differential-reflectivity-py"><span class="std std-ref">Create an RHI plot with reflectivity contour lines from an MDV file</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_rhi_contours_differential_reflectivity.py</span></code>)</p></td>
-<td><p>00:02.107</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_ppi_mdv.html#sphx-glr-examples-plotting-plot-ppi-mdv-py"><span class="std std-ref">Create a PPI plot from a MDV file</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_ppi_mdv.py</span></code>)</p></td>
+<td><p>00:02.145</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="examples/plotting/plot_choose_a_colormap.html#sphx-glr-examples-plotting-plot-choose-a-colormap-py"><span class="std std-ref">Choose a Colormap for your Plot</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_choose_a_colormap.py</span></code>)</p></td>
 <td><p>00:01.982</p></td>
 <td><p>0.0</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_rhi_cfradial_singlescan.html#sphx-glr-examples-plotting-plot-rhi-cfradial-singlescan-py"><span class="std std-ref">Create a multiple panel RHI plot from a CF/Radial file</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_rhi_cfradial_singlescan.py</span></code>)</p></td>
-<td><p>00:01.871</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_rhi_cfradial.html#sphx-glr-examples-plotting-plot-rhi-cfradial-py"><span class="std std-ref">Create a multiple panel RHI plot from a CF/Radial file</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_rhi_cfradial.py</span></code>)</p></td>
+<td><p>00:01.860</p></td>
 <td><p>0.0</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="examples/plotting/plot_rhi_cfradial.html#sphx-glr-examples-plotting-plot-rhi-cfradial-py"><span class="std std-ref">Create a multiple panel RHI plot from a CF/Radial file</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_rhi_cfradial.py</span></code>)</p></td>
-<td><p>00:01.848</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="examples/plotting/plot_nexrad_reflectivity.html#sphx-glr-examples-plotting-plot-nexrad-reflectivity-py"><span class="std std-ref">Create a plot of NEXRAD reflectivity</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_nexrad_reflectivity.py</span></code>)</p></td>
+<td><p>00:01.738</p></td>
 <td><p>0.0</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_rhi_data_overlay.html#sphx-glr-examples-plotting-plot-rhi-data-overlay-py"><span class="std std-ref">Create an RHI plot with reflectivity contour lines from an MDV file</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_rhi_data_overlay.py</span></code>)</p></td>
-<td><p>00:01.552</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_rhi_contours_differential_reflectivity.html#sphx-glr-examples-plotting-plot-rhi-contours-differential-reflectivity-py"><span class="std std-ref">Create an RHI plot with reflectivity contour lines from an MDV file</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_rhi_contours_differential_reflectivity.py</span></code>)</p></td>
+<td><p>00:01.644</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="examples/plotting/plot_xsect.html#sphx-glr-examples-plotting-plot-xsect-py"><span class="std std-ref">Plot a cross section from  a PPI volume</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_xsect.py</span></code>)</p></td>
-<td><p>00:01.363</p></td>
+<td><p>00:01.367</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_ppi_cfradial.html#sphx-glr-examples-plotting-plot-ppi-cfradial-py"><span class="std std-ref">Create a PPI plot from a Cfradial file</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_ppi_cfradial.py</span></code>)</p></td>
-<td><p>00:01.360</p></td>
+<td><p>00:01.362</p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="examples/plotting/plot_rhi_cfradial_singlescan.html#sphx-glr-examples-plotting-plot-rhi-cfradial-singlescan-py"><span class="std std-ref">Create a multiple panel RHI plot from a CF/Radial file</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_rhi_cfradial_singlescan.py</span></code>)</p></td>
+<td><p>00:01.306</p></td>
+<td><p>0.0</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_rhi_data_overlay.html#sphx-glr-examples-plotting-plot-rhi-data-overlay-py"><span class="std std-ref">Create an RHI plot with reflectivity contour lines from an MDV file</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_rhi_data_overlay.py</span></code>)</p></td>
+<td><p>00:01.159</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="examples/plotting/plot_rhi_mdv.html#sphx-glr-examples-plotting-plot-rhi-mdv-py"><span class="std std-ref">Create a RHI plot from a MDV file</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_rhi_mdv.py</span></code>)</p></td>
-<td><p>00:01.298</p></td>
+<td><p>00:00.990</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_corner_reflector.html#sphx-glr-examples-plotting-plot-corner-reflector-py"><span class="std std-ref">Plot a Corner Reflector</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_corner_reflector.py</span></code>)</p></td>
-<td><p>00:01.021</p></td>
+<td><p>00:00.871</p></td>
 <td><p>0.0</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="examples/correct/plot_cloud_mask.html#sphx-glr-examples-correct-plot-cloud-mask-py"><span class="std std-ref">Calculating and Plotting a Cloud Mask</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/correct/plot_cloud_mask.py</span></code>)</p></td>
-<td><p>00:00.913</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="examples/plotting/plot_rhi_two_panel.html#sphx-glr-examples-plotting-plot-rhi-two-panel-py"><span class="std std-ref">Create a two panel RHI plot</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_rhi_two_panel.py</span></code>)</p></td>
+<td><p>00:00.830</p></td>
 <td><p>0.0</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="examples/plotting/plot_rhi_two_panel.html#sphx-glr-examples-plotting-plot-rhi-two-panel-py"><span class="std std-ref">Create a two panel RHI plot</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/plotting/plot_rhi_two_panel.py</span></code>)</p></td>
-<td><p>00:00.839</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="examples/correct/plot_cloud_mask.html#sphx-glr-examples-correct-plot-cloud-mask-py"><span class="std std-ref">Calculating and Plotting a Cloud Mask</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/correct/plot_cloud_mask.py</span></code>)</p></td>
+<td><p>00:00.751</p></td>
 <td><p>0.0</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="examples/correct/plot_zdr_check.html#sphx-glr-examples-correct-plot-zdr-check-py"><span class="std std-ref">ZDR Bias Calculation</span></a> (<code class="docutils literal notranslate"><span class="pre">../../examples/correct/plot_zdr_check.py</span></code>)</p></td>
-<td><p>00:00.737</p></td>
+<td><p>00:00.548</p></td>
 <td><p>0.0</p></td>
 </tr>
 </tbody>
@@ -691,7 +666,8 @@ $(document).ready( function () {
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -716,8 +692,8 @@ $(document).ready( function () {
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -750,7 +726,7 @@ $(document).ready( function () {
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
 </p></div>
       
     </div>
