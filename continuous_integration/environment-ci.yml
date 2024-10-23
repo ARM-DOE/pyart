@@ -20,7 +20,7 @@ dependencies:
   - libnetcdf
   - flake8
   - fsspec
-  - glpk
+  - pyglpk
   - cftime
   - setuptools
   - shapely
