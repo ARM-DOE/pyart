@@ -31,7 +31,4 @@ dependencies:
   - versioneer
   - black
   - open-radar-data
-  - pip
-  - pip:
-    - cibuildwheel
-    - glpk
+  - glpk
