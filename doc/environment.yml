@@ -36,6 +36,7 @@ dependencies:
   - cmweather
   - mda-xdrlib
   - xradar
+  - dask
   - pip
   - pip:
       - pooch

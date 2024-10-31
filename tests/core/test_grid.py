@@ -92,7 +92,7 @@ def test_grid_to_xarray():
     time = np.array([netCDF4.num2date(grid.time["data"][0], grid.time["units"])])
 
     # Check dimensions
-    assert ds.dims == {"time": 1, "z": 2, "y": 400, "x": 320, "nradar": 1}
+    assert ds.sizes == {"time": 1, "z": 2, "y": 400, "x": 320, "nradar": 1}
 
     # Check coordinate data
     assert np.array_equal(ds.x.data, grid.x["data"])

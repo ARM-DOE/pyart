@@ -20,11 +20,10 @@ dependencies:
   - libnetcdf
   - flake8
   - fsspec
-  - pyglpk
   - cftime
   - setuptools
   - shapely
-  - ruff==0.4.2
+  - ruff
   - mda-xdrlib
   - xradar
   - pooch
