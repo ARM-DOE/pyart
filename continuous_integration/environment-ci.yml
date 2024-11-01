@@ -12,7 +12,7 @@ dependencies:
   - wradlib
   - cartopy
   - cvxopt
-  - xarray
+  - xarray<2024.10.0
   - metpy
   - pytest-cov
   - pytest-mpl
@@ -30,3 +30,4 @@ dependencies:
   - versioneer
   - black
   - open-radar-data
+  - glpk

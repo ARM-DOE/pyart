@@ -14,7 +14,7 @@ dependencies:
   - metpy
   - cartopy
   - cvxopt
-  - xarray
+  - xarray<2024.10.0
   - sphinx<7.2
   - ipython
   - pandoc
