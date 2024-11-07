@@ -23,6 +23,7 @@ jobs:
         uses: mamba-org/setup-micromamba@v2.0.1
         with:
           environment-file: doc/environment.yml
+          micromamba-version: '2.0.0-0'
           environment-name: pyart-docs
           cache-downloads: true
 
