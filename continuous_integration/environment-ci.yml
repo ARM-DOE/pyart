@@ -12,7 +12,7 @@ dependencies:
   - wradlib
   - cartopy
   - cvxopt
-  - xarray<2024.10.0
+  - xarray<=2024.9.0
   - metpy
   - pytest-cov
   - pytest-mpl
@@ -25,7 +25,7 @@ dependencies:
   - shapely
   - ruff
   - mda-xdrlib
-  - xradar
+  - xradar<=0.7.0
   - pooch
   - versioneer
   - black

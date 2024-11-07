@@ -1,7 +1,6 @@
 name: pyart-docs
 channels:
   - conda-forge
-  - defaults
 dependencies:
   - gdal
   - numpy
@@ -14,7 +13,7 @@ dependencies:
   - metpy
   - cartopy
   - cvxopt
-  - xarray<2024.10.0
+  - xarray<=2024.9.0
   - sphinx<7.2
   - ipython
   - pandoc
@@ -35,7 +34,7 @@ dependencies:
   - pre_commit
   - cmweather
   - mda-xdrlib
-  - xradar
+  - xradar<=0.7.0
   - dask
   - pip
   - pip:
