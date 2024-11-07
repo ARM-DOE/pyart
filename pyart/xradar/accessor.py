@@ -18,8 +18,8 @@ except ImportError:
         DataTree,
         formatting,
         formatting_html,
-        register_datatree_accessor,
     )
+    from datatree.extensions import register_datatree_accessor
     from datatree.treenode import NodePath
 
 from xarray import DataArray, Dataset, concat
