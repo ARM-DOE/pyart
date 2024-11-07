@@ -25,7 +25,7 @@ jobs:
           environment-file: doc/environment.yml
           micromamba-version: '2.0.0-0'
           environment-name: pyart-docs
-          cache-downloads: true
+          cache-downloads: false
 
       - name: Fetch all history for all tags and branches
         run: |
