@@ -7,9 +7,9 @@ cftime
 fsspec
 s3fs
 open_radar_data
-xradar<=0.7.0
+xradar>=0.8.0
 pandas
 mda-xdrlib
-xarray<=2024.9.0
+xarray>=2024.10.0
 cartopy
 pint
