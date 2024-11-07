@@ -38,7 +38,7 @@ jobs:
         uses: mamba-org/setup-micromamba@v2.0.0
         with:
           environment-file: continuous_integration/environment-ci.yml
-          micromamba-version: '2.0.0-0'
+          micromamba-version: '2.0.1'
           init-shell: >-
             bash
           cache-downloads: true
