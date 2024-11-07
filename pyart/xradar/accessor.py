@@ -7,15 +7,21 @@ import copy
 
 import numpy as np
 import pandas as pd
+
 try:
+    from xarray.core import formatting, formatting_html
+    from xarray.core.datatree import DataTree
     from xarray.core.extensions import register_datatree_accessor
     from xarray.core.treenode import NodePath
-    from xarray.core.datatree import DataTree
-    from xarray.core import formatting, formatting_html
 except ImportError:
-    from datatree import register_datatree_accessor
-    from datatree import DataTree, formatting, formatting_html
+    from datatree import (
+        DataTree,
+        formatting,
+        formatting_html,
+        register_datatree_accessor,
+    )
     from datatree.treenode import NodePath
+
 from xarray import DataArray, Dataset, concat
 from xarray.core import utils
 from xradar.accessors import XradarAccessor
