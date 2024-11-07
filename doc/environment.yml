@@ -1,7 +1,6 @@
 name: pyart-docs
 channels:
   - conda-forge
-  - defaults
 dependencies:
   - gdal
   - numpy
@@ -14,7 +13,7 @@ dependencies:
   - metpy
   - cartopy
   - cvxopt
-  - xarray<2024.10.0
+  - xarray
   - sphinx<7.2
   - ipython
   - pandoc
