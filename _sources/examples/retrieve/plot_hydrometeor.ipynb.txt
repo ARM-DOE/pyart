@@ -1,0 +1,43 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "\n# Calculate and Plot hydrometeor classification\n\nCalculates a hydrometeor classification and displays the results\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "# Author: Daniel Wolfensberger (daniel.wolfensberger@meteoswiss.ch)\n# License: BSD 3 clause\n\nimport matplotlib as mpl\nimport matplotlib.pyplot as plt\nimport numpy as np\nfrom open_radar_data import DATASETS\n\nimport pyart\n\n# Read in a sample file\nfilename = DATASETS.fetch(\"MLL2217907250U.003.nc\")\nradar = pyart.io.read_cfradial(filename)\n\n# Read temperature preinterpolated from NWP model\nfilename = DATASETS.fetch(\"20220628072500_savevol_COSMO_LOOKUP_TEMP.nc\")\nnwp_temp = pyart.io.read_cfradial(filename)\n\n# Add temperature to radar object as new field\nradar.add_field(\"temperature\", nwp_temp.fields[\"temperature\"])\n\n# Compute attenuation\nout = pyart.correct.calculate_attenuation_zphi(\n    radar,\n    phidp_field=\"uncorrected_differential_phase\",\n    temp_field=\"temperature\",\n    temp_ref=\"temperature\",\n)\nspec_at, pia, cor_z, spec_diff_at, pida, cor_zdr = out\nradar.add_field(\"corrected_reflectivity\", cor_z)\nradar.add_field(\"corrected_differential_reflectivity\", cor_zdr)\nradar.add_field(\"specific_attenuation\", spec_at)\n\n# Compute KDP\nkdp, _, _ = pyart.retrieve.kdp_maesaka(\n    radar, psidp_field=\"uncorrected_differential_phase\"\n)\nradar.add_field(\"specific_differential_phase\", kdp)\n\n# Compute hydrometeor classification\nhydro = pyart.retrieve.hydroclass_semisupervised(\n    radar,\n    refl_field=\"corrected_reflectivity\",\n    zdr_field=\"corrected_differential_reflectivity\",\n    kdp_field=\"specific_differential_phase\",\n    rhv_field=\"uncorrected_cross_correlation_ratio\",\n    temp_field=\"temperature\",\n)[\"hydro\"]\n\nradar.add_field(\"radar_echo_classification\", hydro)\n\n# Display hydrometeor classification with categorical colormap\nfig, ax = plt.subplots(1, 1, figsize=(6, 6))\ndisplay = pyart.graph.RadarDisplay(radar)\n\nlabels = [\"NC\", \"AG\", \"CR\", \"LR\", \"RP\", \"RN\", \"VI\", \"WS\", \"MH\", \"IH/HDG\"]\nticks = np.arange(len(labels))\nboundaries = np.arange(-0.5, len(labels))\nnorm = mpl.colors.BoundaryNorm(boundaries, 256)\n\ncax = display.plot_ppi(\n    \"radar_echo_classification\", 0, ax=ax, norm=norm, ticks=ticks, ticklabs=labels\n)\n\nax.set_xlim([-50, 50])\nax.set_ylim([-50, 50])\nax.set_aspect(\"equal\", \"box\")\n\n# For info\n# NC = not classified\n# AG = aggregates\n# CR = ice crystals\n# LR = light rain\n# RP = rimed particles\n# RN = rain\n# VI = vertically oriented ice\n# WS = wet snow\n# MH = melting hail\n# IH/HDG = dry hail / high density graupel"
+      ]
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.13.0"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}

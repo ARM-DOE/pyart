@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" data-theme="light">
+<html lang="en" data-content_root="../../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -16,19 +16,17 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -41,15 +39,14 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=bf1c18cd"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/documentation_options.js?v=c739abb9"></script>
+    <script src="../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -61,13 +58,18 @@
                 gtag('js', new Date());
                 gtag('config', 'G-JJEG3CV376');
             </script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-JJEG3CV376');
+            </script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'blog_posts/2024/epcape-blog-post';</script>
     <script src="../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.19" /> 
+  <meta name="docsearch:language" content="en"/> 
 <link
   rel="alternate"
   type="application/atom+xml"
@@ -90,8 +92,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -99,6 +112,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -106,8 +120,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -217,21 +231,29 @@
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
         </div>
       
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -268,11 +290,15 @@
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
     </div>
   
 
@@ -293,8 +319,7 @@
       
         
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+      <div class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -369,11 +394,15 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -541,6 +570,8 @@
       
         <div class="header-article-item">
 
+
+
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -549,7 +580,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Investigating ARM Scanning Cloud Radar Data from EPCAPE</span></li>
+    <li class="breadcrumb-item active" aria-current="page">Investigatin...</li>
   </ul>
 </nav>
 </div>
@@ -566,19 +597,19 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <section class="tex2jax_ignore mathjax_ignore" id="investigating-arm-scanning-cloud-radar-data-from-epcape">
-<h1>Investigating ARM Scanning Cloud Radar Data from EPCAPE<a class="headerlink" href="#investigating-arm-scanning-cloud-radar-data-from-epcape" title="Permalink to this heading">#</a></h1>
+<h1>Investigating ARM Scanning Cloud Radar Data from EPCAPE<a class="headerlink" href="#investigating-arm-scanning-cloud-radar-data-from-epcape" title="Link to this heading">#</a></h1>
 <section id="motivation">
-<h2>Motivation<a class="headerlink" href="#motivation" title="Permalink to this heading">#</a></h2>
+<h2>Motivation<a class="headerlink" href="#motivation" title="Link to this heading">#</a></h2>
 </section>
 <section id="the-problem">
-<h2>The Problem<a class="headerlink" href="#the-problem" title="Permalink to this heading">#</a></h2>
+<h2>The Problem<a class="headerlink" href="#the-problem" title="Link to this heading">#</a></h2>
 <p>We would like to find data from a relevant case, and visualize using Py-ART!</p>
 </section>
 <section id="the-solution">
-<h2>The Solution<a class="headerlink" href="#the-solution" title="Permalink to this heading">#</a></h2>
+<h2>The Solution<a class="headerlink" href="#the-solution" title="Link to this heading">#</a></h2>
 <p>Include a walk through of the solution, with some sort of final figure or notable insight!</p>
 <section id="searching-for-data-through-the-dq-plot-browser">
-<h3>Searching for data through the DQ Plot Browser<a class="headerlink" href="#searching-for-data-through-the-dq-plot-browser" title="Permalink to this heading">#</a></h3>
+<h3>Searching for data through the DQ Plot Browser<a class="headerlink" href="#searching-for-data-through-the-dq-plot-browser" title="Link to this heading">#</a></h3>
 <p>We do not know exactly what date/time we would like to analyze! Instead of downloading the entire record, making our own visualizations, and deciding on an analysis time from there, we can utilize a tool provided by ARM - the Data Quality quicklooks!</p>
 <p>These are automated plots that are generated for a variety of ARM instruments - including the scanning radars!</p>
 <p>We filled out the query using the following link, adding in which specific instrument we are interested in, and a general time frame. We know that January 2024 was the wettest January on record for La Jolla, California, so we can use that as a time frame to find an event!</p>
@@ -586,7 +617,7 @@
 <p><a class="reference external" href="https://dq.arm.gov/dq-plotbrowser/?comp=true&amp;amp;s=epc&amp;amp;c=kasacr&amp;amp;f=S2&amp;amp;l=a1&amp;amp;p=ppiv&amp;amp;p=rhi&amp;amp;sd=20240101&amp;amp;ed=20240131&amp;amp;">Link to access this in your browser</a></p>
 </section>
 <section id="use-act-to-retrieve-data-from-epcape">
-<h3>Use ACT to retrieve data from EPCAPE<a class="headerlink" href="#use-act-to-retrieve-data-from-epcape" title="Permalink to this heading">#</a></h3>
+<h3>Use ACT to retrieve data from EPCAPE<a class="headerlink" href="#use-act-to-retrieve-data-from-epcape" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">glob</span>
@@ -603,7 +634,7 @@
 </div>
 </div>
 <section id="retrieve-you-api-token-from-arm-live">
-<h4>Retrieve you API token from ARM Live<a class="headerlink" href="#retrieve-you-api-token-from-arm-live" title="Permalink to this heading">#</a></h4>
+<h4>Retrieve you API token from ARM Live<a class="headerlink" href="#retrieve-you-api-token-from-arm-live" title="Link to this heading">#</a></h4>
 <p>You will need to go to ARM Live to access your individual token. Follow <a class="reference external" href="https://adc.arm.gov/armlive/livedata/home">this link</a>, or it is accessible through the documentation for the <code class="docutils literal notranslate"><span class="pre">download_arm_data</span></code> function from the Atmospheric data Community Toolkit (ACT).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -700,7 +731,7 @@ information on how to obtain a username and token.
 </div>
 </section>
 <section id="pass-your-credentials-into-the-search">
-<h4>Pass your Credentials into the Search<a class="headerlink" href="#pass-your-credentials-into-the-search" title="Permalink to this heading">#</a></h4>
+<h4>Pass your Credentials into the Search<a class="headerlink" href="#pass-your-credentials-into-the-search" title="Link to this heading">#</a></h4>
 <p>Use your ARM username and token in the following cell to search and download your data!</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -747,7 +778,7 @@ User Facility. https://doi.org/10.5439/1469302
 </section>
 </section>
 <section id="read-the-data-into-py-art">
-<h3>Read the Data into Py-ART<a class="headerlink" href="#read-the-data-into-py-art" title="Permalink to this heading">#</a></h3>
+<h3>Read the Data into Py-ART<a class="headerlink" href="#read-the-data-into-py-art" title="Link to this heading">#</a></h3>
 <p>Now that we have a directory full of files, we can read these into Py-ART. The trick is figuring out which ones we are interested in.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -757,7 +788,7 @@ User Facility. https://doi.org/10.5439/1469302
 </div>
 </div>
 <section id="take-a-peak-at-the-scan-strategy">
-<h4>Take a Peak at the Scan Strategy<a class="headerlink" href="#take-a-peak-at-the-scan-strategy" title="Permalink to this heading">#</a></h4>
+<h4>Take a Peak at the Scan Strategy<a class="headerlink" href="#take-a-peak-at-the-scan-strategy" title="Link to this heading">#</a></h4>
 <p>Each of these radar volumes had a different scan strategy. We can check this within the radar’s metadata!</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -825,7 +856,7 @@ epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012914.nc has ppi scan strategy!
 </div>
 </section>
 <section id="sort-the-scans-by-scan-strategy">
-<h4>Sort the Scans by Scan Strategy<a class="headerlink" href="#sort-the-scans-by-scan-strategy" title="Permalink to this heading">#</a></h4>
+<h4>Sort the Scans by Scan Strategy<a class="headerlink" href="#sort-the-scans-by-scan-strategy" title="Link to this heading">#</a></h4>
 <p>Now that we know which file has whic can strategy, we can sort them into <code class="docutils literal notranslate"><span class="pre">ppi</span></code> and <code class="docutils literal notranslate"><span class="pre">rhi</span></code> categories!</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -862,7 +893,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
 </div>
 </section>
 <section id="plot-all-of-the-ppi-scans">
-<h4>Plot all of the PPI Scans<a class="headerlink" href="#plot-all-of-the-ppi-scans" title="Permalink to this heading">#</a></h4>
+<h4>Plot all of the PPI Scans<a class="headerlink" href="#plot-all-of-the-ppi-scans" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">ppi_files</span><span class="p">:</span>
@@ -926,7 +957,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
 </div>
 </section>
 <section id="plot-all-the-rhi-scans">
-<h4>Plot all the RHI Scans<a class="headerlink" href="#plot-all-the-rhi-scans" title="Permalink to this heading">#</a></h4>
+<h4>Plot all the RHI Scans<a class="headerlink" href="#plot-all-the-rhi-scans" title="Link to this heading">#</a></h4>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">rhi_files</span><span class="p">:</span>
@@ -968,7 +999,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
 </section>
 </section>
 <section id="apply-corrections-to-the-velocity-data">
-<h3>Apply Corrections to the Velocity Data<a class="headerlink" href="#apply-corrections-to-the-velocity-data" title="Permalink to this heading">#</a></h3>
+<h3>Apply Corrections to the Velocity Data<a class="headerlink" href="#apply-corrections-to-the-velocity-data" title="Link to this heading">#</a></h3>
 <p>We notice a couple key data quality issues - mainly:</p>
 <ul class="simple">
 <li><p>Noise in regions with clear-air returns (random velocity values)</p></li>
@@ -976,7 +1007,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
 </ul>
 <p>The signal to noise ratio (SNR) value will help us mask out these regions!</p>
 <section id="explore-a-threshold-for-snr">
-<h4>Explore a Threshold for SNR<a class="headerlink" href="#explore-a-threshold-for-snr" title="Permalink to this heading">#</a></h4>
+<h4>Explore a Threshold for SNR<a class="headerlink" href="#explore-a-threshold-for-snr" title="Link to this heading">#</a></h4>
 <p>Let’s explore a threshold to use for signal to noise ratio. We can start with an initial plot of the data, side by side with reflectivity.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1077,7 +1108,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
 </div>
 </section>
 <section id="plot-our-revised-cleaned-data">
-<h4>Plot our Revised, Cleaned Data<a class="headerlink" href="#plot-our-revised-cleaned-data" title="Permalink to this heading">#</a></h4>
+<h4>Plot our Revised, Cleaned Data<a class="headerlink" href="#plot-our-revised-cleaned-data" title="Link to this heading">#</a></h4>
 <p>Now that we have a threshold value, let’s plot it!</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1167,7 +1198,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
 </div>
 </section>
 <section id="plot-where-the-rhi-scan-is-slicing-through-using-the-ppi-for-a-frame-of-reference">
-<h4>Plot where the RHI scan is slicing through using the PPI for a frame of reference<a class="headerlink" href="#plot-where-the-rhi-scan-is-slicing-through-using-the-ppi-for-a-frame-of-reference" title="Permalink to this heading">#</a></h4>
+<h4>Plot where the RHI scan is slicing through using the PPI for a frame of reference<a class="headerlink" href="#plot-where-the-rhi-scan-is-slicing-through-using-the-ppi-for-a-frame-of-reference" title="Link to this heading">#</a></h4>
 <p>To give us a better idea of where we are slicing through the clouds, let’s plot up the the RHI latitude/longitude, as well as the two PPI scans valid for this 0100 to 0115 UTC time period.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -1220,7 +1251,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
 </section>
 </section>
 <section id="conclusions">
-<h2>Conclusions<a class="headerlink" href="#conclusions" title="Permalink to this heading">#</a></h2>
+<h2>Conclusions<a class="headerlink" href="#conclusions" title="Link to this heading">#</a></h2>
 <p>Within this post, we explored how to view and access field campaign data from ARM’s data achive, explore the scan strategies, apply an inital quality control of the data, and visualize a sample case!</p>
 </section>
 </section>
@@ -1269,8 +1300,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
             
             
               
-                <dialog id="pst-secondary-sidebar-modal"></dialog>
-                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -1331,8 +1361,8 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1352,7 +1382,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     <br/>
   </p>
 </div>
@@ -1365,7 +1395,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
 </p></div>
       
     </div>

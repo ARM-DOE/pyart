@@ -1,0 +1,43 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "\n# Hydrometeor Classification with Custom Frequency Settings\n\n This script shows how to use hydrometeor classification for X-band radar data.\n We are reading radar data, plotting some variables of interest and applying the\n classification to identify types of precipitation.\n\n .. note::\n    The script initially attempts hydrometeor classification without specific radar frequency information for band selection.\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "import matplotlib.pyplot as plt\nimport numpy as np\nfrom open_radar_data import DATASETS\n\nimport pyart\n\nfilename = DATASETS.fetch(\"gucxprecipradarcmacppiS2.c1.20220314.025840.nc\")\nradar = pyart.io.read_cfradial(filename)\n\nfigure = plt.figure(figsize=(15, 4))\n\nax1 = plt.subplot(1, 3, 1)\ndisplay = pyart.graph.RadarDisplay(radar)\nax1 = display.plot(\"DBZ\", vmin=0, vmax=50)  # DBZ corrected_reflectivity\nplt.xlim(-20, 20)\nplt.ylim(-20, 20)\n\nax2 = plt.subplot(1, 3, 2)\nax2 = display.plot(\"corrected_differential_reflectivity\", cmap=\"pyart_Carbone42\")  # ZDR\nplt.xlim(-20, 20)\nplt.ylim(-20, 20)\n\nax3 = plt.subplot(1, 3, 3)\nax3 = display.plot(\"corrected_specific_diff_phase\", cmap=\"pyart_Carbone42\")  # KDP\nplt.xlim(-20, 20)\n\n# ### When instrument parameters does not have radar frequency info.\n\nprint(radar.instrument_parameters)\n\n\n# This shows an issue where radar frequency information is missing. Without this hydrometeor classification will default to C-band.\n\n# Get classification\nhydromet_class = pyart.retrieve.hydroclass_semisupervised(\n    radar,\n    refl_field=\"corrected_reflectivity\",\n    zdr_field=\"corrected_differential_reflectivity\",\n    kdp_field=\"filtered_corrected_specific_diff_phase\",\n    rhv_field=\"RHOHV\",\n    temp_field=\"sounding_temperature\",\n)[\"hydro\"]\n\nradar.add_field(\"hydro_classification\", hydromet_class, replace_existing=True)\n\n\n# Use `radar_freq` parameters\n# To address this issue, radar frequency information can be supplied to the function with `radar_freq` parameter.\n\n\n# Get classification\nhydromet_class = pyart.retrieve.hydroclass_semisupervised(\n    radar,\n    refl_field=\"corrected_reflectivity\",\n    zdr_field=\"corrected_differential_reflectivity\",\n    kdp_field=\"filtered_corrected_specific_diff_phase\",\n    rhv_field=\"RHOHV\",\n    temp_field=\"sounding_temperature\",\n    radar_freq=9.2e9,\n)[\"hydro\"]\n\nradar.add_field(\"hydro_classification\", hydromet_class, replace_existing=True)\n\n\n# Add radar frequency to the radar object\n# Incorporating radar frequency into the radar object enhances processing pipeline.\n\n# Add X-band frequency information to radar.instrument_parameters\nradar.instrument_parameters[\"frequency\"] = {\n    \"long_name\": \"Radar frequency\",\n    \"units\": \"Hz\",\n    \"data\": [9.2e9],\n}\n\nradar.instrument_parameters\n\n\n# Let's run the classification again and the warning should change telling the radar frequency from instrument parameters is used.\n\n\nhydromet_class = pyart.retrieve.hydroclass_semisupervised(\n    radar,\n    refl_field=\"corrected_reflectivity\",\n    zdr_field=\"corrected_differential_reflectivity\",\n    kdp_field=\"filtered_corrected_specific_diff_phase\",\n    rhv_field=\"RHOHV\",\n    temp_field=\"sounding_temperature\",\n    radar_freq=9.2e9,\n)[\"hydro\"]\n\nradar.add_field(\"hydro_classification\", hydromet_class, replace_existing=True)\n\n\n# Note that the frequency used here is from the radar object, not the user supplied.\n\n\n# plotting\n\nimport matplotlib.colors as colors\n\nhid_colors = [\n    \"White\",\n    \"LightBlue\",\n    \"MediumBlue\",\n    \"DarkOrange\",\n    \"LightPink\",\n    \"Cyan\",\n    \"DarkGray\",\n    \"Lime\",\n    \"Yellow\",\n    \"Red\",\n]\ncmaphid = colors.ListedColormap(hid_colors)\ncmapmeth = colors.ListedColormap(hid_colors[0:6])\ncmapmeth_trop = colors.ListedColormap(hid_colors[0:7])\n\n\ndef adjust_fhc_colorbar_for_pyart(cb):\n    cb.set_ticks(np.arange(1.4, 9, 0.9))\n    cb.ax.set_yticklabels(\n        [\n            \"Aggregates\",\n            \"Ice Crystals\",\n            \"Light rain\",\n            \"Rain\",\n            \"Vertical Ice\",\n            \"Wet snow\",\n            \"HD Graupel\",\n            \"Melting hail\",\n            \"Dry hail or high-density graupel\",\n        ]\n    )\n    cb.ax.set_ylabel(\"\")\n    cb.ax.tick_params(length=0)\n    return cb\n\n\ndef adjust_meth_colorbar_for_pyart(cb, tropical=False):\n    if not tropical:\n        cb.set_ticks(np.arange(1.25, 5, 0.833))\n        cb.ax.set_yticklabels(\n            [\"R(Kdp, Zdr)\", \"R(Kdp)\", \"R(Z, Zdr)\", \"R(Z)\", \"R(Zrain)\"]\n        )\n    else:\n        cb.set_ticks(np.arange(1.3, 6, 0.85))\n        cb.ax.set_yticklabels(\n            [\"R(Kdp, Zdr)\", \"R(Kdp)\", \"R(Z, Zdr)\", \"R(Z_all)\", \"R(Z_c)\", \"R(Z_s)\"]\n        )\n    cb.ax.set_ylabel(\"\")\n    cb.ax.tick_params(length=0)\n    return cb\n\n\ndef two_panel_plot(\n    radar,\n    sweep=0,\n    var1=\"corrected_reflectivity\",\n    vmin1=0,\n    vmax1=65,\n    cmap1=\"RdYlBu_r\",\n    units1=\"dBZ\",\n    var2=\"corrected_differential_reflectivity\",\n    vmin2=-5,\n    vmax2=5,\n    cmap2=\"RdYlBu_r\",\n    units2=\"dB\",\n    return_flag=False,\n    xlim=[-150, 150],\n    ylim=[-150, 150],\n):\n    display = pyart.graph.RadarDisplay(radar)\n    fig = plt.figure(figsize=(13, 5))\n    ax1 = fig.add_subplot(121)\n    display.plot_ppi(\n        var1,\n        sweep=sweep,\n        vmin=vmin1,\n        vmax=vmax1,\n        cmap=cmap1,\n        colorbar_label=units1,\n        mask_outside=True,\n    )\n    display.set_limits(xlim=xlim, ylim=ylim)\n    ax2 = fig.add_subplot(122)\n    display.plot_ppi(\n        var2,\n        sweep=sweep,\n        vmin=vmin2,\n        vmax=vmax2,\n        cmap=cmap2,\n        colorbar_label=units2,\n        mask_outside=True,\n    )\n    display.set_limits(xlim=xlim, ylim=ylim)\n    if return_flag:\n        return fig, ax1, ax2, display\n\n\nlim = [-20, 20]\nfig, ax1, ax2, display = two_panel_plot(\n    radar,\n    sweep=0,\n    var1=\"corrected_reflectivity\",\n    var2=\"hydro_classification\",\n    vmin2=0,\n    vmax2=10,\n    cmap2=cmaphid,\n    units2=\"\",\n    return_flag=True,\n    xlim=lim,\n    ylim=lim,\n)\ndisplay.cbs[1] = adjust_fhc_colorbar_for_pyart(display.cbs[1])"
+      ]
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.13.0"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}

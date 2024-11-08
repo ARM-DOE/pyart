@@ -1,0 +1,43 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "\n# Create a PPI plot from a Cfradial file\n\nAn example which creates a PPI plot of a Cfradial file.\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "print(__doc__)\n\n# Author: Max Grover (mgrover@anl.gov)\n# License: BSD 3 clause\n\nimport matplotlib.pyplot as plt\n\nimport pyart\nfrom pyart.testing import get_test_data\n\n# Locate the test data and read in using main read method\nfilename = get_test_data(\"swx_20120520_0641.nc\")\nradar = pyart.io.read(filename)\n\n# Setup the display, which automatically detects this is a ppi scan\ndisplay = pyart.graph.RadarDisplay(radar)\nfig = plt.figure()\nax = fig.add_subplot(111)\ndisplay.plot(\"reflectivity_horizontal\", 0, vmin=-32, vmax=64.0)\ndisplay.plot_range_rings([10, 20, 30, 40])\ndisplay.plot_cross_hair(5.0)\nplt.show()"
+      ]
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.13.0"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}

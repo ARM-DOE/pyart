@@ -1,0 +1,115 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "\n# Dealias Radial Velocities Using Xradar and Py-ART\n\nAn example which uses xradar and Py-ART to dealias radial velocities.\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "# Author: Max Grover (mgrover@anl.gov)\n# License: BSD 3 clause\n\n\nimport cartopy.crs as ccrs\nimport matplotlib.pyplot as plt\nimport xradar as xd\n\nimport pyart\nfrom pyart.testing import get_test_data\n\n# Locate the test data and read in using xradar\nfilename = get_test_data(\"swx_20120520_0641.nc\")\ntree = xd.io.open_cfradial1_datatree(filename)\n\n# Give the tree Py-ART radar methods\nradar = tree.pyart.to_radar()\n\n# Determine the nyquist velocity using the maximum radial velocity from the first sweep\nnyq = radar[\"sweep_0\"][\"mean_doppler_velocity\"].max().values\n\n# Set the nyquist to what we captured above\n# Calculate the velocity texture\nvel_texture = pyart.retrieve.calculate_velocity_texture(\n    radar, vel_field=\"mean_doppler_velocity\", nyq=nyq\n)\nradar.add_field(\"velocity_texture\", vel_texture, replace_existing=True)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Visualize our velocity texture field**\nLet's use the RadarMapDisplay to visualize the texture field\n\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "fig = plt.figure(figsize=[8, 8])\ndisplay = pyart.graph.RadarMapDisplay(radar)\ndisplay.plot_ppi_map(\n    \"velocity_texture\",\n    sweep=2,\n    resolution=\"50m\",\n    vmin=0,\n    vmax=10,\n    projection=ccrs.PlateCarree(),\n    cmap=\"pyart_balance\",\n)\nplt.show()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Determine a Velocity Texture Threshold Value**\n\nWe can use the xradar/xarray plotting functionality here\n\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "radar[\"sweep_0\"][\"velocity_texture\"].plot.hist()\nplt.show()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Apply a Gatefilter Mask**\n\nWe now apply this threshold, along with a reflectivity threshold,\nand make use of the region-based dealiasing algorithm\n\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "# Configure the gatefilter\ngatefilter = pyart.filters.GateFilter(radar)\ngatefilter.exclude_above(\"velocity_texture\", 4)\ngatefilter.exclude_below(\"corrected_reflectivity_horizontal\", 0)\n\n# At this point, we can simply used dealias_region_based to dealias the velocities\n# and then add the new field to the radar.\nvelocity_dealiased = pyart.correct.dealias_region_based(\n    radar,\n    vel_field=\"mean_doppler_velocity\",\n    nyquist_vel=nyq,\n    centered=True,\n    gatefilter=gatefilter,\n)\nradar.add_field(\"corrected_velocity\", velocity_dealiased, replace_existing=True)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Visualize the Cleaned Radial Velocities**\n\nWe can visualize the uncorrected and corrected radial velocity fields\n\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "fig = plt.figure(figsize=(14, 5))\ndisplay = pyart.graph.RadarMapDisplay(radar)\nax1 = plt.subplot(121)\ndisplay.plot_ppi(\n    \"mean_doppler_velocity\",\n    cmap=\"twilight_shifted\",\n    vmin=-40,\n    vmax=40,\n    colorbar_label=\"Uncorrected Radial Velocity (m/s)\",\n    ax=ax1,\n)\nax2 = plt.subplot(122)\ndisplay.plot_ppi(\n    \"corrected_velocity\",\n    cmap=\"twilight_shifted\",\n    vmin=-40,\n    vmax=40,\n    colorbar_label=\"Corrected Radial Velocity (m/s)\",\n    ax=ax2,\n)\nplt.show()"
+      ]
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.13.0"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}

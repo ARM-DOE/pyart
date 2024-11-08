@@ -1,0 +1,151 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "\n# Compare Two Radars Using Gatemapper\n\nMap the reflectivity field of a single radar in Antenna coordinates to\nanother radar in Antenna coordinates and compare the fields.\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "print(__doc__)\n\n# Author: Max Grover (mgrover@anl.gov) and Bobby Jackson (rjackson@anl.gov)\n# License: BSD 3 clause\n\nimport warnings\n\nimport cartopy.crs as ccrs\nimport matplotlib.pyplot as plt\nimport numpy as np\n\nimport pyart\nfrom pyart.testing import get_test_data\n\nwarnings.filterwarnings(\"ignore\")"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Read in the Data**\n\nFor this example, we use two XSAPR radars from our test data.\n\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "# read in the data from both XSAPR radars\nxsapr_sw_file = get_test_data(\"swx_20120520_0641.nc\")\nxsapr_se_file = get_test_data(\"sex_20120520_0641.nc\")\nradar_sw = pyart.io.read_cfradial(xsapr_sw_file)\nradar_se = pyart.io.read_cfradial(xsapr_se_file)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Filter and Configure the GateMapper**\n\nWe are interested in mapping the southwestern radar to the\nsoutheastern radar. Before running our gatemapper, we add a\nfilter for only positive reflectivity values.\nWe also need to set a distance (meters) and time (seconds)\nbetween the source and destination gate allowed for an\nadequate match), using the distance_tolerance/time_tolerance variables.\n\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "gatefilter = pyart.filters.GateFilter(radar_sw)\ngatefilter.exclude_below(\"reflectivity_horizontal\", 20)\ngmapper = pyart.map.GateMapper(\n    radar_sw,\n    radar_se,\n    distance_tolerance=500.0,\n    time_tolerance=60,\n    gatefilter_src=gatefilter,\n)\nradar_sw_mapped_to_radar_se = gmapper.mapped_radar([\"reflectivity_horizontal\"])"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Plot the Original Data**\n\nLet's take a look at our original fields - notice the difference\nin reflectivity values!\n\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "fig = plt.figure(figsize=(16, 6))\nax = plt.subplot(121, projection=ccrs.PlateCarree())\n\n# Plot the southwestern radar\ndisp1 = pyart.graph.RadarMapDisplay(radar_sw)\ndisp1.plot_ppi_map(\n    \"reflectivity_horizontal\",\n    sweep=1,\n    ax=ax,\n    vmin=-20,\n    vmax=70,\n    min_lat=36,\n    max_lat=37,\n    min_lon=-98,\n    max_lon=-97,\n    lat_lines=np.arange(36, 37.25, 0.25),\n    lon_lines=np.arange(-98, -96.75, 0.25),\n)\n\nax2 = plt.subplot(122, projection=ccrs.PlateCarree())\ndisp2 = pyart.graph.RadarMapDisplay(radar_se)\ndisp2.plot_ppi_map(\n    \"reflectivity_horizontal\",\n    sweep=1,\n    ax=ax2,\n    vmin=-20,\n    vmax=70,\n    min_lat=36,\n    max_lat=37,\n    min_lon=-98,\n    max_lon=-97,\n    lat_lines=np.arange(36, 37.25, 0.25),\n    lon_lines=np.arange(-98, -96.75, 0.25),\n)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "Now, we can compare our original field from the southwestern radar,\nto the new remapped field - there are similarities...\n\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "fig = plt.figure(figsize=(16, 6))\nax = plt.subplot(121, projection=ccrs.PlateCarree())\n\n# Plot the southeastern radar\ndisp1 = pyart.graph.RadarMapDisplay(radar_se)\ndisp1.plot_ppi_map(\n    \"reflectivity_horizontal\",\n    sweep=1,\n    ax=ax,\n    vmin=-20,\n    vmax=70,\n    min_lat=36,\n    max_lat=37,\n    min_lon=-98,\n    max_lon=-97,\n    lat_lines=np.arange(36, 37.25, 0.25),\n    lon_lines=np.arange(-98, -96.75, 0.25),\n)\n\n# Plot the southwestern radar mapped to the southeastern radar\nax2 = plt.subplot(122, projection=ccrs.PlateCarree())\ndisp2 = pyart.graph.RadarMapDisplay(radar_sw_mapped_to_radar_se)\ndisp2.plot_ppi_map(\n    \"reflectivity_horizontal\",\n    sweep=1,\n    ax=ax2,\n    vmin=-20,\n    vmax=70,\n    min_lat=36,\n    max_lat=37,\n    min_lon=-98,\n    max_lon=-97,\n    lat_lines=np.arange(36, 37.25, 0.25),\n    lon_lines=np.arange(-98, -96.75, 0.25),\n)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Calculate and Plot the Difference**\n\nIt can be difficult to \"eyeball\" the difference between these two fields.\nFortunately, now that our radars match coordinates, we can plot a difference.\nKeep in mind there is a time difference of ~ 1 minute between these plots,\nleading to small difference due to the precipitation moving through the\ndomain over the course of that minute.\n\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "# Extract the numpy arrays for our reflectivity fields\nreflectivity_se_radar = radar_se.fields[\"reflectivity_horizontal\"][\"data\"]\nreflectivity_sw_radar = radar_sw_mapped_to_radar_se.fields[\"reflectivity_horizontal\"][\n    \"data\"\n]\n\n# Calculate the difference between the southeastern and southwestern radar\nreflectivity_difference = reflectivity_se_radar - reflectivity_sw_radar\n\n# Add a field like this to the radar_se radar object\nradar_se.add_field_like(\n    \"reflectivity_horizontal\",\n    field_name=\"reflectivity_bias\",\n    data=reflectivity_difference,\n)\n\n# Setup our figure\nfig = plt.figure(figsize=(8, 6))\nax = plt.subplot(111, projection=ccrs.PlateCarree())\n\n# Plot the difference field\ndisp1 = pyart.graph.RadarMapDisplay(radar_se)\ndisp1.plot_ppi_map(\n    \"reflectivity_bias\",\n    cmap=\"pyart_balance\",\n    title=\"Reflectivity Difference \\n XSAPR Southwest - XSPAR Southeast\",\n    sweep=1,\n    ax=ax,\n    vmin=-30,\n    vmax=30,\n    min_lat=36,\n    max_lat=37,\n    min_lon=-98,\n    max_lon=-97,\n    lat_lines=np.arange(36, 37.25, 0.25),\n    lon_lines=np.arange(-98, -96.75, 0.25),\n)"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Plot a Histogram for Comparison**\n\nAnother way of plotting the comparison here is using\na 2-dimensional histogram,which is more helpful in this\ncase where our scans don't neccessarily match exactly in time.\n\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "# Include elevations above the lowest one\nincl_gates = np.argwhere(radar_sw_mapped_to_radar_se.elevation[\"data\"] > 1.0)\n\n# Filter the reflectivity fields using the filter created above\nrefl_se = reflectivity_se_radar[incl_gates, :]\nrefl_sw = reflectivity_sw_radar[incl_gates, :]\n\n# Make sure not include masked values\nvalues_without_mask = np.logical_and(~refl_se.mask, ~refl_sw.mask)\nrefl_se = refl_se[values_without_mask]\nrefl_sw = refl_sw[values_without_mask]\n\n# Set the bins for our histogram\nbins = np.arange(-10, 60, 1)\n\n# Create the 2D histogram using the flattened numpy arrays\nhist = np.histogram2d(refl_se.flatten(), refl_sw.flatten(), bins=bins)[0]\nhist = np.ma.masked_where(hist == 0, hist)\n\n# Setup our figure\nfig = plt.figure(figsize=(8, 6))\n\n# Create a 1-1 comparison\nx, y = np.meshgrid((bins[:-1] + bins[1:]) / 2.0, (bins[:-1] + bins[1:]) / 2.0)\nc = plt.pcolormesh(x, y, np.log10(hist.T), cmap=\"pyart_HomeyerRainbow\")\n\n# Add a colorbar and labels\nplt.colorbar(c, label=\"$log_{10}$ counts\")\nplt.xlabel(\"XSAPR Southeast $Z_{H}$ [dBZ]\")\nplt.ylabel(\"XSAPR Southwest $Z_{H}$ [dBZ]\")\n\nplt.show()"
+      ]
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.13.0"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}

@@ -1,0 +1,79 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "\n# Calculating and Plotting a Cloud Mask\n\nThis example shows how to correct and plot reflectivity from an ARM\nKAZR using a noise floor cloud mask.\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "print(__doc__)\n\n# Author: Adam Theisen and Zach Sherman\n# License: BSD 3 clause\n\nimport matplotlib.pyplot as plt\nimport numpy as np\nfrom open_radar_data import DATASETS\n\nimport pyart"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Read and plot raw data**\n\nFirst let's read and plot our dataset without any mask.\n\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "# Fetch and read in the ARM KAZR file.\nfilename = DATASETS.fetch(\"sgpkazrgeC1.a1.20190529.000002.cdf\")\nradar = pyart.aux_io.read_kazr(filename)\n\n# Let's now take a look at reflectivity data prior to any corrections.\ndisplay = pyart.graph.RadarDisplay(radar)\ndisplay.plot(\"reflectivity_copol\")\ndisplay.set_limits(xlim=(0, 55))\nplt.show()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "**Calculate cloud mask and plot corrected data**\n\nNow lets apply a mask by using the calc_cloud_mask function\nthat will use a noise floor calculation from range and more\nto calculate the mask.\n\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "# First lets correct the data by calculating the mask.\ncloud_mask_radar = pyart.correct.calc_cloud_mask(radar, \"reflectivity_copol\", \"range\")\n\n# In this new radar object we should now have a new cloud mask field.\nprint(cloud_mask_radar.fields[\"cloud_mask_2\"])\n\n# Next we'll create a copy of the reflectivity field so we are not\n# overwriting the original data.\ncloud_mask_radar.add_field_like(\n    \"reflectivity_copol\",\n    \"reflectivity_cloud_mask\",\n    cloud_mask_radar.fields[\"reflectivity_copol\"][\"data\"].copy(),\n)\n\n# Now let's apply the mask to the copied reflectivity data.\ncloud_mask_radar.fields[\"reflectivity_cloud_mask\"][\"data\"][\n    cloud_mask_radar.fields[\"cloud_mask_2\"][\"data\"] == 0\n] = np.nan\n\n# And now we can plot the masked reflectivity field.\ndisplay = pyart.graph.RadarDisplay(cloud_mask_radar)\ndisplay.plot(\"reflectivity_cloud_mask\")\ndisplay.set_limits(xlim=(0, 55))\nplt.show()"
+      ]
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.13.0"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}

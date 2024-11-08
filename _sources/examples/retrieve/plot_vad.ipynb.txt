@@ -1,0 +1,43 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "\n# Calculate and Plot VAD profile\n\nCalculates a VAD and plots a vertical profile of wind\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "# Author: Daniel Wolfensberger (daniel.wolfensberger@meteoswiss.ch)\n# License: BSD 3 clause\n\nimport matplotlib.pyplot as plt\nimport numpy as np\nfrom open_radar_data import DATASETS\n\nimport pyart\n\n# Read in a sample file\nfilename = DATASETS.fetch(\"MLA2119412050U.nc\")\nradar = pyart.io.read_cfradial(filename)\n\n# Loop on all sweeps and compute VAD\nzlevels = np.arange(100, 5000, 100)  # height above radar\nu_allsweeps = []\nv_allsweeps = []\n\nfor idx in range(radar.nsweeps):\n    radar_1sweep = radar.extract_sweeps([idx])\n    vad = pyart.retrieve.vad_browning(\n        radar_1sweep, \"corrected_velocity\", z_want=zlevels\n    )\n    u_allsweeps.append(vad.u_wind)\n    v_allsweeps.append(vad.v_wind)\n\n# Average U and V over all sweeps and compute magnitude and angle\nu_avg = np.nanmean(np.array(u_allsweeps), axis=0)\nv_avg = np.nanmean(np.array(v_allsweeps), axis=0)\norientation = np.rad2deg(np.arctan2(-u_avg, -v_avg)) % 360\nspeed = np.sqrt(u_avg**2 + v_avg**2)\n\n# Display vertical profile of wind\nfig, ax = plt.subplots(1, 2, sharey=True)\nax[0].plot(speed * 2, zlevels + radar.altitude[\"data\"])\nax[1].plot(orientation, zlevels + radar.altitude[\"data\"])\nax[0].set_xlabel(\"Wind speed [m/s]\")\nax[1].set_xlabel(\"Wind direction [deg]\")\nax[0].set_ylabel(\"Altitude [m]\")\nfig.suptitle(\"Wind profile obtained from VAD\")"
+      ]
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.13.0"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}

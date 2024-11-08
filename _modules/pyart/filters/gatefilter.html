@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" data-theme="light">
+<html lang="en" data-content_root="../../../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -15,19 +15,17 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
-  <!-- 
-    this give us a css class that will be invisible only if js is disabled 
-  -->
-  <noscript>
-    <style>
-      .pst-js-only { display: none !important; }
-
-    </style>
-  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -40,15 +38,14 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
-  <!-- So that users can add custom icons -->
-  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
 
-    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=bf1c18cd"></script>
-    <script src="../../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../../_static/documentation_options.js?v=c739abb9"></script>
+    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
@@ -60,13 +57,18 @@
                 gtag('js', new Date());
                 gtag('config', 'G-JJEG3CV376');
             </script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-JJEG3CV376');
+            </script>
     <script>DOCUMENTATION_OPTIONS.pagename = '_modules/pyart/filters/gatefilter';</script>
     <script src="../../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="1.19" /> 
+  <meta name="docsearch:language" content="en"/> 
 <link
   rel="alternate"
   type="application/atom+xml"
@@ -89,8 +91,19 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <dialog id="pst-search-dialog">
-    
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
 <form class="bd-search d-flex align-items-center"
       action="../../../search.html"
       method="get">
@@ -98,6 +111,7 @@
   <input type="search"
          class="form-control"
          name="q"
+         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -105,8 +119,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form>
-  </dialog>
+</form></div>
+  </div>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -216,21 +230,29 @@
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
         </div>
       
       
         <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -267,11 +289,15 @@
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
- <i class="fa-solid fa-magnifying-glass"></i>
- <span class="search-button__default-text">Search</span>
- <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-</button>
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
     </div>
   
 
@@ -288,8 +314,7 @@
       
         
       
-      <dialog id="pst-primary-sidebar-modal"></dialog>
-      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
 
   
@@ -364,11 +389,15 @@
         
           <div class="navbar-item">
 
-<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
-  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
-  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
-  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
-</button></div>
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -424,6 +453,8 @@
       
         <div class="header-article-item">
 
+
+
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -435,7 +466,7 @@
     
     <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pyart.filters.gatefilter</span></li>
+    <li class="breadcrumb-item active" aria-current="page">pyart.filter...</li>
   </ul>
 </nav>
 </div>
@@ -466,7 +497,9 @@
 <span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">texture_along_ray</span>
 
 
-<div class="viewcode-block" id="moment_based_gate_filter"><a class="viewcode-back" href="../../../API/generated/pyart.filters.moment_based_gate_filter.html#pyart.correct.moment_based_gate_filter">[docs]</a><span class="k">def</span> <span class="nf">moment_based_gate_filter</span><span class="p">(</span>
+<div class="viewcode-block" id="moment_based_gate_filter">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.moment_based_gate_filter.html#pyart.correct.moment_based_gate_filter">[docs]</a>
+<span class="k">def</span> <span class="nf">moment_based_gate_filter</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">ncp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">rhv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -560,7 +593,10 @@
     <span class="k">return</span> <span class="n">gatefilter</span></div>
 
 
-<div class="viewcode-block" id="moment_and_texture_based_gate_filter"><a class="viewcode-back" href="../../../API/generated/pyart.filters.moment_and_texture_based_gate_filter.html#pyart.correct.moment_and_texture_based_gate_filter">[docs]</a><span class="k">def</span> <span class="nf">moment_and_texture_based_gate_filter</span><span class="p">(</span>
+
+<div class="viewcode-block" id="moment_and_texture_based_gate_filter">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.moment_and_texture_based_gate_filter.html#pyart.correct.moment_and_texture_based_gate_filter">[docs]</a>
+<span class="k">def</span> <span class="nf">moment_and_texture_based_gate_filter</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">zdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">rhv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -706,7 +742,10 @@
     <span class="k">return</span> <span class="n">gatefilter</span></div>
 
 
-<div class="viewcode-block" id="temp_based_gate_filter"><a class="viewcode-back" href="../../../API/generated/pyart.filters.temp_based_gate_filter.html#pyart.correct.temp_based_gate_filter">[docs]</a><span class="k">def</span> <span class="nf">temp_based_gate_filter</span><span class="p">(</span>
+
+<div class="viewcode-block" id="temp_based_gate_filter">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.temp_based_gate_filter.html#pyart.correct.temp_based_gate_filter">[docs]</a>
+<span class="k">def</span> <span class="nf">temp_based_gate_filter</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">temp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">min_temp</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="mf">400.0</span><span class="p">,</span> <span class="n">beamwidth</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -799,7 +838,10 @@
     <span class="k">return</span> <span class="n">gatefilter</span></div>
 
 
-<div class="viewcode-block" id="iso0_based_gate_filter"><a class="viewcode-back" href="../../../API/generated/pyart.filters.iso0_based_gate_filter.html#pyart.correct.iso0_based_gate_filter">[docs]</a><span class="k">def</span> <span class="nf">iso0_based_gate_filter</span><span class="p">(</span>
+
+<div class="viewcode-block" id="iso0_based_gate_filter">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.iso0_based_gate_filter.html#pyart.correct.iso0_based_gate_filter">[docs]</a>
+<span class="k">def</span> <span class="nf">iso0_based_gate_filter</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">iso0_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">max_h_iso0</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">thickness</span><span class="o">=</span><span class="mf">400.0</span><span class="p">,</span> <span class="n">beamwidth</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -892,7 +934,10 @@
     <span class="k">return</span> <span class="n">gatefilter</span></div>
 
 
-<div class="viewcode-block" id="GateFilter"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.html#pyart.correct.GateFilter">[docs]</a><span class="k">class</span> <span class="nc">GateFilter</span><span class="p">:</span>
+
+<div class="viewcode-block" id="GateFilter">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.html#pyart.correct.GateFilter">[docs]</a>
+<span class="k">class</span> <span class="nc">GateFilter</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class for building a boolean arrays for filtering gates based on</span>
 <span class="sd">    a set of condition typically based on the values in the radar fields.</span>
@@ -939,11 +984,14 @@
     <span class="c1"># _gate_excluded attribute. The gate_included attribute can be found</span>
     <span class="c1"># by taking the ones complement of gates_included.</span>
 
-<div class="viewcode-block" id="GateFilter.copy"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.copy.html#pyart.correct.GateFilter.copy">[docs]</a>    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GateFilter.copy">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.copy.html#pyart.correct.GateFilter.copy">[docs]</a>
+    <span class="k">def</span> <span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a copy of the gatefilter.&quot;&quot;&quot;</span>
         <span class="n">a</span> <span class="o">=</span> <span class="n">GateFilter</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="p">)</span>
         <span class="n">a</span><span class="o">.</span><span class="n">_gate_excluded</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">a</span></div>
+
 
     <span class="nd">@property</span>
     <span class="k">def</span> <span class="nf">gate_included</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
@@ -999,7 +1047,9 @@
     <span class="c1"># exclude methods #</span>
     <span class="c1">###################</span>
 
-<div class="viewcode-block" id="GateFilter.exclude_transition"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_transition.html#pyart.correct.GateFilter.exclude_transition">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trans_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="GateFilter.exclude_transition">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_transition.html#pyart.correct.GateFilter.exclude_transition">[docs]</a>
+    <span class="k">def</span> <span class="nf">exclude_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trans_value</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Exclude all gates in rays marked as in transition between sweeps.</span>
 
@@ -1041,7 +1091,10 @@
             <span class="n">marked</span><span class="p">[</span><span class="n">in_transition</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_below"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_below.html#pyart.correct.GateFilter.exclude_below">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_below</span><span class="p">(</span>
+
+<div class="viewcode-block" id="GateFilter.exclude_below">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_below.html#pyart.correct.GateFilter.exclude_below">[docs]</a>
+    <span class="k">def</span> <span class="nf">exclude_below</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1081,7 +1134,10 @@
             <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">value</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_above"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_above.html#pyart.correct.GateFilter.exclude_above">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_above</span><span class="p">(</span>
+
+<div class="viewcode-block" id="GateFilter.exclude_above">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_above.html#pyart.correct.GateFilter.exclude_above">[docs]</a>
+    <span class="k">def</span> <span class="nf">exclude_above</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Exclude gates where a given field is above a given value.&quot;&quot;&quot;</span>
@@ -1091,7 +1147,10 @@
             <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">value</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_above_toa"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_above_toa.html#pyart.correct.GateFilter.exclude_above_toa">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_above_toa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GateFilter.exclude_above_toa">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_above_toa.html#pyart.correct.GateFilter.exclude_above_toa">[docs]</a>
+    <span class="k">def</span> <span class="nf">exclude_above_toa</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Exclude gates above a given toa value.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">inclusive</span><span class="p">:</span>
             <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">value</span>
@@ -1099,7 +1158,10 @@
             <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">gate_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">value</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_inside"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_inside.html#pyart.correct.GateFilter.exclude_inside">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_inside</span><span class="p">(</span>
+
+<div class="viewcode-block" id="GateFilter.exclude_inside">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_inside.html#pyart.correct.GateFilter.exclude_inside">[docs]</a>
+    <span class="k">def</span> <span class="nf">exclude_inside</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Exclude gates where a given field is inside a given interval.&quot;&quot;&quot;</span>
@@ -1112,7 +1174,10 @@
             <span class="n">marked</span> <span class="o">=</span> <span class="p">(</span><span class="n">fdata</span> <span class="o">&gt;</span> <span class="n">v1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">fdata</span> <span class="o">&lt;</span> <span class="n">v2</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_outside"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_outside.html#pyart.correct.GateFilter.exclude_outside">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_outside</span><span class="p">(</span>
+
+<div class="viewcode-block" id="GateFilter.exclude_outside">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_outside.html#pyart.correct.GateFilter.exclude_outside">[docs]</a>
+    <span class="k">def</span> <span class="nf">exclude_outside</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Exclude gates where a given field is outside a given interval.&quot;&quot;&quot;</span>
@@ -1125,39 +1190,60 @@
             <span class="n">marked</span> <span class="o">=</span> <span class="p">(</span><span class="n">fdata</span> <span class="o">&lt;</span> <span class="n">v1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">fdata</span> <span class="o">&gt;</span> <span class="n">v2</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_equal"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_equal.html#pyart.correct.GateFilter.exclude_equal">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GateFilter.exclude_equal">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_equal.html#pyart.correct.GateFilter.exclude_equal">[docs]</a>
+    <span class="k">def</span> <span class="nf">exclude_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Exclude gates where a given field is equal to a value.&quot;&quot;&quot;</span>
         <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">==</span> <span class="n">value</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_not_equal"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_not_equal.html#pyart.correct.GateFilter.exclude_not_equal">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_not_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GateFilter.exclude_not_equal">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_not_equal.html#pyart.correct.GateFilter.exclude_not_equal">[docs]</a>
+    <span class="k">def</span> <span class="nf">exclude_not_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Exclude gates where a given field is not equal to a value.&quot;&quot;&quot;</span>
         <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">!=</span> <span class="n">value</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_all"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_all.html#pyart.correct.GateFilter.exclude_all">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GateFilter.exclude_all">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_all.html#pyart.correct.GateFilter.exclude_all">[docs]</a>
+    <span class="k">def</span> <span class="nf">exclude_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Exclude all gates.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span><span class="p">)</span>
         <span class="k">return</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_none"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_none.html#pyart.correct.GateFilter.exclude_none">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_none</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GateFilter.exclude_none">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_none.html#pyart.correct.GateFilter.exclude_none">[docs]</a>
+    <span class="k">def</span> <span class="nf">exclude_none</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Exclude no gates, include all gates.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span><span class="p">)</span>
         <span class="k">return</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_masked"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_masked.html#pyart.correct.GateFilter.exclude_masked">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_masked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GateFilter.exclude_masked">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_masked.html#pyart.correct.GateFilter.exclude_masked">[docs]</a>
+    <span class="k">def</span> <span class="nf">exclude_masked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Exclude gates where a given field is masked.&quot;&quot;&quot;</span>
         <span class="n">marked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_invalid"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_invalid.html#pyart.correct.GateFilter.exclude_invalid">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_invalid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GateFilter.exclude_invalid">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_invalid.html#pyart.correct.GateFilter.exclude_invalid">[docs]</a>
+    <span class="k">def</span> <span class="nf">exclude_invalid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Exclude gates where an invalid value occurs in a field (NaNs or infs).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">marked</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_last_gates"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_last_gates.html#pyart.correct.GateFilter.exclude_last_gates">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_last_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">n_gates</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GateFilter.exclude_last_gates">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_last_gates.html#pyart.correct.GateFilter.exclude_last_gates">[docs]</a>
+    <span class="k">def</span> <span class="nf">exclude_last_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">n_gates</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Excludes a number of gates at the end of each ray. This is useful</span>
 <span class="sd">        for when trying to exclude &quot;ring artifacts&quot; in some datasets.</span>
@@ -1166,7 +1252,10 @@
         <span class="n">marked</span><span class="p">[:,</span> <span class="o">-</span><span class="n">n_gates</span><span class="p">:]</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.exclude_gates"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_gates.html#pyart.correct.GateFilter.exclude_gates">[docs]</a>    <span class="k">def</span> <span class="nf">exclude_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GateFilter.exclude_gates">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.exclude_gates.html#pyart.correct.GateFilter.exclude_gates">[docs]</a>
+    <span class="k">def</span> <span class="nf">exclude_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;or&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Exclude gates where a given mask is equal True.</span>
 
@@ -1199,11 +1288,14 @@
         <span class="n">marked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;bool&quot;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
+
     <span class="c1">####################</span>
     <span class="c1"># include_ methods #</span>
     <span class="c1">####################</span>
 
-<div class="viewcode-block" id="GateFilter.include_not_transition"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_not_transition.html#pyart.correct.GateFilter.include_not_transition">[docs]</a>    <span class="k">def</span> <span class="nf">include_not_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trans_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="GateFilter.include_not_transition">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_not_transition.html#pyart.correct.GateFilter.include_not_transition">[docs]</a>
+    <span class="k">def</span> <span class="nf">include_not_transition</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">trans_value</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Include all gates in rays not marked as in transition between sweeps.</span>
 
@@ -1246,7 +1338,10 @@
             <span class="n">include</span><span class="p">[</span><span class="n">not_in_transition</span><span class="p">]</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="o">~</span><span class="n">include</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_below"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_below.html#pyart.correct.GateFilter.include_below">[docs]</a>    <span class="k">def</span> <span class="nf">include_below</span><span class="p">(</span>
+
+<div class="viewcode-block" id="GateFilter.include_below">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_below.html#pyart.correct.GateFilter.include_below">[docs]</a>
+    <span class="k">def</span> <span class="nf">include_below</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Include gates where a given field is below a given value.&quot;&quot;&quot;</span>
@@ -1256,7 +1351,10 @@
             <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="o">~</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_above"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_above.html#pyart.correct.GateFilter.include_above">[docs]</a>    <span class="k">def</span> <span class="nf">include_above</span><span class="p">(</span>
+
+<div class="viewcode-block" id="GateFilter.include_above">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_above.html#pyart.correct.GateFilter.include_above">[docs]</a>
+    <span class="k">def</span> <span class="nf">include_above</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Include gates where a given field is above a given value.&quot;&quot;&quot;</span>
@@ -1266,7 +1364,10 @@
             <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">value</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="o">~</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_inside"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_inside.html#pyart.correct.GateFilter.include_inside">[docs]</a>    <span class="k">def</span> <span class="nf">include_inside</span><span class="p">(</span>
+
+<div class="viewcode-block" id="GateFilter.include_inside">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_inside.html#pyart.correct.GateFilter.include_inside">[docs]</a>
+    <span class="k">def</span> <span class="nf">include_inside</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">True</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Include gates where a given field is inside a given interval.&quot;&quot;&quot;</span>
@@ -1279,7 +1380,10 @@
             <span class="n">marked</span> <span class="o">=</span> <span class="p">(</span><span class="n">fdata</span> <span class="o">&gt;</span> <span class="n">v1</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">fdata</span> <span class="o">&lt;</span> <span class="n">v2</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="o">~</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_outside"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_outside.html#pyart.correct.GateFilter.include_outside">[docs]</a>    <span class="k">def</span> <span class="nf">include_outside</span><span class="p">(</span>
+
+<div class="viewcode-block" id="GateFilter.include_outside">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_outside.html#pyart.correct.GateFilter.include_outside">[docs]</a>
+    <span class="k">def</span> <span class="nf">include_outside</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">v1</span><span class="p">,</span> <span class="n">v2</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">,</span> <span class="n">inclusive</span><span class="o">=</span><span class="kc">False</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Include gates where a given field is outside a given interval.&quot;&quot;&quot;</span>
@@ -1292,37 +1396,58 @@
             <span class="n">marked</span> <span class="o">=</span> <span class="p">(</span><span class="n">fdata</span> <span class="o">&lt;</span> <span class="n">v1</span><span class="p">)</span> <span class="o">|</span> <span class="p">(</span><span class="n">fdata</span> <span class="o">&gt;</span> <span class="n">v2</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="o">~</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_equal"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_equal.html#pyart.correct.GateFilter.include_equal">[docs]</a>    <span class="k">def</span> <span class="nf">include_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GateFilter.include_equal">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_equal.html#pyart.correct.GateFilter.include_equal">[docs]</a>
+    <span class="k">def</span> <span class="nf">include_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Include gates where a given field is equal to a value.&quot;&quot;&quot;</span>
         <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">==</span> <span class="n">value</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="o">~</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_not_equal"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_not_equal.html#pyart.correct.GateFilter.include_not_equal">[docs]</a>    <span class="k">def</span> <span class="nf">include_not_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GateFilter.include_not_equal">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_not_equal.html#pyart.correct.GateFilter.include_not_equal">[docs]</a>
+    <span class="k">def</span> <span class="nf">include_not_equal</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Include gates where a given field is not equal to a value.&quot;&quot;&quot;</span>
         <span class="n">marked</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">)</span> <span class="o">!=</span> <span class="n">value</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="o">~</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_all"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_all.html#pyart.correct.GateFilter.include_all">[docs]</a>    <span class="k">def</span> <span class="nf">include_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GateFilter.include_all">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_all.html#pyart.correct.GateFilter.include_all">[docs]</a>
+    <span class="k">def</span> <span class="nf">include_all</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Include all gates.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_none"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_none.html#pyart.correct.GateFilter.include_none">[docs]</a>    <span class="k">def</span> <span class="nf">include_none</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GateFilter.include_none">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_none.html#pyart.correct.GateFilter.include_none">[docs]</a>
+    <span class="k">def</span> <span class="nf">include_none</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Include no gates, exclude all gates.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_gate_excluded</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_not_masked"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_not_masked.html#pyart.correct.GateFilter.include_not_masked">[docs]</a>    <span class="k">def</span> <span class="nf">include_not_masked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GateFilter.include_not_masked">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_not_masked.html#pyart.correct.GateFilter.include_not_masked">[docs]</a>
+    <span class="k">def</span> <span class="nf">include_not_masked</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Include gates where a given field in not masked.&quot;&quot;&quot;</span>
         <span class="n">marked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">getmaskarray</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_valid"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_valid.html#pyart.correct.GateFilter.include_valid">[docs]</a>    <span class="k">def</span> <span class="nf">include_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GateFilter.include_valid">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_valid.html#pyart.correct.GateFilter.include_valid">[docs]</a>
+    <span class="k">def</span> <span class="nf">include_valid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Include gates where a valid value occurs in a field (not NaN or inf).</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">marked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_get_fdata</span><span class="p">(</span><span class="n">field</span><span class="p">))</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="o">~</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GateFilter.include_gates"><a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_gates.html#pyart.correct.GateFilter.include_gates">[docs]</a>    <span class="k">def</span> <span class="nf">include_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
+
+<div class="viewcode-block" id="GateFilter.include_gates">
+<a class="viewcode-back" href="../../../API/generated/pyart.filters.GateFilter.include_gates.html#pyart.correct.GateFilter.include_gates">[docs]</a>
+    <span class="k">def</span> <span class="nf">include_gates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mask</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">op</span><span class="o">=</span><span class="s2">&quot;and&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Include gates where a given mask is equal True.</span>
 
@@ -1352,7 +1477,9 @@
         <span class="k">if</span> <span class="n">mask</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">fdata</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Mask array must be the same size as a field.&quot;</span><span class="p">)</span>
         <span class="n">marked</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;bool&quot;</span><span class="p">)</span>
-        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div></div>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_merge</span><span class="p">(</span><span class="n">marked</span><span class="p">,</span> <span class="n">op</span><span class="p">,</span> <span class="n">exclude_masked</span><span class="p">)</span></div>
+</div>
+
 </pre></div>
 <div class="section ablog__blog_comments">
    
@@ -1385,8 +1512,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1406,7 +1533,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
     <br/>
   </p>
 </div>
@@ -1419,7 +1546,7 @@
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
 </p></div>
       
     </div>

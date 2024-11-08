@@ -1,0 +1,43 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {},
+      "source": [
+        "\n# Create an image-muted reflectivity plot\nAn example which creates an image-muted PPI plot from a NEXRAD file.\n\nImage muting reduces the visual prominence of the reflectivities within identified\nmelting and mixed precipitation features in winter storms (i.e. regions with low\ncorrelation coefficient values). Reflectivities corresponding to melting and mixed\nprecipitation features are deemphasized using a gray scale and the regions\nwith just snow and just rain are depicted in a corresponding full-color scale.\nThe ultimate utility of image muting radar reflectivity is to reduce the misinterpretation\nof regions of melting or mixed precipitation as opposed to heavy snow or heavy rain.\n"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "collapsed": false
+      },
+      "outputs": [],
+      "source": [
+        "print(__doc__)\n\n# Author: Laura Tomkins (lmtomkin@ncsu.edu)\n# License: BSD 3 clause\n# citation: Tomkins, L. M., Yuter, S. E., Miller, M. A., and Allen, L. R., 2022:\n# Image muting of mixed precipitation to improve identification of regions\n# of heavy snow in radar data. Atmos. Meas. Tech., 15, 5515\u20135525,\n# https://doi.org/10.5194/amt-15-5515-2022\n\nimport matplotlib.colors as mcolors\nimport matplotlib.pyplot as plt\nimport numpy as np\n\nimport pyart\n\n# Read in file\nnexrad_file = \"s3://noaa-nexrad-level2/2020/02/07/KBGM/KBGM20200207_132642_V06\"\nradar = pyart.io.read_nexrad_archive(nexrad_file)\n\n# Mute radar object\n# Regions where rhoHV < 0.97 and reflectivity > 20 will be muted\nradar = pyart.util.image_mute_radar(\n    radar,\n    field=\"reflectivity\",\n    mute_field=\"cross_correlation_ratio\",\n    mute_threshold=0.97,\n    field_threshold=20,\n)\n\n# adjust colormaps for visual separation\n# this example uses perceptually uniform colormaps\nmagma_cmap = plt.get_cmap(\"magma_r\")\ngrays_cmap = plt.get_cmap(\"gray_r\")\n\nnonmuted_cmap = mcolors.LinearSegmentedColormap.from_list(\n    \"nonmuted_cmap\", magma_cmap(np.linspace(0, 0.9, magma_cmap.N))\n)\nmuted_cmap = mcolors.LinearSegmentedColormap.from_list(\n    \"muted_cmap\", grays_cmap(np.linspace(0, 0.7, grays_cmap.N))\n)\n\n# create plot using RadarDisplay\ndisplay = pyart.graph.RadarDisplay(radar)\n\nfig = plt.figure()\nax = plt.axes()\ndisplay.plot(\"nonmuted_reflectivity\", 0, vmin=5, vmax=45, cmap=nonmuted_cmap)\ndisplay.plot(\"muted_reflectivity\", 0, vmin=5, vmax=45, cmap=muted_cmap)\ndisplay.set_limits((-300, 300), (-300, 300))\nax.set_aspect(\"equal\")\nplt.show()"
+      ]
+    }
+  ],
+  "metadata": {
+    "kernelspec": {
+      "display_name": "Python 3",
+      "language": "python",
+      "name": "python3"
+    },
+    "language_info": {
+      "codemirror_mode": {
+        "name": "ipython",
+        "version": 3
+      },
+      "file_extension": ".py",
+      "mimetype": "text/x-python",
+      "name": "python",
+      "nbconvert_exporter": "python",
+      "pygments_lexer": "ipython3",
+      "version": "3.13.0"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
