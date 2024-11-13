@@ -36,9 +36,9 @@ dependencies:
   - mda-xdrlib
   - xradar>=0.8.0
   - dask
+  - ablog
   - pip
   - pip:
       - pooch
       - versioneer
-      - ablog
       - -e ..
