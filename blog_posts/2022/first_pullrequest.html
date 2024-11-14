@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -16,17 +16,19 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -39,24 +41,20 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../_static/documentation_options.js?v=63412fa0"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=1b649cd4"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -68,7 +66,8 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/> 
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.19" /> 
 <link
   rel="alternate"
   type="application/atom+xml"
@@ -91,19 +90,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -111,7 +99,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -119,8 +106,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -230,29 +217,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -289,15 +268,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -318,7 +293,8 @@ document.write(`
       
         
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -393,15 +369,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -552,8 +524,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -562,7 +532,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page">Active...</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Active Py-ART Development - Submitting a Pull Request (PR)</span></li>
   </ul>
 </nav>
 </div>
@@ -579,26 +549,23 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <section class="tex2jax_ignore mathjax_ignore" id="active-py-art-development-submitting-a-pull-request-pr">
-<h1>Active Py-ART Development - Submitting a Pull Request (PR)<a class="headerlink" href="#active-py-art-development-submitting-a-pull-request-pr" title="Link to this heading">#</a></h1>
+<h1>Active Py-ART Development - Submitting a Pull Request (PR)<a class="headerlink" href="#active-py-art-development-submitting-a-pull-request-pr" title="Permalink to this heading">#</a></h1>
 <p>The motivation for this blog comes from wanting to change the colorscheme within the default Py-ART documentation images to a more (<a class="reference external" href="https://ntrs.nasa.gov/api/citations/20180004634/downloads/20180004634.pdf">color vision deficiency friendly color scheme</a>).</p>
 <p>Here are the images we are working with:</p>
-<a class="reference internal image-reference" href="../../_images/PyART_Docs_Original_PPI_image.png"><img alt="drawing" src="../../_images/PyART_Docs_Original_PPI_image.png" style="width: 400px;" />
-</a>
-<a class="reference internal image-reference" href="../../_images/PyART_Docs_OriginalRHI_withJetColorscheme.png"><img alt="drawing" src="../../_images/PyART_Docs_OriginalRHI_withJetColorscheme.png" style="width: 400px;" />
-</a>
+<a class="reference internal image-reference" href="../../_images/PyART_Docs_Original_PPI_image.png"><img alt="drawing" src="../../_images/PyART_Docs_Original_PPI_image.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="../../_images/PyART_Docs_OriginalRHI_withJetColorscheme.png"><img alt="drawing" src="../../_images/PyART_Docs_OriginalRHI_withJetColorscheme.png" style="width: 400px;" /></a>
 <p>This is also a good time to illustrate how to get started with
 active development in Py-ART and submitting changes
 to the source code for further collaboration.</p>
 <p>Please refer to the (<a class="reference external" href="https://arm-doe.github.io/pyart/userguide/INSTALL.html">Py-ART Contributor’s Guide</a>) for installation guidence.</p>
 <p>I’ve highlighted some steps of the installation below that tripped me up and might offer some assistance.</p>
 <section id="first-if-you-have-not-done-so-already-you-will-need-to-fork-the-py-art-github-repository">
-<h2>First, if you have not done so already, you will need to fork the Py-ART github repository<a class="headerlink" href="#first-if-you-have-not-done-so-already-you-will-need-to-fork-the-py-art-github-repository" title="Link to this heading">#</a></h2>
+<h2>First, if you have not done so already, you will need to fork the Py-ART github repository<a class="headerlink" href="#first-if-you-have-not-done-so-already-you-will-need-to-fork-the-py-art-github-repository" title="Permalink to this heading">#</a></h2>
 <p>by clicking here:</p>
-<a class="reference internal image-reference" href="../../_images/pyart_github_clone.png"><img alt="drawing" src="../../_images/pyart_github_clone.png" style="width: 400px;" />
-</a>
+<a class="reference internal image-reference" href="../../_images/pyart_github_clone.png"><img alt="drawing" src="../../_images/pyart_github_clone.png" style="width: 400px;" /></a>
 </section>
 <section id="second-in-a-terminal-you-will-need-to-clone-your-remote-fork-with-the-git-clone-command">
-<h2>Second, in a terminal, you will need to clone your remote fork with the “git clone” command<a class="headerlink" href="#second-in-a-terminal-you-will-need-to-clone-your-remote-fork-with-the-git-clone-command" title="Link to this heading">#</a></h2>
+<h2>Second, in a terminal, you will need to clone your remote fork with the “git clone” command<a class="headerlink" href="#second-in-a-terminal-you-will-need-to-clone-your-remote-fork-with-the-git-clone-command" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https_link_to_your_fork</span>
@@ -609,7 +576,7 @@ to the source code for further collaboration.</p>
 <p>If you are unfamiliar with git command line commands, please review this (<a class="reference external" href="https://foundations.projectpythia.org/foundations/getting-started-github.html">getting started documentation</a>)</p>
 </section>
 <section id="third-create-the-pyart-docs-conda-environment">
-<h2>Third, create the “pyart-docs” conda environment<a class="headerlink" href="#third-create-the-pyart-docs-conda-environment" title="Link to this heading">#</a></h2>
+<h2>Third, create the “pyart-docs” conda environment<a class="headerlink" href="#third-create-the-pyart-docs-conda-environment" title="Permalink to this heading">#</a></h2>
 <p>We will use the documentation YML file (located at the /pyart/doc/environmental.yml) to create the “pyart-docs” conda environment.</p>
 <p>NOTE: The documentation YML file is slightly different from the /pyart/environmental.yml file and contains the packages needed for active development</p>
 <p>To create a new environment from this YML file, type:</p>
@@ -622,9 +589,8 @@ to the source code for further collaboration.</p>
 </div>
 </section>
 <section id="fourth-we-will-need-to-install-the-trmm-rsl-library">
-<h2>Fourth, we will need to install the (<a class="reference external" href="https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/">TRMM RSL Library</a>)<a class="headerlink" href="#fourth-we-will-need-to-install-the-trmm-rsl-library" title="Link to this heading">#</a></h2>
-<a class="reference internal image-reference" href="../../_images/TRMM_RSL_webpage.png"><img alt="drawing" src="../../_images/TRMM_RSL_webpage.png" style="width: 400px;" />
-</a>
+<h2>Fourth, we will need to install the (<a class="reference external" href="https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/">TRMM RSL Library</a>)<a class="headerlink" href="#fourth-we-will-need-to-install-the-trmm-rsl-library" title="Permalink to this heading">#</a></h2>
+<a class="reference internal image-reference" href="../../_images/TRMM_RSL_webpage.png"><img alt="drawing" src="../../_images/TRMM_RSL_webpage.png" style="width: 400px;" /></a>
 <p>Click on the “Download latest version” button and download the package to a local location (~/opt - for me)</p>
 <p>You will then need to run the installation commands from the RSL library:</p>
 <div class="cell docutils container">
@@ -651,7 +617,7 @@ to the source code for further collaboration.</p>
 </div>
 </section>
 <section id="lastly-activate-the-pyart-docs-environment-and-install-the-python-script-within-your-forked-repository">
-<h2>Lastly, activate the ‘pyart-docs’ environment and install the python script within your forked repository<a class="headerlink" href="#lastly-activate-the-pyart-docs-environment-and-install-the-python-script-within-your-forked-repository" title="Link to this heading">#</a></h2>
+<h2>Lastly, activate the ‘pyart-docs’ environment and install the python script within your forked repository<a class="headerlink" href="#lastly-activate-the-pyart-docs-environment-and-install-the-python-script-within-your-forked-repository" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
@@ -661,9 +627,9 @@ to the source code for further collaboration.</p>
 </div>
 </section>
 <section id="okay-you-should-be-installed-now-and-ready-to-make-changes-to-the-source-code">
-<h2>OKAY! You should be installed now, and ready to make changes to the source code!<a class="headerlink" href="#okay-you-should-be-installed-now-and-ready-to-make-changes-to-the-source-code" title="Link to this heading">#</a></h2>
+<h2>OKAY! You should be installed now, and ready to make changes to the source code!<a class="headerlink" href="#okay-you-should-be-installed-now-and-ready-to-make-changes-to-the-source-code" title="Permalink to this heading">#</a></h2>
 <section id="first-create-a-new-branch-for-our-changes">
-<h3>1. First, create a New Branch for our Changes<a class="headerlink" href="#first-create-a-new-branch-for-our-changes" title="Link to this heading">#</a></h3>
+<h3>1. First, create a New Branch for our Changes<a class="headerlink" href="#first-create-a-new-branch-for-our-changes" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">newblog_post</span>
@@ -673,7 +639,7 @@ to the source code for further collaboration.</p>
 </div>
 </section>
 <section id="push-new-branch-to-remote">
-<h3>2. Push New Branch To Remote<a class="headerlink" href="#push-new-branch-to-remote" title="Link to this heading">#</a></h3>
+<h3>2. Push New Branch To Remote<a class="headerlink" href="#push-new-branch-to-remote" title="Permalink to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="o">--</span><span class="nb">set</span><span class="o">-</span><span class="n">upstream</span> <span class="n">origin</span> <span class="n">newblog_post</span>
@@ -862,7 +828,7 @@ to the source code for further collaboration.</p>
 </section>
 </section>
 <section id="now-lets-commit-these-changes-to-github">
-<h2>Now lets commit these changes to github!<a class="headerlink" href="#now-lets-commit-these-changes-to-github" title="Link to this heading">#</a></h2>
+<h2>Now lets commit these changes to github!<a class="headerlink" href="#now-lets-commit-these-changes-to-github" title="Permalink to this heading">#</a></h2>
 <p>The git ‘status’ command will show which branch we are working on and all changes made</p>
 <p>‘Changes not staged for commit” are all changes I have made to files within my local Py-ART repository.</p>
 <p>‘Untracked files’ are any file that is new to Py-ART, and is currently not submitted to the repository.</p>
@@ -913,16 +879,14 @@ After adding the new images for the docs and updated (and new) code, we need to 
 <p>Finally, ‘git push’ will push all these changes to the remote repository (my personal fork of Py-ART), where I can then request a pull-request by going to my ‘branches’</p>
 </section>
 <section id="after-creating-a-pull-request-this-is-what-it-looks-like-on-github">
-<h2>After Creating a Pull Request, this is what it looks like on GitHub<a class="headerlink" href="#after-creating-a-pull-request-this-is-what-it-looks-like-on-github" title="Link to this heading">#</a></h2>
-<a class="reference internal image-reference" href="../../_images/pull_request_commitmessage.png"><img alt="drawing" src="../../_images/pull_request_commitmessage.png" style="width: 400px;" />
-</a>
+<h2>After Creating a Pull Request, this is what it looks like on GitHub<a class="headerlink" href="#after-creating-a-pull-request-this-is-what-it-looks-like-on-github" title="Permalink to this heading">#</a></h2>
+<a class="reference internal image-reference" href="../../_images/pull_request_commitmessage.png"><img alt="drawing" src="../../_images/pull_request_commitmessage.png" style="width: 400px;" /></a>
 <p>Additionally, the Pull Request will show what code has been changed and allows anyone to respond with comments/suggestions</p>
-<a class="reference internal image-reference" href="../../_images/pull_request_changes.png"><img alt="drawing" src="../../_images/pull_request_changes.png" style="width: 400px;" />
-</a>
+<a class="reference internal image-reference" href="../../_images/pull_request_changes.png"><img alt="drawing" src="../../_images/pull_request_changes.png" style="width: 400px;" /></a>
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="hope-this-helped">
-<h1>Hope this helped!<a class="headerlink" href="#hope-this-helped" title="Link to this heading">#</a></h1>
+<h1>Hope this helped!<a class="headerlink" href="#hope-this-helped" title="Permalink to this heading">#</a></h1>
 </section>
 
 <div class="section ablog__blog_comments">
@@ -969,7 +933,8 @@ After adding the new images for the docs and updated (and new) code, we need to 
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -1022,8 +987,8 @@ After adding the new images for the docs and updated (and new) code, we need to 
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1043,7 +1008,7 @@ After adding the new images for the docs and updated (and new) code, we need to 
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>
@@ -1056,7 +1021,7 @@ After adding the new images for the docs and updated (and new) code, we need to 
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
 </p></div>
       
     </div>

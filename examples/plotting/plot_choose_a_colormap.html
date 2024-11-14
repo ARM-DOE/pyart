@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -16,17 +16,19 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -39,24 +41,20 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../_static/documentation_options.js?v=63412fa0"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=1b649cd4"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -70,7 +68,8 @@
     <link rel="next" title="Retrieval Examples" href="../retrieve/index.html" />
     <link rel="prev" title="Create an RHI plot with reflectivity contour lines from an MDV file" href="plot_rhi_contours_differential_reflectivity.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/> 
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.19" /> 
 <link
   rel="alternate"
   type="application/atom+xml"
@@ -93,19 +92,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -113,7 +101,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -121,8 +108,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -232,29 +219,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -291,15 +270,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -318,7 +293,8 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -393,15 +369,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -527,8 +499,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -543,7 +513,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="index.html" class="nav-link">Plotting examples</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">Choose a...</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Choose a Colormap for your Plot</span></li>
   </ul>
 </nav>
 </div>
@@ -559,13 +529,16 @@ document.write(`
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                   <section class="tex2jax_ignore mathjax_ignore" id="choose-a-colormap-for-your-plot">
-<h1>Choose a Colormap for your Plot<a class="headerlink" href="#choose-a-colormap-for-your-plot" title="Link to this heading">#</a></h1>
+                   <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-examples-plotting-plot-choose-a-colormap-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="choose-a-colormap-for-your-plot">
+<span id="sphx-glr-examples-plotting-plot-choose-a-colormap-py"></span><h1>Choose a Colormap for your Plot<a class="headerlink" href="#choose-a-colormap-for-your-plot" title="Permalink to this heading">#</a></h1>
 <p>This is an example of what colormaps are available in Py-ART,
 and how to add them to your own plots.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Max Grover (mgrover@anl.gov)</span>
 <span class="c1"># License: BSD 3 clause</span>
@@ -577,14 +550,10 @@ and how to add them to your own plots.</p>
 <span class="kn">from</span> <span class="nn">pyart.testing</span> <span class="kn">import</span> <span class="n">get_test_data</span>
 </pre></div>
 </div>
-</div>
-</div>
 <p><strong>Plot the available colormaps</strong></p>
 <p>Let’s see which colormaps are available directly from Py-ART!
 We use a helper function from matplotlib to plot this.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setup some helper functions and ranges to visualize our colormaps, from matplotlib</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setup some helper functions and ranges to visualize our colormaps, from matplotlib</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gradient</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gradient</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.vstack.html#numpy.vstack" title="numpy.vstack" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">vstack</span></a><span class="p">((</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gradient</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gradient</span></a><span class="p">))</span>
 
@@ -615,28 +584,20 @@ We use a helper function from matplotlib to plot this.</p>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-</div>
 <p><strong>Colorblind Friendly Colormaps</strong></p>
 <p>We recommend starting with these colorblind friendly colormaps.
 These colormaps are the most inclusive, and should be used where
 possible.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_color_gradients</span><span class="p">(</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_color_gradients</span><span class="p">(</span>
     <span class="s2">&quot;Colorblind Friendly&quot;</span><span class="p">,</span>
     <span class="p">[</span><span class="s2">&quot;LangRainbow12&quot;</span><span class="p">,</span> <span class="s2">&quot;HomeyerRainbow&quot;</span><span class="p">,</span> <span class="s2">&quot;balance&quot;</span><span class="p">,</span> <span class="s2">&quot;ChaseSpectral&quot;</span><span class="p">,</span> <span class="s2">&quot;SpectralExtended&quot;</span><span class="p">],</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
-<p><strong>Perceptually Uniform Colormaps</strong></p>
+<img src="../../_images/sphx_glr_plot_choose_a_colormap_001.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_001.png" alt="Colorblind Friendly Colormaps" class = "sphx-glr-single-img"/><p><strong>Perceptually Uniform Colormaps</strong></p>
 <p>More generally, perceptually uniform colormaps are colormaps where
 the lightness value increases monotonically through the colormaps.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_color_gradients</span><span class="p">(</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_color_gradients</span><span class="p">(</span>
     <span class="s2">&quot;Sequential&quot;</span><span class="p">,</span>
     <span class="p">[</span>
         <span class="s2">&quot;Bu10&quot;</span><span class="p">,</span>
@@ -647,14 +608,10 @@ the lightness value increases monotonically through the colormaps.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
-<p><strong>Diverging Colormaps</strong></p>
+<img src="../../_images/sphx_glr_plot_choose_a_colormap_002.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_002.png" alt="Sequential Colormaps" class = "sphx-glr-single-img"/><p><strong>Diverging Colormaps</strong></p>
 <p>Diverging colormaps are helpful when showing positive and negative
 values. This is when the 0 value is meaningful (ex. velocity)</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_color_gradients</span><span class="p">(</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_color_gradients</span><span class="p">(</span>
     <span class="s2">&quot;Diverging&quot;</span><span class="p">,</span>
     <span class="p">[</span>
         <span class="s2">&quot;BlueBrown11&quot;</span><span class="p">,</span>
@@ -676,15 +633,11 @@ values. This is when the 0 value is meaningful (ex. velocity)</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
-<p><strong>Field-Specific Colormaps</strong></p>
+<img src="../../_images/sphx_glr_plot_choose_a_colormap_003.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_003.png" alt="Diverging Colormaps" class = "sphx-glr-single-img"/><p><strong>Field-Specific Colormaps</strong></p>
 <p>There are some colormaps that useful for specific fields, such as
 “BlueBrown10” for terrain, or NWSRef for the National Weather Service
 reflectivity field</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_color_gradients</span><span class="p">(</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_color_gradients</span><span class="p">(</span>
     <span class="s2">&quot;Field-specific &quot;</span><span class="p">,</span>
     <span class="p">[</span>
         <span class="s2">&quot;BlueBrown10&quot;</span><span class="p">,</span>
@@ -708,14 +661,10 @@ reflectivity field</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
-<p><strong>Plot Using a Colormap from Matplotlib</strong></p>
+<img src="../../_images/sphx_glr_plot_choose_a_colormap_004.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_004.png" alt="Field-specific  Colormaps" class = "sphx-glr-single-img"/><p><strong>Plot Using a Colormap from Matplotlib</strong></p>
 <p>Now, we can apply one of these colorbars to plot and
 compare to a colormap from matplotlib, starting with the matplotlib example.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read in a sample cfradial file</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read in a sample cfradial file</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar_file</span></a> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">&quot;swx_20120520_0641.nc&quot;</span><span class="p">)</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar_file</span></a><span class="p">)</span>
 
@@ -726,16 +675,12 @@ compare to a colormap from matplotlib, starting with the matplotlib example.</p>
 <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">64.0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Spectral_r&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
-<p><strong>Plot Using a Colormap from Py-ART</strong></p>
+<img src="../../_images/sphx_glr_plot_choose_a_colormap_005.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_005.png" alt="xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p><strong>Plot Using a Colormap from Py-ART</strong></p>
 <p>Let’s use one of our Py-ART’s colorbars now! We need
-to remember to add the pyart_ string in front of the
+to remember to add the <a href="#id1"><span class="problematic" id="id2">pyart_</span></a> string in front of the
 colormap, as shown below.
 Setup a display to plot the data</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 
 <span class="c1"># Start by plotting a regular matplotlib colormap (Spectral_r)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
@@ -743,8 +688,19 @@ Setup a display to plot the data</p>
 <span class="p">)</span>
 </pre></div>
 </div>
+<img src="../../_images/sphx_glr_plot_choose_a_colormap_006.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_006.png" alt="xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.033 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plotting-plot-choose-a-colormap-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/653fe2324a2591f4300a944b1759293c/plot_choose_a_colormap.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_choose_a_colormap.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/a2a6f36bb8ab4a3f0f5de19adbab6406/plot_choose_a_colormap.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_choose_a_colormap.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/e32824c3275081f0341f53eaef7cd20e/plot_choose_a_colormap.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_choose_a_colormap.zip</span></code></a></p>
 </div>
 </div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
 
 <div class="section ablog__blog_comments">
@@ -785,13 +741,14 @@ Setup a display to plot the data</p>
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../../_sources/examples/plotting/plot_choose_a_colormap.ipynb.txt">
+    <a href="../../_sources/examples/plotting/plot_choose_a_colormap.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
@@ -810,8 +767,8 @@ Setup a display to plot the data</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -831,7 +788,7 @@ Setup a display to plot the data</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>
@@ -844,7 +801,7 @@ Setup a display to plot the data</p>
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
 </p></div>
       
     </div>

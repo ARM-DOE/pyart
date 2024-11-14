@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -15,17 +15,19 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -38,24 +40,20 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../../_static/documentation_options.js?v=63412fa0"></script>
-    <script src="../../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js?v=1b649cd4"></script>
+    <script src="../../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -67,7 +65,8 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/> 
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.19" /> 
 <link
   rel="alternate"
   type="application/atom+xml"
@@ -90,19 +89,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../../search.html"
       method="get">
@@ -110,7 +98,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -118,8 +105,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -229,29 +216,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -288,15 +267,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -313,7 +288,8 @@ document.write(`
       
         
       
-      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
         
 
   
@@ -388,15 +364,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -452,8 +424,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -465,7 +435,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../../index.html" class="nav-link">Module code</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">pyart.core.grid</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">pyart.core.grid</span></li>
   </ul>
 </nav>
 </div>
@@ -510,9 +480,7 @@ document.write(`
 <span class="kn">from</span> <span class="nn">.transforms</span> <span class="kn">import</span> <span class="n">cartesian_to_geographic</span><span class="p">,</span> <span class="n">cartesian_vectors_to_geographic</span>
 
 
-<div class="viewcode-block" id="Grid">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.html#pyart.core.Grid">[docs]</a>
-<span class="k">class</span> <span class="nc">Grid</span><span class="p">:</span>
+<div class="viewcode-block" id="Grid"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.html#pyart.core.Grid">[docs]</a><span class="k">class</span> <span class="nc">Grid</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class for storing rectilinear gridded radar data in Cartesian coordinate.</span>
 
@@ -673,9 +641,7 @@ document.write(`
         <span class="n">proj</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="n">projparams</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">proj</span>
 
-<div class="viewcode-block" id="Grid.get_projparams">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.get_projparams.html#pyart.core.Grid.get_projparams">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_projparams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Grid.get_projparams"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.get_projparams.html#pyart.core.Grid.get_projparams">[docs]</a>    <span class="k">def</span> <span class="nf">get_projparams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a projparam dict or str from the projection attribute.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="n">projparams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -685,7 +651,6 @@ document.write(`
             <span class="k">return</span> <span class="n">projparams</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span></div>
-
 
     <span class="k">def</span> <span class="nf">_find_and_check_nradar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -729,9 +694,7 @@ document.write(`
         <span class="k">return</span> <span class="n">nradar</span>
 
     <span class="c1"># Attribute init/reset methods</span>
-<div class="viewcode-block" id="Grid.init_point_x_y_z">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.init_point_x_y_z.html#pyart.core.Grid.init_point_x_y_z">[docs]</a>
-    <span class="k">def</span> <span class="nf">init_point_x_y_z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Grid.init_point_x_y_z"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.init_point_x_y_z.html#pyart.core.Grid.init_point_x_y_z">[docs]</a>    <span class="k">def</span> <span class="nf">init_point_x_y_z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize or reset the point_{x, y, z} attributes.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_x</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;point_x&quot;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_x</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_point_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">))</span>
@@ -742,10 +705,7 @@ document.write(`
         <span class="bp">self</span><span class="o">.</span><span class="n">point_z</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;point_z&quot;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_z</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_point_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">))</span></div>
 
-
-<div class="viewcode-block" id="Grid.init_point_longitude_latitude">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.init_point_longitude_latitude.html#pyart.core.Grid.init_point_longitude_latitude">[docs]</a>
-    <span class="k">def</span> <span class="nf">init_point_longitude_latitude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Grid.init_point_longitude_latitude"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.init_point_longitude_latitude.html#pyart.core.Grid.init_point_longitude_latitude">[docs]</a>    <span class="k">def</span> <span class="nf">init_point_longitude_latitude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize or reset the point_{longitude, latitudes} attributes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -757,19 +717,13 @@ document.write(`
         <span class="n">point_latitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_point_lon_lat_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_latitude</span> <span class="o">=</span> <span class="n">point_latitude</span></div>
 
-
-<div class="viewcode-block" id="Grid.init_point_altitude">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.init_point_altitude.html#pyart.core.Grid.init_point_altitude">[docs]</a>
-    <span class="k">def</span> <span class="nf">init_point_altitude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Grid.init_point_altitude"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.init_point_altitude.html#pyart.core.Grid.init_point_altitude">[docs]</a>    <span class="k">def</span> <span class="nf">init_point_altitude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the point_altitude attribute.&quot;&quot;&quot;</span>
         <span class="n">point_altitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;point_altitude&quot;</span><span class="p">))</span>
         <span class="n">point_altitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_point_altitude_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_altitude</span> <span class="o">=</span> <span class="n">point_altitude</span></div>
 
-
-<div class="viewcode-block" id="Grid.write">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.write.html#pyart.core.Grid.write">[docs]</a>
-    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span>
+<div class="viewcode-block" id="Grid.write"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.write.html#pyart.core.Grid.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">filename</span><span class="p">,</span>
         <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;NETCDF4&quot;</span><span class="p">,</span>
@@ -805,10 +759,7 @@ document.write(`
             <span class="n">arm_alt_lat_lon_variables</span><span class="o">=</span><span class="n">arm_alt_lat_lon_variables</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-
-<div class="viewcode-block" id="Grid.to_xarray">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.to_xarray.html#pyart.core.Grid.to_xarray">[docs]</a>
-    <span class="k">def</span> <span class="nf">to_xarray</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Grid.to_xarray"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.to_xarray.html#pyart.core.Grid.to_xarray">[docs]</a>    <span class="k">def</span> <span class="nf">to_xarray</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert the Grid object to an xarray format.</span>
 
@@ -955,10 +906,7 @@ document.write(`
         <span class="n">ds</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">ds</span></div>
 
-
-<div class="viewcode-block" id="Grid.add_field">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.add_field.html#pyart.core.Grid.add_field">[docs]</a>
-    <span class="k">def</span> <span class="nf">add_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Grid.add_field"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.add_field.html#pyart.core.Grid.add_field">[docs]</a>    <span class="k">def</span> <span class="nf">add_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a field to the object.</span>
 
@@ -984,10 +932,7 @@ document.write(`
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">field_dict</span></div>
 
-
-<div class="viewcode-block" id="Grid.get_point_longitude_latitude">
-<a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.get_point_longitude_latitude.html#pyart.core.Grid.get_point_longitude_latitude">[docs]</a>
-    <span class="k">def</span> <span class="nf">get_point_longitude_latitude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Grid.get_point_longitude_latitude"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.get_point_longitude_latitude.html#pyart.core.Grid.get_point_longitude_latitude">[docs]</a>    <span class="k">def</span> <span class="nf">get_point_longitude_latitude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return arrays of longitude and latitude for a given grid height level.</span>
 
@@ -1013,9 +958,7 @@ document.write(`
         <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
         <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
         <span class="n">projparams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_projparams</span><span class="p">()</span>
-        <span class="k">return</span> <span class="n">cartesian_vectors_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">)</span></div>
-</div>
-
+        <span class="k">return</span> <span class="n">cartesian_vectors_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">)</span></div></div>
 
 
 <span class="k">def</span> <span class="nf">_point_data_factory</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">):</span>
@@ -1099,8 +1042,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1120,7 +1063,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>
@@ -1133,7 +1076,7 @@ document.write(`
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
 </p></div>
       
     </div>

@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -16,17 +16,19 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -39,24 +41,20 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../_static/documentation_options.js?v=63412fa0"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=1b649cd4"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -68,7 +66,8 @@
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/> 
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.19" /> 
 <link
   rel="alternate"
   type="application/atom+xml"
@@ -91,19 +90,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -111,7 +99,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -119,8 +106,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -230,29 +217,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -289,15 +268,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -318,7 +293,8 @@ document.write(`
       
         
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -393,15 +369,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -569,8 +541,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -579,7 +549,7 @@ document.write(`
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page">Creating...</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Creating animated gifs with NEXRAD Level 2 radar data using Py-ART</span></li>
   </ul>
 </nav>
 </div>
@@ -596,25 +566,25 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <section class="tex2jax_ignore mathjax_ignore" id="creating-animated-gifs-with-nexrad-level-2-radar-data-using-py-art">
-<h1>Creating animated gifs with NEXRAD Level 2 radar data using Py-ART<a class="headerlink" href="#creating-animated-gifs-with-nexrad-level-2-radar-data-using-py-art" title="Link to this heading">#</a></h1>
+<h1>Creating animated gifs with NEXRAD Level 2 radar data using Py-ART<a class="headerlink" href="#creating-animated-gifs-with-nexrad-level-2-radar-data-using-py-art" title="Permalink to this heading">#</a></h1>
 <section id="overview">
-<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
 <section id="within-this-blog-post-we-will-cover">
-<h3>Within this blog post, we will cover:<a class="headerlink" href="#within-this-blog-post-we-will-cover" title="Link to this heading">#</a></h3>
+<h3>Within this blog post, we will cover:<a class="headerlink" href="#within-this-blog-post-we-will-cover" title="Permalink to this heading">#</a></h3>
 <section id="accessing-nexrad-data-from-aws">
-<h4>1: Accessing NEXRAD data from AWS<a class="headerlink" href="#accessing-nexrad-data-from-aws" title="Link to this heading">#</a></h4>
+<h4>1: Accessing NEXRAD data from AWS<a class="headerlink" href="#accessing-nexrad-data-from-aws" title="Permalink to this heading">#</a></h4>
 </section>
 <section id="how-to-read-the-data-into-py-art-and-create-plots">
-<h4>2: How to read the data into Py-ART and create plots<a class="headerlink" href="#how-to-read-the-data-into-py-art-and-create-plots" title="Link to this heading">#</a></h4>
+<h4>2: How to read the data into Py-ART and create plots<a class="headerlink" href="#how-to-read-the-data-into-py-art-and-create-plots" title="Permalink to this heading">#</a></h4>
 </section>
 <section id="how-to-create-animated-gifs-with-acquired-radar-data-from-py-art">
-<h4>3: How to create animated gifs with acquired radar data from Py-ART<a class="headerlink" href="#how-to-create-animated-gifs-with-acquired-radar-data-from-py-art" title="Link to this heading">#</a></h4>
+<h4>3: How to create animated gifs with acquired radar data from Py-ART<a class="headerlink" href="#how-to-create-animated-gifs-with-acquired-radar-data-from-py-art" title="Permalink to this heading">#</a></h4>
 </section>
 </section>
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="prerequisites">
-<h1>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h1>
+<h1>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading">#</a></h1>
 <div class="pst-scrollable-table-container"><table class="table">
 <thead>
 <tr class="row-odd"><th class="head"><p>Concepts</p></th>
@@ -666,7 +636,7 @@ document.write(`
 </div>
 </div>
 <section id="set-up-the-aws-s3-filysystem">
-<h2>Set up the AWS S3 filysystem<a class="headerlink" href="#set-up-the-aws-s3-filysystem" title="Link to this heading">#</a></h2>
+<h2>Set up the AWS S3 filysystem<a class="headerlink" href="#set-up-the-aws-s3-filysystem" title="Permalink to this heading">#</a></h2>
 <p>This allows you to pull nexrad-level-2 data files from the AWS repository.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -677,7 +647,7 @@ document.write(`
 </div>
 </section>
 <section id="selecting-your-date-station-and-time-period">
-<h2>Selecting your date, station, and time period<a class="headerlink" href="#selecting-your-date-station-and-time-period" title="Link to this heading">#</a></h2>
+<h2>Selecting your date, station, and time period<a class="headerlink" href="#selecting-your-date-station-and-time-period" title="Permalink to this heading">#</a></h2>
 <p>Once the file system is set up, you can use the following code to specify what time, date, and station you’d like to retrieve data for</p>
 <p>For this example, we will use data from NWS Chicago (KLOT) from 04 UTC, June 5th, 2024</p>
 <div class="cell docutils container">
@@ -691,7 +661,7 @@ document.write(`
 </div>
 </section>
 <section id="optional-setting-up-individual-locations-to-be-plotted-on-your-map">
-<h2>OPTIONAL* setting up individual locations to be plotted on your map<a class="headerlink" href="#optional-setting-up-individual-locations-to-be-plotted-on-your-map" title="Link to this heading">#</a></h2>
+<h2>OPTIONAL* setting up individual locations to be plotted on your map<a class="headerlink" href="#optional-setting-up-individual-locations-to-be-plotted-on-your-map" title="Permalink to this heading">#</a></h2>
 <p>In this example, two plots are pointed due to their relevance to the example weather event: The ATMOS facility at Argonne National Laboratory, Lemont, IL, and Sawmill Creek in Darien, IL. The latitude and longitude for each site should be placed at the same index (IE. Index 0 in both latitude and longitude should contain the latitude and longitude data for that one site. This also applies to the labels, markers, and colors. Any object in the index 0 slot will apply to that same point.)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -707,7 +677,7 @@ document.write(`
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="generating-your-file-list">
-<h1>Generating your file list<a class="headerlink" href="#generating-your-file-list" title="Link to this heading">#</a></h1>
+<h1>Generating your file list<a class="headerlink" href="#generating-your-file-list" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">files</span> <span class="o">=</span> <span class="p">[]</span>
@@ -746,7 +716,7 @@ document.write(`
 </div>
 </div>
 <section id="checking-your-plottable-radar-products">
-<h2>Checking your plottable radar products<a class="headerlink" href="#checking-your-plottable-radar-products" title="Link to this heading">#</a></h2>
+<h2>Checking your plottable radar products<a class="headerlink" href="#checking-your-plottable-radar-products" title="Permalink to this heading">#</a></h2>
 <p>This function reads one of the radar files in your file list and prints out the available products for plotting. One file should represent all products available in each radar file in the list. Although if you are pulling data from files pre 2011, dual-pol products won’t be available.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -778,7 +748,7 @@ document.write(`
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="reading-the-data-into-pyart">
-<h1>Reading the data into PyART<a class="headerlink" href="#reading-the-data-into-pyart" title="Link to this heading">#</a></h1>
+<h1>Reading the data into PyART<a class="headerlink" href="#reading-the-data-into-pyart" title="Permalink to this heading">#</a></h1>
 <p>To streamline the process of pulling and processing the radar files, we will create a function called read_radar_data.</p>
 <p>Within this function, some progress tracking code is implemented. Each time a file is successfully read, a message will be printed out letting you know what file in the order it is. This is useful to tell if your code is actually working.
 An exception is added to this code so that the files marked MDM (shown on the list of filed compiled when pulling data) do not halt the process, and are instead skipped as they are not necessary.</p>
@@ -800,7 +770,7 @@ An exception is added to this code so that the files marked MDM (shown on the li
 </div>
 </div>
 <section id="looping-through-the-radar-data">
-<h2>Looping through the radar data<a class="headerlink" href="#looping-through-the-radar-data" title="Link to this heading">#</a></h2>
+<h2>Looping through the radar data<a class="headerlink" href="#looping-through-the-radar-data" title="Permalink to this heading">#</a></h2>
 <p>This code allows us to loop through each radar file read. A progress message is printed when a new file has started being processed.
 The if statement tells the code to skip files that are unable to be read.</p>
 <div class="cell docutils container">
@@ -817,32 +787,32 @@ The if statement tells the code to skip files that are unable to be read.</p>
 </div>
 </section>
 <section id="plotting-code-with-added-features-and-plotted-points">
-<h2>Plotting code with added features and plotted points<a class="headerlink" href="#plotting-code-with-added-features-and-plotted-points" title="Link to this heading">#</a></h2>
+<h2>Plotting code with added features and plotted points<a class="headerlink" href="#plotting-code-with-added-features-and-plotted-points" title="Permalink to this heading">#</a></h2>
 <p>The radar product being plotted can be changed based on the needs of the individual, but for this example, we will use reflectivity to make a singular gif.</p>
 </section>
 <section id="customizing-the-range-of-plotted-data">
-<h2>Customizing the range of plotted data<a class="headerlink" href="#customizing-the-range-of-plotted-data" title="Link to this heading">#</a></h2>
+<h2>Customizing the range of plotted data<a class="headerlink" href="#customizing-the-range-of-plotted-data" title="Permalink to this heading">#</a></h2>
 <p>Vmin and vmax represent the range of dBz values you’d like to plot on the radar. Sometimes, one may want to raise the lower limit to reduce clutter or nonmeteorological scatter that often appears as low reflectivity blobs near the radar. Basically the maximum and minimum values for your colorbar as well.</p>
 <p>The sweep is the elevation being scanned. For example, sweep 0 is the lowest level scanned by the radar.</p>
 </section>
 <section id="counties">
-<h2>Counties<a class="headerlink" href="#counties" title="Link to this heading">#</a></h2>
+<h2>Counties<a class="headerlink" href="#counties" title="Permalink to this heading">#</a></h2>
 <p>Counties can be added with the ax.add_feature line. Further additions can be made using cartopy.cfeature if needed.</p>
 </section>
 <section id="location-plotting">
-<h2>Location plotting<a class="headerlink" href="#location-plotting" title="Link to this heading">#</a></h2>
+<h2>Location plotting<a class="headerlink" href="#location-plotting" title="Permalink to this heading">#</a></h2>
 <p>The for loop in this cell is used to plot the location data provided in the aforementioned variables.</p>
 </section>
 <section id="zooming">
-<h2>Zooming<a class="headerlink" href="#zooming" title="Link to this heading">#</a></h2>
+<h2>Zooming<a class="headerlink" href="#zooming" title="Permalink to this heading">#</a></h2>
 <p>The x and ylim functions will allow you to control the zoom on your plot. The grid on the plot is representative of latitude (y) and longitude (x) lines. For this example, we are zoomed in over the points.</p>
 </section>
 <section id="colorbar">
-<h2>Colorbar<a class="headerlink" href="#colorbar" title="Link to this heading">#</a></h2>
+<h2>Colorbar<a class="headerlink" href="#colorbar" title="Permalink to this heading">#</a></h2>
 <p>The built in colorbar is disabled and one was created manually to make it fit the image better. Purely an aesthetic decision.</p>
 </section>
 <section id="note">
-<h2>NOTE<a class="headerlink" href="#note" title="Link to this heading">#</a></h2>
+<h2>NOTE<a class="headerlink" href="#note" title="Permalink to this heading">#</a></h2>
 <p>This code is meant to go under the for loop. Don’t run it on its own as it won’t work as intended. Full code block will be below</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -904,7 +874,7 @@ The if statement tells the code to skip files that are unable to be read.</p>
 </div>
 </section>
 <section id="full-code-block-constructed-properly-within-the-for-loop">
-<h2>Full code block constructed properly within the for loop.<a class="headerlink" href="#full-code-block-constructed-properly-within-the-for-loop" title="Link to this heading">#</a></h2>
+<h2>Full code block constructed properly within the for loop.<a class="headerlink" href="#full-code-block-constructed-properly-within-the-for-loop" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">file</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">files</span><span class="p">):</span>
@@ -977,7 +947,7 @@ The if statement tells the code to skip files that are unable to be read.</p>
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="gif-creation">
-<h1>GIF creation<a class="headerlink" href="#gif-creation" title="Link to this heading">#</a></h1>
+<h1>GIF creation<a class="headerlink" href="#gif-creation" title="Permalink to this heading">#</a></h1>
 <p>We can now use the data to create a gif out of the frames we’ve appended to our list.</p>
 <p>This code also includes code to save the gif to your local directory.</p>
 <p>Something to note, if you do not want to save the gif, you can get rid of this code.</p>
@@ -1009,7 +979,7 @@ The if statement tells the code to skip files that are unable to be read.</p>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="code-in-whole">
-<h1>Code in whole<a class="headerlink" href="#code-in-whole" title="Link to this heading">#</a></h1>
+<h1>Code in whole<a class="headerlink" href="#code-in-whole" title="Permalink to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyart</span>
@@ -1185,7 +1155,7 @@ The if statement tells the code to skip files that are unable to be read.</p>
 </div>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="summary">
-<h1>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h1>
+<h1>Summary<a class="headerlink" href="#summary" title="Permalink to this heading">#</a></h1>
 <p>Within this blog post, we walked through how MetPy and PyART can be used to loop through NEXRAD level 2 data from a recent convective rainfall event and create an animated gif over a location.</p>
 </section>
 
@@ -1226,7 +1196,8 @@ The if statement tells the code to skip files that are unable to be read.</p>
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -1300,8 +1271,8 @@ The if statement tells the code to skip files that are unable to be read.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1321,7 +1292,7 @@ The if statement tells the code to skip files that are unable to be read.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>
@@ -1334,7 +1305,7 @@ The if statement tells the code to skip files that are unable to be read.</p>
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
 </p></div>
       
     </div>

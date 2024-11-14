@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -16,17 +16,19 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -39,24 +41,20 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../_static/documentation_options.js?v=63412fa0"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=1b649cd4"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -70,7 +68,8 @@
     <link rel="next" title="Create a RHI plot from a MDV file" href="plot_rhi_mdv.html" />
     <link rel="prev" title="Compare Two Radars Using Gatemapper" href="../mapping/plot_compare_two_radars_gatemapper.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/> 
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.19" /> 
 <link
   rel="alternate"
   type="application/atom+xml"
@@ -93,19 +92,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -113,7 +101,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -121,8 +108,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -232,29 +219,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -291,15 +270,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -318,7 +293,8 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -393,15 +369,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -527,8 +499,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -540,7 +510,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Example Gallery</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">Plotting examples</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Plotting examples</span></li>
   </ul>
 </nav>
 </div>
@@ -557,67 +527,67 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <section id="plotting-examples">
-<span id="sphx-glr-examples-plotting"></span><span id="id1"></span><h1>Plotting examples<a class="headerlink" href="#plotting-examples" title="Link to this heading">#</a></h1>
+<span id="sphx-glr-examples-plotting"></span><span id="id1"></span><h1>Plotting examples<a class="headerlink" href="#plotting-examples" title="Permalink to this heading">#</a></h1>
 <p>Plotting real world radar data with Py-ART.</p>
 <div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="An example which creates a RHI plot of a MDV file using a RadarDisplay object."><img alt="" src="../../_images/sphx_glr_plot_rhi_mdv_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_rhi_mdv.py</span></p>
+<p><a class="reference internal" href="plot_rhi_mdv.html#sphx-glr-examples-plotting-plot-rhi-mdv-py"><span class="std std-ref">Create a RHI plot from a MDV file</span></a></p>
   <div class="sphx-glr-thumbnail-title">Create a RHI plot from a MDV file</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="This is an example of how to plot a corner reflector."><img alt="" src="../../_images/sphx_glr_plot_corner_reflector_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_corner_reflector.py</span></p>
+<p><a class="reference internal" href="plot_corner_reflector.html#sphx-glr-examples-plotting-plot-corner-reflector-py"><span class="std std-ref">Plot a Corner Reflector</span></a></p>
   <div class="sphx-glr-thumbnail-title">Plot a Corner Reflector</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="An example which creates a PPI plot of a MDV file using a RadarDisplay object."><img alt="" src="../../_images/sphx_glr_plot_ppi_mdv_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_ppi_mdv.py</span></p>
+<p><a class="reference internal" href="plot_ppi_mdv.html#sphx-glr-examples-plotting-plot-ppi-mdv-py"><span class="std std-ref">Create a PPI plot from a MDV file</span></a></p>
   <div class="sphx-glr-thumbnail-title">Create a PPI plot from a MDV file</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="An example which creates a PPI plot of a Cfradial file."><img alt="" src="../../_images/sphx_glr_plot_ppi_cfradial_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_ppi_cfradial.py</span></p>
+<p><a class="reference internal" href="plot_ppi_cfradial.html#sphx-glr-examples-plotting-plot-ppi-cfradial-py"><span class="std std-ref">Create a PPI plot from a Cfradial file</span></a></p>
   <div class="sphx-glr-thumbnail-title">Create a PPI plot from a Cfradial file</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="An example which creates a plot containing the first collected scan from a NEXRAD file."><img alt="" src="../../_images/sphx_glr_plot_nexrad_reflectivity_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_nexrad_reflectivity.py</span></p>
+<p><a class="reference internal" href="plot_nexrad_reflectivity.html#sphx-glr-examples-plotting-plot-nexrad-reflectivity-py"><span class="std std-ref">Create a plot of NEXRAD reflectivity</span></a></p>
   <div class="sphx-glr-thumbnail-title">Create a plot of NEXRAD reflectivity</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="An example which extracts a cross section at two azimuth angles from a volume of PPI scans and plots both cross sections."><img alt="" src="../../_images/sphx_glr_plot_xsect_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_xsect.py</span></p>
+<p><a class="reference internal" href="plot_xsect.html#sphx-glr-examples-plotting-plot-xsect-py"><span class="std std-ref">Plot a cross section from  a PPI volume</span></a></p>
   <div class="sphx-glr-thumbnail-title">Plot a cross section from  a PPI volume</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="An example which creates a RHI plot of a CF/Radial file using a RadarDisplay object."><img alt="" src="../../_images/sphx_glr_plot_rhi_cfradial_singlescan_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_rhi_cfradial_singlescan.py</span></p>
+<p><a class="reference internal" href="plot_rhi_cfradial_singlescan.html#sphx-glr-examples-plotting-plot-rhi-cfradial-singlescan-py"><span class="std std-ref">Create a multiple panel RHI plot from a CF/Radial file</span></a></p>
   <div class="sphx-glr-thumbnail-title">Create a multiple panel RHI plot from a CF/Radial file</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="This example demonstrates how to create and compare PPI (Plan Position Indicator) and CAPPI (Constant Altitude Plan Position Indicator) plots using radar data."><img alt="" src="../../_images/sphx_glr_plot_cappi_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_cappi.py</span></p>
+<p><a class="reference internal" href="plot_cappi.html#sphx-glr-examples-plotting-plot-cappi-py"><span class="std std-ref">Compare PPI vs CAPPI</span></a></p>
   <div class="sphx-glr-thumbnail-title">Compare PPI vs CAPPI</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="An example which creates a two panel RHI plot of a cfradial file.  The fields included in the two panels are reflectivity and doppler velocity."><img alt="" src="../../_images/sphx_glr_plot_rhi_two_panel_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_rhi_two_panel.py</span></p>
+<p><a class="reference internal" href="plot_rhi_two_panel.html#sphx-glr-examples-plotting-plot-rhi-two-panel-py"><span class="std std-ref">Create a two panel RHI plot</span></a></p>
   <div class="sphx-glr-thumbnail-title">Create a two panel RHI plot</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="An example which creates a plot containing multiple moments taken from a NEXRAD Archive file."><img alt="" src="../../_images/sphx_glr_plot_nexrad_multiple_moments_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_nexrad_multiple_moments.py</span></p>
+<p><a class="reference internal" href="plot_nexrad_multiple_moments.html#sphx-glr-examples-plotting-plot-nexrad-multiple-moments-py"><span class="std std-ref">Create a plot of multiple moments from a NEXRAD file</span></a></p>
   <div class="sphx-glr-thumbnail-title">Create a plot of multiple moments from a NEXRAD file</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="An example which creates a multiple panel RHI plot of a CF/Radial file using a RadarDisplay object."><img alt="" src="../../_images/sphx_glr_plot_rhi_cfradial_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_rhi_cfradial.py</span></p>
+<p><a class="reference internal" href="plot_rhi_cfradial.html#sphx-glr-examples-plotting-plot-rhi-cfradial-py"><span class="std std-ref">Create a multiple panel RHI plot from a CF/Radial file</span></a></p>
   <div class="sphx-glr-thumbnail-title">Create a multiple panel RHI plot from a CF/Radial file</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="An example that creates a 3 panel plot of a PPI, latitude slice, and longitude slice using xarray and a cartopy background."><img alt="" src="../../_images/sphx_glr_plot_three_panel_gridmapdisplay_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_three_panel_gridmapdisplay.py</span></p>
+<p><a class="reference internal" href="plot_three_panel_gridmapdisplay.html#sphx-glr-examples-plotting-plot-three-panel-gridmapdisplay-py"><span class="std std-ref">Create a 3 panel plot using GridMapDisplay</span></a></p>
   <div class="sphx-glr-thumbnail-title">Create a 3 panel plot using GridMapDisplay</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="An example which creates a PPI plot of a file with a cartopy background and range rings"><img alt="" src="../../_images/sphx_glr_plot_ppi_with_rings_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_ppi_with_rings.py</span></p>
+<p><a class="reference internal" href="plot_ppi_with_rings.html#sphx-glr-examples-plotting-plot-ppi-with-rings-py"><span class="std std-ref">Create a PPI plot on a cartopy map</span></a></p>
   <div class="sphx-glr-thumbnail-title">Create a PPI plot on a cartopy map</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="Image muting reduces the visual prominence of the reflectivities within identified melting and mixed precipitation features in winter storms (i.e. regions with low correlation coefficient values). Reflectivities corresponding to melting and mixed precipitation features are deemphasized using a gray scale and the regions with just snow and just rain are depicted in a corresponding full-color scale. The ultimate utility of image muting radar reflectivity is to reduce the misinterpretation of regions of melting or mixed precipitation as opposed to heavy snow or heavy rain."><img alt="" src="../../_images/sphx_glr_plot_nexrad_image_muted_reflectivity_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_nexrad_image_muted_reflectivity.py</span></p>
+<p><a class="reference internal" href="plot_nexrad_image_muted_reflectivity.html#sphx-glr-examples-plotting-plot-nexrad-image-muted-reflectivity-py"><span class="std std-ref">Create an image-muted reflectivity plot</span></a></p>
   <div class="sphx-glr-thumbnail-title">Create an image-muted reflectivity plot</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="An example which creates an RHI plot of velocity using a RadarDisplay object and adding Reflectivity contours from the same MDV file."><img alt="" src="../../_images/sphx_glr_plot_rhi_data_overlay_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_rhi_data_overlay.py</span></p>
+<p><a class="reference internal" href="plot_rhi_data_overlay.html#sphx-glr-examples-plotting-plot-rhi-data-overlay-py"><span class="std std-ref">Create an RHI plot with reflectivity contour lines from an MDV file</span></a></p>
   <div class="sphx-glr-thumbnail-title">Create an RHI plot with reflectivity contour lines from an MDV file</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="This is an example of how to plot a cross section of your radar grid using the GridMapDisplay"><img alt="" src="../../_images/sphx_glr_plot_cross_section_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_cross_section.py</span></p>
+<p><a class="reference internal" href="plot_cross_section.html#sphx-glr-examples-plotting-plot-cross-section-py"><span class="std std-ref">Plot a Cross Section from a Grid</span></a></p>
   <div class="sphx-glr-thumbnail-title">Plot a Cross Section from a Grid</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="This is an example of how to modify a colobar within a Py-ART display object."><img alt="" src="../../_images/sphx_glr_plot_modify_colorbar_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_modify_colorbar.py</span></p>
+<p><a class="reference internal" href="plot_modify_colorbar.html#sphx-glr-examples-plotting-plot-modify-colorbar-py"><span class="std std-ref">Modify a Colorbar for your Plot</span></a></p>
   <div class="sphx-glr-thumbnail-title">Modify a Colorbar for your Plot</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="This is an example of how to plot a Max-CAPPI within a Py-ART grid display object."><img alt="" src="../../_images/sphx_glr_plot_max_cappi_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_max_cappi.py</span></p>
+<p><a class="reference internal" href="plot_max_cappi.html#sphx-glr-examples-plotting-plot-max-cappi-py"><span class="std std-ref">Plot Max-CAPPI</span></a></p>
   <div class="sphx-glr-thumbnail-title">Plot Max-CAPPI</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="An example which creates an RHI plot of reflectivity using a RadarDisplay object and adding differnential Reflectivity contours from the same MDV file."><img alt="" src="../../_images/sphx_glr_plot_rhi_contours_differential_reflectivity_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_rhi_contours_differential_reflectivity.py</span></p>
+<p><a class="reference internal" href="plot_rhi_contours_differential_reflectivity.html#sphx-glr-examples-plotting-plot-rhi-contours-differential-reflectivity-py"><span class="std std-ref">Create an RHI plot with reflectivity contour lines from an MDV file</span></a></p>
   <div class="sphx-glr-thumbnail-title">Create an RHI plot with reflectivity contour lines from an MDV file</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="This is an example of what colormaps are available in Py-ART, and how to add them to your own plots."><img alt="" src="../../_images/sphx_glr_plot_choose_a_colormap_thumb.png" />
-<p><span class="xref std std-ref">sphx_glr_examples_plotting_plot_choose_a_colormap.py</span></p>
+<p><a class="reference internal" href="plot_choose_a_colormap.html#sphx-glr-examples-plotting-plot-choose-a-colormap-py"><span class="std std-ref">Choose a Colormap for your Plot</span></a></p>
   <div class="sphx-glr-thumbnail-title">Choose a Colormap for your Plot</div>
 </div></div><div class="toctree-wrapper compound">
 </div>
@@ -661,7 +631,8 @@ document.write(`
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -686,8 +657,8 @@ document.write(`
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -707,7 +678,7 @@ document.write(`
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>
@@ -720,7 +691,7 @@ document.write(`
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
 </p></div>
       
     </div>

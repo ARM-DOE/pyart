@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../" data-theme="light">
+<html lang="en" data-content_root="" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -16,17 +16,19 @@
     document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
     document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
   </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-
-  
-  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
-  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
-<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -39,24 +41,20 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
-  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
 
-    <script src="../../_static/documentation_options.js?v=63412fa0"></script>
-    <script src="../../_static/doctools.js?v=9bcbadda"></script>
-    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=1b649cd4"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
-    <script>
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){ dataLayer.push(arguments); }
-                gtag('js', new Date());
-                gtag('config', 'G-JJEG3CV376');
-            </script>
     <script>
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){ dataLayer.push(arguments); }
@@ -70,7 +68,8 @@
     <link rel="next" title="Convective-Stratiform classification" href="plot_convective_stratiform.html" />
     <link rel="prev" title="Hydrometeor Classification with Custom Frequency Settings" href="plot_hydrometeor_class_x_band.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <meta name="docsearch:language" content="en"/> 
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.19" /> 
 <link
   rel="alternate"
   type="application/atom+xml"
@@ -93,19 +92,8 @@
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
 
   
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-primary-sidebar-checkbox"/>
-  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
-  
-  <input type="checkbox"
-          class="sidebar-toggle"
-          id="pst-secondary-sidebar-checkbox"/>
-  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
-  
-  <div class="search-button__wrapper">
-    <div class="search-button__overlay"></div>
-    <div class="search-button__search-container">
+  <dialog id="pst-search-dialog">
+    
 <form class="bd-search d-flex align-items-center"
       action="../../search.html"
       method="get">
@@ -113,7 +101,6 @@
   <input type="search"
          class="form-control"
          name="q"
-         id="search-input"
          placeholder="Search the docs ..."
          aria-label="Search the docs ..."
          autocomplete="off"
@@ -121,8 +108,8 @@
          autocapitalize="off"
          spellcheck="false"/>
   <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
-</form></div>
-  </div>
+</form>
+  </dialog>
 
   <div class="pst-async-banner-revealer d-none">
   <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
@@ -232,29 +219,21 @@
         <div class="navbar-item navbar-persistent--container">
           
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
         </div>
       
       
         <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
       
         <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -291,15 +270,11 @@ document.write(`
   
     <div class="navbar-persistent--mobile">
 
- <script>
- document.write(`
-   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="fa-solid fa-magnifying-glass"></i>
-    <span class="search-button__default-text">Search</span>
-    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
-   </button>
- `);
- </script>
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
     </div>
   
 
@@ -318,7 +293,8 @@ document.write(`
       
       
       
-      <div class="bd-sidebar-primary bd-sidebar">
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
         
 
   
@@ -393,15 +369,11 @@ document.write(`
         
           <div class="navbar-item">
 
-<script>
-document.write(`
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
-    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
-    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
-    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
-  </button>
-`);
-</script></div>
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
         
           <div class="navbar-item"><ul class="navbar-icon-links"
     aria-label="Icon Links">
@@ -527,8 +499,6 @@ document.write(`
       
         <div class="header-article-item">
 
-
-
 <nav aria-label="Breadcrumb" class="d-print-none">
   <ul class="bd-breadcrumbs">
     
@@ -543,7 +513,7 @@ document.write(`
     
     <li class="breadcrumb-item"><a href="index.html" class="nav-link">Retrieval Examples</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page">Creating a...</li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Creating a CFAD diagram</span></li>
   </ul>
 </nav>
 </div>
@@ -559,12 +529,15 @@ document.write(`
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                   <section class="tex2jax_ignore mathjax_ignore" id="creating-a-cfad-diagram">
-<h1>Creating a CFAD diagram<a class="headerlink" href="#creating-a-cfad-diagram" title="Link to this heading">#</a></h1>
+                   <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-examples-retrieve-plot-cfad-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="creating-a-cfad-diagram">
+<span id="sphx-glr-examples-retrieve-plot-cfad-py"></span><h1>Creating a CFAD diagram<a class="headerlink" href="#creating-a-cfad-diagram" title="Permalink to this heading">#</a></h1>
 <p>This example shows how to create a contoured frequency by altitude (CFAD) diagram</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Laura Tomkins (lmtomkin@ncsu.edu)</span>
 <span class="c1"># License: BSD 3 clause</span>
@@ -577,11 +550,8 @@ document.write(`
 <span class="kn">import</span> <span class="nn">pyart</span>
 </pre></div>
 </div>
-</div>
-</div>
-<section id="description-of-a-cfad">
-<h2>Description of a CFAD<a class="headerlink" href="#description-of-a-cfad" title="Link to this heading">#</a></h2>
-<p>A contoured frequency by altitude diagram (CFAD) is essentially a 2D histogram used to depict the vertical
+<dl>
+<dt>Description of a CFAD</dt><dd><p>A contoured frequency by altitude diagram (CFAD) is essentially a 2D histogram used to depict the vertical
 distribution of a particular variable, such as radar reflectivity. The x-axis represents the frequency of the
 field and the y-axis represents the frequency of the altitude. A key feature that distinguishes a CFAD from a
 regular 2D histogram is that it is normalized by altitude and altitudes where there is insufficient data are
@@ -590,24 +560,22 @@ removed. See Yuter and Houze (1995) for full details of the diagram.</p>
 In a CFAD diagram, for a given altitude, the normalized frequency values will sum to a value of 1. When
 interpreting a CFAD diagram, the normalized frequency for a given bin will be the frequency of that value for the
 associated altitude (i.e. each bin can be interpreted as the fraction of data points at each altitude).</p>
-</section>
-<section id="minimum-fraction-threshold-in-a-cfad-diagram-altitudes-where-there-is-insufficient-data-are-removed-this-feature-is-controlled-with-the-min-frac-thres-value-the-default-value-is-0-1-meaning-that-altitudes-where-the-number-of-observations-is-less-than-one-tenth-of-the-maximum-number-of-observations-across-all-altitudes-are-removed-increasing-the-value-will-act-to-be-more-aggressive-in-removing-altitudes-and-decreasing-the-value-will-act-to-include-more-data-setting-this-value-to-zero-will-include-all-altitudes-with-data-but-use-caution-when-interpreting-cfads-with-all-data-available-as-those-altitudes-with-less-data-will-not-be-as-representative-as-other-altitudes-with-sufficient-data-basic-example-with-reflectivity-from-rhi">
-<h2><strong>Minimum fraction threshold</strong>
+<p><strong>Minimum fraction threshold</strong>
 In a CFAD diagram, altitudes where there is insufficient data are removed. This feature is controlled with the
-<code class="docutils literal notranslate"><span class="pre">min_frac_thres</span></code> value. The default value is 0.1, meaning that altitudes where the number of observations is less
+<cite>min_frac_thres</cite> value. The default value is 0.1, meaning that altitudes where the number of observations is less
 than one tenth of the maximum number of observations across all altitudes are removed. Increasing the value will
 act to be more aggressive in removing altitudes and decreasing the value will act to include more data. Setting
 this value to zero will include all altitudes with data, but use caution when interpreting CFADs with all data
-available as those altitudes with less data will not be as representative as other altitudes with sufficient data.
-#####################################
-Basic example with reflectivity from RHI<a class="headerlink" href="#minimum-fraction-threshold-in-a-cfad-diagram-altitudes-where-there-is-insufficient-data-are-removed-this-feature-is-controlled-with-the-min-frac-thres-value-the-default-value-is-0-1-meaning-that-altitudes-where-the-number-of-observations-is-less-than-one-tenth-of-the-maximum-number-of-observations-across-all-altitudes-are-removed-increasing-the-value-will-act-to-be-more-aggressive-in-removing-altitudes-and-decreasing-the-value-will-act-to-include-more-data-setting-this-value-to-zero-will-include-all-altitudes-with-data-but-use-caution-when-interpreting-cfads-with-all-data-available-as-those-altitudes-with-less-data-will-not-be-as-representative-as-other-altitudes-with-sufficient-data-basic-example-with-reflectivity-from-rhi" title="Link to this heading">#</a></h2>
-<p><strong>Example with RHI</strong>
+available as those altitudes with less data will not be as representative as other altitudes with sufficient data.</p>
+</dd>
+</dl>
+<blockquote>
+<div><p><strong>Example with RHI</strong>
 First, we will show an example from an RHI scan. We will get the reflectivity data and mask outside -15 and 35 dBZ
 to remove any noisy data. For the best results, we recommend cleaning up the field as much as possible (i.e.
 despeckling, filtering, etc.)</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get test data</span>
+</div></blockquote>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># get test data</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">get_test_data</span><span class="p">(</span><span class="s2">&quot;sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc&quot;</span><span class="p">)</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
 
@@ -665,15 +633,15 @@ despeckling, filtering, etc.)</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../_images/sphx_glr_plot_cfad_001.png" srcset="../../_images/sphx_glr_plot_cfad_001.png" alt="plot cfad" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_cfad_002.png" srcset="../../_images/sphx_glr_plot_cfad_002.png" alt="37.3 Deg. 2011-05-24T01:56:04Z  Equivalent reflectivity factor" class = "sphx-glr-multi-img"/></li>
+</ul>
 <p>We can see a general increase in reflectivity values from the echo top to around 8km. The maximum frequency value in
 each altitude row represents the mode of the reflectivity distribution which we can see also increases from echo
 top to 8km. Below 8km the distribution of reflectivity values widens, likely associated with some of the noise in
 the RHI.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Minimum fraction threshold example</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Minimum fraction threshold example</span>
 <span class="c1"># ----------</span>
 <span class="c1"># Previously, we used the default `min_frac_thres` of 0.1. Next, we will increase the threshold and set the threshold</span>
 <span class="c1"># to 0 (not recommended) so show how the CFAD changes.</span>
@@ -747,19 +715,14 @@ the RHI.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-</div>
-<p>Setting the <code class="docutils literal notranslate"><span class="pre">min_frac_thres</span></code> to 0 (left panel) shows all data, even near the top of the chart (14km) where there is
-limited echo. Setting the <code class="docutils literal notranslate"><span class="pre">min_frac_thres</span></code> higher to 0.2 (right panel) removed altitudes between 1 and 5 km where
+<img src="../../_images/sphx_glr_plot_cfad_003.png" srcset="../../_images/sphx_glr_plot_cfad_003.png" alt="min_frac_thres = 0.2, min_frac_thres = 0.1, min_frac_thres = 0" class = "sphx-glr-single-img"/><p>Setting the <cite>min_frac_thres</cite> to 0 (left panel) shows all data, even near the top of the chart (14km) where there is
+limited echo. Setting the <cite>min_frac_thres</cite> higher to 0.2 (right panel) removed altitudes between 1 and 5 km where
 there is less echo than between 6 and 12km where there is a consistent swath of reflectivity throughout the entire
 cross section.</p>
-</section>
 <section id="velocity-example">
-<h2>Velocity example<a class="headerlink" href="#velocity-example" title="Link to this heading">#</a></h2>
+<h2>Velocity example<a class="headerlink" href="#velocity-example" title="Permalink to this heading">#</a></h2>
 <p>Next, we will show a CFAD for the doppler velocity from the above example. First, we have to dealias the velocity.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a gatefilter</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a gatefilter</span>
 <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_invalid</span><span class="p">(</span><span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">)</span>
 <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_outside</span><span class="p">(</span><span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
@@ -824,20 +787,20 @@ cross section.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../_images/sphx_glr_plot_cfad_004.png" srcset="../../_images/sphx_glr_plot_cfad_004.png" alt="37.3 Deg. 2011-05-24T01:56:04Z  Corrected radial velocity of scatterers away from instrument" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_cfad_005.png" srcset="../../_images/sphx_glr_plot_cfad_005.png" alt="plot cfad" class = "sphx-glr-multi-img"/></li>
+</ul>
 <p>The velocity CFAD is very different from the reflectivity CFAD. In most altitudes, there is more of a bimodal
 pattern associated with the changing sign of the velocity values on either side of the radar. In general,
 the distribution of velocity values is consistently wide throughout the profile compared to the reflectivity CFAD.</p>
 </section>
 <section id="validation">
-<h2>Validation<a class="headerlink" href="#validation" title="Link to this heading">#</a></h2>
+<h2>Validation<a class="headerlink" href="#validation" title="Permalink to this heading">#</a></h2>
 <p>Finally, we wanted to compare this function with the original method, so here we reproduce Fig. 2c from Yuter and
-Houze (1995) to demonstrate that it works the same. Instead of using the <code class="docutils literal notranslate"><span class="pre">pcolormesh</span></code> function, we are using
+Houze (1995) to demonstrate that it works the same. Instead of using the <cite>pcolormesh</cite> function, we are using
 contour lines.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get test data</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># get test data</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">DATASETS</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;ddop.910815.213931.cdf&quot;</span><span class="p">)</span>
 <span class="n">grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
 
@@ -895,8 +858,19 @@ contour lines.</p>
 <span class="c1"># Mon. Wea. Rev. 123, 1941-1963. https://doi.org/10.1175/1520-0493(1995)123%3C1941:TDKAME%3E2.0.CO;2</span>
 </pre></div>
 </div>
+<img src="../../_images/sphx_glr_plot_cfad_006.png" srcset="../../_images/sphx_glr_plot_cfad_006.png" alt="Yuter and Houze (1995) Fig. 2c" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.644 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-retrieve-plot-cfad-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/8fef9e6273d2bd008ef548d306e473f7/plot_cfad.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_cfad.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/36a6893635898d891de5614ab4719c0f/plot_cfad.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_cfad.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/422f684956c90b77f98e307629348f8d/plot_cfad.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_cfad.zip</span></code></a></p>
 </div>
 </div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
 </section>
 
@@ -938,7 +912,8 @@ contour lines.</p>
             
             
               
-                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
 
   <div class="sidebar-secondary-item">
@@ -949,16 +924,6 @@ contour lines.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#description-of-a-cfad">Description of a CFAD</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#minimum-fraction-threshold-in-a-cfad-diagram-altitudes-where-there-is-insufficient-data-are-removed-this-feature-is-controlled-with-the-min-frac-thres-value-the-default-value-is-0-1-meaning-that-altitudes-where-the-number-of-observations-is-less-than-one-tenth-of-the-maximum-number-of-observations-across-all-altitudes-are-removed-increasing-the-value-will-act-to-be-more-aggressive-in-removing-altitudes-and-decreasing-the-value-will-act-to-include-more-data-setting-this-value-to-zero-will-include-all-altitudes-with-data-but-use-caution-when-interpreting-cfads-with-all-data-available-as-those-altitudes-with-less-data-will-not-be-as-representative-as-other-altitudes-with-sufficient-data-basic-example-with-reflectivity-from-rhi"><strong>Minimum fraction threshold</strong>
-In a CFAD diagram, altitudes where there is insufficient data are removed. This feature is controlled with the
-<code class="docutils literal notranslate"><span class="pre">min_frac_thres</span></code> value. The default value is 0.1, meaning that altitudes where the number of observations is less
-than one tenth of the maximum number of observations across all altitudes are removed. Increasing the value will
-act to be more aggressive in removing altitudes and decreasing the value will act to include more data. Setting
-this value to zero will include all altitudes with data, but use caution when interpreting CFADs with all data
-available as those altitudes with less data will not be as representative as other altitudes with sufficient data.
-#####################################
-Basic example with reflectivity from RHI</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#velocity-example">Velocity example</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation">Validation</a></li>
 </ul>
@@ -967,7 +932,7 @@ Basic example with reflectivity from RHI</a></li>
   <div class="sidebar-secondary-item">
 
   <div class="tocsection sourcelink">
-    <a href="../../_sources/examples/retrieve/plot_cfad.ipynb.txt">
+    <a href="../../_sources/examples/retrieve/plot_cfad.rst.txt">
       <i class="fa-solid fa-file-lines"></i> Show Source
     </a>
   </div>
@@ -986,8 +951,8 @@ Basic example with reflectivity from RHI</a></li>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
-<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1007,7 +972,7 @@ Basic example with reflectivity from RHI</a></li>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.1.3.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
     <br/>
   </p>
 </div>
@@ -1020,7 +985,7 @@ Basic example with reflectivity from RHI</a></li>
       
         <div class="footer-item">
 <p class="theme-version">
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.15.4.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
 </p></div>
       
     </div>
