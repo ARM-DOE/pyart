@@ -26,8 +26,8 @@ jobs:
     strategy:
       matrix:
         os: [
-          ubuntu-20.04,
-          windows-2019,
+          ubuntu-latest,
+          windows-latest,
           macos-14,
           macos-13,
         ]
@@ -45,11 +45,11 @@ jobs:
            git fetch --prune --unshallow
 
       - name: Build wheels for CPython
-        uses: pypa/cibuildwheel@v2.21.1
+        uses: pypa/cibuildwheel@v2.21.3
         with:
           output-dir: dist
         env:
-          CIBW_BUILD: "cp39-* cp310-* cp311-* cp312*"
+          CIBW_BUILD: "cp310-* cp311-* cp312*"
           CIBW_SKIP: "*-musllinux_*"  #  numpy doesn't have wheels for musllinux so we can't build some quickly and without bloating
           CIBW_ARCHS_LINUX: "x86_64"
           MACOSX_DEPLOYMENT_TARGET: "10.9" # as of CIBW 2.9, this is the default value, pin it so it can't be bumped silently
@@ -99,7 +99,7 @@ jobs:
           merge-multiple: true
 
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.10.2
+        uses: pypa/gh-action-pypi-publish@v1.12.2
         with:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN }}
