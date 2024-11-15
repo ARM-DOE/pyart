@@ -20,6 +20,7 @@ dependencies:
   - libnetcdf
   - flake8
   - fsspec
+  - s3fs
   - glpk
   - cftime
   - setuptools
