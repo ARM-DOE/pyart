@@ -13,7 +13,7 @@ def test_storm_relative_velocity():
     )
     sr_data = pyart.retrieve.storm_relative_velocity(radar, direction="NE", speed=20.0)
     test_data = [2.276456117630005, 4.776455879211426, 3.276456117630005]
-    np.testing.assert_allclose(sr_data[-1][0:3], test_data)
+    np.testing.assert_allclose(sr_data[-1][0:3].tolist(), test_data)
 
     # Test one sweep
     radar_sweep = radar.extract_sweeps([21])
@@ -21,7 +21,7 @@ def test_storm_relative_velocity():
         radar_sweep, direction="NE", speed=20.0
     )
     one_sweep_data = [0.1278250813484192, 4.6278252601623535, 4.6278252601623535]
-    np.testing.assert_allclose(sr_one_sweep[0][0:3], one_sweep_data)
+    np.testing.assert_allclose(sr_one_sweep[0][0:3].tolist(), one_sweep_data)
 
     # Test missing parameters
     pytest.raises(ValueError, pyart.retrieve.storm_relative_velocity, radar)
