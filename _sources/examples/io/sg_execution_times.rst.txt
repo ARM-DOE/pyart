@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:23.289** total execution time for 2 files **from examples/io**:
+**00:23.270** total execution time for 2 files **from examples/io**:
 
 .. container::
 
@@ -33,8 +33,8 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_io_plot_nexrad_data_aws.py` (``plot_nexrad_data_aws.py``)
-     - 00:14.413
+     - 00:14.596
      - 0.0
    * - :ref:`sphx_glr_examples_io_plot_older_nexrad_data_aws.py` (``plot_older_nexrad_data_aws.py``)
-     - 00:08.876
+     - 00:08.673
      - 0.0
