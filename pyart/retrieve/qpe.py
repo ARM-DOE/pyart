@@ -696,7 +696,7 @@ def ZtoR(radar, ref_field="reflectivity", a=300, b=1.4, save_name="NWS_primary_p
     """
     Convert reflectivity (dBZ) to precipitation rate (mm/hr)
 
-    Author: Laura Tomkins
+    Author: Laura Tomkins (lauramtomkins@gmail.com)
 
     Parameters
     ----------

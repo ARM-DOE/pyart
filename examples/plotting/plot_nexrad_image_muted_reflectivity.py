@@ -16,7 +16,7 @@ of regions of melting or mixed precipitation as opposed to heavy snow or heavy r
 
 print(__doc__)
 
-# Author: Laura Tomkins (lmtomkin@ncsu.edu)
+# Author: Laura Tomkins (lauramtomkins@gmail.com)
 # License: BSD 3 clause
 # citation: Tomkins, L. M., Yuter, S. E., Miller, M. A., and Allen, L. R., 2022:
 # Image muting of mixed precipitation to improve identification of regions

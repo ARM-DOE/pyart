@@ -329,7 +329,7 @@ def feature_detection(
     etc.) described by Tomkins et al. (2023) and based on original convective-stratiform algorithms developed by
     Steiner et al. (1995), Yuter et al. (2005) and Yuter and Houze (1997) algorithm.
 
-    Author: Laura Tomkins (@lauratomkins)
+    Author: Laura Tomkins (lauramtomkins@gmail.com)
 
     Parameters
     ----------

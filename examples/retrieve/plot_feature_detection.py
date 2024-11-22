@@ -9,7 +9,7 @@ features in cool-season events.
 
 print(__doc__)
 
-# Author: Laura Tomkins (lmtomkin@ncsu.edu)
+# Author: Laura Tomkins (lauramtomkins@gmail.com)
 # License: BSD 3 clause
 
 
