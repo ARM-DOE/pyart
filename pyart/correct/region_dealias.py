@@ -52,7 +52,7 @@ def dealias_region_based(
     set_limits=True,
     vel_field=None,
     corr_vel_field=None,
-    **kwargs
+    **kwargs,
 ):
     """
     Dealias Doppler velocities using a region based algorithm.
