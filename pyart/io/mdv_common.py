@@ -941,7 +941,7 @@ class MdvFile:
         # the file pointer must be set at the correct location prior to call
         SIZE_FLOAT = 4.0
         nelevations = np.floor(nbytes / SIZE_FLOAT)
-        fmt = f">{nelevations}f"
+        fmt = f">{int(nelevations)}f"
         packet = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
         return np.array(packet)
 

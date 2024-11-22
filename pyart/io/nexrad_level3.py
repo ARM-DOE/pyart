@@ -124,9 +124,9 @@ class NEXRADLevel3File:
         # Read and decode 18 byte Message Header Block
         self.msg_header = _unpack_from_buf(buf, bpos, MESSAGE_HEADER)
         if self.msg_header["code"] not in SUPPORTED_PRODUCTS:
-            code = self.msg_header["code"]  # noqa: F841
+            code = self.msg_header["code"]
             raise NotImplementedError(
-                "Level3 product with code {code} is not supported"
+                f"Level3 product with code {code} is not supported"
             )
         bpos += 18
 
