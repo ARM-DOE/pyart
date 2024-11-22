@@ -127,7 +127,7 @@ def est_rain_rate_kdp(radar, alpha=None, beta=None, kdp_field=None, rr_field=Non
     rain : dict
         Field dictionary containing the rainfall rate.
 
-    Reference
+    References
     ---------
     Figueras et al. Long-term monitoring of French polarimetric radar data
     quality and evaluation of several polarimetric quantitative precipitation
