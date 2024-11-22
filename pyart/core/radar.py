@@ -797,7 +797,7 @@ class Radar:
         if "data" not in dic:
             raise KeyError("dic must contain a 'data' key")
         if dic["data"].shape != (self.nrays, self.ngates):
-            err = "'data' has invalid shape, should be ({self.nrays}, {self.ngates})"
+            err = f"'data' has invalid shape, should be ({self.nrays}, {self.ngates})"
             raise ValueError(err)
         # add the field
         self.fields[field_name] = dic
