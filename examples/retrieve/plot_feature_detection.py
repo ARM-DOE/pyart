@@ -28,7 +28,7 @@ import pyart
 # varies with the background value. The algorithm is heavily customizable and is designed to work with a variety of
 # datasets. Here, we show several examples of how to use the algorithm with different types of radar data.
 #
-# See Steiner et al. (1995), Yuter and Houze (1997), and Yuter et al. (2005) for full details on the algorithm. Tomkins 
+# See Steiner et al. (1995), Yuter and Houze (1997), and Yuter et al. (2005) for full details on the algorithm. Tomkins
 # et al. 2024 builds on this work to describe feature detection in cool-season events (part 2).
 
 ######################################
@@ -811,7 +811,7 @@ plt.show()
 # of heavy snow in radar data. Atmos. Meas. Tech., 15, 5515–5525,
 # https://doi.org/10.5194/amt-15-5515-2022
 #
-# Tomkins, L. M., Yuter, S. E., and Miller, M. A., 2024: Dual adaptive differential 
-# threshold method for automated detection of faint and strong echo features 
-# in radar observations of winter storms. Atmos. Meas. Tech., 17, 3377–3399, 
+# Tomkins, L. M., Yuter, S. E., and Miller, M. A., 2024: Dual adaptive differential
+# threshold method for automated detection of faint and strong echo features
+# in radar observations of winter storms. Atmos. Meas. Tech., 17, 3377–3399,
 # https://doi.org/10.5194/amt-17-3377-2024

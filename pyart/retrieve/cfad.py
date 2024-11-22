@@ -18,9 +18,9 @@ def create_cfad(
     This function returns a Contoured Frequency by Altitude Diagram (CFAD; Yuter et al. 1995), a 2-dimensional
     histogram that is normalized by the number of points at each altitude. Altitude bins are masked where the counts
     are less than a minimum fraction of the largest number of counts for any altitude row.
-    
+
     Author: Laura Tomkins (lauramtomkins@gmail.com)
-    
+
     Parameters
     ----------
     radar : Radar
