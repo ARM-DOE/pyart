@@ -37,7 +37,7 @@ class GAMICFile:
         """initialize object."""
         self._hfile = h5py.File(filename, "r")
         self.nsweeps = self._hfile["what"].attrs["sets"]
-        self._scans = ["scan%i" % (i) for i in range(self.nsweeps)]
+        self._scans = [f"scan{i}" for i in range(self.nsweeps)]
         self.rays_per_sweep = self.how_attrs("ray_count", "int32")
         self.total_rays = sum(self.rays_per_sweep)
         self.gates_per_sweep = self.how_attrs("bin_count", "int32")

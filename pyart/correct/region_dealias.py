@@ -316,9 +316,7 @@ def _find_sweep_interval_splits(nyquist, interval_splits, velocities, nsweep):
         max_vel = velocities.max()
         min_vel = velocities.min()
         if max_vel > nyquist or min_vel < -nyquist:
-            msg = "Velocities outside of the Nyquist interval found in " "sweep %i." % (
-                nsweep
-            )
+            msg = f"Velocities outside of the Nyquist interval found in sweep {nsweep}."
             warnings.warn(msg, UserWarning)
             # additional intervals must be added to capture the velocities
             # outside the nyquist limits

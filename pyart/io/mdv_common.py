@@ -550,13 +550,13 @@ class MdvFile:
                 compr_data = self.fileptr.read(compr_info["nbytes_coded"])
             encoding_type = field_header["encoding_type"]
             if encoding_type == ENCODING_INT8:
-                fmt = ">%iB" % (nx * ny)
+                fmt = f">{nx*ny}B"
                 np_form = ">B"
             elif encoding_type == ENCODING_INT16:
-                fmt = ">%iH" % (nx * ny)
+                fmt = f">{nx*ny}H"
                 np_form = ">H"
             elif encoding_type == ENCODING_FLOAT32:
-                fmt = ">%if" % (nx * ny)
+                fmt = f">{nx*ny}f"
                 np_form = ">f"
             else:
                 raise NotImplementedError("encoding: ", encoding_type)
@@ -885,7 +885,7 @@ class MdvFile:
 
             else:
                 if debug:
-                    print("getting unknown chunk %i" % chunk_id)
+                    print(f"getting unknown chunk {chunk_id}")
                 self.chunk_data[cnum] = self._get_unknown_chunk(cnum)
 
         return radar_info, elevations, calib_info
@@ -913,7 +913,7 @@ class MdvFile:
 
             else:
                 if debug:
-                    print("writing unknown chunk %i" % chunk_id)
+                    print(f"writing unknown chunk {chunk_id}")
                 self._write_unknown_chunk(self.chunk_data[cnum])
 
     def _get_radar_info(self):
@@ -941,14 +941,14 @@ class MdvFile:
         # the file pointer must be set at the correct location prior to call
         SIZE_FLOAT = 4.0
         nelevations = np.floor(nbytes / SIZE_FLOAT)
-        fmt = ">%df" % (nelevations)
+        fmt = f">{nelevations}f"
         packet = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
         return np.array(packet)
 
     def _write_elevs(self, packet):
         """Write an array of elevation."""
         # the file pointer must be set at the correct location prior to call
-        fmt = ">%df" % (len(packet))
+        fmt = f">{len(packet)}f"
         # cast to string as Python < 2.7.7 pack does not except unicode
         fmt = str(fmt)
         string = struct.pack(fmt, *packet)
@@ -1006,7 +1006,7 @@ class MdvFile:
     def _get_levels_info(self, nlevels):
         """Get nlevel information, return a dict."""
         # the file pointer must be set at the correct location prior to call
-        fmt = ">%iI %iI" % (nlevels, nlevels)
+        fmt = f">{nlevels}I {nlevels}I"
         if self.fileptr:
             packet = struct.unpack(fmt, self.fileptr.read(struct.calcsize(fmt)))
         else:
@@ -1019,7 +1019,7 @@ class MdvFile:
     def _write_levels_info(self, nlevels, d):
         """write levels information, return a dict."""
         # the file pointer must be set at the correct location prior to call
-        fmt = "%iI %iI" % (nlevels, nlevels)
+        fmt = f"{nlevels}I {nlevels}I"
         packet = d["vlevel_offsets"] + d["vlevel_nbytes"]
         # cast to string as Python < 2.7.7 pack does not except unicode
         fmt = str(fmt)
@@ -1101,7 +1101,7 @@ class MdvFile:
         else:
             proj_type = self.field_headers[0]["proj_type"]
             message = (
-                "Unsupported projection type: %i, " % (proj_type)
+                f"Unsupported projection type: {proj_type}, "
                 + "is MDV file in antenna coordinates?"
             )
             raise NotImplementedError(message)

@@ -210,7 +210,7 @@ class Xgrid:
             raise KeyError("dic must contain a 'data' key")
         if dic["data"].shape != (self.nz, self.ny, self.nx):
             t = (self.nz, self.ny, self.nx)
-            err = "'data' has invalid shape, should be (%i, %i)" % t
+            err = "'data' has invalid shape, should be ({}, {})".format(*t)
             raise ValueError(err)
         self.fields[field_name] = dic
 
@@ -458,7 +458,7 @@ class Xradar:
             raise KeyError("dic must contain a 'data' key")
         if dic["data"].shape != (self.nrays, self.ngates):
             t = (self.nrays, self.ngates)
-            err = "'data' has invalid shape, should be (%i, %i)" % t
+            err = "'data' has invalid shape, should be ({}, {})".format(*t)
             raise ValueError(err)
         # add the field
         self.fields[field_name] = dic
