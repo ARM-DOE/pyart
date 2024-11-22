@@ -51,6 +51,7 @@ grid = pyart.map.grid_from_radars(
     grid_shape=(1, 201, 201),
     grid_limits=((0, 10000), (-50000.0, 50000.0), (-50000.0, 50000.0)),
     fields=["reflectivity_horizontal"],
+    nb=1.5,
 )
 
 # get dx dy
@@ -189,6 +190,7 @@ grid = pyart.map.grid_from_radars(
     grid_shape=(1, 201, 201),
     grid_limits=((0, 10000), (-200000.0, 200000.0), (-200000.0, 200000.0)),
     fields=["reflectivity"],
+    nb=1.5,
 )
 
 # get dx dy
@@ -421,6 +423,7 @@ grid = pyart.map.grid_from_radars(
     grid_shape=(1, 201, 201),
     grid_limits=((0, 10000), (-200000.0, 200000.0), (-200000.0, 200000.0)),
     fields=["reflectivity", "cross_correlation_ratio"],
+    nb=1.5,
 )
 
 # image mute grid object
