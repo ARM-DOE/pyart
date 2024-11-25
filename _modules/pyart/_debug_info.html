@@ -536,13 +536,6 @@
         <span class="n">cylp_available</span> <span class="o">=</span> <span class="s2">&quot;MISSING&quot;</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">glpk</span>
-
-        <span class="n">glpk_version</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%i</span><span class="s2">.</span><span class="si">%i</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">glpk</span><span class="o">.</span><span class="n">env</span><span class="o">.</span><span class="n">version</span><span class="p">)</span>
-    <span class="k">except</span><span class="p">:</span>
-        <span class="n">glpk_version</span> <span class="o">=</span> <span class="s2">&quot;MISSING&quot;</span>
-
-    <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span> <span class="nn">cvxopt.info</span>
 
         <span class="n">cvxopt_version</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">version</span>
@@ -576,7 +569,6 @@
 
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---- Optional dependencies ----&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CyLP:&quot;</span><span class="p">,</span> <span class="n">cylp_available</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;PyGLPK version:&quot;</span><span class="p">,</span> <span class="n">glpk_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CVXOPT version:&quot;</span><span class="p">,</span> <span class="n">cvxopt_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cartopy version:&quot;</span><span class="p">,</span> <span class="n">cartopy_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
     <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pytest version:&quot;</span><span class="p">,</span> <span class="n">pytest_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span></div>

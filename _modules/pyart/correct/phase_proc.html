@@ -1356,13 +1356,13 @@
     <span class="c1"># check if equal sized chunks can be distributed to worker processes</span>
     <span class="k">if</span> <span class="n">n_rays</span> <span class="o">%</span> <span class="n">chunksize</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;Problem of </span><span class="si">%d</span><span class="s2"> rays cannot be split to </span><span class="si">%d</span><span class="s2"> worker processes!</span><span class="se">\n\r</span><span class="s2">&quot;</span>
-            <span class="s2">&quot;Fallback to 1 process!&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">n_rays</span><span class="p">,</span> <span class="n">proc</span><span class="p">)</span>
+            <span class="sa">f</span><span class="s2">&quot;Problem of </span><span class="si">{</span><span class="n">n_rays</span><span class="si">}</span><span class="s2"> rays cannot be split to </span><span class="si">{</span><span class="n">proc</span><span class="si">}</span><span class="s2"> worker processes!</span><span class="se">\n\r</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;Fallback to 1 process!&quot;</span>
         <span class="p">)</span>
         <span class="n">chunksize</span> <span class="o">=</span> <span class="n">n_rays</span>  <span class="c1"># fall back to one process</span>
         <span class="n">proc</span> <span class="o">=</span> <span class="mi">1</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Calculating with </span><span class="si">%d</span><span class="s2"> processes, </span><span class="si">%d</span><span class="s2"> rays per chunk&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">proc</span><span class="p">,</span> <span class="n">chunksize</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Calculating with </span><span class="si">{</span><span class="n">proc</span><span class="si">}</span><span class="s2"> processes, </span><span class="si">{</span><span class="n">chunksize</span><span class="si">}</span><span class="s2"> rays per chunk&quot;</span><span class="p">)</span>
 
     <span class="k">def</span> <span class="nf">worker</span><span class="p">(</span><span class="n">model</span><span class="p">,</span> <span class="n">B_vectors</span><span class="p">,</span> <span class="n">weights</span><span class="p">,</span> <span class="n">ray</span><span class="p">,</span> <span class="n">chunksize</span><span class="p">,</span> <span class="n">out_q</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

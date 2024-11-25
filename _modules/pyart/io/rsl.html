@@ -629,7 +629,7 @@
     <span class="k">for</span> <span class="n">volume_num</span> <span class="ow">in</span> <span class="n">available_vols</span><span class="p">:</span>
         <span class="c1"># if a volume number is not recognized it is skipped.</span>
         <span class="k">if</span> <span class="n">volume_num</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">VOLUMENUM2RSLNAME</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown Volume Number </span><span class="si">%d</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">volume_num</span><span class="p">)</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Unknown Volume Number </span><span class="si">{</span><span class="n">volume_num</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
             <span class="k">continue</span>
         <span class="n">rsl_field_name</span> <span class="o">=</span> <span class="n">VOLUMENUM2RSLNAME</span><span class="p">[</span><span class="n">volume_num</span><span class="p">]</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="o">.</span><span class="n">get_field_name</span><span class="p">(</span><span class="n">rsl_field_name</span><span class="p">)</span>

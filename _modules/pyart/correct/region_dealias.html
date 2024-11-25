@@ -506,7 +506,7 @@
     <span class="n">set_limits</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">corr_vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="o">**</span><span class="n">kwargs</span>
+    <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Dealias Doppler velocities using a region based algorithm.</span>
@@ -770,9 +770,7 @@
         <span class="n">max_vel</span> <span class="o">=</span> <span class="n">velocities</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="n">min_vel</span> <span class="o">=</span> <span class="n">velocities</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">max_vel</span> <span class="o">&gt;</span> <span class="n">nyquist</span> <span class="ow">or</span> <span class="n">min_vel</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">nyquist</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Velocities outside of the Nyquist interval found in &quot;</span> <span class="s2">&quot;sweep </span><span class="si">%i</span><span class="s2">.&quot;</span> <span class="o">%</span> <span class="p">(</span>
-                <span class="n">nsweep</span>
-            <span class="p">)</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Velocities outside of the Nyquist interval found in sweep </span><span class="si">{</span><span class="n">nsweep</span><span class="si">}</span><span class="s2">.&quot;</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">)</span>
             <span class="c1"># additional intervals must be added to capture the velocities</span>
             <span class="c1"># outside the nyquist limits</span>
