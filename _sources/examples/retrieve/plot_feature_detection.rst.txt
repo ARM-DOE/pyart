@@ -32,7 +32,7 @@ features in cool-season events.
 
     print(__doc__)
 
-    # Author: Laura Tomkins (lmtomkin@ncsu.edu)
+    # Author: Laura Tomkins (lauramtomkins@gmail.com)
     # License: BSD 3 clause
 
 
@@ -59,8 +59,8 @@ The feature detection algorithm works by identifying features that exceed the ba
 varies with the background value. The algorithm is heavily customizable and is designed to work with a variety of
 datasets. Here, we show several examples of how to use the algorithm with different types of radar data.
 
-See Steiner et al. (1995), Yuter and Houze (1997), and Yuter et al. (2005) for full details on the algorithm. A
-manuscript (Tomkins et al. 2024) is in prep to describe feature detection in cool-season events (part 2).
+See Steiner et al. (1995), Yuter and Houze (1997), and Yuter et al. (2005) for full details on the algorithm. Tomkins
+et al. 2024 builds on this work to describe feature detection in cool-season events (part 2).
 
 .. GENERATED FROM PYTHON SOURCE LINES 35-40
 
@@ -70,7 +70,7 @@ Part 1: Warm-season convective-stratiform classification
 
 Our first example classifies echo from a summer convective event.
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-123
+.. GENERATED FROM PYTHON SOURCE LINES 40-124
 
 .. code-block:: Python
 
@@ -88,6 +88,7 @@ Our first example classifies echo from a summer convective event.
         grid_shape=(1, 201, 201),
         grid_limits=((0, 10000), (-50000.0, 50000.0), (-50000.0, 50000.0)),
         fields=["reflectivity_horizontal"],
+        nb=1.5,
     )
 
     # get dx dy
@@ -169,7 +170,7 @@ Our first example classifies echo from a summer convective event.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 124-129
+.. GENERATED FROM PYTHON SOURCE LINES 125-130
 
 In addition to the default feature detection classification, the function also returns an underestimate
 (``feature_under``) and an overestimate (``feature_over``) to take into consideration the uncertainty when choosing
@@ -177,7 +178,7 @@ classification parameters. The under and overestimate use the same parameters, b
 certain value (default is 5 dBZ, can be changed with ``estimate_offset``). The estimation can be turned off (
 ``estimate_flag=False``), but we recommend keeping it turned on.
 
-.. GENERATED FROM PYTHON SOURCE LINES 129-174
+.. GENERATED FROM PYTHON SOURCE LINES 130-175
 
 .. code-block:: Python
 
@@ -238,13 +239,13 @@ certain value (default is 5 dBZ, can be changed with ``estimate_offset``). The e
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 175-178
+.. GENERATED FROM PYTHON SOURCE LINES 176-179
 
 **Tropical example**
 
 Let's get a NEXRAD file from Hurricane Ian
 
-.. GENERATED FROM PYTHON SOURCE LINES 178-263
+.. GENERATED FROM PYTHON SOURCE LINES 179-265
 
 .. code-block:: Python
 
@@ -262,6 +263,7 @@ Let's get a NEXRAD file from Hurricane Ian
         grid_shape=(1, 201, 201),
         grid_limits=((0, 10000), (-200000.0, 200000.0), (-200000.0, 200000.0)),
         fields=["reflectivity"],
+        nb=1.5,
     )
 
     # get dx dy
@@ -345,7 +347,7 @@ Let's get a NEXRAD file from Hurricane Ian
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 264-269
+.. GENERATED FROM PYTHON SOURCE LINES 266-271
 
 **Comparison with original C++ algorithm**
 
@@ -353,7 +355,7 @@ To ensure that our algorithm here matches the original algorithm developed in C+
 example during the KWAJEX field campaign. The file contains the original convective-stratiform classification from
 the C++ algorithm. We use the algorithm implemented in Py-ART with the same settings to produce identical results.
 
-.. GENERATED FROM PYTHON SOURCE LINES 269-398
+.. GENERATED FROM PYTHON SOURCE LINES 271-400
 
 .. code-block:: Python
 
@@ -510,7 +512,7 @@ the C++ algorithm. We use the algorithm implemented in Py-ART with the same sett
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 399-410
+.. GENERATED FROM PYTHON SOURCE LINES 401-412
 
 Part 2: Cool-season feature detection
 -------------------------------------
@@ -524,7 +526,7 @@ change ``dB_averaging = False`` when using a rescaled field (set ``dB_averaging`
 dBZ units). Also note that since we are now using a snow rate field with different values, most of our parameters
 have changed as well.
 
-.. GENERATED FROM PYTHON SOURCE LINES 410-504
+.. GENERATED FROM PYTHON SOURCE LINES 412-507
 
 .. code-block:: Python
 
@@ -542,6 +544,7 @@ have changed as well.
         grid_shape=(1, 201, 201),
         grid_limits=((0, 10000), (-200000.0, 200000.0), (-200000.0, 200000.0)),
         fields=["reflectivity", "cross_correlation_ratio"],
+        nb=1.5,
     )
 
     # image mute grid object
@@ -634,13 +637,13 @@ have changed as well.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 505-508
+.. GENERATED FROM PYTHON SOURCE LINES 508-511
 
 **Under and over estimate in snow**
 
 Here we show how to bound the snow rate with an under and over estimate
 
-.. GENERATED FROM PYTHON SOURCE LINES 508-614
+.. GENERATED FROM PYTHON SOURCE LINES 511-617
 
 .. code-block:: Python
 
@@ -762,14 +765,14 @@ Here we show how to bound the snow rate with an under and over estimate
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 615-619
+.. GENERATED FROM PYTHON SOURCE LINES 618-622
 
 **Strong and Faint features**
 
 We have developed a new technique which runs the algorithm twice to find features that are very distinct from the
 background (strong features) and features that are not very distinct from the background (faint features).
 
-.. GENERATED FROM PYTHON SOURCE LINES 619-720
+.. GENERATED FROM PYTHON SOURCE LINES 622-723
 
 .. code-block:: Python
 
@@ -886,14 +889,14 @@ background (strong features) and features that are not very distinct from the ba
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 721-725
+.. GENERATED FROM PYTHON SOURCE LINES 724-728
 
 **Image muted Strong and Faint features**
 
 This last section shows how we can image mute the fields (Tomkins et al. 2022) and reduce the visual prominence of
 melting and mixed precipitation.
 
-.. GENERATED FROM PYTHON SOURCE LINES 725-778
+.. GENERATED FROM PYTHON SOURCE LINES 728-781
 
 .. code-block:: Python
 
@@ -962,7 +965,7 @@ melting and mixed precipitation.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 779-810
+.. GENERATED FROM PYTHON SOURCE LINES 782-818
 
 Summary of recommendations and best practices
 ---------------------------------------------
@@ -996,10 +999,15 @@ Image muting of mixed precipitation to improve identification of regions
 of heavy snow in radar data. Atmos. Meas. Tech., 15, 5515–5525,
 https://doi.org/10.5194/amt-15-5515-2022
 
+Tomkins, L. M., Yuter, S. E., and Miller, M. A., 2024: Dual adaptive differential
+threshold method for automated detection of faint and strong echo features
+in radar observations of winter storms. Atmos. Meas. Tech., 17, 3377–3399,
+https://doi.org/10.5194/amt-17-3377-2024
+
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 26.030 seconds)
+   **Total running time of the script:** (0 minutes 24.868 seconds)
 
 
 .. _sphx_glr_download_examples_retrieve_plot_feature_detection.py:

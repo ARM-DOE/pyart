@@ -543,15 +543,12 @@ correlation coefficient values). Reflectivities corresponding to melting and mix
 precipitation features are deemphasized using a gray scale and the regions
 with just snow and just rain are depicted in a corresponding full-color scale.
 The ultimate utility of image muting radar reflectivity is to reduce the misinterpretation
-of regions of melting or mixed precipitation as opposed to heavy snow or heavy rain.</p>
+of regions of melting or mixed precipitation as opposed to heavy snow or heavy rain.
+See Tomkins et al. (2022) for full details.</p>
 <img src="../../_images/sphx_glr_plot_nexrad_image_muted_reflectivity_001.png" srcset="../../_images/sphx_glr_plot_nexrad_image_muted_reflectivity_001.png" alt="KBGM 0.5 Deg. 2020-02-07T13:26:42Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
-<span class="c1"># Author: Laura Tomkins (lmtomkin@ncsu.edu)</span>
+<span class="c1"># Author: Laura Tomkins (lauramtomkins@gmail.com)</span>
 <span class="c1"># License: BSD 3 clause</span>
-<span class="c1"># citation: Tomkins, L. M., Yuter, S. E., Miller, M. A., and Allen, L. R., 2022:</span>
-<span class="c1"># Image muting of mixed precipitation to improve identification of regions</span>
-<span class="c1"># of heavy snow in radar data. Atmos. Meas. Tech., 15, 5515–5525,</span>
-<span class="c1"># https://doi.org/10.5194/amt-15-5515-2022</span>
 
 <span class="kn">import</span> <span class="nn">matplotlib.colors</span> <span class="k">as</span> <span class="nn">mcolors</span>
 <span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
@@ -595,9 +592,16 @@ of regions of melting or mixed precipitation as opposed to heavy snow or heavy r
 <span class="n">display</span><span class="o">.</span><span class="n">set_limits</span><span class="p">((</span><span class="o">-</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">300</span><span class="p">,</span> <span class="mi">300</span><span class="p">))</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.set_aspect.html#matplotlib.axes.Axes.set_aspect" title="matplotlib.axes.Axes.set_aspect" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span></a><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
+
+<span class="c1"># References</span>
+<span class="c1"># ----------</span>
+<span class="c1"># Tomkins, L. M., Yuter, S. E., Miller, M. A., and Allen, L. R., 2022:</span>
+<span class="c1"># Image muting of mixed precipitation to improve identification of regions</span>
+<span class="c1"># of heavy snow in radar data. Atmos. Meas. Tech., 15, 5515–5525,</span>
+<span class="c1"># https://doi.org/10.5194/amt-15-5515-2022</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 3.665 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 3.412 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plotting-plot-nexrad-image-muted-reflectivity-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/a92bcae17776348a425fe87192a2b761/plot_nexrad_image_muted_reflectivity.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_nexrad_image_muted_reflectivity.ipynb</span></code></a></p>

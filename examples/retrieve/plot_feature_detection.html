@@ -541,7 +541,7 @@ and stratiform regions in warm season events and how the algorithm can be used t
 features in cool-season events.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
-<span class="c1"># Author: Laura Tomkins (lmtomkin@ncsu.edu)</span>
+<span class="c1"># Author: Laura Tomkins (lauramtomkins@gmail.com)</span>
 <span class="c1"># License: BSD 3 clause</span>
 
 
@@ -559,8 +559,8 @@ features in cool-season events.</p>
 <p>The feature detection algorithm works by identifying features that exceed the background value by an amount that
 varies with the background value. The algorithm is heavily customizable and is designed to work with a variety of
 datasets. Here, we show several examples of how to use the algorithm with different types of radar data.</p>
-<p>See Steiner et al. (1995), Yuter and Houze (1997), and Yuter et al. (2005) for full details on the algorithm. A
-manuscript (Tomkins et al. 2024) is in prep to describe feature detection in cool-season events (part 2).</p>
+<p>See Steiner et al. (1995), Yuter and Houze (1997), and Yuter et al. (2005) for full details on the algorithm. Tomkins
+et al. 2024 builds on this work to describe feature detection in cool-season events (part 2).</p>
 </section>
 <section id="part-1-warm-season-convective-stratiform-classification">
 <h2>Part 1: Warm-season convective-stratiform classification<a class="headerlink" href="#part-1-warm-season-convective-stratiform-classification" title="Permalink to this heading">#</a></h2>
@@ -579,6 +579,7 @@ manuscript (Tomkins et al. 2024) is in prep to describe feature detection in coo
     <span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">201</span><span class="p">),</span>
     <span class="n">grid_limits</span><span class="o">=</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">50000.0</span><span class="p">,</span> <span class="mf">50000.0</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">50000.0</span><span class="p">,</span> <span class="mf">50000.0</span><span class="p">)),</span>
     <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">],</span>
+    <span class="n">nb</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1"># get dx dy</span>
@@ -714,6 +715,7 @@ certain value (default is 5 dBZ, can be changed with <code class="docutils liter
     <span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">201</span><span class="p">),</span>
     <span class="n">grid_limits</span><span class="o">=</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">200000.0</span><span class="p">,</span> <span class="mf">200000.0</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">200000.0</span><span class="p">,</span> <span class="mf">200000.0</span><span class="p">)),</span>
     <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">],</span>
+    <span class="n">nb</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1"># get dx dy</span>
@@ -947,6 +949,7 @@ have changed as well.</p>
     <span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">201</span><span class="p">),</span>
     <span class="n">grid_limits</span><span class="o">=</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">200000.0</span><span class="p">,</span> <span class="mf">200000.0</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">200000.0</span><span class="p">,</span> <span class="mf">200000.0</span><span class="p">)),</span>
     <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">],</span>
+    <span class="n">nb</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="c1"># image mute grid object</span>
@@ -1326,7 +1329,11 @@ Reflectivity with Snow Gauge Accumulation. J. Appl. Meteorol. Climatol., 42, 20�
 Image muting of mixed precipitation to improve identification of regions
 of heavy snow in radar data. Atmos. Meas. Tech., 15, 5515–5525,
 <a class="reference external" href="https://doi.org/10.5194/amt-15-5515-2022">https://doi.org/10.5194/amt-15-5515-2022</a></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 26.030 seconds)</p>
+<p>Tomkins, L. M., Yuter, S. E., and Miller, M. A., 2024: Dual adaptive differential
+threshold method for automated detection of faint and strong echo features
+in radar observations of winter storms. Atmos. Meas. Tech., 17, 3377–3399,
+<a class="reference external" href="https://doi.org/10.5194/amt-17-3377-2024">https://doi.org/10.5194/amt-17-3377-2024</a></p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 24.868 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-retrieve-plot-feature-detection-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/5930845ba241266919440c1a8dad75dd/plot_feature_detection.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_feature_detection.ipynb</span></code></a></p>

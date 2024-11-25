@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**01:10.718** total execution time for 8 files **from examples/retrieve**:
+**01:05.918** total execution time for 8 files **from examples/retrieve**:
 
 .. container::
 
@@ -33,26 +33,26 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_retrieve_plot_feature_detection.py` (``plot_feature_detection.py``)
-     - 00:26.030
+     - 00:24.868
      - 0.0
    * - :ref:`sphx_glr_examples_retrieve_plot_convective_stratiform.py` (``plot_convective_stratiform.py``)
-     - 00:20.086
+     - 00:19.163
      - 0.0
    * - :ref:`sphx_glr_examples_retrieve_plot_hydrometeor_class_x_band.py` (``plot_hydrometeor_class_x_band.py``)
-     - 00:10.005
-     - 0.0
-   * - :ref:`sphx_glr_examples_retrieve_plot_vad.py` (``plot_vad.py``)
-     - 00:03.343
+     - 00:09.199
      - 0.0
    * - :ref:`sphx_glr_examples_retrieve_plot_composite_reflectivity.py` (``plot_composite_reflectivity.py``)
-     - 00:03.281
+     - 00:03.288
+     - 0.0
+   * - :ref:`sphx_glr_examples_retrieve_plot_vad.py` (``plot_vad.py``)
+     - 00:02.606
      - 0.0
    * - :ref:`sphx_glr_examples_retrieve_plot_hydrometeor.py` (``plot_hydrometeor.py``)
-     - 00:03.092
+     - 00:02.399
      - 0.0
    * - :ref:`sphx_glr_examples_retrieve_plot_cfad.py` (``plot_cfad.py``)
-     - 00:02.697
+     - 00:02.222
      - 0.0
    * - :ref:`sphx_glr_examples_retrieve_plot_column_subset.py` (``plot_column_subset.py``)
-     - 00:02.185
+     - 00:02.171
      - 0.0

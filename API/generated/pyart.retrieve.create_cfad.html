@@ -1154,26 +1154,23 @@
 <dd><p>This function returns a Contoured Frequency by Altitude Diagram (CFAD; Yuter et al. 1995), a 2-dimensional
 histogram that is normalized by the number of points at each altitude. Altitude bins are masked where the counts
 are less than a minimum fraction of the largest number of counts for any altitude row.</p>
-<dl class="simple">
-<dt>radar<span class="classifier">Radar</span></dt><dd><p>Radar object used. Can be Radar or Grid object.</p>
-</dd>
-<dt>field_bins<span class="classifier">list</span></dt><dd><p>List of bin edges for field values to use for CFAD creation.</p>
-</dd>
-<dt>altitude_bins<span class="classifier">list</span></dt><dd><p>List of bin edges for height values to use for CFAD creation.</p>
-</dd>
-<dt>field<span class="classifier">str</span></dt><dd><p>Field name to use to look up reflectivity data. In the
-radar object. Default field name is ‘reflectivity’.</p>
-</dd>
-<dt>field_mask<span class="classifier">array</span></dt><dd><p>An array the same size as the field array used to mask values.</p>
-</dd>
-<dt>min_frac_thres<span class="classifier">float, optional</span></dt><dd><p>Fraction of values to remove in CFAD normalization (default 0.1). If an altitude row has a total count that
-is less than min_frac_thres of the largest number of total counts for any altitude row, the bins in that
-altitude row are masked.</p>
-</dd>
-</dl>
+<p>Author: Laura Tomkins (<a class="reference external" href="mailto:lauramtomkins&#37;&#52;&#48;gmail&#46;com">lauramtomkins<span>&#64;</span>gmail<span>&#46;</span>com</a>)</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p><ul class="simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>radar</strong> (<em>Radar</em>) – Radar object used. Can be Radar or Grid object.</p></li>
+<li><p><strong>field_bins</strong> (<em>list</em>) – List of bin edges for field values to use for CFAD creation.</p></li>
+<li><p><strong>altitude_bins</strong> (<em>list</em>) – List of bin edges for height values to use for CFAD creation.</p></li>
+<li><p><strong>field</strong> (<em>str</em>) – Field name to use to look up reflectivity data. In the
+radar object. Default field name is ‘reflectivity’.</p></li>
+<li><p><strong>field_mask</strong> (<em>array</em>) – An array the same size as the field array used to mask values.</p></li>
+<li><p><strong>min_frac_thres</strong> (<em>float, optional</em>) – Fraction of values to remove in CFAD normalization (default 0.1). If an altitude row has a total count that
+is less than min_frac_thres of the largest number of total counts for any altitude row, the bins in that
+altitude row are masked.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p><ul class="simple">
 <li><p><strong>freq_norm</strong> (<em>array</em>) – Array of normalized frequency.</p></li>
 <li><p><strong>height_edges</strong> (<em>array</em>) – Array of bin edges for height data.</p></li>
 <li><p><strong>field_edges</strong> (<em>array of x coordinates</em>) – Array of bin edges for field data.</p></li>
