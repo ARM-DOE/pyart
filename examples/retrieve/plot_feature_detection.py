@@ -9,7 +9,7 @@ features in cool-season events.
 
 print(__doc__)
 
-# Author: Laura Tomkins (lmtomkin@ncsu.edu)
+# Author: Laura Tomkins (lauramtomkins@gmail.com)
 # License: BSD 3 clause
 
 
@@ -28,8 +28,8 @@ import pyart
 # varies with the background value. The algorithm is heavily customizable and is designed to work with a variety of
 # datasets. Here, we show several examples of how to use the algorithm with different types of radar data.
 #
-# See Steiner et al. (1995), Yuter and Houze (1997), and Yuter et al. (2005) for full details on the algorithm. A
-# manuscript (Tomkins et al. 2024) is in prep to describe feature detection in cool-season events (part 2).
+# See Steiner et al. (1995), Yuter and Houze (1997), and Yuter et al. (2005) for full details on the algorithm. Tomkins
+# et al. 2024 builds on this work to describe feature detection in cool-season events (part 2).
 
 ######################################
 # Part 1: Warm-season convective-stratiform classification
@@ -51,6 +51,7 @@ grid = pyart.map.grid_from_radars(
     grid_shape=(1, 201, 201),
     grid_limits=((0, 10000), (-50000.0, 50000.0), (-50000.0, 50000.0)),
     fields=["reflectivity_horizontal"],
+    nb=1.5,
 )
 
 # get dx dy
@@ -189,6 +190,7 @@ grid = pyart.map.grid_from_radars(
     grid_shape=(1, 201, 201),
     grid_limits=((0, 10000), (-200000.0, 200000.0), (-200000.0, 200000.0)),
     fields=["reflectivity"],
+    nb=1.5,
 )
 
 # get dx dy
@@ -421,6 +423,7 @@ grid = pyart.map.grid_from_radars(
     grid_shape=(1, 201, 201),
     grid_limits=((0, 10000), (-200000.0, 200000.0), (-200000.0, 200000.0)),
     fields=["reflectivity", "cross_correlation_ratio"],
+    nb=1.5,
 )
 
 # image mute grid object
@@ -807,3 +810,8 @@ plt.show()
 # Image muting of mixed precipitation to improve identification of regions
 # of heavy snow in radar data. Atmos. Meas. Tech., 15, 5515–5525,
 # https://doi.org/10.5194/amt-15-5515-2022
+#
+# Tomkins, L. M., Yuter, S. E., and Miller, M. A., 2024: Dual adaptive differential
+# threshold method for automated detection of faint and strong echo features
+# in radar observations of winter storms. Atmos. Meas. Tech., 17, 3377–3399,
+# https://doi.org/10.5194/amt-17-3377-2024
