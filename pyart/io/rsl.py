@@ -175,7 +175,7 @@ def read_rsl(
     for volume_num in available_vols:
         # if a volume number is not recognized it is skipped.
         if volume_num not in VOLUMENUM2RSLNAME:
-            warnings.warn("Unknown Volume Number %d" % volume_num)
+            warnings.warn(f"Unknown Volume Number {volume_num}")
             continue
         rsl_field_name = VOLUMENUM2RSLNAME[volume_num]
         field_name = filemetadata.get_field_name(rsl_field_name)
