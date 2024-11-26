@@ -93,6 +93,8 @@
     
     steiner_conv_strat
     
+    storm_relative_velocity
+    
     texture_of_complex_phase
     
     vad_browning
