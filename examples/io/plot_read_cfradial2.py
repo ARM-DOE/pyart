@@ -11,14 +11,14 @@ An example which uses xradar and Py-ART to read and plot Cfradial2/FM301 data.
 # License: BSD 3 clause
 
 
-import xradar as xd
+import xarray as xr
 
 import pyart
 from pyart.testing import get_test_data
 
 # Locate the test data and read in using xradar
 filename = get_test_data("cfrad2.20080604_002217_000_SPOL_v36_SUR.nc")
-tree = xd.io.open_cfradial1_datatree(filename)
+tree = xr.open_datatree(filename)
 
 # Give the tree Py-ART radar methods
 radar = tree.pyart.to_radar()
