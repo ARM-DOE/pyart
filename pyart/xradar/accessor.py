@@ -25,7 +25,7 @@ except ImportError:
 from xarray import DataArray, Dataset, concat
 from xarray.core import utils
 from xradar.accessors import XradarAccessor
-from xradar.util import get_sweep_keys
+from xradar.util import apply_to_sweeps, get_sweep_keys
 
 from ..config import get_metadata
 from ..core.transforms import (
@@ -283,7 +283,23 @@ class Xgrid:
 
 class Xradar:
     def __init__(self, xradar, default_sweep="sweep_0", scan_type=None):
-        self.xradar = xradar
+        # Make sure that first dimension is azimuth
+        self.xradar = apply_to_sweeps(xradar, ensure_dim)
+        # Run through the sanity check for latitude/longitude/altitude
+        for coord in ["latitude", "longitude", "altitude"]:
+            if coord not in self.xradar:
+                raise ValueError(
+                    f"{coord} not included in xradar object, cannot georeference"
+                )
+
+        # Ensure that lat/lon/alt info is applied across the sweeps
+        self.xradar = apply_to_sweeps(
+            self.xradar,
+            ensure_georeference_variables,
+            latitude=self.xradar["latitude"],
+            longitude=self.xradar["longitude"],
+            altitude=self.xradar["altitude"],
+        )
         self.scan_type = scan_type or "ppi"
         self.sweep_group_names = get_sweep_keys(self.xradar)
         self.nsweeps = len(self.sweep_group_names)
@@ -626,6 +642,12 @@ class Xradar:
         # Add in number of gates variable
         cleaned["ngates"] = ("gates", np.arange(len(cleaned.gates)))
 
+        # Ensure latitude/longitude/altitude are length 1
+        if cleaned["latitude"].values.shape != ():
+            cleaned["latitude"] = cleaned.latitude.isel(gates=0)
+            cleaned["longitude"] = cleaned.longitude.isel(gates=0)
+            cleaned["altitude"] = cleaned.altitude.isel(gates=0)
+
         # Return the non-missing times, ensuring valid data is returned
         return cleaned
 
@@ -837,3 +859,31 @@ class XradarDataTreeAccessor(XradarAccessor):
         """
         dt = self.xarray_obj
         return Xradar(dt, scan_type=scan_type)
+
+
+def ensure_dim(ds, dim="azimuth"):
+    """
+    Ensure the first dimension is a certain coordinate (ex. azimuth)
+    """
+    core_dims = ds.dims
+    if dim not in core_dims:
+        if "time" in core_dims:
+            ds = ds.swap_dims({"time": dim})
+        else:
+            return ValueError(
+                "Poorly formatted data: time/azimuth not included as core dimension."
+            )
+    return ds
+
+
+def ensure_georeference_variables(ds, latitude, longitude, altitude):
+    """
+    Ensure georeference variables are included in the sweep information
+    """
+    if "latitude" not in ds:
+        ds["latitude"] = latitude
+    if "longitude" not in ds:
+        ds["longitude"] = longitude
+    if "altitude" not in ds:
+        ds["altitude"] = altitude
+    return ds

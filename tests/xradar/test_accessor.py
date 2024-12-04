@@ -7,6 +7,7 @@ from open_radar_data import DATASETS
 import pyart
 
 filename = DATASETS.fetch("cfrad.20080604_002217_000_SPOL_v36_SUR.nc")
+cfradial2_file = DATASETS.fetch("cfrad2.20080604_002217_000_SPOL_v36_SUR.nc")
 
 
 def test_get_field(filename=filename):
@@ -167,3 +168,23 @@ def test_to_xradar_object():
     assert reflectivity.shape == (480, 996)
     assert radar.nsweeps == 9
     assert radar.ngates == 996
+
+
+def test_cfradial2_data():
+    """
+    Test swapping the dimensions when the first is time
+    """
+    dtree = xr.open_datatree(
+        cfradial2_file,
+    )
+
+    # Before the transformation, time should be in the dimensions
+    assert "time" in dtree["sweep_0"].dims
+
+    # After the transformation, azimuth should be moved from coord to dim
+    radar = dtree.pyart.to_radar()
+    assert "azimuth" in radar["sweep_0"].dims
+
+    # Ensure georeferencing works as expected
+    x, y, z = radar.get_gate_x_y_z(0)
+    assert x.shape == (480, 996)
