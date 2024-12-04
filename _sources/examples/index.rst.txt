@@ -125,6 +125,23 @@ Reading/writing a variety of radar data using Py-ART.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which uses xradar and Py-ART to read and plot Cfradial2/FM301 data.">
+
+.. only:: html
+
+  .. image:: /examples/io/images/thumb/sphx_glr_plot_read_cfradial2_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_io_plot_read_cfradial2.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Read and Plot Cfradial2/FM301 data Using Xradar and Py-ART</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="In this example, we will show how to read in older NEXRAD files prior to 2008 that are missing some coordinate metadata.">
 
 .. only:: html

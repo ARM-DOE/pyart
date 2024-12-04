@@ -1,0 +1,684 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Read and Plot Cfradial2/FM301 data Using Xradar and Py-ART &#8212; Py-ART 1.19.3 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!-- 
+    this give us a css class that will be invisible only if js is disabled 
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=26a4bc78f4c0ddb94549" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../../_static/scripts/fontawesome.js?digest=26a4bc78f4c0ddb94549"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549" />
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=1b649cd4"></script>
+    <script src="../../_static/doctools.js?v=888ff710"></script>
+    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script crossorigin="anonymous" integrity="sha256-Ae2Vz/4ePdIu6ZyI/5ZGsYnb+m0JlOmKPjt6XZ9JJkA=" src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('js', new Date());
+                gtag('config', 'G-JJEG3CV376');
+            </script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/io/plot_read_cfradial2';</script>
+    <script src="../../_static/doc_shared.js?v=6c7402a7"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues" href="plot_older_nexrad_data_aws.html" />
+    <link rel="prev" title="Input/Output Examples" href="index.html" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.19" /> 
+<link
+  rel="alternate"
+  type="application/atom+xml"
+  href="../../blog/atom.xml"
+  title="PyART Blog"
+/>
+  
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Py-ART 1.19.3 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../userguide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Example Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../API/index.html">
+    API Reference Manual
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../dev/index.html">
+    Developer’s Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../blog.html">
+    Blog
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" ">
+  <a class="nav-link dropdown-item nav-internal" href="../../notebook-gallery.html">
+    Notebook Gallery
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://github.com/ARM-DOE/pyart/releases">
+    Release Notes
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ARM-DOE/pyart" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/Py_ART" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../userguide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Example Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../API/index.html">
+    API Reference Manual
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../dev/index.html">
+    Developer’s Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../blog.html">
+    Blog
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../notebook-gallery.html">
+    Notebook Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://github.com/ARM-DOE/pyart/releases">
+    Release Notes
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ARM-DOE/pyart" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/Py_ART" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">Twitter</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 has-children"><a class="reference internal" href="../correct/index.html">Moment correction examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../correct/plot_zdr_check.html">ZDR Bias Calculation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../correct/plot_cloud_mask.html">Calculating and Plotting a Cloud Mask</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../correct/plot_attenuation.html">Correct reflectivity attenuation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../correct/plot_dealias.html">Dealias doppler velocities using the Region Based Algorithm</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Input/Output Examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Read and Plot Cfradial2/FM301 data Using Xradar and Py-ART</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_older_nexrad_data_aws.html">Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_nexrad_data_aws.html">Reading NEXRAD Data from the AWS Cloud</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../mapping/index.html">Mapping examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../mapping/plot_map_one_radar_to_grid.html">Map a single radar to a Cartesian grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mapping/plot_map_two_radars_to_grid.html">Map two radars to a Cartesian grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mapping/plot_grid_single_sweep_ppi.html">Map a single PPI sweep to a Cartesian grid using 2D weighting</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mapping/plot_compare_two_radars_gatemapper.html">Compare Two Radars Using Gatemapper</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../plotting/index.html">Plotting examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_rhi_mdv.html">Create a RHI plot from a MDV file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_corner_reflector.html">Plot a Corner Reflector</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_ppi_mdv.html">Create a PPI plot from a MDV file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_ppi_cfradial.html">Create a PPI plot from a Cfradial file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_nexrad_reflectivity.html">Create a plot of NEXRAD reflectivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_xsect.html">Plot a cross section from  a PPI volume</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_rhi_cfradial_singlescan.html">Create a multiple panel RHI plot from a CF/Radial file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_cappi.html">Compare PPI vs CAPPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_rhi_two_panel.html">Create a two panel RHI plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_nexrad_multiple_moments.html">Create a plot of multiple moments from a NEXRAD file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_rhi_cfradial.html">Create a multiple panel RHI plot from a CF/Radial file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_three_panel_gridmapdisplay.html">Create a 3 panel plot using GridMapDisplay</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_ppi_with_rings.html">Create a PPI plot on a cartopy map</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_nexrad_image_muted_reflectivity.html">Create an image-muted reflectivity plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_rhi_data_overlay.html">Create an RHI plot with reflectivity contour lines from an MDV file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_cross_section.html">Plot a Cross Section from a Grid</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_modify_colorbar.html">Modify a Colorbar for your Plot</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_max_cappi.html">Plot Max-CAPPI</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_rhi_contours_differential_reflectivity.html">Create an RHI plot with reflectivity contour lines from an MDV file</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../plotting/plot_choose_a_colormap.html">Choose a Colormap for your Plot</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../retrieve/index.html">Retrieval Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../retrieve/plot_column_subset.html">Extract a radar column above a point</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../retrieve/plot_composite_reflectivity.html">Calculate and Plot Composite Reflectivity</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../retrieve/plot_vad.html">Calculate and Plot VAD profile</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../retrieve/plot_hydrometeor.html">Calculate and Plot hydrometeor classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../retrieve/plot_hydrometeor_class_x_band.html">Hydrometeor Classification with Custom Frequency Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../retrieve/plot_cfad.html">Creating a CFAD diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../retrieve/plot_convective_stratiform.html">Convective-Stratiform classification</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../retrieve/plot_feature_detection.html">Feature Detection classification</a></li>
+</ul>
+</details></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../xradar/index.html">Xradar Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../xradar/plot_xradar.html">Plot a PPI Using Xradar and Py-ART</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../xradar/plot_grid_xradar.html">Grid Data Using Xradar and Py-ART</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../xradar/plot_dealias_xradar.html">Dealias Radial Velocities Using Xradar and Py-ART</a></li>
+</ul>
+</details></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Example Gallery</a></li>
+    
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Input/Output Examples</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Read and Plot Cfradial2/FM301 data Using Xradar and Py-ART</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                   <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-examples-io-plot-read-cfradial2-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="read-and-plot-cfradial2-fm301-data-using-xradar-and-py-art">
+<span id="sphx-glr-examples-io-plot-read-cfradial2-py"></span><h1>Read and Plot Cfradial2/FM301 data Using Xradar and Py-ART<a class="headerlink" href="#read-and-plot-cfradial2-fm301-data-using-xradar-and-py-art" title="Permalink to this heading">#</a></h1>
+<p>An example which uses xradar and Py-ART to read and plot Cfradial2/FM301 data.</p>
+<img src="../../_images/sphx_glr_plot_read_cfradial2_001.png" srcset="../../_images/sphx_glr_plot_read_cfradial2_001.png" alt="SPOLRVP8 0.5 Deg. 2008-06-04T00:15:34Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Author: Max Grover (mgrover@anl.gov)</span>
+<span class="c1"># License: BSD 3 clause</span>
+
+
+<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">from</span> <span class="nn">open_radar_data</span> <span class="kn">import</span> <span class="n">DATASETS</span>
+
+<span class="kn">import</span> <span class="nn">pyart</span>
+
+<span class="c1"># Locate the test data and read in using xradar</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">DATASETS</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;cfrad2.20080604_002217_000_SPOL_v36_SUR.nc&quot;</span><span class="p">)</span>
+<span class="n">tree</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">open_datatree</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
+
+<span class="c1"># Give the tree Py-ART radar methods</span>
+<span class="n">radar</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">pyart</span><span class="o">.</span><span class="n">to_radar</span><span class="p">()</span>
+
+<span class="c1"># Plot the Reflectivity Field (corrected_reflectivity_horizontal)</span>
+<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi</span><span class="p">(</span><span class="s2">&quot;DBZ&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_ChaseSpectral&quot;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.749 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-io-plot-read-cfradial2-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/17c88c4b4a3ef3c9e7f7aacebafc09d4/plot_read_cfradial2.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_read_cfradial2.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/420f9d5965c039406c52d7392b71173c/plot_read_cfradial2.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_read_cfradial2.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/1408fef76e21bdfaab1f27d6100ca0e2/plot_read_cfradial2.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_read_cfradial2.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</section>
+
+<div class="section ablog__blog_comments">
+   
+</div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Input/Output Examples</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="plot_older_nexrad_data_aws.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../../_sources/examples/io/plot_read_cfradial2.rst.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=26a4bc78f4c0ddb94549"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=26a4bc78f4c0ddb94549"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2013-2024, Py-ART developers.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
