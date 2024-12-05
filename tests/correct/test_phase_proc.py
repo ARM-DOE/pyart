@@ -143,6 +143,7 @@ def perform_phase_processing(LP_solver="cvxopt"):
     return radar, phidp, kdp
 
 
+@pytest.mark.skipif(not cvxopt_available, reason="CVXOPT is not installed.")
 def test_perform_phase_processing_gf(LP_solver="cvxopt"):
     """Perform LP phase processing on a single ray radar."""
     radar = pyart.testing.make_single_ray_radar()
