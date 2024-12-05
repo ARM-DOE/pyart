@@ -35,7 +35,7 @@ def spectra_moments(radar):
     wavelength = radar.ds.attrs["wavelength"]
     for i in range(times):
         if i % 100 == 0:
-            print("Dealiasing %d/%d" % (i, times))
+            print(f"Dealiasing {i}/{times}")
         spectra_idx = spectra[i, :, :]
         # Get the raw spectra, bins, and wavelength
         # Subtract the noise floor from the spectra. Also, return the integration limits

@@ -326,10 +326,10 @@ def feature_detection(
 ):
     """
     This function can be used to detect features in a field (e.g. reflectivity, rain rate, snow rate,
-    etc.) described by Tomkins et al. (2023) and based on original convective-stratiform algorithms developed by
+    etc.) described by Tomkins et al. (2024) and based on original convective-stratiform algorithms developed by
     Steiner et al. (1995), Yuter et al. (2005) and Yuter and Houze (1997) algorithm.
 
-    Author: Laura Tomkins (@lauratomkins)
+    Author: Laura Tomkins (lauramtomkins@gmail.com)
 
     Parameters
     ----------
@@ -422,8 +422,10 @@ def feature_detection(
     2005: Physical characterization of tropical oceanic convection observed in
     KWAJEX. J. Appl. Meteor., 44, 385-415. https://doi.org/10.1175/JAM2206.1
 
-    Tomkins, L. M., S. E. Yuter, and M. A. Miller, 2024: Objective identification
-    of faint and strong features in radar observations of winter storms. in prep.
+    Tomkins, L. M., Yuter, S. E., and Miller, M. A., 2024: Dual adaptive differential
+    threshold method for automated detection of faint and strong echo features
+    in radar observations of winter storms. Atmos. Meas. Tech., 17, 3377–3399.
+    https://doi.org/10.5194/amt-17-3377-2024
 
     """
 
