@@ -98,7 +98,7 @@ def test_phase_proc_lp_gf_cylp():
     with warnings.catch_warnings():
         # ignore FutureWarnings as CyLP emits a number of these
         warnings.simplefilter("ignore", category=FutureWarning)
-        radar, phidp, kdp = perform_phase_processing_gf("cylp")
+        radar, phidp, kdp = test_perform_phase_processing_gf("cylp")
     ref = np.load(REFERENCE_RAYS_FILE)
     assert _ratio(ref["reference_phidp"], phidp["data"]) <= 0.05
     assert _ratio(ref["reference_kdp"], kdp["data"]) <= 0.05
@@ -136,14 +136,14 @@ def _ratio(a1, a2):
     return abs_residues / avg_abs_sum
 
 
-def perform_phase_processing(LP_solver="pyglpk"):
+def perform_phase_processing(LP_solver="cvxopt"):
     """Perform LP phase processing on a single ray radar."""
     radar = pyart.testing.make_single_ray_radar()
     phidp, kdp = pyart.correct.phase_proc_lp(radar, 0.0, LP_solver=LP_solver)
     return radar, phidp, kdp
 
 
-def perform_phase_processing_gf(LP_solver="pyglpk"):
+def test_perform_phase_processing_gf(LP_solver="cvxopt"):
     """Perform LP phase processing on a single ray radar."""
     radar = pyart.testing.make_single_ray_radar()
     my_gatefilter = pyart.filters.GateFilter(radar)
@@ -157,79 +157,5 @@ def perform_phase_processing_gf(LP_solver="pyglpk"):
         ncpts=20,
         system_phase=-140.1,
     )
-    return radar, phidp, kdp
-
-
-def save_reference_rays(radar, phidp, kdp):
-    """Save the phase processed rays to REFERENCE_RAY_FILE."""
-    unfolded = radar.fields["unfolded_differential_phase"]
-    np.savez(
-        REFERENCE_RAYS_FILE,
-        reference_phidp=phidp["data"],
-        reference_kdp=kdp["data"],
-        reference_unfolded_phidp=unfolded["data"],
-    )
-
-
-def make_plot(range_km, unfolded_phidp, refl, phidp, kdp, filename):
-    """
-    Make and save a plot of PhiDP, reflectivity and KDP.
-
-    Parameters
-    ----------
-    range_km : array
-        Gate range in kilometers.
-    unfolded_phidp, refl, phidp, kdp : dict
-        Dictionary containing the unfolded phiDP, reflectivity,
-        LP filtered phiDP and KDP in the data key
-    filename :
-        Filename to save the file to.
-
-    """
-
-    from matplotlib import pyplot as plt
-
-    fig = plt.figure(figsize=[10, 5])
-    ax = fig.add_subplot(111)
-
-    # filtered phidp and unfolded phidp
-    (p1,) = ax.plot(range_km, phidp["data"][0], "b-")
-    (p2,) = ax.plot(range_km, unfolded_phidp["data"][0], "g-")
-
-    # set labels
-    ax.set_ylim(0, 250)
-    ax.set_ylabel("Differential phase shift (degrees)")
-    ax.set_xlabel("Range (km)")
-
-    # plot KDP and reflectivity on second axis
-    ax2 = ax.twinx()
-    (p3,) = ax2.plot(range_km, kdp["data"][0], "r-")
-    (p4,) = ax2.plot(range_km, refl["data"][0] / 10.0)
-
-    # decorate and save
-    ax2.yaxis.grid(color="gray", linestyle="dashed")
-    ax.legend(
-        [p1, p2, p3, p4],
-        ["Filtered phiDP", "Unfolded phiDP", "KDP", "Z/10.0"],
-        loc="upper left",
-    )
-    fig.savefig(filename)
-
-
-if __name__ == "__main__":
-    import sys
-
-    radar, phidp, kdp = perform_phase_processing()
-    filename = "ray_plot.png"
-    if sys.argv[-1] == "-r":  # regenerate reference files
-        save_reference_rays(radar, phidp, kdp)
-        filename = "reference_ray_plot.png"
-
-    make_plot(
-        radar.range["data"] / 1000.0,
-        radar.fields["unfolded_differential_phase"],
-        radar.fields["reflectivity"],
-        phidp,
-        kdp,
-        filename,
-    )
+    assert phidp["data"].max() < 360.0
+    assert kdp["data"].max() < 6.0
