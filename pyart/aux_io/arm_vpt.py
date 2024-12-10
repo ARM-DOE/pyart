@@ -484,4 +484,3 @@ def read_mmcr(
     ncobj.close()
 
     return radar_out
-
