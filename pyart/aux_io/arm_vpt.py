@@ -271,14 +271,14 @@ def read_mmcr(
         values the corresponding `Radar` object.
         If `mode_to_extract` is specified returning the `Radar` object corresponding to the that
         mode.
-        
+
     """
 
     if mode_names is None:
         mode_names = {
-            1: {"name": "bl", "prt": 1.0 / 68e-6},                  
-            2: {"name": "ci", "prt": 1.0 / 126e-6},                  
-            3: {"name": "ge", "prt": 1.0 / 106e-6},                  
+            1: {"name": "bl", "prt": 1.0 / 68e-6},
+            2: {"name": "ci", "prt": 1.0 / 126e-6},
+            3: {"name": "ge", "prt": 1.0 / 106e-6},
             4: {"name": "pr", "prt": 1.0 / 106e-6}
         }  # For PRT, see MMCR handbook (https://doi.org/10.2172/948372)
 
@@ -382,7 +382,7 @@ def read_mmcr(
              'missing_value': -9999.0,
              'data': range_arr
         }
-        
+
         fields = {}
         for key in keys:
             field_name = filemetadata.get_field_name(key)
@@ -392,7 +392,7 @@ def read_mmcr(
                 if include_fields is not None and key not in include_fields:
                     continue
                 field_name = key
-                
+
             d = {
                 k: getattr(ncvars[key], k)
                 for k in ncvars[key].ncattrs()
@@ -400,7 +400,7 @@ def read_mmcr(
             }
             d['data'] = ncvars[key][mode_sample_indices, active_range]
             fields[field_name] = d
-    
+
         # 4.5 instrument_parameters sub-convention -> instrument_parameters dict
         # this section needed multiple changes and/or additions since the
         # instrument parameters were primarily located in the global attributes
@@ -408,17 +408,17 @@ def read_mmcr(
 
         sweep_end_ray_index = filemetadata("sweep_end_ray_index")
         sweep_end_ray_index["data"] = np.array([time['data'].size - 1], dtype=np.int32)
-        
+
         azimuth = filemetadata("azimuth")
         azimuth["data"] = 0.0 * np.ones(time['data'].size, dtype=np.float32)
-    
+
         elevation = filemetadata("elevation")
         elevation["data"] = 90.0 * np.ones(time['data'].size, dtype=np.float32)
-    
+
         omega = float(ncobj.radar_operating_frequency.split()[0])
         frequency = filemetadata("frequency")
         frequency["data"] = np.array([omega / 1e9], dtype=np.float32)
-    
+
         prt_mode = filemetadata("prt_mode")
         prt_mode["data"] = np.array(["fixed"], dtype=str)
 
@@ -430,7 +430,7 @@ def read_mmcr(
 
         n_samples = filemetadata("n_samples")
         n_samples["data"] = np.full(time['data'].size, ncvars["NumSpectralAverages"][mode], dtype=np.float32)
-    
+
         # 4.6 radar_parameters sub-convention -> instrument_parameters dict
         # this section needed multiple changes and/or additions since the
         # radar instrument parameters were primarily located in the global
@@ -443,7 +443,7 @@ def read_mmcr(
             "nyquist_velocity": nyquist_velocity,
             "n_samples": n_samples,
         }
-    
+
         # 4.7 lidar_parameters sub-convention -> skip
         # 4.8 radar_calibration sub-convention -> skip
 
@@ -469,8 +469,9 @@ def read_mmcr(
             radar_out[mode_names[mode]["name"]] = Radar_tmp
         else:
             radar_out = Radar_tmp
-    
+
     # close NetCDF object
     ncobj.close()
 
     return radar_out
+
