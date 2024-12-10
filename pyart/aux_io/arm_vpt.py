@@ -384,7 +384,7 @@ def read_mmcr(
             "long_name": "Range (center of radar sample volume)",
             "units": "m AGL",
             "missing_value": -9999.0,
-            "data": range_arr
+            "data": range_arr,
         }
 
         fields = {}
