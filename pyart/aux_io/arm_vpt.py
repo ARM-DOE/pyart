@@ -279,7 +279,7 @@ def read_mmcr(
             1: {"name": "bl", "prt": 1.0 / 68e-6},
             2: {"name": "ci", "prt": 1.0 / 126e-6},
             3: {"name": "ge", "prt": 1.0 / 106e-6},
-            4: {"name": "pr", "prt": 1.0 / 106e-6}
+            4: {"name": "pr", "prt": 1.0 / 106e-6},
         }  # For PRT, see MMCR handbook (https://doi.org/10.2172/948372)
 
     # create metadata retrieval object
@@ -369,18 +369,22 @@ def read_mmcr(
         modes = np.unique(ncvars["ModeNum"])
         radar_out = {}
     else:
-        modes = [key for key in mode_names.keys() if mode_names[key]["name"] == mode_to_extract]
+        modes = [
+            key
+            for key in mode_names.keys()
+            if mode_names[key]["name"] == mode_to_extract
+        ]
     for mode in modes:
         mode_sample_indices = ncvars["ModeNum"] == np.array(mode)
         active_range = ncvars["heights"][mode, :] > 0.0
-        range_arr = ncvars["heights"][mode, active_range] - altitude['data']
+        range_arr = ncvars["heights"][mode, active_range] - altitude["data"]
         time = cfradial._ncvar_to_dict(ncvars["time"])
-        time['data'] = ncvars["time"][mode_sample_indices]
+        time["data"] = ncvars["time"][mode_sample_indices]
         _range = {
-            'long_name': 'Range (center of radar sample volume)',
-             'units': 'm AGL',
-             'missing_value': -9999.0,
-             'data': range_arr
+            "long_name": "Range (center of radar sample volume)",
+            "units": "m AGL",
+            "missing_value": -9999.0,
+            "data": range_arr
         }
 
         fields = {}
@@ -398,7 +402,7 @@ def read_mmcr(
                 for k in ncvars[key].ncattrs()
                 if k not in ["scale_factor", "add_offset"]
             }
-            d['data'] = ncvars[key][mode_sample_indices, active_range]
+            d["data"] = ncvars[key][mode_sample_indices, active_range]
             fields[field_name] = d
 
         # 4.5 instrument_parameters sub-convention -> instrument_parameters dict
@@ -407,13 +411,13 @@ def read_mmcr(
         # this section is likely still incomplete
 
         sweep_end_ray_index = filemetadata("sweep_end_ray_index")
-        sweep_end_ray_index["data"] = np.array([time['data'].size - 1], dtype=np.int32)
+        sweep_end_ray_index["data"] = np.array([time["data"].size - 1], dtype=np.int32)
 
         azimuth = filemetadata("azimuth")
-        azimuth["data"] = 0.0 * np.ones(time['data'].size, dtype=np.float32)
+        azimuth["data"] = 0.0 * np.ones(time["data"].size, dtype=np.float32)
 
         elevation = filemetadata("elevation")
-        elevation["data"] = 90.0 * np.ones(time['data'].size, dtype=np.float32)
+        elevation["data"] = 90.0 * np.ones(time["data"].size, dtype=np.float32)
 
         omega = float(ncobj.radar_operating_frequency.split()[0])
         frequency = filemetadata("frequency")
@@ -423,13 +427,19 @@ def read_mmcr(
         prt_mode["data"] = np.array(["fixed"], dtype=str)
 
         prt = filemetadata("prt")
-        prt["data"] = np.full(time['data'].size, mode_names[mode]["prt"], dtype=np.float32)
+        prt["data"] = np.full(
+            time["data"].size, mode_names[mode]["prt"], dtype=np.float32
+        )
 
         nyquist_velocity = filemetadata("nyquist_velocity")
-        nyquist_velocity["data"] = np.full(time['data'].size, ncvars["NyquistVelocity"][mode], dtype=np.float32)
+        nyquist_velocity["data"] = np.full(
+            time["data"].size, ncvars["NyquistVelocity"][mode], dtype=np.float32
+        )
 
         n_samples = filemetadata("n_samples")
-        n_samples["data"] = np.full(time['data'].size, ncvars["NumSpectralAverages"][mode], dtype=np.float32)
+        n_samples["data"] = np.full(
+            time["data"].size, ncvars["NumSpectralAverages"][mode], dtype=np.float32
+        )
 
         # 4.6 radar_parameters sub-convention -> instrument_parameters dict
         # this section needed multiple changes and/or additions since the
