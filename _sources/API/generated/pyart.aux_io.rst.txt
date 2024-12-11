@@ -25,6 +25,8 @@
     
     read_kazr_spectra
     
+    read_mmcr
+    
     read_noxp_iphex_nc
     
     read_odim_h5

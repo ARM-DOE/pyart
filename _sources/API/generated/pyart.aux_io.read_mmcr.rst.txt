@@ -1,0 +1,6 @@
+pyart.aux\_io.read\_mmcr
+========================
+
+.. currentmodule:: pyart.aux_io
+
+.. autofunction:: read_mmcr

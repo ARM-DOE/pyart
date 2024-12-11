@@ -548,6 +548,7 @@
 <li class="toctree-l2"><a class="reference internal" href="pyart.aux_io.read_gamic.html">pyart.aux_io.read_gamic</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.aux_io.read_kazr.html">pyart.aux_io.read_kazr</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.aux_io.read_kazr_spectra.html">pyart.aux_io.read_kazr_spectra</a></li>
+<li class="toctree-l2"><a class="reference internal" href="pyart.aux_io.read_mmcr.html">pyart.aux_io.read_mmcr</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.aux_io.read_noxp_iphex_nc.html">pyart.aux_io.read_noxp_iphex_nc</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.aux_io.read_odim_h5.html">pyart.aux_io.read_odim_h5</a></li>
 <li class="toctree-l2"><a class="reference internal" href="pyart.aux_io.read_pattern.html">pyart.aux_io.read_pattern</a></li>
@@ -1173,31 +1174,34 @@ priority.</p>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.read_kazr_spectra.html#pyart.aux_io.read_kazr_spectra" title="pyart.aux_io.read_kazr_spectra"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_kazr_spectra</span></code></a>(filename[, field_names, ...])</p></td>
 <td><p>Read a ARM KAZR spectra netCDF file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.read_noxp_iphex_nc.html#pyart.aux_io.read_noxp_iphex_nc" title="pyart.aux_io.read_noxp_iphex_nc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_noxp_iphex_nc</span></code></a>(filename[, field_names, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.read_mmcr.html#pyart.aux_io.read_mmcr" title="pyart.aux_io.read_mmcr"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_mmcr</span></code></a>(filename[, field_names, ...])</p></td>
+<td><p>Read millimeter wavelength cloud radar (MMCR) b1 NetCDF ingest data.</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.read_noxp_iphex_nc.html#pyart.aux_io.read_noxp_iphex_nc" title="pyart.aux_io.read_noxp_iphex_nc"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_noxp_iphex_nc</span></code></a>(filename[, field_names, ...])</p></td>
 <td><p>Read a NOXP IPHEX netCDF file.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.read_odim_h5.html#pyart.aux_io.read_odim_h5" title="pyart.aux_io.read_odim_h5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_odim_h5</span></code></a>(filename[, field_names, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.read_odim_h5.html#pyart.aux_io.read_odim_h5" title="pyart.aux_io.read_odim_h5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_odim_h5</span></code></a>(filename[, field_names, ...])</p></td>
 <td><p>Read a ODIM_H5 file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.read_pattern.html#pyart.aux_io.read_pattern" title="pyart.aux_io.read_pattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_pattern</span></code></a>(filename, **kwargs)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.read_pattern.html#pyart.aux_io.read_pattern" title="pyart.aux_io.read_pattern"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_pattern</span></code></a>(filename, **kwargs)</p></td>
 <td><p>Read a netCDF file from a PATTERN project X-band radar.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.read_radx.html#pyart.aux_io.read_radx" title="pyart.aux_io.read_radx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_radx</span></code></a>(filename[, radx_dir])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.read_radx.html#pyart.aux_io.read_radx" title="pyart.aux_io.read_radx"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_radx</span></code></a>(filename[, radx_dir])</p></td>
 <td><p>Read a file by first converting it to Cf/Radial using RadxConvert.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.read_radx_grid.html#pyart.aux_io.read_radx_grid" title="pyart.aux_io.read_radx_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_radx_grid</span></code></a>(filename[, exclude_fields])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.read_radx_grid.html#pyart.aux_io.read_radx_grid" title="pyart.aux_io.read_radx_grid"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_radx_grid</span></code></a>(filename[, exclude_fields])</p></td>
 <td><p>Read a netCDF grid file produced by radx2grid within LROSE.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.read_rainbow_wrl.html#pyart.aux_io.read_rainbow_wrl" title="pyart.aux_io.read_rainbow_wrl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_rainbow_wrl</span></code></a>(filename[, field_names, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.read_rainbow_wrl.html#pyart.aux_io.read_rainbow_wrl" title="pyart.aux_io.read_rainbow_wrl"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_rainbow_wrl</span></code></a>(filename[, field_names, ...])</p></td>
 <td><p>Read a RAINBOW file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.read_rxm25.html#pyart.aux_io.read_rxm25" title="pyart.aux_io.read_rxm25"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_rxm25</span></code></a>(filename[, cfradial_outfile, heading])</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.read_rxm25.html#pyart.aux_io.read_rxm25" title="pyart.aux_io.read_rxm25"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_rxm25</span></code></a>(filename[, cfradial_outfile, heading])</p></td>
 <td><p>Read in Ridgeline Instruments RXM-25 formatted NetCDF data.</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.read_sinarame_h5.html#pyart.aux_io.read_sinarame_h5" title="pyart.aux_io.read_sinarame_h5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_sinarame_h5</span></code></a>(filename[, field_names, ...])</p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.read_sinarame_h5.html#pyart.aux_io.read_sinarame_h5" title="pyart.aux_io.read_sinarame_h5"><code class="xref py py-obj docutils literal notranslate"><span class="pre">read_sinarame_h5</span></code></a>(filename[, field_names, ...])</p></td>
 <td><p>Read a SINARAME_H5 file.</p></td>
 </tr>
-<tr class="row-even"><td><p><a class="reference internal" href="pyart.aux_io.write_sinarame_cfradial.html#pyart.aux_io.write_sinarame_cfradial" title="pyart.aux_io.write_sinarame_cfradial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_sinarame_cfradial</span></code></a>(path)</p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="pyart.aux_io.write_sinarame_cfradial.html#pyart.aux_io.write_sinarame_cfradial" title="pyart.aux_io.write_sinarame_cfradial"><code class="xref py py-obj docutils literal notranslate"><span class="pre">write_sinarame_cfradial</span></code></a>(path)</p></td>
 <td><p>This function takes SINARAME_H5 files (where every file has only one field and one volume) from a folder and writes a CfRadial file for each volume including all fields.</p></td>
 </tr>
 </tbody>
