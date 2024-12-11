@@ -276,11 +276,13 @@ def read_mmcr(
 
     if mode_names is None:
         mode_names = {
-            1: {"name": "bl", "prt": 1.0 / 68e-6},
-            2: {"name": "ci", "prt": 1.0 / 126e-6},
-            3: {"name": "ge", "prt": 1.0 / 106e-6},
-            4: {"name": "pr", "prt": 1.0 / 106e-6},
-        }  # For PRT, see MMCR handbook (https://doi.org/10.2172/948372)
+            1: "bl",
+            2: "ci",
+            3: "ge",
+            4: "pr",
+            5: "dualpol_ch0",  # Dual-pol receiver 0
+            6: "dualpol_ch1",  # Dual-pol receiver 1
+        }
 
     # create metadata retrieval object
     filemetadata = FileMetadata(
@@ -369,11 +371,7 @@ def read_mmcr(
         modes = np.unique(ncvars["ModeNum"])
         radar_out = {}
     else:
-        modes = [
-            key
-            for key in mode_names.keys()
-            if mode_names[key]["name"] == mode_to_extract
-        ]
+        modes = [key for key in mode_names.keys() if mode_names[key] == mode_to_extract]
     for mode in modes:
         mode_sample_indices = ncvars["ModeNum"] == np.array(mode)
         active_range = ncvars["heights"][mode, :] > 0.0
@@ -428,7 +426,7 @@ def read_mmcr(
 
         prt = filemetadata("prt")
         prt["data"] = np.full(
-            time["data"].size, mode_names[mode]["prt"], dtype=np.float32
+            time["data"].size, ncvars["InterPulsePeriod"][mode] * 1e-9, dtype=np.float32
         )
 
         nyquist_velocity = filemetadata("nyquist_velocity")
@@ -476,7 +474,7 @@ def read_mmcr(
             instrument_parameters=instrument_parameters,
         )
         if mode_to_extract is None:
-            radar_out[mode_names[mode]["name"]] = Radar_tmp
+            radar_out[mode_names[mode]] = Radar_tmp
         else:
             radar_out = Radar_tmp
 
