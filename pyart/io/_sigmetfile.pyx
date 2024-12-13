@@ -214,7 +214,7 @@ cdef class SigmetFile:
             nyquist = wavelength_cm / (10000.0 * 4.0 * prt_value)
             data['WIDTH'] *= nyquist
             # scale 1-byte KDP by the wavelength
-	    if 'KDP' in self.data_type_names:
+	if 'KDP' in self.data_type_names:
             # The IRIS Programmer's Manual indicates 1-byte differential phase format
             # data should be divided by the wavelength in cm (section 4.3.12).
             wavelength_cm = self.product_hdr['product_end']['wavelength']
