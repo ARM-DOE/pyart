@@ -6,7 +6,7 @@ This example shows how to calculate the ZDR bias from VPT/Birdbath scans.
 The technique here uses a vertically pointing scan in regions of light rain.
 In these regions, raindrops should be approximately spherical and therefore their
 ZDR near zero. Therefore, we want the average ZDR in these regions.
-This code applies reflectivity and cross correlation ratio-based thresholradar to the ZDR
+This code applies reflectivity and cross correlation ratio-based threshold to the ZDR
 bias calculation to ensure that we are taking the average ZDR in light rain.
 
 """
