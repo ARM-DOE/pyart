@@ -25,7 +25,7 @@ Correct reflectivity attenuation
 In this example the reflectivity attenuation is calculated and then corrected
 for a polarimetric radar using a Z-PHI method implemented in Py-ART.
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-80
+.. GENERATED FROM PYTHON SOURCE LINES 10-82
 
 
 
@@ -47,13 +47,15 @@ for a polarimetric radar using a Z-PHI method implemented in Py-ART.
     # License: BSD 3 clause
 
     import matplotlib.pyplot as plt
+    import xradar as xd
 
     import pyart
 
     file = pyart.testing.get_test_data("sgpcsaprsurcmacI7.c0.20110520.095101.nc")
 
     # read in the data
-    radar = pyart.io.read_cfradial(file)
+    tree = xd.io.open_cfradial1_datatree(file)
+    radar = tree.pyart.to_radar()
 
     # remove existing corrections
     radar.fields.pop("specific_attenuation")
@@ -114,7 +116,7 @@ for a polarimetric radar using a Z-PHI method implemented in Py-ART.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 8.701 seconds)
+   **Total running time of the script:** (0 minutes 9.824 seconds)
 
 
 .. _sphx_glr_download_examples_correct_plot_attenuation.py:
