@@ -10,6 +10,7 @@ from copy import deepcopy
 from warnings import warn
 
 import numpy as np
+import numpy.ma as ma
 from scipy.integrate import cumulative_trapezoid
 
 from ..config import get_field_name, get_fillvalue, get_metadata
@@ -1058,6 +1059,10 @@ def calculate_attenuation(
 
     cor_z = get_metadata(corr_refl_field)
     cor_z["data"] = atten + reflectivity_horizontal + z_offset
+
+    # If the numpy arrays are not masked arrays, convert it before returning
+    if isinstance(cor_z["data"], np.ndarray):
+        cor_z["data"] = ma.masked_invalid(cor_z["data"])
     cor_z["data"].mask = init_refl_correct.mask
     cor_z["_FillValue"] = get_fillvalue()
 
