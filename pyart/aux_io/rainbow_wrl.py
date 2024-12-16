@@ -5,6 +5,7 @@ Routines for reading RAINBOW files (Used by SELEX) using the wradlib library
 
 # specific modules for this function
 import os
+import warnings
 
 try:
     import wradlib  # noqa
@@ -126,7 +127,11 @@ def read_rainbow_wrl(
         Radar object containing data from RAINBOW file.
 
     """
-
+    warnings.warn(
+        "Py-ART's Rainbow module is deprecated, please use xradar to read in the file using "
+        "xd.io.open_rainbow_datatree",
+        UserWarning,
+    )
     # check that wradlib is available
     if not _WRADLIB_AVAILABLE:
         raise MissingOptionalDependency(
