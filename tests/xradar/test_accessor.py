@@ -57,6 +57,22 @@ def test_get_gate_x_y_z(filename=filename):
     assert z.shape == (480, 996)
 
 
+def test_get_gate_lat_lon(filename=filename):
+    dtree = xd.io.open_cfradial1_datatree(
+        filename,
+        optional=False,
+    )
+    radar = pyart.xradar.Xradar(dtree)
+    lat, lon, alt = radar.get_gate_lat_lon_alt(0)
+    # Check lat, lon, and alt values
+    assert lat.shape == (480, 996)
+    assert_allclose(lat.min(), 21.183521)
+    assert lon.shape == (480, 996)
+    assert_allclose(lon.min(), 118.97935)
+    assert alt.shape == (480, 996)
+    assert_allclose(alt.min(), 45.0000017)
+
+
 def test_add_field(filename=filename):
     dtree = xd.io.open_cfradial1_datatree(
         filename,
