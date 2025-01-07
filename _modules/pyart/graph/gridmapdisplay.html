@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -464,50 +464,50 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">import</span> <span class="nn">cartopy</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cartopy</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">metpy</span>  <span class="c1"># noqa</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">metpy</span>  <span class="c1"># noqa</span>
 
     <span class="n">_METPY_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_METPY_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">pyart.core.transforms</span> <span class="kn">import</span> <span class="n">_interpolate_axes_edges</span>
-<span class="kn">from</span> <span class="nn">pyart.exceptions</span> <span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
-<span class="kn">from</span> <span class="nn">pyart.graph</span> <span class="kn">import</span> <span class="n">common</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.core.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">_interpolate_axes_edges</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.graph</span><span class="w"> </span><span class="kn">import</span> <span class="n">common</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">xarray</span>  <span class="c1"># noqa</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span>  <span class="c1"># noqa</span>
 
     <span class="n">_XARRAY_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_XARRAY_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">netCDF4</span>  <span class="c1"># noqa</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">netCDF4</span>  <span class="c1"># noqa</span>
 
     <span class="n">_NETCDF4_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_NETCDF4_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">copy</span>
 
-    <span class="kn">import</span> <span class="nn">shapely.geometry</span> <span class="k">as</span> <span class="nn">sgeom</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sgeom</span>
 
     <span class="n">_LAMBERT_GRIDLINES</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_LAMBERT_GRIDLINES</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">max_cappi</span>  <span class="c1"># noqa</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">max_cappi</span>  <span class="c1"># noqa</span>
 
 
-<div class="viewcode-block" id="GridMapDisplay"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.html#pyart.graph.GridMapDisplay">[docs]</a><span class="k">class</span> <span class="nc">GridMapDisplay</span><span class="p">:</span>
+<div class="viewcode-block" id="GridMapDisplay"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.html#pyart.graph.GridMapDisplay">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">GridMapDisplay</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class for creating plots from a grid object using xarray</span>
 <span class="sd">    with a cartopy projection.</span>
@@ -528,7 +528,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;initalize the object.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_XARRAY_AVAILABLE</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
@@ -546,7 +546,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">=</span> <span class="s2">&quot;origin&quot;</span>
 
-<div class="viewcode-block" id="GridMapDisplay.plot_grid"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_grid.html#pyart.graph.GridMapDisplay.plot_grid">[docs]</a>    <span class="k">def</span> <span class="nf">plot_grid</span><span class="p">(</span>
+<div class="viewcode-block" id="GridMapDisplay.plot_grid"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_grid.html#pyart.graph.GridMapDisplay.plot_grid">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_grid</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">field</span><span class="p">,</span>
         <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -795,7 +795,7 @@
                 <span class="n">ticklabs</span><span class="o">=</span><span class="n">ticklabs</span><span class="p">,</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplay.plot_crosshairs"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_crosshairs.html#pyart.graph.GridMapDisplay.plot_crosshairs">[docs]</a>    <span class="k">def</span> <span class="nf">plot_crosshairs</span><span class="p">(</span>
+<div class="viewcode-block" id="GridMapDisplay.plot_crosshairs"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_crosshairs.html#pyart.graph.GridMapDisplay.plot_crosshairs">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_crosshairs</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -824,7 +824,7 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">axhline</span><span class="p">(</span><span class="n">lat</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">axvline</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="n">linestyle</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplay.plot_latitude_slice"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_latitude_slice.html#pyart.graph.GridMapDisplay.plot_latitude_slice">[docs]</a>    <span class="k">def</span> <span class="nf">plot_latitude_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="GridMapDisplay.plot_latitude_slice"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_latitude_slice.html#pyart.graph.GridMapDisplay.plot_latitude_slice">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_latitude_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a slice along a given latitude.</span>
 
@@ -844,7 +844,7 @@
         <span class="n">_</span><span class="p">,</span> <span class="n">y_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_nearest_grid_indices</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plot_latitudinal_level</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">field</span><span class="p">,</span> <span class="n">y_index</span><span class="o">=</span><span class="n">y_index</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplay.plot_latitudinal_level"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_latitudinal_level.html#pyart.graph.GridMapDisplay.plot_latitudinal_level">[docs]</a>    <span class="k">def</span> <span class="nf">plot_latitudinal_level</span><span class="p">(</span>
+<div class="viewcode-block" id="GridMapDisplay.plot_latitudinal_level"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_latitudinal_level.html#pyart.graph.GridMapDisplay.plot_latitudinal_level">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_latitudinal_level</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">field</span><span class="p">,</span>
         <span class="n">y_index</span><span class="p">,</span>
@@ -985,7 +985,7 @@
                 <span class="n">ticklabs</span><span class="o">=</span><span class="n">ticklabs</span><span class="p">,</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplay.plot_longitude_slice"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_longitude_slice.html#pyart.graph.GridMapDisplay.plot_longitude_slice">[docs]</a>    <span class="k">def</span> <span class="nf">plot_longitude_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="GridMapDisplay.plot_longitude_slice"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_longitude_slice.html#pyart.graph.GridMapDisplay.plot_longitude_slice">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_longitude_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a slice along a given longitude.</span>
 
@@ -1005,7 +1005,7 @@
         <span class="n">x_index</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_nearest_grid_indices</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plot_longitudinal_level</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">field</span><span class="p">,</span> <span class="n">x_index</span><span class="o">=</span><span class="n">x_index</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplay.plot_longitudinal_level"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_longitudinal_level.html#pyart.graph.GridMapDisplay.plot_longitudinal_level">[docs]</a>    <span class="k">def</span> <span class="nf">plot_longitudinal_level</span><span class="p">(</span>
+<div class="viewcode-block" id="GridMapDisplay.plot_longitudinal_level"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_longitudinal_level.html#pyart.graph.GridMapDisplay.plot_longitudinal_level">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_longitudinal_level</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">field</span><span class="p">,</span>
         <span class="n">x_index</span><span class="p">,</span>
@@ -1147,7 +1147,7 @@
                 <span class="n">ticklabs</span><span class="o">=</span><span class="n">ticklabs</span><span class="p">,</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplay.plot_cross_section"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_cross_section.html#pyart.graph.GridMapDisplay.plot_cross_section">[docs]</a>    <span class="k">def</span> <span class="nf">plot_cross_section</span><span class="p">(</span>
+<div class="viewcode-block" id="GridMapDisplay.plot_cross_section"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_cross_section.html#pyart.graph.GridMapDisplay.plot_cross_section">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_cross_section</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">field</span><span class="p">,</span>
         <span class="n">start</span><span class="p">,</span>
@@ -1249,7 +1249,7 @@
                 <span class="s2">&quot;MetPy is required to use plot_cross_section but is not &quot;</span> <span class="o">+</span> <span class="s2">&quot;installed!&quot;</span>
             <span class="p">)</span>
 
-        <span class="kn">from</span> <span class="nn">metpy.interpolate</span> <span class="kn">import</span> <span class="n">cross_section</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">metpy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_section</span>
 
         <span class="c1"># parse parameters</span>
         <span class="n">ax</span><span class="p">,</span> <span class="n">fig</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_ax_fig</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">fig</span><span class="p">)</span>
@@ -1329,7 +1329,7 @@
                 <span class="n">ticklabs</span><span class="o">=</span><span class="n">ticklabs</span><span class="p">,</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplay.plot_colorbar"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_colorbar.html#pyart.graph.GridMapDisplay.plot_colorbar">[docs]</a>    <span class="k">def</span> <span class="nf">plot_colorbar</span><span class="p">(</span>
+<div class="viewcode-block" id="GridMapDisplay.plot_colorbar"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_colorbar.html#pyart.graph.GridMapDisplay.plot_colorbar">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_colorbar</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">mappable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span><span class="p">,</span>
@@ -1394,7 +1394,7 @@
             <span class="n">cb</span><span class="o">.</span><span class="n">set_ticklabels</span><span class="p">(</span><span class="n">ticklabs</span><span class="p">)</span>
         <span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_find_nearest_grid_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_nearest_grid_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Find the nearest x, y grid indices for a given latitude and</span>
 <span class="sd">        longitude.&quot;&quot;&quot;</span>
 
@@ -1409,20 +1409,20 @@
     <span class="c1"># Plot adjusting methods #</span>
     <span class="c1">##########################</span>
 
-    <span class="k">def</span> <span class="nf">_get_label_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_label_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get default label for x units.&quot;&quot;&quot;</span>
 
         <span class="k">return</span> <span class="s2">&quot;East West distance from &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s2">&quot; (km)&quot;</span>
 
-    <span class="k">def</span> <span class="nf">_get_label_y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_label_y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get default label for y units.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;North South distance from &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s2">&quot; (km)&quot;</span>
 
-    <span class="k">def</span> <span class="nf">_get_label_z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_label_z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get default label for z units.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;Distance Above &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s2">&quot; (km)&quot;</span>
 
-    <span class="k">def</span> <span class="nf">_label_axes_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis_labels</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_label_axes_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis_labels</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the x and y axis labels for a grid plot.&quot;&quot;&quot;</span>
         <span class="n">x_label</span><span class="p">,</span> <span class="n">y_label</span> <span class="o">=</span> <span class="n">axis_labels</span>
         <span class="k">if</span> <span class="n">x_label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1432,7 +1432,7 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_label_axes_longitude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis_labels</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_label_axes_longitude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis_labels</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the x and y axis labels for a longitude slice.&quot;&quot;&quot;</span>
         <span class="n">x_label</span><span class="p">,</span> <span class="n">y_label</span> <span class="o">=</span> <span class="n">axis_labels</span>
         <span class="k">if</span> <span class="n">x_label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1442,7 +1442,7 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_label_axes_latitude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis_labels</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_label_axes_latitude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis_labels</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the x and y axis labels for a latitude slice.&quot;&quot;&quot;</span>
         <span class="n">x_label</span><span class="p">,</span> <span class="n">y_label</span> <span class="o">=</span> <span class="n">axis_labels</span>
         <span class="k">if</span> <span class="n">x_label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1456,7 +1456,7 @@
     <span class="c1"># name generator methods #</span>
     <span class="c1">##########################</span>
 
-<div class="viewcode-block" id="GridMapDisplay.generate_filename"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.generate_filename.html#pyart.graph.GridMapDisplay.generate_filename">[docs]</a>    <span class="k">def</span> <span class="nf">generate_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="GridMapDisplay.generate_filename"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.generate_filename.html#pyart.graph.GridMapDisplay.generate_filename">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a filename for a grid plot.</span>
 
@@ -1480,7 +1480,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">common</span><span class="o">.</span><span class="n">generate_grid_filename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">ext</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplay.generate_grid_title"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.generate_grid_title.html#pyart.graph.GridMapDisplay.generate_grid_title">[docs]</a>    <span class="k">def</span> <span class="nf">generate_grid_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+<div class="viewcode-block" id="GridMapDisplay.generate_grid_title"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.generate_grid_title.html#pyart.graph.GridMapDisplay.generate_grid_title">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate_grid_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a title for a plot.</span>
 
@@ -1499,7 +1499,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">common</span><span class="o">.</span><span class="n">generate_grid_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplay.generate_latitudinal_level_title"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.generate_latitudinal_level_title.html#pyart.graph.GridMapDisplay.generate_latitudinal_level_title">[docs]</a>    <span class="k">def</span> <span class="nf">generate_latitudinal_level_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+<div class="viewcode-block" id="GridMapDisplay.generate_latitudinal_level_title"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.generate_latitudinal_level_title.html#pyart.graph.GridMapDisplay.generate_latitudinal_level_title">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate_latitudinal_level_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a title for a plot.</span>
 
@@ -1518,7 +1518,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">common</span><span class="o">.</span><span class="n">generate_latitudinal_level_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplay.generate_longitudinal_level_title"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.generate_longitudinal_level_title.html#pyart.graph.GridMapDisplay.generate_longitudinal_level_title">[docs]</a>    <span class="k">def</span> <span class="nf">generate_longitudinal_level_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+<div class="viewcode-block" id="GridMapDisplay.generate_longitudinal_level_title"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.generate_longitudinal_level_title.html#pyart.graph.GridMapDisplay.generate_longitudinal_level_title">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate_longitudinal_level_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a title for a plot.</span>
 
@@ -1537,7 +1537,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">common</span><span class="o">.</span><span class="n">generate_longitudinal_level_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplay.cartopy_states"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.cartopy_states.html#pyart.graph.GridMapDisplay.cartopy_states">[docs]</a>    <span class="k">def</span> <span class="nf">cartopy_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GridMapDisplay.cartopy_states"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.cartopy_states.html#pyart.graph.GridMapDisplay.cartopy_states">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">cartopy_states</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get state boundaries using cartopy.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
             <span class="n">category</span><span class="o">=</span><span class="s2">&quot;cultural&quot;</span><span class="p">,</span>
@@ -1546,7 +1546,7 @@
             <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplay.cartopy_political_boundaries"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.cartopy_political_boundaries.html#pyart.graph.GridMapDisplay.cartopy_political_boundaries">[docs]</a>    <span class="k">def</span> <span class="nf">cartopy_political_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GridMapDisplay.cartopy_political_boundaries"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.cartopy_political_boundaries.html#pyart.graph.GridMapDisplay.cartopy_political_boundaries">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">cartopy_political_boundaries</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get political boundaries using cartopy.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
             <span class="n">category</span><span class="o">=</span><span class="s2">&quot;cultural&quot;</span><span class="p">,</span>
@@ -1555,13 +1555,13 @@
             <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplay.cartopy_coastlines"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.cartopy_coastlines.html#pyart.graph.GridMapDisplay.cartopy_coastlines">[docs]</a>    <span class="k">def</span> <span class="nf">cartopy_coastlines</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GridMapDisplay.cartopy_coastlines"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.cartopy_coastlines.html#pyart.graph.GridMapDisplay.cartopy_coastlines">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">cartopy_coastlines</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get coastlines using cartopy.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
             <span class="n">category</span><span class="o">=</span><span class="s2">&quot;physical&quot;</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;coastline&quot;</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="s2">&quot;10m&quot;</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplay.plot_maxcappi"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_maxcappi.html#pyart.graph.GridMapDisplay.plot_maxcappi">[docs]</a>    <span class="k">def</span> <span class="nf">plot_maxcappi</span><span class="p">(</span>
+<div class="viewcode-block" id="GridMapDisplay.plot_maxcappi"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplay.plot_maxcappi.html#pyart.graph.GridMapDisplay.plot_maxcappi">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_maxcappi</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">field</span><span class="p">,</span>
         <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1606,7 +1606,7 @@
 <span class="c1"># https://nbviewer.jupyter.org/gist/ajdawson/dd536f786741e987ae4e</span>
 
 
-<span class="k">def</span> <span class="nf">find_side</span><span class="p">(</span><span class="n">ls</span><span class="p">,</span> <span class="n">side</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_side</span><span class="p">(</span><span class="n">ls</span><span class="p">,</span> <span class="n">side</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given a shapely LineString which is assumed to be rectangular, return the</span>
 <span class="sd">    line corresponding to a given side of the rectangle.</span>
@@ -1621,13 +1621,13 @@
     <span class="k">return</span> <span class="n">sgeom</span><span class="o">.</span><span class="n">LineString</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">side</span><span class="p">])</span>
 
 
-<span class="k">def</span> <span class="nf">lambert_xticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">lambert_xticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Draw ticks on the bottom x-axis of a Lambert Conformal projection.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">te</span><span class="p">(</span><span class="n">xy</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">te</span><span class="p">(</span><span class="n">xy</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">lc</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">lc</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">n</span><span class="p">)))</span><span class="o">.</span><span class="n">T</span>
 
     <span class="n">xticks</span><span class="p">,</span> <span class="n">xticklabels</span> <span class="o">=</span> <span class="n">_lambert_ticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="n">lc</span><span class="p">,</span> <span class="n">te</span><span class="p">)</span>
@@ -1636,13 +1636,13 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">get_major_formatter</span><span class="p">()(</span><span class="n">xtick</span><span class="p">)</span> <span class="k">for</span> <span class="n">xtick</span> <span class="ow">in</span> <span class="n">xticklabels</span><span class="p">])</span>
 
 
-<span class="k">def</span> <span class="nf">lambert_yticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">lambert_yticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Draw ticks on the left y-axis of a Lambert Conformal projection.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">te</span><span class="p">(</span><span class="n">xy</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">te</span><span class="p">(</span><span class="n">xy</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">lc</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">lc</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">n</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">t</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
 
     <span class="n">yticks</span><span class="p">,</span> <span class="n">yticklabels</span> <span class="o">=</span> <span class="n">_lambert_ticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">lc</span><span class="p">,</span> <span class="n">te</span><span class="p">)</span>
@@ -1651,7 +1651,7 @@
     <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">get_major_formatter</span><span class="p">()(</span><span class="n">ytick</span><span class="p">)</span> <span class="k">for</span> <span class="n">ytick</span> <span class="ow">in</span> <span class="n">yticklabels</span><span class="p">])</span>
 
 
-<span class="k">def</span> <span class="nf">_lambert_ticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">tick_location</span><span class="p">,</span> <span class="n">line_constructor</span><span class="p">,</span> <span class="n">tick_extractor</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_lambert_ticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">tick_location</span><span class="p">,</span> <span class="n">line_constructor</span><span class="p">,</span> <span class="n">tick_extractor</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the tick locations and labels for a Lambert Conformal projection.</span>
 <span class="sd">    &quot;&quot;&quot;</span>

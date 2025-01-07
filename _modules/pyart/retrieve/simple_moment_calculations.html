@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,15 +463,15 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">ndimage</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ndimage</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_metadata</span>
-<span class="kn">from</span> <span class="nn">..core.transforms</span> <span class="kn">import</span> <span class="n">antenna_to_cartesian</span>
-<span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">angular_texture_2d</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_metadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">antenna_to_cartesian</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">angular_texture_2d</span>
 
 
-<div class="viewcode-block" id="calculate_snr_from_reflectivity"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.calculate_snr_from_reflectivity.html#pyart.retrieve.calculate_snr_from_reflectivity">[docs]</a><span class="k">def</span> <span class="nf">calculate_snr_from_reflectivity</span><span class="p">(</span>
+<div class="viewcode-block" id="calculate_snr_from_reflectivity"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.calculate_snr_from_reflectivity.html#pyart.retrieve.calculate_snr_from_reflectivity">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">calculate_snr_from_reflectivity</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">snr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">toa</span><span class="o">=</span><span class="mf">25000.0</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -525,7 +525,7 @@
     <span class="k">return</span> <span class="n">snr_dict</span></div>
 
 
-<div class="viewcode-block" id="compute_noisedBZ"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_noisedBZ.html#pyart.retrieve.compute_noisedBZ">[docs]</a><span class="k">def</span> <span class="nf">compute_noisedBZ</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">noisedBZ_val</span><span class="p">,</span> <span class="n">_range</span><span class="p">,</span> <span class="n">ref_dist</span><span class="p">,</span> <span class="n">noise_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_noisedBZ"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_noisedBZ.html#pyart.retrieve.compute_noisedBZ">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">compute_noisedBZ</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">noisedBZ_val</span><span class="p">,</span> <span class="n">_range</span><span class="p">,</span> <span class="n">ref_dist</span><span class="p">,</span> <span class="n">noise_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes noise in dBZ from reference noise value.</span>
 
@@ -560,7 +560,7 @@
     <span class="k">return</span> <span class="n">noisedBZ</span></div>
 
 
-<div class="viewcode-block" id="compute_snr"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_snr.html#pyart.retrieve.compute_snr">[docs]</a><span class="k">def</span> <span class="nf">compute_snr</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">noise_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">snr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_snr"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_snr.html#pyart.retrieve.compute_snr">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">compute_snr</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">noise_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">snr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes SNR from a reflectivity field and the noise in dBZ.</span>
 
@@ -607,7 +607,7 @@
     <span class="k">return</span> <span class="n">snr</span></div>
 
 
-<div class="viewcode-block" id="compute_l"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_l.html#pyart.retrieve.compute_l">[docs]</a><span class="k">def</span> <span class="nf">compute_l</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">rhohv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">l_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_l"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_l.html#pyart.retrieve.compute_l">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">compute_l</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">rhohv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">l_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes Rhohv in logarithmic scale according to L=-log10(1-RhoHV).</span>
 
@@ -652,7 +652,7 @@
     <span class="k">return</span> <span class="n">l_field_out</span></div>
 
 
-<div class="viewcode-block" id="compute_cdr"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_cdr.html#pyart.retrieve.compute_cdr">[docs]</a><span class="k">def</span> <span class="nf">compute_cdr</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">rhohv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_cdr"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_cdr.html#pyart.retrieve.compute_cdr">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">compute_cdr</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">rhohv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the Circular Depolarization Ratio.</span>
 
@@ -713,7 +713,7 @@
     <span class="k">return</span> <span class="n">cdr</span></div>
 
 
-<div class="viewcode-block" id="calculate_velocity_texture"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.calculate_velocity_texture.html#pyart.retrieve.calculate_velocity_texture">[docs]</a><span class="k">def</span> <span class="nf">calculate_velocity_texture</span><span class="p">(</span>
+<div class="viewcode-block" id="calculate_velocity_texture"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.calculate_velocity_texture.html#pyart.retrieve.calculate_velocity_texture">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">calculate_velocity_texture</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wind_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">nyq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">check_nyq_uniform</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>

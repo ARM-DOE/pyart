@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -486,22 +486,22 @@
 
 <span class="sd">&quot;&quot;&quot;</span> <span class="s2">&quot;&quot;</span> <span class="s2">&quot;&quot;</span> <span class="s2">&quot;&quot;</span> <span class="s2">&quot;&quot;</span> <span class="s2">&quot;&quot;</span> <span class="s2">&quot;&quot;</span> <span class="s2">&quot;&quot;</span> <span class="s2">&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">netCDF4</span> <span class="kn">import</span> <span class="n">num2date</span>
-<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">interp1d</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">netCDF4</span><span class="w"> </span><span class="kn">import</span> <span class="n">num2date</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.interpolate</span><span class="w"> </span><span class="kn">import</span> <span class="n">interp1d</span>
 
-<span class="kn">from</span> <span class="nn">..core.transforms</span> <span class="kn">import</span> <span class="n">antenna_to_cartesian</span>
-<span class="kn">from</span> <span class="nn">..io.common</span> <span class="kn">import</span> <span class="n">make_time_unit_str</span>
-<span class="kn">from</span> <span class="nn">..util.circular_stats</span> <span class="kn">import</span> <span class="n">compute_directional_stats</span>
-<span class="kn">from</span> <span class="nn">..util.datetime_utils</span> <span class="kn">import</span> <span class="n">datetime_from_radar</span>
-<span class="kn">from</span> <span class="nn">..util.radar_utils</span> <span class="kn">import</span> <span class="n">ma_broadcast_to</span>
-<span class="kn">from</span> <span class="nn">..util.xsect</span> <span class="kn">import</span> <span class="n">cross_section_ppi</span><span class="p">,</span> <span class="n">cross_section_rhi</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">antenna_to_cartesian</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_time_unit_str</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.circular_stats</span><span class="w"> </span><span class="kn">import</span> <span class="n">compute_directional_stats</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.datetime_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime_from_radar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.radar_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">ma_broadcast_to</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.xsect</span><span class="w"> </span><span class="kn">import</span> <span class="n">cross_section_ppi</span><span class="p">,</span> <span class="n">cross_section_rhi</span>
 
 
-<div class="viewcode-block" id="quasi_vertical_profile"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.quasi_vertical_profile.html#pyart.retrieve.quasi_vertical_profile">[docs]</a><span class="k">def</span> <span class="nf">quasi_vertical_profile</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">desired_angle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="quasi_vertical_profile"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.quasi_vertical_profile.html#pyart.retrieve.quasi_vertical_profile">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">quasi_vertical_profile</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">desired_angle</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Quasi Vertical Profile.</span>
 
@@ -602,7 +602,7 @@
     <span class="k">return</span> <span class="n">qvp</span></div>
 
 
-<div class="viewcode-block" id="compute_qvp"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_qvp.html#pyart.retrieve.compute_qvp">[docs]</a><span class="k">def</span> <span class="nf">compute_qvp</span><span class="p">(</span>
+<div class="viewcode-block" id="compute_qvp"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_qvp.html#pyart.retrieve.compute_qvp">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">compute_qvp</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">field_names</span><span class="p">,</span>
     <span class="n">ref_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -734,7 +734,7 @@
     <span class="k">return</span> <span class="n">qvp</span></div>
 
 
-<div class="viewcode-block" id="compute_rqvp"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_rqvp.html#pyart.retrieve.compute_rqvp">[docs]</a><span class="k">def</span> <span class="nf">compute_rqvp</span><span class="p">(</span>
+<div class="viewcode-block" id="compute_rqvp"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_rqvp.html#pyart.retrieve.compute_rqvp">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">compute_rqvp</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">field_names</span><span class="p">,</span>
     <span class="n">ref_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -910,7 +910,7 @@
     <span class="k">return</span> <span class="n">qvp</span></div>
 
 
-<div class="viewcode-block" id="compute_evp"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_evp.html#pyart.retrieve.compute_evp">[docs]</a><span class="k">def</span> <span class="nf">compute_evp</span><span class="p">(</span>
+<div class="viewcode-block" id="compute_evp"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_evp.html#pyart.retrieve.compute_evp">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">compute_evp</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">field_names</span><span class="p">,</span>
     <span class="n">lon</span><span class="p">,</span>
@@ -1072,7 +1072,7 @@
     <span class="k">return</span> <span class="n">qvp</span></div>
 
 
-<div class="viewcode-block" id="compute_svp"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_svp.html#pyart.retrieve.compute_svp">[docs]</a><span class="k">def</span> <span class="nf">compute_svp</span><span class="p">(</span>
+<div class="viewcode-block" id="compute_svp"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_svp.html#pyart.retrieve.compute_svp">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">compute_svp</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">field_names</span><span class="p">,</span>
     <span class="n">lon</span><span class="p">,</span>
@@ -1231,7 +1231,7 @@
     <span class="k">return</span> <span class="n">qvp</span></div>
 
 
-<div class="viewcode-block" id="compute_vp"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_vp.html#pyart.retrieve.compute_vp">[docs]</a><span class="k">def</span> <span class="nf">compute_vp</span><span class="p">(</span>
+<div class="viewcode-block" id="compute_vp"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_vp.html#pyart.retrieve.compute_vp">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">compute_vp</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">field_names</span><span class="p">,</span>
     <span class="n">lon</span><span class="p">,</span>
@@ -1359,7 +1359,7 @@
     <span class="k">return</span> <span class="n">qvp</span></div>
 
 
-<div class="viewcode-block" id="compute_ts_along_coord"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_ts_along_coord.html#pyart.retrieve.compute_ts_along_coord">[docs]</a><span class="k">def</span> <span class="nf">compute_ts_along_coord</span><span class="p">(</span>
+<div class="viewcode-block" id="compute_ts_along_coord"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_ts_along_coord.html#pyart.retrieve.compute_ts_along_coord">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">compute_ts_along_coord</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">field_names</span><span class="p">,</span>
     <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;ALONG_AZI&quot;</span><span class="p">,</span>
@@ -1548,7 +1548,7 @@
     <span class="k">return</span> <span class="n">acoord</span></div>
 
 
-<span class="k">def</span> <span class="nf">project_to_vertical</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">project_to_vertical</span><span class="p">(</span>
     <span class="n">data_in</span><span class="p">,</span> <span class="n">data_height</span><span class="p">,</span> <span class="n">grid_height</span><span class="p">,</span> <span class="n">interp_kind</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=-</span><span class="mf">9999.0</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1611,7 +1611,7 @@
     <span class="k">return</span> <span class="n">data_out</span>
 
 
-<span class="k">def</span> <span class="nf">find_rng_index</span><span class="p">(</span><span class="n">rng_vec</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">rng_tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_rng_index</span><span class="p">(</span><span class="n">rng_vec</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">rng_tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find the range index corresponding to a particular range</span>
 
@@ -1638,7 +1638,7 @@
     <span class="k">return</span> <span class="n">ind_rng</span>
 
 
-<span class="k">def</span> <span class="nf">get_target_elevations</span><span class="p">(</span><span class="n">radar_in</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_target_elevations</span><span class="p">(</span><span class="n">radar_in</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Gets RHI target elevations</span>
 
@@ -1662,7 +1662,7 @@
     <span class="k">return</span> <span class="n">target_elevations</span><span class="p">,</span> <span class="n">el_tol</span>
 
 
-<span class="k">def</span> <span class="nf">find_nearest_gate</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">latlon_tol</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_nearest_gate</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">latlon_tol</span><span class="o">=</span><span class="mf">0.0005</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find the radar gate closest to a lat,lon point</span>
 
@@ -1725,7 +1725,7 @@
     <span class="k">return</span> <span class="n">ind_ray</span><span class="p">,</span> <span class="n">ind_rng</span><span class="p">,</span> <span class="n">azi</span><span class="p">,</span> <span class="n">rng</span>
 
 
-<span class="k">def</span> <span class="nf">find_neighbour_gates</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">azi</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">delta_azi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delta_rng</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_neighbour_gates</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">azi</span><span class="p">,</span> <span class="n">rng</span><span class="p">,</span> <span class="n">delta_azi</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delta_rng</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find the neighbouring gates within +-delta_azi and +-delta_rng</span>
 
@@ -1779,7 +1779,7 @@
     <span class="k">return</span> <span class="n">inds_ray</span><span class="p">,</span> <span class="n">inds_rng</span>
 
 
-<span class="k">def</span> <span class="nf">get_data_along_rng</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_data_along_rng</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">fix_elevations</span><span class="p">,</span> <span class="n">fix_azimuths</span><span class="p">,</span> <span class="n">ang_tol</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">rmin</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rmax</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -1876,7 +1876,7 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xvals</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">yvals</span><span class="p">),</span> <span class="n">valid_azi</span><span class="p">,</span> <span class="n">valid_ele</span>
 
 
-<span class="k">def</span> <span class="nf">get_data_along_azi</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_data_along_azi</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">field_name</span><span class="p">,</span>
     <span class="n">fix_ranges</span><span class="p">,</span>
@@ -1961,7 +1961,7 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xvals</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">yvals</span><span class="p">),</span> <span class="n">valid_rng</span><span class="p">,</span> <span class="n">valid_ele</span>
 
 
-<span class="k">def</span> <span class="nf">get_data_along_ele</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_data_along_ele</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">field_name</span><span class="p">,</span>
     <span class="n">fix_ranges</span><span class="p">,</span>
@@ -2041,7 +2041,7 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">xvals</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">yvals</span><span class="p">),</span> <span class="n">valid_rng</span><span class="p">,</span> <span class="n">valid_azi</span>
 
 
-<span class="k">def</span> <span class="nf">find_ang_index</span><span class="p">(</span><span class="n">ang_vec</span><span class="p">,</span> <span class="n">ang</span><span class="p">,</span> <span class="n">ang_tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">find_ang_index</span><span class="p">(</span><span class="n">ang_vec</span><span class="p">,</span> <span class="n">ang</span><span class="p">,</span> <span class="n">ang_tol</span><span class="o">=</span><span class="mf">0.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find the angle index corresponding to a particular fixed angle</span>
 
@@ -2068,7 +2068,7 @@
     <span class="k">return</span> <span class="n">ind_ang</span>
 
 
-<span class="k">def</span> <span class="nf">_create_qvp_object</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_qvp_object</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">field_names</span><span class="p">,</span> <span class="n">qvp_type</span><span class="o">=</span><span class="s2">&quot;qvp&quot;</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">hmax</span><span class="o">=</span><span class="mf">10000.0</span><span class="p">,</span> <span class="n">hres</span><span class="o">=</span><span class="mf">200.0</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2139,7 +2139,7 @@
     <span class="k">return</span> <span class="n">qvp</span>
 
 
-<span class="k">def</span> <span class="nf">_create_along_coord_object</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_along_coord_object</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">field_names</span><span class="p">,</span> <span class="n">rng_values</span><span class="p">,</span> <span class="n">fixed_angle</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">start_time</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2208,7 +2208,7 @@
     <span class="k">return</span> <span class="n">acoord</span>
 
 
-<span class="k">def</span> <span class="nf">_update_qvp_metadata</span><span class="p">(</span><span class="n">qvp</span><span class="p">,</span> <span class="n">ref_time</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="mf">90.0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_update_qvp_metadata</span><span class="p">(</span><span class="n">qvp</span><span class="p">,</span> <span class="n">ref_time</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">elev</span><span class="o">=</span><span class="mf">90.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    updates a QVP object metadata with data from the current radar volume</span>
 
@@ -2245,7 +2245,7 @@
     <span class="k">return</span> <span class="n">qvp</span>
 
 
-<span class="k">def</span> <span class="nf">_update_along_coord_metadata</span><span class="p">(</span><span class="n">acoord</span><span class="p">,</span> <span class="n">ref_time</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_update_along_coord_metadata</span><span class="p">(</span><span class="n">acoord</span><span class="p">,</span> <span class="n">ref_time</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    updates an along coordinate object metadata with data from the current</span>
 <span class="sd">    radar volume</span>

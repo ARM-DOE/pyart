@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,17 +463,17 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">struct</span>
-<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timezone</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">FileMetadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
-<span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
-<span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">make_time_unit_str</span><span class="p">,</span> <span class="n">prepare_for_read</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileMetadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.radar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Radar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">make_time_unit_str</span><span class="p">,</span> <span class="n">prepare_for_read</span>
 
 
-<div class="viewcode-block" id="read_chl"><a class="viewcode-back" href="../../../API/generated/pyart.io.read_chl.html#pyart.io.read_chl">[docs]</a><span class="k">def</span> <span class="nf">read_chl</span><span class="p">(</span>
+<div class="viewcode-block" id="read_chl"><a class="viewcode-back" href="../../../API/generated/pyart.io.read_chl.html#pyart.io.read_chl">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">read_chl</span><span class="p">(</span>
     <span class="n">filename</span><span class="p">,</span>
     <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -645,7 +645,7 @@
     <span class="p">)</span></div>
 
 
-<span class="k">class</span> <span class="nc">ChlFile</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ChlFile</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A file object for CHL data.</span>
 
@@ -696,7 +696,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">ns_time</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">,</span> <span class="n">ns_time</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
         <span class="c1"># initalize attributes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ngates</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">num_sweeps</span> <span class="o">=</span> <span class="kc">None</span>
@@ -739,11 +739,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_extract_fields</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rays_per_sweep</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_rays_in_current_sweep</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Close the file.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 
-    <span class="k">def</span> <span class="nf">_read_block</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_read_block</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Read a block from an open CHL file.&quot;&quot;&quot;</span>
         <span class="n">pld</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_fh</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">pld</span> <span class="o">==</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="p">:</span>
@@ -773,11 +773,11 @@
         <span class="k">return</span> <span class="n">packet</span>
 
     <span class="c1"># Block parsers</span>
-    <span class="k">def</span> <span class="nf">_parse_file_hdr_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_file_hdr_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse a field_hdr block.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">_unpack_structure</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">ARCH_FILE_HDR_T</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_parse_field_scale_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_field_scale_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse a field_scale block. Add scale to field_info attr.&quot;&quot;&quot;</span>
         <span class="n">packet</span> <span class="o">=</span> <span class="n">_unpack_structure</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">FIELD_SCALE_T</span><span class="p">)</span>
         <span class="n">packet</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">packet</span><span class="p">[</span><span class="s2">&quot;name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
@@ -786,14 +786,14 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">field_info</span><span class="p">[</span><span class="n">packet</span><span class="p">[</span><span class="s2">&quot;bit_mask_pos&quot;</span><span class="p">]]</span> <span class="o">=</span> <span class="n">packet</span>
         <span class="k">return</span> <span class="n">packet</span>
 
-    <span class="k">def</span> <span class="nf">_parse_radar_info_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_radar_info_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse a radar_info block. Update metadata attribute.&quot;&quot;&quot;</span>
         <span class="n">packet</span> <span class="o">=</span> <span class="n">_unpack_structure</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">RADAR_INFO_T</span><span class="p">)</span>
         <span class="n">packet</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">packet</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">radar_info</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">packet</span>
 
-    <span class="k">def</span> <span class="nf">_parse_processor_info_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_processor_info_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse a processor_info block. Set dr attribute.&quot;&quot;&quot;</span>
         <span class="n">packet</span> <span class="o">=</span> <span class="n">_unpack_structure</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">PROCESSOR_INFO</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">gate_spacing</span> <span class="o">=</span> <span class="n">packet</span><span class="p">[</span><span class="s2">&quot;gate_spacing&quot;</span><span class="p">]</span>
@@ -801,7 +801,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">processor_info</span> <span class="o">=</span> <span class="n">packet</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">packet</span>
 
-    <span class="k">def</span> <span class="nf">_parse_scan_seg_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_scan_seg_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse a scan_seg_block. Update sweep attributes.&quot;&quot;&quot;</span>
         <span class="n">packet</span> <span class="o">=</span> <span class="n">_unpack_structure</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">SCAN_SEG</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sweep_number</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">packet</span><span class="p">[</span><span class="s2">&quot;sweep_num&quot;</span><span class="p">])</span>
@@ -815,7 +815,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_rays_in_current_sweep</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">return</span> <span class="n">packet</span>
 
-    <span class="k">def</span> <span class="nf">_parse_sweep_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_sweep_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse a sweep block. Set num_sweeps attribute.&quot;&quot;&quot;</span>
         <span class="n">packet</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="n">packet</span><span class="p">[</span><span class="s2">&quot;num_sweeps&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;I&quot;</span><span class="p">,</span> <span class="n">payload</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">4</span><span class="p">])[</span><span class="mi">0</span><span class="p">]</span>
@@ -825,7 +825,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">num_sweeps</span> <span class="o">=</span> <span class="n">packet</span><span class="p">[</span><span class="s2">&quot;num_sweeps&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">packet</span>
 
-    <span class="k">def</span> <span class="nf">_parse_ray_hdr_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_ray_hdr_block</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">payload</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Parse a ray_hdr block. Update associated attributes.&quot;&quot;&quot;</span>
         <span class="n">packet</span> <span class="o">=</span> <span class="n">_unpack_structure</span><span class="p">(</span><span class="n">payload</span><span class="p">,</span> <span class="n">ARCH_RAY_HEADER</span><span class="p">)</span>
 
@@ -857,7 +857,7 @@
 
         <span class="k">return</span> <span class="n">packet</span>
 
-    <span class="k">def</span> <span class="nf">_extract_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_fields</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Extract field data from _dstring attribute post read.&quot;&quot;&quot;</span>
         <span class="n">all_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dstring</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_dtype</span><span class="p">)</span>
         <span class="n">all_data</span> <span class="o">=</span> <span class="n">all_data</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ngates</span><span class="p">)</span>
@@ -894,7 +894,7 @@
 <span class="c1">##############</span>
 
 
-<span class="k">def</span> <span class="nf">_unpack_structure</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">structure</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_unpack_structure</span><span class="p">(</span><span class="n">string</span><span class="p">,</span> <span class="n">structure</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Unpack a structure.&quot;&quot;&quot;</span>
     <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">structure</span><span class="p">])</span>
     <span class="n">tpl</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="n">fmt</span><span class="p">,</span> <span class="n">string</span><span class="p">)</span>

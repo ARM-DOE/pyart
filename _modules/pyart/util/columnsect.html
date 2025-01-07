@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -464,15 +464,15 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
-<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
 
-<span class="kn">from</span> <span class="nn">..core.transforms</span> <span class="kn">import</span> <span class="n">antenna_vectors_to_cartesian</span>
-<span class="kn">from</span> <span class="nn">.datetime_utils</span> <span class="kn">import</span> <span class="n">datetime_from_radar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">antenna_vectors_to_cartesian</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.datetime_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">datetime_from_radar</span>
 
 
-<div class="viewcode-block" id="column_vertical_profile"><a class="viewcode-back" href="../../../API/generated/pyart.util.column_vertical_profile.html#pyart.util.column_vertical_profile">[docs]</a><span class="k">def</span> <span class="nf">column_vertical_profile</span><span class="p">(</span>
+<div class="viewcode-block" id="column_vertical_profile"><a class="viewcode-back" href="../../../API/generated/pyart.util.column_vertical_profile.html#pyart.util.column_vertical_profile">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">column_vertical_profile</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">azimuth_spread</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">spatial_spread</span><span class="o">=</span><span class="mi">3</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -625,7 +625,7 @@
     <span class="k">return</span> <span class="n">assemble_column</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">total_moment</span><span class="p">,</span> <span class="n">forazi</span><span class="p">,</span> <span class="n">dis</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="sphere_distance"><a class="viewcode-back" href="../../../API/generated/pyart.util.sphere_distance.html#pyart.util.sphere_distance">[docs]</a><span class="k">def</span> <span class="nf">sphere_distance</span><span class="p">(</span><span class="n">radar_latitude</span><span class="p">,</span> <span class="n">target_latitude</span><span class="p">,</span> <span class="n">radar_longitude</span><span class="p">,</span> <span class="n">target_longitude</span><span class="p">):</span>
+<div class="viewcode-block" id="sphere_distance"><a class="viewcode-back" href="../../../API/generated/pyart.util.sphere_distance.html#pyart.util.sphere_distance">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">sphere_distance</span><span class="p">(</span><span class="n">radar_latitude</span><span class="p">,</span> <span class="n">target_latitude</span><span class="p">,</span> <span class="n">radar_longitude</span><span class="p">,</span> <span class="n">target_longitude</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculated of the great circle distance between radar and target</span>
 
@@ -678,7 +678,7 @@
     <span class="k">return</span> <span class="n">distance</span></div>
 
 
-<div class="viewcode-block" id="for_azimuth"><a class="viewcode-back" href="../../../API/generated/pyart.util.for_azimuth.html#pyart.util.for_azimuth">[docs]</a><span class="k">def</span> <span class="nf">for_azimuth</span><span class="p">(</span><span class="n">radar_latitude</span><span class="p">,</span> <span class="n">target_latitude</span><span class="p">,</span> <span class="n">radar_longitude</span><span class="p">,</span> <span class="n">target_longitude</span><span class="p">):</span>
+<div class="viewcode-block" id="for_azimuth"><a class="viewcode-back" href="../../../API/generated/pyart.util.for_azimuth.html#pyart.util.for_azimuth">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">for_azimuth</span><span class="p">(</span><span class="n">radar_latitude</span><span class="p">,</span> <span class="n">target_latitude</span><span class="p">,</span> <span class="n">radar_longitude</span><span class="p">,</span> <span class="n">target_longitude</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculation of inital bearing alongitudeg a great-circle arc</span>
 <span class="sd">    Known as Forward Azimuth Angle.</span>
@@ -738,7 +738,7 @@
     <span class="k">return</span> <span class="n">azimuth</span></div>
 
 
-<div class="viewcode-block" id="get_field_location"><a class="viewcode-back" href="../../../API/generated/pyart.util.get_field_location.html#pyart.util.get_field_location">[docs]</a><span class="k">def</span> <span class="nf">get_field_location</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">):</span>
+<div class="viewcode-block" id="get_field_location"><a class="viewcode-back" href="../../../API/generated/pyart.util.get_field_location.html#pyart.util.get_field_location">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_field_location</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given the location (in latitude, longitude) of a target, extract the</span>
 <span class="sd">    radar column above that point for further analysis.</span>
@@ -888,7 +888,7 @@
     <span class="k">return</span> <span class="n">column</span></div>
 
 
-<div class="viewcode-block" id="get_column_rays"><a class="viewcode-back" href="../../../API/generated/pyart.util.get_column_rays.html#pyart.util.get_column_rays">[docs]</a><span class="k">def</span> <span class="nf">get_column_rays</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">):</span>
+<div class="viewcode-block" id="get_column_rays"><a class="viewcode-back" href="../../../API/generated/pyart.util.get_column_rays.html#pyart.util.get_column_rays">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_column_rays</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Given the location (in latitude,longitude) of a target, return the rays</span>
 <span class="sd">    that correspond to radar column above the target.</span>
@@ -940,7 +940,7 @@
     <span class="k">return</span> <span class="n">rays</span></div>
 
 
-<span class="k">def</span> <span class="nf">get_sweep_rays</span><span class="p">(</span><span class="n">sweep_azi</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">azimuth_spread</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_sweep_rays</span><span class="p">(</span><span class="n">sweep_azi</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">azimuth_spread</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extract the specific rays for a given azimuth from a radar sweep</span>
 
@@ -977,7 +977,7 @@
     <span class="k">return</span> <span class="n">centerline</span><span class="p">,</span> <span class="n">spread</span>
 
 
-<span class="k">def</span> <span class="nf">subset_fields</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">ray</span><span class="p">,</span> <span class="n">target_gates</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">subset_fields</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">ray</span><span class="p">,</span> <span class="n">target_gates</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parameter</span>
 <span class="sd">    ---------</span>
@@ -1009,7 +1009,7 @@
     <span class="k">return</span> <span class="n">moment</span>
 
 
-<span class="k">def</span> <span class="nf">assemble_column</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">total_moment</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">assemble_column</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">total_moment</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    With a dictionary containing the extracted fields from a radar sweep,</span>
 <span class="sd">    assemble individual gates and fields into an xarray DataSet</span>
@@ -1132,7 +1132,7 @@
     <span class="k">return</span> <span class="n">column</span>
 
 
-<span class="k">def</span> <span class="nf">check_latitude</span><span class="p">(</span><span class="n">latitude</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_latitude</span><span class="p">(</span><span class="n">latitude</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to check if input latitude is valid for type and value.</span>
 
@@ -1158,7 +1158,7 @@
         <span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">check_longitude</span><span class="p">(</span><span class="n">longitude</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check_longitude</span><span class="p">(</span><span class="n">longitude</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function to check if input latitude is valid for type and value.</span>
 

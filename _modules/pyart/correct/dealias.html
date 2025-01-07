@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,22 +463,22 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">..io</span> <span class="kn">import</span> <span class="n">_rsl_interface</span>
-    <span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_fourdd_interface</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">..io</span><span class="w"> </span><span class="kn">import</span> <span class="n">_rsl_interface</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">_fourdd_interface</span>
 
     <span class="n">_FOURDD_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_FOURDD_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
-<span class="kn">from</span> <span class="nn">._common_dealias</span> <span class="kn">import</span> <span class="n">_parse_gatefilter</span><span class="p">,</span> <span class="n">_set_limits</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._common_dealias</span><span class="w"> </span><span class="kn">import</span> <span class="n">_parse_gatefilter</span><span class="p">,</span> <span class="n">_set_limits</span>
 
 
-<div class="viewcode-block" id="dealias_fourdd"><a class="viewcode-back" href="../../../API/generated/pyart.correct.dealias_fourdd.html#pyart.correct.dealias_fourdd">[docs]</a><span class="k">def</span> <span class="nf">dealias_fourdd</span><span class="p">(</span>
+<div class="viewcode-block" id="dealias_fourdd"><a class="viewcode-back" href="../../../API/generated/pyart.correct.dealias_fourdd.html#pyart.correct.dealias_fourdd">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">dealias_fourdd</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">last_radar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">sonde_profile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -720,7 +720,7 @@
     <span class="k">return</span> <span class="n">vr_corr</span></div>
 
 
-<span class="k">def</span> <span class="nf">_create_rsl_volume</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">vol_num</span><span class="p">,</span> <span class="n">rsl_badval</span><span class="p">,</span> <span class="n">excluded</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_create_rsl_volume</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">vol_num</span><span class="p">,</span> <span class="n">rsl_badval</span><span class="p">,</span> <span class="n">excluded</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a RSLVolume containing data from a field in radar.</span>
 <span class="sd">    &quot;&quot;&quot;</span>

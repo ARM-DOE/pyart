@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,23 +463,23 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.constants</span> <span class="kn">import</span> <span class="n">lambda2nu</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.constants</span><span class="w"> </span><span class="kn">import</span> <span class="n">lambda2nu</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">FileMetadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
-<span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
-<span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">mean_of_two_angles_deg</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_sigmet_noaa_hh</span>
-<span class="kn">from</span> <span class="nn">._sigmetfile</span> <span class="kn">import</span> <span class="n">SigmetFile</span><span class="p">,</span> <span class="n">bin2_to_angle</span><span class="p">,</span> <span class="n">bin4_to_angle</span>
-<span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">make_time_unit_str</span><span class="p">,</span> <span class="n">prepare_for_read</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileMetadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.radar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Radar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">mean_of_two_angles_deg</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">_sigmet_noaa_hh</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._sigmetfile</span><span class="w"> </span><span class="kn">import</span> <span class="n">SigmetFile</span><span class="p">,</span> <span class="n">bin2_to_angle</span><span class="p">,</span> <span class="n">bin4_to_angle</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">make_time_unit_str</span><span class="p">,</span> <span class="n">prepare_for_read</span>
 
 <span class="n">SPEED_OF_LIGHT</span> <span class="o">=</span> <span class="mf">299793000.0</span>
 
 
-<div class="viewcode-block" id="read_sigmet"><a class="viewcode-back" href="../../../API/generated/pyart.io.read_sigmet.html#pyart.io.read_sigmet">[docs]</a><span class="k">def</span> <span class="nf">read_sigmet</span><span class="p">(</span>
+<div class="viewcode-block" id="read_sigmet"><a class="viewcode-back" href="../../../API/generated/pyart.io.read_sigmet.html#pyart.io.read_sigmet">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">read_sigmet</span><span class="p">(</span>
     <span class="n">filename</span><span class="p">,</span>
     <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -955,7 +955,7 @@
     <span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">_is_time_ordered_by_reversal</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_time_ordered_by_reversal</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns if volume can be time ordered by reversing some or all sweeps.</span>
 <span class="sd">    True if the volume can be time ordered, False if not.</span>
@@ -979,7 +979,7 @@
     <span class="k">return</span> <span class="kc">True</span>
 
 
-<span class="k">def</span> <span class="nf">_is_time_ordered_by_roll</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_time_ordered_by_roll</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns if volume can be time ordered by rolling some or all sweeps.</span>
 <span class="sd">    True if the volume can be time ordered, False if not.</span>
@@ -1007,7 +1007,7 @@
     <span class="k">return</span> <span class="kc">True</span>
 
 
-<span class="k">def</span> <span class="nf">_is_time_ordered_by_reverse_roll</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_is_time_ordered_by_reverse_roll</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns if volume can be time ordered by reversing and rolling some or all</span>
 <span class="sd">    sweeps. True if the volume can be time ordered, False if not.</span>
@@ -1038,7 +1038,7 @@
     <span class="k">return</span> <span class="kc">True</span>
 
 
-<span class="k">def</span> <span class="nf">_time_order_data_and_metadata_roll</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_time_order_data_and_metadata_roll</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Put Sigmet data and metadata in time increasing order using a roll</span>
 <span class="sd">    operation.</span>
@@ -1078,7 +1078,7 @@
     <span class="k">return</span>
 
 
-<span class="k">def</span> <span class="nf">_time_order_data_and_metadata_reverse</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_time_order_data_and_metadata_reverse</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Put Sigmet data and metadata in time increasing order by reverse sweep in</span>
 <span class="sd">    time reversed order.</span>
@@ -1115,7 +1115,7 @@
     <span class="k">return</span>
 
 
-<span class="k">def</span> <span class="nf">_time_order_data_and_metadata_full</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_time_order_data_and_metadata_full</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Put Sigmet data and metadata in time increasing order by sorting the</span>
 <span class="sd">    times.</span>
@@ -1157,7 +1157,7 @@
     <span class="k">return</span>
 
 
-<span class="k">def</span> <span class="nf">ymds_time_to_datetime</span><span class="p">(</span><span class="n">ymds</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ymds_time_to_datetime</span><span class="p">(</span><span class="n">ymds</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a datetime object from a Sigmet ymds_time dictionary.&quot;&quot;&quot;</span>
     <span class="n">dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">ymds</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">],</span> <span class="n">ymds</span><span class="p">[</span><span class="s2">&quot;month&quot;</span><span class="p">],</span> <span class="n">ymds</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">])</span>
     <span class="c1"># lowest 10 bits of millisecond parameter specifies milliseconds</span>

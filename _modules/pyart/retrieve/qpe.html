@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,15 +463,15 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
-<span class="kn">from</span> <span class="nn">.echo_class</span> <span class="kn">import</span> <span class="n">get_freq_band</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.echo_class</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_freq_band</span>
 
 
-<div class="viewcode-block" id="est_rain_rate_zpoly"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_zpoly.html#pyart.retrieve.est_rain_rate_zpoly">[docs]</a><span class="k">def</span> <span class="nf">est_rain_rate_zpoly</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="est_rain_rate_zpoly"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_zpoly.html#pyart.retrieve.est_rain_rate_zpoly">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">est_rain_rate_zpoly</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates rainfall rate from reflectivity using a polynomial Z-R relation</span>
 <span class="sd">    developed at McGill University.</span>
@@ -523,7 +523,7 @@
     <span class="k">return</span> <span class="n">rain</span></div>
 
 
-<div class="viewcode-block" id="est_rain_rate_z"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_z.html#pyart.retrieve.est_rain_rate_z">[docs]</a><span class="k">def</span> <span class="nf">est_rain_rate_z</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.0376</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.6112</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="est_rain_rate_z"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_z.html#pyart.retrieve.est_rain_rate_z">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">est_rain_rate_z</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.0376</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.6112</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates rainfall rate from reflectivity using a power law.</span>
 
@@ -566,7 +566,7 @@
     <span class="k">return</span> <span class="n">rain</span></div>
 
 
-<div class="viewcode-block" id="est_rain_rate_kdp"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_kdp.html#pyart.retrieve.est_rain_rate_kdp">[docs]</a><span class="k">def</span> <span class="nf">est_rain_rate_kdp</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kdp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="est_rain_rate_kdp"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_kdp.html#pyart.retrieve.est_rain_rate_kdp">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">est_rain_rate_kdp</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kdp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates rainfall rate from kdp using alpha power law.</span>
 
@@ -628,7 +628,7 @@
     <span class="k">return</span> <span class="n">rain</span></div>
 
 
-<div class="viewcode-block" id="est_rain_rate_a"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_a.html#pyart.retrieve.est_rain_rate_a">[docs]</a><span class="k">def</span> <span class="nf">est_rain_rate_a</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">a_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="est_rain_rate_a"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_a.html#pyart.retrieve.est_rain_rate_a">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">est_rain_rate_a</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">a_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates rainfall rate from specific attenuation using alpha power law.</span>
 
@@ -693,7 +693,7 @@
     <span class="k">return</span> <span class="n">rain</span></div>
 
 
-<div class="viewcode-block" id="est_rain_rate_zkdp"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_zkdp.html#pyart.retrieve.est_rain_rate_zkdp">[docs]</a><span class="k">def</span> <span class="nf">est_rain_rate_zkdp</span><span class="p">(</span>
+<div class="viewcode-block" id="est_rain_rate_zkdp"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_zkdp.html#pyart.retrieve.est_rain_rate_zkdp">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">est_rain_rate_zkdp</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">alphaz</span><span class="o">=</span><span class="mf">0.0376</span><span class="p">,</span>
     <span class="n">betaz</span><span class="o">=</span><span class="mf">0.6112</span><span class="p">,</span>
@@ -786,7 +786,7 @@
     <span class="k">return</span> <span class="n">rain_main</span></div>
 
 
-<div class="viewcode-block" id="est_rain_rate_za"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_za.html#pyart.retrieve.est_rain_rate_za">[docs]</a><span class="k">def</span> <span class="nf">est_rain_rate_za</span><span class="p">(</span>
+<div class="viewcode-block" id="est_rain_rate_za"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_za.html#pyart.retrieve.est_rain_rate_za">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">est_rain_rate_za</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">alphaz</span><span class="o">=</span><span class="mf">0.0376</span><span class="p">,</span>
     <span class="n">betaz</span><span class="o">=</span><span class="mf">0.6112</span><span class="p">,</span>
@@ -877,7 +877,7 @@
     <span class="k">return</span> <span class="n">rain_main</span></div>
 
 
-<div class="viewcode-block" id="est_rain_rate_hydro"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_hydro.html#pyart.retrieve.est_rain_rate_hydro">[docs]</a><span class="k">def</span> <span class="nf">est_rain_rate_hydro</span><span class="p">(</span>
+<div class="viewcode-block" id="est_rain_rate_hydro"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_hydro.html#pyart.retrieve.est_rain_rate_hydro">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">est_rain_rate_hydro</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">alphazr</span><span class="o">=</span><span class="mf">0.0376</span><span class="p">,</span>
     <span class="n">betazr</span><span class="o">=</span><span class="mf">0.6112</span><span class="p">,</span>
@@ -1032,7 +1032,7 @@
     <span class="k">return</span> <span class="n">rain</span></div>
 
 
-<span class="k">def</span> <span class="nf">_get_coeff_rkdp</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_coeff_rkdp</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the R(kdp) power law coefficients for a particular frequency.</span>
 
@@ -1068,7 +1068,7 @@
     <span class="k">return</span> <span class="n">coeff_rkdp_dict</span><span class="p">[</span><span class="n">freq_band_aux</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">_coeff_rkdp_table</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_coeff_rkdp_table</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Defines the R(kdp) power law coefficients for each frequency band.</span>
 
@@ -1092,7 +1092,7 @@
     <span class="k">return</span> <span class="n">coeff_rkdp_dict</span>
 
 
-<span class="k">def</span> <span class="nf">_get_coeff_ra</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_coeff_ra</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the R(A) power law coefficients for a particular frequency.</span>
 
@@ -1128,7 +1128,7 @@
     <span class="k">return</span> <span class="n">coeff_ra_dict</span><span class="p">[</span><span class="n">freq_band_aux</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">_coeff_ra_table</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_coeff_ra_table</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Defines the R(A) power law coefficients for each frequency band.</span>
 
@@ -1152,7 +1152,7 @@
     <span class="k">return</span> <span class="n">coeff_ra_dict</span>
 
 
-<div class="viewcode-block" id="ZtoR"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.ZtoR.html#pyart.retrieve.ZtoR">[docs]</a><span class="k">def</span> <span class="nf">ZtoR</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">ref_field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">1.4</span><span class="p">,</span> <span class="n">save_name</span><span class="o">=</span><span class="s2">&quot;NWS_primary_prate&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="ZtoR"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.ZtoR.html#pyart.retrieve.ZtoR">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">ZtoR</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">ref_field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">1.4</span><span class="p">,</span> <span class="n">save_name</span><span class="o">=</span><span class="s2">&quot;NWS_primary_prate&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Convert reflectivity (dBZ) to precipitation rate (mm/hr)</span>
 

@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,23 +463,23 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">mpl_toolkits.basemap</span> <span class="kn">import</span> <span class="n">Basemap</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.basemap</span><span class="w"> </span><span class="kn">import</span> <span class="n">Basemap</span>
 
     <span class="n">_BASEMAP_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_BASEMAP_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
-<span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">parse_ax_fig</span><span class="p">,</span> <span class="n">parse_cmap</span><span class="p">,</span> <span class="n">parse_vmin_vmax</span>
-<span class="kn">from</span> <span class="nn">.radardisplay</span> <span class="kn">import</span> <span class="n">RadarDisplay</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">parse_ax_fig</span><span class="p">,</span> <span class="n">parse_cmap</span><span class="p">,</span> <span class="n">parse_vmin_vmax</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.radardisplay</span><span class="w"> </span><span class="kn">import</span> <span class="n">RadarDisplay</span>
 
 
-<div class="viewcode-block" id="RadarMapDisplayBasemap"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.html#pyart.graph.RadarMapDisplayBasemap">[docs]</a><span class="k">class</span> <span class="nc">RadarMapDisplayBasemap</span><span class="p">(</span><span class="n">RadarDisplay</span><span class="p">):</span>
+<div class="viewcode-block" id="RadarMapDisplayBasemap"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.html#pyart.graph.RadarMapDisplayBasemap">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">RadarMapDisplayBasemap</span><span class="p">(</span><span class="n">RadarDisplay</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A display object for creating plots on a geographic map from data in a</span>
 <span class="sd">    Radar object.</span>
@@ -529,7 +529,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the object.&quot;&quot;&quot;</span>
         <span class="c1"># check that basemap is available</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BASEMAP_AVAILABLE</span><span class="p">:</span>
@@ -554,12 +554,12 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_y0</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># y axis radar location in map coords (meters)</span>
         <span class="k">return</span>
 
-    <span class="k">def</span> <span class="nf">_check_basemap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_check_basemap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that basemap is not None, raise ValueError if it is.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;no basemap plotted&quot;</span><span class="p">)</span>
 
-<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_ppi_map"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_ppi_map.html#pyart.graph.RadarMapDisplayBasemap.plot_ppi_map">[docs]</a>    <span class="k">def</span> <span class="nf">plot_ppi_map</span><span class="p">(</span>
+<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_ppi_map"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_ppi_map.html#pyart.graph.RadarMapDisplayBasemap.plot_ppi_map">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_ppi_map</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">field</span><span class="p">,</span>
         <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -842,7 +842,7 @@
             <span class="p">)</span>
         <span class="k">return</span></div>
 
-<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_point"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_point.html#pyart.graph.RadarMapDisplayBasemap.plot_point">[docs]</a>    <span class="k">def</span> <span class="nf">plot_point</span><span class="p">(</span>
+<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_point"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_point.html#pyart.graph.RadarMapDisplayBasemap.plot_point">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_point</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">lon</span><span class="p">,</span>
         <span class="n">lat</span><span class="p">,</span>
@@ -885,7 +885,7 @@
             <span class="n">x_text</span><span class="p">,</span> <span class="n">y_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span><span class="p">(</span><span class="n">lon</span> <span class="o">+</span> <span class="n">lon_offset</span><span class="p">,</span> <span class="n">lat</span> <span class="o">+</span> <span class="n">lat_offset</span><span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">x_text</span><span class="p">,</span> <span class="n">y_text</span><span class="p">,</span> <span class="n">label_text</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_line_geo"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_line_geo.html#pyart.graph.RadarMapDisplayBasemap.plot_line_geo">[docs]</a>    <span class="k">def</span> <span class="nf">plot_line_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_lons</span><span class="p">,</span> <span class="n">line_lats</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="s2">&quot;r-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_line_geo"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_line_geo.html#pyart.graph.RadarMapDisplayBasemap.plot_line_geo">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_line_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_lons</span><span class="p">,</span> <span class="n">line_lats</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="s2">&quot;r-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a line segments on the current map given values in lat and lon.</span>
 
@@ -904,7 +904,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_basemap</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">line_lons</span><span class="p">,</span> <span class="n">line_lats</span><span class="p">,</span> <span class="n">line_style</span><span class="p">,</span> <span class="n">latlon</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_line_xy"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_line_xy.html#pyart.graph.RadarMapDisplayBasemap.plot_line_xy">[docs]</a>    <span class="k">def</span> <span class="nf">plot_line_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_x</span><span class="p">,</span> <span class="n">line_y</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="s2">&quot;r-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_line_xy"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_line_xy.html#pyart.graph.RadarMapDisplayBasemap.plot_line_xy">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_line_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_x</span><span class="p">,</span> <span class="n">line_y</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="s2">&quot;r-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a line segments on the current map given radar x, y values.</span>
 
@@ -925,7 +925,7 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_x0</span> <span class="o">+</span> <span class="n">line_x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_y0</span> <span class="o">+</span> <span class="n">line_y</span><span class="p">,</span> <span class="n">line_style</span><span class="p">,</span> <span class="n">latlon</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_range_ring"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_range_ring.html#pyart.graph.RadarMapDisplayBasemap.plot_range_ring">[docs]</a>    <span class="k">def</span> <span class="nf">plot_range_ring</span><span class="p">(</span>
+<div class="viewcode-block" id="RadarMapDisplayBasemap.plot_range_ring"><a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplayBasemap.plot_range_ring.html#pyart.graph.RadarMapDisplayBasemap.plot_range_ring">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_range_ring</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">range_ring_location_km</span><span class="p">,</span> <span class="n">npts</span><span class="o">=</span><span class="mi">360</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="s2">&quot;k-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>

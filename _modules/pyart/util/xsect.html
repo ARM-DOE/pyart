@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,15 +463,15 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">copy</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">copy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">Radar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Radar</span>
 
 
-<div class="viewcode-block" id="cross_section_ppi"><a class="viewcode-back" href="../../../API/generated/pyart.util.cross_section_ppi.html#pyart.util.cross_section_ppi">[docs]</a><span class="k">def</span> <span class="nf">cross_section_ppi</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">target_azimuths</span><span class="p">,</span> <span class="n">az_tol</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cross_section_ppi"><a class="viewcode-back" href="../../../API/generated/pyart.util.cross_section_ppi.html#pyart.util.cross_section_ppi">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">cross_section_ppi</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">target_azimuths</span><span class="p">,</span> <span class="n">az_tol</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extract cross sections from a PPI volume along one or more azimuth angles.</span>
 
@@ -533,7 +533,7 @@
     <span class="k">return</span> <span class="n">radar_rhi</span></div>
 
 
-<div class="viewcode-block" id="cross_section_rhi"><a class="viewcode-back" href="../../../API/generated/pyart.util.cross_section_rhi.html#pyart.util.cross_section_rhi">[docs]</a><span class="k">def</span> <span class="nf">cross_section_rhi</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">target_elevations</span><span class="p">,</span> <span class="n">el_tol</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cross_section_rhi"><a class="viewcode-back" href="../../../API/generated/pyart.util.cross_section_rhi.html#pyart.util.cross_section_rhi">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">cross_section_rhi</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">target_elevations</span><span class="p">,</span> <span class="n">el_tol</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Extract cross sections from an RHI volume along one or more elevation</span>
 <span class="sd">    angles.</span>
@@ -597,7 +597,7 @@
     <span class="k">return</span> <span class="n">radar_ppi</span></div>
 
 
-<span class="k">def</span> <span class="nf">_construct_xsect_radar</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">scan_type</span><span class="p">,</span> <span class="n">pxsect_rays</span><span class="p">,</span> <span class="n">xsect_nsweeps</span><span class="p">,</span> <span class="n">target_angles</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_construct_xsect_radar</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">scan_type</span><span class="p">,</span> <span class="n">pxsect_rays</span><span class="p">,</span> <span class="n">xsect_nsweeps</span><span class="p">,</span> <span class="n">target_angles</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Constructs a new radar object that contains cross-sections at fixed angles</span>
 <span class="sd">    of a PPI or RHI volume scan.</span>
@@ -685,7 +685,7 @@
     <span class="k">return</span> <span class="n">radar_xsect</span>
 
 
-<span class="k">def</span> <span class="nf">_copy_dic</span><span class="p">(</span><span class="n">orig_dic</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_copy_dic</span><span class="p">(</span><span class="n">orig_dic</span><span class="p">,</span> <span class="n">excluded_keys</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a copy of the original dictionary copying each element.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">excluded_keys</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">excluded_keys</span> <span class="o">=</span> <span class="p">[]</span>

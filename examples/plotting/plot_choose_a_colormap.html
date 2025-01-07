@@ -30,7 +30,7 @@
   <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -550,11 +550,11 @@ and how to add them to your own plots.</p>
 <span class="c1"># Author: Max Grover (mgrover@anl.gov)</span>
 <span class="c1"># License: BSD 3 clause</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">import</span> <span class="nn">pyart</span>
-<span class="kn">from</span> <span class="nn">pyart.testing</span> <span class="kn">import</span> <span class="n">get_test_data</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_test_data</span>
 </pre></div>
 </div>
 <p><strong>Plot the available colormaps</strong></p>
@@ -565,7 +565,7 @@ We use a helper function from matplotlib to plot this.</p>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gradient</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.vstack.html#numpy.vstack" title="numpy.vstack" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">vstack</span></a><span class="p">((</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gradient</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gradient</span></a><span class="p">))</span>
 
 
-<span class="k">def</span> <span class="nf">plot_color_gradients</span><span class="p">(</span><span class="n">cmap_category</span><span class="p">,</span> <span class="n">cmap_list</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_color_gradients</span><span class="p">(</span><span class="n">cmap_category</span><span class="p">,</span> <span class="n">cmap_list</span><span class="p">):</span>
     <span class="c1"># Create figure and adjust figure height to number of colormaps</span>
     <span class="n">nrows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cmap_list</span><span class="p">)</span>
     <span class="n">figh</span> <span class="o">=</span> <span class="mf">0.35</span> <span class="o">+</span> <span class="mf">0.15</span> <span class="o">+</span> <span class="p">(</span><span class="n">nrows</span> <span class="o">+</span> <span class="p">(</span><span class="n">nrows</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.22</span>
@@ -695,7 +695,7 @@ Setup a display to plot the data</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_choose_a_colormap_006.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_006.png" alt="xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.989 seconds)</p>
+<img src="../../_images/sphx_glr_plot_choose_a_colormap_006.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_006.png" alt="xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.915 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plotting-plot-choose-a-colormap-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/653fe2324a2591f4300a944b1759293c/plot_choose_a_colormap.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_choose_a_colormap.ipynb</span></code></a></p>

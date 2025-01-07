@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,11 +463,11 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">signal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal</span>
 
 
-<div class="viewcode-block" id="angular_texture_2d"><a class="viewcode-back" href="../../../API/generated/pyart.util.angular_texture_2d.html#pyart.util.angular_texture_2d">[docs]</a><span class="k">def</span> <span class="nf">angular_texture_2d</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">interval</span><span class="p">):</span>
+<div class="viewcode-block" id="angular_texture_2d"><a class="viewcode-back" href="../../../API/generated/pyart.util.angular_texture_2d.html#pyart.util.angular_texture_2d">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">angular_texture_2d</span><span class="p">(</span><span class="n">image</span><span class="p">,</span> <span class="n">N</span><span class="p">,</span> <span class="n">interval</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the angular texture of an image. Uses convolutions</span>
 <span class="sd">    in order to speed up texture calculation by a factor of ~50</span>
@@ -524,7 +524,7 @@
     <span class="k">return</span> <span class="n">std_dev</span></div>
 
 
-<div class="viewcode-block" id="rolling_window"><a class="viewcode-back" href="../../../API/generated/pyart.util.rolling_window.html#pyart.util.rolling_window">[docs]</a><span class="k">def</span> <span class="nf">rolling_window</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">window</span><span class="p">):</span>
+<div class="viewcode-block" id="rolling_window"><a class="viewcode-back" href="../../../API/generated/pyart.util.rolling_window.html#pyart.util.rolling_window">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">rolling_window</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">window</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create a rolling window object for application of functions</span>
 <span class="sd">    eg: result=np.ma.std(array, 11), 1).&quot;&quot;&quot;</span>
     <span class="n">shape</span> <span class="o">=</span> <span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="p">(</span><span class="n">a</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">window</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">window</span><span class="p">)</span>
@@ -532,7 +532,7 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">lib</span><span class="o">.</span><span class="n">stride_tricks</span><span class="o">.</span><span class="n">as_strided</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">shape</span><span class="o">=</span><span class="n">shape</span><span class="p">,</span> <span class="n">strides</span><span class="o">=</span><span class="n">strides</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="texture"><a class="viewcode-back" href="../../../API/generated/pyart.util.texture.html#pyart.util.texture">[docs]</a><span class="k">def</span> <span class="nf">texture</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
+<div class="viewcode-block" id="texture"><a class="viewcode-back" href="../../../API/generated/pyart.util.texture.html#pyart.util.texture">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">texture</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">var</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine a texture field using an 11pt stdev</span>
 <span class="sd">    texarray=texture(pyradarobj, field).&quot;&quot;&quot;</span>
     <span class="n">fld</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">var</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
@@ -546,7 +546,7 @@
     <span class="k">return</span> <span class="n">tex</span></div>
 
 
-<div class="viewcode-block" id="texture_along_ray"><a class="viewcode-back" href="../../../API/generated/pyart.util.texture_along_ray.html#pyart.util.texture_along_ray">[docs]</a><span class="k">def</span> <span class="nf">texture_along_ray</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">wind_size</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
+<div class="viewcode-block" id="texture_along_ray"><a class="viewcode-back" href="../../../API/generated/pyart.util.texture_along_ray.html#pyart.util.texture_along_ray">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">texture_along_ray</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">var</span><span class="p">,</span> <span class="n">wind_size</span><span class="o">=</span><span class="mi">7</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute field texture along ray using a user specified</span>
 <span class="sd">    window size.</span>

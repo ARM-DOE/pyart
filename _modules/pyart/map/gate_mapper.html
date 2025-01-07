@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,17 +463,17 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">KDTree</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">KDTree</span>
 
-<span class="kn">import</span> <span class="nn">pyart.filters</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyart.filters</span>
 
-<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">Radar</span><span class="p">,</span> <span class="n">geographic_to_cartesian</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Radar</span><span class="p">,</span> <span class="n">geographic_to_cartesian</span>
 
 
-<div class="viewcode-block" id="GateMapper"><a class="viewcode-back" href="../../../API/generated/pyart.map.GateMapper.html#pyart.map.GateMapper">[docs]</a><span class="k">class</span> <span class="nc">GateMapper</span><span class="p">:</span>
+<div class="viewcode-block" id="GateMapper"><a class="viewcode-back" href="../../../API/generated/pyart.map.GateMapper.html#pyart.map.GateMapper">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">GateMapper</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    The GateMapper class will, given one radar&#39;s gate, find the gate in another radar&#39;s volume</span>
 <span class="sd">    that is closest in location to the specified gate. GateMapper will use a kd-tree in order to generate a</span>
@@ -521,7 +521,7 @@
 <span class="sd">        The difference in time between the source and destination radar rays.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">src_radar</span><span class="p">:</span> <span class="n">Radar</span><span class="p">,</span>
         <span class="n">dest_radar</span><span class="p">:</span> <span class="n">Radar</span><span class="p">,</span>
@@ -559,7 +559,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_distance_tolerance</span> <span class="o">=</span> <span class="n">distance_tolerance</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">distance_tolerance</span> <span class="o">=</span> <span class="n">distance_tolerance</span>
 
-    <span class="k">def</span> <span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">:</span> <span class="nb">tuple</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the equivalent index in the destination radar&#39;s coordinates&quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="p">(</span>
             <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_index_map</span><span class="p">[</span><span class="n">key</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">key</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="mi">0</span><span class="p">]),</span>
@@ -571,7 +571,7 @@
             <span class="k">return</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">distance_tolerance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">distance_tolerance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Getter for distance_tolerance property of GateMapper class.</span>
 
@@ -583,7 +583,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distance_tolerance</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">time_tolerance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">time_tolerance</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Getter for time_tolerance property of GateMapper class.</span>
 
@@ -595,7 +595,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_time_tolerance</span>
 
     <span class="nd">@time_tolerance</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">time_tolerance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_tolerance</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">time_tolerance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">time_tolerance</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Setter for the time_tolerance property of GateMapper class. This will</span>
 <span class="sd">        also reset the mapping function inside GateMapper so that no additional</span>
@@ -610,7 +610,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">tolerance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_distance_tolerance</span>
 
     <span class="nd">@distance_tolerance</span><span class="o">.</span><span class="n">setter</span>
-    <span class="k">def</span> <span class="nf">distance_tolerance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance_tolerance</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">distance_tolerance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">distance_tolerance</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Setter for the distance_tolerance property of GateMapper class. This will</span>
 <span class="sd">        also reset the mapping function inside GateMapper so that no additional</span>
@@ -660,7 +660,7 @@
         <span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_distance_tolerance</span> <span class="o">=</span> <span class="n">distance_tolerance</span>
 
-<div class="viewcode-block" id="GateMapper.mapped_radar"><a class="viewcode-back" href="../../../API/generated/pyart.map.GateMapper.mapped_radar.html#pyart.map.GateMapper.mapped_radar">[docs]</a>    <span class="k">def</span> <span class="nf">mapped_radar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_list</span><span class="p">):</span>
+<div class="viewcode-block" id="GateMapper.mapped_radar"><a class="viewcode-back" href="../../../API/generated/pyart.map.GateMapper.mapped_radar.html#pyart.map.GateMapper.mapped_radar">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">mapped_radar</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_list</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        This returns a version of the destination radar with the fields in field_list from the source radar</span>
 <span class="sd">        mapped into the destination radar&#39;s coordinate system.</span>

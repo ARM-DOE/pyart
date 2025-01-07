@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,27 +463,27 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
 
     <span class="n">_XARRAY_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_XARRAY_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">FileMetadata</span>
-<span class="kn">from</span> <span class="nn">..core.radar_spectra</span> <span class="kn">import</span> <span class="n">RadarSpectra</span>
-<span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
-<span class="kn">from</span> <span class="nn">..io.common</span> <span class="kn">import</span> <span class="n">_test_arguments</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileMetadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.radar_spectra</span><span class="w"> </span><span class="kn">import</span> <span class="n">RadarSpectra</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">_test_arguments</span>
 
 <span class="n">KAZR_SPECTRA_FIELD_NAMES</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;spectra&quot;</span><span class="p">:</span> <span class="s2">&quot;spectra&quot;</span><span class="p">}</span>
 
 
-<div class="viewcode-block" id="read_kazr_spectra"><a class="viewcode-back" href="../../../API/generated/pyart.aux_io.read_kazr_spectra.html#pyart.aux_io.read_kazr_spectra">[docs]</a><span class="k">def</span> <span class="nf">read_kazr_spectra</span><span class="p">(</span>
+<div class="viewcode-block" id="read_kazr_spectra"><a class="viewcode-back" href="../../../API/generated/pyart.aux_io.read_kazr_spectra.html#pyart.aux_io.read_kazr_spectra">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">read_kazr_spectra</span><span class="p">(</span>
     <span class="n">filename</span><span class="p">,</span>
     <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -681,7 +681,7 @@
     <span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">_get_spectra</span><span class="p">(</span><span class="n">xrobj</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_spectra</span><span class="p">(</span><span class="n">xrobj</span><span class="p">,</span> <span class="n">time</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieves the spectra values using time and locator mask.&quot;&quot;&quot;</span>
     <span class="n">the_spectra_locs</span> <span class="o">=</span> <span class="n">xrobj</span><span class="o">.</span><span class="n">locator_mask</span><span class="o">.</span><span class="n">sel</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">)</span><span class="o">.</span><span class="n">values</span>
     <span class="n">the_spectra_loc</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">the_spectra_locs</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">xrobj</span><span class="o">.</span><span class="n">speclength</span><span class="o">.</span><span class="n">values</span><span class="p">)))</span>
@@ -694,7 +694,7 @@
     <span class="k">return</span> <span class="n">the_spectra_loc</span>
 
 
-<span class="k">def</span> <span class="nf">get_kazr_location</span><span class="p">(</span><span class="n">arm_site</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_kazr_location</span><span class="p">(</span><span class="n">arm_site</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the latitude, longitude and altitude of a ARM KAZR Radar.</span>
 

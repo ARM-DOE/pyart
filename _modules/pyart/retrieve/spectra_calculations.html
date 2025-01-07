@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -460,13 +460,13 @@
                    <h1>Source code for pyart.retrieve.spectra_calculations</h1><div class="highlight"><pre>
 <span></span><span class="sd">&quot;&quot;&quot; Module containing calculations for spectra moments. &quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_metadata</span>
-<span class="kn">from</span> <span class="nn">..util.hildebrand_sekhon</span> <span class="kn">import</span> <span class="n">estimate_noise_hs74</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_metadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.hildebrand_sekhon</span><span class="w"> </span><span class="kn">import</span> <span class="n">estimate_noise_hs74</span>
 
 
-<div class="viewcode-block" id="spectra_moments"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.spectra_moments.html#pyart.retrieve.spectra_moments">[docs]</a><span class="k">def</span> <span class="nf">spectra_moments</span><span class="p">(</span><span class="n">radar</span><span class="p">):</span>
+<div class="viewcode-block" id="spectra_moments"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.spectra_moments.html#pyart.retrieve.spectra_moments">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">spectra_moments</span><span class="p">(</span><span class="n">radar</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Retrieves the radar moments using a spectra radar object.</span>
 
 <span class="sd">    Parameter</span>
@@ -539,7 +539,7 @@
     <span class="k">return</span> <span class="n">field_list</span></div>
 
 
-<div class="viewcode-block" id="dealias_spectra"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.dealias_spectra.html#pyart.retrieve.dealias_spectra">[docs]</a><span class="k">def</span> <span class="nf">dealias_spectra</span><span class="p">(</span><span class="n">the_spectra</span><span class="p">,</span> <span class="n">vel_bins</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">left_limit</span><span class="p">,</span> <span class="n">right_limit</span><span class="p">):</span>
+<div class="viewcode-block" id="dealias_spectra"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.dealias_spectra.html#pyart.retrieve.dealias_spectra">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">dealias_spectra</span><span class="p">(</span><span class="n">the_spectra</span><span class="p">,</span> <span class="n">vel_bins</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">left_limit</span><span class="p">,</span> <span class="n">right_limit</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Dealias a spectra.</span>
 
 <span class="sd">    Parameters</span>
@@ -637,7 +637,7 @@
     <span class="k">return</span> <span class="n">new_spectra</span><span class="p">,</span> <span class="n">new_bins</span></div>
 
 
-<span class="k">def</span> <span class="nf">_get_limits_dealiased_spectra</span><span class="p">(</span><span class="n">the_spectra</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_limits_dealiased_spectra</span><span class="p">(</span><span class="n">the_spectra</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates limits for a dealiased spectra.&quot;&quot;&quot;</span>
     <span class="n">left</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">the_spectra</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="n">right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">the_spectra</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -661,7 +661,7 @@
     <span class="k">return</span> <span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">,</span> <span class="n">new_spec</span>
 
 
-<span class="k">def</span> <span class="nf">_get_reflectivity</span><span class="p">(</span><span class="n">spectra</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_reflectivity</span><span class="p">(</span><span class="n">spectra</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates reflectivity from a RadarSpectra object.&quot;&quot;&quot;</span>
     <span class="n">spectra_linear</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">spectra</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
     <span class="n">radar_constant</span> <span class="o">=</span> <span class="mf">1e18</span> <span class="o">*</span> <span class="n">wavelength</span><span class="o">**</span><span class="mi">4</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.93</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">5</span><span class="p">)</span>
@@ -680,7 +680,7 @@
     <span class="k">return</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">ref</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_get_mean_velocity</span><span class="p">(</span><span class="n">spectra</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_mean_velocity</span><span class="p">(</span><span class="n">spectra</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">ref</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates mean velocity from a RadarSpectra object.&quot;&quot;&quot;</span>
     <span class="n">spectra_linear</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">spectra</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
     <span class="n">radar_constant</span> <span class="o">=</span> <span class="mf">1e18</span> <span class="o">*</span> <span class="n">wavelength</span><span class="o">**</span><span class="mi">4</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.93</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">5</span><span class="p">)</span>
@@ -705,7 +705,7 @@
     <span class="k">return</span> <span class="n">mean_vel</span>
 
 
-<span class="k">def</span> <span class="nf">_get_spectral_width</span><span class="p">(</span><span class="n">spectra</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">mean_vel</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_spectral_width</span><span class="p">(</span><span class="n">spectra</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">mean_vel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates reflectivity from a RadarSpectra object.&quot;&quot;&quot;</span>
     <span class="n">spectra_linear</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">spectra</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
     <span class="n">radar_constant</span> <span class="o">=</span> <span class="mf">1e18</span> <span class="o">*</span> <span class="n">wavelength</span><span class="o">**</span><span class="mi">4</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.93</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">5</span><span class="p">)</span>
@@ -733,7 +733,7 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">spec_wid</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_get_skewness</span><span class="p">(</span><span class="n">spectra</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">mean_vel</span><span class="p">,</span> <span class="n">spec_width</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_skewness</span><span class="p">(</span><span class="n">spectra</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">mean_vel</span><span class="p">,</span> <span class="n">spec_width</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates skewness from a RadarSpectra object.&quot;&quot;&quot;</span>
     <span class="n">spectra_linear</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">spectra</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
     <span class="n">radar_constant</span> <span class="o">=</span> <span class="mf">1e18</span> <span class="o">*</span> <span class="n">wavelength</span><span class="o">**</span><span class="mi">4</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.93</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">5</span><span class="p">)</span>
@@ -761,7 +761,7 @@
     <span class="k">return</span> <span class="n">skew</span> <span class="o">/</span> <span class="n">spec_width</span><span class="o">**</span><span class="mi">3</span>
 
 
-<span class="k">def</span> <span class="nf">_get_kurtosis</span><span class="p">(</span><span class="n">spectra</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">mean_vel</span><span class="p">,</span> <span class="n">spec_width</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_kurtosis</span><span class="p">(</span><span class="n">spectra</span><span class="p">,</span> <span class="n">bins</span><span class="p">,</span> <span class="n">wavelength</span><span class="p">,</span> <span class="n">ref</span><span class="p">,</span> <span class="n">mean_vel</span><span class="p">,</span> <span class="n">spec_width</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates a Kurtosis field from a RadarSpectra object.&quot;&quot;&quot;</span>
     <span class="n">spectra_linear</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">spectra</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
     <span class="n">radar_constant</span> <span class="o">=</span> <span class="mf">1e18</span> <span class="o">*</span> <span class="n">wavelength</span><span class="o">**</span><span class="mi">4</span> <span class="o">/</span> <span class="p">(</span><span class="mf">0.93</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">5</span><span class="p">)</span>
@@ -788,7 +788,7 @@
     <span class="k">return</span> <span class="n">kurt</span> <span class="o">/</span> <span class="n">spec_width</span><span class="o">**</span><span class="mi">4</span>
 
 
-<span class="k">def</span> <span class="nf">_get_noise_floor_and_limits</span><span class="p">(</span><span class="n">the_spectra</span><span class="p">,</span> <span class="n">avg_window</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_noise_floor_and_limits</span><span class="p">(</span><span class="n">the_spectra</span><span class="p">,</span> <span class="n">avg_window</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates noise floor and limits from a RadarSpectra object.&quot;&quot;&quot;</span>
     <span class="n">lin_spectra</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="n">the_spectra</span> <span class="o">/</span> <span class="mf">10.0</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">avg_window</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>

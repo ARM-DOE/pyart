@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,18 +463,18 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">import</span> <span class="nn">dask</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">pint</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">signal</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">dask</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pint</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">signal</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_metadata</span>
-<span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_metadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.radar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Radar</span>
 
 
-<div class="viewcode-block" id="correct_noise_rhohv"><a class="viewcode-back" href="../../../API/generated/pyart.correct.correct_noise_rhohv.html#pyart.correct.correct_noise_rhohv">[docs]</a><span class="k">def</span> <span class="nf">correct_noise_rhohv</span><span class="p">(</span>
+<div class="viewcode-block" id="correct_noise_rhohv"><a class="viewcode-back" href="../../../API/generated/pyart.correct.correct_noise_rhohv.html#pyart.correct.correct_noise_rhohv">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">correct_noise_rhohv</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">urhohv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">snr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -562,7 +562,7 @@
     <span class="k">return</span> <span class="n">rhohv</span></div>
 
 
-<div class="viewcode-block" id="correct_bias"><a class="viewcode-back" href="../../../API/generated/pyart.correct.correct_bias.html#pyart.correct.correct_bias">[docs]</a><span class="k">def</span> <span class="nf">correct_bias</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">field_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="correct_bias"><a class="viewcode-back" href="../../../API/generated/pyart.correct.correct_bias.html#pyart.correct.correct_bias">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">correct_bias</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">bias</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">field_name</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Corrects a radar data bias. If field name is none the correction is</span>
 <span class="sd">    applied to horizontal reflectivity by default.</span>
@@ -605,7 +605,7 @@
     <span class="k">return</span> <span class="n">corr_field</span></div>
 
 
-<div class="viewcode-block" id="calc_zdr_offset"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calc_zdr_offset.html#pyart.correct.calc_zdr_offset">[docs]</a><span class="k">def</span> <span class="nf">calc_zdr_offset</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zdr_var</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="calc_zdr_offset"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calc_zdr_offset.html#pyart.correct.calc_zdr_offset">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">calc_zdr_offset</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height_range</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zdr_var</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Function for calculating the ZDR bias from a VPT scan.</span>
 
@@ -661,7 +661,7 @@
     <span class="k">return</span> <span class="n">results</span></div>
 
 
-<div class="viewcode-block" id="calc_cloud_mask"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calc_cloud_mask.html#pyart.correct.calc_cloud_mask">[docs]</a><span class="k">def</span> <span class="nf">calc_cloud_mask</span><span class="p">(</span>
+<div class="viewcode-block" id="calc_cloud_mask"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calc_cloud_mask.html#pyart.correct.calc_cloud_mask">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">calc_cloud_mask</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">field</span><span class="p">,</span>
     <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -759,7 +759,7 @@
     <span class="k">return</span> <span class="n">radar</span></div>
 
 
-<div class="viewcode-block" id="calc_noise_floor"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calc_noise_floor.html#pyart.correct.calc_noise_floor">[docs]</a><span class="k">def</span> <span class="nf">calc_noise_floor</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+<div class="viewcode-block" id="calc_noise_floor"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calc_noise_floor.html#pyart.correct.calc_noise_floor">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">calc_noise_floor</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculation for getting the noise floor</span>
 
@@ -805,7 +805,7 @@
     <span class="k">return</span> <span class="n">noise</span></div>
 
 
-<div class="viewcode-block" id="cloud_threshold"><a class="viewcode-back" href="../../../API/generated/pyart.correct.cloud_threshold.html#pyart.correct.cloud_threshold">[docs]</a><span class="k">def</span> <span class="nf">cloud_threshold</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_avg</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">nffts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="cloud_threshold"><a class="viewcode-back" href="../../../API/generated/pyart.correct.cloud_threshold.html#pyart.correct.cloud_threshold">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">cloud_threshold</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_avg</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">nffts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates the noise floor from a cloud threshold.</span>
 
@@ -872,7 +872,7 @@
     <span class="k">return</span> <span class="n">result</span></div>
 
 
-<div class="viewcode-block" id="range_correction"><a class="viewcode-back" href="../../../API/generated/pyart.correct.range_correction.html#pyart.correct.range_correction">[docs]</a><span class="k">def</span> <span class="nf">range_correction</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
+<div class="viewcode-block" id="range_correction"><a class="viewcode-back" href="../../../API/generated/pyart.correct.range_correction.html#pyart.correct.range_correction">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">range_correction</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Corrects reflectivity for range to help get the</span>
 <span class="sd">    correct noise floor values</span>
@@ -931,7 +931,7 @@
     <span class="k">return</span> <span class="n">data</span></div>
 
 
-<span class="k">def</span> <span class="nf">_first_mask</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">noise_threshold</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_first_mask</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">noise_threshold</span><span class="p">):</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
     <span class="n">mask</span><span class="p">[</span><span class="n">data</span> <span class="o">&gt;</span> <span class="n">noise_threshold</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">mask</span>

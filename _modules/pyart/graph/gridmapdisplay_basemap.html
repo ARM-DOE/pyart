@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,22 +463,22 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span> <span class="nn">mpl_toolkits.basemap</span> <span class="kn">import</span> <span class="n">Basemap</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">mpl_toolkits.basemap</span><span class="w"> </span><span class="kn">import</span> <span class="n">Basemap</span>
 
     <span class="n">_BASEMAP_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_BASEMAP_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">..core.transforms</span> <span class="kn">import</span> <span class="n">_interpolate_axes_edges</span>
-<span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">common</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">_interpolate_axes_edges</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">common</span>
 
 
-<div class="viewcode-block" id="GridMapDisplayBasemap"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.html#pyart.graph.GridMapDisplayBasemap">[docs]</a><span class="k">class</span> <span class="nc">GridMapDisplayBasemap</span><span class="p">:</span>
+<div class="viewcode-block" id="GridMapDisplayBasemap"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.html#pyart.graph.GridMapDisplayBasemap">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">GridMapDisplayBasemap</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class for creating plots from a grid object on top of a Basemap.</span>
 
@@ -505,7 +505,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;initalize the object.&quot;&quot;&quot;</span>
         <span class="c1"># check that basemap is available</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_BASEMAP_AVAILABLE</span><span class="p">:</span>
@@ -521,7 +521,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">=</span> <span class="s2">&quot;origin&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span> <span class="o">=</span> <span class="kc">None</span>
 
-<div class="viewcode-block" id="GridMapDisplayBasemap.plot_basemap"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.plot_basemap.html#pyart.graph.GridMapDisplayBasemap.plot_basemap">[docs]</a>    <span class="k">def</span> <span class="nf">plot_basemap</span><span class="p">(</span>
+<div class="viewcode-block" id="GridMapDisplayBasemap.plot_basemap"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.plot_basemap.html#pyart.graph.GridMapDisplayBasemap.plot_basemap">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_basemap</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">lat_lines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">lon_lines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -587,7 +587,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span><span class="o">.</span><span class="n">drawparallels</span><span class="p">(</span><span class="n">lat_lines</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="kc">True</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">])</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span><span class="o">.</span><span class="n">drawmeridians</span><span class="p">(</span><span class="n">lon_lines</span><span class="p">,</span> <span class="n">labels</span><span class="o">=</span><span class="p">[</span><span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">False</span><span class="p">,</span> <span class="kc">True</span><span class="p">])</span></div>
 
-<div class="viewcode-block" id="GridMapDisplayBasemap.plot_grid"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.plot_grid.html#pyart.graph.GridMapDisplayBasemap.plot_grid">[docs]</a>    <span class="k">def</span> <span class="nf">plot_grid</span><span class="p">(</span>
+<div class="viewcode-block" id="GridMapDisplayBasemap.plot_grid"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.plot_grid.html#pyart.graph.GridMapDisplayBasemap.plot_grid">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_grid</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">field</span><span class="p">,</span>
         <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -728,7 +728,7 @@
 
         <span class="k">return</span></div>
 
-<div class="viewcode-block" id="GridMapDisplayBasemap.plot_crosshairs"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.plot_crosshairs.html#pyart.graph.GridMapDisplayBasemap.plot_crosshairs">[docs]</a>    <span class="k">def</span> <span class="nf">plot_crosshairs</span><span class="p">(</span>
+<div class="viewcode-block" id="GridMapDisplayBasemap.plot_crosshairs"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.plot_crosshairs.html#pyart.graph.GridMapDisplayBasemap.plot_crosshairs">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_crosshairs</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="s2">&quot;r--&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span>
     <span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -763,7 +763,7 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_lat</span><span class="p">,</span> <span class="n">y_lat</span><span class="p">,</span> <span class="n">line_style</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">)</span>
         <span class="k">return</span></div>
 
-<div class="viewcode-block" id="GridMapDisplayBasemap.plot_latitude_slice"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.plot_latitude_slice.html#pyart.graph.GridMapDisplayBasemap.plot_latitude_slice">[docs]</a>    <span class="k">def</span> <span class="nf">plot_latitude_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="GridMapDisplayBasemap.plot_latitude_slice"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.plot_latitude_slice.html#pyart.graph.GridMapDisplayBasemap.plot_latitude_slice">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_latitude_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a slice along a given latitude.</span>
 
@@ -783,7 +783,7 @@
         <span class="n">_</span><span class="p">,</span> <span class="n">y_index</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_nearest_grid_indices</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plot_latitudinal_level</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">field</span><span class="p">,</span> <span class="n">y_index</span><span class="o">=</span><span class="n">y_index</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplayBasemap.plot_latitudinal_level"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.plot_latitudinal_level.html#pyart.graph.GridMapDisplayBasemap.plot_latitudinal_level">[docs]</a>    <span class="k">def</span> <span class="nf">plot_latitudinal_level</span><span class="p">(</span>
+<div class="viewcode-block" id="GridMapDisplayBasemap.plot_latitudinal_level"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.plot_latitudinal_level.html#pyart.graph.GridMapDisplayBasemap.plot_latitudinal_level">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_latitudinal_level</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">field</span><span class="p">,</span>
         <span class="n">y_index</span><span class="p">,</span>
@@ -922,7 +922,7 @@
             <span class="p">)</span>
         <span class="k">return</span></div>
 
-<div class="viewcode-block" id="GridMapDisplayBasemap.plot_longitude_slice"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.plot_longitude_slice.html#pyart.graph.GridMapDisplayBasemap.plot_longitude_slice">[docs]</a>    <span class="k">def</span> <span class="nf">plot_longitude_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="GridMapDisplayBasemap.plot_longitude_slice"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.plot_longitude_slice.html#pyart.graph.GridMapDisplayBasemap.plot_longitude_slice">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_longitude_slice</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">lon</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plot a slice along a given longitude.</span>
 
@@ -941,7 +941,7 @@
         <span class="n">x_index</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_find_nearest_grid_indices</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">plot_longitudinal_level</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="n">field</span><span class="p">,</span> <span class="n">x_index</span><span class="o">=</span><span class="n">x_index</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplayBasemap.plot_longitudinal_level"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.plot_longitudinal_level.html#pyart.graph.GridMapDisplayBasemap.plot_longitudinal_level">[docs]</a>    <span class="k">def</span> <span class="nf">plot_longitudinal_level</span><span class="p">(</span>
+<div class="viewcode-block" id="GridMapDisplayBasemap.plot_longitudinal_level"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.plot_longitudinal_level.html#pyart.graph.GridMapDisplayBasemap.plot_longitudinal_level">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_longitudinal_level</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">field</span><span class="p">,</span>
         <span class="n">x_index</span><span class="p">,</span>
@@ -1080,7 +1080,7 @@
             <span class="p">)</span>
         <span class="k">return</span></div>
 
-<div class="viewcode-block" id="GridMapDisplayBasemap.plot_colorbar"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.plot_colorbar.html#pyart.graph.GridMapDisplayBasemap.plot_colorbar">[docs]</a>    <span class="k">def</span> <span class="nf">plot_colorbar</span><span class="p">(</span>
+<div class="viewcode-block" id="GridMapDisplayBasemap.plot_colorbar"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.plot_colorbar.html#pyart.graph.GridMapDisplayBasemap.plot_colorbar">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_colorbar</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">mappable</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">orientation</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span><span class="p">,</span>
@@ -1146,7 +1146,7 @@
         <span class="n">cb</span><span class="o">.</span><span class="n">set_label</span><span class="p">(</span><span class="n">label</span><span class="p">)</span>
         <span class="k">return</span></div>
 
-    <span class="k">def</span> <span class="nf">_make_basemap</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_make_basemap</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">resolution</span><span class="o">=</span><span class="s2">&quot;l&quot;</span><span class="p">,</span>
         <span class="n">area_thresh</span><span class="o">=</span><span class="mi">10000</span><span class="p">,</span>
@@ -1234,7 +1234,7 @@
 
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span>
 
-    <span class="k">def</span> <span class="nf">_find_nearest_grid_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_nearest_grid_indices</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Find the nearest x, y grid indices for a given latitude and longitude.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -1249,19 +1249,19 @@
     <span class="c1"># Plot adjusting methods #</span>
     <span class="c1">##########################</span>
 
-    <span class="k">def</span> <span class="nf">_get_label_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_label_x</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get default label for x units.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;East West distance from &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s2">&quot; (km)&quot;</span>
 
-    <span class="k">def</span> <span class="nf">_get_label_y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_label_y</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get default label for y units.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;North South distance from &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s2">&quot; (km)&quot;</span>
 
-    <span class="k">def</span> <span class="nf">_get_label_z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_label_z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Get default label for z units.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="s2">&quot;Distance Above &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s2">&quot;  (km)&quot;</span>
 
-    <span class="k">def</span> <span class="nf">_label_axes_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis_labels</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_label_axes_grid</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis_labels</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the x and y axis labels for a grid plot.&quot;&quot;&quot;</span>
         <span class="n">x_label</span><span class="p">,</span> <span class="n">y_label</span> <span class="o">=</span> <span class="n">axis_labels</span>
         <span class="k">if</span> <span class="n">x_label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1271,7 +1271,7 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_label_axes_longitude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis_labels</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_label_axes_longitude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis_labels</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the x and y axis labels for a longitude slice.&quot;&quot;&quot;</span>
         <span class="n">x_label</span><span class="p">,</span> <span class="n">y_label</span> <span class="o">=</span> <span class="n">axis_labels</span>
         <span class="k">if</span> <span class="n">x_label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1281,7 +1281,7 @@
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="n">x_label</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="n">y_label</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">_label_axes_latitude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis_labels</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_label_axes_latitude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">axis_labels</span><span class="p">,</span> <span class="n">ax</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set the x and y axis labels for a latitude slice.&quot;&quot;&quot;</span>
         <span class="n">x_label</span><span class="p">,</span> <span class="n">y_label</span> <span class="o">=</span> <span class="n">axis_labels</span>
         <span class="k">if</span> <span class="n">x_label</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -1295,7 +1295,7 @@
     <span class="c1"># name generator methods #</span>
     <span class="c1">##########################</span>
 
-<div class="viewcode-block" id="GridMapDisplayBasemap.generate_filename"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.generate_filename.html#pyart.graph.GridMapDisplayBasemap.generate_filename">[docs]</a>    <span class="k">def</span> <span class="nf">generate_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">):</span>
+<div class="viewcode-block" id="GridMapDisplayBasemap.generate_filename"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.generate_filename.html#pyart.graph.GridMapDisplayBasemap.generate_filename">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate_filename</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">ext</span><span class="o">=</span><span class="s2">&quot;png&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a filename for a grid plot.</span>
 
@@ -1319,7 +1319,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">common</span><span class="o">.</span><span class="n">generate_grid_filename</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">ext</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplayBasemap.generate_grid_title"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.generate_grid_title.html#pyart.graph.GridMapDisplayBasemap.generate_grid_title">[docs]</a>    <span class="k">def</span> <span class="nf">generate_grid_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+<div class="viewcode-block" id="GridMapDisplayBasemap.generate_grid_title"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.generate_grid_title.html#pyart.graph.GridMapDisplayBasemap.generate_grid_title">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate_grid_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a title for a plot.</span>
 
@@ -1338,7 +1338,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">common</span><span class="o">.</span><span class="n">generate_grid_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplayBasemap.generate_longitudinal_level_title"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.generate_longitudinal_level_title.html#pyart.graph.GridMapDisplayBasemap.generate_longitudinal_level_title">[docs]</a>    <span class="k">def</span> <span class="nf">generate_longitudinal_level_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+<div class="viewcode-block" id="GridMapDisplayBasemap.generate_longitudinal_level_title"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.generate_longitudinal_level_title.html#pyart.graph.GridMapDisplayBasemap.generate_longitudinal_level_title">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate_longitudinal_level_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a title for a plot.</span>
 
@@ -1357,7 +1357,7 @@
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">common</span><span class="o">.</span><span class="n">generate_longitudinal_level_title</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">grid</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="GridMapDisplayBasemap.generate_latitudinal_level_title"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.generate_latitudinal_level_title.html#pyart.graph.GridMapDisplayBasemap.generate_latitudinal_level_title">[docs]</a>    <span class="k">def</span> <span class="nf">generate_latitudinal_level_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
+<div class="viewcode-block" id="GridMapDisplayBasemap.generate_latitudinal_level_title"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.generate_latitudinal_level_title.html#pyart.graph.GridMapDisplayBasemap.generate_latitudinal_level_title">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">generate_latitudinal_level_title</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">level</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Generate a title for a plot.</span>
 
@@ -1380,7 +1380,7 @@
     <span class="c1">#      get methods       #</span>
     <span class="c1">##########################</span>
 
-<div class="viewcode-block" id="GridMapDisplayBasemap.get_basemap"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.get_basemap.html#pyart.graph.GridMapDisplayBasemap.get_basemap">[docs]</a>    <span class="k">def</span> <span class="nf">get_basemap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="GridMapDisplayBasemap.get_basemap"><a class="viewcode-back" href="../../../API/generated/pyart.graph.GridMapDisplayBasemap.get_basemap.html#pyart.graph.GridMapDisplayBasemap.get_basemap">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_basemap</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;get basemap of the plot&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">basemap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_make_basemap</span><span class="p">()</span>

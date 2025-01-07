@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,17 +463,17 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">netCDF4</span> <span class="kn">import</span> <span class="n">date2num</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">netCDF4</span><span class="w"> </span><span class="kn">import</span> <span class="n">date2num</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">FileMetadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
-<span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
-<span class="kn">from</span> <span class="nn">..lazydict</span> <span class="kn">import</span> <span class="n">LazyLoadDict</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">mdv_common</span>
-<span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">make_time_unit_str</span><span class="p">,</span> <span class="n">prepare_for_read</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileMetadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.radar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Radar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..lazydict</span><span class="w"> </span><span class="kn">import</span> <span class="n">LazyLoadDict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">mdv_common</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">make_time_unit_str</span><span class="p">,</span> <span class="n">prepare_for_read</span>
 
 
-<div class="viewcode-block" id="read_mdv"><a class="viewcode-back" href="../../../API/generated/pyart.io.read_mdv.html#pyart.io.read_mdv">[docs]</a><span class="k">def</span> <span class="nf">read_mdv</span><span class="p">(</span>
+<div class="viewcode-block" id="read_mdv"><a class="viewcode-back" href="../../../API/generated/pyart.io.read_mdv.html#pyart.io.read_mdv">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">read_mdv</span><span class="p">(</span>
     <span class="n">filename</span><span class="p">,</span>
     <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>

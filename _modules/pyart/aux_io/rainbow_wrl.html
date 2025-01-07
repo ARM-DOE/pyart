@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -464,29 +464,29 @@
 <span class="sd">&quot;&quot;&quot;</span>
 
 <span class="c1"># specific modules for this function</span>
-<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">wradlib</span>  <span class="c1"># noqa</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">wradlib</span>  <span class="c1"># noqa</span>
 
     <span class="n">_WRADLIB_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="c1"># `read_rainbow` as of wradlib version 1.0.0</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">wradlib.io</span> <span class="kn">import</span> <span class="n">read_Rainbow</span> <span class="k">as</span> <span class="n">read_rainbow</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">wradlib.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_Rainbow</span> <span class="k">as</span> <span class="n">read_rainbow</span>
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-        <span class="kn">from</span> <span class="nn">wradlib.io</span> <span class="kn">import</span> <span class="n">read_rainbow</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">wradlib.io</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_rainbow</span>
 <span class="k">except</span><span class="p">:</span>
     <span class="n">_WRADLIB_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 
-<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">FileMetadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
-<span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
-<span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
-<span class="kn">from</span> <span class="nn">..io.common</span> <span class="kn">import</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">make_time_unit_str</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileMetadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.radar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Radar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">make_time_unit_str</span>
 
 <span class="n">RAINBOW_FIELD_NAMES</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="s2">&quot;spectrum_width&quot;</span><span class="p">,</span>
@@ -520,7 +520,7 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="read_rainbow_wrl"><a class="viewcode-back" href="../../../API/generated/pyart.aux_io.read_rainbow_wrl.html#pyart.aux_io.read_rainbow_wrl">[docs]</a><span class="k">def</span> <span class="nf">read_rainbow_wrl</span><span class="p">(</span>
+<div class="viewcode-block" id="read_rainbow_wrl"><a class="viewcode-back" href="../../../API/generated/pyart.aux_io.read_rainbow_wrl.html#pyart.aux_io.read_rainbow_wrl">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">read_rainbow_wrl</span><span class="p">(</span>
     <span class="n">filename</span><span class="p">,</span>
     <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -863,7 +863,7 @@
     <span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">_get_angle</span><span class="p">(</span><span class="n">ray_info</span><span class="p">,</span> <span class="n">angle_step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scan_type</span><span class="o">=</span><span class="s2">&quot;ppi&quot;</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_angle</span><span class="p">(</span><span class="n">ray_info</span><span class="p">,</span> <span class="n">angle_step</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">scan_type</span><span class="o">=</span><span class="s2">&quot;ppi&quot;</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    obtains the ray angle start, stop and center</span>
 
@@ -889,7 +889,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="n">bin_to_deg</span> <span class="o">=</span> <span class="mf">360.0</span> <span class="o">/</span> <span class="mf">65536.0</span>
 
-    <span class="k">def</span> <span class="nf">_extract_angles</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_extract_angles</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
         <span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data</span> <span class="o">*</span> <span class="n">bin_to_deg</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">scan_type</span> <span class="o">==</span> <span class="s2">&quot;rhi&quot;</span><span class="p">:</span>
             <span class="n">ind</span> <span class="o">=</span> <span class="p">(</span><span class="n">angle</span> <span class="o">&gt;</span> <span class="mf">225.0</span><span class="p">)</span><span class="o">.</span><span class="n">nonzero</span><span class="p">()</span>
@@ -915,7 +915,7 @@
     <span class="k">return</span> <span class="n">moving_angle</span><span class="p">,</span> <span class="n">angle_start</span><span class="p">,</span> <span class="n">angle_stop</span>
 
 
-<span class="k">def</span> <span class="nf">_get_data</span><span class="p">(</span><span class="n">rawdata</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">,</span> <span class="n">maxbin</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_data</span><span class="p">(</span><span class="n">rawdata</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">,</span> <span class="n">maxbin</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Obtains the raw data</span>
 
@@ -966,7 +966,7 @@
     <span class="k">return</span> <span class="n">masked_data</span>
 
 
-<span class="k">def</span> <span class="nf">_get_time</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_time</span><span class="p">(</span>
     <span class="n">date_sweep</span><span class="p">,</span>
     <span class="n">time_sweep</span><span class="p">,</span>
     <span class="n">first_angle_start</span><span class="p">,</span>

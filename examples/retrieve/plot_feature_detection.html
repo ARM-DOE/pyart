@@ -30,7 +30,7 @@
   <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -552,13 +552,13 @@ features in cool-season events.</p>
 <span class="c1"># License: BSD 3 clause</span>
 
 
-<span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
-<span class="kn">import</span> <span class="nn">matplotlib.colors</span> <span class="k">as</span> <span class="nn">mcolors</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">open_radar_data</span> <span class="kn">import</span> <span class="n">DATASETS</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cartopy.crs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ccrs</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mcolors</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">open_radar_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATASETS</span>
 
-<span class="kn">import</span> <span class="nn">pyart</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 </pre></div>
 </div>
 <section id="how-the-algorithm-works">
@@ -1254,7 +1254,7 @@ background (strong features) and features that are not very distinct from the ba
 <p>This last section shows how we can image mute the fields (Tomkins et al. 2022) and reduce the visual prominence of
 melting and mixed precipitation.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a function to quickly apply image muting to other fields</span>
-<span class="k">def</span> <span class="nf">quick_image_mute</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="numpy.ma.MaskedArray" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">muted_ref</span></a><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">quick_image_mute</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="numpy.ma.MaskedArray" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">muted_ref</span></a><span class="p">):</span>
     <span class="n">nonmuted_field</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ma.masked_where.html#numpy.ma.masked_where" title="numpy.ma.masked_where" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span></a><span class="p">(</span><span class="o">~</span><a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray.mask" title="numpy.ma.MaskedArray.mask" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-attribute"><span class="n">muted_ref</span><span class="o">.</span><span class="n">mask</span></a><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
     <span class="n">muted_field</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ma.masked_where.html#numpy.ma.masked_where" title="numpy.ma.masked_where" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray.mask" title="numpy.ma.MaskedArray.mask" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-attribute"><span class="n">muted_ref</span><span class="o">.</span><span class="n">mask</span></a><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
 
@@ -1340,7 +1340,7 @@ of heavy snow in radar data. Atmos. Meas. Tech., 15, 5515–5525,
 threshold method for automated detection of faint and strong echo features
 in radar observations of winter storms. Atmos. Meas. Tech., 17, 3377–3399,
 <a class="reference external" href="https://doi.org/10.5194/amt-17-3377-2024">https://doi.org/10.5194/amt-17-3377-2024</a></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 25.311 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 28.230 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-retrieve-plot-feature-detection-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/5930845ba241266919440c1a8dad75dd/plot_feature_detection.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_feature_detection.ipynb</span></code></a></p>

@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,30 +463,30 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">netCDF4</span> <span class="kn">import</span> <span class="n">num2date</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">netCDF4</span><span class="w"> </span><span class="kn">import</span> <span class="n">num2date</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">xarray</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span>
 
     <span class="n">_XARRAY_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_XARRAY_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">pyproj</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pyproj</span>
 
     <span class="n">_PYPROJ_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_PYPROJ_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_metadata</span>
-<span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
-<span class="kn">from</span> <span class="nn">..lazydict</span> <span class="kn">import</span> <span class="n">LazyLoadDict</span>
-<span class="kn">from</span> <span class="nn">.transforms</span> <span class="kn">import</span> <span class="n">cartesian_to_geographic</span><span class="p">,</span> <span class="n">cartesian_vectors_to_geographic</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_metadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..lazydict</span><span class="w"> </span><span class="kn">import</span> <span class="n">LazyLoadDict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">cartesian_to_geographic</span><span class="p">,</span> <span class="n">cartesian_vectors_to_geographic</span>
 
 
-<div class="viewcode-block" id="Grid"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.html#pyart.core.Grid">[docs]</a><span class="k">class</span> <span class="nc">Grid</span><span class="p">:</span>
+<div class="viewcode-block" id="Grid"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.html#pyart.core.Grid">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">Grid</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class for storing rectilinear gridded radar data in Cartesian coordinate.</span>
 
@@ -556,7 +556,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">time</span><span class="p">,</span>
         <span class="n">fields</span><span class="p">,</span>
@@ -607,7 +607,7 @@
 
         <span class="k">return</span>
 
-    <span class="k">def</span> <span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return object&#39;s state which can be pickled.&quot;&quot;&quot;</span>
         <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># copy the objects state</span>
         <span class="c1"># Remove unpicklable entries (those which are lazily loaded</span>
@@ -619,7 +619,7 @@
         <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;point_altitude&quot;</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">state</span>
 
-    <span class="k">def</span> <span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Restore unpicklable entries from pickled object.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_point_x_y_z</span><span class="p">()</span>
@@ -627,7 +627,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">init_point_altitude</span><span class="p">()</span>
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">projection_proj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">projection_proj</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="c1"># Proj instance as specified by the projection attribute.</span>
         <span class="c1"># Raises a ValueError if the pyart_aeqd projection is specified.</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_PYPROJ_AVAILABLE</span><span class="p">:</span>
@@ -647,7 +647,7 @@
         <span class="n">proj</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="n">projparams</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">proj</span>
 
-<div class="viewcode-block" id="Grid.get_projparams"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.get_projparams.html#pyart.core.Grid.get_projparams">[docs]</a>    <span class="k">def</span> <span class="nf">get_projparams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Grid.get_projparams"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.get_projparams.html#pyart.core.Grid.get_projparams">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_projparams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a projparam dict or str from the projection attribute.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="n">projparams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -658,7 +658,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span></div>
 
-    <span class="k">def</span> <span class="nf">_find_and_check_nradar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_find_and_check_nradar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return the number of radars which were used to create the grid.</span>
 
@@ -700,7 +700,7 @@
         <span class="k">return</span> <span class="n">nradar</span>
 
     <span class="c1"># Attribute init/reset methods</span>
-<div class="viewcode-block" id="Grid.init_point_x_y_z"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.init_point_x_y_z.html#pyart.core.Grid.init_point_x_y_z">[docs]</a>    <span class="k">def</span> <span class="nf">init_point_x_y_z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Grid.init_point_x_y_z"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.init_point_x_y_z.html#pyart.core.Grid.init_point_x_y_z">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">init_point_x_y_z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize or reset the point_{x, y, z} attributes.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_x</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;point_x&quot;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_x</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_point_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">))</span>
@@ -711,7 +711,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">point_z</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;point_z&quot;</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_z</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_point_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">))</span></div>
 
-<div class="viewcode-block" id="Grid.init_point_longitude_latitude"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.init_point_longitude_latitude.html#pyart.core.Grid.init_point_longitude_latitude">[docs]</a>    <span class="k">def</span> <span class="nf">init_point_longitude_latitude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Grid.init_point_longitude_latitude"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.init_point_longitude_latitude.html#pyart.core.Grid.init_point_longitude_latitude">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">init_point_longitude_latitude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Initialize or reset the point_{longitude, latitudes} attributes.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -723,13 +723,13 @@
         <span class="n">point_latitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_point_lon_lat_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_latitude</span> <span class="o">=</span> <span class="n">point_latitude</span></div>
 
-<div class="viewcode-block" id="Grid.init_point_altitude"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.init_point_altitude.html#pyart.core.Grid.init_point_altitude">[docs]</a>    <span class="k">def</span> <span class="nf">init_point_altitude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Grid.init_point_altitude"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.init_point_altitude.html#pyart.core.Grid.init_point_altitude">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">init_point_altitude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the point_altitude attribute.&quot;&quot;&quot;</span>
         <span class="n">point_altitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;point_altitude&quot;</span><span class="p">))</span>
         <span class="n">point_altitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_point_altitude_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_altitude</span> <span class="o">=</span> <span class="n">point_altitude</span></div>
 
-<div class="viewcode-block" id="Grid.write"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.write.html#pyart.core.Grid.write">[docs]</a>    <span class="k">def</span> <span class="nf">write</span><span class="p">(</span>
+<div class="viewcode-block" id="Grid.write"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.write.html#pyart.core.Grid.write">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">filename</span><span class="p">,</span>
         <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;NETCDF4&quot;</span><span class="p">,</span>
@@ -755,7 +755,7 @@
 
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="c1"># delayed import to avoid circular import</span>
-        <span class="kn">from</span> <span class="nn">..io.grid_io</span> <span class="kn">import</span> <span class="n">write_grid</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..io.grid_io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_grid</span>
 
         <span class="n">write_grid</span><span class="p">(</span>
             <span class="n">filename</span><span class="p">,</span>
@@ -765,7 +765,7 @@
             <span class="n">arm_alt_lat_lon_variables</span><span class="o">=</span><span class="n">arm_alt_lat_lon_variables</span><span class="p">,</span>
         <span class="p">)</span></div>
 
-<div class="viewcode-block" id="Grid.to_xarray"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.to_xarray.html#pyart.core.Grid.to_xarray">[docs]</a>    <span class="k">def</span> <span class="nf">to_xarray</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Grid.to_xarray"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.to_xarray.html#pyart.core.Grid.to_xarray">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">to_xarray</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Convert the Grid object to an xarray format.</span>
 
@@ -786,7 +786,7 @@
                 <span class="s2">&quot;Xarray is required to use Grid.to_xarray but is not installed!&quot;</span>
             <span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">_process_radar_name</span><span class="p">(</span><span class="n">radar_name</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">_process_radar_name</span><span class="p">(</span><span class="n">radar_name</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;Process radar_name to handle different formats.&quot;&quot;&quot;</span>
             <span class="k">if</span> <span class="n">radar_name</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;S&quot;</span> <span class="ow">and</span> <span class="n">radar_name</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="c1"># Join each row of bytes into a single byte string</span>
@@ -835,7 +835,7 @@
         <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">lon</span><span class="p">]:</span>
             <span class="n">attr</span><span class="o">.</span><span class="n">encoding</span><span class="p">[</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
-        <span class="kn">from</span> <span class="nn">..io.grid_io</span> <span class="kn">import</span> <span class="n">_make_coordinatesystem_dict</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">..io.grid_io</span><span class="w"> </span><span class="kn">import</span> <span class="n">_make_coordinatesystem_dict</span>
 
         <span class="n">ds</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s2">&quot;ProjectionCoordinateSystem&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xarray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
             <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">),</span>
@@ -912,7 +912,7 @@
         <span class="n">ds</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">ds</span></div>
 
-<div class="viewcode-block" id="Grid.add_field"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.add_field.html#pyart.core.Grid.add_field">[docs]</a>    <span class="k">def</span> <span class="nf">add_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Grid.add_field"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.add_field.html#pyart.core.Grid.add_field">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">add_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Add a field to the object.</span>
 
@@ -938,7 +938,7 @@
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">field_dict</span></div>
 
-<div class="viewcode-block" id="Grid.get_point_longitude_latitude"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.get_point_longitude_latitude.html#pyart.core.Grid.get_point_longitude_latitude">[docs]</a>    <span class="k">def</span> <span class="nf">get_point_longitude_latitude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="Grid.get_point_longitude_latitude"><a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.get_point_longitude_latitude.html#pyart.core.Grid.get_point_longitude_latitude">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">get_point_longitude_latitude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return arrays of longitude and latitude for a given grid height level.</span>
 
@@ -967,10 +967,10 @@
         <span class="k">return</span> <span class="n">cartesian_vectors_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">)</span></div></div>
 
 
-<span class="k">def</span> <span class="nf">_point_data_factory</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_point_data_factory</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a function which returns the locations of all points.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">_point_data</span><span class="p">():</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_point_data</span><span class="p">():</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The function which returns the locations of all points.&quot;&quot;&quot;</span>
         <span class="n">reg_x</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
         <span class="n">reg_y</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
@@ -986,10 +986,10 @@
     <span class="k">return</span> <span class="n">_point_data</span>
 
 
-<span class="k">def</span> <span class="nf">_point_lon_lat_data_factory</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_point_lon_lat_data_factory</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a function which returns the geographic locations of points.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">_point_lon_lat_data</span><span class="p">():</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_point_lon_lat_data</span><span class="p">():</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The function which returns the geographic point locations.&quot;&quot;&quot;</span>
         <span class="n">x</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">point_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
         <span class="n">y</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">point_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
@@ -1008,10 +1008,10 @@
     <span class="k">return</span> <span class="n">_point_lon_lat_data</span>
 
 
-<span class="k">def</span> <span class="nf">_point_altitude_data_factory</span><span class="p">(</span><span class="n">grid</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_point_altitude_data_factory</span><span class="p">(</span><span class="n">grid</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a function which returns the point altitudes.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">_point_altitude_data</span><span class="p">():</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_point_altitude_data</span><span class="p">():</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;The function which returns the point altitudes.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">grid</span><span class="o">.</span><span class="n">origin_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">grid</span><span class="o">.</span><span class="n">point_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 

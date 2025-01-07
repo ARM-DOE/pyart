@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,14 +463,14 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="c1"># For details on these computation see:</span>
 <span class="c1"># https://en.wikipedia.org/wiki/Directional_statistics</span>
 <span class="c1"># https://en.wikipedia.org/wiki/Mean_of_circular_quantities</span>
 
 
-<div class="viewcode-block" id="compute_directional_stats"><a class="viewcode-back" href="../../../API/generated/pyart.util.compute_directional_stats.html#pyart.util.compute_directional_stats">[docs]</a><span class="k">def</span> <span class="nf">compute_directional_stats</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">avg_type</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">nvalid_min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<div class="viewcode-block" id="compute_directional_stats"><a class="viewcode-back" href="../../../API/generated/pyart.util.compute_directional_stats.html#pyart.util.compute_directional_stats">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">compute_directional_stats</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">avg_type</span><span class="o">=</span><span class="s2">&quot;mean&quot;</span><span class="p">,</span> <span class="n">nvalid_min</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Computes the mean or the median along one of the axis (ray or range)</span>
 
@@ -505,7 +505,7 @@
     <span class="k">return</span> <span class="n">values</span><span class="p">,</span> <span class="n">nvalid</span></div>
 
 
-<div class="viewcode-block" id="mean_of_two_angles"><a class="viewcode-back" href="../../../API/generated/pyart.util.mean_of_two_angles.html#pyart.util.mean_of_two_angles">[docs]</a><span class="k">def</span> <span class="nf">mean_of_two_angles</span><span class="p">(</span><span class="n">angles1</span><span class="p">,</span> <span class="n">angles2</span><span class="p">):</span>
+<div class="viewcode-block" id="mean_of_two_angles"><a class="viewcode-back" href="../../../API/generated/pyart.util.mean_of_two_angles.html#pyart.util.mean_of_two_angles">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">mean_of_two_angles</span><span class="p">(</span><span class="n">angles1</span><span class="p">,</span> <span class="n">angles2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the element by element mean of two sets of angles.</span>
 
@@ -529,7 +529,7 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="mean_of_two_angles_deg"><a class="viewcode-back" href="../../../API/generated/pyart.util.mean_of_two_angles_deg.html#pyart.util.mean_of_two_angles_deg">[docs]</a><span class="k">def</span> <span class="nf">mean_of_two_angles_deg</span><span class="p">(</span><span class="n">angle1</span><span class="p">,</span> <span class="n">angle2</span><span class="p">):</span>
+<div class="viewcode-block" id="mean_of_two_angles_deg"><a class="viewcode-back" href="../../../API/generated/pyart.util.mean_of_two_angles_deg.html#pyart.util.mean_of_two_angles_deg">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">mean_of_two_angles_deg</span><span class="p">(</span><span class="n">angle1</span><span class="p">,</span> <span class="n">angle2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the element by element mean of two sets of angles in degrees.</span>
 
@@ -549,7 +549,7 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">mean_of_two_angles</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">angle1</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">angle2</span><span class="p">)))</span></div>
 
 
-<div class="viewcode-block" id="angular_mean"><a class="viewcode-back" href="../../../API/generated/pyart.util.angular_mean.html#pyart.util.angular_mean">[docs]</a><span class="k">def</span> <span class="nf">angular_mean</span><span class="p">(</span><span class="n">angles</span><span class="p">):</span>
+<div class="viewcode-block" id="angular_mean"><a class="viewcode-back" href="../../../API/generated/pyart.util.angular_mean.html#pyart.util.angular_mean">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">angular_mean</span><span class="p">(</span><span class="n">angles</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the mean of a distribution of angles in radians.</span>
 
@@ -570,7 +570,7 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">y</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">x</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="angular_std"><a class="viewcode-back" href="../../../API/generated/pyart.util.angular_std.html#pyart.util.angular_std">[docs]</a><span class="k">def</span> <span class="nf">angular_std</span><span class="p">(</span><span class="n">angles</span><span class="p">):</span>
+<div class="viewcode-block" id="angular_std"><a class="viewcode-back" href="../../../API/generated/pyart.util.angular_std.html#pyart.util.angular_std">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">angular_std</span><span class="p">(</span><span class="n">angles</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the standard deviation of a distribution of angles in radians.</span>
 
@@ -592,7 +592,7 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log</span><span class="p">(</span><span class="n">norm</span><span class="p">))</span></div>
 
 
-<div class="viewcode-block" id="angular_mean_deg"><a class="viewcode-back" href="../../../API/generated/pyart.util.angular_mean_deg.html#pyart.util.angular_mean_deg">[docs]</a><span class="k">def</span> <span class="nf">angular_mean_deg</span><span class="p">(</span><span class="n">angles</span><span class="p">):</span>
+<div class="viewcode-block" id="angular_mean_deg"><a class="viewcode-back" href="../../../API/generated/pyart.util.angular_mean_deg.html#pyart.util.angular_mean_deg">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">angular_mean_deg</span><span class="p">(</span><span class="n">angles</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the mean of a distribution of angles in degrees.</span>
 
@@ -610,7 +610,7 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">angular_mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">angles</span><span class="p">)))</span></div>
 
 
-<div class="viewcode-block" id="angular_std_deg"><a class="viewcode-back" href="../../../API/generated/pyart.util.angular_std_deg.html#pyart.util.angular_std_deg">[docs]</a><span class="k">def</span> <span class="nf">angular_std_deg</span><span class="p">(</span><span class="n">angles</span><span class="p">):</span>
+<div class="viewcode-block" id="angular_std_deg"><a class="viewcode-back" href="../../../API/generated/pyart.util.angular_std_deg.html#pyart.util.angular_std_deg">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">angular_std_deg</span><span class="p">(</span><span class="n">angles</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the standard deviation of a distribution of angles in degrees.</span>
 
@@ -628,7 +628,7 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">angular_std</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">angles</span><span class="p">)))</span></div>
 
 
-<div class="viewcode-block" id="interval_mean"><a class="viewcode-back" href="../../../API/generated/pyart.util.interval_mean.html#pyart.util.interval_mean">[docs]</a><span class="k">def</span> <span class="nf">interval_mean</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">interval_min</span><span class="p">,</span> <span class="n">interval_max</span><span class="p">):</span>
+<div class="viewcode-block" id="interval_mean"><a class="viewcode-back" href="../../../API/generated/pyart.util.interval_mean.html#pyart.util.interval_mean">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">interval_mean</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">interval_min</span><span class="p">,</span> <span class="n">interval_max</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the mean of a distribution within an interval.</span>
 
@@ -659,7 +659,7 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">a_mean</span> <span class="o">*</span> <span class="p">(</span><span class="n">half_width</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">)</span> <span class="o">+</span> <span class="n">center</span></div>
 
 
-<div class="viewcode-block" id="interval_std"><a class="viewcode-back" href="../../../API/generated/pyart.util.interval_std.html#pyart.util.interval_std">[docs]</a><span class="k">def</span> <span class="nf">interval_std</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">interval_min</span><span class="p">,</span> <span class="n">interval_max</span><span class="p">):</span>
+<div class="viewcode-block" id="interval_std"><a class="viewcode-back" href="../../../API/generated/pyart.util.interval_std.html#pyart.util.interval_std">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">interval_std</span><span class="p">(</span><span class="n">dist</span><span class="p">,</span> <span class="n">interval_min</span><span class="p">,</span> <span class="n">interval_max</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the standard deviation of a distribution within an interval.</span>
 

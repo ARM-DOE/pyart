@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,21 +463,21 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">h5py</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">h5py</span>
 
     <span class="n">_H5PY_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_H5PY_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">FileMetadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
-<span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
-<span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
-<span class="kn">from</span> <span class="nn">..io.common</span> <span class="kn">import</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">make_time_unit_str</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileMetadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.radar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Radar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">make_time_unit_str</span>
 
 <span class="n">ODIM_H5_FIELD_NAMES</span> <span class="o">=</span> <span class="p">{</span>
     <span class="s2">&quot;TH&quot;</span><span class="p">:</span> <span class="s2">&quot;total_power_horizontal&quot;</span><span class="p">,</span>  <span class="c1"># uncorrected reflectivity, horizontal</span>
@@ -499,7 +499,7 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="read_odim_h5"><a class="viewcode-back" href="../../../API/generated/pyart.aux_io.read_odim_h5.html#pyart.aux_io.read_odim_h5">[docs]</a><span class="k">def</span> <span class="nf">read_odim_h5</span><span class="p">(</span>
+<div class="viewcode-block" id="read_odim_h5"><a class="viewcode-back" href="../../../API/generated/pyart.aux_io.read_odim_h5.html#pyart.aux_io.read_odim_h5">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">read_odim_h5</span><span class="p">(</span>
     <span class="n">filename</span><span class="p">,</span>
     <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -869,7 +869,7 @@
     <span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">_to_str</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_to_str</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert bytes to str if necessary.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;decode&quot;</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
@@ -877,7 +877,7 @@
         <span class="k">return</span> <span class="n">text</span>
 
 
-<span class="k">def</span> <span class="nf">_get_odim_h5_sweep_data</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_odim_h5_sweep_data</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Get ODIM_H5 sweet data from an HDF5 group.&quot;&quot;&quot;</span>
 
     <span class="c1"># mask raw data</span>

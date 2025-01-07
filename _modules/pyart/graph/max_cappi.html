@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -470,20 +470,20 @@
 
 <span class="n">__all__</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;plot_maxcappi&quot;</span><span class="p">]</span>
 
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
-<span class="kn">import</span> <span class="nn">cartopy.feature</span> <span class="k">as</span> <span class="nn">feat</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">cartopy.mpl.gridliner</span> <span class="kn">import</span> <span class="n">LATITUDE_FORMATTER</span><span class="p">,</span> <span class="n">LONGITUDE_FORMATTER</span>
-<span class="kn">from</span> <span class="nn">matplotlib.ticker</span> <span class="kn">import</span> <span class="n">NullFormatter</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cartopy.crs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ccrs</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cartopy.feature</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">feat</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">cartopy.mpl.gridliner</span><span class="w"> </span><span class="kn">import</span> <span class="n">LATITUDE_FORMATTER</span><span class="p">,</span> <span class="n">LONGITUDE_FORMATTER</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">matplotlib.ticker</span><span class="w"> </span><span class="kn">import</span> <span class="n">NullFormatter</span>
 
 <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="plot_maxcappi"><a class="viewcode-back" href="../../../API/generated/pyart.graph.plot_maxcappi.html#pyart.graph.plot_maxcappi">[docs]</a><span class="k">def</span> <span class="nf">plot_maxcappi</span><span class="p">(</span>
+<div class="viewcode-block" id="plot_maxcappi"><a class="viewcode-back" href="../../../API/generated/pyart.graph.plot_maxcappi.html#pyart.graph.plot_maxcappi">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">plot_maxcappi</span><span class="p">(</span>
     <span class="n">grid</span><span class="p">,</span>
     <span class="n">field</span><span class="p">,</span>
     <span class="n">cmap</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -603,7 +603,7 @@
     <span class="k">if</span> <span class="n">title</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Max-</span><span class="si">{</span><span class="n">field</span><span class="o">.</span><span class="n">upper</span><span class="p">()[:</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
 
-    <span class="k">def</span> <span class="nf">plot_range_rings</span><span class="p">(</span><span class="n">ax_xy</span><span class="p">,</span> <span class="n">max_range</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_range_rings</span><span class="p">(</span><span class="n">ax_xy</span><span class="p">,</span> <span class="n">max_range</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Plots range rings at 50 km intervals.</span>
 
@@ -635,7 +635,7 @@
 
         <span class="n">ax_xy</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">,</span> <span class="n">prop</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;weight&quot;</span><span class="p">:</span> <span class="s2">&quot;normal&quot;</span><span class="p">,</span> <span class="s2">&quot;size&quot;</span><span class="p">:</span> <span class="mi">8</span><span class="p">})</span>
 
-    <span class="k">def</span> <span class="nf">_get_projection</span><span class="p">(</span><span class="n">ds</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_projection</span><span class="p">(</span><span class="n">ds</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Determine the central latitude and longitude from a dataset</span>
 <span class="sd">        and return the corresponding projection.</span>
@@ -653,7 +653,7 @@
 <span class="sd">            calculated latitude and longitude.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
 
-        <span class="k">def</span> <span class="nf">get_coord_or_attr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">coord_name</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">):</span>
+        <span class="k">def</span><span class="w"> </span><span class="nf">get_coord_or_attr</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">coord_name</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">):</span>
 <span class="w">            </span><span class="sd">&quot;&quot;&quot;Helper function to get a coordinate or attribute, or</span>
 <span class="sd">            calculate median if available.</span>
 <span class="sd">            &quot;&quot;&quot;</span>
@@ -845,7 +845,7 @@
         <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span></div>
 
 
-<span class="k">def</span> <span class="nf">map_features</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">lat_lines</span><span class="p">,</span> <span class="n">lon_lines</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">map_features</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">lat_lines</span><span class="p">,</span> <span class="n">lon_lines</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Adds map features and gridlines to the plot.</span>
 
@@ -912,7 +912,7 @@
         <span class="c1"># Label the end-points of the gridlines using custom tick makers</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">LONGITUDE_FORMATTER</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">set_major_formatter</span><span class="p">(</span><span class="n">LATITUDE_FORMATTER</span><span class="p">)</span>
-        <span class="kn">from</span> <span class="nn">pyart.graph.gridmapdisplay</span> <span class="kn">import</span> <span class="n">lambert_xticks</span><span class="p">,</span> <span class="n">lambert_yticks</span>
+        <span class="kn">from</span><span class="w"> </span><span class="nn">pyart.graph.gridmapdisplay</span><span class="w"> </span><span class="kn">import</span> <span class="n">lambert_xticks</span><span class="p">,</span> <span class="n">lambert_yticks</span>
 
         <span class="n">lambert_xticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">lon_lines</span><span class="p">)</span>
         <span class="n">lambert_yticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">lat_lines</span><span class="p">)</span>

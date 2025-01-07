@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -465,23 +465,23 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="k">try</span><span class="p">:</span>
-    <span class="kn">import</span> <span class="nn">pyproj</span>
+    <span class="kn">import</span><span class="w"> </span><span class="nn">pyproj</span>
 
     <span class="n">_PYPROJ_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
 <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
     <span class="n">_PYPROJ_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
 
-<span class="kn">from</span> <span class="nn">..exceptions</span> <span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
 
 <span class="n">PI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span>
 
 
-<div class="viewcode-block" id="antenna_to_cartesian"><a class="viewcode-back" href="../../../API/generated/pyart.core.antenna_to_cartesian.html#pyart.core.antenna_to_cartesian">[docs]</a><span class="k">def</span> <span class="nf">antenna_to_cartesian</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span><span class="p">):</span>
+<div class="viewcode-block" id="antenna_to_cartesian"><a class="viewcode-back" href="../../../API/generated/pyart.core.antenna_to_cartesian.html#pyart.core.antenna_to_cartesian">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">antenna_to_cartesian</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return Cartesian coordinates from antenna coordinates.</span>
 
@@ -538,7 +538,7 @@
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span></div>
 
 
-<div class="viewcode-block" id="cartesian_to_antenna"><a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_to_antenna.html#pyart.core.cartesian_to_antenna">[docs]</a><span class="k">def</span> <span class="nf">cartesian_to_antenna</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
+<div class="viewcode-block" id="cartesian_to_antenna"><a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_to_antenna.html#pyart.core.cartesian_to_antenna">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">cartesian_to_antenna</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns antenna coordinates from Cartesian coordinates.</span>
 
@@ -565,7 +565,7 @@
     <span class="k">return</span> <span class="n">ranges</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span></div>
 
 
-<div class="viewcode-block" id="antenna_vectors_to_cartesian"><a class="viewcode-back" href="../../../API/generated/pyart.core.antenna_vectors_to_cartesian.html#pyart.core.antenna_vectors_to_cartesian">[docs]</a><span class="k">def</span> <span class="nf">antenna_vectors_to_cartesian</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="antenna_vectors_to_cartesian"><a class="viewcode-back" href="../../../API/generated/pyart.core.antenna_vectors_to_cartesian.html#pyart.core.antenna_vectors_to_cartesian">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">antenna_vectors_to_cartesian</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate Cartesian coordinate for gates from antenna coordinate vectors.</span>
 
@@ -606,7 +606,7 @@
     <span class="k">return</span> <span class="n">antenna_to_cartesian</span><span class="p">(</span><span class="n">rg</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="n">azg</span><span class="p">,</span> <span class="n">eleg</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">_interpolate_range_edges</span><span class="p">(</span><span class="n">ranges</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_interpolate_range_edges</span><span class="p">(</span><span class="n">ranges</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpolate the edges of the range gates from their centers.&quot;&quot;&quot;</span>
     <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">ranges</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ranges</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
     <span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">ranges</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ranges</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mf">2.0</span>
@@ -616,7 +616,7 @@
     <span class="k">return</span> <span class="n">edges</span>
 
 
-<span class="k">def</span> <span class="nf">_interpolate_elevation_edges</span><span class="p">(</span><span class="n">elevations</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_interpolate_elevation_edges</span><span class="p">(</span><span class="n">elevations</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpolate the edges of the elevation angles from their centers.&quot;&quot;&quot;</span>
     <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">elevations</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">elevations</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
     <span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">elevations</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">elevations</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mf">2.0</span>
@@ -627,7 +627,7 @@
     <span class="k">return</span> <span class="n">edges</span>
 
 
-<span class="k">def</span> <span class="nf">_interpolate_azimuth_edges</span><span class="p">(</span><span class="n">azimuths</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_interpolate_azimuth_edges</span><span class="p">(</span><span class="n">azimuths</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpolate the edges of the azimuth angles from their centers.&quot;&quot;&quot;</span>
     <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">azimuths</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">azimuths</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
     <span class="c1"># perform interpolation and extrapolation in complex plane to</span>
@@ -646,7 +646,7 @@
     <span class="k">return</span> <span class="n">edges</span>
 
 
-<span class="k">def</span> <span class="nf">_half_angle_complex</span><span class="p">(</span><span class="n">complex_angle1</span><span class="p">,</span> <span class="n">complex_angle2</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_half_angle_complex</span><span class="p">(</span><span class="n">complex_angle1</span><span class="p">,</span> <span class="n">complex_angle2</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return half the angle between complex numbers on the unit circle.</span>
 
@@ -671,7 +671,7 @@
     <span class="k">return</span> <span class="n">half_angle_deg</span>
 
 
-<span class="k">def</span> <span class="nf">_interpolate_axes_edges</span><span class="p">(</span><span class="n">axes</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_interpolate_axes_edges</span><span class="p">(</span><span class="n">axes</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpolate the edges of the axes gates from their centers.&quot;&quot;&quot;</span>
     <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">axes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">axes</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
     <span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">axes</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mf">2.0</span>
@@ -680,7 +680,7 @@
     <span class="k">return</span> <span class="n">edges</span>
 
 
-<span class="k">def</span> <span class="nf">antenna_to_cartesian_track_relative</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">rot</span><span class="p">,</span> <span class="n">roll</span><span class="p">,</span> <span class="n">drift</span><span class="p">,</span> <span class="n">tilt</span><span class="p">,</span> <span class="n">pitch</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">antenna_to_cartesian_track_relative</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">rot</span><span class="p">,</span> <span class="n">roll</span><span class="p">,</span> <span class="n">drift</span><span class="p">,</span> <span class="n">tilt</span><span class="p">,</span> <span class="n">pitch</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate track-relative Cartesian coordinates from radar coordinates.</span>
 
@@ -737,7 +737,7 @@
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
 
 
-<span class="k">def</span> <span class="nf">antenna_to_cartesian_earth_relative</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">rot</span><span class="p">,</span> <span class="n">roll</span><span class="p">,</span> <span class="n">heading</span><span class="p">,</span> <span class="n">tilt</span><span class="p">,</span> <span class="n">pitch</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">antenna_to_cartesian_earth_relative</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">rot</span><span class="p">,</span> <span class="n">roll</span><span class="p">,</span> <span class="n">heading</span><span class="p">,</span> <span class="n">tilt</span><span class="p">,</span> <span class="n">pitch</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate earth-relative Cartesian coordinates from radar coordinates</span>
 
@@ -794,7 +794,7 @@
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
 
 
-<span class="k">def</span> <span class="nf">antenna_to_cartesian_aircraft_relative</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">rot</span><span class="p">,</span> <span class="n">tilt</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">antenna_to_cartesian_aircraft_relative</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">rot</span><span class="p">,</span> <span class="n">tilt</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculate aircraft-relative Cartesian coordinates from radar coordinates.</span>
 
@@ -831,7 +831,7 @@
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span>
 
 
-<div class="viewcode-block" id="geographic_to_cartesian"><a class="viewcode-back" href="../../../API/generated/pyart.core.geographic_to_cartesian.html#pyart.core.geographic_to_cartesian">[docs]</a><span class="k">def</span> <span class="nf">geographic_to_cartesian</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">projparams</span><span class="p">):</span>
+<div class="viewcode-block" id="geographic_to_cartesian"><a class="viewcode-back" href="../../../API/generated/pyart.core.geographic_to_cartesian.html#pyart.core.geographic_to_cartesian">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">geographic_to_cartesian</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">projparams</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Geographic to Cartesian coordinate transform.</span>
 
@@ -881,7 +881,7 @@
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span></div>
 
 
-<div class="viewcode-block" id="geographic_to_cartesian_aeqd"><a class="viewcode-back" href="../../../API/generated/pyart.core.geographic_to_cartesian_aeqd.html#pyart.core.geographic_to_cartesian_aeqd">[docs]</a><span class="k">def</span> <span class="nf">geographic_to_cartesian_aeqd</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon_0</span><span class="p">,</span> <span class="n">lat_0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">6370997.0</span><span class="p">):</span>
+<div class="viewcode-block" id="geographic_to_cartesian_aeqd"><a class="viewcode-back" href="../../../API/generated/pyart.core.geographic_to_cartesian_aeqd.html#pyart.core.geographic_to_cartesian_aeqd">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">geographic_to_cartesian_aeqd</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon_0</span><span class="p">,</span> <span class="n">lat_0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">6370997.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Azimuthal equidistant geographic to Cartesian coordinate transform.</span>
 
@@ -965,7 +965,7 @@
     <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span></div>
 
 
-<div class="viewcode-block" id="cartesian_to_geographic"><a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_to_geographic.html#pyart.core.cartesian_to_geographic">[docs]</a><span class="k">def</span> <span class="nf">cartesian_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">):</span>
+<div class="viewcode-block" id="cartesian_to_geographic"><a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_to_geographic.html#pyart.core.cartesian_to_geographic">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">cartesian_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Cartesian to Geographic coordinate transform.</span>
 
@@ -1015,7 +1015,7 @@
     <span class="k">return</span> <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span></div>
 
 
-<div class="viewcode-block" id="cartesian_vectors_to_geographic"><a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_vectors_to_geographic.html#pyart.core.cartesian_vectors_to_geographic">[docs]</a><span class="k">def</span> <span class="nf">cartesian_vectors_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<div class="viewcode-block" id="cartesian_vectors_to_geographic"><a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_vectors_to_geographic.html#pyart.core.cartesian_vectors_to_geographic">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">cartesian_vectors_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Cartesian vectors to Geographic coordinate transform.</span>
 
@@ -1056,7 +1056,7 @@
     <span class="k">return</span> <span class="n">cartesian_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">)</span></div>
 
 
-<div class="viewcode-block" id="cartesian_to_geographic_aeqd"><a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_to_geographic_aeqd.html#pyart.core.cartesian_to_geographic_aeqd">[docs]</a><span class="k">def</span> <span class="nf">cartesian_to_geographic_aeqd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">lon_0</span><span class="p">,</span> <span class="n">lat_0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">6370997.0</span><span class="p">):</span>
+<div class="viewcode-block" id="cartesian_to_geographic_aeqd"><a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_to_geographic_aeqd.html#pyart.core.cartesian_to_geographic_aeqd">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">cartesian_to_geographic_aeqd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">lon_0</span><span class="p">,</span> <span class="n">lat_0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">6370997.0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Azimuthal equidistant Cartesian to geographic coordinate transform.</span>
 

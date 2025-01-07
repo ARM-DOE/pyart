@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,15 +463,15 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">netCDF4</span> <span class="kn">import</span> <span class="n">date2num</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">netCDF4</span><span class="w"> </span><span class="kn">import</span> <span class="n">date2num</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">FileMetadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
-<span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
-<span class="kn">from</span> <span class="nn">.common</span> <span class="kn">import</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">make_time_unit_str</span><span class="p">,</span> <span class="n">prepare_for_read</span>
-<span class="kn">from</span> <span class="nn">.uffile</span> <span class="kn">import</span> <span class="n">UFFile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">FileMetadata</span><span class="p">,</span> <span class="n">get_fillvalue</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.radar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Radar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">make_time_unit_str</span><span class="p">,</span> <span class="n">prepare_for_read</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.uffile</span><span class="w"> </span><span class="kn">import</span> <span class="n">UFFile</span>
 
 <span class="n">_LIGHT_SPEED</span> <span class="o">=</span> <span class="mf">2.99792458e8</span>  <span class="c1"># speed of light in meters per second</span>
 <span class="n">_UF_SWEEP_MODES</span> <span class="o">=</span> <span class="p">{</span>
@@ -498,7 +498,7 @@
 <span class="p">}</span>
 
 
-<div class="viewcode-block" id="read_uf"><a class="viewcode-back" href="../../../API/generated/pyart.io.read_uf.html#pyart.io.read_uf">[docs]</a><span class="k">def</span> <span class="nf">read_uf</span><span class="p">(</span>
+<div class="viewcode-block" id="read_uf"><a class="viewcode-back" href="../../../API/generated/pyart.io.read_uf.html#pyart.io.read_uf">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">read_uf</span><span class="p">(</span>
     <span class="n">filename</span><span class="p">,</span>
     <span class="n">field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">additional_metadata</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -677,7 +677,7 @@
     <span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">_get_scan_type</span><span class="p">(</span><span class="n">ufray</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_scan_type</span><span class="p">(</span><span class="n">ufray</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Ruturn the scan type of a UF ray.&quot;&quot;&quot;</span>
     <span class="n">uf_sweep_mode</span> <span class="o">=</span> <span class="n">ufray</span><span class="o">.</span><span class="n">mandatory_header</span><span class="p">[</span><span class="s2">&quot;sweep_mode&quot;</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">uf_sweep_mode</span> <span class="ow">in</span> <span class="n">_UF_SWEEP_MODES</span><span class="p">:</span>
@@ -687,7 +687,7 @@
         <span class="k">return</span> <span class="s2">&quot;ppi&quot;</span>
 
 
-<span class="k">def</span> <span class="nf">_get_instrument_parameters</span><span class="p">(</span><span class="n">ufile</span><span class="p">,</span> <span class="n">filemetadata</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_instrument_parameters</span><span class="p">(</span><span class="n">ufile</span><span class="p">,</span> <span class="n">filemetadata</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a dictionary containing instrument parameters.&quot;&quot;&quot;</span>
 
     <span class="c1"># pulse width</span>

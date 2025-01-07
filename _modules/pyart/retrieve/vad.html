@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,13 +463,13 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_field_name</span>
-<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">HorizontalWindProfile</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_field_name</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core</span><span class="w"> </span><span class="kn">import</span> <span class="n">HorizontalWindProfile</span>
 
 
-<div class="viewcode-block" id="vad_michelson"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.vad_michelson.html#pyart.retrieve.vad_michelson">[docs]</a><span class="k">def</span> <span class="nf">vad_michelson</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_want</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="vad_michelson"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.vad_michelson.html#pyart.retrieve.vad_michelson">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">vad_michelson</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_want</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Velocity azimuth display.</span>
 
@@ -566,7 +566,7 @@
     <span class="k">return</span> <span class="n">vad</span></div>
 
 
-<span class="k">def</span> <span class="nf">_vad_calculation_m</span><span class="p">(</span><span class="n">velocity_field</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_vad_calculation_m</span><span class="p">(</span><span class="n">velocity_field</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates VAD for a scan, returns speed and angle</span>
 <span class="sd">    outdic = vad_algorithm(velocity_field, azimuth, elevation)</span>
 <span class="sd">    velocity_field is a 2D array, azimuth is a 1D array,</span>
@@ -630,7 +630,7 @@
     <span class="k">return</span> <span class="n">speed</span><span class="p">,</span> <span class="n">angle</span>
 
 
-<span class="k">def</span> <span class="nf">_interval_mean</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">current_z</span><span class="p">,</span> <span class="n">wanted_z</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_interval_mean</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">current_z</span><span class="p">,</span> <span class="n">wanted_z</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Find the mean of data indexed by current_z</span>
 <span class="sd">    at wanted_z on intervals wanted_z+/- delta</span>
 <span class="sd">    wanted_z.&quot;&quot;&quot;</span>
@@ -649,12 +649,12 @@
     <span class="k">return</span> <span class="n">mean_values</span>
 
 
-<span class="k">def</span> <span class="nf">_sd_to_uv</span><span class="p">(</span><span class="n">speed</span><span class="p">,</span> <span class="n">direction</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_sd_to_uv</span><span class="p">(</span><span class="n">speed</span><span class="p">,</span> <span class="n">direction</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Takes speed and direction to create u_mean and v_mean.&quot;&quot;&quot;</span>
     <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> <span class="o">*</span> <span class="n">speed</span><span class="p">),</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span> <span class="o">*</span> <span class="n">speed</span><span class="p">)</span>
 
 
-<div class="viewcode-block" id="vad_browning"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.vad_browning.html#pyart.retrieve.vad_browning">[docs]</a><span class="k">def</span> <span class="nf">vad_browning</span><span class="p">(</span>
+<div class="viewcode-block" id="vad_browning"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.vad_browning.html#pyart.retrieve.vad_browning">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">vad_browning</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">velocity</span><span class="p">,</span>
     <span class="n">z_want</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -755,7 +755,7 @@
     <span class="k">return</span> <span class="n">vad</span></div>
 
 
-<span class="k">def</span> <span class="nf">_vad_calculation_b</span><span class="p">(</span><span class="n">velocities</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span> <span class="n">valid_ray_min</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_vad_calculation_b</span><span class="p">(</span><span class="n">velocities</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span> <span class="n">valid_ray_min</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Calculates VAD for a scan and returns u_mean and</span>
 <span class="sd">    v_mean. velocities is a 2D array, azimuths is a 1D</span>
 <span class="sd">    array, elevation is a number.</span>
@@ -825,7 +825,7 @@
     <span class="k">return</span> <span class="n">u_mean</span><span class="p">,</span> <span class="n">v_mean</span>
 
 
-<span class="k">def</span> <span class="nf">_inverse_dist_squared</span><span class="p">(</span><span class="n">dist</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_inverse_dist_squared</span><span class="p">(</span><span class="n">dist</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Obtaining distance weights by using distance weighting</span>
 <span class="sd">    interpolation, using the inverse distance-squared relationship.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -834,11 +834,11 @@
     <span class="k">return</span> <span class="n">weights</span>
 
 
-<span class="k">class</span> <span class="nc">_Average1D</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_Average1D</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Used to find the nearest gate height and horizontal wind</span>
 <span class="sd">    value with respect to the user&#39;s desired height.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">99999.0</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">weight</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="mf">99999.0</span><span class="p">):</span>
         <span class="n">sort_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">x_sorted</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">sort_idx</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y_sorted</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">sort_idx</span><span class="p">]</span>
@@ -854,7 +854,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Invalid weight argument:&quot;</span><span class="p">,</span> <span class="n">weight</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_new</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x_new</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="k">if</span> <span class="n">window</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">window</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">window</span>
 

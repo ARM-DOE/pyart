@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,21 +463,21 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.ndimage</span> <span class="k">as</span> <span class="nn">ndimage</span>
-<span class="kn">from</span> <span class="nn">scipy.optimize</span> <span class="kn">import</span> <span class="n">fmin_l_bfgs_b</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.ndimage</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ndimage</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.optimize</span><span class="w"> </span><span class="kn">import</span> <span class="n">fmin_l_bfgs_b</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
-<span class="kn">from</span> <span class="nn">._common_dealias</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._common_dealias</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">_parse_fields</span><span class="p">,</span>
     <span class="n">_parse_gatefilter</span><span class="p">,</span>
     <span class="n">_parse_nyquist_vel</span><span class="p">,</span>
     <span class="n">_parse_rays_wrap_around</span><span class="p">,</span>
     <span class="n">_set_limits</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">._fast_edge_finder</span> <span class="kn">import</span> <span class="n">_fast_edge_finder</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._fast_edge_finder</span><span class="w"> </span><span class="kn">import</span> <span class="n">_fast_edge_finder</span>
 
 <span class="c1"># Possible future improvements to the region based dealiasing algorithm:</span>
 <span class="c1">#</span>
@@ -496,7 +496,7 @@
 <span class="c1">#   object. See comments in the class for details.</span>
 
 
-<div class="viewcode-block" id="dealias_region_based"><a class="viewcode-back" href="../../../API/generated/pyart.correct.dealias_region_based.html#pyart.correct.dealias_region_based">[docs]</a><span class="k">def</span> <span class="nf">dealias_region_based</span><span class="p">(</span>
+<div class="viewcode-block" id="dealias_region_based"><a class="viewcode-back" href="../../../API/generated/pyart.correct.dealias_region_based.html#pyart.correct.dealias_region_based">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">dealias_region_based</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">ref_vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">interval_splits</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
@@ -713,12 +713,12 @@
                     <span class="n">scorr_means</span><span class="p">[</span><span class="n">reg</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">scorr</span><span class="p">[</span><span class="n">labels_corr</span> <span class="o">==</span> <span class="n">reg</span><span class="p">])</span>
                     <span class="n">sref_means</span><span class="p">[</span><span class="n">reg</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">sref</span><span class="p">[</span><span class="n">labels_corr</span> <span class="o">==</span> <span class="n">reg</span><span class="p">])</span>
 
-                <span class="k">def</span> <span class="nf">cost_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                <span class="k">def</span><span class="w"> </span><span class="nf">cost_function</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
                     <span class="k">return</span> <span class="n">_cost_function</span><span class="p">(</span>
                         <span class="n">x</span><span class="p">,</span> <span class="n">scorr_means</span><span class="p">,</span> <span class="n">sref_means</span><span class="p">,</span> <span class="n">nyquist_interval</span><span class="p">,</span> <span class="n">nfeatures_corr</span>
                     <span class="p">)</span>
 
-                <span class="k">def</span> <span class="nf">gradient</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+                <span class="k">def</span><span class="w"> </span><span class="nf">gradient</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
                     <span class="k">return</span> <span class="n">_gradient</span><span class="p">(</span>
                         <span class="n">x</span><span class="p">,</span> <span class="n">scorr_means</span><span class="p">,</span> <span class="n">sref_means</span><span class="p">,</span> <span class="n">nyquist_interval</span><span class="p">,</span> <span class="n">nfeatures_corr</span>
                     <span class="p">)</span>
@@ -763,7 +763,7 @@
     <span class="k">return</span> <span class="n">corr_vel</span></div>
 
 
-<span class="k">def</span> <span class="nf">_find_sweep_interval_splits</span><span class="p">(</span><span class="n">nyquist</span><span class="p">,</span> <span class="n">interval_splits</span><span class="p">,</span> <span class="n">velocities</span><span class="p">,</span> <span class="n">nsweep</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_find_sweep_interval_splits</span><span class="p">(</span><span class="n">nyquist</span><span class="p">,</span> <span class="n">interval_splits</span><span class="p">,</span> <span class="n">velocities</span><span class="p">,</span> <span class="n">nsweep</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the interval limits for a given sweep.&quot;&quot;&quot;</span>
     <span class="c1"># The Nyquist interval is split into interval_splits  equal sized areas.</span>
     <span class="c1"># If velocities outside the Nyquist are present the number and</span>
@@ -789,7 +789,7 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">num</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_find_regions</span><span class="p">(</span><span class="n">vel</span><span class="p">,</span> <span class="n">gfilter</span><span class="p">,</span> <span class="n">limits</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_find_regions</span><span class="p">(</span><span class="n">vel</span><span class="p">,</span> <span class="n">gfilter</span><span class="p">,</span> <span class="n">limits</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Find regions of similar velocity.</span>
 
@@ -834,7 +834,7 @@
     <span class="k">return</span> <span class="n">label</span><span class="p">,</span> <span class="n">nfeatures</span>
 
 
-<span class="k">def</span> <span class="nf">_edge_sum_and_count</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_edge_sum_and_count</span><span class="p">(</span>
     <span class="n">labels</span><span class="p">,</span> <span class="n">num_masked_gates</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">rays_wrap_around</span><span class="p">,</span> <span class="n">max_gap_x</span><span class="p">,</span> <span class="n">max_gap_y</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -885,7 +885,7 @@
     <span class="k">return</span> <span class="p">(</span><span class="n">index1</span><span class="p">,</span> <span class="n">index2</span><span class="p">),</span> <span class="n">count</span><span class="p">,</span> <span class="p">(</span><span class="n">vel1</span><span class="p">,</span> <span class="n">vel2</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_combine_regions</span><span class="p">(</span><span class="n">region_tracker</span><span class="p">,</span> <span class="n">edge_tracker</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_combine_regions</span><span class="p">(</span><span class="n">region_tracker</span><span class="p">,</span> <span class="n">edge_tracker</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns True when done.&quot;&quot;&quot;</span>
     <span class="c1"># Edge parameters from edge with largest weight</span>
     <span class="n">status</span><span class="p">,</span> <span class="n">extra</span> <span class="o">=</span> <span class="n">edge_tracker</span><span class="o">.</span><span class="n">pop_edge</span><span class="p">()</span>
@@ -919,7 +919,7 @@
 
 <span class="c1"># Minimize cost function that is sum of difference between regions and</span>
 <span class="c1"># sounding</span>
-<span class="k">def</span> <span class="nf">_cost_function</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_cost_function</span><span class="p">(</span>
     <span class="n">nyq_vector</span><span class="p">,</span> <span class="n">vels_slice_means</span><span class="p">,</span> <span class="n">svels_slice_means</span><span class="p">,</span> <span class="n">v_nyq_vel</span><span class="p">,</span> <span class="n">nfeatures</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Cost function for minimization in region based algorithm.&quot;&quot;&quot;</span>
@@ -942,7 +942,7 @@
     <span class="k">return</span> <span class="n">cost</span>
 
 
-<span class="k">def</span> <span class="nf">_gradient</span><span class="p">(</span><span class="n">nyq_vector</span><span class="p">,</span> <span class="n">vels_slice_means</span><span class="p">,</span> <span class="n">svels_slice_means</span><span class="p">,</span> <span class="n">v_nyq_vel</span><span class="p">,</span> <span class="n">nfeatures</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_gradient</span><span class="p">(</span><span class="n">nyq_vector</span><span class="p">,</span> <span class="n">vels_slice_means</span><span class="p">,</span> <span class="n">svels_slice_means</span><span class="p">,</span> <span class="n">v_nyq_vel</span><span class="p">,</span> <span class="n">nfeatures</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of cost function for minimization</span>
 <span class="sd">    in region based algorithm.&quot;&quot;&quot;</span>
     <span class="n">gradient_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nyq_vector</span><span class="p">))</span>
@@ -972,13 +972,13 @@
     <span class="k">return</span> <span class="n">gradient_vector</span>
 
 
-<span class="k">class</span> <span class="nc">_RegionTracker</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_RegionTracker</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Tracks the location of radar volume regions contained in each node</span>
 <span class="sd">    as the network is reduced.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region_sizes</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region_sizes</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;initalize.&quot;&quot;&quot;</span>
         <span class="c1"># number of gates in each node</span>
         <span class="n">nregions</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">region_sizes</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
@@ -993,7 +993,7 @@
         <span class="c1"># number of unwrappings to apply to dealias each region</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">unwrap_number</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nregions</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">merge_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_a</span><span class="p">,</span> <span class="n">node_b</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">merge_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_a</span><span class="p">,</span> <span class="n">node_b</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Merge node b into node a.&quot;&quot;&quot;</span>
 
         <span class="c1"># move all regions from node_b to node_a</span>
@@ -1006,7 +1006,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">node_size</span><span class="p">[</span><span class="n">node_b</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="k">return</span>
 
-    <span class="k">def</span> <span class="nf">unwrap_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">nwrap</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unwrap_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">nwrap</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Unwrap all gates contained a node.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">nwrap</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span>
@@ -1015,15 +1015,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">unwrap_number</span><span class="p">[</span><span class="n">regions_to_unwrap</span><span class="p">]</span> <span class="o">+=</span> <span class="n">nwrap</span>
         <span class="k">return</span>
 
-    <span class="k">def</span> <span class="nf">get_node_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">get_node_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of gates in a node.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_size</span><span class="p">[</span><span class="n">node</span><span class="p">]</span>
 
 
-<span class="k">class</span> <span class="nc">_EdgeTracker</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">_EdgeTracker</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for tracking edges in a dynamic network.&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">edge_count</span><span class="p">,</span> <span class="n">velocities</span><span class="p">,</span> <span class="n">nyquist_interval</span><span class="p">,</span> <span class="n">nnodes</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">edge_count</span><span class="p">,</span> <span class="n">velocities</span><span class="p">,</span> <span class="n">nyquist_interval</span><span class="p">,</span> <span class="n">nnodes</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;initialize&quot;&quot;&quot;</span>
 
         <span class="n">nedges</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
@@ -1066,7 +1066,7 @@
         <span class="c1"># TODO</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">priority_queue</span> <span class="o">=</span> <span class="p">[]</span>
 
-    <span class="k">def</span> <span class="nf">merge_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_node</span><span class="p">,</span> <span class="n">merge_node</span><span class="p">,</span> <span class="n">foo_edge</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">merge_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_node</span><span class="p">,</span> <span class="n">merge_node</span><span class="p">,</span> <span class="n">foo_edge</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Merge nodes.&quot;&quot;&quot;</span>
 
         <span class="c1"># remove edge between base and merge nodes</span>
@@ -1120,7 +1120,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_last_base_node</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">base_node</span><span class="p">)</span>
         <span class="k">return</span>
 
-    <span class="k">def</span> <span class="nf">_combine_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_edge</span><span class="p">,</span> <span class="n">merge_edge</span><span class="p">,</span> <span class="n">merge_node</span><span class="p">,</span> <span class="n">neighbor_node</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_combine_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_edge</span><span class="p">,</span> <span class="n">merge_edge</span><span class="p">,</span> <span class="n">merge_node</span><span class="p">,</span> <span class="n">neighbor_node</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Combine edges into a single edge.&quot;&quot;&quot;</span>
         <span class="c1"># Merging nodes MUST be set to alpha prior to calling this function</span>
 
@@ -1142,7 +1142,7 @@
         <span class="c1"># relocate base_edge in priority queue</span>
         <span class="c1"># self.priority_queue.sort()</span>
 
-    <span class="k">def</span> <span class="nf">_reverse_edge_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_reverse_edge_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Reverse an edges direction, change alpha and beta.&quot;&quot;&quot;</span>
         <span class="c1"># swap nodes</span>
         <span class="n">old_alpha</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_alpha</span><span class="p">[</span><span class="n">edge</span><span class="p">])</span>
@@ -1153,7 +1153,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">sum_diff</span><span class="p">[</span><span class="n">edge</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">sum_diff</span><span class="p">[</span><span class="n">edge</span><span class="p">]</span>
         <span class="k">return</span>
 
-    <span class="k">def</span> <span class="nf">unwrap_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">nwrap</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">unwrap_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">nwrap</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Unwrap a node.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">nwrap</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span>
@@ -1167,7 +1167,7 @@
                 <span class="bp">self</span><span class="o">.</span><span class="n">sum_diff</span><span class="p">[</span><span class="n">edge</span><span class="p">]</span> <span class="o">+=</span> <span class="o">-</span><span class="n">weight</span> <span class="o">*</span> <span class="n">nwrap</span>
         <span class="k">return</span>
 
-    <span class="k">def</span> <span class="nf">pop_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">pop_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Pop edge with largest weight. Return node numbers and diff.&quot;&quot;&quot;</span>
 
         <span class="c1"># if len(priority_queue) == 0:</span>

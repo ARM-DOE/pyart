@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,16 +463,16 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">math</span>
-<span class="kn">import</span> <span class="nn">struct</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">netCDF4</span> <span class="kn">import</span> <span class="n">num2date</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">netCDF4</span><span class="w"> </span><span class="kn">import</span> <span class="n">num2date</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_field_mapping</span>
-<span class="kn">from</span> <span class="nn">.uf</span> <span class="kn">import</span> <span class="n">_LIGHT_SPEED</span>
-<span class="kn">from</span> <span class="nn">.uffile</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_field_mapping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.uf</span><span class="w"> </span><span class="kn">import</span> <span class="n">_LIGHT_SPEED</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.uffile</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">POLARIZATION_STR</span><span class="p">,</span>
     <span class="n">UF_DATA_HEADER</span><span class="p">,</span>
     <span class="n">UF_FIELD_HEADER</span><span class="p">,</span>
@@ -483,7 +483,7 @@
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="write_uf"><a class="viewcode-back" href="../../../API/generated/pyart.io.write_uf.html#pyart.io.write_uf">[docs]</a><span class="k">def</span> <span class="nf">write_uf</span><span class="p">(</span>
+<div class="viewcode-block" id="write_uf"><a class="viewcode-back" href="../../../API/generated/pyart.io.write_uf.html#pyart.io.write_uf">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">write_uf</span><span class="p">(</span>
     <span class="n">filename</span><span class="p">,</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">uf_field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -585,7 +585,7 @@
     <span class="k">return</span></div>
 
 
-<span class="k">def</span> <span class="nf">_find_field_mapping</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">uf_field_names</span><span class="p">,</span> <span class="n">radar_field_names</span><span class="p">,</span> <span class="n">exclude_fields</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_find_field_mapping</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">uf_field_names</span><span class="p">,</span> <span class="n">radar_field_names</span><span class="p">,</span> <span class="n">exclude_fields</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a dictionary mapping radar fields to UF data types.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">uf_field_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">uf_field_names</span> <span class="o">=</span> <span class="n">get_field_mapping</span><span class="p">(</span><span class="s2">&quot;write_uf&quot;</span><span class="p">)</span>
@@ -610,7 +610,7 @@
     <span class="k">return</span> <span class="n">field_mapping</span>
 
 
-<span class="k">class</span> <span class="nc">UFRayCreator</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">UFRayCreator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A class for generating UF rays for writing UF file.</span>
 
@@ -631,7 +631,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">radar</span><span class="p">,</span>
         <span class="n">field_mapping</span><span class="p">,</span>
@@ -660,7 +660,7 @@
         <span class="k">return</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_calc_ray_num_to_sweep_num</span><span class="p">(</span><span class="n">radar</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_calc_ray_num_to_sweep_num</span><span class="p">(</span><span class="n">radar</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an array mapping ray number to sweep numbers.&quot;&quot;&quot;</span>
         <span class="n">ray_num_to_sweep_num</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">radar</span><span class="o">.</span><span class="n">nrays</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">isweep</span><span class="p">,</span> <span class="n">sweep_slice</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">()):</span>
@@ -668,7 +668,7 @@
         <span class="k">return</span> <span class="n">ray_num_to_sweep_num</span>
 
     <span class="nd">@staticmethod</span>
-    <span class="k">def</span> <span class="nf">_calc_record_length</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_mapping</span><span class="p">,</span> <span class="n">field_write_order</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_calc_record_length</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_mapping</span><span class="p">,</span> <span class="n">field_write_order</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the record length in 2-byte words.&quot;&quot;&quot;</span>
         <span class="c1"># record length is given by the sum of</span>
         <span class="c1"># 45 word (90 byte) mandatory header</span>
@@ -687,7 +687,7 @@
         <span class="n">nvel</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">data_type</span> <span class="ow">in</span> <span class="n">UF_VEL_DATA_TYPES</span> <span class="k">for</span> <span class="n">data_type</span> <span class="ow">in</span> <span class="n">data_types</span><span class="p">)</span>
         <span class="k">return</span> <span class="mi">45</span> <span class="o">+</span> <span class="mi">14</span> <span class="o">+</span> <span class="mi">3</span> <span class="o">+</span> <span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">ngates</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">+</span> <span class="mi">19</span><span class="p">)</span> <span class="o">*</span> <span class="n">nfields</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">nvel</span>
 
-    <span class="k">def</span> <span class="nf">_set_optional_header_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">volume_start</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_optional_header_time</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">volume_start</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Populate the optional header template with the volume start.&quot;&quot;&quot;</span>
         <span class="n">header</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optional_header_template</span>
         <span class="k">if</span> <span class="n">volume_start</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -698,7 +698,7 @@
         <span class="n">header</span><span class="p">[</span><span class="s2">&quot;volume_minute&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">volume_start</span><span class="o">.</span><span class="n">minute</span>
         <span class="n">header</span><span class="p">[</span><span class="s2">&quot;volume_second&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">volume_start</span><span class="o">.</span><span class="n">second</span>
 
-    <span class="k">def</span> <span class="nf">_set_mandatory_header_location</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_mandatory_header_location</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Populate the mandatory header template with the location.&quot;&quot;&quot;</span>
         <span class="n">header</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">mandatory_header_template</span>
 
@@ -715,7 +715,7 @@
         <span class="n">header</span><span class="p">[</span><span class="s2">&quot;height_above_sea_level&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">return</span>
 
-    <span class="k">def</span> <span class="nf">_set_field_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_field_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Populate the field header template with radar parameters.&quot;&quot;&quot;</span>
         <span class="c1"># these parameter are assumed to be constant for all rays in</span>
         <span class="c1"># the volume, UF can store volumes where these change between</span>
@@ -762,7 +762,7 @@
 
         <span class="k">return</span>
 
-    <span class="k">def</span> <span class="nf">_parse_custom_templates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">templates_extra</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_parse_custom_templates</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">templates_extra</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set additional template parameter using provided dictionary.&quot;&quot;&quot;</span>
 
         <span class="k">if</span> <span class="s2">&quot;mandatory_header&quot;</span> <span class="ow">in</span> <span class="n">templates_extra</span><span class="p">:</span>
@@ -779,7 +779,7 @@
 
         <span class="k">return</span>
 
-    <span class="k">def</span> <span class="nf">make_ray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ray_num</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_ray</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ray_num</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a byte string representing a complete UF ray.&quot;&quot;&quot;</span>
         <span class="n">ray</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_mandatory_header</span><span class="p">(</span><span class="n">ray_num</span><span class="p">)</span>
         <span class="n">ray</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_optional_header</span><span class="p">()</span>
@@ -811,7 +811,7 @@
 
         <span class="k">return</span> <span class="n">ray</span>
 
-    <span class="k">def</span> <span class="nf">make_mandatory_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ray_num</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_mandatory_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ray_num</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a byte string representing a UF mandatory header.&quot;&quot;&quot;</span>
 
         <span class="c1"># time parameters</span>
@@ -858,12 +858,12 @@
 
         <span class="k">return</span> <span class="n">_pack_structure</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">UF_MANDATORY_HEADER</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">make_optional_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_optional_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a byte string representing a UF optional header.&quot;&quot;&quot;</span>
         <span class="n">header</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">optional_header_template</span>
         <span class="k">return</span> <span class="n">_pack_structure</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">UF_OPTIONAL_HEADER</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">make_data_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_data_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a byte string representing a UF data header.&quot;&quot;&quot;</span>
         <span class="n">header</span> <span class="o">=</span> <span class="n">UF_DATA_HEADER_TEMPLATE</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">nfields</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">field_write_order</span><span class="p">)</span>
@@ -871,7 +871,7 @@
         <span class="n">header</span><span class="p">[</span><span class="s2">&quot;record_nfields&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfields</span>
         <span class="k">return</span> <span class="n">_pack_structure</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="n">UF_DATA_HEADER</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">make_field_position_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_field_position_list</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a list of field position dictionaries.&quot;&quot;&quot;</span>
         <span class="c1"># 62 words (124 bytes) are occupied by the:</span>
         <span class="c1"># * mandatory header (90 bytes)</span>
@@ -895,12 +895,12 @@
                 <span class="n">offset</span> <span class="o">+=</span> <span class="mi">2</span>  <span class="c1"># account for the FSI_VEL structure</span>
         <span class="k">return</span> <span class="n">field_positions</span>
 
-    <span class="k">def</span> <span class="nf">make_field_position</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_field_position</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a byte string representing the UF field positions.&quot;&quot;&quot;</span>
         <span class="n">fps</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">make_field_position_list</span><span class="p">()</span>
         <span class="k">return</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">_pack_structure</span><span class="p">(</span><span class="n">fp</span><span class="p">,</span> <span class="n">UF_FIELD_POSITION</span><span class="p">)</span> <span class="k">for</span> <span class="n">fp</span> <span class="ow">in</span> <span class="n">fps</span><span class="p">])</span>
 
-    <span class="k">def</span> <span class="nf">make_field_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_offset</span><span class="p">,</span> <span class="n">ray_num</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_field_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data_offset</span><span class="p">,</span> <span class="n">ray_num</span><span class="p">,</span> <span class="n">scale_factor</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a byte string representing a field header.&quot;&quot;&quot;</span>
         <span class="n">field_header</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">field_header_template</span>
         <span class="n">field_header</span><span class="p">[</span><span class="s2">&quot;nbins&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radar</span><span class="o">.</span><span class="n">ngates</span>
@@ -928,7 +928,7 @@
                 <span class="n">field_header</span><span class="p">[</span><span class="s2">&quot;polarization&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">POLARIZATION_STR</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">mode</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">_pack_structure</span><span class="p">(</span><span class="n">field_header</span><span class="p">,</span> <span class="n">UF_FIELD_HEADER</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">make_fsi_vel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ray_num</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_fsi_vel</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ray_num</span><span class="p">,</span> <span class="n">scale</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a byte string representing a UF FSI velocity structure.&quot;&quot;&quot;</span>
         <span class="n">fsi_vel</span> <span class="o">=</span> <span class="n">UF_FSI_VEL_TEMPLATE</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">iparams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span>
@@ -939,13 +939,13 @@
             <span class="n">fsi_vel</span><span class="p">[</span><span class="s2">&quot;nyquist&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">UF_MISSING_VALUE</span>
         <span class="k">return</span> <span class="n">_pack_structure</span><span class="p">(</span><span class="n">fsi_vel</span><span class="p">,</span> <span class="n">UF_FSI_VEL</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">make_data_array</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">ray_num</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">100.0</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">make_data_array</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">ray_num</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mf">100.0</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return an array of UF field data.&quot;&quot;&quot;</span>
         <span class="n">field_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray_num</span><span class="p">]</span> <span class="o">*</span> <span class="n">scale</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">field_data</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="o">-</span><span class="mi">32768</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;&gt;i2&quot;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_d_to_dms</span><span class="p">(</span><span class="n">in_deg</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_d_to_dms</span><span class="p">(</span><span class="n">in_deg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Degrees to degree, minutes, seconds.&quot;&quot;&quot;</span>
     <span class="c1"># add or subtract a fraction of a second to fix round off issues</span>
     <span class="n">epsilon</span> <span class="o">=</span> <span class="mf">0.01</span> <span class="o">/</span> <span class="mf">3600.0</span>
@@ -956,7 +956,7 @@
     <span class="k">return</span> <span class="n">degrees</span><span class="p">,</span> <span class="n">minutes</span><span class="p">,</span> <span class="n">seconds</span>
 
 
-<span class="k">def</span> <span class="nf">_pack_structure</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">structure</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_pack_structure</span><span class="p">(</span><span class="n">dic</span><span class="p">,</span> <span class="n">structure</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Pack a structure from a dictionary.&quot;&quot;&quot;</span>
     <span class="n">fmt</span> <span class="o">=</span> <span class="s2">&quot;&gt;&quot;</span> <span class="o">+</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">i</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">structure</span><span class="p">])</span>  <span class="c1"># UF is big-endian</span>
     <span class="n">values</span> <span class="o">=</span> <span class="p">[</span><span class="n">dic</span><span class="p">[</span><span class="n">i</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">structure</span><span class="p">]</span>

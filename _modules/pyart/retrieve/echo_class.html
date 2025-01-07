@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,20 +463,20 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
 <span class="c1"># Local imports</span>
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
-<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">Grid</span>
-<span class="kn">from</span> <span class="nn">..util.radar_utils</span> <span class="kn">import</span> <span class="n">ma_broadcast_to</span>
-<span class="kn">from</span> <span class="nn">._echo_class</span> <span class="kn">import</span> <span class="n">_feature_detection</span><span class="p">,</span> <span class="n">steiner_class_buff</span>
-<span class="kn">from</span> <span class="nn">._echo_class_wt</span> <span class="kn">import</span> <span class="n">calc_scale_break</span><span class="p">,</span> <span class="n">wavelet_reclass</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core</span><span class="w"> </span><span class="kn">import</span> <span class="n">Grid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util.radar_utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">ma_broadcast_to</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._echo_class</span><span class="w"> </span><span class="kn">import</span> <span class="n">_feature_detection</span><span class="p">,</span> <span class="n">steiner_class_buff</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._echo_class_wt</span><span class="w"> </span><span class="kn">import</span> <span class="n">calc_scale_break</span><span class="p">,</span> <span class="n">wavelet_reclass</span>
 
 
-<div class="viewcode-block" id="steiner_conv_strat"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.steiner_conv_strat.html#pyart.retrieve.steiner_conv_strat">[docs]</a><span class="k">def</span> <span class="nf">steiner_conv_strat</span><span class="p">(</span>
+<div class="viewcode-block" id="steiner_conv_strat"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.steiner_conv_strat.html#pyart.retrieve.steiner_conv_strat">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">steiner_conv_strat</span><span class="p">(</span>
     <span class="n">grid</span><span class="p">,</span>
     <span class="n">dx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">dy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -590,7 +590,7 @@
     <span class="p">}</span></div>
 
 
-<div class="viewcode-block" id="conv_strat_yuter"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.conv_strat_yuter.html#pyart.retrieve.conv_strat_yuter">[docs]</a><span class="k">def</span> <span class="nf">conv_strat_yuter</span><span class="p">(</span>
+<div class="viewcode-block" id="conv_strat_yuter"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.conv_strat_yuter.html#pyart.retrieve.conv_strat_yuter">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">conv_strat_yuter</span><span class="p">(</span>
     <span class="n">grid</span><span class="p">,</span>
     <span class="n">dx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">dy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -752,7 +752,7 @@
     <span class="k">return</span> <span class="n">feature_dict</span></div>
 
 
-<div class="viewcode-block" id="feature_detection"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.feature_detection.html#pyart.retrieve.feature_detection">[docs]</a><span class="k">def</span> <span class="nf">feature_detection</span><span class="p">(</span>
+<div class="viewcode-block" id="feature_detection"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.feature_detection.html#pyart.retrieve.feature_detection">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">feature_detection</span><span class="p">(</span>
     <span class="n">grid</span><span class="p">,</span>
     <span class="n">dx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">dy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1063,7 +1063,7 @@
     <span class="k">return</span> <span class="n">feature_dict</span></div>
 
 
-<div class="viewcode-block" id="hydroclass_semisupervised"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.hydroclass_semisupervised.html#pyart.retrieve.hydroclass_semisupervised">[docs]</a><span class="k">def</span> <span class="nf">hydroclass_semisupervised</span><span class="p">(</span>
+<div class="viewcode-block" id="hydroclass_semisupervised"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.hydroclass_semisupervised.html#pyart.retrieve.hydroclass_semisupervised">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">hydroclass_semisupervised</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">hydro_names</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;AG&quot;</span><span class="p">,</span> <span class="s2">&quot;CR&quot;</span><span class="p">,</span> <span class="s2">&quot;LR&quot;</span><span class="p">,</span> <span class="s2">&quot;RP&quot;</span><span class="p">,</span> <span class="s2">&quot;RN&quot;</span><span class="p">,</span> <span class="s2">&quot;VI&quot;</span><span class="p">,</span> <span class="s2">&quot;WS&quot;</span><span class="p">,</span> <span class="s2">&quot;MH&quot;</span><span class="p">,</span> <span class="s2">&quot;IH/HDG&quot;</span><span class="p">),</span>
     <span class="n">var_names</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Zh&quot;</span><span class="p">,</span> <span class="s2">&quot;ZDR&quot;</span><span class="p">,</span> <span class="s2">&quot;KDP&quot;</span><span class="p">,</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">,</span> <span class="s2">&quot;relH&quot;</span><span class="p">),</span>
@@ -1333,7 +1333,7 @@
     <span class="k">return</span> <span class="n">fields_dict</span></div>
 
 
-<span class="k">def</span> <span class="nf">_standardize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">mx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mn</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_standardize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">mx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mn</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Streches the radar data to -1 to 1 interval.</span>
 
@@ -1385,7 +1385,7 @@
     <span class="k">return</span> <span class="n">field_std</span>
 
 
-<span class="k">def</span> <span class="nf">_assign_to_class</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_assign_to_class</span><span class="p">(</span>
     <span class="n">fields_dict</span><span class="p">,</span>
     <span class="n">mass_centers</span><span class="p">,</span>
     <span class="n">var_names</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Zh&quot;</span><span class="p">,</span> <span class="s2">&quot;ZDR&quot;</span><span class="p">,</span> <span class="s2">&quot;KDP&quot;</span><span class="p">,</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">,</span> <span class="s2">&quot;relH&quot;</span><span class="p">),</span>
@@ -1492,7 +1492,7 @@
     <span class="k">return</span> <span class="n">hydroclass</span><span class="p">,</span> <span class="n">entropy</span><span class="p">,</span> <span class="n">t_dist</span>
 
 
-<span class="k">def</span> <span class="nf">_assign_to_class_scan</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_assign_to_class_scan</span><span class="p">(</span>
     <span class="n">fields_dict</span><span class="p">,</span>
     <span class="n">mass_centers</span><span class="p">,</span>
     <span class="n">var_names</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Zh&quot;</span><span class="p">,</span> <span class="s2">&quot;ZDR&quot;</span><span class="p">,</span> <span class="s2">&quot;KDP&quot;</span><span class="p">,</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">,</span> <span class="s2">&quot;relH&quot;</span><span class="p">),</span>
@@ -1595,7 +1595,7 @@
     <span class="k">return</span> <span class="n">hydroclass</span><span class="p">,</span> <span class="n">entropy</span><span class="p">,</span> <span class="n">t_dist</span>
 
 
-<span class="k">def</span> <span class="nf">_get_mass_centers</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_mass_centers</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get mass centers for a particular frequency.</span>
 
@@ -1633,7 +1633,7 @@
     <span class="k">return</span> <span class="n">mass_centers</span>
 
 
-<span class="k">def</span> <span class="nf">_mass_centers_table</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_mass_centers_table</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Defines the mass centers look up table for each frequency band.</span>
 
@@ -1680,7 +1680,7 @@
     <span class="k">return</span> <span class="n">mass_centers_dict</span>
 
 
-<span class="k">def</span> <span class="nf">_data_limits_table</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_data_limits_table</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Defines the data limits used in the standardization.</span>
 
@@ -1700,7 +1700,7 @@
     <span class="k">return</span> <span class="n">dlimits_dict</span>
 
 
-<div class="viewcode-block" id="get_freq_band"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.get_freq_band.html#pyart.retrieve.get_freq_band">[docs]</a><span class="k">def</span> <span class="nf">get_freq_band</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
+<div class="viewcode-block" id="get_freq_band"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.get_freq_band.html#pyart.retrieve.get_freq_band">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">get_freq_band</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Returns the frequency band name (S, C, X, ...).</span>
 
@@ -1727,7 +1727,7 @@
     <span class="k">return</span> <span class="kc">None</span></div>
 
 
-<div class="viewcode-block" id="conv_strat_raut"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.conv_strat_raut.html#pyart.retrieve.conv_strat_raut">[docs]</a><span class="k">def</span> <span class="nf">conv_strat_raut</span><span class="p">(</span>
+<div class="viewcode-block" id="conv_strat_raut"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.conv_strat_raut.html#pyart.retrieve.conv_strat_raut">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">conv_strat_raut</span><span class="p">(</span>
     <span class="n">grid</span><span class="p">,</span>
     <span class="n">refl_field</span><span class="p">,</span>
     <span class="n">cappi_level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -1899,7 +1899,7 @@
     <span class="k">return</span> <span class="n">reclass_dict</span></div>
 
 
-<span class="k">def</span> <span class="nf">_compute_coeff_transform</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_compute_coeff_transform</span><span class="p">(</span>
     <span class="n">mass_centers</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]),</span> <span class="n">value</span><span class="o">=</span><span class="mf">50.0</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>

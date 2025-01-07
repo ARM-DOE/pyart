@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,15 +463,15 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..core</span> <span class="kn">import</span> <span class="n">transforms</span>
-<span class="kn">from</span> <span class="nn">..core.transforms</span> <span class="kn">import</span> <span class="n">antenna_to_cartesian</span><span class="p">,</span> <span class="n">antenna_to_cartesian_track_relative</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">common</span>
-<span class="kn">from</span> <span class="nn">.radardisplay</span> <span class="kn">import</span> <span class="n">RadarDisplay</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core</span><span class="w"> </span><span class="kn">import</span> <span class="n">transforms</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">antenna_to_cartesian</span><span class="p">,</span> <span class="n">antenna_to_cartesian_track_relative</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">common</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.radardisplay</span><span class="w"> </span><span class="kn">import</span> <span class="n">RadarDisplay</span>
 
 
-<div class="viewcode-block" id="AirborneRadarDisplay"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.html#pyart.graph.AirborneRadarDisplay">[docs]</a><span class="k">class</span> <span class="nc">AirborneRadarDisplay</span><span class="p">(</span><span class="n">RadarDisplay</span><span class="p">):</span>
+<div class="viewcode-block" id="AirborneRadarDisplay"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.html#pyart.graph.AirborneRadarDisplay">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">AirborneRadarDisplay</span><span class="p">(</span><span class="n">RadarDisplay</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A display object for creating plots from data in a airborne radar object.</span>
 
@@ -525,7 +525,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the object.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">rotation</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">rotation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
@@ -548,7 +548,7 @@
     <span class="c1"># Plotting methods #</span>
     <span class="c1">####################</span>
 
-<div class="viewcode-block" id="AirborneRadarDisplay.plot"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.plot.html#pyart.graph.AirborneRadarDisplay.plot">[docs]</a>    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="AirborneRadarDisplay.plot"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.plot.html#pyart.graph.AirborneRadarDisplay.plot">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Create a plot appropiate for the radar.</span>
 
@@ -580,7 +580,7 @@
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;unknown scan_type </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">scan_type</span><span class="si">:</span><span class="s2"> </span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="k">return</span></div>
 
-<div class="viewcode-block" id="AirborneRadarDisplay.plot_sweep_grid"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.plot_sweep_grid.html#pyart.graph.AirborneRadarDisplay.plot_sweep_grid">[docs]</a>    <span class="k">def</span> <span class="nf">plot_sweep_grid</span><span class="p">(</span>
+<div class="viewcode-block" id="AirborneRadarDisplay.plot_sweep_grid"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.plot_sweep_grid.html#pyart.graph.AirborneRadarDisplay.plot_sweep_grid">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">plot_sweep_grid</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">field</span><span class="p">,</span>
         <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
@@ -747,29 +747,29 @@
                 <span class="n">ticklabs</span><span class="o">=</span><span class="n">ticklabs</span><span class="p">,</span>
             <span class="p">)</span></div>
 
-<div class="viewcode-block" id="AirborneRadarDisplay.label_xaxis_x"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.label_xaxis_x.html#pyart.graph.AirborneRadarDisplay.label_xaxis_x">[docs]</a>    <span class="k">def</span> <span class="nf">label_xaxis_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="AirborneRadarDisplay.label_xaxis_x"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.label_xaxis_x.html#pyart.graph.AirborneRadarDisplay.label_xaxis_x">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">label_xaxis_x</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Label the xaxis with the default label for x units.&quot;&quot;&quot;</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_ax</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;Horizontal distance from &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s2">&quot; (km)&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AirborneRadarDisplay.label_yaxis_y"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.label_yaxis_y.html#pyart.graph.AirborneRadarDisplay.label_yaxis_y">[docs]</a>    <span class="k">def</span> <span class="nf">label_yaxis_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="AirborneRadarDisplay.label_yaxis_y"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.label_yaxis_y.html#pyart.graph.AirborneRadarDisplay.label_yaxis_y">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">label_yaxis_y</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Label the yaxis with the default label for y units.&quot;&quot;&quot;</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_ax</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Horizontal distance from &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s2">&quot; (km)&quot;</span><span class="p">)</span></div>
 
-<div class="viewcode-block" id="AirborneRadarDisplay.label_yaxis_z"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.label_yaxis_z.html#pyart.graph.AirborneRadarDisplay.label_yaxis_z">[docs]</a>    <span class="k">def</span> <span class="nf">label_yaxis_z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<div class="viewcode-block" id="AirborneRadarDisplay.label_yaxis_z"><a class="viewcode-back" href="../../../API/generated/pyart.graph.AirborneRadarDisplay.label_yaxis_z.html#pyart.graph.AirborneRadarDisplay.label_yaxis_z">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">label_yaxis_z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Label the yaxis with the default label for z units.&quot;&quot;&quot;</span>
         <span class="n">ax</span> <span class="o">=</span> <span class="n">common</span><span class="o">.</span><span class="n">parse_ax</span><span class="p">(</span><span class="n">ax</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;Distance Above &quot;</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin</span> <span class="o">+</span> <span class="s2">&quot;  (km)&quot;</span><span class="p">)</span></div>
 
-    <span class="k">def</span> <span class="nf">_get_x_z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="p">,</span> <span class="n">ignoreTilt</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_x_z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="p">,</span> <span class="n">ignoreTilt</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve and return x and z coordinate in km.&quot;&quot;&quot;</span>
         <span class="n">x</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_x_y_z</span><span class="p">(</span>
             <span class="n">sweep</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="p">,</span> <span class="n">ignoreTilt</span><span class="o">=</span><span class="n">ignoreTilt</span>
         <span class="p">)</span>
         <span class="k">return</span> <span class="n">x</span><span class="p">,</span> <span class="n">z</span>
 
-    <span class="k">def</span> <span class="nf">_get_x_y_z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="p">,</span> <span class="n">ignoreTilt</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_get_x_y_z</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sweep</span><span class="p">,</span> <span class="n">edges</span><span class="p">,</span> <span class="n">filter_transitions</span><span class="p">,</span> <span class="n">ignoreTilt</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Retrieve and return x, y, and z coordinate in km.&quot;&quot;&quot;</span>
         <span class="n">sweep_slice</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="n">sweep</span><span class="p">)</span>
 

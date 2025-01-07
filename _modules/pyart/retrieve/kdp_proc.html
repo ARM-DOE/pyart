@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -466,16 +466,16 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">time</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
-<span class="kn">from</span> <span class="nn">functools</span> <span class="kn">import</span> <span class="n">partial</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">time</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">partial</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">from</span> <span class="nn">scipy</span> <span class="kn">import</span> <span class="n">interpolate</span><span class="p">,</span> <span class="n">linalg</span><span class="p">,</span> <span class="n">optimize</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">stats</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">interpolate</span><span class="p">,</span> <span class="n">linalg</span><span class="p">,</span> <span class="n">optimize</span><span class="p">,</span> <span class="n">signal</span><span class="p">,</span> <span class="n">stats</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
-<span class="kn">from</span> <span class="nn">..util</span> <span class="kn">import</span> <span class="n">rolling_window</span>
-<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">_kdp_proc</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..util</span><span class="w"> </span><span class="kn">import</span> <span class="n">rolling_window</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">_kdp_proc</span>
 
 <span class="c1"># Constants in the Kalman filter retrieval method (generally no need to</span>
 <span class="c1"># modify them)</span>
@@ -498,7 +498,7 @@
 <span class="n">SHIFT</span> <span class="o">=</span> <span class="mi">13</span>  <span class="c1"># Shifting of the final signal</span>
 
 
-<div class="viewcode-block" id="kdp_schneebeli"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.kdp_schneebeli.html#pyart.retrieve.kdp_schneebeli">[docs]</a><span class="k">def</span> <span class="nf">kdp_schneebeli</span><span class="p">(</span>
+<div class="viewcode-block" id="kdp_schneebeli"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.kdp_schneebeli.html#pyart.retrieve.kdp_schneebeli">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">kdp_schneebeli</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -572,7 +572,7 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># create parallel computing instance</span>
     <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">multiprocessing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mp</span>
 
         <span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">mp</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(),</span> <span class="n">maxtasksperchild</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
@@ -663,7 +663,7 @@
     <span class="k">return</span> <span class="n">kdp_dict</span><span class="p">,</span> <span class="n">kdp_stdev_dict</span><span class="p">,</span> <span class="n">phidpr_dict</span></div>
 
 
-<span class="k">def</span> <span class="nf">_kdp_estimation_backward_fixed</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_kdp_estimation_backward_fixed</span><span class="p">(</span>
     <span class="n">psidp_in</span><span class="p">,</span> <span class="n">rcov</span><span class="p">,</span> <span class="n">pcov_scale</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">f_transposed</span><span class="p">,</span> <span class="n">h_plus</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">kdp_th</span><span class="p">,</span> <span class="n">mpsidp</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -777,7 +777,7 @@
     <span class="k">return</span> <span class="n">kdp</span><span class="p">,</span> <span class="n">kdp_error</span>
 
 
-<span class="k">def</span> <span class="nf">_kdp_estimation_forward_fixed</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_kdp_estimation_forward_fixed</span><span class="p">(</span>
     <span class="n">psidp_in</span><span class="p">,</span> <span class="n">rcov</span><span class="p">,</span> <span class="n">pcov_scale</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="n">f_transposed</span><span class="p">,</span> <span class="n">h_plus</span><span class="p">,</span> <span class="n">c1</span><span class="p">,</span> <span class="n">c2</span><span class="p">,</span> <span class="n">b1</span><span class="p">,</span> <span class="n">b2</span><span class="p">,</span> <span class="n">kdp_th</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -879,7 +879,7 @@
     <span class="k">return</span> <span class="n">kdp</span><span class="p">,</span> <span class="n">phidp</span><span class="p">,</span> <span class="n">kdp_error</span>
 
 
-<span class="k">def</span> <span class="nf">_kdp_kalman_profile</span><span class="p">(</span><span class="n">psidp_in</span><span class="p">,</span> <span class="n">dr</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">rcov</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pcov</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_kdp_kalman_profile</span><span class="p">(</span><span class="n">psidp_in</span><span class="p">,</span> <span class="n">dr</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">rcov</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">pcov</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates Kdp with the Kalman filter method by Schneebeli and al. (2014)</span>
 <span class="sd">    for a set of psidp measurements.</span>
@@ -1225,7 +1225,7 @@
     <span class="k">return</span> <span class="n">kdp_filter_out</span><span class="p">,</span> <span class="n">kdp_std</span><span class="p">,</span> <span class="n">phidp_filter_out</span>
 
 
-<div class="viewcode-block" id="kdp_vulpiani"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.kdp_vulpiani.html#pyart.retrieve.kdp_vulpiani">[docs]</a><span class="k">def</span> <span class="nf">kdp_vulpiani</span><span class="p">(</span>
+<div class="viewcode-block" id="kdp_vulpiani"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.kdp_vulpiani.html#pyart.retrieve.kdp_vulpiani">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">kdp_vulpiani</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1310,7 +1310,7 @@
         <span class="n">windsize</span> <span class="o">=</span> <span class="mi">10</span>
 
     <span class="k">if</span> <span class="n">parallel</span><span class="p">:</span>
-        <span class="kn">import</span> <span class="nn">multiprocessing</span> <span class="k">as</span> <span class="nn">mp</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">multiprocessing</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mp</span>
 
         <span class="n">pool</span> <span class="o">=</span> <span class="n">mp</span><span class="o">.</span><span class="n">Pool</span><span class="p">(</span><span class="n">processes</span><span class="o">=</span><span class="n">mp</span><span class="o">.</span><span class="n">cpu_count</span><span class="p">(),</span> <span class="n">maxtasksperchild</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
@@ -1396,7 +1396,7 @@
     <span class="k">return</span> <span class="n">kdp_dict</span><span class="p">,</span> <span class="n">phidpr_dict</span></div>
 
 
-<span class="k">def</span> <span class="nf">_kdp_vulpiani_profile</span><span class="p">(</span><span class="n">psidp_in</span><span class="p">,</span> <span class="n">dr</span><span class="p">,</span> <span class="n">windsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">interp</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_kdp_vulpiani_profile</span><span class="p">(</span><span class="n">psidp_in</span><span class="p">,</span> <span class="n">dr</span><span class="p">,</span> <span class="n">windsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">band</span><span class="o">=</span><span class="s2">&quot;X&quot;</span><span class="p">,</span> <span class="n">n_iter</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">interp</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Estimates Kdp with the Vulpiani method for a single profile of psidp</span>
 <span class="sd">    measurements</span>
@@ -1530,7 +1530,7 @@
     <span class="k">return</span> <span class="n">kdp_calc</span><span class="p">,</span> <span class="n">phidp_rec</span>
 
 
-<span class="k">def</span> <span class="nf">filter_psidp</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">filter_psidp</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">psidp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">rhohv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1653,7 +1653,7 @@
 <span class="c1">#   function of iteration.</span>
 
 
-<div class="viewcode-block" id="kdp_maesaka"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.kdp_maesaka.html#pyart.retrieve.kdp_maesaka">[docs]</a><span class="k">def</span> <span class="nf">kdp_maesaka</span><span class="p">(</span>
+<div class="viewcode-block" id="kdp_maesaka"><a class="viewcode-back" href="../../../API/generated/pyart.retrieve.kdp_maesaka.html#pyart.retrieve.kdp_maesaka">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">kdp_maesaka</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">method</span><span class="o">=</span><span class="s2">&quot;cg&quot;</span><span class="p">,</span>
@@ -1920,7 +1920,7 @@
     <span class="k">return</span> <span class="n">kdp_dict</span><span class="p">,</span> <span class="n">phidpf_dict</span><span class="p">,</span> <span class="n">phidpr_dict</span></div>
 
 
-<span class="k">def</span> <span class="nf">boundary_conditions_maesaka</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">boundary_conditions_maesaka</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">n</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span> <span class="n">psidp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -2120,7 +2120,7 @@
     <span class="k">return</span> <span class="n">phi_near</span><span class="p">,</span> <span class="n">phi_far</span><span class="p">,</span> <span class="n">range_near</span><span class="p">,</span> <span class="n">range_far</span><span class="p">,</span> <span class="n">idx_near</span><span class="p">,</span> <span class="n">idx_far</span>
 
 
-<span class="k">def</span> <span class="nf">_cost_maesaka</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_cost_maesaka</span><span class="p">(</span>
     <span class="n">x</span><span class="p">,</span>
     <span class="n">psidp_o</span><span class="p">,</span>
     <span class="n">bcs</span><span class="p">,</span>
@@ -2225,7 +2225,7 @@
     <span class="k">return</span> <span class="n">J</span>
 
 
-<span class="k">def</span> <span class="nf">_jac_maesaka</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_jac_maesaka</span><span class="p">(</span>
     <span class="n">x</span><span class="p">,</span>
     <span class="n">psidp_o</span><span class="p">,</span>
     <span class="n">bcs</span><span class="p">,</span>
@@ -2343,7 +2343,7 @@
     <span class="k">return</span> <span class="n">jac</span>
 
 
-<span class="k">def</span> <span class="nf">_forward_reverse_phidp</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">bcs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_forward_reverse_phidp</span><span class="p">(</span><span class="n">k</span><span class="p">,</span> <span class="n">bcs</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Compute the forward and reverse direction propagation differential phases</span>
 <span class="sd">    from the control variable k and boundary conditions following equations (1)</span>
@@ -2392,7 +2392,7 @@
     <span class="k">return</span> <span class="n">phidp_f</span><span class="p">,</span> <span class="n">phidp_r</span>
 
 
-<span class="k">def</span> <span class="nf">_parse_range_resolution</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">check_uniform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_parse_range_resolution</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">check_uniform</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">verbose</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parse the radar range gate resolution.</span>
 

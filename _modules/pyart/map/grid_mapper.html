@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,25 +463,25 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">import</span> <span class="nn">netCDF4</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">scipy.spatial</span>
-<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">netCDF4</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.spatial</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
-<span class="kn">from</span> <span class="nn">..core.grid</span> <span class="kn">import</span> <span class="n">Grid</span>
-<span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
-<span class="kn">from</span> <span class="nn">..core.transforms</span> <span class="kn">import</span> <span class="n">geographic_to_cartesian</span>
-<span class="kn">from</span> <span class="nn">..filters</span> <span class="kn">import</span> <span class="n">GateFilter</span><span class="p">,</span> <span class="n">moment_based_gate_filter</span>
-<span class="kn">from</span> <span class="nn">..io.common</span> <span class="kn">import</span> <span class="n">make_time_unit_str</span>
-<span class="kn">from</span> <span class="nn">._load_nn_field_data</span> <span class="kn">import</span> <span class="n">_load_nn_field_data</span>
-<span class="kn">from</span> <span class="nn">.ckdtree</span> <span class="kn">import</span> <span class="n">cKDTree</span>
-<span class="kn">from</span> <span class="nn">.gates_to_grid</span> <span class="kn">import</span> <span class="n">map_gates_to_grid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">Grid</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.radar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Radar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">geographic_to_cartesian</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..filters</span><span class="w"> </span><span class="kn">import</span> <span class="n">GateFilter</span><span class="p">,</span> <span class="n">moment_based_gate_filter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..io.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">make_time_unit_str</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._load_nn_field_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">_load_nn_field_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.ckdtree</span><span class="w"> </span><span class="kn">import</span> <span class="n">cKDTree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.gates_to_grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">map_gates_to_grid</span>
 
 
-<div class="viewcode-block" id="grid_from_radars"><a class="viewcode-back" href="../../../API/generated/pyart.map.grid_from_radars.html#pyart.map.grid_from_radars">[docs]</a><span class="k">def</span> <span class="nf">grid_from_radars</span><span class="p">(</span>
+<div class="viewcode-block" id="grid_from_radars"><a class="viewcode-back" href="../../../API/generated/pyart.map.grid_from_radars.html#pyart.map.grid_from_radars">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">grid_from_radars</span><span class="p">(</span>
     <span class="n">radars</span><span class="p">,</span>
     <span class="n">grid_shape</span><span class="p">,</span>
     <span class="n">grid_limits</span><span class="p">,</span>
@@ -665,7 +665,7 @@
     <span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">_unify_times_for_radars</span><span class="p">(</span><span class="n">radars</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_unify_times_for_radars</span><span class="p">(</span><span class="n">radars</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return unified start times and units for a number of radars.&quot;&quot;&quot;</span>
     <span class="n">dates</span> <span class="o">=</span> <span class="p">[</span>
         <span class="n">netCDF4</span><span class="o">.</span><span class="n">num2date</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">])</span> <span class="k">for</span> <span class="n">radar</span> <span class="ow">in</span> <span class="n">radars</span>
@@ -675,7 +675,7 @@
     <span class="k">return</span> <span class="n">times</span><span class="p">,</span> <span class="n">units</span>
 
 
-<span class="k">class</span> <span class="nc">NNLocator</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NNLocator</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Nearest neighbor locator.</span>
 
@@ -697,7 +697,7 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">leafsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;kd_tree&quot;</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">leafsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">algorithm</span><span class="o">=</span><span class="s2">&quot;kd_tree&quot;</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;initalize.&quot;&quot;&quot;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_algorithm</span> <span class="o">=</span> <span class="n">algorithm</span>
 
@@ -706,7 +706,7 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;invalid algorithm&quot;</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">find_neighbors_and_dists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">find_neighbors_and_dists</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">q</span><span class="p">,</span> <span class="n">r</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Find all neighbors and distances within a given distance.</span>
 
@@ -734,7 +734,7 @@
             <span class="k">return</span> <span class="n">ind</span><span class="p">,</span> <span class="n">dist</span>
 
 
-<div class="viewcode-block" id="map_to_grid"><a class="viewcode-back" href="../../../API/generated/pyart.map.map_to_grid.html#pyart.map.map_to_grid">[docs]</a><span class="k">def</span> <span class="nf">map_to_grid</span><span class="p">(</span>
+<div class="viewcode-block" id="map_to_grid"><a class="viewcode-back" href="../../../API/generated/pyart.map.map_to_grid.html#pyart.map.map_to_grid">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">map_to_grid</span><span class="p">(</span>
     <span class="n">radars</span><span class="p">,</span>
     <span class="n">grid_shape</span><span class="p">,</span>
     <span class="n">grid_limits</span><span class="p">,</span>
@@ -1203,7 +1203,7 @@
 <span class="c1"># Radius of Influence (RoI) functions</span>
 
 
-<div class="viewcode-block" id="example_roi_func_constant"><a class="viewcode-back" href="../../../API/generated/pyart.map.example_roi_func_constant.html#pyart.map.example_roi_func_constant">[docs]</a><span class="k">def</span> <span class="nf">example_roi_func_constant</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
+<div class="viewcode-block" id="example_roi_func_constant"><a class="viewcode-back" href="../../../API/generated/pyart.map.example_roi_func_constant.html#pyart.map.example_roi_func_constant">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">example_roi_func_constant</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Example RoI function which returns a constant radius.</span>
 
@@ -1222,21 +1222,21 @@
     <span class="k">return</span> <span class="n">constant</span></div>
 
 
-<span class="k">def</span> <span class="nf">_gen_roi_func_constant</span><span class="p">(</span><span class="n">constant_roi</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_gen_roi_func_constant</span><span class="p">(</span><span class="n">constant_roi</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a RoI function which returns a constant radius.</span>
 
 <span class="sd">    See :py:func:`map_to_grid` for a description of the parameters.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">roi</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">roi</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;constant radius of influence function.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">constant_roi</span>
 
     <span class="k">return</span> <span class="n">roi</span>
 
 
-<div class="viewcode-block" id="example_roi_func_dist"><a class="viewcode-back" href="../../../API/generated/pyart.map.example_roi_func_dist.html#pyart.map.example_roi_func_dist">[docs]</a><span class="k">def</span> <span class="nf">example_roi_func_dist</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
+<div class="viewcode-block" id="example_roi_func_dist"><a class="viewcode-back" href="../../../API/generated/pyart.map.example_roi_func_dist.html#pyart.map.example_roi_func_dist">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">example_roi_func_dist</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Example RoI function which returns a radius which grows with distance.</span>
 
@@ -1268,7 +1268,7 @@
     <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">r</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">_gen_roi_func_dist</span><span class="p">(</span><span class="n">z_factor</span><span class="p">,</span> <span class="n">xy_factor</span><span class="p">,</span> <span class="n">min_radius</span><span class="p">,</span> <span class="n">offsets</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_gen_roi_func_dist</span><span class="p">(</span><span class="n">z_factor</span><span class="p">,</span> <span class="n">xy_factor</span><span class="p">,</span> <span class="n">min_radius</span><span class="p">,</span> <span class="n">offsets</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a RoI function whose radius grows with distance.</span>
 
@@ -1279,7 +1279,7 @@
     <span class="n">yg_off</span> <span class="o">=</span> <span class="n">offsets</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
     <span class="n">xg_off</span> <span class="o">=</span> <span class="n">offsets</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">roi</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">roi</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;dist radius of influence function.&quot;&quot;&quot;</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
             <span class="n">z_factor</span> <span class="o">*</span> <span class="p">(</span><span class="n">zg</span> <span class="o">-</span> <span class="n">zg_off</span><span class="p">)</span>
@@ -1291,7 +1291,7 @@
     <span class="k">return</span> <span class="n">roi</span>
 
 
-<div class="viewcode-block" id="example_roi_func_dist_beam"><a class="viewcode-back" href="../../../API/generated/pyart.map.example_roi_func_dist_beam.html#pyart.map.example_roi_func_dist_beam">[docs]</a><span class="k">def</span> <span class="nf">example_roi_func_dist_beam</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
+<div class="viewcode-block" id="example_roi_func_dist_beam"><a class="viewcode-back" href="../../../API/generated/pyart.map.example_roi_func_dist_beam.html#pyart.map.example_roi_func_dist_beam">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">example_roi_func_dist_beam</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Example RoI function which returns a radius which grows with distance</span>
 <span class="sd">    and whose parameters are based on virtual beam size.</span>
@@ -1326,7 +1326,7 @@
     <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">r</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">_gen_roi_func_dist_beam</span><span class="p">(</span><span class="n">h_factor</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">bsp</span><span class="p">,</span> <span class="n">min_radius</span><span class="p">,</span> <span class="n">offsets</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_gen_roi_func_dist_beam</span><span class="p">(</span><span class="n">h_factor</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">bsp</span><span class="p">,</span> <span class="n">min_radius</span><span class="p">,</span> <span class="n">offsets</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return a RoI function whose radius which grows with distance</span>
 <span class="sd">    and whose parameters are based on virtual beam size.</span>
@@ -1338,7 +1338,7 @@
     <span class="n">yg_off</span> <span class="o">=</span> <span class="n">offsets</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
     <span class="n">xg_off</span> <span class="o">=</span> <span class="n">offsets</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
 
-    <span class="k">def</span> <span class="nf">roi</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">roi</span><span class="p">(</span><span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;dist_beam radius of influence function.&quot;&quot;&quot;</span>
         <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span>
             <span class="n">h_factor</span> <span class="o">*</span> <span class="p">((</span><span class="n">zg</span> <span class="o">-</span> <span class="n">zg_off</span><span class="p">)</span> <span class="o">/</span> <span class="mf">20.0</span><span class="p">)</span>
@@ -1351,7 +1351,7 @@
     <span class="k">return</span> <span class="n">roi</span>
 
 
-<div class="viewcode-block" id="grid_ppi_sweeps"><a class="viewcode-back" href="../../../API/generated/pyart.map.grid_ppi_sweeps.html#pyart.map.grid_ppi_sweeps">[docs]</a><span class="k">def</span> <span class="nf">grid_ppi_sweeps</span><span class="p">(</span>
+<div class="viewcode-block" id="grid_ppi_sweeps"><a class="viewcode-back" href="../../../API/generated/pyart.map.grid_ppi_sweeps.html#pyart.map.grid_ppi_sweeps">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">grid_ppi_sweeps</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">target_sweeps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">grid_size</span><span class="o">=</span><span class="mi">801</span><span class="p">,</span>
@@ -1469,7 +1469,7 @@
     <span class="k">return</span> <span class="n">radar_ds</span></div>
 
 
-<div class="viewcode-block" id="grid_rhi_sweeps"><a class="viewcode-back" href="../../../API/generated/pyart.map.grid_rhi_sweeps.html#pyart.map.grid_rhi_sweeps">[docs]</a><span class="k">def</span> <span class="nf">grid_rhi_sweeps</span><span class="p">(</span>
+<div class="viewcode-block" id="grid_rhi_sweeps"><a class="viewcode-back" href="../../../API/generated/pyart.map.grid_rhi_sweeps.html#pyart.map.grid_rhi_sweeps">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">grid_rhi_sweeps</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">target_sweeps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">grid_size</span><span class="o">=</span><span class="mi">801</span><span class="p">,</span>

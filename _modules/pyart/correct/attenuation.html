@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -466,20 +466,20 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">from</span> <span class="nn">copy</span> <span class="kn">import</span> <span class="n">deepcopy</span>
-<span class="kn">from</span> <span class="nn">warnings</span> <span class="kn">import</span> <span class="n">warn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">numpy.ma</span> <span class="k">as</span> <span class="nn">ma</span>
-<span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">cumulative_trapezoid</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy.ma</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ma</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.integrate</span><span class="w"> </span><span class="kn">import</span> <span class="n">cumulative_trapezoid</span>
 
-<span class="kn">from</span> <span class="nn">..config</span> <span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
-<span class="kn">from</span> <span class="nn">..filters</span> <span class="kn">import</span> <span class="n">GateFilter</span><span class="p">,</span> <span class="n">iso0_based_gate_filter</span><span class="p">,</span> <span class="n">temp_based_gate_filter</span>
-<span class="kn">from</span> <span class="nn">..retrieve</span> <span class="kn">import</span> <span class="n">get_freq_band</span>
-<span class="kn">from</span> <span class="nn">.phase_proc</span> <span class="kn">import</span> <span class="n">det_process_range</span><span class="p">,</span> <span class="n">smooth_and_trim</span><span class="p">,</span> <span class="n">smooth_masked</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..filters</span><span class="w"> </span><span class="kn">import</span> <span class="n">GateFilter</span><span class="p">,</span> <span class="n">iso0_based_gate_filter</span><span class="p">,</span> <span class="n">temp_based_gate_filter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..retrieve</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_freq_band</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.phase_proc</span><span class="w"> </span><span class="kn">import</span> <span class="n">det_process_range</span><span class="p">,</span> <span class="n">smooth_and_trim</span><span class="p">,</span> <span class="n">smooth_masked</span>
 
 
-<div class="viewcode-block" id="calculate_attenuation_zphi"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calculate_attenuation_zphi.html#pyart.correct.calculate_attenuation_zphi">[docs]</a><span class="k">def</span> <span class="nf">calculate_attenuation_zphi</span><span class="p">(</span>
+<div class="viewcode-block" id="calculate_attenuation_zphi"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calculate_attenuation_zphi.html#pyart.correct.calculate_attenuation_zphi">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">calculate_attenuation_zphi</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">doc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">fzl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -807,7 +807,7 @@
     <span class="k">return</span> <span class="n">spec_at</span><span class="p">,</span> <span class="n">pia_dict</span><span class="p">,</span> <span class="n">cor_z</span><span class="p">,</span> <span class="n">spec_diff_at</span><span class="p">,</span> <span class="n">pida_dict</span><span class="p">,</span> <span class="n">cor_zdr</span></div>
 
 
-<div class="viewcode-block" id="calculate_attenuation_philinear"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calculate_attenuation_philinear.html#pyart.correct.calculate_attenuation_philinear">[docs]</a><span class="k">def</span> <span class="nf">calculate_attenuation_philinear</span><span class="p">(</span>
+<div class="viewcode-block" id="calculate_attenuation_philinear"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calculate_attenuation_philinear.html#pyart.correct.calculate_attenuation_philinear">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">calculate_attenuation_philinear</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">doc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">fzl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1042,7 +1042,7 @@
     <span class="k">return</span> <span class="n">spec_at</span><span class="p">,</span> <span class="n">pia_dict</span><span class="p">,</span> <span class="n">cor_z</span><span class="p">,</span> <span class="n">spec_diff_at</span><span class="p">,</span> <span class="n">pida_dict</span><span class="p">,</span> <span class="n">cor_zdr</span></div>
 
 
-<span class="k">def</span> <span class="nf">get_mask_fzl</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">get_mask_fzl</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">fzl</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">doc</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -1190,7 +1190,7 @@
     <span class="k">return</span> <span class="n">mask_fzl</span><span class="p">,</span> <span class="n">end_gate_arr</span>
 
 
-<span class="k">def</span> <span class="nf">_prepare_phidp</span><span class="p">(</span><span class="n">phidp</span><span class="p">,</span> <span class="n">mask_fzl</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_prepare_phidp</span><span class="p">(</span><span class="n">phidp</span><span class="p">,</span> <span class="n">mask_fzl</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Prepares phidp to be used in attenuation correction by masking values</span>
 <span class="sd">    above freezing level setting negative values to 0 and make sure it is</span>
@@ -1217,7 +1217,7 @@
     <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="o">.</span><span class="n">accumulate</span><span class="p">(</span><span class="n">corr_phidp</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="mf">0.0</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">_get_param_attzphi</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_param_attzphi</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the parameters of Z-Phi attenuation estimation for a particular</span>
 <span class="sd">    frequency.</span>
@@ -1254,7 +1254,7 @@
     <span class="k">return</span> <span class="n">param_att_dict</span><span class="p">[</span><span class="n">freq_band_aux</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">_param_attzphi_table</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_param_attzphi_table</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Defines the parameters of Z-Phi attenuation estimation at each frequency</span>
 <span class="sd">    band.</span>
@@ -1279,7 +1279,7 @@
     <span class="k">return</span> <span class="n">param_att_dict</span>
 
 
-<span class="k">def</span> <span class="nf">_get_param_attphilinear</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_get_param_attphilinear</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Get the parameters of attenuation estimation based on phidp for a</span>
 <span class="sd">    particular frequency.</span>
@@ -1316,7 +1316,7 @@
     <span class="k">return</span> <span class="n">param_att_dict</span><span class="p">[</span><span class="n">freq_band_aux</span><span class="p">]</span>
 
 
-<span class="k">def</span> <span class="nf">_param_attphilinear_table</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_param_attphilinear_table</span><span class="p">():</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Defines the parameters of attenuation estimation based on phidp at each</span>
 <span class="sd">    frequency band.</span>
@@ -1341,7 +1341,7 @@
     <span class="k">return</span> <span class="n">param_att_dict</span>
 
 
-<div class="viewcode-block" id="calculate_attenuation"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calculate_attenuation.html#pyart.correct.calculate_attenuation">[docs]</a><span class="k">def</span> <span class="nf">calculate_attenuation</span><span class="p">(</span>
+<div class="viewcode-block" id="calculate_attenuation"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calculate_attenuation.html#pyart.correct.calculate_attenuation">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">calculate_attenuation</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">z_offset</span><span class="p">,</span>
     <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>

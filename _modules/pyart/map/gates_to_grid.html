@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,15 +463,15 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">gc</span>
-<span class="kn">import</span> <span class="nn">warnings</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">gc</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
-<span class="kn">from</span> <span class="nn">..core.radar</span> <span class="kn">import</span> <span class="n">Radar</span>
-<span class="kn">from</span> <span class="nn">..core.transforms</span> <span class="kn">import</span> <span class="n">geographic_to_cartesian</span>
-<span class="kn">from</span> <span class="nn">..filters</span> <span class="kn">import</span> <span class="n">GateFilter</span><span class="p">,</span> <span class="n">moment_based_gate_filter</span>
-<span class="kn">from</span> <span class="nn">._gate_to_grid_map</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.radar</span><span class="w"> </span><span class="kn">import</span> <span class="n">Radar</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..core.transforms</span><span class="w"> </span><span class="kn">import</span> <span class="n">geographic_to_cartesian</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">..filters</span><span class="w"> </span><span class="kn">import</span> <span class="n">GateFilter</span><span class="p">,</span> <span class="n">moment_based_gate_filter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">._gate_to_grid_map</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">ConstantRoI</span><span class="p">,</span>
     <span class="n">DistBeamRoI</span><span class="p">,</span>
     <span class="n">DistRoI</span><span class="p">,</span>
@@ -480,7 +480,7 @@
 <span class="p">)</span>
 
 
-<div class="viewcode-block" id="map_gates_to_grid"><a class="viewcode-back" href="../../../API/generated/pyart.map.map_gates_to_grid.html#pyart.map.map_gates_to_grid">[docs]</a><span class="k">def</span> <span class="nf">map_gates_to_grid</span><span class="p">(</span>
+<div class="viewcode-block" id="map_gates_to_grid"><a class="viewcode-back" href="../../../API/generated/pyart.map.map_gates_to_grid.html#pyart.map.map_gates_to_grid">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">map_gates_to_grid</span><span class="p">(</span>
     <span class="n">radars</span><span class="p">,</span>
     <span class="n">grid_shape</span><span class="p">,</span>
     <span class="n">grid_limits</span><span class="p">,</span>
@@ -675,7 +675,7 @@
     <span class="k">return</span> <span class="n">grids</span></div>
 
 
-<span class="k">def</span> <span class="nf">_detemine_cy_weighting_func</span><span class="p">(</span><span class="n">weighting_function</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_detemine_cy_weighting_func</span><span class="p">(</span><span class="n">weighting_function</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine cython weight function value.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">weighting_function</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="o">==</span> <span class="s2">&quot;BARNES2&quot;</span><span class="p">:</span>
         <span class="n">cy_weighting_function</span> <span class="o">=</span> <span class="mi">3</span>
@@ -697,7 +697,7 @@
     <span class="k">return</span> <span class="n">cy_weighting_function</span>
 
 
-<span class="k">def</span> <span class="nf">_find_projparams</span><span class="p">(</span><span class="n">grid_origin</span><span class="p">,</span> <span class="n">radars</span><span class="p">,</span> <span class="n">grid_projection</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_find_projparams</span><span class="p">(</span><span class="n">grid_origin</span><span class="p">,</span> <span class="n">radars</span><span class="p">,</span> <span class="n">grid_projection</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine the projection parameter.&quot;&quot;&quot;</span>
 
     <span class="c1"># parse grid_origin</span>
@@ -722,7 +722,7 @@
     <span class="k">return</span> <span class="n">projparams</span>
 
 
-<span class="k">def</span> <span class="nf">_parse_gatefilters</span><span class="p">(</span><span class="n">gatefilters</span><span class="p">,</span> <span class="n">radars</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_parse_gatefilters</span><span class="p">(</span><span class="n">gatefilters</span><span class="p">,</span> <span class="n">radars</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Parse the gatefilters parameter.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">gatefilters</span><span class="p">,</span> <span class="n">GateFilter</span><span class="p">):</span>
         <span class="n">gatefilters</span> <span class="o">=</span> <span class="p">(</span><span class="n">gatefilters</span><span class="p">,)</span>  <span class="c1"># make tuple if single filter passed</span>
@@ -735,7 +735,7 @@
     <span class="k">return</span> <span class="n">gatefilters</span>
 
 
-<span class="k">def</span> <span class="nf">_determine_fields</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">radars</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_determine_fields</span><span class="p">(</span><span class="n">fields</span><span class="p">,</span> <span class="n">radars</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Determine which field should be mapped to the grid.&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="nb">set</span><span class="p">(</span><span class="n">radars</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -745,7 +745,7 @@
     <span class="k">return</span> <span class="n">fields</span>
 
 
-<span class="k">def</span> <span class="nf">_find_offsets</span><span class="p">(</span><span class="n">radars</span><span class="p">,</span> <span class="n">projparams</span><span class="p">,</span> <span class="n">grid_origin_alt</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_find_offsets</span><span class="p">(</span><span class="n">radars</span><span class="p">,</span> <span class="n">projparams</span><span class="p">,</span> <span class="n">grid_origin_alt</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Find offset between radars and grid origin.&quot;&quot;&quot;</span>
     <span class="c1"># loop over the radars finding offsets from the origin</span>
     <span class="n">offsets</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># offsets from the grid origin, in meters, for each radar</span>
@@ -767,7 +767,7 @@
     <span class="k">return</span> <span class="n">offsets</span>
 
 
-<span class="k">def</span> <span class="nf">_find_grid_params</span><span class="p">(</span><span class="n">grid_shape</span><span class="p">,</span> <span class="n">grid_limits</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_find_grid_params</span><span class="p">(</span><span class="n">grid_shape</span><span class="p">,</span> <span class="n">grid_limits</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Find the starting points and step size of the grid.&quot;&quot;&quot;</span>
     <span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">grid_shape</span>
     <span class="n">zr</span><span class="p">,</span> <span class="n">yr</span><span class="p">,</span> <span class="n">xr</span> <span class="o">=</span> <span class="n">grid_limits</span>
@@ -793,7 +793,7 @@
     <span class="k">return</span> <span class="n">grid_starts</span><span class="p">,</span> <span class="n">grid_steps</span>
 
 
-<span class="k">def</span> <span class="nf">_parse_roi_func</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_parse_roi_func</span><span class="p">(</span>
     <span class="n">roi_func</span><span class="p">,</span> <span class="n">constant_roi</span><span class="p">,</span> <span class="n">z_factor</span><span class="p">,</span> <span class="n">xy_factor</span><span class="p">,</span> <span class="n">min_radius</span><span class="p">,</span> <span class="n">h_factor</span><span class="p">,</span> <span class="n">nb</span><span class="p">,</span> <span class="n">bsp</span><span class="p">,</span> <span class="n">offsets</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the Radius of influence object.&quot;&quot;&quot;</span>

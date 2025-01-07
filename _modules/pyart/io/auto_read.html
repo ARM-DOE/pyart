@@ -29,7 +29,7 @@
   <link href="../../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -463,23 +463,23 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span> <span class="nn">bz2</span>
-<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">bz2</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">gzip</span>
 
-<span class="kn">import</span> <span class="nn">netCDF4</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">netCDF4</span>
 
-<span class="kn">from</span> <span class="nn">.cfradial</span> <span class="kn">import</span> <span class="n">read_cfradial</span>
-<span class="kn">from</span> <span class="nn">.chl</span> <span class="kn">import</span> <span class="n">read_chl</span>
-<span class="kn">from</span> <span class="nn">.mdv_radar</span> <span class="kn">import</span> <span class="n">read_mdv</span>
-<span class="kn">from</span> <span class="nn">.nexrad_archive</span> <span class="kn">import</span> <span class="n">read_nexrad_archive</span>
-<span class="kn">from</span> <span class="nn">.nexrad_cdm</span> <span class="kn">import</span> <span class="n">read_nexrad_cdm</span>
-<span class="kn">from</span> <span class="nn">.nexradl3_read</span> <span class="kn">import</span> <span class="n">read_nexrad_level3</span>
-<span class="kn">from</span> <span class="nn">.rsl</span> <span class="kn">import</span> <span class="n">_RSL_AVAILABLE</span><span class="p">,</span> <span class="n">read_rsl</span>
-<span class="kn">from</span> <span class="nn">.sigmet</span> <span class="kn">import</span> <span class="n">read_sigmet</span>
-<span class="kn">from</span> <span class="nn">.uf</span> <span class="kn">import</span> <span class="n">read_uf</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.cfradial</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_cfradial</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.chl</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_chl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.mdv_radar</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_mdv</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.nexrad_archive</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_nexrad_archive</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.nexrad_cdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_nexrad_cdm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.nexradl3_read</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_nexrad_level3</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.rsl</span><span class="w"> </span><span class="kn">import</span> <span class="n">_RSL_AVAILABLE</span><span class="p">,</span> <span class="n">read_rsl</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.sigmet</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_sigmet</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.uf</span><span class="w"> </span><span class="kn">import</span> <span class="n">read_uf</span>
 
 
-<div class="viewcode-block" id="read"><a class="viewcode-back" href="../../../API/generated/pyart.io.read.html#pyart.io.read">[docs]</a><span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">use_rsl</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<div class="viewcode-block" id="read"><a class="viewcode-back" href="../../../API/generated/pyart.io.read.html#pyart.io.read">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">read</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">use_rsl</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Read a radar file and return a radar object.</span>
 
@@ -597,7 +597,7 @@
     <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Unknown or unsupported file format: &quot;</span> <span class="o">+</span> <span class="n">filetype</span><span class="p">)</span></div>
 
 
-<span class="k">def</span> <span class="nf">determine_filetype</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">determine_filetype</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Return the filetype of a given file by examining the first few bytes.</span>
 

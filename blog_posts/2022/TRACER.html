@@ -30,7 +30,7 @@
   <link href="../../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 <link href="../../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
@@ -581,16 +581,16 @@
 <h2>Imports<a class="headerlink" href="#imports" title="Permalink to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pyart</span>
-<span class="kn">import</span> <span class="nn">act</span>
-<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">xarray</span> <span class="k">as</span> <span class="nn">xr</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">s3fs</span>
-<span class="kn">import</span> <span class="nn">cartopy.crs</span> <span class="k">as</span> <span class="nn">ccrs</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">act</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">s3fs</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">cartopy.crs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ccrs</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 
-<span class="kn">from</span> <span class="nn">scipy.spatial</span> <span class="kn">import</span> <span class="n">KDTree</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial</span><span class="w"> </span><span class="kn">import</span> <span class="n">KDTree</span>
 
 <span class="o">%</span><span class="k">matplotlib</span> inline
 </pre></div>
@@ -1071,7 +1071,7 @@ Attributes: (12/30)
 <span class="c1"># &quot;file_id&quot; is an ABI L1b or L2 .nc file opened using the netCDF4 library</span>
 
 
-<span class="k">def</span> <span class="nf">calculate_degrees</span><span class="p">(</span><span class="n">file_id</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">calculate_degrees</span><span class="p">(</span><span class="n">file_id</span><span class="p">):</span>
     <span class="c1"># Read in GOES ABI fixed grid projection variables and constants</span>
     <span class="n">x_coordinate_1d</span> <span class="o">=</span> <span class="n">file_id</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;x&quot;</span><span class="p">][:]</span>  <span class="c1"># E/W scanning angle in radians</span>
     <span class="n">y_coordinate_1d</span> <span class="o">=</span> <span class="n">file_id</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;y&quot;</span><span class="p">][:]</span>  <span class="c1"># N/S elevation angle in radians</span>
