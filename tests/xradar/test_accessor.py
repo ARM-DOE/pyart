@@ -83,6 +83,11 @@ def test_add_field(filename=filename):
     radar.add_field("reflectivity", new_field)
     assert "reflectivity" in radar.fields
     assert radar["sweep_0"]["reflectivity"].shape == radar["sweep_0"]["DBZ"].shape
+    # Test add field like as well
+    radar.add_field_like("reflectivity", "test", new_field["data"])
+    assert "test" in radar.fields
+    assert "data" in radar.fields["test"]
+    assert radar.fields["test"]["units"] == "dBZ"
 
 
 def test_grid(filename=filename):
