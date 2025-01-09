@@ -9,6 +9,14 @@ import pyart
 filename = DATASETS.fetch("cfrad.20080604_002217_000_SPOL_v36_SUR.nc")
 cfradial2_file = DATASETS.fetch("cfrad2.20080604_002217_000_SPOL_v36_SUR.nc")
 
+COMMON_MAP_TO_GRID_ARGS = {
+    "grid_shape": (3, 9, 10),
+    "grid_limits": ((-400.0, 400.0), (-900.0, 900.0), (-900, 900)),
+    "fields": None,
+    "gridding_algo": "map_to_grid",
+    "roi_func": lambda z, y, x: 30,
+}
+
 
 def test_get_field(filename=filename):
     dtree = xd.io.open_cfradial1_datatree(
@@ -209,3 +217,14 @@ def test_cfradial2_data():
     # Ensure georeferencing works as expected
     x, y, z = radar.get_gate_x_y_z(0)
     assert x.shape == (480, 996)
+
+
+def test_grid_xradar():
+    dtree = xd.io.open_cfradial1_datatree(
+        filename,
+        optional=False,
+    )
+    radar = dtree.pyart.to_radar()
+    grid = pyart.map.grid_from_radars([radar], **COMMON_MAP_TO_GRID_ARGS)
+    assert (10, 9, 3) == (grid.nx, grid.ny, grid.nz)
+    assert_allclose(np.min(grid.fields["DBZ"]["data"]), -1.3201784)
