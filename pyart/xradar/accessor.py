@@ -345,10 +345,21 @@ class Xradar:
         self.ngates = len(self.range["data"])
         self.nrays = len(self.azimuth["data"])
         self.projection = {"proj": "pyart_aeqd", "_include_lon_0_lat_0": True}
+        self.sweep_number = {
+            "standard_name": "sweep_number",
+            "long_name": "Sweep number",
+            "data": np.unique(self.combined_sweeps.sweep_number),
+        }
+        self.sweep_mode = self._determine_sweep_mode()
         self.instrument_parameters = self.find_instrument_parameters()
         self.init_gate_x_y_z()
         self.init_gate_longitude_latitude()
         self.init_gate_alt()
+
+        # Extra methods needed for compatibility
+        self.rays_are_indexed = None
+        self.ray_angle_res = None
+        self.target_scan_rate = None
 
     def __repr__(self):
         return formatting.datatree_repr(self.xradar)
@@ -391,6 +402,24 @@ class Xradar:
             raise ValueError(f"Invalid format for key: {key}")
 
         # Iterators
+
+    def _determine_sweep_mode(self):
+        sweep_mode = {
+            "units": "unitless",
+            "standard_name": "sweep_mode",
+            "long_name": "Sweep mode",
+        }
+        if "sweep_mode" in self.xradar["sweep_0"]:
+            sweep_mode["data"] = np.array(
+                self.nsweeps * [str(self.xradar["sweep_0"].sweep_mode.values)],
+                dtype="S",
+            )
+        else:
+            sweep_mode["data"] = np.array(
+                self.nsweeps * ["azimuth_surveillance"], dtype="S"
+            )
+
+        return sweep_mode
 
     def find_instrument_parameters(self):
         # By default, check the radar_parameters first
