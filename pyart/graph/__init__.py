@@ -62,5 +62,6 @@ from .radardisplay import RadarDisplay  # noqa
 from .radardisplay_airborne import AirborneRadarDisplay  # noqa
 from .radarmapdisplay import RadarMapDisplay  # noqa
 from .radarmapdisplay_basemap import RadarMapDisplayBasemap  # noqa
+from .max_cappi import plot_maxcappi  # noqa
 
 __all__ = [s for s in dir() if not s.startswith("_")]

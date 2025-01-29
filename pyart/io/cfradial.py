@@ -922,7 +922,7 @@ def _calculate_scale_and_offset(dic, dtype, minimum=None, maximum=None):
     if "_FillValue" in dic:
         fillvalue = dic["_FillValue"]
     else:
-        fillvalue = np.NaN
+        fillvalue = np.nan
 
     data = dic["data"].copy()
     data = np.ma.array(data, mask=(~np.isfinite(data) | (data == fillvalue)))

@@ -7,19 +7,22 @@ In this example the reflectivity attenuation is calculated and then corrected
 for a polarimetric radar using a Z-PHI method implemented in Py-ART.
 
 """
+
 print(__doc__)
 
 # Author: Jonathan J. Helmus (jhelmus@anl.gov)
 # License: BSD 3 clause
 
 import matplotlib.pyplot as plt
+import xradar as xd
 
 import pyart
 
 file = pyart.testing.get_test_data("sgpcsaprsurcmacI7.c0.20110520.095101.nc")
 
 # read in the data
-radar = pyart.io.read_cfradial(file)
+tree = xd.io.open_cfradial1_datatree(file)
+radar = tree.pyart.to_radar()
 
 # remove existing corrections
 radar.fields.pop("specific_attenuation")

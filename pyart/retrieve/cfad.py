@@ -19,6 +19,10 @@ def create_cfad(
     histogram that is normalized by the number of points at each altitude. Altitude bins are masked where the counts
     are less than a minimum fraction of the largest number of counts for any altitude row.
 
+    Author: Laura Tomkins (lauramtomkins@gmail.com)
+
+    Parameters
+    ----------
     radar : Radar
         Radar object used. Can be Radar or Grid object.
     field_bins : list

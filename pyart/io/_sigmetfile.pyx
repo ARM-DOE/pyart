@@ -213,7 +213,12 @@ cdef class SigmetFile:
             prt_value = 1. / self.product_hdr['product_end']['prf']
             nyquist = wavelength_cm / (10000.0 * 4.0 * prt_value)
             data['WIDTH'] *= nyquist
-
+        # scale 1-byte KDP by the wavelength
+        if 'KDP' in self.data_type_names:
+            # The IRIS Programmer's Manual indicates 1-byte differential phase format
+            # data should be divided by the wavelength in cm (section 4.3.12).
+            wavelength_cm = self.product_hdr['product_end']['wavelength']
+            data['KDP'] /= (wavelength_cm / 100.0)
         return data, metadata
 
     def _get_sweep(self, full_xhdr=False, raw_data=False):
@@ -714,6 +719,13 @@ def convert_sigmet_data(data_type, data, nbins):
             # this is done in the get_data method of the SigmetFile class.
             out[:] = (ndata - 128.) / 127.
             mask[ndata == 0] = True
+
+        elif data_type_name == 'VELC':
+            # VELC, 3, Velocity (1 byte)
+            # 1-byte Corrected Velocity Format, section 4.4.42
+            out[:] = (ndata - 128.) / 127. *75.
+            mask[ndata == 0] = True
+            mask[ndata == 255] = True
 
         elif data_type_name == 'WIDTH':
             # WIDTH, 4, Width (1 byte)

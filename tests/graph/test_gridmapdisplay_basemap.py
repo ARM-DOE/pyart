@@ -1,4 +1,5 @@
 """ Unit Tests for Py-ART's graph/gridmapdisplay_basemap.py module. """
+
 # execute this script to create figure_gridmapdisplay_*.png files.
 
 # TODO use matplotlib's @image_comparison decorator to compare to file

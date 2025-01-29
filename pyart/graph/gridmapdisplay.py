@@ -6,15 +6,9 @@ and cartopy.
 
 import warnings
 
+import cartopy
 import matplotlib.pyplot as plt
 import numpy as np
-
-try:
-    import cartopy  # noqa
-
-    _CARTOPY_AVAILABLE = True
-except ImportError:
-    _CARTOPY_AVAILABLE = False
 
 try:
     import metpy  # noqa
@@ -50,6 +44,8 @@ try:
 except ImportError:
     _LAMBERT_GRIDLINES = False
 
+from . import max_cappi  # noqa
+
 
 class GridMapDisplay:
     """
@@ -74,11 +70,6 @@ class GridMapDisplay:
 
     def __init__(self, grid, debug=False):
         """initalize the object."""
-        # check that cartopy and xarray are available
-        if not _CARTOPY_AVAILABLE:
-            raise MissingOptionalDependency(
-                "Cartopy is required to use GridMapDisplay but is not installed!"
-            )
         if not _XARRAY_AVAILABLE:
             raise MissingOptionalDependency(
                 "Xarray is required to use GridMapDisplay but is not installed!"
@@ -120,7 +111,7 @@ class GridMapDisplay:
         add_grid_lines=True,
         ticks=None,
         ticklabs=None,
-        **kwargs
+        **kwargs,
     ):
         """
         Plot the grid using xarray and cartopy.
@@ -257,7 +248,7 @@ class GridMapDisplay:
             vmin=vmin,
             vmax=vmax,
             add_colorbar=False,
-            **kwargs
+            **kwargs,
         )
 
         self.mappables.append(pm)
@@ -274,14 +265,14 @@ class GridMapDisplay:
         if add_grid_lines:
             if lon_lines is None:
                 lon_lines = np.linspace(
-                    np.around(ds.lon.min() - 0.1, decimals=2),
-                    np.around(ds.lon.max() + 0.1, decimals=2),
+                    np.around(ds.lon.min() - 0.1, decimals=2).values,
+                    np.around(ds.lon.max() + 0.1, decimals=2).values,
                     5,
                 )
             if lat_lines is None:
                 lat_lines = np.linspace(
-                    np.around(ds.lat.min() - 0.1, decimals=2),
-                    np.around(ds.lat.max() + 0.1, decimals=2),
+                    np.around(ds.lat.min() - 0.1, decimals=2).values,
+                    np.around(ds.lat.max() + 0.1, decimals=2).values,
                     5,
                 )
 
@@ -414,7 +405,7 @@ class GridMapDisplay:
         fig=None,
         ticks=None,
         ticklabs=None,
-        **kwargs
+        **kwargs,
     ):
         """
         Plot a slice along a given latitude.
@@ -575,7 +566,7 @@ class GridMapDisplay:
         fig=None,
         ticks=None,
         ticklabs=None,
-        **kwargs
+        **kwargs,
     ):
         """
         Plot a slice along a given longitude.
@@ -718,7 +709,7 @@ class GridMapDisplay:
         fig=None,
         ticks=None,
         ticklabs=None,
-        **kwargs
+        **kwargs,
     ):
         """
         Plot a cross section through a set of given points (latitude,
@@ -849,7 +840,7 @@ class GridMapDisplay:
             add_colorbar=False,
             ax=ax,
             cmap=cmap,
-            **kwargs
+            **kwargs,
         )
 
         self.mappables.append(plot)
@@ -1108,6 +1099,46 @@ class GridMapDisplay:
         """Get coastlines using cartopy."""
         return cartopy.feature.NaturalEarthFeature(
             category="physical", name="coastline", scale="10m", facecolor="none"
+        )
+
+    def plot_maxcappi(
+        self,
+        field,
+        cmap=None,
+        vmin=None,
+        vmax=None,
+        title=None,
+        lat_lines=None,
+        lon_lines=None,
+        add_map=True,
+        projection=None,
+        colorbar=True,
+        range_rings=False,
+        dpi=100,
+        savedir=None,
+        show_figure=True,
+        add_slogan=False,
+        **kwargs,
+    ):
+        # Call the plot_maxcappi function from the max_cappi module or object
+        max_cappi.plot_maxcappi(
+            grid=self.grid,  # Assuming `self.grid` holds the Grid object in your class
+            field=field,
+            cmap=cmap,
+            vmin=vmin,
+            vmax=vmax,
+            title=title,
+            lat_lines=lat_lines,
+            lon_lines=lon_lines,
+            add_map=add_map,
+            projection=projection,
+            colorbar=colorbar,
+            range_rings=range_rings,
+            dpi=dpi,
+            savedir=savedir,
+            show_figure=show_figure,
+            add_slogan=add_slogan,
+            **kwargs,
         )
 
 

@@ -126,7 +126,7 @@ class NEXRADLevel3File:
         if self.msg_header["code"] not in SUPPORTED_PRODUCTS:
             code = self.msg_header["code"]
             raise NotImplementedError(
-                "Level3 product with code %i is not supported" % (code)
+                f"Level3 product with code {code} is not supported"
             )
         bpos += 18
 
@@ -139,10 +139,9 @@ class NEXRADLevel3File:
         supp_ver = SUPPORTED_VERSION_NUMBERS[self.msg_header["code"]]
         if ver > supp_ver:
             warnings.warn(
-                "Radar product version is %d. Py-ART implementation \
-            supports max version of %d. Most recent product version has not \
-            yet been implemented/tested."
-                % (ver, supp_ver),
+                f"Radar product version is {ver}. Py-ART implementation \
+            supports max version of {supp_ver}. Most recent product version has not \
+            yet been implemented/tested.",
                 UserWarning,
             )
 
@@ -456,7 +455,7 @@ class Level3XDRParser(Unpacker):
         if packet_code == 28:
             xdr.update(self._unpack_prod_desc())
         else:
-            raise NotImplementedError("Unknown XDR Component: %d" % (packet_code))
+            raise NotImplementedError(f"Unknown XDR Component: {packet_code}")
 
         # Check that we got it all
         self.done()
@@ -530,7 +529,7 @@ class Level3XDRParser(Unpacker):
                 if i < num - 1:
                     self.unpack_int()  # Another pointer for the 'list' ?
             except KeyError:
-                raise NotImplementedError("Unknown XDR Component: %d" % (code))
+                raise NotImplementedError(f"Unknown XDR Component: {code}")
                 break
 
         if num == 1:
@@ -761,7 +760,7 @@ SYMBOLOGY_HEADER = (
     ("block_length", INT4),  # Length of block in bytes
     ("layers", INT2),  # Number of data layers
     ("layer_divider", INT2),  # Delineate data layers, -1
-    ("layer_length", INT4)  # Length of data layer in bytes
+    ("layer_length", INT4),  # Length of data layer in bytes
     # Display data packets
 )
 

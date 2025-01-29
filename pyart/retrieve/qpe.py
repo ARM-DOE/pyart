@@ -127,7 +127,7 @@ def est_rain_rate_kdp(radar, alpha=None, beta=None, kdp_field=None, rr_field=Non
     rain : dict
         Field dictionary containing the rainfall rate.
 
-    Reference
+    References
     ---------
     Figueras et al. Long-term monitoring of French polarimetric radar data
     quality and evaluation of several polarimetric quantitative precipitation
@@ -475,6 +475,12 @@ def est_rain_rate_hydro(
     rain : dict
         Field dictionary containing the rainfall rate.
 
+    References
+    ----------
+    Besic, N., Figueras i Ventura, J., Grazioli, J., Gabella, M., Germann, U., and Berne, A.: Hydrometeor classification
+    through statistical clustering of polarimetric radar measurements: a semi-supervised approach,
+    Atmos. Meas. Tech., 9, 4425–4445, https://doi.org/10.5194/amt-9-4425-2016, 2016.
+
     """
     # parse the field parameters
     if refl_field is None:
@@ -690,7 +696,7 @@ def ZtoR(radar, ref_field="reflectivity", a=300, b=1.4, save_name="NWS_primary_p
     """
     Convert reflectivity (dBZ) to precipitation rate (mm/hr)
 
-    Author: Laura Tomkins
+    Author: Laura Tomkins (lauramtomkins@gmail.com)
 
     Parameters
     ----------

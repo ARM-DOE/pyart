@@ -3,16 +3,29 @@ Utilities for interfacing between xradar and Py-ART
 
 """
 
-
 import copy
 
 import numpy as np
 import pandas as pd
-from datatree import DataTree, formatting, formatting_html
-from datatree.treenode import NodePath
+
+try:
+    from xarray.core import formatting, formatting_html
+    from xarray.core.datatree import DataTree
+    from xarray.core.extensions import register_datatree_accessor
+    from xarray.core.treenode import NodePath
+except ImportError:
+    from datatree import (
+        DataTree,
+        formatting,
+        formatting_html,
+    )
+    from datatree.extensions import register_datatree_accessor
+    from datatree.treenode import NodePath
+
 from xarray import DataArray, Dataset, concat
 from xarray.core import utils
-from xradar.util import get_sweep_keys
+from xradar.accessors import XradarAccessor
+from xradar.util import apply_to_sweeps, get_sweep_keys
 
 from ..config import get_metadata
 from ..core.transforms import (
@@ -197,7 +210,7 @@ class Xgrid:
             raise KeyError("dic must contain a 'data' key")
         if dic["data"].shape != (self.nz, self.ny, self.nx):
             t = (self.nz, self.ny, self.nx)
-            err = "'data' has invalid shape, should be (%i, %i)" % t
+            err = "'data' has invalid shape, should be ({}, {})".format(*t)
             raise ValueError(err)
         self.fields[field_name] = dic
 
@@ -270,23 +283,47 @@ class Xgrid:
 
 class Xradar:
     def __init__(self, xradar, default_sweep="sweep_0", scan_type=None):
-        self.xradar = xradar
+        # Make sure that first dimension is azimuth
+        self.xradar = apply_to_sweeps(xradar, ensure_dim)
+        # Run through the sanity check for latitude/longitude/altitude
+        for coord in ["latitude", "longitude", "altitude"]:
+            if coord not in self.xradar:
+                raise ValueError(
+                    f"{coord} not included in xradar object, cannot georeference"
+                )
+
+        # Ensure that lat/lon/alt info is applied across the sweeps
+        self.xradar = apply_to_sweeps(
+            self.xradar,
+            ensure_georeference_variables,
+            latitude=self.xradar["latitude"],
+            longitude=self.xradar["longitude"],
+            altitude=self.xradar["altitude"],
+        )
         self.scan_type = scan_type or "ppi"
         self.sweep_group_names = get_sweep_keys(self.xradar)
         self.nsweeps = len(self.sweep_group_names)
         self.combined_sweeps = self._combine_sweeps()
         self.fields = self._find_fields(self.combined_sweeps)
+
+        # Check to see if the time is multidimensional - if it is, collapse it
+        if len(self.combined_sweeps.time.dims) > 1:
+            time = self.combined_sweeps.time.isel(range=0)
+        else:
+            time = self.combined_sweeps.time
         self.time = dict(
-            data=(self.combined_sweeps.time - self.combined_sweeps.time.min()).astype(
-                "int64"
-            )
-            / 1e9,
+            data=(time - time.min()).astype("int64").values / 1e9,
             units=f"seconds since {pd.to_datetime(self.combined_sweeps.time.min().values).strftime('%Y-%m-%d %H:%M:%S.0')}",
             calendar="gregorian",
         )
         self.range = dict(data=self.combined_sweeps.range.values)
         self.azimuth = dict(data=self.combined_sweeps.azimuth.values)
         self.elevation = dict(data=self.combined_sweeps.elevation.values)
+        # Check to see if the time is multidimensional - if it is, collapse it
+        self.combined_sweeps["sweep_fixed_angle"] = (
+            "sweep_number",
+            np.unique(self.combined_sweeps.sweep_fixed_angle),
+        )
         self.fixed_angle = dict(data=self.combined_sweeps.sweep_fixed_angle.values)
         self.antenna_transition = None
         self.latitude = dict(
@@ -307,9 +344,22 @@ class Xradar:
         self.metadata = dict(**self.xradar.attrs)
         self.ngates = len(self.range["data"])
         self.nrays = len(self.azimuth["data"])
+        self.projection = {"proj": "pyart_aeqd", "_include_lon_0_lat_0": True}
+        self.sweep_number = {
+            "standard_name": "sweep_number",
+            "long_name": "Sweep number",
+            "data": np.unique(self.combined_sweeps.sweep_number),
+        }
+        self.sweep_mode = self._determine_sweep_mode()
         self.instrument_parameters = self.find_instrument_parameters()
         self.init_gate_x_y_z()
+        self.init_gate_longitude_latitude()
         self.init_gate_alt()
+
+        # Extra methods needed for compatibility
+        self.rays_are_indexed = None
+        self.ray_angle_res = None
+        self.target_scan_rate = None
 
     def __repr__(self):
         return formatting.datatree_repr(self.xradar)
@@ -352,6 +402,24 @@ class Xradar:
             raise ValueError(f"Invalid format for key: {key}")
 
         # Iterators
+
+    def _determine_sweep_mode(self):
+        sweep_mode = {
+            "units": "unitless",
+            "standard_name": "sweep_mode",
+            "long_name": "Sweep mode",
+        }
+        if "sweep_mode" in self.xradar["sweep_0"]:
+            sweep_mode["data"] = np.array(
+                self.nsweeps * [str(self.xradar["sweep_0"].sweep_mode.values)],
+                dtype="S",
+            )
+        else:
+            sweep_mode["data"] = np.array(
+                self.nsweeps * ["azimuth_surveillance"], dtype="S"
+            )
+
+        return sweep_mode
 
     def find_instrument_parameters(self):
         # By default, check the radar_parameters first
@@ -437,7 +505,7 @@ class Xradar:
             raise KeyError("dic must contain a 'data' key")
         if dic["data"].shape != (self.nrays, self.ngates):
             t = (self.nrays, self.ngates)
-            err = "'data' has invalid shape, should be (%i, %i)" % t
+            err = "'data' has invalid shape, should be ({}, {})".format(*t)
             raise ValueError(err)
         # add the field
         self.fields[field_name] = dic
@@ -454,6 +522,51 @@ class Xradar:
             sweep_ds[field_name].attrs = attrs
             self.xradar[f"sweep_{sweep}"].ds = sweep_ds
         return
+
+    def add_field_like(
+        self, existing_field_name, field_name, data, replace_existing=False
+    ):
+        """
+        Add a field to the object with metadata from a existing field.
+
+        Note that the data parameter is not copied by this method.
+        If data refers to a 'data' array from an existing field dictionary, a
+        copy should be made within or prior to using this method. If this is
+        not done the 'data' key in both field dictionaries will point to the
+        same NumPy array and modification of one will change the second. To
+        copy NumPy arrays use the copy() method. See the Examples section
+        for how to create a copy of the 'reflectivity' field as a field named
+        'reflectivity_copy'.
+
+        Parameters
+        ----------
+        existing_field_name : str
+            Name of an existing field to take metadata from when adding
+            the new field to the object.
+        field_name : str
+            Name of the field to add to the dictionary of fields.
+        data : array
+            Field data. A copy of this data is not made, see the note above.
+        replace_existing : bool, optional
+            True to replace the existing field with key field_name if it
+            exists, loosing any existing data. False will raise a ValueError
+            when the field already exists.
+
+        Examples
+        --------
+        >>> radar.add_field_like('reflectivity', 'reflectivity_copy',
+        ...                      radar.fields['reflectivity']['data'].copy())
+
+        """
+        if existing_field_name not in self.fields:
+            err = f"field {existing_field_name} does not exist in object"
+            raise ValueError(err)
+        dic = {}
+        for k, v in self.fields[existing_field_name].items():
+            if k != "data":
+                dic[k] = v
+        dic["data"] = data
+        return self.add_field(field_name, dic, replace_existing=replace_existing)
 
     def get_field(self, sweep, field_name, copy=False):
         """
@@ -545,6 +658,62 @@ class Xradar:
         data = self.combined_sweeps.sel(sweep_number=sweep)
         return data["x"].values, data["y"].values, data["z"].values
 
+    def get_gate_lat_lon_alt(
+        self, sweep, reset_gate_coords=False, filter_transitions=False
+    ):
+        """
+        Return the longitude, latitude and altitude gate locations.
+        Longitude and latitude are in degrees and altitude in meters.
+
+        With the default parameter this method returns the same data as
+        contained in the gate_latitude, gate_longitude and gate_altitude
+        attributes but this method performs the gate location calculations
+        only for the specified sweep and therefore is more efficient than
+        accessing this data through these attribute. If coordinates have
+        at all, please use the reset_gate_coords parameter.
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve gate locations from, 0 based.
+        reset_gate_coords : bool, optional
+            Optional to reset the gate latitude, gate longitude and gate
+            altitude attributes before using them in this function. This
+            is useful when the geographic coordinates have changed and gate
+            latitude, gate longitude and gate altitude need to be reset.
+        filter_transitions : bool, optional
+            True to remove rays where the antenna was in transition between
+            sweeps. False will include these rays. No rays will be removed
+            if the antenna_transition attribute is not available (set to None).
+
+        Returns
+        -------
+        lat, lon, alt : 2D array
+            Array containing the latitude, longitude and altitude,
+            for all gates in the sweep.
+
+        """
+        s = self.get_slice(sweep)
+
+        if reset_gate_coords:
+            gate_latitude = LazyLoadDict(get_metadata("gate_latitude"))
+            gate_latitude.set_lazy("data", _gate_lon_lat_data_factory(self, 1))
+            self.gate_latitude = gate_latitude
+
+            gate_longitude = LazyLoadDict(get_metadata("gate_longitude"))
+            gate_longitude.set_lazy("data", _gate_lon_lat_data_factory(self, 0))
+            self.gate_longitude = gate_longitude
+
+            gate_altitude = LazyLoadDict(get_metadata("gate_altitude"))
+            gate_altitude.set_lazy("data", _gate_altitude_data_factory(self))
+            self.gate_altitude = gate_altitude
+
+        lat = self.gate_latitude["data"][s]
+        lon = self.gate_longitude["data"][s]
+        alt = self.gate_altitude["data"][s]
+
+        return lat, lon, alt
+
     def init_gate_x_y_z(self):
         """Initialize or reset the gate_{x, y, z} attributes."""
 
@@ -579,11 +748,27 @@ class Xradar:
                 data=np.mean(self.altitude["data"]) + self.gate_z["data"]
             )
 
+    def init_gate_longitude_latitude(self):
+        """
+        Initialize or reset the gate_longitude and gate_latitude attributes.
+        """
+        gate_longitude = LazyLoadDict(get_metadata("gate_longitude"))
+        gate_longitude.set_lazy("data", _gate_lon_lat_data_factory(self, 0))
+        self.gate_longitude = gate_longitude
+
+        gate_latitude = LazyLoadDict(get_metadata("gate_latitude"))
+        gate_latitude.set_lazy("data", _gate_lon_lat_data_factory(self, 1))
+        self.gate_latitude = gate_latitude
+
     def _combine_sweeps(self):
         # Loop through and extract the different datasets
         ds_list = []
         for sweep in self.sweep_group_names:
-            ds_list.append(self.xradar[sweep].ds.drop_duplicates("azimuth"))
+            ds_list.append(
+                self.xradar[sweep]
+                .ds.drop_duplicates("azimuth")
+                .set_coords("sweep_number")
+            )
 
         # Merge based on the sweep number
         merged = concat(ds_list, dim="sweep_number")
@@ -591,11 +776,21 @@ class Xradar:
         # Stack the sweep number and azimuth together
         stacked = merged.stack(gates=["sweep_number", "azimuth"]).transpose()
 
+        # Select the valid azimuths
+        good_azimuths = stacked.time.dropna("gates", how="all").gates
+        stacked = stacked.sel(gates=good_azimuths)
+
         # Drop the missing gates
         cleaned = stacked.where(stacked.time == stacked.time.dropna("gates"))
 
         # Add in number of gates variable
         cleaned["ngates"] = ("gates", np.arange(len(cleaned.gates)))
+
+        # Ensure latitude/longitude/altitude are length 1
+        if cleaned["latitude"].values.shape != ():
+            cleaned["latitude"] = cleaned.latitude.isel(gates=0)
+            cleaned["longitude"] = cleaned.longitude.isel(gates=0)
+            cleaned["altitude"] = cleaned.altitude.isel(gates=0)
 
         # Return the non-missing times, ensuring valid data is returned
         return cleaned
@@ -738,6 +933,13 @@ class Xradar:
         else:
             return azimuths
 
+    def get_projparams(self):
+        projparams = self.projection.copy()
+        if projparams.pop("_include_lon_0_lat_0", False):
+            projparams["lon_0"] = self.longitude["data"][0]
+            projparams["lat_0"] = self.latitude["data"][0]
+        return projparams
+
 
 def _point_data_factory(grid, coordinate):
     """Return a function which returns the locations of all points."""
@@ -788,3 +990,86 @@ def _point_altitude_data_factory(grid):
         return grid.origin_altitude["data"][0] + grid.point_z["data"]
 
     return _point_altitude_data
+
+
+def _gate_lon_lat_data_factory(radar, coordinate):
+    """Return a function which returns the geographic locations of gates."""
+
+    def _gate_lon_lat_data():
+        """The function which returns the geographic locations gates."""
+        x = radar.gate_x["data"]
+        y = radar.gate_y["data"]
+        projparams = radar.get_projparams()
+        geographic_coords = cartesian_to_geographic(x, y, projparams)
+        # Set gate_latitude['data'] when gate_longitude['data'] is evaluated
+        # and vice-versa.  This ensures that both attributes contain data from
+        # the same map projection and that the map projection only needs to be
+        # evaluated once.
+        if coordinate == 0:
+            radar.gate_latitude["data"] = geographic_coords[1]
+        else:
+            radar.gate_longitude["data"] = geographic_coords[0]
+        return geographic_coords[coordinate]
+
+    return _gate_lon_lat_data
+
+
+def _gate_altitude_data_factory(radar):
+    """Return a function which returns the gate altitudes."""
+
+    def _gate_altitude_data():
+        """The function which returns the gate altitudes."""
+        try:
+            return radar.altitude["data"] + radar.gate_z["data"]
+        except ValueError:
+            return np.mean(radar.altitude["data"]) + radar.gate_z["data"]
+
+    return _gate_altitude_data
+
+
+@register_datatree_accessor("pyart")
+class XradarDataTreeAccessor(XradarAccessor):
+    """Adds a number of pyart specific methods to datatree.DataTree objects."""
+
+    def to_radar(self, scan_type=None) -> DataTree:
+        """
+        Add pyart radar object methods to the xradar datatree object
+        Parameters
+        ----------
+        scan_type: string
+            Scan type (ppi, rhi, etc.)
+        Returns
+        -------
+        dt: datatree.Datatree
+            Datatree including pyart.Radar methods
+        """
+        dt = self.xarray_obj
+        return Xradar(dt, scan_type=scan_type)
+
+
+def ensure_dim(ds, dim="azimuth"):
+    """
+    Ensure the first dimension is a certain coordinate (ex. azimuth)
+    """
+    core_dims = ds.dims
+    if dim not in core_dims:
+        if "time" in core_dims:
+            ds = ds.swap_dims({"time": dim})
+        else:
+            return ValueError(
+                "Poorly formatted data: time/azimuth not included as core dimension."
+            )
+    return ds
+
+
+def ensure_georeference_variables(ds, latitude, longitude, altitude):
+    """
+    Ensure georeference variables are included in the sweep information
+    """
+    if "latitude" not in ds:
+        ds["latitude"] = latitude
+    if "longitude" not in ds:
+        ds["longitude"] = longitude
+    if "altitude" not in ds:
+        ds["altitude"] = altitude
+    return ds

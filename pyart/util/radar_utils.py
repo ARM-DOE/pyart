@@ -573,12 +573,12 @@ def join_radar(radar1, radar2):
         == 1 & len(radar2.altitude["data"])
         == 1
     ):
-        lat1 = float(radar1.latitude["data"])
-        lon1 = float(radar1.longitude["data"])
-        alt1 = float(radar1.altitude["data"])
-        lat2 = float(radar2.latitude["data"])
-        lon2 = float(radar2.longitude["data"])
-        alt2 = float(radar2.altitude["data"])
+        lat1 = float(radar1.latitude["data"].item())
+        lon1 = float(radar1.longitude["data"].item())
+        alt1 = float(radar1.altitude["data"].item())
+        lat2 = float(radar2.latitude["data"].item())
+        lon2 = float(radar2.longitude["data"].item())
+        alt2 = float(radar2.altitude["data"].item())
 
         if (lat1 != lat2) or (lon1 != lon2) or (alt1 != alt2):
             ones1 = np.ones(len(radar1.time["data"]), dtype="float32")
@@ -613,7 +613,7 @@ def image_mute_radar(radar, field, mute_field, mute_threshold, field_threshold=N
     the correlation coefficient is less than a certain threshold to discern
     melting precipitation.
 
-    Author: Laura Tomkins (@lauratomkins)
+    Author: Laura Tomkins (lauramtomkins@gmail.com)
 
     Parameters
     ----------
@@ -689,3 +689,33 @@ def image_mute_radar(radar, field, mute_field, mute_threshold, field_threshold=N
     muted_dict["long_name"] = "Muted " + field
     radar.add_field("muted_" + field, muted_dict)
     return radar
+
+
+def ma_broadcast_to(array, tup):
+    """
+    Is used to guarantee that a masked array can be broadcasted without
+    loosing the mask
+
+    Parameters
+    ----------
+    array : Numpy masked array or normal array
+    tup : shape as tuple
+
+    Returns
+    -------
+    broadcasted_array
+        The broadcasted numpy array including its mask if available
+        otherwise only the broadcasted array is returned
+
+    """
+    broadcasted_array = np.broadcast_to(array, tup)
+
+    if np.ma.is_masked(array):
+        initial_mask = np.ma.getmask(array)
+        initial_fill_value = array.fill_value
+        broadcasted_mask = np.broadcast_to(initial_mask, tup)
+        return np.ma.array(
+            broadcasted_array, mask=broadcasted_mask, fill_value=initial_fill_value
+        )
+
+    return broadcasted_array

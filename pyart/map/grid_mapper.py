@@ -481,19 +481,19 @@ def map_to_grid(
 
     # find the grid origin if not given
     if grid_origin is None:
-        try:
-            lat = float(radars[0].latitude["data"])
-            lon = float(radars[0].longitude["data"])
-        except TypeError:
+        if len(radars[0].latitude["data"]) == 1 & len(radars[0].longitude["data"]) == 1:
+            lat = float(radars[0].latitude["data"].item())
+            lon = float(radars[0].longitude["data"].item())
+        else:
             lat = np.mean(radars[0].latitude["data"])
             lon = np.mean(radars[0].longitude["data"])
         grid_origin = (lat, lon)
     grid_origin_lat, grid_origin_lon = grid_origin
 
     if grid_origin_alt is None:
-        try:
-            grid_origin_alt = float(radars[0].altitude["data"])
-        except TypeError:
+        if len(radars[0].altitude["data"]) == 1:
+            grid_origin_alt = float(radars[0].altitude["data"].item())
+        else:
             grid_origin_alt = np.mean(radars[0].altitude["data"])
 
     # fields which should be mapped, None for fields which are in all radars
@@ -544,10 +544,15 @@ def map_to_grid(
         x_disp, y_disp = geographic_to_cartesian(
             radar.longitude["data"], radar.latitude["data"], projparams
         )
-        try:
-            z_disp = float(radar.altitude["data"]) - grid_origin_alt
-            offsets.append((z_disp, float(y_disp), float(x_disp)))
-        except TypeError:
+        if (
+            len(radar.latitude["data"])
+            == 1 & len(radar.longitude["data"])
+            == 1 & len(radar.altitude["data"])
+            == 1
+        ):
+            z_disp = float(radar.altitude["data"].item()) - grid_origin_alt
+            offsets.append((z_disp, float(y_disp.item()), float(x_disp.item())))
+        else:
             z_disp = np.mean(radar.altitude["data"]) - grid_origin_alt
             offsets.append((z_disp, np.mean(y_disp), np.mean(x_disp)))
 
@@ -918,7 +923,7 @@ def grid_ppi_sweeps(
         if 'auto' using the maximum horizontal range rounded up to the nearest kilometer
         and limiting vertically up to `max_z`.
     max_z: float
-        maximum height to consider in gridding (only used if `grid_size` is 'auto')
+        maximum height to consider in gridding (only used if `grid_limits` is 'auto')
     el_rounding_frac: float
         A fraction for rounding the elevation elements. This variables is also used to
         represent the sweep for altitude estimation.
@@ -960,6 +965,11 @@ def grid_ppi_sweeps(
 
     # Calling the gridding method
     radar_ds = None
+
+    # Use all sweeps if no target sweep is provided
+    if target_sweeps is None:
+        target_sweeps = np.arange(radar.nsweeps)
+
     for sweep in target_sweeps:
         radar_sw = radar.extract_sweeps([sweep])
         sweep_grid = grid_from_radars(
@@ -1027,7 +1037,7 @@ def grid_rhi_sweeps(
         This input parameter is ignored if `grid_shape` is given
         explicitly via kwargs.
     max_z: float
-        maximum height in grid (only used if `grid_size` is 'auto').
+        maximum height in grid (only used if `grid_limits` is 'auto').
     grid_limits: 3-tuple with 2-tuple elements or 'auto'
         if 'auto' using the maximum horizontal range and limiting vertically up to 12 km.
     az_rounding_frac: float
@@ -1067,6 +1077,11 @@ def grid_rhi_sweeps(
 
     # Calling the gridding method
     radar_ds = None
+
+    # Use all sweeps if no target sweep is provided
+    if target_sweeps is None:
+        target_sweeps = np.arange(radar.nsweeps)
+
     for sweep in target_sweeps:
         radar_sw = radar.extract_sweeps([sweep])
         if (

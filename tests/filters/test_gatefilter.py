@@ -15,9 +15,9 @@ radar.add_field("test_field", {"data": fdata})
 # more
 fdata2 = np.ma.masked_array(fdata, copy=True)
 fdata2[2, 2] = np.ma.masked
-fdata2[3, 3] = np.NAN
-fdata2[4, 4] = np.PINF
-fdata2[5, 5] = np.NINF
+fdata2[3, 3] = np.nan
+fdata2[4, 4] = np.inf
+fdata2[5, 5] = -np.inf
 radar.add_field("test_field2", {"data": fdata2})
 
 
@@ -101,6 +101,17 @@ def test_gatefilter_exclude_above():
     gfilter.exclude_above("test_field", -5)
     assert gfilter.gate_excluded[0, 0] is np.True_
     assert gfilter.gate_excluded[0, -1] is np.True_
+
+
+def test_gatefilter_exclude_above_toa():
+    gfilter = pyart.correct.GateFilter(radar)
+    gfilter.exclude_above_toa(211.0)
+    assert gfilter.gate_excluded[0, 0] is np.False_
+    assert gfilter.gate_excluded[0, -1] is np.True_
+
+    assert gfilter.gate_excluded[0, -2] is np.False_
+    gfilter.exclude_above_toa(211.0, inclusive=True)
+    assert gfilter.gate_excluded[0, -2] is np.True_
 
 
 def test_gatefilter_exclude_inside():

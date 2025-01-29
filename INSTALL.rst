@@ -7,7 +7,7 @@ Required Dependencies
 
 Py-ART requires the following software.
 
-* Python__ 3.9x, 3.10x or 3.11x
+* Python__ 3.11x, 3.12x or 3.13x
 
 __ http://www.python.org
 

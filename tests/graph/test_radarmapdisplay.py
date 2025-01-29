@@ -1,4 +1,5 @@
 """ Unit Tests for Py-ART's graph/radarmapdisplay.py module. """
+
 # execute this script to create figure_plot_radar_display_*.png files.
 
 # TODO use matplotlib's @image_comparison decorator to compare to file

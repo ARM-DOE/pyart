@@ -1,6 +1,5 @@
 """ Unit Tests for Py-ART's graph/cm.py module. """
 
-
 import matplotlib
 
 from pyart.graph import cm
