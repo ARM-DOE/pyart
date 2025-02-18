@@ -1,4 +1,5 @@
 import pathlib
+import pytest
 
 from pyart.testing.example_data import DATASETS, get_test_data, locate
 
@@ -15,6 +16,7 @@ def test_locate():
     assert pathlib.Path(p).exists
 
 
+@pytest.mark.skip(reason="ARM Data downloads are limited at the moment.")
 def test_get_test_data():
     test_file = "034142.mdv"
     file_path = get_test_data(test_file)
