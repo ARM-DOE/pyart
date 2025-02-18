@@ -14,7 +14,7 @@ headers = {
 
 
 def add_header_to_download(url, output_file, pooch):
-    download = pooch.HTTPDownloader(headers=headers)
+    download = pooch.downloaders.HTTPDownloader(headers=headers)
     download(url, output_file, pooch)
 
 
