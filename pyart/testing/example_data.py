@@ -15,7 +15,7 @@ headers = {
 
 def add_header_to_download(url, output_file, pooch):
     download = pooch.downloaders.HTTPDownloader(headers=headers)
-    download(url, output_file, pooch)
+    download(url, output_file, mypooch)  # noqa
 
 
 with open(importlib.resources.files("pyart.testing") / "registry.txt") as registry_file:
