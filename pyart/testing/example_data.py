@@ -1,6 +1,7 @@
 import importlib.resources
 
 import pooch
+from pooch.downloaders import HTTPDownloader
 
 DATASETS = pooch.create(
     path=pooch.os_cache("pyart-datasets"),
@@ -13,9 +14,9 @@ headers = {
 }
 
 
-def add_header_to_download(url, output_file, pooch):
-    download = pooch.downloaders.HTTPDownloader(headers=headers)
-    download(url, output_file, mypooch)  # noqa
+def add_header_to_download(url, output_file, mypooch):
+    download = HTTPDownloader(headers=headers)
+    download(url, output_file, mypooch)
 
 
 with open(importlib.resources.files("pyart.testing") / "registry.txt") as registry_file:
