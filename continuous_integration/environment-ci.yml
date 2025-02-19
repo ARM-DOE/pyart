@@ -24,7 +24,6 @@ dependencies:
   - cftime
   - setuptools
   - shapely
-  - ruff==0.4.2
   - mda-xdrlib
   - xradar>=0.8.0
   - pooch
