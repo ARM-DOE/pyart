@@ -461,12 +461,22 @@
 <span></span><span class="kn">import</span><span class="w"> </span><span class="nn">importlib.resources</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pooch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pooch.downloaders</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPDownloader</span>
 
 <span class="n">DATASETS</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
     <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;pyart-datasets&quot;</span><span class="p">),</span>
     <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://adc.arm.gov/pyart/example_data/&quot;</span><span class="p">,</span>
     <span class="n">env</span><span class="o">=</span><span class="s2">&quot;PYART_DATASETS_DIR&quot;</span><span class="p">,</span>
 <span class="p">)</span>
+
+<span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;user-agent&quot;</span><span class="p">:</span> <span class="s2">&quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36&quot;</span>
+<span class="p">}</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">add_header_to_download</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">mypooch</span><span class="p">):</span>
+    <span class="n">download</span> <span class="o">=</span> <span class="n">HTTPDownloader</span><span class="p">(</span><span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+    <span class="n">download</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">mypooch</span><span class="p">)</span>
 
 
 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;pyart.testing&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">registry_file</span><span class="p">:</span>
@@ -501,7 +511,7 @@
 <span class="sd">    path_to_file = str</span>
 <span class="sd">        Local path to the desired file</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="n">DATASETS</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">file</span><span class="p">)</span></div>
+    <span class="k">return</span> <span class="n">DATASETS</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">downloader</span><span class="o">=</span><span class="n">add_header_to_download</span><span class="p">)</span></div>
 </pre></div>
 <div class="section ablog__blog_comments">
    
