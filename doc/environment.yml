@@ -34,9 +34,6 @@ dependencies:
   - pre_commit
   - cmweather
   - mda-xdrlib
-  - xradar
-  - cmweather
-  - mda-xdrlib
   - xradar>=0.8.0
   - dask
   - ablog
