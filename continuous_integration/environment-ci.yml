@@ -32,3 +32,4 @@ dependencies:
   - open-radar-data
   - ruff
   - cmweather
+  - s3fs
