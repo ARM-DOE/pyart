@@ -218,7 +218,7 @@ cdef class SigmetFile:
             # The IRIS Programmer's Manual indicates 1-byte differential phase format
             # data should be divided by the wavelength in cm (section 4.3.12).
             wavelength_cm = self.product_hdr['product_end']['wavelength']
-            data['KDP'] /= wavelength_cm
+            data['KDP'] /= (wavelength_cm / 100.0)
         return data, metadata
 
     def _get_sweep(self, full_xhdr=False, raw_data=False):
