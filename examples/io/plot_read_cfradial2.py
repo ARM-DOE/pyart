@@ -25,4 +25,4 @@ radar = tree.pyart.to_radar()
 
 # Plot the Reflectivity Field (corrected_reflectivity_horizontal)
 display = pyart.graph.RadarMapDisplay(radar)
-display.plot_ppi("DBZ", cmap="pyart_ChaseSpectral", vmin=-20, vmax=70)
+display.plot_ppi("DBZ", cmap="ChaseSpectral", vmin=-20, vmax=70)
