@@ -36,5 +36,5 @@ grid = pyart.map.grid_from_radars(
 
 display = pyart.graph.GridMapDisplay(grid)
 display.plot_grid(
-    "reflectivity_horizontal", level=0, vmin=-20, vmax=60, cmap="pyart_ChaseSpectral"
+    "reflectivity_horizontal", level=0, vmin=-20, vmax=60, cmap="ChaseSpectral"
 )
