@@ -463,20 +463,6 @@
 
 <span class="sd">&quot;&quot;&quot;</span>
 
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-
-<span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_field_name</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">..io</span><span class="w"> </span><span class="kn">import</span> <span class="n">_rsl_interface</span>
-    <span class="kn">from</span><span class="w"> </span><span class="nn">.</span><span class="w"> </span><span class="kn">import</span> <span class="n">_fourdd_interface</span>
-
-    <span class="n">_FOURDD_AVAILABLE</span> <span class="o">=</span> <span class="kc">True</span>
-<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
-    <span class="n">_FOURDD_AVAILABLE</span> <span class="o">=</span> <span class="kc">False</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">..exceptions</span><span class="w"> </span><span class="kn">import</span> <span class="n">MissingOptionalDependency</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">._common_dealias</span><span class="w"> </span><span class="kn">import</span> <span class="n">_parse_gatefilter</span><span class="p">,</span> <span class="n">_set_limits</span>
-
 
 <div class="viewcode-block" id="dealias_fourdd"><a class="viewcode-back" href="../../../API/generated/pyart.correct.dealias_fourdd.html#pyart.correct.dealias_fourdd">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">dealias_fourdd</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
@@ -496,6 +482,8 @@
     <span class="o">**</span><span class="n">kwargs</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    **Deprecated in Py-ART 2.0. Please use the region-based dealiaser.</span>
+
 <span class="sd">    Dealias Doppler velocities using the 4DD algorithm.</span>
 
 <span class="sd">    Dealias the Doppler velocities field using the University of Washington</span>
@@ -638,106 +626,10 @@
 
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="c1"># check that FourDD is available (requires TRMM RSL)</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="n">_FOURDD_AVAILABLE</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
-            <span class="s2">&quot;Py-ART must be build with support for TRMM RSL to use&quot;</span>
-            <span class="o">+</span> <span class="s2">&quot; the dealias_fourdd function.&quot;</span>
-        <span class="p">)</span>
 
-    <span class="c1"># verify that sounding data or last_volume is provided</span>
-    <span class="k">if</span> <span class="p">(</span><span class="n">sonde_profile</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="n">last_radar</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">):</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;sonde_profile or last_radar must be provided.&quot;</span><span class="p">)</span>
-
-    <span class="c1"># parse the field parameters</span>
-    <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">vel_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;velocity&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">corr_vel_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">corr_vel_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;corrected_velocity&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">last_vel_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">last_vel_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;corrected_velocity&quot;</span><span class="p">)</span>
-
-    <span class="c1"># get fill value</span>
-    <span class="n">fill_value</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
-
-    <span class="c1"># parse radar gate filter</span>
-    <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">_parse_gatefilter</span><span class="p">(</span><span class="n">gatefilter</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
-    <span class="n">excluded</span> <span class="o">=</span> <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span>
-
-    <span class="c1"># create RSL volumes containing the doppler velocity and</span>
-    <span class="c1"># doppler velocity in the last radar (if provided)</span>
-    <span class="n">vel_volume</span> <span class="o">=</span> <span class="n">_create_rsl_volume</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">vel_field</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rsl_badval</span><span class="p">,</span> <span class="n">excluded</span><span class="p">)</span>
-
-    <span class="k">if</span> <span class="n">last_radar</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">last_vel_volume</span> <span class="o">=</span> <span class="n">_create_rsl_volume</span><span class="p">(</span><span class="n">last_radar</span><span class="p">,</span> <span class="n">last_vel_field</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">rsl_badval</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">last_vel_volume</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="c1"># create an RslVolume containing the sounding data if it available</span>
-    <span class="k">if</span> <span class="n">sonde_profile</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># convert the sounding data to 1D float32 arrays</span>
-        <span class="n">height</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">sonde_profile</span><span class="o">.</span><span class="n">height</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="n">speed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">sonde_profile</span><span class="o">.</span><span class="n">speed</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-        <span class="n">wdir</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ascontiguousarray</span><span class="p">(</span><span class="n">sonde_profile</span><span class="o">.</span><span class="n">direction</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-
-        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">height</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">999</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Too many sounding heights, maximum is 999&quot;</span><span class="p">)</span>
-
-        <span class="n">success</span><span class="p">,</span> <span class="n">sound_volume</span> <span class="o">=</span> <span class="n">_fourdd_interface</span><span class="o">.</span><span class="n">create_soundvolume</span><span class="p">(</span>
-            <span class="n">vel_volume</span><span class="p">,</span> <span class="n">height</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">wdir</span><span class="p">,</span> <span class="n">sign</span><span class="p">,</span> <span class="n">max_shear</span>
-        <span class="p">)</span>
-        <span class="k">if</span> <span class="n">success</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Error when loading sounding data.&quot;</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">sound_volume</span> <span class="o">=</span> <span class="kc">None</span>
-
-    <span class="c1"># perform dealiasing</span>
-    <span class="k">if</span> <span class="n">debug</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">_fourdd_interface</span><span class="o">.</span><span class="n">fourdd_dealias</span><span class="p">(</span>
-            <span class="n">vel_volume</span><span class="p">,</span> <span class="n">last_vel_volume</span><span class="p">,</span> <span class="n">sound_volume</span><span class="p">,</span> <span class="n">filt</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-        <span class="p">)</span>
-
-    <span class="n">_</span><span class="p">,</span> <span class="n">data</span> <span class="o">=</span> <span class="n">_fourdd_interface</span><span class="o">.</span><span class="n">fourdd_dealias</span><span class="p">(</span>
-        <span class="n">vel_volume</span><span class="p">,</span> <span class="n">last_vel_volume</span><span class="p">,</span> <span class="n">sound_volume</span><span class="p">,</span> <span class="n">filt</span><span class="p">,</span> <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
-    <span class="p">)</span>
-
-    <span class="c1"># prepare data for output, set bad values and mask data</span>
-    <span class="n">is_bad_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">data</span><span class="p">),</span> <span class="n">data</span> <span class="o">==</span> <span class="n">rsl_badval</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">keep_original</span><span class="p">:</span>
-        <span class="n">vel_array</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">is_bad_data</span><span class="p">,</span> <span class="n">vel_array</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
-    <span class="k">else</span><span class="p">:</span>
-        <span class="n">data</span><span class="p">[</span><span class="n">is_bad_data</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill_value</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_equal</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">)</span>
-
-    <span class="c1"># return field dictionary containing dealiased Doppler velocities</span>
-    <span class="n">vr_corr</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">corr_vel_field</span><span class="p">)</span>
-    <span class="n">vr_corr</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
-    <span class="n">vr_corr</span><span class="p">[</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">fill_value</span>
-
-    <span class="k">if</span> <span class="n">set_limits</span><span class="p">:</span>
-        <span class="n">nyquist_vel</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-        <span class="n">_set_limits</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">nyquist_vel</span><span class="p">,</span> <span class="n">vr_corr</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">vr_corr</span></div>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">_create_rsl_volume</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">vol_num</span><span class="p">,</span> <span class="n">rsl_badval</span><span class="p">,</span> <span class="n">excluded</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Create a RSLVolume containing data from a field in radar.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">fill_value</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
-    <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float32</span><span class="p">)</span>
-    <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fdata</span><span class="p">,</span> <span class="n">fill_value</span><span class="p">)</span>
-    <span class="n">is_bad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logical_or</span><span class="p">(</span><span class="n">fdata</span> <span class="o">==</span> <span class="n">fill_value</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">fdata</span><span class="p">))</span>
-    <span class="n">fdata</span><span class="p">[</span><span class="n">is_bad</span><span class="p">]</span> <span class="o">=</span> <span class="n">rsl_badval</span>
-    <span class="k">if</span> <span class="n">excluded</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">fdata</span><span class="p">[</span><span class="n">excluded</span><span class="p">]</span> <span class="o">=</span> <span class="n">rsl_badval</span>
-    <span class="n">rays_per_sweep</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
-    <span class="p">)</span>
-    <span class="n">rays_per_sweep</span> <span class="o">=</span> <span class="n">rays_per_sweep</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
-    <span class="n">rsl_volume</span> <span class="o">=</span> <span class="n">_rsl_interface</span><span class="o">.</span><span class="n">create_volume</span><span class="p">(</span><span class="n">fdata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">vol_num</span><span class="p">)</span>
-    <span class="n">_rsl_interface</span><span class="o">.</span><span class="n">_label_volume</span><span class="p">(</span><span class="n">rsl_volume</span><span class="p">,</span> <span class="n">radar</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">rsl_volume</span>
+    <span class="k">raise</span> <span class="ne">DeprecationWarning</span><span class="p">(</span>
+        <span class="s2">&quot;FourDD dealiasing has been deprecated in Py-ART 2.0 please use dealias_region_based.&quot;</span>
+    <span class="p">)</span></div>
 </pre></div>
 <div class="section ablog__blog_comments">
    

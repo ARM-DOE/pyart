@@ -559,7 +559,7 @@ and how to add them to your own plots.</p>
 </pre></div>
 </div>
 <p><strong>Plot the available colormaps</strong></p>
-<p>Let’s see which colormaps are available directly from Py-ART!
+<p>Let’s see which colormaps are available in Py-ART from the colormap package cmweather!
 We use a helper function from matplotlib to plot this.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setup some helper functions and ranges to visualize our colormaps, from matplotlib</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gradient</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
@@ -576,11 +576,11 @@ We use a helper function from matplotlib to plot this.</p>
     <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">cmap_category</span> <span class="o">+</span> <span class="s2">&quot; Colormaps&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">cmap_name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span> <span class="n">cmap_list</span><span class="p">):</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gradient</span></a><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;pyart_</span><span class="si">{</span><span class="n">cmap_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gradient</span></a><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cmap_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
             <span class="o">-</span><span class="mf">0.01</span><span class="p">,</span>
             <span class="mf">0.5</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">&quot;pyart_</span><span class="si">{</span><span class="n">cmap_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cmap_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
             <span class="n">va</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
             <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;right&quot;</span><span class="p">,</span>
             <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
@@ -684,19 +684,15 @@ compare to a colormap from matplotlib, starting with the matplotlib example.</p>
 </pre></div>
 </div>
 <img src="../../_images/sphx_glr_plot_choose_a_colormap_005.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_005.png" alt="xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p><strong>Plot Using a Colormap from Py-ART</strong></p>
-<p>Let’s use one of our Py-ART’s colorbars now! We need
-to remember to add the <a href="#id1"><span class="problematic" id="id2">pyart_</span></a> string in front of the
-colormap, as shown below.
+<p>Let’s use one of our cmweather’s colorbars now!
 Setup a display to plot the data</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 
-<span class="c1"># Start by plotting a regular matplotlib colormap (Spectral_r)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">64.0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_HomeyerRainbow&quot;</span>
-<span class="p">)</span>
+<span class="c1"># Now let&#39;s plot with a CVD-friendly colormap (HomeyerRainbow)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">64.0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;HomeyerRainbow&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_choose_a_colormap_006.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_006.png" alt="xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.931 seconds)</p>
+<img src="../../_images/sphx_glr_plot_choose_a_colormap_006.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_006.png" alt="xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.938 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plotting-plot-choose-a-colormap-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/653fe2324a2591f4300a944b1759293c/plot_choose_a_colormap.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_choose_a_colormap.ipynb</span></code></a></p>

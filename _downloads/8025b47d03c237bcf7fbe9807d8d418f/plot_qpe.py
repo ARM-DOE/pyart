@@ -160,7 +160,7 @@ for file in files:
 da_rain_rate = xr.concat(rain_rate_list, dim="time")
 
 da_rain_rate.plot.contourf(
-    x="time", levels=range(0, 26, 2), cmap="pyart_RRate11", figsize=[10, 3]
+    x="time", levels=range(0, 26, 2), cmap="RRate11", figsize=[10, 3]
 )
 plt.title("QPE")
 plt.xlabel("Time")

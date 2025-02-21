@@ -86,7 +86,7 @@ and slightly overlaps the PPI display
         vmax=60,
         embellish=False,
         norm=None,
-        cmap="pyart_HomeyerRainbow",
+        cmap="HomeyerRainbow",
     )
 
     # Add gridlines
@@ -153,7 +153,7 @@ and slightly overlaps the PPI display
         vmax=60,
         embellish=False,
         norm=None,
-        cmap="pyart_HomeyerRainbow",
+        cmap="HomeyerRainbow",
     )
 
     # Add gridlines
@@ -197,7 +197,7 @@ and slightly overlaps the PPI display
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.119 seconds)
+   **Total running time of the script:** (0 minutes 3.118 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_modify_colorbar.py:

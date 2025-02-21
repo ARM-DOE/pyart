@@ -512,7 +512,7 @@
 <span class="sd">    field : str</span>
 <span class="sd">        The radar field to be plotted (e.g., &quot;REF&quot;, &quot;VEL&quot;, &quot;WIDTH&quot;).</span>
 <span class="sd">    cmap : str or matplotlib colormap, optional</span>
-<span class="sd">        Colormap to use for the plot. Default is &quot;pyart_HomeyerRainbow&quot;.</span>
+<span class="sd">        Colormap to use for the plot. Default is &quot;HomeyerRainbow&quot;.</span>
 <span class="sd">    vmin : float, optional</span>
 <span class="sd">        Minimum value for the color scaling. Default is set to the minimum value of the data if not provided.</span>
 <span class="sd">    vmax : float, optional</span>
@@ -595,7 +595,7 @@
     <span class="n">sideticks</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">max_height</span> <span class="o">/</span> <span class="mi">4</span><span class="p">,</span> <span class="n">max_height</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">max_height</span> <span class="o">/</span> <span class="mi">4</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">cmap</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">cmap</span> <span class="o">=</span> <span class="s2">&quot;pyart_HomeyerRainbow&quot;</span>
+        <span class="n">cmap</span> <span class="o">=</span> <span class="s2">&quot;HomeyerRainbow&quot;</span>
     <span class="k">if</span> <span class="n">vmin</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">vmin</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">vmax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

@@ -267,7 +267,7 @@ domain over the course of that minute.
     disp1 = pyart.graph.RadarMapDisplay(radar_se)
     disp1.plot_ppi_map(
         "reflectivity_bias",
-        cmap="pyart_balance",
+        cmap="balance",
         title="Reflectivity Difference \n XSAPR Southwest - XSPAR Southeast",
         sweep=1,
         ax=ax,
@@ -331,7 +331,7 @@ case where our scans don't neccessarily match exactly in time.
 
     # Create a 1-1 comparison
     x, y = np.meshgrid((bins[:-1] + bins[1:]) / 2.0, (bins[:-1] + bins[1:]) / 2.0)
-    c = plt.pcolormesh(x, y, np.log10(hist.T), cmap="pyart_HomeyerRainbow")
+    c = plt.pcolormesh(x, y, np.log10(hist.T), cmap="HomeyerRainbow")
 
     # Add a colorbar and labels
     plt.colorbar(c, label="$log_{10}$ counts")
@@ -354,7 +354,7 @@ case where our scans don't neccessarily match exactly in time.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 33.607 seconds)
+   **Total running time of the script:** (0 minutes 34.237 seconds)
 
 
 .. _sphx_glr_download_examples_mapping_plot_compare_two_radars_gatemapper.py:

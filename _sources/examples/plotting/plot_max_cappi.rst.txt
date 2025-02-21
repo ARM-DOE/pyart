@@ -160,7 +160,7 @@ Let's read in a Nexrad data and create a grid.
     gdisplay = pyart.graph.GridMapDisplay(grid)
     with plt.style.context("dark_background"):
         gdisplay.plot_maxcappi(
-            field="reflectivity", cmap="pyart_HomeyerRainbow", add_slogan=True
+            field="reflectivity", cmap="HomeyerRainbow", add_slogan=True
         )
 
 
@@ -185,7 +185,7 @@ Let's read in a Nexrad data and create a grid.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 12.154 seconds)
+   **Total running time of the script:** (0 minutes 12.273 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_max_cappi.py:

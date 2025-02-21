@@ -568,6 +568,11 @@
 <span class="sd">    This function has not been tested on &quot;stream&quot; Cfradial files.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;Py-ART&#39;s CfRadial module is deprecated, please use xradar to read in the file using &quot;</span>
+        <span class="s2">&quot;xd.io.open_cfradial1_datatree&quot;</span><span class="p">,</span>
+        <span class="ne">UserWarning</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="c1"># test for non empty kwargs</span>
     <span class="n">_test_arguments</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 

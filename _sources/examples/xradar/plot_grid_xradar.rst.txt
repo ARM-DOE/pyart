@@ -69,13 +69,13 @@ An example which uses xradar and Py-ART to grid a PPI file.
 
     display = pyart.graph.GridMapDisplay(grid)
     display.plot_grid(
-        "reflectivity_horizontal", level=0, vmin=-20, vmax=60, cmap="pyart_ChaseSpectral"
+        "reflectivity_horizontal", level=0, vmin=-20, vmax=60, cmap="ChaseSpectral"
     )
 
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 4.181 seconds)
+   **Total running time of the script:** (0 minutes 4.212 seconds)
 
 
 .. _sphx_glr_download_examples_xradar_plot_grid_xradar.py:

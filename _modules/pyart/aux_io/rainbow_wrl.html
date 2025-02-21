@@ -465,6 +465,7 @@
 
 <span class="c1"># specific modules for this function</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">import</span><span class="w"> </span><span class="nn">wradlib</span>  <span class="c1"># noqa</span>
@@ -586,7 +587,11 @@
 <span class="sd">        Radar object containing data from RAINBOW file.</span>
 
 <span class="sd">    &quot;&quot;&quot;</span>
-
+    <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
+        <span class="s2">&quot;Py-ART&#39;s Rainbow module is deprecated, please use xradar to read in the file using &quot;</span>
+        <span class="s2">&quot;xd.io.open_rainbow_datatree&quot;</span><span class="p">,</span>
+        <span class="ne">UserWarning</span><span class="p">,</span>
+    <span class="p">)</span>
     <span class="c1"># check that wradlib is available</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_WRADLIB_AVAILABLE</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
