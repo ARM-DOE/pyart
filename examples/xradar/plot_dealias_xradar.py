@@ -48,7 +48,7 @@ display.plot_ppi_map(
     vmin=0,
     vmax=10,
     projection=ccrs.PlateCarree(),
-    cmap="pyart_balance",
+    cmap="balance",
 )
 plt.show()
 

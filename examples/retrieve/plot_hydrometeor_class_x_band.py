@@ -28,12 +28,12 @@ plt.xlim(-20, 20)
 plt.ylim(-20, 20)
 
 ax2 = plt.subplot(1, 3, 2)
-ax2 = display.plot("corrected_differential_reflectivity", cmap="pyart_Carbone42")  # ZDR
+ax2 = display.plot("corrected_differential_reflectivity", cmap="Carbone42")  # ZDR
 plt.xlim(-20, 20)
 plt.ylim(-20, 20)
 
 ax3 = plt.subplot(1, 3, 3)
-ax3 = display.plot("corrected_specific_diff_phase", cmap="pyart_Carbone42")  # KDP
+ax3 = display.plot("corrected_specific_diff_phase", cmap="Carbone42")  # KDP
 plt.xlim(-20, 20)
 
 # ### When instrument parameters does not have radar frequency info.

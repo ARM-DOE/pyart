@@ -132,26 +132,6 @@ define_macros = [("NPY_NO_DEPRECATED_API", "NPY_1_7_API_VERSION")]
 
 # build the RSL IO and FourDD dealiaser if RSL is installed
 if check_rsl_path(rsl_lib_path, rsl_include_path):
-    fourdd_sources = [
-        "pyart/correct/src/dealias_fourdd.c",
-        "pyart/correct/src/sounding_to_volume.c",
-        "pyart/correct/src/helpers.c",
-    ]
-
-    # Cython wrapper around FourDD
-    extension_4dd = Extension(
-        "pyart.correct._fourdd_interface",
-        sources=[
-            "pyart/correct/_fourdd_interface.pyx",
-        ]
-        + fourdd_sources,
-        libraries=["rsl"],
-        library_dirs=[rsl_lib_path],
-        include_dirs=[rsl_include_path, "pyart/correct/src"] + [get_include()],
-        runtime_library_dirs=[rsl_lib_path],
-        define_macros=define_macros,
-    )
-
     # Cython wrapper around RSL io
     extension_rsl = Extension(
         "pyart.io._rsl_interface",
@@ -164,7 +144,6 @@ if check_rsl_path(rsl_lib_path, rsl_include_path):
     )
 
     extensions.append(extension_rsl)
-    extensions.append(extension_4dd)
 
 libraries = []
 if os.name == "posix":

@@ -16,6 +16,7 @@ dependencies:
   - xradar
   - mda-xdrlib
   - pip
+  - cmweather
   - pip:
     - wheel
     - watchdog

@@ -84,6 +84,11 @@ def read_gamic(
         Radar object.
 
     """
+    warnings.warn(
+        "Py-ART's GAMIC module is deprecated, please use xradar to read in the file using "
+        "xd.io.open_gamic_datatree",
+        UserWarning,
+    )
     # check that h5py is available
     if not _H5PY_AVAILABLE:
         raise MissingOptionalDependency(

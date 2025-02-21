@@ -185,6 +185,7 @@ The required dependencies to install Py-ART in addition to Python are:
 * `Cython <https://cython.readthedocs.io/en/latest/>`_
 * `setuptools <https://setuptools.pypa.io/en/latest/index.html>`_
 * `cartopy <https://scitools.org.uk/cartopy/docs/latest/>`_
+* `cmweather <https://cmweather.readthedocs.io/en/latest/>`_
 
 A working C/C++ compiler is required for some optional modules. An easy method
 to install these dependencies is by using a

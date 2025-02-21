@@ -22,7 +22,7 @@ from pyart.testing import get_test_data
 ######################################
 # **Plot the available colormaps**
 #
-# Let's see which colormaps are available directly from Py-ART!
+# Let's see which colormaps are available in Py-ART from the colormap package cmweather!
 # We use a helper function from matplotlib to plot this.
 
 # Setup some helper functions and ranges to visualize our colormaps, from matplotlib
@@ -40,11 +40,11 @@ def plot_color_gradients(cmap_category, cmap_list):
     axs[0].set_title(cmap_category + " Colormaps", fontsize=14)
 
     for ax, cmap_name in zip(axs, cmap_list):
-        ax.imshow(gradient, aspect="auto", cmap=f"pyart_{cmap_name}")
+        ax.imshow(gradient, aspect="auto", cmap=f"{cmap_name}")
         ax.text(
             -0.01,
             0.5,
-            f"pyart_{cmap_name}",
+            f"{cmap_name}",
             va="center",
             ha="right",
             fontsize=10,
@@ -158,14 +158,10 @@ display.plot("reflectivity_horizontal", vmin=-32, vmax=64.0, cmap="Spectral_r")
 ######################################
 # **Plot Using a Colormap from Py-ART**
 #
-# Let's use one of our Py-ART's colorbars now! We need
-# to remember to add the pyart_ string in front of the
-# colormap, as shown below.
+# Let's use one of our cmweather's colorbars now!
 # Setup a display to plot the data
 
 display = pyart.graph.RadarDisplay(radar)
 
-# Start by plotting a regular matplotlib colormap (Spectral_r)
-display.plot(
-    "reflectivity_horizontal", vmin=-32, vmax=64.0, cmap="pyart_HomeyerRainbow"
-)
+# Now let's plot with a CVD-friendly colormap (HomeyerRainbow)
+display.plot("reflectivity_horizontal", vmin=-32, vmax=64.0, cmap="HomeyerRainbow")
