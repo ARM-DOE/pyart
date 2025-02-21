@@ -29,11 +29,11 @@ import numpy as np
 import pytz
 import xarray as xr
 
-import 
+import pyart
 
 
 def column_profile(
-    radar: .core.Radar,
+    radar: pyart.core.Radar,
     latitude: float = 33.8,
     longitude: float = -88.3,
     azimuth_spread: float = 3,
@@ -52,7 +52,7 @@ def column_profile(
 
     Parameters
     ----------
-    radar : .core.Radar
+    radar : pyart.core.Radar
         Py-ART radar object containing volume scan data.
     latitude : float, optional
         Latitude of the point of interest (default is 33.8).
@@ -77,7 +77,7 @@ def column_profile(
     if min_alt is None or max_alt is None:
         raise ValueError("Both min_alt and max_alt must be specified.")
 
-    col_prof = .util.column_vertical_profile(
+    col_prof = pyart.util.column_vertical_profile(
         radar,
         latitude=latitude,
         longitude=longitude,
@@ -142,7 +142,7 @@ files = download_nexrad(timezone, date, site, local_date=False)[:5]
 rain_rate_list = []
 
 for file in files:
-    radar = .io.read_nexrad_archive("s3://" + file)
+    radar = pyart.io.read_nexrad_archive("s3://" + file)
     col_prof_interp = column_profile(
         radar,
         latitude=33.5,
