@@ -87,6 +87,23 @@ Retrievals from various radars, such as additional fields or subsets of the data
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="- The column_profile function extracts a vertical profile at a given latitude/longitude. - The rain_rate_categorized function computes rain rates based on categorized reflectivity. - The script reads multiple radar files, processes them, and visualizes the results.">
+
+.. only:: html
+
+  .. image:: /examples/retrieve/images/thumb/sphx_glr_plot_qpe_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_retrieve_plot_qpe.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Radar-Based Quantitative Precipitation Estimation (QPE)</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip=" This script shows how to use hydrometeor classification for X-band radar data.  We are reading radar data, plotting some variables of interest and applying the  classification to identify types of precipitation.">
 
 .. only:: html
@@ -167,6 +184,7 @@ Retrievals from various radars, such as additional fields or subsets of the data
    /examples/retrieve/plot_composite_reflectivity
    /examples/retrieve/plot_vad
    /examples/retrieve/plot_hydrometeor
+   /examples/retrieve/plot_qpe
    /examples/retrieve/plot_hydrometeor_class_x_band
    /examples/retrieve/plot_cfad
    /examples/retrieve/plot_convective_stratiform
