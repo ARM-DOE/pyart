@@ -106,6 +106,4 @@ grid = pyart.map.grid_from_radars(
 # Create a grid display
 gdisplay = pyart.graph.GridMapDisplay(grid)
 with plt.style.context("dark_background"):
-    gdisplay.plot_maxcappi(
-        field="reflectivity", cmap="HomeyerRainbow", add_slogan=True
-    )
+    gdisplay.plot_maxcappi(field="reflectivity", cmap="HomeyerRainbow", add_slogan=True)
