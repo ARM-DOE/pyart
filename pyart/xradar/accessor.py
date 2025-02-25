@@ -409,7 +409,7 @@ class Xradar:
             "standard_name": "sweep_mode",
             "long_name": "Sweep mode",
         }
-        sweep_list = list(self.xradar.children.keys())
+        sweep_list = get_sweep_keys(self.xradar)
         if "sweep_mode" in self.xradar[sweep_list[0]]:
             sweep_mode["data"] = np.array(
                 self.nsweeps * [str(self.xradar[sweep_list[0]].sweep_mode.values)],
