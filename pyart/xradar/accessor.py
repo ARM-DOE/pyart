@@ -409,9 +409,10 @@ class Xradar:
             "standard_name": "sweep_mode",
             "long_name": "Sweep mode",
         }
-        if "sweep_mode" in self.xradar["sweep_0"]:
+        sweep_list = list(self.xradar.children.keys())
+        if "sweep_mode" in self.xradar[sweep_list[0]]:
             sweep_mode["data"] = np.array(
-                self.nsweeps * [str(self.xradar["sweep_0"].sweep_mode.values)],
+                self.nsweeps * [str(self.xradar[sweep_list[0]].sweep_mode.values)],
                 dtype="S",
             )
         else:
@@ -955,6 +956,14 @@ class Xradar:
             Radar object which contains a copy of data from the selected
             sweeps.
         """
+
+        # parse and verify parameters
+        verify_sweeps = np.array(sweeps, dtype="int32")
+        if np.any(verify_sweeps > (self.nsweeps - 1)):
+            raise ValueError("invalid sweeps indices in sweeps parameter")
+        if np.any(verify_sweeps < 0):
+            raise ValueError("only positive sweeps can be extracted")
+
         # Add proper indexing names
         sweeps_str = ["sweep_" + str(i) for i in sweeps]
         sweep_dict = {}

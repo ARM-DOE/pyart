@@ -1,4 +1,5 @@
 import numpy as np
+import pytest
 import xarray as xr
 import xradar as xd
 from numpy.testing import assert_allclose, assert_almost_equal
@@ -130,6 +131,9 @@ def test_extract_sweeps():
     assert "sweep_7" not in test_radar.xradar.children.keys()
 
     assert np.round(test_radar.latitude["data"][0], 4) == 36.4908
+
+    pytest.raises(ValueError, radar.extract_sweeps, [0, 50])
+    pytest.raises(ValueError, radar.extract_sweeps, [-1, 1])
 
 
 def _check_attrs_similar(grid1, grid2, attr):
