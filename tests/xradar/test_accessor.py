@@ -117,7 +117,7 @@ def test_grid(filename=filename):
 
 def test_extract_sweeps():
     dtree = xd.io.open_cfradial1_datatree(
-        filename,
+        filename_multiple_sweeps,
         optional=False,
     )
     radar = pyart.xradar.Xradar(dtree)
