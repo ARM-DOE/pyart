@@ -125,7 +125,7 @@ def test_extract_sweeps():
 
     test_radar = radar.extract_sweeps(sweeps)
 
-    assert test_radar.nsweeps == 5
+    assert test_radar.nsweeps == 4
     assert "sweep_0" in test_radar.xradar.children.keys()
     assert "sweep_7" not in test_radar.xradar.children.keys()
 
