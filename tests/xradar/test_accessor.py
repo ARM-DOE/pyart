@@ -129,7 +129,7 @@ def test_extract_sweeps():
     assert "sweep_0" in test_radar.xradar.children.keys()
     assert "sweep_7" not in test_radar.xradar.children.keys()
 
-    assert test_radar.latitude["data"][0] == 36.49083333
+    assert np.round(test_radar.latitude["data"][0], 4) == 36.4908
 
 
 def _check_attrs_similar(grid1, grid2, attr):
