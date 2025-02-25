@@ -955,9 +955,11 @@ class Xradar:
             Radar object which contains a copy of data from the selected
             sweeps.
         """
+        # Add proper indexing names
         sweeps_str = ["sweep_" + str(i) for i in sweeps]
         sweep_dict = {}
 
+        # Grab only selected sweeps while dropping old sweep information
         az_max_shape = self.xradar.children[sweeps_str[0]].azimuth.shape[0]
         range_max_shape = self.xradar.children[sweeps_str[0]].range.shape[0]
 
@@ -968,7 +970,10 @@ class Xradar:
                 drop=True,
             )
 
+        # Create new datatree containing selected sweeps
         dt_sweeps = DataTree(children=sweep_dict)
+
+        # Copys over attrs and modified sweep info
         dt_sweeps.attrs = self.xradar.attrs
         sweep_group_name_data = DataArray(
             self.xradar.sweep_group_name.values[sweeps],
