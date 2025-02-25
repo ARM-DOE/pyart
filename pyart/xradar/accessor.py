@@ -940,6 +940,52 @@ class Xradar:
             projparams["lat_0"] = self.latitude["data"][0]
         return projparams
 
+    def extract_sweeps(self, sweeps):
+        """
+        Create a new radar that contains only the data from select sweeps.
+
+        Parameters
+        ----------
+        sweeps : array_like
+            Sweeps (0-based) to include in new Radar object.
+
+        Returns
+        -------
+        radar : Radar
+            Radar object which contains a copy of data from the selected
+            sweeps.
+        """
+        sweeps_str = ["sweep_" + str(i) for i in sweeps]
+        sweep_dict = {}
+
+        az_max_shape = self.xradar.children[sweeps_str[0]].azimuth.shape[0]
+        range_max_shape = self.xradar.children[sweeps_str[0]].range.shape[0]
+
+        for group_name in sweeps_str:
+            sweep_dict[group_name] = self.xradar.children[group_name].isel(
+                azimuth=slice(0, az_max_shape),
+                range=slice(0, range_max_shape),
+                drop=True,
+            )
+
+        dt_sweeps = DataTree(children=sweep_dict)
+        dt_sweeps.attrs = self.xradar.attrs
+        sweep_group_name_data = DataArray(
+            self.xradar.sweep_group_name.values[sweeps],
+            dims=("sweep"),
+        )
+        sweep_fixed_angle_data = DataArray(
+            self.xradar.sweep_fixed_angle.values[sweeps],
+            dims=("sweep"),
+            attrs=self.xradar.sweep_fixed_angle.attrs,
+        )
+        dt_sweeps["sweep_group_name"] = sweep_group_name_data
+        dt_sweeps["sweep_fixed_angle"] = sweep_fixed_angle_data
+        dt_sweeps["latitude"] = self.xradar.latitude
+        dt_sweeps["longitude"] = self.xradar.longitude
+        dt_sweeps["altitude"] = self.xradar.altitude
+        return dt_sweeps.pyart.to_radar()
+
 
 def _point_data_factory(grid, coordinate):
     """Return a function which returns the locations of all points."""

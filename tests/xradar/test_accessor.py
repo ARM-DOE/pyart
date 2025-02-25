@@ -7,6 +7,7 @@ from open_radar_data import DATASETS
 import pyart
 
 filename = DATASETS.fetch("cfrad.20080604_002217_000_SPOL_v36_SUR.nc")
+filename_multiple_sweeps = DATASETS.fetch("swx_20120520_0641.nc")
 cfradial2_file = DATASETS.fetch("cfrad2.20080604_002217_000_SPOL_v36_SUR.nc")
 
 COMMON_MAP_TO_GRID_ARGS = {
@@ -112,6 +113,23 @@ def test_grid(filename=filename):
     )
     assert_allclose(grid.x["data"], np.arange(-100_000, 120_000, 20_000))
     assert_allclose(grid.fields["DBZ"]["data"][0, -1, 0], np.array(-0.511), rtol=1e-03)
+
+
+def test_extract_sweeps():
+    dtree = xd.io.open_cfradial1_datatree(
+        filename,
+        optional=False,
+    )
+    radar = pyart.xradar.Xradar(dtree)
+    sweeps = [0, 5, 6, 8]
+
+    test_radar = radar.extract_sweeps(sweeps)
+
+    assert test_radar.nsweeps == 5
+    assert "sweep_0" in test_radar.xradar.children.keys()
+    assert "sweep_7" not in test_radar.xradar.children.keys()
+
+    assert test_radar.latitude["data"][0] == 36.49083333
 
 
 def _check_attrs_similar(grid1, grid2, attr):
