@@ -409,9 +409,10 @@ class Xradar:
             "standard_name": "sweep_mode",
             "long_name": "Sweep mode",
         }
-        if "sweep_mode" in self.xradar["sweep_0"]:
+        sweep_list = get_sweep_keys(self.xradar)
+        if "sweep_mode" in self.xradar[sweep_list[0]]:
             sweep_mode["data"] = np.array(
-                self.nsweeps * [str(self.xradar["sweep_0"].sweep_mode.values)],
+                self.nsweeps * [str(self.xradar[sweep_list[0]].sweep_mode.values)],
                 dtype="S",
             )
         else:
@@ -939,6 +940,65 @@ class Xradar:
             projparams["lon_0"] = self.longitude["data"][0]
             projparams["lat_0"] = self.latitude["data"][0]
         return projparams
+
+    def extract_sweeps(self, sweeps):
+        """
+        Create a new radar that contains only the data from select sweeps.
+
+        Parameters
+        ----------
+        sweeps : array_like
+            Sweeps (0-based) to include in new Radar object.
+
+        Returns
+        -------
+        radar : Radar
+            Radar object which contains a copy of data from the selected
+            sweeps.
+        """
+
+        # parse and verify parameters
+        verify_sweeps = np.array(sweeps, dtype="int32")
+        if np.any(verify_sweeps > (self.nsweeps - 1)):
+            raise ValueError("invalid sweeps indices in sweeps parameter")
+        if np.any(verify_sweeps < 0):
+            raise ValueError("only positive sweeps can be extracted")
+
+        # Add proper indexing names
+        sweeps_str = ["sweep_" + str(i) for i in sweeps]
+        sweep_dict = {}
+
+        # Grab only selected sweeps while dropping old sweep information
+        az_max_shape = self.xradar.children[sweeps_str[0]].azimuth.shape[0]
+        range_max_shape = self.xradar.children[sweeps_str[0]].range.shape[0]
+
+        for group_name in sweeps_str:
+            sweep_dict[group_name] = self.xradar.children[group_name].isel(
+                azimuth=slice(0, az_max_shape),
+                range=slice(0, range_max_shape),
+                drop=True,
+            )
+
+        # Create new datatree containing selected sweeps
+        dt_sweeps = DataTree(children=sweep_dict)
+
+        # Copys over attrs and modified sweep info
+        dt_sweeps.attrs = self.xradar.attrs
+        sweep_group_name_data = DataArray(
+            self.xradar.sweep_group_name.values[sweeps],
+            dims=("sweep"),
+        )
+        sweep_fixed_angle_data = DataArray(
+            self.xradar.sweep_fixed_angle.values[sweeps],
+            dims=("sweep"),
+            attrs=self.xradar.sweep_fixed_angle.attrs,
+        )
+        dt_sweeps["sweep_group_name"] = sweep_group_name_data
+        dt_sweeps["sweep_fixed_angle"] = sweep_fixed_angle_data
+        dt_sweeps["latitude"] = self.xradar.latitude
+        dt_sweeps["longitude"] = self.xradar.longitude
+        dt_sweeps["altitude"] = self.xradar.altitude
+        return dt_sweeps.pyart.to_radar()
 
 
 def _point_data_factory(grid, coordinate):
