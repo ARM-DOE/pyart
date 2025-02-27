@@ -7,6 +7,5 @@ include README.rst
 include LICENSE.txt
 include INSTALL.rst
 include pyart/testing/registry.txt
-include pyart/correct/src/UWASHINGTON_4DD_README
 include pyart/__check_build/README
 include pyart/testing/data/*
