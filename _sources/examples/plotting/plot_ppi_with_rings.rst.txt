@@ -105,7 +105,7 @@ and range rings
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (4 minutes 32.357 seconds)
+   **Total running time of the script:** (4 minutes 32.031 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_ppi_with_rings.py:
