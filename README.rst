@@ -304,8 +304,18 @@ contributing, see the `contributor's guide. <https://github.com/ARM-DOE/pyart/bl
 Testing
 -------
 
-After installation, you can launch the test suite from outside the
-source directory (you will need to have pytest installed)::
+For testing, we use pytest for running the unit tests and open-test-data for
+test files that are used for Py-ART's example gallery. To install pytest::
+
+   $ conda install -c conda-forge pytest
+
+To install open-radar-data::
+
+   $ conda install -c conda-forge open-radar-data
+
+After installation of pytest you can launch the test
+suite from outside the source directory (you will need to have pytest
+installed)::
 
    $ pytest --pyargs pyart
 
