@@ -312,6 +312,32 @@ For more on pytest:
 
 - https://docs.pytest.org/en/latest/
 
+Examples
+--------
+
+When creating and contributing new examples to Py-ART, we used the open-radar-data
+package for example files.
+
+To install open-radar-data::
+
+        conda install -c conda-forge open-radar-data
+
+To see what files exist in open-radar-data to use for an example script:
+
+.. code-block:: python
+
+   from open_radar_data import DATASETS
+
+   print(DATASETS.registry_files)
+
+To grab a file to use for an example, use:
+
+.. code-block:: python
+
+   files = DATASETS.fetch('gucxprecipradarcmacppiS2.c1.20220314.025840.nc')
+
+If there isn't a file that fits the example being created, feel free to open a PR at
+https://github.com/openradar/open-radar-data
 
 GitHub
 ------
