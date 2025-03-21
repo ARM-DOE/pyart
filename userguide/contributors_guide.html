@@ -765,6 +765,27 @@ From within the main pyart directory:</p>
 <li><p><a class="reference external" href="https://docs.pytest.org/en/latest/">https://docs.pytest.org/en/latest/</a></p></li>
 </ul>
 </section>
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">#</a></h2>
+<p>When creating and contributing new examples to Py-ART, we used the open-radar-data
+package for example files.</p>
+<p>To install open-radar-data:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">conda</span> <span class="n">install</span> <span class="o">-</span><span class="n">c</span> <span class="n">conda</span><span class="o">-</span><span class="n">forge</span> <span class="nb">open</span><span class="o">-</span><span class="n">radar</span><span class="o">-</span><span class="n">data</span>
+</pre></div>
+</div>
+<p>To see what files exist in open-radar-data to use for an example script:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">open_radar_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATASETS</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">DATASETS</span><span class="o">.</span><span class="n">registry_files</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>To grab a file to use for an example, use:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">files</span> <span class="o">=</span> <span class="n">DATASETS</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s1">&#39;gucxprecipradarcmacppiS2.c1.20220314.025840.nc&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>If there isn’t a file that fits the example being created, feel free to open a PR at
+<a class="github reference external" href="https://github.com/openradar/open-radar-data">openradar/open-radar-data</a></p>
+</section>
 <section id="github">
 <h2>GitHub<a class="headerlink" href="#github" title="Permalink to this heading">#</a></h2>
 <p>When contributing to pyart, the changes created should be in a new branch
@@ -910,6 +931,7 @@ to PEP8 standards.</p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-style">Code Style</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#python-file-setup">Python File Setup</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#testing">Testing</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#github">GitHub</a></li>
 </ul>
   </nav></div>
