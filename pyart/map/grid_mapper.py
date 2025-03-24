@@ -956,7 +956,10 @@ def grid_ppi_sweeps(
     if isinstance(grid_limits, str):
         if grid_limits == "auto":
             max_xy = np.max(
-                [np.max(radar.get_gate_x_y_z(sweep=sw)[0]) for sw in target_sweeps]
+                [
+                    np.max(np.abs(radar.get_gate_x_y_z(sweep=sw)[0:2]))
+                    for sw in target_sweeps
+                ]
             )
             max_xy = np.ceil(max_xy / 1e3) * 1e3
             grid_limits = ((0.0, max_z), (-max_xy, max_xy), (-max_xy, max_xy))
