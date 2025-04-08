@@ -1,6 +1,6 @@
 """
 =========================================
-Reading NEXRAD Data from the Google Cloud
+Reading NEXRAD Data from Google Cloud
 =========================================
 
 Within this example, we show how you can remotely access Next Generation Weather Radar (NEXRAD) Data from Google Cloud Storage
