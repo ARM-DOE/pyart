@@ -15,6 +15,7 @@ print(__doc__)
 
 import tarfile
 
+# This example requires installation of the gcsfs library
 import gcsfs
 import matplotlib.pyplot as plt
 
