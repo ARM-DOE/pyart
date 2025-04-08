@@ -36,6 +36,23 @@ Reading/writing a variety of radar data using Py-ART.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Within this example, we show how you can remotely access Next Generation Weather Radar (NEXRAD) Data from Google Cloud Storage and plot quick looks of the datasets.">
+
+.. only:: html
+
+  .. image:: /examples/io/images/thumb/sphx_glr_plot_nexrad_data_google_cloud_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_io_plot_nexrad_data_google_cloud.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Reading NEXRAD Data from Google Cloud</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="In this example, we will show how to read in older NEXRAD files prior to 2008 that are missing some coordinate metadata.">
 
 .. only:: html
@@ -79,6 +96,7 @@ Reading/writing a variety of radar data using Py-ART.
    :hidden:
 
    /examples/io/plot_read_cfradial2
+   /examples/io/plot_nexrad_data_google_cloud
    /examples/io/plot_older_nexrad_data_aws
    /examples/io/plot_nexrad_data_aws
 
