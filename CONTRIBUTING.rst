@@ -138,7 +138,7 @@ documentation style.
 
 For more on the NumPy documentation style:
 
-- https://github.com/numpy/numpy/blob/main/doc/HOWTO_DOCUMENT.rst.txt
+- https://numpydoc.readthedocs.io/en/latest/format.html#docstring-standard
 
 An example:
 
