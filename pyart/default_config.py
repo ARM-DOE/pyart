@@ -497,6 +497,36 @@ DEFAULT_METADATA = {
         "long_name": "Geoferences have been applied to ray",
         "comment": "1 if georefs have been applied, 0 otherwise",
     },
+    "eastward_velocity": {
+        "units": "meters_per_second",
+        "long_name": "platform_eastward_velocity",
+        "comment": "EW velocity of the platform. Positive is eastwards.",
+    },
+    "northward_velocity": {
+        "units": "meters_per_second",
+        "long_name": "platform_northward_velocity",
+        "comment": "NS velocity of the platform. Positive is northwards.",
+    },
+    "vertical_velocity": {
+        "units": "meters_per_second",
+        "long_name": "platform_vertical_velocity",
+        "comment": "Vertical velocity of the platform. Positive is up.",
+    },
+    "eastward_wind": {
+        "units": "meters_per_second",
+        "long_name": "platform_eastward_wind",
+        "comment": "EW wind at the platform location. Positive is eastwards.",
+    },
+    "northward_wind": {
+        "units": "meters_per_second",
+        "long_name": "platform_northward_wind",
+        "comment": "NS wind at the platform location. Positive is northwards.",
+    },
+    "vertical_wind": {
+        "units": "meters_per_second",
+        "standard_name": "platform_vertical_wind",
+        "comment": "Vertical wind at the platform location. Positive is up.",
+    },
     # Reflectivity fields
     reflectivity: {
         "units": "dBZ",
