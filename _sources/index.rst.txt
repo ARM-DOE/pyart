@@ -208,6 +208,17 @@ The required dependencies to install Py-ART in addition to Python are:
 * `SciPy <https://www.scipy.org>`_
 * `matplotlib <https://matplotlib.org/>`_
 * `netCDF4 <https://github.com/Unidata/netcdf4-python>`_
+* `pooch <https://pypi.org/project/pooch/>`_
+* `Cython <https://cython.readthedocs.io/en/latest/>`_
+* `setuptools <https://setuptools.pypa.io/en/latest/index.html>`_
+* `cartopy <https://scitools.org.uk/cartopy/docs/latest/>`_
+* `cmweather <https://cmweather.readthedocs.io/en/latest/>`_
+* `xradar <https://docs.openradarscience.org/projects/xradar/en/stable/>`_
+* `xarray <https://docs.xarray.dev/en/stable/>`_
+* `mda-xdrlib <https://github.com/MDAnalysis/mda-xdrlib>`_
+* `fsspec <https://filesystem-spec.readthedocs.io/en/latest/>`_
+* `s3fs <https://s3fs.readthedocs.io/en/latest/>`_
+* `pandas <https://pandas.pydata.org/>`_
 
 A working C/C++ compiler is required for some optional modules. An easy method
 to install these dependencies is by using a
@@ -253,9 +264,6 @@ functionality is available of the following modules are installed.
 * `Cartopy <https://scitools.org.uk/cartopy/docs/latest/>`_. If installed,
   the ability to plot grids on geographic maps is available.
 
-* `xarray <https://xarray.pydata.org/en/stable/>`_. If installed, gives the
-  ability to work with the grid dataset used in grid plotting.
-
 * `Basemap <https://matplotlib.org/basemap/>`_. If installed, also gives the
   ability to plot grids on geographic maps, but Cartopy is recommended over
   Basemap.
@@ -268,6 +276,9 @@ functionality is available of the following modules are installed.
 
 * `gdal <https://pypi.python.org/pypi/GDAL/>`_.
   Required to output GeoTIFFs from `Grid` objects.
+
+* `metpy <https://unidata.github.io/MetPy/latest/>`_.
+  Required to plot gridded cross sections.
 
 Getting help
 ============
