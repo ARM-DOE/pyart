@@ -92,7 +92,6 @@ without these packages.
 * `Basemap <https://matplotlib.org/basemap/>`_ But Cartopy is recommended as
   basemap will no longer have support.
 
-* `xarray <https://docs.xarray.dev/en/stable/>`_
 * `pyproj <https://github.com/pyproj4/pyproj>`_
 
 * `pytest <https://docs.pytest.org/en/latest/>`_
