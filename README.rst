@@ -91,7 +91,7 @@ environment based on the `environment.yml <https://github.com/ARM-DOE/pyart/blob
 
 Or for a basic environment and downloading optional dependencies as needed::
 
-    conda create -n pyart_env -c conda-forge python=3.9 arm_pyart
+    conda create -n pyart_env -c conda-forge python=3.13 arm_pyart
 
 Basic command in a terminal or command prompt to install the latest version of
 Py-ART::
@@ -186,6 +186,12 @@ The required dependencies to install Py-ART in addition to Python are:
 * `setuptools <https://setuptools.pypa.io/en/latest/index.html>`_
 * `cartopy <https://scitools.org.uk/cartopy/docs/latest/>`_
 * `cmweather <https://cmweather.readthedocs.io/en/latest/>`_
+* `xradar <https://docs.openradarscience.org/projects/xradar/en/stable/>`_
+* `xarray <https://docs.xarray.dev/en/stable/>`_
+* `mda-xdrlib <https://github.com/MDAnalysis/mda-xdrlib>`_
+* `fsspec <https://filesystem-spec.readthedocs.io/en/latest/>`_
+* `s3fs <https://s3fs.readthedocs.io/en/latest/>`_
+* `pandas <https://pandas.pydata.org/>`_
 
 A working C/C++ compiler is required for some optional modules. An easy method
 to install these dependencies is by using a
@@ -232,9 +238,6 @@ functionality is available of the following modules are installed.
 * `Cartopy <https://scitools.org.uk/cartopy/docs/latest/>`_. If installed,
   the ability to plot grids on geographic maps is available.
 
-* `xarray <https://xarray.pydata.org/en/stable/>`_. If installed, gives the
-  ability to work with the grid dataset used in grid plotting.
-
 * `Basemap <https://matplotlib.org/basemap/>`_. If installed, also gives the
   ability to plot grids on geographic maps, but Cartopy is recommended over
   Basemap.
@@ -247,6 +250,9 @@ functionality is available of the following modules are installed.
 
 * `gdal <https://pypi.python.org/pypi/GDAL/>`_.
   Required to output GeoTIFFs from `Grid` objects.
+
+* `metpy <https://unidata.github.io/MetPy/latest/>`_.
+  Required for plotting gridded cross sections.
 
 Installing from source
 ======================
