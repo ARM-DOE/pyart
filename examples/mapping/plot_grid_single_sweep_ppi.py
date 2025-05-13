@@ -1,7 +1,7 @@
 """
-======================================
+=============================================================
 Map a single PPI sweep to a Cartesian grid using 2D weighting
-======================================
+=============================================================
 
 Map the reflectivity field of a single PPI sweep from Antenna (polar) coordinates
 to a Cartesian grid, while using a 2D weighting.

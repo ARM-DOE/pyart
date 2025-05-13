@@ -1,7 +1,7 @@
 """
-=======================================
+=======================
 Creating a CFAD diagram
-=======================================
+=======================
 This example shows how to create a contoured frequency by altitude (CFAD) diagram
 """
 
@@ -19,7 +19,8 @@ import pyart
 
 ######################################
 # Description of a CFAD
-# ----------
+# ---------------------
+#
 # A contoured frequency by altitude diagram (CFAD) is essentially a 2D histogram used to depict the vertical
 # distribution of a particular variable, such as radar reflectivity. The x-axis represents the frequency of the
 # field and the y-axis represents the frequency of the altitude. A key feature that distinguishes a CFAD from a
@@ -38,9 +39,11 @@ import pyart
 # act to be more aggressive in removing altitudes and decreasing the value will act to include more data. Setting
 # this value to zero will include all altitudes with data, but use caution when interpreting CFADs with all data
 # available as those altitudes with less data will not be as representative as other altitudes with sufficient data.
-######################################
+
+##########################################
 # Basic example with reflectivity from RHI
-# ----------
+# ----------------------------------------
+#
 # **Example with RHI**
 # First, we will show an example from an RHI scan. We will get the reflectivity data and mask outside -15 and 35 dBZ
 # to remove any noisy data. For the best results, we recommend cleaning up the field as much as possible (i.e.
@@ -110,7 +113,7 @@ plt.show()
 # the RHI.
 
 # Minimum fraction threshold example
-# ----------
+# ----------------------------------
 # Previously, we used the default `min_frac_thres` of 0.1. Next, we will increase the threshold and set the threshold
 # to 0 (not recommended) so show how the CFAD changes.
 
@@ -190,7 +193,7 @@ plt.show()
 #
 #
 # Velocity example
-# ----------
+# ----------------
 # Next, we will show a CFAD for the doppler velocity from the above example. First, we have to dealias the velocity.
 
 # create a gatefilter
