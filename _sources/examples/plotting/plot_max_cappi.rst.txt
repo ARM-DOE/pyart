@@ -18,9 +18,9 @@
 .. _sphx_glr_examples_plotting_plot_max_cappi.py:
 
 
-=============
+==============
 Plot Max-CAPPI
-=============
+==============
 
 This is an example of how to plot a Max-CAPPI
 within a Py-ART grid display object.
@@ -50,8 +50,8 @@ within a Py-ART grid display object.
 
 .. GENERATED FROM PYTHON SOURCE LINES 23-25
 
-** MAX-CAPPI Display
-
+MAX-CAPPI Display
+-----------------
 
 .. GENERATED FROM PYTHON SOURCE LINES 25-36
 
@@ -80,13 +80,14 @@ within a Py-ART grid display object.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 37-40
+.. GENERATED FROM PYTHON SOURCE LINES 37-41
 
-** Second Example
+Second Example
+--------------
 
 Let's read in a Nexrad data and create a grid.
 
-.. GENERATED FROM PYTHON SOURCE LINES 40-110
+.. GENERATED FROM PYTHON SOURCE LINES 41-111
 
 .. code-block:: Python
 
@@ -183,7 +184,7 @@ Let's read in a Nexrad data and create a grid.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 13.907 seconds)
+   **Total running time of the script:** (0 minutes 13.601 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_max_cappi.py:

@@ -20,7 +20,8 @@ import pyart
 from pyart.testing import get_test_data
 
 #########################################
-# ** Initial PPI Map Display
+# Initial PPI Map Display
+# -----------------------
 #
 # Let's plot a PPI Map Display
 # and take a look at the colorbar
@@ -77,8 +78,9 @@ gl.ylabel_style = {"size": 14}
 del display
 
 ############################################
-# ** Colorbar Position / Title Manipulation
-
+# Colorbar Position / Title Manipulation
+# --------------------------------------
+#
 # Now, let's update the colorbar position
 # to match the display
 

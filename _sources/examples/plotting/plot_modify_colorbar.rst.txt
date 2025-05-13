@@ -48,9 +48,10 @@ within a Py-ART display object.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 23-30
+.. GENERATED FROM PYTHON SOURCE LINES 23-31
 
-** Initial PPI Map Display
+Initial PPI Map Display
+-----------------------
 
 Let's plot a PPI Map Display
 and take a look at the colorbar
@@ -58,7 +59,7 @@ and take a look at the colorbar
 Notice: the colorbar is not perfect
 and slightly overlaps the PPI display
 
-.. GENERATED FROM PYTHON SOURCE LINES 30-79
+.. GENERATED FROM PYTHON SOURCE LINES 31-80
 
 .. code-block:: Python
 
@@ -123,17 +124,18 @@ and slightly overlaps the PPI display
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 80-81
+.. GENERATED FROM PYTHON SOURCE LINES 81-86
 
-** Colorbar Position / Title Manipulation
+Colorbar Position / Title Manipulation
+--------------------------------------
 
-.. GENERATED FROM PYTHON SOURCE LINES 81-132
+Now, let's update the colorbar position
+to match the display
+
+.. GENERATED FROM PYTHON SOURCE LINES 86-134
 
 .. code-block:: Python
 
-
-    # Now, let's update the colorbar position
-    # to match the display
 
     # Define figure
     fig = plt.figure()
@@ -197,7 +199,7 @@ and slightly overlaps the PPI display
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.120 seconds)
+   **Total running time of the script:** (0 minutes 3.145 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_modify_colorbar.py:

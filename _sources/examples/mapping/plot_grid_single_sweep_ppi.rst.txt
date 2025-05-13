@@ -18,9 +18,9 @@
 .. _sphx_glr_examples_mapping_plot_grid_single_sweep_ppi.py:
 
 
-======================================
+=============================================================
 Map a single PPI sweep to a Cartesian grid using 2D weighting
-======================================
+=============================================================
 
 Map the reflectivity field of a single PPI sweep from Antenna (polar) coordinates
 to a Cartesian grid, while using a 2D weighting.
@@ -187,7 +187,7 @@ negligible at low elevation angles common to PPI sweeps.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 6.391 seconds)
+   **Total running time of the script:** (0 minutes 6.353 seconds)
 
 
 .. _sphx_glr_download_examples_mapping_plot_grid_single_sweep_ppi.py:

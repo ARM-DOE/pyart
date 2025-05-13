@@ -559,8 +559,9 @@ to download the full example code.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 </pre></div>
 </div>
-<dl>
-<dt>Description of a CFAD</dt><dd><p>A contoured frequency by altitude diagram (CFAD) is essentially a 2D histogram used to depict the vertical
+<section id="description-of-a-cfad">
+<h2>Description of a CFAD<a class="headerlink" href="#description-of-a-cfad" title="Permalink to this heading">#</a></h2>
+<p>A contoured frequency by altitude diagram (CFAD) is essentially a 2D histogram used to depict the vertical
 distribution of a particular variable, such as radar reflectivity. The x-axis represents the frequency of the
 field and the y-axis represents the frequency of the altitude. A key feature that distinguishes a CFAD from a
 regular 2D histogram is that it is normalized by altitude and altitudes where there is insufficient data are
@@ -576,14 +577,13 @@ than one tenth of the maximum number of observations across all altitudes are re
 act to be more aggressive in removing altitudes and decreasing the value will act to include more data. Setting
 this value to zero will include all altitudes with data, but use caution when interpreting CFADs with all data
 available as those altitudes with less data will not be as representative as other altitudes with sufficient data.</p>
-</dd>
-</dl>
-<blockquote>
-<div><p><strong>Example with RHI</strong>
+</section>
+<section id="basic-example-with-reflectivity-from-rhi">
+<h2>Basic example with reflectivity from RHI<a class="headerlink" href="#basic-example-with-reflectivity-from-rhi" title="Permalink to this heading">#</a></h2>
+<p><strong>Example with RHI</strong>
 First, we will show an example from an RHI scan. We will get the reflectivity data and mask outside -15 and 35 dBZ
 to remove any noisy data. For the best results, we recommend cleaning up the field as much as possible (i.e.
 despeckling, filtering, etc.)</p>
-</div></blockquote>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># get test data</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">get_test_data</span><span class="p">(</span><span class="s2">&quot;sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc&quot;</span><span class="p">)</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
@@ -651,7 +651,7 @@ each altitude row represents the mode of the reflectivity distribution which we 
 top to 8km. Below 8km the distribution of reflectivity values widens, likely associated with some of the noise in
 the RHI.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Minimum fraction threshold example</span>
-<span class="c1"># ----------</span>
+<span class="c1"># ----------------------------------</span>
 <span class="c1"># Previously, we used the default `min_frac_thres` of 0.1. Next, we will increase the threshold and set the threshold</span>
 <span class="c1"># to 0 (not recommended) so show how the CFAD changes.</span>
 
@@ -728,6 +728,7 @@ the RHI.</p>
 limited echo. Setting the <cite>min_frac_thres</cite> higher to 0.2 (right panel) removed altitudes between 1 and 5 km where
 there is less echo than between 6 and 12km where there is a consistent swath of reflectivity throughout the entire
 cross section.</p>
+</section>
 <section id="velocity-example">
 <h2>Velocity example<a class="headerlink" href="#velocity-example" title="Permalink to this heading">#</a></h2>
 <p>Next, we will show a CFAD for the doppler velocity from the above example. First, we have to dealias the velocity.</p>
@@ -867,7 +868,7 @@ contour lines.</p>
 <span class="c1"># Mon. Wea. Rev. 123, 1941-1963. https://doi.org/10.1175/1520-0493(1995)123%3C1941:TDKAME%3E2.0.CO;2</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_cfad_006.png" srcset="../../_images/sphx_glr_plot_cfad_006.png" alt="Yuter and Houze (1995) Fig. 2c" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.422 seconds)</p>
+<img src="../../_images/sphx_glr_plot_cfad_006.png" srcset="../../_images/sphx_glr_plot_cfad_006.png" alt="Yuter and Houze (1995) Fig. 2c" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.724 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-retrieve-plot-cfad-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/8fef9e6273d2bd008ef548d306e473f7/plot_cfad.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_cfad.ipynb</span></code></a></p>
@@ -933,6 +934,8 @@ contour lines.</p>
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#description-of-a-cfad">Description of a CFAD</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-example-with-reflectivity-from-rhi">Basic example with reflectivity from RHI</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#velocity-example">Velocity example</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation">Validation</a></li>
 </ul>

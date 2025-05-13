@@ -18,9 +18,9 @@
 .. _sphx_glr_examples_retrieve_plot_cfad.py:
 
 
-=======================================
+=======================
 Creating a CFAD diagram
-=======================================
+=======================
 This example shows how to create a contoured frequency by altitude (CFAD) diagram
 
 .. GENERATED FROM PYTHON SOURCE LINES 7-20
@@ -47,37 +47,41 @@ This example shows how to create a contoured frequency by altitude (CFAD) diagra
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 21-48
+.. GENERATED FROM PYTHON SOURCE LINES 21-42
 
 Description of a CFAD
- ----------
- A contoured frequency by altitude diagram (CFAD) is essentially a 2D histogram used to depict the vertical
- distribution of a particular variable, such as radar reflectivity. The x-axis represents the frequency of the
- field and the y-axis represents the frequency of the altitude. A key feature that distinguishes a CFAD from a
- regular 2D histogram is that it is normalized by altitude and altitudes where there is insufficient data are
- removed. See Yuter and Houze (1995) for full details of the diagram.
+---------------------
 
- **Interpretation**
- In a CFAD diagram, for a given altitude, the normalized frequency values will sum to a value of 1. When
- interpreting a CFAD diagram, the normalized frequency for a given bin will be the frequency of that value for the
- associated altitude (i.e. each bin can be interpreted as the fraction of data points at each altitude).
+A contoured frequency by altitude diagram (CFAD) is essentially a 2D histogram used to depict the vertical
+distribution of a particular variable, such as radar reflectivity. The x-axis represents the frequency of the
+field and the y-axis represents the frequency of the altitude. A key feature that distinguishes a CFAD from a
+regular 2D histogram is that it is normalized by altitude and altitudes where there is insufficient data are
+removed. See Yuter and Houze (1995) for full details of the diagram.
 
- **Minimum fraction threshold**
- In a CFAD diagram, altitudes where there is insufficient data are removed. This feature is controlled with the
- `min_frac_thres` value. The default value is 0.1, meaning that altitudes where the number of observations is less
- than one tenth of the maximum number of observations across all altitudes are removed. Increasing the value will
- act to be more aggressive in removing altitudes and decreasing the value will act to include more data. Setting
- this value to zero will include all altitudes with data, but use caution when interpreting CFADs with all data
- available as those altitudes with less data will not be as representative as other altitudes with sufficient data.
-#####################################
- Basic example with reflectivity from RHI
- ----------
- **Example with RHI**
- First, we will show an example from an RHI scan. We will get the reflectivity data and mask outside -15 and 35 dBZ
- to remove any noisy data. For the best results, we recommend cleaning up the field as much as possible (i.e.
- despeckling, filtering, etc.)
+**Interpretation**
+In a CFAD diagram, for a given altitude, the normalized frequency values will sum to a value of 1. When
+interpreting a CFAD diagram, the normalized frequency for a given bin will be the frequency of that value for the
+associated altitude (i.e. each bin can be interpreted as the fraction of data points at each altitude).
 
-.. GENERATED FROM PYTHON SOURCE LINES 48-106
+**Minimum fraction threshold**
+In a CFAD diagram, altitudes where there is insufficient data are removed. This feature is controlled with the
+`min_frac_thres` value. The default value is 0.1, meaning that altitudes where the number of observations is less
+than one tenth of the maximum number of observations across all altitudes are removed. Increasing the value will
+act to be more aggressive in removing altitudes and decreasing the value will act to include more data. Setting
+this value to zero will include all altitudes with data, but use caution when interpreting CFADs with all data
+available as those altitudes with less data will not be as representative as other altitudes with sufficient data.
+
+.. GENERATED FROM PYTHON SOURCE LINES 44-51
+
+Basic example with reflectivity from RHI
+----------------------------------------
+
+**Example with RHI**
+First, we will show an example from an RHI scan. We will get the reflectivity data and mask outside -15 and 35 dBZ
+to remove any noisy data. For the best results, we recommend cleaning up the field as much as possible (i.e.
+despeckling, filtering, etc.)
+
+.. GENERATED FROM PYTHON SOURCE LINES 51-109
 
 .. code-block:: Python
 
@@ -163,20 +167,20 @@ Description of a CFAD
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 107-111
+.. GENERATED FROM PYTHON SOURCE LINES 110-114
 
 We can see a general increase in reflectivity values from the echo top to around 8km. The maximum frequency value in
 each altitude row represents the mode of the reflectivity distribution which we can see also increases from echo
 top to 8km. Below 8km the distribution of reflectivity values widens, likely associated with some of the noise in
 the RHI.
 
-.. GENERATED FROM PYTHON SOURCE LINES 111-185
+.. GENERATED FROM PYTHON SOURCE LINES 114-188
 
 .. code-block:: Python
 
 
     # Minimum fraction threshold example
-    # ----------
+    # ----------------------------------
     # Previously, we used the default `min_frac_thres` of 0.1. Next, we will increase the threshold and set the threshold
     # to 0 (not recommended) so show how the CFAD changes.
 
@@ -260,7 +264,7 @@ the RHI.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 186-195
+.. GENERATED FROM PYTHON SOURCE LINES 189-198
 
 Setting the `min_frac_thres` to 0 (left panel) shows all data, even near the top of the chart (14km) where there is
 limited echo. Setting the `min_frac_thres` higher to 0.2 (right panel) removed altitudes between 1 and 5 km where
@@ -269,10 +273,10 @@ cross section.
 
 
 Velocity example
-----------
+----------------
 Next, we will show a CFAD for the doppler velocity from the above example. First, we have to dealias the velocity.
 
-.. GENERATED FROM PYTHON SOURCE LINES 195-260
+.. GENERATED FROM PYTHON SOURCE LINES 198-263
 
 .. code-block:: Python
 
@@ -365,7 +369,7 @@ Next, we will show a CFAD for the doppler velocity from the above example. First
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 261-270
+.. GENERATED FROM PYTHON SOURCE LINES 264-273
 
 The velocity CFAD is very different from the reflectivity CFAD. In most altitudes, there is more of a bimodal
 pattern associated with the changing sign of the velocity values on either side of the radar. In general,
@@ -377,7 +381,7 @@ Finally, we wanted to compare this function with the original method, so here we
 Houze (1995) to demonstrate that it works the same. Instead of using the `pcolormesh` function, we are using
 contour lines.
 
-.. GENERATED FROM PYTHON SOURCE LINES 270-328
+.. GENERATED FROM PYTHON SOURCE LINES 273-331
 
 .. code-block:: Python
 
@@ -454,7 +458,7 @@ contour lines.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 2.422 seconds)
+   **Total running time of the script:** (0 minutes 2.724 seconds)
 
 
 .. _sphx_glr_download_examples_retrieve_plot_cfad.py:
