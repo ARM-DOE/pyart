@@ -172,8 +172,10 @@ def read_odim_h5(
         metadata["odim_conventions"] = _to_str(hfile.attrs["Conventions"])
 
         h_what = hfile["what"].attrs
-        metadata["version"] = _to_str(h_what["version"])
-        metadata["source"] = _to_str(h_what["source"])
+        if "version" in h_what:
+            metadata["version"] = _to_str(h_what["version"])
+        if "source" in h_what:
+            metadata["source"] = _to_str(h_what["source"])
 
         try:
             ds1_how = hfile[datasets[0]]["how"].attrs
