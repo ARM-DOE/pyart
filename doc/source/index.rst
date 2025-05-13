@@ -264,9 +264,6 @@ functionality is available of the following modules are installed.
 * `Cartopy <https://scitools.org.uk/cartopy/docs/latest/>`_. If installed,
   the ability to plot grids on geographic maps is available.
 
-* `xarray <https://xarray.pydata.org/en/stable/>`_. If installed, gives the
-  ability to work with the grid dataset used in grid plotting.
-
 * `Basemap <https://matplotlib.org/basemap/>`_. If installed, also gives the
   ability to plot grids on geographic maps, but Cartopy is recommended over
   Basemap.
