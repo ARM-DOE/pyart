@@ -84,8 +84,8 @@ def create_cfad(
 
     # get raw bin counts
     freq, height_edges, field_edges = np.histogram2d(
-        altitude_data.flatten(),
-        field_data.flatten(),
+        altitude_data.compressed(),
+        field_data.compressed(),
         bins=[altitude_bins, field_bins],
     )
 
