@@ -48,7 +48,7 @@ fs.get(gcs_path, ".")
 file = tarfile.open("NWS_NEXRAD_NXL2DPBL_KAMX_20161007040000_20161007045959.tar")
 members = file.getmembers()
 
-# This case we are getting only the first file, use extract_all if wanting all files.
+# This case we are getting only the first file.
 file.extract(members[0].name, ".")
 file.close()
 
