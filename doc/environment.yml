@@ -21,7 +21,7 @@ dependencies:
   - Cython
   - fsspec
   - s3fs
-  - gcsfs
+  - gcsfs>=2025.3.2
   - glpk
   - cftime
   - shapely
