@@ -556,10 +556,6 @@
     <span class="n">index</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">desired_angle</span><span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
     <span class="n">radar_slice</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
 
-    <span class="c1"># Printing radar tilt angles and radar elevation</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
-    <span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
-
     <span class="c1"># Setting field parameters</span>
     <span class="c1"># If fields is None then all radar fields pulled else defined field is used</span>
     <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>

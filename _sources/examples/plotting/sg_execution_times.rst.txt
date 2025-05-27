@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**22:01.669** total execution time for 20 files **from examples/plotting**:
+**21:58.532** total execution time for 20 files **from examples/plotting**:
 
 .. container::
 
@@ -33,62 +33,62 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_plotting_plot_three_panel_gridmapdisplay.py` (``plot_three_panel_gridmapdisplay.py``)
-     - 14:00.681
+     - 13:59.709
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_ppi_with_rings.py` (``plot_ppi_with_rings.py``)
-     - 04:32.480
+     - 04:31.738
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_nexrad_multiple_moments.py` (``plot_nexrad_multiple_moments.py``)
-     - 01:15.827
+     - 01:14.853
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_rhi_cfradial_singlescan.py` (``plot_rhi_cfradial_singlescan.py``)
-     - 00:31.424
+     - 00:31.320
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_rhi_contours_differential_reflectivity.py` (``plot_rhi_contours_differential_reflectivity.py``)
-     - 00:21.361
+     - 00:21.332
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_rhi_mdv.py` (``plot_rhi_mdv.py``)
-     - 00:17.168
+     - 00:17.080
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_rhi_data_overlay.py` (``plot_rhi_data_overlay.py``)
-     - 00:15.552
+     - 00:15.448
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_max_cappi.py` (``plot_max_cappi.py``)
-     - 00:13.593
+     - 00:12.939
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_cross_section.py` (``plot_cross_section.py``)
-     - 00:07.911
+     - 00:07.937
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_nexrad_reflectivity.py` (``plot_nexrad_reflectivity.py``)
-     - 00:06.669
+     - 00:06.585
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_nexrad_image_muted_reflectivity.py` (``plot_nexrad_image_muted_reflectivity.py``)
-     - 00:03.500
+     - 00:03.721
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_modify_colorbar.py` (``plot_modify_colorbar.py``)
-     - 00:03.175
+     - 00:03.114
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_ppi_mdv.py` (``plot_ppi_mdv.py``)
-     - 00:02.139
+     - 00:02.183
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_cappi.py` (``plot_cappi.py``)
-     - 00:02.072
+     - 00:01.991
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_choose_a_colormap.py` (``plot_choose_a_colormap.py``)
-     - 00:01.923
+     - 00:01.939
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_rhi_cfradial.py` (``plot_rhi_cfradial.py``)
-     - 00:01.882
+     - 00:01.888
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_xsect.py` (``plot_xsect.py``)
-     - 00:01.356
+     - 00:01.374
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_ppi_cfradial.py` (``plot_ppi_cfradial.py``)
-     - 00:01.351
-     - 0.0
-   * - :ref:`sphx_glr_examples_plotting_plot_rhi_two_panel.py` (``plot_rhi_two_panel.py``)
-     - 00:00.844
+     - 00:01.364
      - 0.0
    * - :ref:`sphx_glr_examples_plotting_plot_corner_reflector.py` (``plot_corner_reflector.py``)
-     - 00:00.760
+     - 00:01.154
+     - 0.0
+   * - :ref:`sphx_glr_examples_plotting_plot_rhi_two_panel.py` (``plot_rhi_two_panel.py``)
+     - 00:00.863
      - 0.0
