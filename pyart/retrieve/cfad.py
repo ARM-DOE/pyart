@@ -77,6 +77,10 @@ def create_cfad(
     if field_mask is not None:
         field_data = np.ma.masked_where(field_mask, field_data)
         altitude_data = np.ma.masked_where(field_data.mask, altitude_data)
+    else:
+        if isinstance(field_data, np.ma.MaskedArray):
+            mask = field_data.mask
+            altitude_data = np.ma.masked_where(mask, altitude_data)
 
     # get raw bin counts
     freq, height_edges, field_edges = np.histogram2d(
