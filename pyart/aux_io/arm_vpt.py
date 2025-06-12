@@ -172,7 +172,6 @@ def read_kazr(
         frequency["data"] = np.array([ncobj.variables['frequency'][:]], dtype=np.float32)
     else:
         frequency["data"] = np.array([-9999.0], dtype=np.float32)
-        
 
     prt_mode = filemetadata("prt_mode")
     prt_mode["data"] = np.array(["fixed"], dtype=str)
