@@ -163,20 +163,41 @@ def read_kazr(
     # this section needed multiple changes and/or additions since the
     # instrument parameters were primarily located in the global attributes
     # this section is likely still incomplete
-    omega = float(ncobj.radar_operating_frequency.split()[0])
+    # Updated section June 12, 2025 to work with most recent ARM KAZR files
     frequency = filemetadata("frequency")
-    frequency["data"] = np.array([omega / 1e9], dtype=np.float32)
+    if hasattr(ncobj, "radar_operating_frequency"):
+        omega = float(ncobj.radar_operating_frequency.split()[0])
+        frequency["data"] = np.array([omega / 1e9], dtype=np.float32)
+    elif "frequency" in ncobj.variables:
+        frequency["data"] = np.array(
+            [ncobj.variables["frequency"][:]], dtype=np.float32
+        )
+    else:
+        frequency["data"] = np.array([-9999.0], dtype=np.float32)
 
     prt_mode = filemetadata("prt_mode")
     prt_mode["data"] = np.array(["fixed"], dtype=str)
 
-    prf = float(ncobj.pulse_repetition_frequency.split()[0])
     prt = filemetadata("prt")
-    prt["data"] = (1.0 / prf) * np.ones(ncvars["time"].size, dtype=np.float32)
+    if hasattr(ncobj, "pulse_repetition_frequency"):
+        prf = float(ncobj.pulse_repetition_frequency.split()[0])
+        prt["data"] = (1.0 / prf) * np.ones(ncvars["time"].size, dtype=np.float32)
+    else:
+        prt["data"] = (-9999.0) * np.ones(ncvars["time"].size, dtype=np.float32)
 
-    v_nq = float(ncobj.nyquist_velocity.split()[0])
     nyquist_velocity = filemetadata("nyquist_velocity")
-    nyquist_velocity["data"] = v_nq * np.ones(ncvars["time"].size, dtype=np.float32)
+    if hasattr(ncobj, "nyquist_velocity"):
+        v_nq = float(ncobj.nyquist_velocity.split()[0])
+        nyquist_velocity["data"] = v_nq * np.ones(ncvars["time"].size, dtype=np.float32)
+    elif "nyquist_velocity" in ncobj.variables:
+        nyquist_velocity["data"] = np.array(
+            [ncobj.variables["nyquist_velocity"][:]], dtype=np.float32
+        )
+    else:
+        nyquist_velocity["data"] = -9999.0 * np.ones(
+            ncvars["time"].size, dtype=np.float32
+        )
+
     samples = int(ncobj.num_spectral_averages)
     n_samples = filemetadata("n_samples")
     n_samples["data"] = samples * np.ones(ncvars["time"].size, dtype=np.int32)
