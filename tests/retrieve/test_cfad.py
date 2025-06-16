@@ -56,4 +56,4 @@ def test_cfad_default():
     )
 
     # Check if mask is working.
-    assert np.isnan(freq_norm).all() is True  # Output: True
+    assert np.isnan(freq_norm).all() == np.True_  # Output: True
