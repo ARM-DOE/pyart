@@ -808,14 +808,14 @@
             <span class="p">)</span>
 
     <span class="c1"># instrument_parameters</span>
-    <span class="c1"># Check if no attributes for instrument parameters.</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">hfile</span><span class="p">[</span><span class="s2">&quot;how&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">instrument_parameters</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="c1"># Grab each instrument parameter and its value for the hfile object.</span>
-    <span class="k">else</span><span class="p">:</span>
+    <span class="k">try</span><span class="p">:</span>
         <span class="n">instrument_parameters</span> <span class="o">=</span> <span class="p">{}</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hfile</span><span class="p">[</span><span class="s2">&quot;how&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
             <span class="n">instrument_parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="s2">&quot;how&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="c1"># Continue if there are no attributes for instrument parameters.</span>
+    <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
+        <span class="n">instrument_parameters</span> <span class="o">=</span> <span class="kc">None</span>
 
     <span class="k">return</span> <span class="n">Radar</span><span class="p">(</span>
         <span class="n">_time</span><span class="p">,</span>
