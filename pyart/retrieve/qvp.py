@@ -96,10 +96,6 @@ def quasi_vertical_profile(radar, desired_angle=None, fields=None, gatefilter=No
     index = abs(radar.fixed_angle["data"] - desired_angle).argmin()
     radar_slice = radar.get_slice(index)
 
-    # Printing radar tilt angles and radar elevation
-    print(radar.fixed_angle["data"])
-    print(radar.elevation["data"][-1])
-
     # Setting field parameters
     # If fields is None then all radar fields pulled else defined field is used
     if fields is None:

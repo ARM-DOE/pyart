@@ -5,7 +5,6 @@ for KDP estimation with sample data.
 
 import matplotlib.pyplot as plt
 import numpy as np
-import pytest
 
 from pyart.config import get_field_name
 from pyart.retrieve.kdp_proc import kdp_maesaka, kdp_schneebeli, kdp_vulpiani
@@ -45,8 +44,7 @@ def _make_real_psidp_radar():
     return radar
 
 
-@pytest.mark.mpl_image_compare(tolerance=30)
-def test_compare_kdp_estimation_methods():
+def test_compare_kdp_estimation_methods(outfile=None):
     # Get profile of noisy psidp
     prof_psidp = _make_real_psidp_radar()
     # Maesaka method
@@ -86,7 +84,6 @@ def test_compare_kdp_estimation_methods():
     plt.xlabel("Range [m]")
     plt.ylabel("Diff. phase [deg]")
     plt.legend(["Maesaka", "Vulpiani", "Schneebeli", "Real Psidp"], loc=0)
-    try:
-        return fig
-    finally:
-        plt.close(fig)
+    if outfile:
+        fig.savefig(outfile)
+    plt.close(fig)
