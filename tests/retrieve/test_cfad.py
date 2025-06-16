@@ -35,3 +35,25 @@ def test_cfad_default():
     assert freq_norm.all(axis=0).any()
     # check column 12 is all ones
     assert (freq_norm[:, verify_index] == 1).all()
+
+    # Test if code pulls mask from current array if no mask is provided
+    non_masked_array = np.ones(radar.fields[ref_field]["data"].shape) * 20
+    mask = np.zeros(non_masked_array.shape, dtype=bool)  # Initialize with False
+    mask[:] = True
+
+    masked_array = np.ma.array(non_masked_array, mask=mask)
+
+    # set every value to be masked
+    radar.fields[ref_field]["data"] = masked_array
+
+    # calculate CFAD
+    freq_norm, height_edges, field_edges = pyart.retrieve.create_cfad(
+        radar,
+        field_bins=np.linspace(0, 30, 20),
+        altitude_bins=np.arange(0, 18000, 100),
+        field="reflectivity",
+        field_mask=None,
+    )
+
+    # Check if mask is working.
+    assert np.isnan(freq_norm).all() is True  # Output: True
