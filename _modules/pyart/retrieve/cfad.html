@@ -537,6 +537,10 @@
     <span class="k">if</span> <span class="n">field_mask</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">field_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">field_mask</span><span class="p">,</span> <span class="n">field_data</span><span class="p">)</span>
         <span class="n">altitude_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">field_data</span><span class="o">.</span><span class="n">mask</span><span class="p">,</span> <span class="n">altitude_data</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">field_data</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">MaskedArray</span><span class="p">):</span>
+            <span class="n">mask</span> <span class="o">=</span> <span class="n">field_data</span><span class="o">.</span><span class="n">mask</span>
+            <span class="n">altitude_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span><span class="n">mask</span><span class="p">,</span> <span class="n">altitude_data</span><span class="p">)</span>
 
     <span class="c1"># get raw bin counts</span>
     <span class="n">freq</span><span class="p">,</span> <span class="n">height_edges</span><span class="p">,</span> <span class="n">field_edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">histogram2d</span><span class="p">(</span>
