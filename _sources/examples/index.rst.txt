@@ -103,6 +103,23 @@ Performing radar moment corrections in antenna (radial) coordinates.
     </div>
 
 
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="In this example doppler velocities from range height indicator (RHI) scans are dealiased, using custom parameters with the region-based dealiasing algorithm in Py-ART.">
+
+.. only:: html
+
+  .. image:: /examples/correct/images/thumb/sphx_glr_plot_dealias_rhi_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_examples_correct_plot_dealias_rhi.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Dealias doppler velocities for an RHI file</div>
+    </div>
+
+
 .. thumbnail-parent-div-close
 
 .. raw:: html
