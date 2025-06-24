@@ -79,7 +79,7 @@ plt.xlim(20, 60)
 # the values are for the output. The algorithm keys on the
 # small variations in the clear air returns, and
 # results in much larger values than would be expected.
-# t is considered best practive to apply a base-level of
+# It is considered best practice to apply a base-level of
 # quality control here to improve the results. We can use velocity
 # texture as a base level, where the noisier data will be removed.
 
