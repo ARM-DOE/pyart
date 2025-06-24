@@ -348,14 +348,14 @@ def read_sinarame_h5(
             )
 
     # instrument_parameters
-    # Check if no attributes for instrument parameters.
-    if len(hfile["how"].attrs) == 0:
-        instrument_parameters = None
     # Grab each instrument parameter and its value for the hfile object.
-    else:
+    try:
         instrument_parameters = {}
         for i in hfile["how"].attrs.keys():
             instrument_parameters[i] = hfile["how"].attrs[i]
+    # Continue if there are no attributes for instrument parameters.
+    except KeyError:
+        instrument_parameters = None
 
     return Radar(
         _time,

@@ -457,7 +457,7 @@ def range_correction(radar, field, height):
 
     data = radar.fields[field]["data"]
 
-    if isinstance(data, np.ma.MaskedArray) and not data.mask:
+    if isinstance(data, np.ma.MaskedArray) and not data.mask.all():
         data = data.data
     elif isinstance(data, np.ma.MaskedArray) and data.mask:
         data = data.filled(np.nan)

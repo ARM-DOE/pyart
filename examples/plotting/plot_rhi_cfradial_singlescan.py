@@ -40,7 +40,7 @@ display.plot(
     mask_outside=True,
     title="RHI",
     axislabels=(xlabel, ylabel),
-    cmap="pyart_HomeyerRainbow",
+    cmap="HomeyerRainbow",
     colorbar_label=colorbar_label,
     ax=ax,
 )

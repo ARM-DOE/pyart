@@ -49,14 +49,14 @@ display.plot_grid(
     vmax=vmax,
     ax=ax1,
     projection=projection,
-    cmap="pyart_HomeyerRainbow",
+    cmap="HomeyerRainbow",
 )
 display.plot_crosshairs(lon=lon, lat=lat)
 
 # Panel 2: longitude slice
 ax2 = fig.add_axes(x_cut_panel_axes)
 display.plot_longitude_slice(
-    "REF", lon=lon, lat=lat, ax=ax2, vmin=vmin, vmax=vmax, cmap="pyart_HomeyerRainbow"
+    "REF", lon=lon, lat=lat, ax=ax2, vmin=vmin, vmax=vmax, cmap="HomeyerRainbow"
 )
 
 ax2.set_ylim([0, 15])
@@ -65,7 +65,7 @@ ax2.set_xlim([-50, 50])
 # Panel 3: latitude slice
 ax3 = fig.add_axes(y_cut_panel_axes)
 display.plot_latitude_slice(
-    "REF", lon=lon, lat=lat, ax=ax3, vmin=vmin, vmax=vmax, cmap="pyart_HomeyerRainbow"
+    "REF", lon=lon, lat=lat, ax=ax3, vmin=vmin, vmax=vmax, cmap="HomeyerRainbow"
 )
 ax3.set_ylim([0, 15])
 ax3.set_xlim([-50, 50])

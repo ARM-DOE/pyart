@@ -89,6 +89,7 @@ def test_grid_to_xarray():
     ds = grid.to_xarray()
 
     lon, lat = grid.get_point_longitude_latitude()
+    lon, lat = grid.get_point_longitude_latitude()
     time = np.array([netCDF4.num2date(grid.time["data"][0], grid.time["units"])])
 
     # Check dimensions

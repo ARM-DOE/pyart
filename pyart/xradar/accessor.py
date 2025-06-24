@@ -345,10 +345,21 @@ class Xradar:
         self.ngates = len(self.range["data"])
         self.nrays = len(self.azimuth["data"])
         self.projection = {"proj": "pyart_aeqd", "_include_lon_0_lat_0": True}
+        self.sweep_number = {
+            "standard_name": "sweep_number",
+            "long_name": "Sweep number",
+            "data": np.unique(self.combined_sweeps.sweep_number),
+        }
+        self.sweep_mode = self._determine_sweep_mode()
         self.instrument_parameters = self.find_instrument_parameters()
         self.init_gate_x_y_z()
         self.init_gate_longitude_latitude()
         self.init_gate_alt()
+
+        # Extra methods needed for compatibility
+        self.rays_are_indexed = None
+        self.ray_angle_res = None
+        self.target_scan_rate = None
 
     def __repr__(self):
         return formatting.datatree_repr(self.xradar)
@@ -391,6 +402,25 @@ class Xradar:
             raise ValueError(f"Invalid format for key: {key}")
 
         # Iterators
+
+    def _determine_sweep_mode(self):
+        sweep_mode = {
+            "units": "unitless",
+            "standard_name": "sweep_mode",
+            "long_name": "Sweep mode",
+        }
+        sweep_list = get_sweep_keys(self.xradar)
+        if "sweep_mode" in self.xradar[sweep_list[0]]:
+            sweep_mode["data"] = np.array(
+                self.nsweeps * [str(self.xradar[sweep_list[0]].sweep_mode.values)],
+                dtype="S",
+            )
+        else:
+            sweep_mode["data"] = np.array(
+                self.nsweeps * ["azimuth_surveillance"], dtype="S"
+            )
+
+        return sweep_mode
 
     def find_instrument_parameters(self):
         # By default, check the radar_parameters first
@@ -493,6 +523,51 @@ class Xradar:
             sweep_ds[field_name].attrs = attrs
             self.xradar[f"sweep_{sweep}"].ds = sweep_ds
         return
+
+    def add_field_like(
+        self, existing_field_name, field_name, data, replace_existing=False
+    ):
+        """
+        Add a field to the object with metadata from a existing field.
+
+        Note that the data parameter is not copied by this method.
+        If data refers to a 'data' array from an existing field dictionary, a
+        copy should be made within or prior to using this method. If this is
+        not done the 'data' key in both field dictionaries will point to the
+        same NumPy array and modification of one will change the second. To
+        copy NumPy arrays use the copy() method. See the Examples section
+        for how to create a copy of the 'reflectivity' field as a field named
+        'reflectivity_copy'.
+
+        Parameters
+        ----------
+        existing_field_name : str
+            Name of an existing field to take metadata from when adding
+            the new field to the object.
+        field_name : str
+            Name of the field to add to the dictionary of fields.
+        data : array
+            Field data. A copy of this data is not made, see the note above.
+        replace_existing : bool, optional
+            True to replace the existing field with key field_name if it
+            exists, loosing any existing data. False will raise a ValueError
+            when the field already exists.
+
+        Examples
+        --------
+        >>> radar.add_field_like('reflectivity', 'reflectivity_copy',
+        ...                      radar.fields['reflectivity']['data'].copy())
+
+        """
+        if existing_field_name not in self.fields:
+            err = f"field {existing_field_name} does not exist in object"
+            raise ValueError(err)
+        dic = {}
+        for k, v in self.fields[existing_field_name].items():
+            if k != "data":
+                dic[k] = v
+        dic["data"] = data
+        return self.add_field(field_name, dic, replace_existing=replace_existing)
 
     def get_field(self, sweep, field_name, copy=False):
         """
@@ -865,6 +940,65 @@ class Xradar:
             projparams["lon_0"] = self.longitude["data"][0]
             projparams["lat_0"] = self.latitude["data"][0]
         return projparams
+
+    def extract_sweeps(self, sweeps):
+        """
+        Create a new radar that contains only the data from select sweeps.
+
+        Parameters
+        ----------
+        sweeps : array_like
+            Sweeps (0-based) to include in new Radar object.
+
+        Returns
+        -------
+        radar : Radar
+            Radar object which contains a copy of data from the selected
+            sweeps.
+        """
+
+        # parse and verify parameters
+        verify_sweeps = np.array(sweeps, dtype="int32")
+        if np.any(verify_sweeps > (self.nsweeps - 1)):
+            raise ValueError("invalid sweeps indices in sweeps parameter")
+        if np.any(verify_sweeps < 0):
+            raise ValueError("only positive sweeps can be extracted")
+
+        # Add proper indexing names
+        sweeps_str = ["sweep_" + str(i) for i in sweeps]
+        sweep_dict = {}
+
+        # Grab only selected sweeps while dropping old sweep information
+        az_max_shape = self.xradar.children[sweeps_str[0]].azimuth.shape[0]
+        range_max_shape = self.xradar.children[sweeps_str[0]].range.shape[0]
+
+        for group_name in sweeps_str:
+            sweep_dict[group_name] = self.xradar.children[group_name].isel(
+                azimuth=slice(0, az_max_shape),
+                range=slice(0, range_max_shape),
+                drop=True,
+            )
+
+        # Create new datatree containing selected sweeps
+        dt_sweeps = DataTree(children=sweep_dict)
+
+        # Copys over attrs and modified sweep info
+        dt_sweeps.attrs = self.xradar.attrs
+        sweep_group_name_data = DataArray(
+            self.xradar.sweep_group_name.values[sweeps],
+            dims=("sweep"),
+        )
+        sweep_fixed_angle_data = DataArray(
+            self.xradar.sweep_fixed_angle.values[sweeps],
+            dims=("sweep"),
+            attrs=self.xradar.sweep_fixed_angle.attrs,
+        )
+        dt_sweeps["sweep_group_name"] = sweep_group_name_data
+        dt_sweeps["sweep_fixed_angle"] = sweep_fixed_angle_data
+        dt_sweeps["latitude"] = self.xradar.latitude
+        dt_sweeps["longitude"] = self.xradar.longitude
+        dt_sweeps["altitude"] = self.xradar.altitude
+        return dt_sweeps.pyart.to_radar()
 
 
 def _point_data_factory(grid, coordinate):

@@ -4,6 +4,7 @@ Routines for reading ODIM_H5 files.
 """
 
 import datetime
+import warnings
 
 import numpy as np
 
@@ -106,6 +107,11 @@ def read_odim_h5(
     # * support for other objects (SCAN, XSEC)
 
     # check that h5py is available
+    warnings.warn(
+        "Py-ART's ODIM module is deprecated, please use xradar to read in the file using "
+        "xd.io.open_odim_datatree",
+        UserWarning,
+    )
     if not _H5PY_AVAILABLE:
         raise MissingOptionalDependency(
             "h5py is required to use read_odim_h5 but is not installed"
@@ -166,8 +172,10 @@ def read_odim_h5(
         metadata["odim_conventions"] = _to_str(hfile.attrs["Conventions"])
 
         h_what = hfile["what"].attrs
-        metadata["version"] = _to_str(h_what["version"])
-        metadata["source"] = _to_str(h_what["source"])
+        if "version" in h_what:
+            metadata["version"] = _to_str(h_what["version"])
+        if "source" in h_what:
+            metadata["source"] = _to_str(h_what["source"])
 
         try:
             ds1_how = hfile[datasets[0]]["how"].attrs

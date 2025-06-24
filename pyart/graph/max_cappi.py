@@ -52,7 +52,7 @@ def plot_maxcappi(
     field : str
         The radar field to be plotted (e.g., "REF", "VEL", "WIDTH").
     cmap : str or matplotlib colormap, optional
-        Colormap to use for the plot. Default is "pyart_HomeyerRainbow".
+        Colormap to use for the plot. Default is "HomeyerRainbow".
     vmin : float, optional
         Minimum value for the color scaling. Default is set to the minimum value of the data if not provided.
     vmax : float, optional
@@ -135,7 +135,7 @@ def plot_maxcappi(
     sideticks = np.arange(max_height / 4, max_height + 1, max_height / 4).astype(int)
 
     if cmap is None:
-        cmap = "pyart_HomeyerRainbow"
+        cmap = "HomeyerRainbow"
     if vmin is None:
         vmin = grid.fields[field]["data"].min()
     if vmax is None:

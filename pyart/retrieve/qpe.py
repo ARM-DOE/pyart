@@ -481,6 +481,12 @@ def est_rain_rate_hydro(
     through statistical clustering of polarimetric radar measurements: a semi-supervised approach,
     Atmos. Meas. Tech., 9, 4425–4445, https://doi.org/10.5194/amt-9-4425-2016, 2016.
 
+    References
+    ----------
+    Besic, N., Figueras i Ventura, J., Grazioli, J., Gabella, M., Germann, U., and Berne, A.: Hydrometeor classification
+    through statistical clustering of polarimetric radar measurements: a semi-supervised approach,
+    Atmos. Meas. Tech., 9, 4425–4445, https://doi.org/10.5194/amt-9-4425-2016, 2016.
+
     """
     # parse the field parameters
     if refl_field is None:

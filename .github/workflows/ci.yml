@@ -27,7 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.10", "3.11", "3.12"]
+        python-version: ["3.11", "3.12", "3.13"]
         os: [macos, ubuntu, windows]
 
     steps:
@@ -35,10 +35,9 @@ jobs:
 
       # Install dependencies
       - name: Setup Conda Environment
-        uses: mamba-org/setup-micromamba@v2.0.3
+        uses: mamba-org/setup-micromamba@v2.0.5
         with:
           environment-file: continuous_integration/environment-ci.yml
-          micromamba-version: '2.0.0-0'
           init-shell: >-
             bash
           cache-downloads: true
@@ -66,7 +65,7 @@ jobs:
           python -m pytest -v --cov=./ --cov-report=xml
 
       - name: Upload code coverage to Codecov
-        uses: codecov/codecov-action@v5.1.2
+        uses: codecov/codecov-action@v5.4.3
         with:
           file: ./coverage.xml
           flags: unittests
