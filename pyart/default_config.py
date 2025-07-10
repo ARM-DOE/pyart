@@ -527,6 +527,17 @@ DEFAULT_METADATA = {
         "standard_name": "platform_vertical_wind",
         "comment": "Vertical wind at the platform location. Positive is up.",
     },
+    "heading_change_rate": {
+        "units": "degrees",
+        "long_name": "platform_heading_angle_rate_of_change",
+    },
+    "pitch_change_rate": {
+        "units": "degrees",
+        "long_name": "platform_pitch_angle_rate_of_change",
+    },
+    "roll_change_rate": {
+        "units": "degrees",
+    },
     # Reflectivity fields
     reflectivity: {
         "units": "dBZ",
