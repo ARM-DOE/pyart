@@ -1,6 +1,6 @@
-==============================
-Building and installing Py-ART
-==============================
+============
+Installation
+============
 
 Required Dependencies
 =====================
@@ -97,6 +97,24 @@ without these packages.
 * `pytest <https://docs.pytest.org/en/latest/>`_
 
 * `metpy <https://unidata.github.io/MetPy/latest/>`_
+
+Instructions for Installing
+===========================
+
+You can install using pip, conda, or pixi! We recommend using pixi, using the instructions below
+
+1. Install pixi if you have not done so already https://pixi.sh/latest/installation/
+
+2. Create a Py-ART environment using the following commands
+
+::
+
+    $ pixi init pyart_dev
+    $ cd pyart_dev
+    $ pixi add arm_pyart
+
+This will build your environment and install all the required dependencies!
+
 
 Obtaining the latest source
 ===========================
