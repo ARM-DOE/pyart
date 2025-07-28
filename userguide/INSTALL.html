@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Building and installing Py-ART &#8212; Py-ART 2.1.0 documentation</title>
+    <title>Installation &#8212; Py-ART 2.1.0 documentation</title>
   
   
   
@@ -417,7 +417,7 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="pyart_2_0.html">Py-ART 2.0</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Building and installing Py-ART</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setting_up_an_environment.html">Setting up an Environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributors_guide.html">Contributor’s Guide</a></li>
 </ul>
@@ -463,7 +463,7 @@
     
     <li class="breadcrumb-item"><a href="index.html" class="nav-link">User Guide</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Building and installing Py-ART</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Installation</span></li>
   </ul>
 </nav>
 </div>
@@ -479,8 +479,8 @@
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                   <section id="building-and-installing-py-art">
-<h1>Building and installing Py-ART<a class="headerlink" href="#building-and-installing-py-art" title="Permalink to this heading">#</a></h1>
+                   <section id="installation">
+<h1>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h1>
 <section id="required-dependencies">
 <h2>Required Dependencies<a class="headerlink" href="#required-dependencies" title="Permalink to this heading">#</a></h2>
 <p>Py-ART requires the following software.</p>
@@ -553,6 +553,20 @@ basemap will no longer have support.</p></li>
 <li><p><a class="reference external" href="https://docs.pytest.org/en/latest/">pytest</a></p></li>
 <li><p><a class="reference external" href="https://unidata.github.io/MetPy/latest/">metpy</a></p></li>
 </ul>
+</section>
+<section id="instructions-for-installing">
+<h2>Instructions for Installing<a class="headerlink" href="#instructions-for-installing" title="Permalink to this heading">#</a></h2>
+<p>You can install using pip, conda, or pixi! We recommend using pixi, using the instructions below</p>
+<ol class="arabic simple">
+<li><p>Install pixi if you have not done so already <a class="reference external" href="https://pixi.sh/latest/installation/">https://pixi.sh/latest/installation/</a></p></li>
+<li><p>Create a Py-ART environment using the following commands</p></li>
+</ol>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ pixi init pyart_dev
+$ cd pyart_dev
+$ pixi add arm_pyart
+</pre></div>
+</div>
+<p>This will build your environment and install all the required dependencies!</p>
 </section>
 <section id="obtaining-the-latest-source">
 <h2>Obtaining the latest source<a class="headerlink" href="#obtaining-the-latest-source" title="Permalink to this heading">#</a></h2>
@@ -694,6 +708,7 @@ To get basemap working, but again Cartopy should be used instead of Basemap.</p>
     <ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#required-dependencies">Required Dependencies</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-dependencies">Optional Dependencies</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#instructions-for-installing">Instructions for Installing</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#obtaining-the-latest-source">Obtaining the latest source</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installing-from-source">Installing from Source</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#frequently-asked-questions">Frequently asked questions</a></li>
