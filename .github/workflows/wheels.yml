@@ -45,7 +45,7 @@ jobs:
            git fetch --prune --unshallow
 
       - name: Build wheels for CPython
-        uses: pypa/cibuildwheel@v3.0.1
+        uses: pypa/cibuildwheel@v3.1.3
         with:
           output-dir: dist
         env:
