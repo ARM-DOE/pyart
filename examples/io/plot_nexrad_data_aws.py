@@ -25,15 +25,15 @@ import pyart
 # Let's start first with NEXRAD Level 2 data, which is ground-based radar data collected
 # by the National Oceanic and Atmospheric Administration (NOAA), as a part of the National Weather Service
 # ### Configure our Filepath for NEXRAD Level 2 Data
-# We will access data from the **noaa-nexrad-level2** bucket, with the data organized as:
+# We will access data from the **unidata-nexrad-level2** bucket, with the data organized as:
 #
-#    ``s3://noaa-nexrad-level2/year/month/date/radarsite/{radarsite}{year}{month}{date}_{hour}{minute}{second}_V06``
+#    ``s3://unidata-nexrad-level2/year/month/date/radarsite/{radarsite}{year}{month}{date}_{hour}{minute}{second}_V06``
 #
 # Where in our case, we are using a sample data file from Houston, Texas (KHGX)
 # on March 22, 2022, at 1201:25 UTC. This means our path would look like:
 
 aws_nexrad_level2_file = (
-    "s3://noaa-nexrad-level2/2022/03/22/KHGX/KHGX20220322_120125_V06"
+    "s3://unidata-nexrad-level2/2022/03/22/KHGX/KHGX20220322_120125_V06"
 )
 
 #######################################

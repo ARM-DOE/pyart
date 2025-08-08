@@ -34,7 +34,7 @@ import pyart
 #
 # First we want to get an older file from amazon web service:
 #
-#    ``s3://noaa-nexrad-level2/year/month/date/radarsite/{radarsite}{year}{month}{date}_{hour}{minute}{second}.gz``
+#    ``s3://unidata-nexrad-level2/year/month/date/radarsite/{radarsite}{year}{month}{date}_{hour}{minute}{second}.gz``
 #
 # Where in our case, we are using a sample data file from Handford, CA (KHNX)
 # on July 24, 2006, at 0203:38 UTC. This means our path would look like this:
@@ -42,7 +42,7 @@ import pyart
 # Note: Older files do not contain the 'V06' but instead '.gz' in the AWS path.
 
 aws_nexrad_level2_file = (
-    "s3://noaa-nexrad-level2/2006/07/24/KHNX/KHNX20060724_020338.gz"
+    "s3://unidata-nexrad-level2/2006/07/24/KHNX/KHNX20060724_020338.gz"
 )
 
 ######################################
