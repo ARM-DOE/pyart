@@ -27,7 +27,7 @@ import numpy as np
 import pyart
 
 # Read in file
-nexrad_file = "s3://noaa-nexrad-level2/2020/02/07/KBGM/KBGM20200207_132642_V06"
+nexrad_file = "s3://unidata-nexrad-level2/2020/02/07/KBGM/KBGM20200207_132642_V06"
 radar = pyart.io.read_nexrad_archive(nexrad_file)
 
 # Mute radar object

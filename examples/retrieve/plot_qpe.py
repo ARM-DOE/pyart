@@ -124,7 +124,7 @@ def download_nexrad(timezone, date, site, local_date=False):
         logging.info(f"Time: {utc_date}")
         fs = fsspec.filesystem("s3", anon=True)
         nexrad_path = utc_date.strftime(
-            f"s3://noaa-nexrad-level2/%Y/%m/%d/{site}/{site}%Y%m%d_%H*"
+            f"s3://unidata-nexrad-level2/%Y/%m/%d/{site}/{site}%Y%m%d_%H*"
         )
         files = sorted(fs.glob(nexrad_path))
         return [file for file in files if not file.endswith("_MDM")]
