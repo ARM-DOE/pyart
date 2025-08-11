@@ -86,13 +86,13 @@ jobs:
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     steps:
       - name: Download sdist
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           name: sdist
           path: dist
 
       - name: Download wheels
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v5
         with:
           pattern: wheels-*
           path: dist
