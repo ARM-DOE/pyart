@@ -9,7 +9,7 @@ import pyart
 def test_storm_relative_velocity():
     # Test all sweeps
     radar = pyart.io.read_nexrad_archive(
-        "s3://noaa-nexrad-level2/2022/03/31/KDGX/KDGX20220331_012808_V06"
+        "s3://unidata-nexrad-level2/2022/03/31/KDGX/KDGX20220331_012808_V06"
     )
     sr_data = pyart.retrieve.storm_relative_velocity(radar, direction="NE", speed=20.0)
     test_data = [2.276456117630005, 4.776455879211426, 3.276456117630005]
