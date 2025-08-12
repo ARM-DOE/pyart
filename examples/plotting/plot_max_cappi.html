@@ -595,7 +595,7 @@ within a Py-ART grid display object.</p>
 
         <span class="n">fs</span> <span class="o">=</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">filesystem</span><span class="p">(</span><span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="n">anon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
         <span class="n">nexrad_path</span> <span class="o">=</span> <span class="n">utc_date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;s3://noaa-nexrad-level2/%Y/%m/%d/</span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site</span></a><span class="si">}</span><span class="s2">/</span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site</span></a><span class="si">}</span><span class="s2">%Y%m%d_%H*&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;s3://unidata-nexrad-level2/%Y/%m/%d/</span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site</span></a><span class="si">}</span><span class="s2">/</span><span class="si">{</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site</span></a><span class="si">}</span><span class="s2">%Y%m%d_%H*&quot;</span>
         <span class="p">)</span>
         <span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">nexrad_path</span><span class="p">))</span>
 
@@ -651,7 +651,7 @@ WARNING:matplotlib.font_manager:findfont: Font family &#39;Courier New&#39; not 
 WARNING:matplotlib.font_manager:findfont: Font family &#39;Courier New&#39; not found.
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 12.412 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 12.402 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plotting-plot-max-cappi-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/8eaf8ca0ba6238acf1f7b2e6a865219c/plot_max_cappi.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_max_cappi.ipynb</span></code></a></p>

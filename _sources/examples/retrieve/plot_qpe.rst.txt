@@ -170,7 +170,7 @@ and range resolution, respectively.
             logging.info(f"Time: {utc_date}")
             fs = fsspec.filesystem("s3", anon=True)
             nexrad_path = utc_date.strftime(
-                f"s3://noaa-nexrad-level2/%Y/%m/%d/{site}/{site}%Y%m%d_%H*"
+                f"s3://unidata-nexrad-level2/%Y/%m/%d/{site}/{site}%Y%m%d_%H*"
             )
             files = sorted(fs.glob(nexrad_path))
             return [file for file in files if not file.endswith("_MDM")]
@@ -227,7 +227,7 @@ and range resolution, respectively.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 20.337 seconds)
+   **Total running time of the script:** (0 minutes 22.155 seconds)
 
 
 .. _sphx_glr_download_examples_retrieve_plot_qpe.py:

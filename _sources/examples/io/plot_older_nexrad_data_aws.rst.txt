@@ -77,7 +77,7 @@ read in an older NEXRAD file.
 
 First we want to get an older file from amazon web service:
 
-   ``s3://noaa-nexrad-level2/year/month/date/radarsite/{radarsite}{year}{month}{date}_{hour}{minute}{second}.gz``
+   ``s3://unidata-nexrad-level2/year/month/date/radarsite/{radarsite}{year}{month}{date}_{hour}{minute}{second}.gz``
 
 Where in our case, we are using a sample data file from Handford, CA (KHNX)
 on July 24, 2006, at 0203:38 UTC. This means our path would look like this:
@@ -90,7 +90,7 @@ on July 24, 2006, at 0203:38 UTC. This means our path would look like this:
     # Note: Older files do not contain the 'V06' but instead '.gz' in the AWS path.
 
     aws_nexrad_level2_file = (
-        "s3://noaa-nexrad-level2/2006/07/24/KHNX/KHNX20060724_020338.gz"
+        "s3://unidata-nexrad-level2/2006/07/24/KHNX/KHNX20060724_020338.gz"
     )
 
 
@@ -227,7 +227,7 @@ Everything now looks correct as this is in Handford CA!
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 8.210 seconds)
+   **Total running time of the script:** (0 minutes 7.983 seconds)
 
 
 .. _sphx_glr_download_examples_io_plot_older_nexrad_data_aws.py:

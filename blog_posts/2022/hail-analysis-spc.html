@@ -636,23 +636,25 @@
 <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">17</span><span class="p">)</span>
 <span class="n">site</span> <span class="o">=</span> <span class="s2">&quot;KMKX&quot;</span>
 
-<span class="n">nexrad_path</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;s3://noaa-nexrad-level2/%Y/%m/%d/</span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2">%Y%m%d_%H*&quot;</span><span class="p">)</span>
+<span class="n">nexrad_path</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
+    <span class="sa">f</span><span class="s2">&quot;s3://unidata-nexrad-level2/%Y/%m/%d/</span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2">%Y%m%d_%H*&quot;</span>
+<span class="p">)</span>
 <span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">nexrad_path</span><span class="p">))</span>
 <span class="n">files</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;noaa-nexrad-level2/2021/09/07/KMKX/KMKX20210907_170101_V06&#39;,
- &#39;noaa-nexrad-level2/2021/09/07/KMKX/KMKX20210907_170739_V06&#39;,
- &#39;noaa-nexrad-level2/2021/09/07/KMKX/KMKX20210907_171431_V06&#39;,
- &#39;noaa-nexrad-level2/2021/09/07/KMKX/KMKX20210907_172123_V06&#39;,
- &#39;noaa-nexrad-level2/2021/09/07/KMKX/KMKX20210907_172814_V06&#39;,
- &#39;noaa-nexrad-level2/2021/09/07/KMKX/KMKX20210907_173452_V06&#39;,
- &#39;noaa-nexrad-level2/2021/09/07/KMKX/KMKX20210907_174130_V06&#39;,
- &#39;noaa-nexrad-level2/2021/09/07/KMKX/KMKX20210907_174807_V06&#39;,
- &#39;noaa-nexrad-level2/2021/09/07/KMKX/KMKX20210907_175459_V06&#39;,
- &#39;noaa-nexrad-level2/2021/09/07/KMKX/KMKX20210907_175459_V06_MDM&#39;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_170101_V06&#39;,
+ &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_170739_V06&#39;,
+ &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_171431_V06&#39;,
+ &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_172123_V06&#39;,
+ &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_172814_V06&#39;,
+ &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_173452_V06&#39;,
+ &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_174130_V06&#39;,
+ &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_174807_V06&#39;,
+ &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_175459_V06&#39;,
+ &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_175459_V06_MDM&#39;]
 </pre></div>
 </div>
 </div>

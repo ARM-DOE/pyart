@@ -60,7 +60,7 @@ See Tomkins et al. (2022) for full details.
     import pyart
 
     # Read in file
-    nexrad_file = "s3://noaa-nexrad-level2/2020/02/07/KBGM/KBGM20200207_132642_V06"
+    nexrad_file = "s3://unidata-nexrad-level2/2020/02/07/KBGM/KBGM20200207_132642_V06"
     radar = pyart.io.read_nexrad_archive(nexrad_file)
 
     # Mute radar object
@@ -106,7 +106,7 @@ See Tomkins et al. (2022) for full details.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.967 seconds)
+   **Total running time of the script:** (0 minutes 3.890 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_nexrad_image_muted_reflectivity.py:

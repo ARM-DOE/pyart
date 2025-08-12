@@ -777,7 +777,7 @@ certain value (default is 5 dBZ, can be changed with <code class="docutils liter
 <img src="../../_images/sphx_glr_plot_convective_stratiform_006.png" srcset="../../_images/sphx_glr_plot_convective_stratiform_006.png" alt="Best estimate, Underestimate, Overestimate" class = "sphx-glr-single-img"/><p><strong>Tropical example</strong></p>
 <p>Let’s get a NEXRAD file from Hurricane Ian</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read in file</span>
-<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nexrad_file</span></a> <span class="o">=</span> <span class="s2">&quot;s3://noaa-nexrad-level2/2022/09/28/KTBW/KTBW20220928_190142_V06&quot;</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nexrad_file</span></a> <span class="o">=</span> <span class="s2">&quot;s3://unidata-nexrad-level2/2022/09/28/KTBW/KTBW20220928_190142_V06&quot;</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nexrad_file</span></a><span class="p">)</span>
 
 <span class="c1"># extract the lowest sweep</span>
@@ -869,7 +869,7 @@ dBZ units).
 In this example, note how we change some of the other parameters since we are classifying snow rate instead of
 reflecitivity.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read in file</span>
-<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nexrad_file</span></a> <span class="o">=</span> <span class="s2">&quot;s3://noaa-nexrad-level2/2021/02/07/KOKX/KOKX20210207_161413_V06&quot;</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nexrad_file</span></a> <span class="o">=</span> <span class="s2">&quot;s3://unidata-nexrad-level2/2021/02/07/KOKX/KOKX20210207_161413_V06&quot;</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nexrad_file</span></a><span class="p">)</span>
 
 <span class="c1"># extract the lowest sweep</span>
@@ -1002,7 +1002,7 @@ KWAJEX. J. Appl. Meteor., 44, 385-415. <a class="reference external" href="https
 and M. Xu, 2003: Snow Nowcasting Using a Real-Time Correlation of Radar
 Reflectivity with Snow Gauge Accumulation. J. Appl. Meteorol. Climatol., 42, 20–36.
 <a class="reference external" href="https://doi.org/10.1175/1520-0450(2003)042%3C0020:SNUART%3E2.0.CO;2">https://doi.org/10.1175/1520-0450(2003)042%3C0020:SNUART%3E2.0.CO;2</a></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 17.735 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 18.811 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-retrieve-plot-convective-stratiform-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/9716299ffa7f4b0b02cc21dac45e7320/plot_convective_stratiform.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_convective_stratiform.ipynb</span></code></a></p>

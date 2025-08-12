@@ -112,7 +112,7 @@ Let's read in a Nexrad data and create a grid.
 
             fs = fsspec.filesystem("s3", anon=True)
             nexrad_path = utc_date.strftime(
-                f"s3://noaa-nexrad-level2/%Y/%m/%d/{site}/{site}%Y%m%d_%H*"
+                f"s3://unidata-nexrad-level2/%Y/%m/%d/{site}/{site}%Y%m%d_%H*"
             )
             files = sorted(fs.glob(nexrad_path))
 
@@ -184,7 +184,7 @@ Let's read in a Nexrad data and create a grid.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 12.412 seconds)
+   **Total running time of the script:** (0 minutes 12.402 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_max_cappi.py:

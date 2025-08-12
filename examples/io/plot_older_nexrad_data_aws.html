@@ -571,14 +571,14 @@ coordinates have a value of 0. This example, we will show how to properly
 read in an older NEXRAD file.</p>
 <p>First we want to get an older file from amazon web service:</p>
 <blockquote>
-<div><p><code class="docutils literal notranslate"><span class="pre">s3://noaa-nexrad-level2/year/month/date/radarsite/{radarsite}{year}{month}{date}_{hour}{minute}{second}.gz</span></code></p>
+<div><p><code class="docutils literal notranslate"><span class="pre">s3://unidata-nexrad-level2/year/month/date/radarsite/{radarsite}{year}{month}{date}_{hour}{minute}{second}.gz</span></code></p>
 </div></blockquote>
 <p>Where in our case, we are using a sample data file from Handford, CA (KHNX)
 on July 24, 2006, at 0203:38 UTC. This means our path would look like this:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Note: Older files do not contain the &#39;V06&#39; but instead &#39;.gz&#39; in the AWS path.</span>
 
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">aws_nexrad_level2_file</span></a> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;s3://noaa-nexrad-level2/2006/07/24/KHNX/KHNX20060724_020338.gz&quot;</span>
+    <span class="s2">&quot;s3://unidata-nexrad-level2/2006/07/24/KHNX/KHNX20060724_020338.gz&quot;</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -627,7 +627,7 @@ pull the coordinate information from a dictionary found within Py-ART.</p>
 <span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_older_nexrad_data_aws_001.png" srcset="../../_images/sphx_glr_plot_older_nexrad_data_aws_001.png" alt="KHNX 0.4 Deg. 2006-07-24T02:03:37Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 8.210 seconds)</p>
+<img src="../../_images/sphx_glr_plot_older_nexrad_data_aws_001.png" srcset="../../_images/sphx_glr_plot_older_nexrad_data_aws_001.png" alt="KHNX 0.4 Deg. 2006-07-24T02:03:37Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 7.983 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-io-plot-older-nexrad-data-aws-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/949d311bfe8355d0dbad6706fc359cce/plot_older_nexrad_data_aws.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_older_nexrad_data_aws.ipynb</span></code></a></p>
