@@ -9,6 +9,7 @@ We also have a collection of installation, and contribution instructions listed 
 .. toctree::
    :maxdepth: 1
 
+   overview
    pyart_2_0
    INSTALL
    setting_up_an_environment
