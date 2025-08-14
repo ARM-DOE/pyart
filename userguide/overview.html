@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Py-ART 2.0 &#8212; Py-ART 2.1.0 documentation</title>
+    <title>Why Py-ART? &#8212; Py-ART 2.1.0 documentation</title>
   
   
   
@@ -60,12 +60,12 @@
                 gtag('js', new Date());
                 gtag('config', 'G-JJEG3CV376');
             </script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'userguide/pyart_2_0';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'userguide/overview';</script>
     <script src="../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Installation" href="INSTALL.html" />
-    <link rel="prev" title="Why Py-ART?" href="overview.html" /> 
+    <link rel="next" title="Py-ART 2.0" href="pyart_2_0.html" />
+    <link rel="prev" title="User Guide" href="index.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="2.1" /> 
@@ -416,8 +416,8 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="overview.html">Why Py-ART?</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Py-ART 2.0</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Why Py-ART?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pyart_2_0.html">Py-ART 2.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="INSTALL.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setting_up_an_environment.html">Setting up an Environment</a></li>
 <li class="toctree-l1"><a class="reference internal" href="contributors_guide.html">Contributor’s Guide</a></li>
@@ -464,7 +464,7 @@
     
     <li class="breadcrumb-item"><a href="index.html" class="nav-link">User Guide</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Py-ART 2.0</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Why Py-ART?</span></li>
   </ul>
 </nav>
 </div>
@@ -480,59 +480,40 @@
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                   <section id="py-art-2-0">
-<h1>Py-ART 2.0<a class="headerlink" href="#py-art-2-0" title="Permalink to this heading">#</a></h1>
-<p>In preparation for version 2.0.0 of Py-ART, codes were standardized for consistency purposes as further defined in the <a class="reference external" href="https://arm-doe.github.io/pyart/userguide/CONTRIBUTING.html">Contributor’s Guide</a>.  These changes will break some users code as the API has changed.  This guide will detail the changes for each module.</p>
-<section id="how-to-try-py-art-2-0">
-<h2>How to Try Py-ART 2.0<a class="headerlink" href="#how-to-try-py-art-2-0" title="Permalink to this heading">#</a></h2>
-<p>The Py-ART 2.0 release candidate can be installed directly from github - this is still a work in progress, feedback is welcome!:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="n">git</span><span class="o">+</span><span class="n">https</span><span class="p">:</span><span class="o">//</span><span class="n">github</span><span class="o">.</span><span class="n">com</span><span class="o">/</span><span class="n">ARM</span><span class="o">-</span><span class="n">DOE</span><span class="o">/</span><span class="n">pyart</span><span class="nd">@release</span><span class="o">/</span><span class="mf">2.0</span>
-</pre></div>
-</div>
+                   <section id="why-py-art">
+<h1>Why Py-ART?<a class="headerlink" href="#why-py-art" title="Permalink to this heading">#</a></h1>
+<p>The <strong>Python ARM Radar Toolkit (Py-ART)</strong> is a powerful and flexible open-source library designed for working with weather radar data. Whether you’re a researcher, operational meteorologist, or data scientist, Py-ART provides the tools you need to analyze, visualize, and process radar data efficiently. Here’s why Py-ART stands out:</p>
+<p>—</p>
+<section id="a-common-data-model-the-radar-object">
+<h2>A Common Data Model: The Radar Object<a class="headerlink" href="#a-common-data-model-the-radar-object" title="Permalink to this heading">#</a></h2>
+<p>At the heart of Py-ART is its <strong>common data model</strong>, which is implemented through the <cite>Radar</cite> object. This unified data structure enables users to work with radar data from a variety of sources in a consistent and intuitive way. The benefits of this approach include:</p>
+<ul class="simple">
+<li><p><strong>Standardization Across Formats</strong>: Radar data comes in many formats (e.g., NEXRAD, ODIM, UF, etc.), each with its own quirks and metadata conventions. Py-ART’s <cite>Radar</cite> object abstracts these differences, providing a standardized interface for all supported formats.</p></li>
+<li><p><strong>Ease of Use</strong>: By encapsulating radar data and metadata into a single object, Py-ART simplifies data manipulation and analysis. Users can access radar fields, coordinates, and metadata with minimal effort.</p></li>
+<li><p><strong>Interoperability</strong>: The common data model facilitates integration with other scientific Python libraries (e.g., NumPy, SciPy, Matplotlib, xarray), enabling seamless workflows for data analysis and visualization.</p></li>
+<li><p><strong>Extensibility</strong>: The <cite>Radar</cite> object is designed to be flexible, allowing users to add custom fields, attributes, or processing steps as needed.</p></li>
+</ul>
+<p>—</p>
 </section>
-<section id="input-output-io">
-<h2>Input/Output (IO)<a class="headerlink" href="#input-output-io" title="Permalink to this heading">#</a></h2>
-<p>We now offer the option to use xradar for IO, with the following interface (a typical gridding workflow is shown below):</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xradar</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xd</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
-
-<span class="c1"># Access sample cfradial1 data from Py-ART and read using xradar</span>
-<span class="n">filename</span> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">&quot;swx_20120520_0641.nc&quot;</span><span class="p">)</span>
-<span class="n">tree</span> <span class="o">=</span> <span class="n">xd</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">open_cfradial1_datatree</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-
-<span class="c1"># Add the associated pyart methods - ensuring compatibility with Py-ART functionality</span>
-<span class="n">radar</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">pyart</span><span class="o">.</span><span class="n">to_radar</span><span class="p">()</span>
-
-<span class="c1"># Grid using 11 vertical levels, and 101 horizontal grid cells at a resolution on 1 km</span>
-<span class="n">grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">grid_from_radars</span><span class="p">(</span>
-    <span class="p">(</span><span class="n">radar</span><span class="p">,),</span>
-    <span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">101</span><span class="p">),</span>
-    <span class="n">grid_limits</span><span class="o">=</span><span class="p">(</span>
-        <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">10_000</span><span class="p">),</span>
-        <span class="p">(</span><span class="o">-</span><span class="mf">50_000.0</span><span class="p">,</span> <span class="mf">50_000.0</span><span class="p">),</span>
-        <span class="p">(</span><span class="o">-</span><span class="mi">50_000</span><span class="p">,</span> <span class="mf">50_000.0</span><span class="p">),</span>
-    <span class="p">),</span>
-<span class="p">)</span>
-</pre></div>
-</div>
+<section id="xradar-vs-legacy-radar-data-structures">
+<h2>xradar vs. Legacy Radar Data Structures<a class="headerlink" href="#xradar-vs-legacy-radar-data-structures" title="Permalink to this heading">#</a></h2>
+<p>Py-ART represents a significant advancement over legacy radar data structures, particularly with its adoption of <strong>xarray</strong> through the <cite>xradar</cite> extension. Here’s how Py-ART (with xradar) compares to older approaches:</p>
+<p>The adoption of xarray in Py-ART allows for more intuitive and efficient handling of radar data, especially for large-scale or multi-dimensional datasets. It also aligns Py-ART with modern data science practices, ensuring long-term sustainability and usability.</p>
+<p>—</p>
 </section>
-<section id="correct">
-<h2>Correct<a class="headerlink" href="#correct" title="Permalink to this heading">#</a></h2>
-<p>The <a class="reference external" href="https://arm-doe.github.io/pyart/API/generated/pyart.correct.dealias_fourdd.html">dealias_fourdd</a> algorithm has been removed given the now unsupported RSL library.</p>
-<p>It is recommended that users move to the <a class="reference external" href="https://arm-doe.github.io/pyart/API/generated/pyart.correct.dealias_region_based.html">region-based dealiasing algorithm</a>.</p>
-</section>
-<section id="graph">
-<h2>Graph<a class="headerlink" href="#graph" title="Permalink to this heading">#</a></h2>
-<p>Colormaps have been moved to a dedicated package outside Py-ART, <a class="reference external" href="https://cmweather.readthedocs.io/">cmweather</a>.</p>
-<p>For example, visualizing our grid mentioned previously, it is recommended to install/import cmweather and change the colormap name from <cite>pyart_ChaseSpectral</cite> to <cite>ChaseSpectral</cite></p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">cmweather</span>
-
-<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">GridMapDisplay</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_grid</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;ChaseSpectral&quot;</span>
-<span class="p">)</span>
-</pre></div>
-</div>
+<section id="goals-and-aspirations">
+<h2>Goals and Aspirations<a class="headerlink" href="#goals-and-aspirations" title="Permalink to this heading">#</a></h2>
+<p>Py-ART was developed with the following goals and aspirations in mind:</p>
+<ol class="arabic simple">
+<li><p><strong>Accessibility</strong>: Make radar data analysis accessible to a broad audience, from novice users to experienced researchers.</p></li>
+<li><p><strong>Flexibility</strong>: Provide tools that can handle diverse radar datasets and use cases, from basic visualization to advanced signal processing.</p></li>
+<li><p><strong>Community-Driven Development</strong>: Foster an open-source community where users can contribute new features, report issues, and collaborate on improvements.</p></li>
+<li><p><strong>Scalability</strong>: Enable efficient processing of large radar datasets, whether on a local machine or in a high-performance computing environment.</p></li>
+<li><p><strong>Future-Proofing</strong>: Stay aligned with modern data science tools and practices, ensuring Py-ART remains relevant as technology evolves.</p></li>
+</ol>
+<p>By adhering to these principles, Py-ART aspires to be the go-to toolkit for radar data analysis, empowering users to unlock the full potential of their data.</p>
+<p>—</p>
+<p>In summary, Py-ART’s common data model, modern architecture, and community-driven approach make it an indispensable tool for anyone working with radar data. Whether you’re exploring new scientific questions or building operational workflows, Py-ART provides the foundation you need to succeed.</p>
 </section>
 </section>
 
@@ -550,20 +531,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="overview.html"
+       href="index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Why Py-ART?</p>
+        <p class="prev-next-title">User Guide</p>
       </div>
     </a>
     <a class="right-next"
-       href="INSTALL.html"
+       href="pyart_2_0.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Installation</p>
+        <p class="prev-next-title">Py-ART 2.0</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -586,10 +567,9 @@
   </div>
   <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-try-py-art-2-0">How to Try Py-ART 2.0</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#input-output-io">Input/Output (IO)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#correct">Correct</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#graph">Graph</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-common-data-model-the-radar-object">A Common Data Model: The Radar Object</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#xradar-vs-legacy-radar-data-structures">xradar vs. Legacy Radar Data Structures</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#goals-and-aspirations">Goals and Aspirations</a></li>
 </ul>
   </nav></div>
 
@@ -597,7 +577,7 @@
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../_sources/userguide/pyart_2_0.rst.txt"
+      <li><a href="../_sources/userguide/overview.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
