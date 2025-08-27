@@ -37,6 +37,9 @@ def get_nexrad_location(station):
 # 2014-Mar-27. http://www.ncdc.noaa.gov/homr/
 # The data below was extracted with:
 # cut -c 10-14,107-115,117-127,128-133
+# As of 8/21/25, KHDC has not been added to HOMR. 
+# KHDC site metadatavwas added manually from the following document:
+# https://www.weather.gov/media/notification/pdf_2023_24/scn24-11_khdc_nexrad_level_iii_product_dissemination.pdf
 
 NEXRAD_LOCATIONS = {
     "KABR": {"lat": 45.45583, "lon": -98.41306, "elev": 1302},
@@ -104,6 +107,7 @@ NEXRAD_LOCATIONS = {
     "KGSP": {"lat": 34.88306, "lon": -82.22028, "elev": 940},
     "KGWX": {"lat": 33.89667, "lon": -88.32889, "elev": 476},
     "KGYX": {"lat": 43.89139, "lon": -70.25694, "elev": 409},
+    "KHDC": {"lat": 30.519, "lon": -90.407, "elev": 43},
     "KHDX": {"lat": 33.07639, "lon": -106.12222, "elev": 4222},
     "KHGX": {"lat": 29.47194, "lon": -95.07889, "elev": 18},
     "KHNX": {"lat": 36.31417, "lon": -119.63111, "elev": 243},
