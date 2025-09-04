@@ -37,7 +37,7 @@ def get_nexrad_location(station):
 # 2014-Mar-27. http://www.ncdc.noaa.gov/homr/
 # The data below was extracted with:
 # cut -c 10-14,107-115,117-127,128-133
-# As of 8/21/25, KHDC has not been added to HOMR. 
+# As of 8/21/25, KHDC has not been added to HOMR.
 # KHDC site metadatavwas added manually from the following document:
 # https://www.weather.gov/media/notification/pdf_2023_24/scn24-11_khdc_nexrad_level_iii_product_dissemination.pdf
 
