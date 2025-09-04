@@ -45,7 +45,7 @@ jobs:
            git fetch --prune --unshallow
 
       - name: Build wheels for CPython
-        uses: pypa/cibuildwheel@v3.1.3
+        uses: pypa/cibuildwheel@v3.1.4
         with:
           output-dir: dist
         env:
@@ -99,7 +99,7 @@ jobs:
           merge-multiple: true
 
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.12.4
+        uses: pypa/gh-action-pypi-publish@v1.13.0
         with:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN }}
