@@ -101,7 +101,7 @@ column of values.
  .. code-block:: none
 
 
-    <matplotlib.collections.PathCollection object at 0x7f9ee6e37b10>
+    <matplotlib.collections.PathCollection object at 0x7f6b48613b10>
 
 
 
@@ -194,7 +194,7 @@ above our point, which is stored in our new dataset
  .. code-block:: none
 
 
-    [<matplotlib.lines.Line2D object at 0x7f9ee6ad9bd0>]
+    [<matplotlib.lines.Line2D object at 0x7f6b6d992710>]
 
 
 
