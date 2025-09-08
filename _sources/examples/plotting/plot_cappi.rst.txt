@@ -88,7 +88,7 @@ for the 'reflectivity' field, and then plot both the PPI and CAPPI for compariso
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 2.012 seconds)
+   **Total running time of the script:** (0 minutes 3.022 seconds)
 
 
 .. _sphx_glr_download_examples_plotting_plot_cappi.py:
