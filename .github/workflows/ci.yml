@@ -35,7 +35,7 @@ jobs:
 
       # Install dependencies
       - name: Setup Conda Environment
-        uses: mamba-org/setup-micromamba@v2.0.5
+        uses: mamba-org/setup-micromamba@v2.0.6
         with:
           environment-file: continuous_integration/environment-ci.yml
           init-shell: >-
@@ -65,7 +65,7 @@ jobs:
           python -m pytest -v --cov=./ --cov-report=xml
 
       - name: Upload code coverage to Codecov
-        uses: codecov/codecov-action@v5.5.0
+        uses: codecov/codecov-action@v5.5.1
         with:
           file: ./coverage.xml
           flags: unittests
