@@ -253,6 +253,7 @@ def read_rainbow_wrl(
     if single_slice:
         rays_per_sweep[0] = int(common_slice_info["slicedata"]["rawdata"]["@rays"])
         maxbin = int(common_slice_info["slicedata"]["rawdata"]["@bins"])
+        nbins_sweep = np.array([maxbin], dtype="int32")
         ssri = np.array([0], dtype="int32")
         seri = np.array([rays_per_sweep[0] - 1], dtype="int32")
     else:
