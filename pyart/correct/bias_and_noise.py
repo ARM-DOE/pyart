@@ -210,7 +210,9 @@ def calc_cloud_mask(
     counts_threshold=12,
 ):
     """
-    Primary function for calculating the cloud mask.
+    Primary function for calculating the cloud mask. Note: This function has
+    only been tested on Ka-band ARM Zenith radars (KAZR). This might not work
+    for other radars.
 
     Parameters
     ----------
