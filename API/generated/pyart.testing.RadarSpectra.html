@@ -1174,42 +1174,42 @@ dictionaries under the meta_group attribute.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Time at the center of each ray.</p></li>
-<li><p><strong>range</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Range to the center of each gate (bin).</p></li>
-<li><p><strong>fields</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> of </em><em>dicts</em>) – Spectra fields.</p></li>
-<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Metadata describing the instrument and data.</p></li>
-<li><p><strong>scan_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Type of scan, one of ‘ppi’, ‘rhi’, ‘sector’ or ‘other’. If the scan
+<li><p><strong>time</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Time at the center of each ray.</p></li>
+<li><p><strong>range</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Range to the center of each gate (bin).</p></li>
+<li><p><strong>fields</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> of </em><em>dicts</em>) – Spectra fields.</p></li>
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Metadata describing the instrument and data.</p></li>
+<li><p><strong>scan_type</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Type of scan, one of ‘ppi’, ‘rhi’, ‘sector’ or ‘other’. If the scan
 volume contains multiple sweep modes this should be ‘other’.</p></li>
-<li><p><strong>latitude</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Latitude of the instrument.</p></li>
-<li><p><strong>longitude</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Longitude of the instrument.</p></li>
-<li><p><strong>altitude</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Altitude of the instrument, above sea level.</p></li>
-<li><p><strong>altitude_agl</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em>) – Altitude of the instrument above ground level. If not provided this
+<li><p><strong>latitude</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Latitude of the instrument.</p></li>
+<li><p><strong>longitude</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Longitude of the instrument.</p></li>
+<li><p><strong>altitude</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Altitude of the instrument, above sea level.</p></li>
+<li><p><strong>altitude_agl</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em>) – Altitude of the instrument above ground level. If not provided this
 attribute is set to None, indicating this parameter not available.</p></li>
-<li><p><strong>sweep_number</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – The number of the sweep in the volume scan, 0-based.</p></li>
-<li><p><strong>sweep_mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Sweep mode for each mode in the volume scan.</p></li>
-<li><p><strong>fixed_angle</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Target angle for thr sweep. Azimuth angle in RHI modes, elevation
+<li><p><strong>sweep_number</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – The number of the sweep in the volume scan, 0-based.</p></li>
+<li><p><strong>sweep_mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Sweep mode for each mode in the volume scan.</p></li>
+<li><p><strong>fixed_angle</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Target angle for thr sweep. Azimuth angle in RHI modes, elevation
 angle in all other modes.</p></li>
-<li><p><strong>sweep_start_ray_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Index of the first ray in each sweep relative to the start of the
+<li><p><strong>sweep_start_ray_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Index of the first ray in each sweep relative to the start of the
 volume, 0-based.</p></li>
-<li><p><strong>sweep_end_ray_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Index of the last ray in each sweep relative to the start of the
+<li><p><strong>sweep_end_ray_index</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Index of the last ray in each sweep relative to the start of the
 volume, 0-based.</p></li>
 <li><p><strong>rays_per_sweep</strong> (<a class="reference internal" href="pyart.lazydict.LazyLoadDict.html#pyart.lazydict.LazyLoadDict" title="pyart.lazydict.LazyLoadDict"><em>LazyLoadDict</em></a>) – Number of rays in each sweep. The data key of this attribute is
 create upon first access from the data in the sweep_start_ray_index and
 sweep_end_ray_index attributes. If the sweep locations needs to be
 modified, do this prior to accessing this attribute or use
 <a class="reference internal" href="pyart.testing.RadarSpectra.init_rays_per_sweep.html#pyart.testing.RadarSpectra.init_rays_per_sweep" title="pyart.testing.RadarSpectra.init_rays_per_sweep"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_rays_per_sweep()</span></code></a> to reset the attribute.</p></li>
-<li><p><strong>target_scan_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em>) – Intended scan rate for each sweep. If not provided this attribute is
+<li><p><strong>target_scan_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em>) – Intended scan rate for each sweep. If not provided this attribute is
 set to None, indicating this parameter is not available.</p></li>
-<li><p><strong>rays_are_indexed</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em>) – Indication of whether ray angles are indexed to a regular grid in
+<li><p><strong>rays_are_indexed</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em>) – Indication of whether ray angles are indexed to a regular grid in
 each sweep. If not provided this attribute is set to None, indicating
 ray angle spacing is not determined.</p></li>
-<li><p><strong>ray_angle_res</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em>) – If rays_are_indexed is not None, this provides the angular resolution
+<li><p><strong>ray_angle_res</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em>) – If rays_are_indexed is not None, this provides the angular resolution
 of the grid. If not provided or available this attribute is set to
 None.</p></li>
-<li><p><strong>azimuth</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Azimuth of antenna, relative to true North. Azimuth angles are
+<li><p><strong>azimuth</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Azimuth of antenna, relative to true North. Azimuth angles are
 recommended to be expressed in the range of [0, 360], but other
 representations are not forbidden.</p></li>
-<li><p><strong>elevation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Elevation of antenna, relative to the horizontal plane. Elevation
+<li><p><strong>elevation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Elevation of antenna, relative to the horizontal plane. Elevation
 angles are recommended to be expressed in the range of [-180, 180],
 but other representations are not forbidden.</p></li>
 <li><p><strong>gate_z</strong> (<em>gate_x</em><em>, </em><em>gate_y</em><em>,</em>) – Location of each gate in a Cartesian coordinate system assuming a
@@ -1222,7 +1222,7 @@ in the <cite>projection</cite> attribute are used to perform an inverse map
 projection from the Cartesian gate locations relative to the radar
 location to longitudes and latitudes. If these attributes are changed
 use <a class="reference internal" href="pyart.testing.RadarSpectra.init_gate_longitude_latitude.html#pyart.testing.RadarSpectra.init_gate_longitude_latitude" title="pyart.testing.RadarSpectra.init_gate_longitude_latitude"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_gate_longitude_latitude()</span></code></a> to reset the attributes.</p></li>
-<li><p><strong>projection</strong> (<em>dic</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Projection parameters defining the map projection used to transform
+<li><p><strong>projection</strong> (<em>dic</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Projection parameters defining the map projection used to transform
 from Cartesian to geographic coordinates. The default dictionary sets
 the ‘proj’ key to ‘pyart_aeqd’ indicating that the native Py-ART
 azimuthal equidistant projection is used. This can be modified to
@@ -1234,29 +1234,29 @@ latitude will be added to the dictionary as ‘lon_0’ and ‘lat_0’.</p></li
 <li><p><strong>gate_altitude</strong> (<a class="reference internal" href="pyart.lazydict.LazyLoadDict.html#pyart.lazydict.LazyLoadDict" title="pyart.lazydict.LazyLoadDict"><em>LazyLoadDict</em></a>) – The altitude of each radar gate as calculated from the altitude of the
 radar and the Cartesian z location of each gate. If this attribute
 is changed use <a class="reference internal" href="pyart.testing.RadarSpectra.init_gate_altitude.html#pyart.testing.RadarSpectra.init_gate_altitude" title="pyart.testing.RadarSpectra.init_gate_altitude"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_gate_altitude()</span></code></a> to reset the attribute.</p></li>
-<li><p><strong>scan_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em>) – Actual antenna scan rate. If not provided this attribute is set to
+<li><p><strong>scan_rate</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em>) – Actual antenna scan rate. If not provided this attribute is set to
 None, indicating this parameter is not available.</p></li>
-<li><p><strong>antenna_transition</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em>) – Flag indicating if the antenna is in transition, 1 = yes, 0 = no.
+<li><p><strong>antenna_transition</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em>) – Flag indicating if the antenna is in transition, 1 = yes, 0 = no.
 If not provided this attribute is set to None, indicating this
 parameter is not available.</p></li>
-<li><p><strong>rotation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em>) – The rotation angle of the antenna. The angle about the aircraft
+<li><p><strong>rotation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em>) – The rotation angle of the antenna. The angle about the aircraft
 longitudinal axis for a vertically scanning radar.</p></li>
-<li><p><strong>tilt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em>) – The tilt angle with respect to the plane orthogonal (Z-axis) to
+<li><p><strong>tilt</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em>) – The tilt angle with respect to the plane orthogonal (Z-axis) to
 aircraft longitudinal axis.</p></li>
-<li><p><strong>roll</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em>) – The roll angle of platform, for aircraft right wing down is positive.</p></li>
-<li><p><strong>drift</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em>) – Drift angle of antenna, the angle between heading and track.</p></li>
-<li><p><strong>heading</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em>) – Heading (compass) angle, clockwise from north.</p></li>
-<li><p><strong>pitch</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em>) – Pitch angle of antenna, for aircraft nose up is positive.</p></li>
-<li><p><strong>georefs_applied</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em>) – Indicates whether the variables have had georeference calculation
+<li><p><strong>roll</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em>) – The roll angle of platform, for aircraft right wing down is positive.</p></li>
+<li><p><strong>drift</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em>) – Drift angle of antenna, the angle between heading and track.</p></li>
+<li><p><strong>heading</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em>) – Heading (compass) angle, clockwise from north.</p></li>
+<li><p><strong>pitch</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em>) – Pitch angle of antenna, for aircraft nose up is positive.</p></li>
+<li><p><strong>georefs_applied</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em>) – Indicates whether the variables have had georeference calculation
 applied.  Leading to Earth-centric azimuth and elevation angles.</p></li>
-<li><p><strong>instrument_parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> of </em><em>dicts</em><em> or </em><em>None</em>) – Instrument parameters, if not provided this attribute is set to None,
+<li><p><strong>instrument_parameters</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> of </em><em>dicts</em><em> or </em><em>None</em>) – Instrument parameters, if not provided this attribute is set to None,
 indicating these parameters are not avaiable. This dictionary also
 includes variables in the radar_parameters CF/Radial subconvention.</p></li>
-<li><p><strong>radar_calibration</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> of </em><em>dicts</em><em> or </em><em>None</em>) – Instrument calibration parameters. If not provided this attribute is
+<li><p><strong>radar_calibration</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> of </em><em>dicts</em><em> or </em><em>None</em>) – Instrument calibration parameters. If not provided this attribute is
 set to None, indicating these parameters are not available</p></li>
-<li><p><strong>ngates</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Number of gates (bins) in a ray.</p></li>
-<li><p><strong>nrays</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Number of rays in the volume.</p></li>
-<li><p><strong>nsweeps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Number of sweep in the volume.</p></li>
+<li><p><strong>ngates</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Number of gates (bins) in a ray.</p></li>
+<li><p><strong>nrays</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Number of rays in the volume.</p></li>
+<li><p><strong>nsweeps</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Number of sweep in the volume.</p></li>
 </ul>
 </dd>
 </dl>

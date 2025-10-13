@@ -1167,15 +1167,15 @@ grid = Grid.from_legacy_parameters(fields, axes, metadata).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Time of the grid.</p></li>
-<li><p><strong>fields</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> of </em><em>dicts</em>) – Moments from radars or other variables.</p></li>
-<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a>) – Metadata describing the grid.</p></li>
+<li><p><strong>time</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Time of the grid.</p></li>
+<li><p><strong>fields</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> of </em><em>dicts</em>) – Moments from radars or other variables.</p></li>
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Metadata describing the grid.</p></li>
 <li><p><strong>origin_altitude</strong> (<em>origin_longitude</em><em>, </em><em>origin_latitude</em><em>,</em>) – Geographic coordinate of the origin of the grid.</p></li>
 <li><p><strong>z</strong> (<em>x</em><em>, </em><em>y</em><em>,</em>) – Distance from the grid origin for each Cartesian coordinate axis in a
 one dimensional array. Defines the spacing along the three grid axes
 which is repeated throughout the grid, making a rectilinear grid.</p></li>
 <li><p><strong>nz</strong> (<em>nx</em><em>, </em><em>ny</em><em>,</em>) – Number of grid points along the given Cartesian dimension.</p></li>
-<li><p><strong>projection</strong> (<em>dic</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.13)"><em>str</em></a>) – Projection parameters defining the map projection used to transform
+<li><p><strong>projection</strong> (<em>dic</em><em> or </em><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Projection parameters defining the map projection used to transform
 from Cartesian to geographic coordinates. None will use the default
 dictionary with the ‘proj’ key set to ‘pyart_aeqd’ indicating that
 the native Py-ART azimuthal equidistant projection is used. Other
@@ -1187,9 +1187,9 @@ latitude will be added to the dictionary as ‘lon_0’ and ‘lat_0’.
 Use the <a class="reference internal" href="pyart.testing.Grid.get_projparams.html#pyart.testing.Grid.get_projparams" title="pyart.testing.Grid.get_projparams"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_projparams()</span></code></a> method to retrieve a copy of this
 attribute dictionary with this special key evaluated.</p></li>
 <li><p><strong>radar_altitude</strong> (<em>radar_longitude</em><em>, </em><em>radar_latitude</em><em>,</em>) – Geographic location of the radars which make up the grid.</p></li>
-<li><p><strong>radar_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Start of collection for the radar which make up the grid.</p></li>
-<li><p><strong>radar_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.13)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Names of the radars which make up the grid.</p></li>
-<li><p><strong>nradar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.13)"><em>int</em></a>) – Number of radars whose data was used to make the grid.</p></li>
+<li><p><strong>radar_time</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Start of collection for the radar which make up the grid.</p></li>
+<li><p><strong>radar_name</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Names of the radars which make up the grid.</p></li>
+<li><p><strong>nradar</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Number of radars whose data was used to make the grid.</p></li>
 <li><p><strong>projection_proj</strong> (<em>Proj</em>) – pyproj.Proj instance for the projection specified by the projection
 attribute. If the ‘pyart_aeqd’ projection is specified accessing this
 attribute will raise a ValueError.</p></li>
