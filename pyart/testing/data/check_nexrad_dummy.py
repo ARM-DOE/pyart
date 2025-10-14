@@ -76,15 +76,11 @@ def dics_similar(dic1, dic2):
         else:
             return False
 
-    # all keys in both dictionaries
-    print(dic1.keys())
-    print(dic2.keys())
     assert set(dic1.keys()).difference(dic2.keys()) == set()
 
     for key in dic1.keys():
         if key == "data":
             continue
-        print(key, dic1[key], dic2[key])
         assert dic1[key] == dic2[key]
 
     # do not check data, since it should not match
