@@ -1,6 +1,5 @@
 Notebook Gallery
 ================
-
 .. toctree::
    :maxdepth: 1
    :caption: Notebooks
@@ -11,3 +10,4 @@ Notebook Gallery
    notebooks/mapping_data_to_a_cartesian_grid.ipynb
    notebooks/masking_data_with_gatefilters.ipynb
    notebooks/the_pyart_radar_object_and_indexing.ipynb
+   ML/AI_preprocessing
