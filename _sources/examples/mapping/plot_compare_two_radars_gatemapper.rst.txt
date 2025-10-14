@@ -354,7 +354,7 @@ case where our scans don't neccessarily match exactly in time.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 33.244 seconds)
+   **Total running time of the script:** (0 minutes 32.805 seconds)
 
 
 .. _sphx_glr_download_examples_mapping_plot_compare_two_radars_gatemapper.py:
