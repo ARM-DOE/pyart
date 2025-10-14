@@ -1159,7 +1159,9 @@
 <dl class="py function">
 <dt class="sig sig-object py" id="pyart.correct.calc_cloud_mask">
 <span class="sig-prename descclassname"><span class="pre">pyart.correct.</span></span><span class="sig-name descname"><span class="pre">calc_cloud_mask</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">field</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">height</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">noise_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">-45.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">threshold_offset</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">5.0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">counts_threshold</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">12</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/correct/bias_and_noise.html#calc_cloud_mask"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.correct.calc_cloud_mask" title="Permalink to this definition">#</a></dt>
-<dd><p>Primary function for calculating the cloud mask.</p>
+<dd><p>Primary function for calculating the cloud mask. Note: This function has
+only been tested on Ka-band ARM Zenith radars (KAZR) and will only work on cloud
+radars.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">

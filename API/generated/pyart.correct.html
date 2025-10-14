@@ -1171,7 +1171,7 @@
 <td><p>Primary function for calculating the cloud mask.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.calc_noise_floor.html#pyart.correct.calc_noise_floor" title="pyart.correct.calc_noise_floor"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_noise_floor</span></code></a>(radar, field, height)</p></td>
-<td><p>Calculation for getting the noise floor</p></td>
+<td><p>Calculation for getting the noise floor Note: This function has only been tested on Ka-band ARM Zenith radars (KAZR) and will only work on cloud radars.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.calc_zdr_offset.html#pyart.correct.calc_zdr_offset" title="pyart.correct.calc_zdr_offset"><code class="xref py py-obj docutils literal notranslate"><span class="pre">calc_zdr_offset</span></code></a>(radar[, gatefilter, ...])</p></td>
 <td><p>Function for calculating the ZDR bias from a VPT scan.</p></td>
@@ -1219,7 +1219,7 @@
 <td><p>Phase process using a LP method [1] using Py-ART's Gatefilter.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.range_correction.html#pyart.correct.range_correction" title="pyart.correct.range_correction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">range_correction</span></code></a>(radar, field, height)</p></td>
-<td><p>Corrects reflectivity for range to help get the correct noise floor values</p></td>
+<td><p>Corrects reflectivity for range to help get the correct noise floor values Note: This function has only been tested on Ka-band ARM Zenith radars (KAZR) and will only work on cloud radars.</p></td>
 </tr>
 </tbody>
 </table>

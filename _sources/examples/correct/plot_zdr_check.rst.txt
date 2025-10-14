@@ -99,7 +99,7 @@ bias calculation to ensure that we are taking the average ZDR in light rain.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (3 minutes 24.757 seconds)
+   **Total running time of the script:** (3 minutes 24.508 seconds)
 
 
 .. _sphx_glr_download_examples_correct_plot_zdr_check.py:

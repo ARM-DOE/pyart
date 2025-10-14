@@ -670,7 +670,9 @@
     <span class="n">counts_threshold</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Primary function for calculating the cloud mask.</span>
+<span class="sd">    Primary function for calculating the cloud mask. Note: This function has</span>
+<span class="sd">    only been tested on Ka-band ARM Zenith radars (KAZR) and will only work on cloud</span>
+<span class="sd">    radars.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -761,7 +763,9 @@
 
 <div class="viewcode-block" id="calc_noise_floor"><a class="viewcode-back" href="../../../API/generated/pyart.correct.calc_noise_floor.html#pyart.correct.calc_noise_floor">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">calc_noise_floor</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculation for getting the noise floor</span>
+<span class="sd">    Calculation for getting the noise floor Note: This function has</span>
+<span class="sd">    only been tested on Ka-band ARM Zenith radars (KAZR) and will only work on cloud</span>
+<span class="sd">    radars.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -807,7 +811,9 @@
 
 <div class="viewcode-block" id="cloud_threshold"><a class="viewcode-back" href="../../../API/generated/pyart.correct.cloud_threshold.html#pyart.correct.cloud_threshold">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">cloud_threshold</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">n_avg</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">nffts</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Calculates the noise floor from a cloud threshold.</span>
+<span class="sd">    Calculates the noise floor from a cloud threshold. Note: This function has</span>
+<span class="sd">    only been tested on Ka-band ARM Zenith radars (KAZR) and will only work on cloud</span>
+<span class="sd">    radars.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -874,8 +880,9 @@
 
 <div class="viewcode-block" id="range_correction"><a class="viewcode-back" href="../../../API/generated/pyart.correct.range_correction.html#pyart.correct.range_correction">[docs]</a><span class="k">def</span><span class="w"> </span><span class="nf">range_correction</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">height</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">    Corrects reflectivity for range to help get the</span>
-<span class="sd">    correct noise floor values</span>
+<span class="sd">    Corrects reflectivity for range to help get the correct noise floor</span>
+<span class="sd">    values Note: This function has only been tested on Ka-band ARM Zenith</span>
+<span class="sd">    radars (KAZR) and will only work on cloud radars.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
