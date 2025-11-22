@@ -11,10 +11,6 @@ on:
       - '.github/workflows/wheels.yml'
   workflow_dispatch:
 
-env:
-  CIBW_TEST_REQUIRES: pytest pytest-mpl
-  CIBW_TEST_COMMAND: "pytest --mpl {project}/tests"
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -45,17 +41,9 @@ jobs:
            git fetch --prune --unshallow
 
       - name: Build wheels for CPython
-        uses: pypa/cibuildwheel@v3.2.1
+        uses: pypa/cibuildwheel@v3.3.0
         with:
           output-dir: dist
-        env:
-          CIBW_BUILD: "cp310-* cp311-* cp312*"
-          CIBW_SKIP: "*-musllinux_*"  #  numpy doesn't have wheels for musllinux so we can't build some quickly and without bloating
-          CIBW_ARCHS_LINUX: "x86_64"
-          MACOSX_DEPLOYMENT_TARGET: "10.9" # as of CIBW 2.9, this is the default value, pin it so it can't be bumped silently
-          CIBW_ARCHS_WINDOWS: "auto64"
-          CIBW_BUILD_VERBOSITY: 1
-          CIBW_ENVIRONMENT: PIP_ONLY_BINARY=":all:"
 
       - uses: actions/upload-artifact@v5
         with:

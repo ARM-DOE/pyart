@@ -117,3 +117,23 @@ select = [
     # Pyupgrade
     "UP",
 ]
+
+[tool.cibuildwheel]
+build-verbosity = 1
+skip = [
+    "cp3*t-*", # free-threading is not supported
+    "cp314-*", # missing support from cartopy
+    "*musllinux*", # missing support from netCDF4
+]
+test-requires = [
+    "pytest",
+    "pytest-mpl",
+]
+test-command = "pytest --mpl {project}/tests"
+environment = { PIP_ONLY_BINARY = ":all:" }
+
+[tool.cibuildwheel.linux]
+archs = "x86_64"
+
+[tool.cibuildwheel.windows]
+archs = "auto64"
