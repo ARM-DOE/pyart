@@ -1,11 +1,83 @@
 [build-system]
 requires = [
-  "setuptools",
-  "setuptools_scm>=6.2",
-  "wheel",
-  "cython>=3.0",
-  "numpy>=2.0.0rc1"
+    "setuptools>=80",
+    "setuptools-scm>=8",
+    "cython>=3.0",
+    "numpy>=2.0.0"
 ]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "arm_pyart"
+description = "Py-ART: Python ARM Radar Toolkit"
+authors = [
+    {name = "Scott Collis", email = "scollis@anl.gov"},
+    {name = "Jonathan Helmus"},
+]
+maintainers = [
+    {name = "Py-ART Developers", email = "zsherman@anl.gov"},
+    {email = "scollis@anl.gov"},
+    {email = "mgrover@anl.gov"},
+]
+license = "BSD-3-Clause"
+license-files = ["LICENSE.txt"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: C",
+    "Programming Language :: Cython",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Atmospheric Science",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS :: MacOS X",
+    "Operating System :: Microsoft :: Windows",
+    "Framework :: Matplotlib",
+]
+urls = {Homepage = "https://github.com/ARM-DOE/pyart"}
+requires-python = ">=3.10"
+dependencies = [
+    "cartopy>=0.22.0",
+    "cftime>=1.5.1.1",
+    "fsspec>=2021.11.0",
+    "matplotlib>=3.5.0",
+    "mda-xdrlib>=0.2.0",
+    "netcdf4>=1.7.2",
+    "numpy>=1.21.2",
+    "open-radar-data>=0.5.0",
+    "pandas>=1.3.4",
+    "pint>=0.18.0",
+    "pooch>=1.5.2",
+    "s3fs>=2021.11.0",
+    "scipy>=1.7.3",
+    "xarray>=2024.10.0",
+    "xradar>=0.8.0",
+]
+dynamic = ["readme", "version"]
+
+[tool.setuptools]
+include-package-data = true
+zip-safe = false
+platforms = [
+    "Linux",
+    "Mac OS-X",
+    "Unix",
+    "Windows",
+]
+
+[tool.setuptools.packages.find]
+exclude = ["docs"]
+namespaces = false
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+local_scheme = "dirty-tag"
 
 [tool.black]
 line-length = 88
