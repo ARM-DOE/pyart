@@ -72,3 +72,21 @@ jobs:
           env_vars: OS,PYTHON
           name: codecov-umbrella
           fail_ci_if_error: false
+
+
+  oldestdeps:
+    name: Check oldest dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v7
+        with:
+          python-version: '3.10.0'
+          prune-cache: false
+
+      - name: Install PyART
+        run: uv sync --group test --resolution=lowest-direct
+
+      - name: Run Tests
+        run: uv run --no-sync python -m pytest -v

@@ -61,6 +61,11 @@ dependencies = [
 ]
 dynamic = ["readme", "version"]
 
+[dependency-groups]
+test = [
+    "pytest>=9.0.1",
+]
+
 [tool.setuptools]
 include-package-data = true
 zip-safe = false
