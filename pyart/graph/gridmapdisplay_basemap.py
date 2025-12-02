@@ -73,7 +73,7 @@ class GridMapDisplayBasemap:
         min_lat=40,
         max_lat=44,
         ax=None,
-        **kwargs
+        **kwargs,
     ):
         """
         Plot a basemap.
@@ -113,7 +113,7 @@ class GridMapDisplayBasemap:
             min_lat,
             max_lat,
             ax,
-            **kwargs
+            **kwargs,
         )
 
         # parse the parameters
@@ -148,7 +148,7 @@ class GridMapDisplayBasemap:
         fig=None,
         ticks=None,
         ticklabs=None,
-        **kwargs
+        **kwargs,
     ):
         """
         Plot the grid onto the current basemap.
@@ -240,7 +240,7 @@ class GridMapDisplayBasemap:
             cmap=cmap,
             norm=norm,
             latlon=True,
-            **kwargs
+            **kwargs,
         )
         self.mappables.append(pm)
         self.fields.append(field)
@@ -344,7 +344,7 @@ class GridMapDisplayBasemap:
         fig=None,
         ticks=None,
         ticklabs=None,
-        **kwargs
+        **kwargs,
     ):
         """
         Plot a slice along a given latitude.
@@ -502,7 +502,7 @@ class GridMapDisplayBasemap:
         fig=None,
         ticks=None,
         ticklabs=None,
-        **kwargs
+        **kwargs,
     ):
         """
         Plot a slice along a given longitude.
@@ -696,7 +696,7 @@ class GridMapDisplayBasemap:
         min_lat=40,
         max_lat=44,
         ax=None,
-        **kwargs
+        **kwargs,
     ):
         """
         Make a basemap.

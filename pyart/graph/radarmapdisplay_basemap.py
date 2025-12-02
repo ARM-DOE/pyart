@@ -140,7 +140,7 @@ class RadarMapDisplayBasemap(RadarDisplay):
         raster=False,
         alpha=None,
         edgecolors="face",
-        **kwargs
+        **kwargs,
     ):
         """
         Plot a PPI volume sweep onto a geographic map.
@@ -302,7 +302,7 @@ class RadarMapDisplayBasemap(RadarDisplay):
                     area_thresh=area_thresh,
                     resolution=resolution,
                     ax=ax,
-                    **kwargs
+                    **kwargs,
                 )
             else:  # using width and height
                 # map domain determined from location of radar gates
@@ -319,7 +319,7 @@ class RadarMapDisplayBasemap(RadarDisplay):
                     area_thresh=area_thresh,
                     resolution=resolution,
                     ax=ax,
-                    **kwargs
+                    **kwargs,
                 )
 
         # The cylindrical equidistant projection does not support conversions
@@ -353,7 +353,7 @@ class RadarMapDisplayBasemap(RadarDisplay):
             norm=norm,
             alpha=alpha,
             edgecolors=edgecolors,
-            **kwargs
+            **kwargs,
         )
 
         if raster:
@@ -389,7 +389,7 @@ class RadarMapDisplayBasemap(RadarDisplay):
         symbol="ro",
         label_text=None,
         label_offset=(None, None),
-        **kwargs
+        **kwargs,
     ):
         """
         Plot a point on the current map.

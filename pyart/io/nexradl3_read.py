@@ -19,7 +19,7 @@ def read_nexrad_level3(
     exclude_fields=None,
     include_fields=None,
     storage_options={"anon": True},
-    **kwargs
+    **kwargs,
 ):
     """
     Read a NEXRAD Level 3 product.
