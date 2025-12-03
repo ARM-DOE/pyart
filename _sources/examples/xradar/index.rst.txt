@@ -26,7 +26,7 @@ Examples of using Xradar with Py-ART to accomplish different tasks.
   .. image:: /examples/xradar/images/thumb/sphx_glr_plot_xradar_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_xradar_plot_xradar.py`
+  :doc:`/examples/xradar/plot_xradar`
 
 .. raw:: html
 
@@ -43,7 +43,7 @@ Examples of using Xradar with Py-ART to accomplish different tasks.
   .. image:: /examples/xradar/images/thumb/sphx_glr_plot_grid_xradar_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_xradar_plot_grid_xradar.py`
+  :doc:`/examples/xradar/plot_grid_xradar`
 
 .. raw:: html
 
@@ -60,7 +60,7 @@ Examples of using Xradar with Py-ART to accomplish different tasks.
   .. image:: /examples/xradar/images/thumb/sphx_glr_plot_dealias_xradar_thumb.png
     :alt:
 
-  :ref:`sphx_glr_examples_xradar_plot_dealias_xradar.py`
+  :doc:`/examples/xradar/plot_dealias_xradar`
 
 .. raw:: html
 
