@@ -10,52 +10,15 @@ atmospheric communities to examine, processes, and analyse data from many types
 of weather radars.
 """
 
-
 DOCLINES = __doc__.split("\n")
 
 import glob
 import os
 import sys
-from os import path
 
 from Cython.Build import cythonize
 from numpy import get_include
-from setuptools import Extension, find_packages, setup
-
-CLASSIFIERS = """\
-    Development Status :: 5 - Production/Stable
-    Intended Audience :: Science/Research
-    Intended Audience :: Developers
-    License :: OSI Approved :: BSD License
-    Programming Language :: Python
-    Programming Language :: Python :: 3
-    Programming Language :: Python :: 3.9
-    Programming Language :: Python :: 3.10
-    Programming Language :: Python :: 3.11
-    Programming Language :: C
-    Programming Language :: Cython
-    Topic :: Scientific/Engineering
-    Topic :: Scientific/Engineering :: Atmospheric Science
-    Operating System :: POSIX :: Linux
-    Operating System :: MacOS :: MacOS X
-    Operating System :: Microsoft :: Windows
-    Framework :: Matplotlib
-"""
-
-NAME = "arm_pyart"
-AUTHOR = "Scott Collis, Jonathan Helmus"
-AUTHOR_EMAIL = "scollis@anl.gov"
-MAINTAINER = "Py-ART Developers"
-MAINTAINER_EMAIL = "zsherman@anl.gov, scollis@anl.gov, mgrover@anl.gov"
-DESCRIPTION = DOCLINES[0]
-LONG_DESCRIPTION = "\n".join(DOCLINES[2:])
-URL = "https://github.com/ARM-DOE/pyart"
-DOWNLOAD_URL = "https://github.com/ARM-DOE/pyart"
-LICENSE = "BSD"
-CLASSIFIERS = list(filter(None, CLASSIFIERS.split("\n")))
-PLATFORMS = ["Linux", "Mac OS-X", "Unix", "Windows"]
-SCRIPTS = glob.glob("scripts/*")
-
+from setuptools import Extension, setup
 
 # This is a bit hackish: we are setting a global variable so that the main
 # pyart __init__ can detect if it is being loaded by the setup routine, to
@@ -66,7 +29,7 @@ SCRIPTS = glob.glob("scripts/*")
 # NOTE: This file must remain Python 2 compatible for the foreseeable future,
 # to ensure that we error out properly for people with outdated setuptools
 # and/or pip.
-min_version = (3, 6)
+min_version = (3, 10)
 if sys.version_info < min_version:
     error = """
 act does not support Python {}.{}.
@@ -79,20 +42,6 @@ pip install --upgrade pip
         *sys.version_info[:2], *min_version
     )
     sys.exit(error)
-
-here = path.abspath(path.dirname(__file__))
-
-with open(path.join(here, "README.rst"), encoding="utf-8") as readme_file:
-    readme = readme_file.read()
-
-with open(path.join(here, "requirements.txt")) as requirements_file:
-    # Parse requirements.txt, ignoring any commented-out lines.
-    requirements = [
-        line
-        for line in requirements_file.read().splitlines()
-        if not line.startswith("#")
-    ]
-
 
 extensions = []
 
@@ -251,28 +200,8 @@ extension_kdp = Extension(
 extensions.append(extension_kdp)
 
 setup(
-    name="arm_pyart",
-    description=DOCLINES[0],
     long_description="\n".join(DOCLINES[2:]),
-    author=AUTHOR,
-    author_email=AUTHOR_EMAIL,
-    maintainer=MAINTAINER,
-    maintainer_email=MAINTAINER_EMAIL,
-    url=URL,
-    packages=find_packages(exclude=["docs"]),
-    include_package_data=True,
-    scripts=SCRIPTS,
-    python_requires=">=3.9",
-    install_requires=requirements,
-    setup_requires=["setuptools_scm", "setuptools"],
-    license=LICENSE,
-    platforms=PLATFORMS,
-    classifiers=CLASSIFIERS,
-    zip_safe=False,
-    use_scm_version={
-        "version_scheme": "post-release",
-        "local_scheme": "dirty-tag",
-    },
+    scripts=glob.glob("scripts/*"),
     ext_modules=cythonize(
         extensions, compiler_directives={"language_level": "3", "cpow": True}
     ),

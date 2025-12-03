@@ -32,7 +32,7 @@ def read_sigmet(
     debug=False,
     ignore_xhdr=False,
     ignore_sweep_start_ms=None,
-    **kwargs
+    **kwargs,
 ):
     """
     Read a Sigmet (IRIS) product file.
@@ -496,7 +496,7 @@ def read_sigmet(
         azimuth,
         elevation,
         instrument_parameters=instrument_parameters,
-        **extended_header_params
+        **extended_header_params,
     )
 
 

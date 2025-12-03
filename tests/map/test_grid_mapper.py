@@ -298,7 +298,7 @@ def test_grid_from_radars_grid_origin():
         (radar,),
         grid_origin=(36.4, -97.6),
         grid_origin_alt=200,
-        **COMMON_MAP_TO_GRID_ARGS
+        **COMMON_MAP_TO_GRID_ARGS,
     )
     assert_almost_equal(grid.origin_latitude["data"][0], 36.4, 1)
     assert_almost_equal(grid.origin_longitude["data"], -97.6, 1)

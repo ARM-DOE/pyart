@@ -21,7 +21,7 @@ def read_chl(
     exclude_fields=None,
     include_fields=None,
     use_file_field_attributes=True,
-    **kwargs
+    **kwargs,
 ):
     """
     Read a CSU-CHILL CHL file.

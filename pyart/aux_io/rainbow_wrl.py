@@ -68,7 +68,7 @@ def read_rainbow_wrl(
     file_field_names=False,
     exclude_fields=None,
     include_fields=None,
-    **kwargs
+    **kwargs,
 ):
     """
     Read a RAINBOW file.
