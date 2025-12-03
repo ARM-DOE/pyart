@@ -35,7 +35,7 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Install python
         uses: actions/setup-python@v6
@@ -45,7 +45,7 @@ jobs:
            git fetch --prune --unshallow
 
       - name: Build wheels for CPython
-        uses: pypa/cibuildwheel@v3.2.1
+        uses: pypa/cibuildwheel@v3.3.0
         with:
           output-dir: dist
         env:
@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Build sdist
         run: pipx run build --sdist

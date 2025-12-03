@@ -16,7 +16,7 @@ jobs:
       run:
         shell: bash -l {0}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
 
       # Create environment using micromamba
       - name: Install Conda environment with Micromamba
