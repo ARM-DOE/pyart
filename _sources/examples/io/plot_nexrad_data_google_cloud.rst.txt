@@ -163,7 +163,7 @@ Let's take a look at a summary of what fields are available.
 
  .. code-block:: none
 
-    ['differential_phase', 'velocity', 'spectrum_width', 'cross_correlation_ratio', 'reflectivity', 'differential_reflectivity']
+    ['spectrum_width', 'cross_correlation_ratio', 'reflectivity', 'velocity', 'differential_reflectivity', 'differential_phase']
 
 
 
@@ -197,7 +197,7 @@ Let's plot the reflectivity field as a first step to investigating our dataset.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 34.510 seconds)
+   **Total running time of the script:** (0 minutes 28.061 seconds)
 
 
 .. _sphx_glr_download_examples_io_plot_nexrad_data_google_cloud.py:
