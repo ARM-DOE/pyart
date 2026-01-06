@@ -341,7 +341,6 @@ class Xradar:
             data=np.expand_dims(self.xradar["longitude"].values, axis=0)
         )
         self.longitude.update(self.combined_sweeps.longitude.attrs)
-            
         self.altitude = dict(
             data=np.expand_dims(self.xradar["altitude"].values, axis=0)
         )
