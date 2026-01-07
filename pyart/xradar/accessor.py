@@ -317,24 +317,34 @@ class Xradar:
             calendar="gregorian",
         )
         self.range = dict(data=self.combined_sweeps.range.values)
+        for attrs in self.combined_sweeps.range.attrs:
+            self.range[attrs] = self.combined_sweeps.range.attrs[attrs]
         self.azimuth = dict(data=self.combined_sweeps.azimuth.values)
+        for attrs in self.combined_sweeps.azimuth.attrs:
+            self.azimuth[attrs] = self.combined_sweeps.azimuth.attrs[attrs]
         self.elevation = dict(data=self.combined_sweeps.elevation.values)
+        for attrs in self.combined_sweeps.elevation.attrs:
+            self.elevation[attrs] = self.combined_sweeps.elevation.attrs[attrs]
         # Check to see if the time is multidimensional - if it is, collapse it
         self.combined_sweeps["sweep_fixed_angle"] = (
             "sweep_number",
             np.unique(self.combined_sweeps.sweep_fixed_angle),
         )
         self.fixed_angle = dict(data=self.combined_sweeps.sweep_fixed_angle.values)
+        self.fixed_angle.update(self.combined_sweeps.sweep_fixed_angle.attrs)
         self.antenna_transition = None
         self.latitude = dict(
             data=np.expand_dims(self.xradar["latitude"].values, axis=0)
         )
+        self.latitude.update(self.combined_sweeps.latitude.attrs)
         self.longitude = dict(
             data=np.expand_dims(self.xradar["longitude"].values, axis=0)
         )
+        self.longitude.update(self.combined_sweeps.longitude.attrs)
         self.altitude = dict(
             data=np.expand_dims(self.xradar["altitude"].values, axis=0)
         )
+        self.altitude.update(self.combined_sweeps.altitude.attrs)
         self.sweep_end_ray_index = dict(
             data=self.combined_sweeps.ngates.groupby("sweep_number").max().values
         )
