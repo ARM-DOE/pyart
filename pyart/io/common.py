@@ -59,7 +59,7 @@ def stringarray_to_chararray(arr, numchars=None):
     """
     Convert a string array to a character array with one extra dimension.
 
-    Robust implementation that falls back to pure-numpy conversion if
+    Implementation that falls back to pure-numpy conversion if
     netCDF4.stringtochar is unavailable or fails.
 
     Parameters
