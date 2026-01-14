@@ -57,34 +57,95 @@ def prepare_for_read(filename, storage_options={"anon": True}):
 
 def stringarray_to_chararray(arr, numchars=None):
     """
-    Convert an string array to a character array with one extra dimension.
+    Convert a string array to a character array with one extra dimension.
+
+    Implementation that falls back to pure-numpy conversion if
+    netCDF4.stringtochar is unavailable or fails.
 
     Parameters
     ----------
-    arr : array
-        Array with numpy dtype 'SN', where N is the number of characters
-        in the string.
-
-    numchars : int
-        Number of characters used to represent the string. If numchar > N
-        the results will be padded on the right with blanks. The default,
-        None will use N.
+    arr : array-like
+        String or bytes array
+    numchars : int, optional
+        Fixed character width. Must be >= actual max string length.
 
     Returns
     -------
-    chararr : array
-        Array with dtype 'S1' and shape = arr.shape + (numchars, ).
-
+    ndarray
+        Character array with dtype 'S1' and shape (*arr.shape, numchars)
     """
-    carr = netCDF4.stringtochar(arr)
-    if numchars is None:
-        return carr
+    arr = np.asarray(arr)
 
-    arr_numchars = carr.shape[-1]
-    if numchars <= arr_numchars:
-        raise ValueError(f"numchars must be >= {arr_numchars}")
-    chararr = np.zeros(arr.shape + (numchars,), dtype="S1")
-    chararr[..., :arr_numchars] = carr[:]
+    # Handle scalar
+    scalar = arr.ndim == 0
+    if scalar:
+        arr = arr.reshape((1,))
+
+    # Handle masked arrays
+    if np.ma.isMaskedArray(arr):
+        arr = arr.filled("")
+
+    # Try netCDF4 first
+    carr = None
+    try:
+        carr = netCDF4.stringtochar(arr)
+    except (ImportError, AttributeError, Exception):
+        pass  # Fall through to manual conversion
+
+    # Manual fallback
+    if carr is None:
+        carr = _manual_string_to_char(arr, numchars)
+
+    # Validate and pad if numchars specified
+    if numchars is not None:
+        arr_numchars = carr.shape[-1]
+        if numchars < arr_numchars:
+            raise ValueError(
+                f"numchars ({numchars}) must be >= actual width ({arr_numchars})"
+            )
+        if numchars > arr_numchars:
+            out = np.zeros(arr.shape + (numchars,), dtype="S1")
+            out[..., :arr_numchars] = carr
+            carr = out
+
+    # Restore scalar shape
+    if scalar:
+        carr = carr[0]
+
+    return carr
+
+
+def _manual_string_to_char(arr, numchars=None):
+    """Manual string-to-char conversion."""
+    # Handle empty arrays
+    if arr.size == 0:
+        width = numchars if numchars is not None else 1
+        return np.zeros(arr.shape + (width,), dtype="S1")
+
+    # Encode to bytes
+    flat = arr.ravel()
+    encoded = []
+    for x in flat:
+        if x is None or x == "":
+            encoded.append(b"")
+        elif isinstance(x, bytes):
+            encoded.append(x)
+        else:
+            encoded.append(str(x).encode("utf-8"))
+
+    # Determine width
+    max_bytes = max(len(b) for b in encoded)
+    width = numchars if numchars is not None else max(max_bytes, 1)
+
+    # Allocate and fill
+    chararr = np.zeros(arr.shape + (width,), dtype="S1")
+    for idx, b in zip(np.ndindex(arr.shape), encoded):
+        if len(b) > width:
+            b = b[:width]  # Truncate
+        # Use null padding for netCDF compatibility
+        padded = b + b"\x00" * (width - len(b))
+        chararr[idx] = np.frombuffer(padded, dtype="S1", count=width)
+
     return chararr
 
 
