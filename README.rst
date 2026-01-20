@@ -159,9 +159,6 @@ Other related open source software for working with weather radar data:
 * `CSU_RadarTools <https://github.com/CSU-Radarmet/CSU_RadarTools>`_ :
   Colorado State University Radar Tools.
 
-* `TRMM RSL <https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/>`_ :
-  TRMM Radar Software Library.
-
 * `RadX <https://www.ral.ucar.edu/projects/titan/docs/radial_formats/radx.html>`_ :
   Radx C++ Software Package for Radial Radar Data.
 
@@ -211,14 +208,8 @@ The above Python modules are require before installing Py-ART, additional
 functionality is available of the following modules are installed.
 
 * `TRMM Radar Software Library (RSL)
-  <https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/>`_.
-  If installed Py-ART will be able to read in radar data in a number of
-  additional formats (Lassen, McGill, Universal Format, and RADTEC) and
-  perform automatic dealiasing of Doppler velocities.  RSL should be
-  install prior to installing Py-ART. The environmental variable `RSL_PATH`
-  should point to the location where RSL was installed if RSL was not
-  installed in the default location (/usr/local/trmm), such as a anaconda path
-  (/usr/anaconda3/envs/pyart_env/.
+  TRMM RSL is no longer supported by NASA and Py-ART. If using files such as DORADE, please
+  consider using radx instead to convert the files to cfradial.
 
 * In order to read files which are stored in HDF5 files the
   `h5py <https://www.h5py.org/>`_ package and related libraries must be
@@ -240,7 +231,7 @@ functionality is available of the following modules are installed.
 
 * `Basemap <https://matplotlib.org/basemap/>`_. If installed, also gives the
   ability to plot grids on geographic maps, but Cartopy is recommended over
-  Basemap.
+  Basemap. Basemap is deprecated in favour of cartopy.
 
 * `wradlib <https://docs.wradlib.org/en/latest/>`_.  Needed to calculate the texture
   of a differential phase field.
