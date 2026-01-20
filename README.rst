@@ -207,7 +207,7 @@ Optional Dependences
 The above Python modules are require before installing Py-ART, additional
 functionality is available of the following modules are installed.
 
-* `TRMM Radar Software Library (RSL)
+* TRMM Radar Software Library (RSL)
   TRMM RSL is no longer supported by NASA and Py-ART. If using files such as DORADE, please
   consider using radx instead to convert the files to cfradial.
 
