@@ -6,7 +6,7 @@
 
 Computation times
 =================
-**00:49.260** total execution time for 4 files **from examples/io**:
+**00:50.532** total execution time for 4 files **from examples/io**:
 
 .. container::
 
@@ -33,14 +33,14 @@ Computation times
      - Time
      - Mem (MB)
    * - :ref:`sphx_glr_examples_io_plot_nexrad_data_google_cloud.py` (``plot_nexrad_data_google_cloud.py``)
-     - 00:25.701
+     - 00:27.109
      - 0.0
    * - :ref:`sphx_glr_examples_io_plot_nexrad_data_aws.py` (``plot_nexrad_data_aws.py``)
-     - 00:13.579
+     - 00:13.409
      - 0.0
    * - :ref:`sphx_glr_examples_io_plot_older_nexrad_data_aws.py` (``plot_older_nexrad_data_aws.py``)
-     - 00:07.972
+     - 00:08.417
      - 0.0
    * - :ref:`sphx_glr_examples_io_plot_read_cfradial2.py` (``plot_read_cfradial2.py``)
-     - 00:02.008
+     - 00:01.598
      - 0.0
