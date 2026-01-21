@@ -543,7 +543,6 @@
 installation, but the package will install and work with reduced functionality
 without these packages.</p>
 <ul class="simple">
-<li><p><a class="reference external" href="https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/">TRMM RSL</a></p></li>
 <li><p><a class="reference external" href="https://github.com/mpy/CyLP">CyLP</a> or
 <a class="reference external" href="https://tfinley.net/software/pyglpk/">PyGLPK</a> or
 <a class="reference external" href="https://cvxopt.org/">CVXOPT</a> and their dependencies.</p></li>
@@ -580,6 +579,7 @@ $ pixi add arm_pyart
 </section>
 <section id="installing-from-source">
 <h2>Installing from Source<a class="headerlink" href="#installing-from-source" title="Permalink to this heading">#</a></h2>
+<p>NOTE: TRMM RSL is deprecated, please consider using radx to convert files such as DORADE.</p>
 <p>The path to the TRMM RSL library must be provided during install. This can
 either be done by setting the <code class="docutils literal notranslate"><span class="pre">RSL_PATH</span></code> environmentation variable. In bash
 this can be done using <code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">RSL_PATH=/path/to/rsl/</span></code>. If this location is

@@ -220,7 +220,7 @@ texture as a base level, where the noisier data will be removed.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 9.394 seconds)
+   **Total running time of the script:** (0 minutes 9.552 seconds)
 
 
 .. _sphx_glr_download_examples_correct_plot_dealias_rhi.py:
