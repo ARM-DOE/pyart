@@ -1,4 +1,4 @@
-""" Unit tests for pyart's retrieve/kdp_proc.py module. """
+"""Unit tests for pyart's retrieve/kdp_proc.py module."""
 
 import numpy as np
 

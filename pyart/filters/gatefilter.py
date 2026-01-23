@@ -650,7 +650,7 @@ class GateFilter:
     ):
         """Exclude gates where a given field is inside a given interval."""
         if v2 < v1:
-            (v1, v2) = (v2, v1)
+            v1, v2 = (v2, v1)
         fdata = self._get_fdata(field)
         if inclusive:
             marked = (fdata >= v1) & (fdata <= v2)
@@ -663,7 +663,7 @@ class GateFilter:
     ):
         """Exclude gates where a given field is outside a given interval."""
         if v2 < v1:
-            (v1, v2) = (v2, v1)
+            v1, v2 = (v2, v1)
         fdata = self._get_fdata(field)
         if inclusive:
             marked = (fdata <= v1) | (fdata >= v2)
@@ -817,7 +817,7 @@ class GateFilter:
     ):
         """Include gates where a given field is inside a given interval."""
         if v2 < v1:
-            (v1, v2) = (v2, v1)
+            v1, v2 = (v2, v1)
         fdata = self._get_fdata(field)
         if inclusive:
             marked = (fdata >= v1) & (fdata <= v2)
@@ -830,7 +830,7 @@ class GateFilter:
     ):
         """Include gates where a given field is outside a given interval."""
         if v2 < v1:
-            (v1, v2) = (v2, v1)
+            v1, v2 = (v2, v1)
         fdata = self._get_fdata(field)
         if inclusive:
             marked = (fdata <= v1) | (fdata >= v2)

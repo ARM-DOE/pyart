@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/sigmet.py module. """
+"""Unit Tests for Py-ART's io/sigmet.py module."""
 
 import numpy as np
 import pytest

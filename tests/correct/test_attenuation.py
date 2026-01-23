@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's correct/attenuation.py module. """
+"""Unit Tests for Py-ART's correct/attenuation.py module."""
 
 # python test_phase_attenuation.py
 # to recreate the reference_rays.npz file.

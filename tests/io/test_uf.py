@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/uf.py and io/uffile.py modules. """
+"""Unit Tests for Py-ART's io/uf.py and io/uffile.py modules."""
 
 from datetime import datetime
 

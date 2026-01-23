@@ -1,4 +1,4 @@
-""" Module to give helpful messages to the user that did not
+"""Module to give helpful messages to the user that did not
 compile Py-ART properly.
 """
 
@@ -29,8 +29,7 @@ def raise_build_error(e):
             dir_content.append(filename.ljust(26))
         else:
             dir_content.append(filename + "\n")
-    raise ImportError(
-        """{}
+    raise ImportError("""{}
 ___________________________________________________________________________
 Contents of {}:
 {}
@@ -40,10 +39,7 @@ It seems that Py-ART has not been built correctly.
 If you have installed Py-ART from source, please do not forget
 to build the package before using it: run `python setup.py install` in the
 source directory.
-{}""".format(
-            e, local_dir, "".join(dir_content).strip(), msg
-        )
-    )
+{}""".format(e, local_dir, "".join(dir_content).strip(), msg))
 
 
 try:

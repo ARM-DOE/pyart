@@ -1,4 +1,4 @@
-""" Unit tests for spectra_calculations.py """
+"""Unit tests for spectra_calculations.py"""
 
 import pytest
 from numpy.testing import assert_allclose

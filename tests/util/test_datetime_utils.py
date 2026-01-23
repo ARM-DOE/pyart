@@ -1,4 +1,4 @@
-""" Unit tests for Py-ART's util/datetime_utils.py module. """
+"""Unit tests for Py-ART's util/datetime_utils.py module."""
 
 import cftime
 import netCDF4

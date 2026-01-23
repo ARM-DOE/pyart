@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's correct/proc_phase.py module. """
+"""Unit Tests for Py-ART's correct/proc_phase.py module."""
 
 # Can also be run as a script to create a ray_plot.png file
 # python test_phase_proc.py
