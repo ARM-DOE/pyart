@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/chl.py module. """
+"""Unit Tests for Py-ART's io/chl.py module."""
 
 import numpy as np
 import pytest

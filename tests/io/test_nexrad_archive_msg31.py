@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/nexrad_archive.py module using a MSG31 file. """
+"""Unit Tests for Py-ART's io/nexrad_archive.py module using a MSG31 file."""
 
 import numpy as np
 import pytest

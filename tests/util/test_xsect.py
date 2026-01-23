@@ -1,4 +1,4 @@
-""" Unit tests for the xsect.py module. """
+"""Unit tests for the xsect.py module."""
 
 from numpy.testing import assert_almost_equal
 

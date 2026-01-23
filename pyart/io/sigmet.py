@@ -461,7 +461,7 @@ def read_sigmet(
         t = _sigmet_noaa_hh._decode_noaa_hh_hdr(
             sigmet_data["XHDR_FULL"], filemetadata, azimuth, elevation
         )
-        (latitude, longitude, altitude, extended_header_params) = t
+        latitude, longitude, altitude, extended_header_params = t
         metadata["platform_type"] = "aircraft"
         # scan_type determined from the antenna_scan_mode parameters
         noaa_hh_scan_modes = {4: "ppi", 7: "rhi"}

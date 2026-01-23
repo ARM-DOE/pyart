@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's testing/sample_objects.py module. """
+"""Unit Tests for Py-ART's testing/sample_objects.py module."""
 
 import numpy as np
 

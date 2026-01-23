@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's core/transforms.py module. """
+"""Unit Tests for Py-ART's core/transforms.py module."""
 
 import warnings
 

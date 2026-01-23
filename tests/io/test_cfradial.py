@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/cfradial.py module. """
+"""Unit Tests for Py-ART's io/cfradial.py module."""
 
 import warnings
 

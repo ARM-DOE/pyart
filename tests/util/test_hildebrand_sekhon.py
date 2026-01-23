@@ -1,4 +1,4 @@
-""" Unit tests for the hildebrand_sekhon module. """
+"""Unit tests for the hildebrand_sekhon module."""
 
 import numpy as np
 from numpy.testing import assert_almost_equal

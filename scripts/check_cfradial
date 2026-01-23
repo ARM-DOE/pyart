@@ -294,8 +294,8 @@ def check_chararr_variable(section, dataset, text, var_name, valid_options):
             if value not in valid_options:
                 tup = (text, var_name, i, value, " ".join(valid_options))
                 t = (
-                    "%s '%s' has an invalid value in position %i: "
-                    "%s must be one of %s" % tup
+                    "{} '{}' has an invalid value in position {:i}: "
+                    "{} must be one of {}".format(*tup)
                 )
                 log_error(section, t)
     return
@@ -929,7 +929,7 @@ def check_cfradial_compliance(dataset, verb=False):
                     tup = (i, s, "yyyy-mm-ddThh:mm:ssZ")
                     t = (
                         "radar_calibration r_calib_time has an invalid time "
-                        "format in position %i: %s must be %s" % (tup)
+                        "format in position {:d}: {} must be {}".format(*tup)
                     )
                     log_error("5.4.2", t)
 

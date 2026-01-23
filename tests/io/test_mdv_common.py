@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/mdv_common.py module. """
+"""Unit Tests for Py-ART's io/mdv_common.py module."""
 
 import warnings
 from datetime import datetime

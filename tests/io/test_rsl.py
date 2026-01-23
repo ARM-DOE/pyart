@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/rsl.py module. """
+"""Unit Tests for Py-ART's io/rsl.py module."""
 
 import numpy as np
 import pytest

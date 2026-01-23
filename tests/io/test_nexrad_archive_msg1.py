@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/nexrad_archive.py module using a MSG1 file. """
+"""Unit Tests for Py-ART's io/nexrad_archive.py module using a MSG1 file."""
 
 import warnings
 

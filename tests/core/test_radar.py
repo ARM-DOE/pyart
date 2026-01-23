@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's core/radar.py module. """
+"""Unit Tests for Py-ART's core/radar.py module."""
 
 import pickle
 import sys

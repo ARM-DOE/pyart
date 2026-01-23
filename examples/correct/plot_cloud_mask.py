@@ -7,6 +7,7 @@ This example shows how to correct and plot reflectivity from an ARM
 KAZR using a noise floor cloud mask.
 
 """
+
 print(__doc__)
 
 # Author: Adam Theisen and Zach Sherman

@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's retrieve/advection.py module. """
+"""Unit Tests for Py-ART's retrieve/advection.py module."""
 
 from numpy.testing import assert_almost_equal
 

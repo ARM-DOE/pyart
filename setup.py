@@ -38,9 +38,7 @@ python3 --version
 This may be due to an out-of-date pip. Make sure you have pip >= 9.0.1.
 Upgrade pip like so:
 pip install --upgrade pip
-""".format(
-        *sys.version_info[:2], *min_version
-    )
+""".format(*sys.version_info[:2], *min_version)
     sys.exit(error)
 
 extensions = []

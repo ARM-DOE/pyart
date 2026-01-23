@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's retrieve/comp_z.py module. """
+"""Unit Tests for Py-ART's retrieve/comp_z.py module."""
 
 import copy
 
