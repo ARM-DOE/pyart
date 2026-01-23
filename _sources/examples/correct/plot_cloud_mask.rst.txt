@@ -25,9 +25,10 @@ Calculating and Plotting a Cloud Mask
 This example shows how to correct and plot reflectivity from an ARM
 KAZR using a noise floor cloud mask.
 
-.. GENERATED FROM PYTHON SOURCE LINES 10-21
+.. GENERATED FROM PYTHON SOURCE LINES 10-22
 
 .. code-block:: Python
+
 
     print(__doc__)
 
@@ -47,13 +48,13 @@ KAZR using a noise floor cloud mask.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 22-25
+.. GENERATED FROM PYTHON SOURCE LINES 23-26
 
 **Read and plot raw data**
 
 First let's read and plot our dataset without any mask.
 
-.. GENERATED FROM PYTHON SOURCE LINES 25-36
+.. GENERATED FROM PYTHON SOURCE LINES 26-37
 
 .. code-block:: Python
 
@@ -80,7 +81,7 @@ First let's read and plot our dataset without any mask.
 
 
 
-.. GENERATED FROM PYTHON SOURCE LINES 37-42
+.. GENERATED FROM PYTHON SOURCE LINES 38-43
 
 **Calculate cloud mask and plot corrected data**
 
@@ -88,7 +89,7 @@ Now lets apply a mask by using the calc_cloud_mask function
 that will use a noise floor calculation from range and more
 to calculate the mask.
 
-.. GENERATED FROM PYTHON SOURCE LINES 42-67
+.. GENERATED FROM PYTHON SOURCE LINES 43-68
 
 .. code-block:: Python
 
@@ -154,7 +155,7 @@ to calculate the mask.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 0.702 seconds)
+   **Total running time of the script:** (0 minutes 0.689 seconds)
 
 
 .. _sphx_glr_download_examples_correct_plot_cloud_mask.py:
