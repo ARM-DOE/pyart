@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" data-theme="light">
+<html lang="en" data-content_root="../../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
@@ -46,9 +46,9 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=90673249"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/documentation_options.js?v=b21de401"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -467,7 +467,9 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">MutableMapping</span>
 
 
-<div class="viewcode-block" id="LazyLoadDict"><a class="viewcode-back" href="../../API/generated/pyart.lazydict.LazyLoadDict.html#pyart.lazydict.LazyLoadDict">[docs]</a><span class="k">class</span><span class="w"> </span><span class="nc">LazyLoadDict</span><span class="p">(</span><span class="n">MutableMapping</span><span class="p">):</span>
+<div class="viewcode-block" id="LazyLoadDict">
+<a class="viewcode-back" href="../../API/generated/pyart.lazydict.LazyLoadDict.html#pyart.lazydict.LazyLoadDict">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">LazyLoadDict</span><span class="p">(</span><span class="n">MutableMapping</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    A dictionary-like class supporting lazy loading of specified keys.</span>
 
@@ -556,11 +558,16 @@
         <span class="n">lazy_str</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lazy_strs</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">seperator</span> <span class="o">+</span> <span class="n">lazy_str</span>
 
-<div class="viewcode-block" id="LazyLoadDict.has_key"><a class="viewcode-back" href="../../API/generated/pyart.lazydict.LazyLoadDict.has_key.html#pyart.lazydict.LazyLoadDict.has_key">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">has_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+<div class="viewcode-block" id="LazyLoadDict.has_key">
+<a class="viewcode-back" href="../../API/generated/pyart.lazydict.LazyLoadDict.has_key.html#pyart.lazydict.LazyLoadDict.has_key">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">has_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;True if dictionary has key, else False.&quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span></div>
 
-<div class="viewcode-block" id="LazyLoadDict.copy"><a class="viewcode-back" href="../../API/generated/pyart.lazydict.LazyLoadDict.copy.html#pyart.lazydict.LazyLoadDict.copy">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+
+<div class="viewcode-block" id="LazyLoadDict.copy">
+<a class="viewcode-back" href="../../API/generated/pyart.lazydict.LazyLoadDict.copy.html#pyart.lazydict.LazyLoadDict.copy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Return a copy of the dictionary.</span>
 
@@ -572,12 +579,17 @@
             <span class="n">dic</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">value_callable</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">dic</span></div>
 
+
     <span class="c1"># lazy dictionary specific methods</span>
-<div class="viewcode-block" id="LazyLoadDict.set_lazy"><a class="viewcode-back" href="../../API/generated/pyart.lazydict.LazyLoadDict.set_lazy.html#pyart.lazydict.LazyLoadDict.set_lazy">[docs]</a>    <span class="k">def</span><span class="w"> </span><span class="nf">set_lazy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_callable</span><span class="p">):</span>
+<div class="viewcode-block" id="LazyLoadDict.set_lazy">
+<a class="viewcode-back" href="../../API/generated/pyart.lazydict.LazyLoadDict.set_lazy.html#pyart.lazydict.LazyLoadDict.set_lazy">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_lazy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_callable</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Set a lazy key to load from a callable object.&quot;&quot;&quot;</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">:</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">_lazyload</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_callable</span></div></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_lazyload</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_callable</span></div>
+</div>
+
 </pre></div>
 <div class="section ablog__blog_comments">
    
@@ -631,7 +643,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>

@@ -2,10 +2,10 @@
 <feed xmlns="http://www.w3.org/2005/Atom" xml:lang="en">
   <id>arm-doe.github.io/pyart/</id>
   <title>PyART Blog</title>
-  <updated>2026-01-23T21:23:32.859527+00:00</updated>
+  <updated>2026-02-13T21:58:07.687468+00:00</updated>
   <link href="arm-doe.github.io/pyart/"/>
   <link href="arm-doe.github.io/pyart/blog/atom.xml" rel="self"/>
-  <generator uri="https://ablog.readthedocs.io/" version="0.11.12">ABlog</generator>
+  <generator uri="https://ablog.readthedocs.io/" version="0.11.13">ABlog</generator>
   <entry>
     <id>arm-doe.github.io/pyart/blog_posts/2024/animated-gifs-with-pyart.html</id>
     <title>Creating animated gifs with NEXRAD Level 2 radar data using Py-ART</title>
@@ -111,7 +111,7 @@
     </author>
     <content type="html">&lt;p class="ablog-post-excerpt"&gt;&lt;p&gt;The motivation for this blog comes from wanting to change the colorscheme within the default Py-ART documentation images to a more (&lt;a class="reference external" href="https://ntrs.nasa.gov/api/citations/20180004634/downloads/20180004634.pdf"&gt;color vision deficiency friendly color scheme&lt;/a&gt;).&lt;/p&gt;
 &lt;p&gt;Here are the images we are working with:&lt;/p&gt;
-&lt;img alt="drawing" src="arm-doe.github.io/pyart/_images/PyART_Docs_Original_PPI_image.png" style="width: 400px;" /&gt;&lt;/p&gt;
+&lt;img alt="drawing" src="arm-doe.github.io/pyart/_images/PyART_Docs_Original_PPI_image.png" width="400" /&gt;&lt;/p&gt;
 </content>
     <link href="arm-doe.github.io/pyart/blog_posts/2022/first_pullrequest.html"/>
     <summary>The motivation for this blog comes from wanting to change the colorscheme within the default Py-ART documentation images to a more (color vision deficiency friendly color scheme).Here are the images we are working with:drawing</summary>
@@ -126,7 +126,7 @@
     </author>
     <content type="html">&lt;p class="ablog-post-excerpt"&gt;&lt;p&gt;The motivation here comes from a thread on Twitter, indicating an issue when plotting NEXRAD Level 3 radial velocity (&lt;code class="docutils literal notranslate"&gt;&lt;span class="pre"&gt;NOU&lt;/span&gt;&lt;/code&gt;).&lt;/p&gt;
 &lt;p&gt;Here is the radar image, plotted by David (&lt;a class="reference external" href="https://twitter.com/dryglick"&gt;&amp;#64;dryglick&lt;/a&gt;):&lt;/p&gt;
-&lt;img alt="drawing" src="arm-doe.github.io/pyart/_images/nexrad-plotting-issue.jpeg" style="width: 400px;" /&gt;&lt;/p&gt;
+&lt;img alt="drawing" src="arm-doe.github.io/pyart/_images/nexrad-plotting-issue.jpeg" width="400" /&gt;&lt;/p&gt;
 </content>
     <link href="arm-doe.github.io/pyart/blog_posts/2022/plot-nexrad-level3.html"/>
     <summary>The motivation here comes from a thread on Twitter, indicating an issue when plotting NEXRAD Level 3 radial velocity (NOU).Here is the radar image, plotted by David (@dryglick):drawing</summary>

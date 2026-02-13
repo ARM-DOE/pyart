@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" data-theme="light">
+<html lang="en" data-content_root="../../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Active Py-ART Development - Submitting a Pull Request (PR) &#8212; Py-ART 2.2.0 documentation</title>
   
@@ -47,9 +47,9 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=90673249"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/documentation_options.js?v=b21de401"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -555,23 +555,26 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <section class="tex2jax_ignore mathjax_ignore" id="active-py-art-development-submitting-a-pull-request-pr">
-<h1>Active Py-ART Development - Submitting a Pull Request (PR)<a class="headerlink" href="#active-py-art-development-submitting-a-pull-request-pr" title="Permalink to this heading">#</a></h1>
+<h1>Active Py-ART Development - Submitting a Pull Request (PR)<a class="headerlink" href="#active-py-art-development-submitting-a-pull-request-pr" title="Link to this heading">#</a></h1>
 <p>The motivation for this blog comes from wanting to change the colorscheme within the default Py-ART documentation images to a more (<a class="reference external" href="https://ntrs.nasa.gov/api/citations/20180004634/downloads/20180004634.pdf">color vision deficiency friendly color scheme</a>).</p>
 <p>Here are the images we are working with:</p>
-<a class="reference internal image-reference" href="../../_images/PyART_Docs_Original_PPI_image.png"><img alt="drawing" src="../../_images/PyART_Docs_Original_PPI_image.png" style="width: 400px;" /></a>
-<a class="reference internal image-reference" href="../../_images/PyART_Docs_OriginalRHI_withJetColorscheme.png"><img alt="drawing" src="../../_images/PyART_Docs_OriginalRHI_withJetColorscheme.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="../../_images/PyART_Docs_Original_PPI_image.png"><img alt="drawing" src="../../_images/PyART_Docs_Original_PPI_image.png" width="400" />
+</a>
+<a class="reference internal image-reference" href="../../_images/PyART_Docs_OriginalRHI_withJetColorscheme.png"><img alt="drawing" src="../../_images/PyART_Docs_OriginalRHI_withJetColorscheme.png" width="400" />
+</a>
 <p>This is also a good time to illustrate how to get started with
 active development in Py-ART and submitting changes
 to the source code for further collaboration.</p>
 <p>Please refer to the (<a class="reference external" href="https://arm-doe.github.io/pyart/userguide/INSTALL.html">Py-ART Contributor’s Guide</a>) for installation guidence.</p>
 <p>I’ve highlighted some steps of the installation below that tripped me up and might offer some assistance.</p>
 <section id="first-if-you-have-not-done-so-already-you-will-need-to-fork-the-py-art-github-repository">
-<h2>First, if you have not done so already, you will need to fork the Py-ART github repository<a class="headerlink" href="#first-if-you-have-not-done-so-already-you-will-need-to-fork-the-py-art-github-repository" title="Permalink to this heading">#</a></h2>
+<h2>First, if you have not done so already, you will need to fork the Py-ART github repository<a class="headerlink" href="#first-if-you-have-not-done-so-already-you-will-need-to-fork-the-py-art-github-repository" title="Link to this heading">#</a></h2>
 <p>by clicking here:</p>
-<a class="reference internal image-reference" href="../../_images/pyart_github_clone.png"><img alt="drawing" src="../../_images/pyart_github_clone.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="../../_images/pyart_github_clone.png"><img alt="drawing" src="../../_images/pyart_github_clone.png" width="400" />
+</a>
 </section>
 <section id="second-in-a-terminal-you-will-need-to-clone-your-remote-fork-with-the-git-clone-command">
-<h2>Second, in a terminal, you will need to clone your remote fork with the “git clone” command<a class="headerlink" href="#second-in-a-terminal-you-will-need-to-clone-your-remote-fork-with-the-git-clone-command" title="Permalink to this heading">#</a></h2>
+<h2>Second, in a terminal, you will need to clone your remote fork with the “git clone” command<a class="headerlink" href="#second-in-a-terminal-you-will-need-to-clone-your-remote-fork-with-the-git-clone-command" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">clone</span> <span class="n">https_link_to_your_fork</span>
@@ -582,7 +585,7 @@ to the source code for further collaboration.</p>
 <p>If you are unfamiliar with git command line commands, please review this (<a class="reference external" href="https://foundations.projectpythia.org/foundations/getting-started-github.html">getting started documentation</a>)</p>
 </section>
 <section id="third-create-the-pyart-docs-conda-environment">
-<h2>Third, create the “pyart-docs” conda environment<a class="headerlink" href="#third-create-the-pyart-docs-conda-environment" title="Permalink to this heading">#</a></h2>
+<h2>Third, create the “pyart-docs” conda environment<a class="headerlink" href="#third-create-the-pyart-docs-conda-environment" title="Link to this heading">#</a></h2>
 <p>We will use the documentation YML file (located at the /pyart/doc/environmental.yml) to create the “pyart-docs” conda environment.</p>
 <p>NOTE: The documentation YML file is slightly different from the /pyart/environmental.yml file and contains the packages needed for active development</p>
 <p>To create a new environment from this YML file, type:</p>
@@ -595,8 +598,9 @@ to the source code for further collaboration.</p>
 </div>
 </section>
 <section id="fourth-we-will-need-to-install-the-trmm-rsl-library">
-<h2>Fourth, we will need to install the (<a class="reference external" href="https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/">TRMM RSL Library</a>)<a class="headerlink" href="#fourth-we-will-need-to-install-the-trmm-rsl-library" title="Permalink to this heading">#</a></h2>
-<a class="reference internal image-reference" href="../../_images/TRMM_RSL_webpage.png"><img alt="drawing" src="../../_images/TRMM_RSL_webpage.png" style="width: 400px;" /></a>
+<h2>Fourth, we will need to install the (<a class="reference external" href="https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/">TRMM RSL Library</a>)<a class="headerlink" href="#fourth-we-will-need-to-install-the-trmm-rsl-library" title="Link to this heading">#</a></h2>
+<a class="reference internal image-reference" href="../../_images/TRMM_RSL_webpage.png"><img alt="drawing" src="../../_images/TRMM_RSL_webpage.png" width="400" />
+</a>
 <p>Click on the “Download latest version” button and download the package to a local location (~/opt - for me)</p>
 <p>You will then need to run the installation commands from the RSL library:</p>
 <div class="cell docutils container">
@@ -623,7 +627,7 @@ to the source code for further collaboration.</p>
 </div>
 </section>
 <section id="lastly-activate-the-pyart-docs-environment-and-install-the-python-script-within-your-forked-repository">
-<h2>Lastly, activate the ‘pyart-docs’ environment and install the python script within your forked repository<a class="headerlink" href="#lastly-activate-the-pyart-docs-environment-and-install-the-python-script-within-your-forked-repository" title="Permalink to this heading">#</a></h2>
+<h2>Lastly, activate the ‘pyart-docs’ environment and install the python script within your forked repository<a class="headerlink" href="#lastly-activate-the-pyart-docs-environment-and-install-the-python-script-within-your-forked-repository" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
@@ -633,9 +637,9 @@ to the source code for further collaboration.</p>
 </div>
 </section>
 <section id="okay-you-should-be-installed-now-and-ready-to-make-changes-to-the-source-code">
-<h2>OKAY! You should be installed now, and ready to make changes to the source code!<a class="headerlink" href="#okay-you-should-be-installed-now-and-ready-to-make-changes-to-the-source-code" title="Permalink to this heading">#</a></h2>
+<h2>OKAY! You should be installed now, and ready to make changes to the source code!<a class="headerlink" href="#okay-you-should-be-installed-now-and-ready-to-make-changes-to-the-source-code" title="Link to this heading">#</a></h2>
 <section id="first-create-a-new-branch-for-our-changes">
-<h3>1. First, create a New Branch for our Changes<a class="headerlink" href="#first-create-a-new-branch-for-our-changes" title="Permalink to this heading">#</a></h3>
+<h3>1. First, create a New Branch for our Changes<a class="headerlink" href="#first-create-a-new-branch-for-our-changes" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">newblog_post</span>
@@ -645,7 +649,7 @@ to the source code for further collaboration.</p>
 </div>
 </section>
 <section id="push-new-branch-to-remote">
-<h3>2. Push New Branch To Remote<a class="headerlink" href="#push-new-branch-to-remote" title="Permalink to this heading">#</a></h3>
+<h3>2. Push New Branch To Remote<a class="headerlink" href="#push-new-branch-to-remote" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="o">--</span><span class="nb">set</span><span class="o">-</span><span class="n">upstream</span> <span class="n">origin</span> <span class="n">newblog_post</span>
@@ -836,7 +840,7 @@ to the source code for further collaboration.</p>
 </section>
 </section>
 <section id="now-lets-commit-these-changes-to-github">
-<h2>Now lets commit these changes to github!<a class="headerlink" href="#now-lets-commit-these-changes-to-github" title="Permalink to this heading">#</a></h2>
+<h2>Now lets commit these changes to github!<a class="headerlink" href="#now-lets-commit-these-changes-to-github" title="Link to this heading">#</a></h2>
 <p>The git ‘status’ command will show which branch we are working on and all changes made</p>
 <p>‘Changes not staged for commit” are all changes I have made to files within my local Py-ART repository.</p>
 <p>‘Untracked files’ are any file that is new to Py-ART, and is currently not submitted to the repository.</p>
@@ -887,14 +891,16 @@ After adding the new images for the docs and updated (and new) code, we need to 
 <p>Finally, ‘git push’ will push all these changes to the remote repository (my personal fork of Py-ART), where I can then request a pull-request by going to my ‘branches’</p>
 </section>
 <section id="after-creating-a-pull-request-this-is-what-it-looks-like-on-github">
-<h2>After Creating a Pull Request, this is what it looks like on GitHub<a class="headerlink" href="#after-creating-a-pull-request-this-is-what-it-looks-like-on-github" title="Permalink to this heading">#</a></h2>
-<a class="reference internal image-reference" href="../../_images/pull_request_commitmessage.png"><img alt="drawing" src="../../_images/pull_request_commitmessage.png" style="width: 400px;" /></a>
+<h2>After Creating a Pull Request, this is what it looks like on GitHub<a class="headerlink" href="#after-creating-a-pull-request-this-is-what-it-looks-like-on-github" title="Link to this heading">#</a></h2>
+<a class="reference internal image-reference" href="../../_images/pull_request_commitmessage.png"><img alt="drawing" src="../../_images/pull_request_commitmessage.png" width="400" />
+</a>
 <p>Additionally, the Pull Request will show what code has been changed and allows anyone to respond with comments/suggestions</p>
-<a class="reference internal image-reference" href="../../_images/pull_request_changes.png"><img alt="drawing" src="../../_images/pull_request_changes.png" style="width: 400px;" /></a>
+<a class="reference internal image-reference" href="../../_images/pull_request_changes.png"><img alt="drawing" src="../../_images/pull_request_changes.png" width="400" />
+</a>
 </section>
 </section>
 <section class="tex2jax_ignore mathjax_ignore" id="hope-this-helped">
-<h1>Hope this helped!<a class="headerlink" href="#hope-this-helped" title="Permalink to this heading">#</a></h1>
+<h1>Hope this helped!<a class="headerlink" href="#hope-this-helped" title="Link to this heading">#</a></h1>
 </section>
 
 <div class="section ablog__blog_comments">
@@ -1016,7 +1022,7 @@ After adding the new images for the docs and updated (and new) code, we need to 
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>

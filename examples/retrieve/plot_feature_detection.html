@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" data-theme="light">
+<html lang="en" data-content_root="../../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Feature Detection classification &#8212; Py-ART 2.2.0 documentation</title>
   
@@ -47,9 +47,9 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=90673249"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/documentation_options.js?v=b21de401"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -539,17 +539,14 @@
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                   <div class="sphx-glr-download-link-note admonition note">
-<p class="admonition-title">Note</p>
-<p><a class="reference internal" href="#sphx-glr-download-examples-retrieve-plot-feature-detection-py"><span class="std std-ref">Go to the end</span></a>
-to download the full example code.</p>
-</div>
-<section class="sphx-glr-example-title" id="feature-detection-classification">
-<span id="sphx-glr-examples-retrieve-plot-feature-detection-py"></span><h1>Feature Detection classification<a class="headerlink" href="#feature-detection-classification" title="Permalink to this heading">#</a></h1>
+                   <section class="tex2jax_ignore mathjax_ignore" id="feature-detection-classification">
+<h1>Feature Detection classification<a class="headerlink" href="#feature-detection-classification" title="Link to this heading">#</a></h1>
 <p>This example shows how to use the feature detection algorithm. We show how to use the algorithm to detect convective
 and stratiform regions in warm season events and how the algorithm can be used to detect both weak and strong
 features in cool-season events.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Laura Tomkins (lauramtomkins@gmail.com)</span>
 <span class="c1"># License: BSD 3 clause</span>
@@ -564,8 +561,10 @@ features in cool-season events.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 </pre></div>
 </div>
+</div>
+</div>
 <section id="how-the-algorithm-works">
-<h2>How the algorithm works<a class="headerlink" href="#how-the-algorithm-works" title="Permalink to this heading">#</a></h2>
+<h2>How the algorithm works<a class="headerlink" href="#how-the-algorithm-works" title="Link to this heading">#</a></h2>
 <p>The feature detection algorithm works by identifying features that exceed the background value by an amount that
 varies with the background value. The algorithm is heavily customizable and is designed to work with a variety of
 datasets. Here, we show several examples of how to use the algorithm with different types of radar data.</p>
@@ -573,10 +572,12 @@ datasets. Here, we show several examples of how to use the algorithm with differ
 et al. 2024 builds on this work to describe feature detection in cool-season events (part 2).</p>
 </section>
 <section id="part-1-warm-season-convective-stratiform-classification">
-<h2>Part 1: Warm-season convective-stratiform classification<a class="headerlink" href="#part-1-warm-season-convective-stratiform-classification" title="Permalink to this heading">#</a></h2>
+<h2>Part 1: Warm-season convective-stratiform classification<a class="headerlink" href="#part-1-warm-season-convective-stratiform-classification" title="Link to this heading">#</a></h2>
 <p><strong>Classification of summer convective example</strong></p>
 <p>Our first example classifies echo from a summer convective event.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># read in file</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># read in file</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">get_test_data</span><span class="p">(</span><span class="s2">&quot;swx_20120520_0641.nc&quot;</span><span class="p">)</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
 
@@ -660,12 +661,16 @@ et al. 2024 builds on this work to describe feature detection in cool-season eve
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_feature_detection_001.png" srcset="../../_images/sphx_glr_plot_feature_detection_001.png" alt="xsapr-sg 0.0 km 2011-05-20T06:42:11Z  Equivalent reflectivity factor, xsapr-sg 0.0 km 2011-05-20T06:42:11Z  Feature detection" class = "sphx-glr-single-img"/><p>In addition to the default feature detection classification, the function also returns an underestimate
+</div>
+</div>
+<p>In addition to the default feature detection classification, the function also returns an underestimate
 (<code class="docutils literal notranslate"><span class="pre">feature_under</span></code>) and an overestimate (<code class="docutils literal notranslate"><span class="pre">feature_over</span></code>) to take into consideration the uncertainty when choosing
 classification parameters. The under and overestimate use the same parameters, but vary the input field by a
 certain value (default is 5 dBZ, can be changed with <code class="docutils literal notranslate"><span class="pre">estimate_offset</span></code>). The estimation can be turned off (
 <code class="docutils literal notranslate"><span class="pre">estimate_flag=False</span></code>), but we recommend keeping it turned on.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># mask weak echo and no surface echo</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># mask weak echo and no surface echo</span>
 <a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="numpy.ma.MaskedArray" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">feature_masked</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ma.masked_equal.html#numpy.ma.masked_equal" title="numpy.ma.masked_equal" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_equal</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">feature_dict</span></a><span class="p">[</span><span class="s2">&quot;feature_detection&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
 <a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="numpy.ma.MaskedArray" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">feature_masked</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ma.masked_equal.html#numpy.ma.masked_equal" title="numpy.ma.masked_equal" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_equal</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="numpy.ma.MaskedArray" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">feature_masked</span></a><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">feature_dict</span></a><span class="p">[</span><span class="s2">&quot;feature_detection&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="numpy.ma.MaskedArray" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">feature_masked</span></a>
@@ -710,9 +715,13 @@ certain value (default is 5 dBZ, can be changed with <code class="docutils liter
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_feature_detection_002.png" srcset="../../_images/sphx_glr_plot_feature_detection_002.png" alt="Best estimate, Underestimate, Overestimate" class = "sphx-glr-single-img"/><p><strong>Tropical example</strong></p>
+</div>
+</div>
+<p><strong>Tropical example</strong></p>
 <p>Let’s get a NEXRAD file from Hurricane Ian</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read in file</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read in file</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nexrad_file</span></a> <span class="o">=</span> <span class="s2">&quot;s3://unidata-nexrad-level2/2022/09/28/KTBW/KTBW20220928_190142_V06&quot;</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nexrad_file</span></a><span class="p">)</span>
 
@@ -798,11 +807,15 @@ certain value (default is 5 dBZ, can be changed with <code class="docutils liter
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_feature_detection_003.png" srcset="../../_images/sphx_glr_plot_feature_detection_003.png" alt="KTBW 0.0 km 2022-09-28T19:01:42Z  Equivalent reflectivity factor, KTBW 0.0 km 2022-09-28T19:01:42Z  Feature detection" class = "sphx-glr-single-img"/><p><strong>Comparison with original C++ algorithm</strong></p>
+</div>
+</div>
+<p><strong>Comparison with original C++ algorithm</strong></p>
 <p>To ensure that our algorithm here matches the original algorithm developed in C++, we compare the results from an
 example during the KWAJEX field campaign. The file contains the original convective-stratiform classification from
 the C++ algorithm. We use the algorithm implemented in Py-ART with the same settings to produce identical results.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># read in file</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># read in file</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">DATASETS</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;convsf.19990811.221202.cdf&quot;</span><span class="p">)</span>
 <span class="n">grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
 
@@ -931,13 +944,11 @@ the C++ algorithm. We use the algorithm implemented in Py-ART with the same sett
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<ul class="sphx-glr-horizontal">
-<li><img src="../../_images/sphx_glr_plot_feature_detection_004.png" srcset="../../_images/sphx_glr_plot_feature_detection_004.png" alt="Reflectivity [dBZ], convsf, convsf lo, convsf hi" class = "sphx-glr-multi-img"/></li>
-<li><img src="../../_images/sphx_glr_plot_feature_detection_005.png" srcset="../../_images/sphx_glr_plot_feature_detection_005.png" alt="Reflectivity [dBZ], convsf, convsf under, convsf over" class = "sphx-glr-multi-img"/></li>
-</ul>
+</div>
+</div>
 </section>
 <section id="part-2-cool-season-feature-detection">
-<h2>Part 2: Cool-season feature detection<a class="headerlink" href="#part-2-cool-season-feature-detection" title="Permalink to this heading">#</a></h2>
+<h2>Part 2: Cool-season feature detection<a class="headerlink" href="#part-2-cool-season-feature-detection" title="Link to this heading">#</a></h2>
 <p><strong>Winter storm example</strong></p>
 <p>In this example, we will show how to algorithm can be used to detect features (snow bands) in winter storms. Here, we
 rescale the reflectivity to snow rate (Rasumussen et al. 2003) in order to better represent the snow field. Note
@@ -946,7 +957,9 @@ the background average. We recommend using a rescaled reflectivity for this algo
 change <code class="docutils literal notranslate"><span class="pre">dB_averaging</span> <span class="pre">=</span> <span class="pre">False</span></code> when using a rescaled field (set <code class="docutils literal notranslate"><span class="pre">dB_averaging</span></code> to True for reflectivity fields in
 dBZ units). Also note that since we are now using a snow rate field with different values, most of our parameters
 have changed as well.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read in file</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read in file</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nexrad_file</span></a> <span class="o">=</span> <span class="s2">&quot;s3://unidata-nexrad-level2/2021/02/07/KOKX/KOKX20210207_161413_V06&quot;</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">nexrad_file</span></a><span class="p">)</span>
 
@@ -1041,9 +1054,13 @@ have changed as well.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_feature_detection_006.png" srcset="../../_images/sphx_glr_plot_feature_detection_006.png" alt="KOKX 0.0 km 2021-02-07T16:14:13Z  Snow rate, KOKX 0.0 km 2021-02-07T16:14:13Z  Feature detection" class = "sphx-glr-single-img"/><p><strong>Under and over estimate in snow</strong></p>
+</div>
+</div>
+<p><strong>Under and over estimate in snow</strong></p>
 <p>Here we show how to bound the snow rate with an under and over estimate</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># get reflectivity field and copy</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get reflectivity field and copy</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ref_field</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">grid</span><span class="o">.</span><span class="n">fields</span></a><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">]</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ref_field_over</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ref_field</span></a><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ref_field_under</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ref_field</span></a><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -1149,10 +1166,14 @@ have changed as well.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_feature_detection_007.png" srcset="../../_images/sphx_glr_plot_feature_detection_007.png" alt="Reflectivity [dBZ], Feature detection (best), Feature detection (underestimate), Feature detection (overestimate)" class = "sphx-glr-single-img"/><p><strong>Strong and Faint features</strong></p>
+</div>
+</div>
+<p><strong>Strong and Faint features</strong></p>
 <p>We have developed a new technique which runs the algorithm twice to find features that are very distinct from the
 background (strong features) and features that are not very distinct from the background (faint features).</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># run the algorithm again, but to find objects that are also faint</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># run the algorithm again, but to find objects that are also faint</span>
 <span class="c1"># feature detection</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">feature_dict</span></a> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">feature_detection</span><span class="p">(</span>
     <span class="n">grid</span><span class="p">,</span>
@@ -1253,10 +1274,14 @@ background (strong features) and features that are not very distinct from the ba
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_feature_detection_008.png" srcset="../../_images/sphx_glr_plot_feature_detection_008.png" alt="KOKX 0.0 km 2021-02-07T16:14:13Z  Snow rate, KOKX 0.0 km 2021-02-07T16:14:13Z  Features faint strong" class = "sphx-glr-single-img"/><p><strong>Image muted Strong and Faint features</strong></p>
+</div>
+</div>
+<p><strong>Image muted Strong and Faint features</strong></p>
 <p>This last section shows how we can image mute the fields (Tomkins et al. 2022) and reduce the visual prominence of
 melting and mixed precipitation.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a function to quickly apply image muting to other fields</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a function to quickly apply image muting to other fields</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">quick_image_mute</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="numpy.ma.MaskedArray" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">muted_ref</span></a><span class="p">):</span>
     <span class="n">nonmuted_field</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ma.masked_where.html#numpy.ma.masked_where" title="numpy.ma.masked_where" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span></a><span class="p">(</span><span class="o">~</span><a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray.mask" title="numpy.ma.MaskedArray.mask" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-attribute"><span class="n">muted_ref</span><span class="o">.</span><span class="n">mask</span></a><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
     <span class="n">muted_field</span> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ma.masked_where.html#numpy.ma.masked_where" title="numpy.ma.masked_where" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray.mask" title="numpy.ma.MaskedArray.mask" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-attribute"><span class="n">muted_ref</span><span class="o">.</span><span class="n">mask</span></a><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
@@ -1309,9 +1334,11 @@ melting and mixed precipitation.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_feature_detection_009.png" srcset="../../_images/sphx_glr_plot_feature_detection_009.png" alt="Snow rate [mm hr$^{-1}$], Feature detection" class = "sphx-glr-single-img"/></section>
+</div>
+</div>
+</section>
 <section id="summary-of-recommendations-and-best-practices">
-<h2>Summary of recommendations and best practices<a class="headerlink" href="#summary-of-recommendations-and-best-practices" title="Permalink to this heading">#</a></h2>
+<h2>Summary of recommendations and best practices<a class="headerlink" href="#summary-of-recommendations-and-best-practices" title="Link to this heading">#</a></h2>
 <ul class="simple">
 <li><p>Tune your parameters to your specific purpose</p></li>
 <li><p>Use a rescaled field if possible (i.e. linear reflectivity, rain or snow rate)</p></li>
@@ -1319,43 +1346,30 @@ melting and mixed precipitation.</p>
 </ul>
 </section>
 <section id="references">
-<h2>References<a class="headerlink" href="#references" title="Permalink to this heading">#</a></h2>
+<h2>References<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
 <p>Steiner, M. R., R. A. Houze Jr., and S. E. Yuter, 1995: Climatological
 Characterization of Three-Dimensional Storm Structure from Operational
 Radar and Rain Gauge Data. J. Appl. Meteor., 34, 1978-2007.
-<a class="reference external" href="https://doi.org/10.1175/1520-0450(1995">https://doi.org/10.1175/1520-0450(1995</a>)034&lt;1978:CCOTDS&gt;2.0.CO;2.</p>
+https://doi.org/10.1175/1520-0450(1995)034&lt;1978:CCOTDS&gt;2.0.CO;2.</p>
 <p>Yuter, S. E., and R. A. Houze, Jr., 1997: Measurements of raindrop size
 distributions over the Pacific warm pool and implications for Z-R relations.
 J. Appl. Meteor., 36, 847-867.
-<a class="reference external" href="https://doi.org/10.1175/1520-0450(1997)036%3C0847:MORSDO%3E2.0.CO;2">https://doi.org/10.1175/1520-0450(1997)036%3C0847:MORSDO%3E2.0.CO;2</a></p>
+https://doi.org/10.1175/1520-0450(1997)036%3C0847:MORSDO%3E2.0.CO;2</p>
 <p>Yuter, S. E., R. A. Houze, Jr., E. A. Smith, T. T. Wilheit, and E. Zipser,
 2005: Physical characterization of tropical oceanic convection observed in
-KWAJEX. J. Appl. Meteor., 44, 385-415. <a class="reference external" href="https://doi.org/10.1175/JAM2206.1">https://doi.org/10.1175/JAM2206.1</a></p>
+KWAJEX. J. Appl. Meteor., 44, 385-415. https://doi.org/10.1175/JAM2206.1</p>
 <p>Rasmussen, R., M. Dixon, S. Vasiloff, F. Hage, S. Knight, J. Vivekanandan,
 and M. Xu, 2003: Snow Nowcasting Using a Real-Time Correlation of Radar
 Reflectivity with Snow Gauge Accumulation. J. Appl. Meteorol. Climatol., 42, 20–36.
-<a class="reference external" href="https://doi.org/10.1175/1520-0450(2003)042%3C0020:SNUART%3E2.0.CO;2">https://doi.org/10.1175/1520-0450(2003)042%3C0020:SNUART%3E2.0.CO;2</a></p>
+https://doi.org/10.1175/1520-0450(2003)042%3C0020:SNUART%3E2.0.CO;2</p>
 <p>Tomkins, L. M., Yuter, S. E., Miller, M. A., and Allen, L. R., 2022:
 Image muting of mixed precipitation to improve identification of regions
 of heavy snow in radar data. Atmos. Meas. Tech., 15, 5515–5525,
-<a class="reference external" href="https://doi.org/10.5194/amt-15-5515-2022">https://doi.org/10.5194/amt-15-5515-2022</a></p>
+https://doi.org/10.5194/amt-15-5515-2022</p>
 <p>Tomkins, L. M., Yuter, S. E., and Miller, M. A., 2024: Dual adaptive differential
 threshold method for automated detection of faint and strong echo features
 in radar observations of winter storms. Atmos. Meas. Tech., 17, 3377–3399,
-<a class="reference external" href="https://doi.org/10.5194/amt-17-3377-2024">https://doi.org/10.5194/amt-17-3377-2024</a></p>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 23.521 seconds)</p>
-<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-retrieve-plot-feature-detection-py">
-<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/5930845ba241266919440c1a8dad75dd/plot_feature_detection.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_feature_detection.ipynb</span></code></a></p>
-</div>
-<div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/6489fb16049cabe05408fd5eb57cf251/plot_feature_detection.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_feature_detection.py</span></code></a></p>
-</div>
-<div class="sphx-glr-download sphx-glr-download-zip docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/1c09047e492c2d0e92111f0865c74e47/plot_feature_detection.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_feature_detection.zip</span></code></a></p>
-</div>
-</div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+https://doi.org/10.5194/amt-17-3377-2024</p>
 </section>
 </section>
 
@@ -1421,7 +1435,7 @@ in radar observations of winter storms. Atmos. Meas. Tech., 17, 3377–3399,
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/examples/retrieve/plot_feature_detection.rst.txt"
+      <li><a href="../../_sources/examples/retrieve/plot_feature_detection.ipynb.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
@@ -1460,7 +1474,7 @@ in radar observations of winter storms. Atmos. Meas. Tech., 17, 3377–3399,
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>

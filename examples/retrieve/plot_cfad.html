@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" data-theme="light">
+<html lang="en" data-content_root="../../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Creating a CFAD diagram &#8212; Py-ART 2.2.0 documentation</title>
   
@@ -47,9 +47,9 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=90673249"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/documentation_options.js?v=b21de401"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -539,15 +539,12 @@
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                   <div class="sphx-glr-download-link-note admonition note">
-<p class="admonition-title">Note</p>
-<p><a class="reference internal" href="#sphx-glr-download-examples-retrieve-plot-cfad-py"><span class="std std-ref">Go to the end</span></a>
-to download the full example code.</p>
-</div>
-<section class="sphx-glr-example-title" id="creating-a-cfad-diagram">
-<span id="sphx-glr-examples-retrieve-plot-cfad-py"></span><h1>Creating a CFAD diagram<a class="headerlink" href="#creating-a-cfad-diagram" title="Permalink to this heading">#</a></h1>
+                   <section class="tex2jax_ignore mathjax_ignore" id="creating-a-cfad-diagram">
+<h1>Creating a CFAD diagram<a class="headerlink" href="#creating-a-cfad-diagram" title="Link to this heading">#</a></h1>
 <p>This example shows how to create a contoured frequency by altitude (CFAD) diagram</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Laura Tomkins (lauramtomkins@gmail.com)</span>
 <span class="c1"># License: BSD 3 clause</span>
@@ -560,8 +557,10 @@ to download the full example code.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 </pre></div>
 </div>
+</div>
+</div>
 <section id="description-of-a-cfad">
-<h2>Description of a CFAD<a class="headerlink" href="#description-of-a-cfad" title="Permalink to this heading">#</a></h2>
+<h2>Description of a CFAD<a class="headerlink" href="#description-of-a-cfad" title="Link to this heading">#</a></h2>
 <p>A contoured frequency by altitude diagram (CFAD) is essentially a 2D histogram used to depict the vertical
 distribution of a particular variable, such as radar reflectivity. The x-axis represents the frequency of the
 field and the y-axis represents the frequency of the altitude. A key feature that distinguishes a CFAD from a
@@ -573,19 +572,21 @@ interpreting a CFAD diagram, the normalized frequency for a given bin will be th
 associated altitude (i.e. each bin can be interpreted as the fraction of data points at each altitude).</p>
 <p><strong>Minimum fraction threshold</strong>
 In a CFAD diagram, altitudes where there is insufficient data are removed. This feature is controlled with the
-<cite>min_frac_thres</cite> value. The default value is 0.1, meaning that altitudes where the number of observations is less
+<code class="docutils literal notranslate"><span class="pre">min_frac_thres</span></code> value. The default value is 0.1, meaning that altitudes where the number of observations is less
 than one tenth of the maximum number of observations across all altitudes are removed. Increasing the value will
 act to be more aggressive in removing altitudes and decreasing the value will act to include more data. Setting
 this value to zero will include all altitudes with data, but use caution when interpreting CFADs with all data
 available as those altitudes with less data will not be as representative as other altitudes with sufficient data.</p>
 </section>
 <section id="basic-example-with-reflectivity-from-rhi">
-<h2>Basic example with reflectivity from RHI<a class="headerlink" href="#basic-example-with-reflectivity-from-rhi" title="Permalink to this heading">#</a></h2>
+<h2>Basic example with reflectivity from RHI<a class="headerlink" href="#basic-example-with-reflectivity-from-rhi" title="Link to this heading">#</a></h2>
 <p><strong>Example with RHI</strong>
 First, we will show an example from an RHI scan. We will get the reflectivity data and mask outside -15 and 35 dBZ
 to remove any noisy data. For the best results, we recommend cleaning up the field as much as possible (i.e.
 despeckling, filtering, etc.)</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># get test data</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get test data</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">get_test_data</span><span class="p">(</span><span class="s2">&quot;sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc&quot;</span><span class="p">)</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
 
@@ -643,15 +644,15 @@ despeckling, filtering, etc.)</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<ul class="sphx-glr-horizontal">
-<li><img src="../../_images/sphx_glr_plot_cfad_001.png" srcset="../../_images/sphx_glr_plot_cfad_001.png" alt="plot cfad" class = "sphx-glr-multi-img"/></li>
-<li><img src="../../_images/sphx_glr_plot_cfad_002.png" srcset="../../_images/sphx_glr_plot_cfad_002.png" alt="37.3 Deg. 2011-05-24T01:56:04Z  Equivalent reflectivity factor" class = "sphx-glr-multi-img"/></li>
-</ul>
+</div>
+</div>
 <p>We can see a general increase in reflectivity values from the echo top to around 8km. The maximum frequency value in
 each altitude row represents the mode of the reflectivity distribution which we can see also increases from echo
 top to 8km. Below 8km the distribution of reflectivity values widens, likely associated with some of the noise in
 the RHI.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Minimum fraction threshold example</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Minimum fraction threshold example</span>
 <span class="c1"># ----------------------------------</span>
 <span class="c1"># Previously, we used the default `min_frac_thres` of 0.1. Next, we will increase the threshold and set the threshold</span>
 <span class="c1"># to 0 (not recommended) so show how the CFAD changes.</span>
@@ -725,15 +726,19 @@ the RHI.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_cfad_003.png" srcset="../../_images/sphx_glr_plot_cfad_003.png" alt="min_frac_thres = 0.2, min_frac_thres = 0.1, min_frac_thres = 0" class = "sphx-glr-single-img"/><p>Setting the <cite>min_frac_thres</cite> to 0 (left panel) shows all data, even near the top of the chart (14km) where there is
-limited echo. Setting the <cite>min_frac_thres</cite> higher to 0.2 (right panel) removed altitudes between 1 and 5 km where
+</div>
+</div>
+<p>Setting the <code class="docutils literal notranslate"><span class="pre">min_frac_thres</span></code> to 0 (left panel) shows all data, even near the top of the chart (14km) where there is
+limited echo. Setting the <code class="docutils literal notranslate"><span class="pre">min_frac_thres</span></code> higher to 0.2 (right panel) removed altitudes between 1 and 5 km where
 there is less echo than between 6 and 12km where there is a consistent swath of reflectivity throughout the entire
 cross section.</p>
 </section>
 <section id="velocity-example">
-<h2>Velocity example<a class="headerlink" href="#velocity-example" title="Permalink to this heading">#</a></h2>
+<h2>Velocity example<a class="headerlink" href="#velocity-example" title="Link to this heading">#</a></h2>
 <p>Next, we will show a CFAD for the doppler velocity from the above example. First, we have to dealias the velocity.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a gatefilter</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># create a gatefilter</span>
 <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_invalid</span><span class="p">(</span><span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">)</span>
 <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_outside</span><span class="p">(</span><span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">30</span><span class="p">)</span>
@@ -798,20 +803,20 @@ cross section.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<ul class="sphx-glr-horizontal">
-<li><img src="../../_images/sphx_glr_plot_cfad_004.png" srcset="../../_images/sphx_glr_plot_cfad_004.png" alt="37.3 Deg. 2011-05-24T01:56:04Z  Corrected radial velocity of scatterers away from instrument" class = "sphx-glr-multi-img"/></li>
-<li><img src="../../_images/sphx_glr_plot_cfad_005.png" srcset="../../_images/sphx_glr_plot_cfad_005.png" alt="plot cfad" class = "sphx-glr-multi-img"/></li>
-</ul>
+</div>
+</div>
 <p>The velocity CFAD is very different from the reflectivity CFAD. In most altitudes, there is more of a bimodal
 pattern associated with the changing sign of the velocity values on either side of the radar. In general,
 the distribution of velocity values is consistently wide throughout the profile compared to the reflectivity CFAD.</p>
 </section>
 <section id="validation">
-<h2>Validation<a class="headerlink" href="#validation" title="Permalink to this heading">#</a></h2>
+<h2>Validation<a class="headerlink" href="#validation" title="Link to this heading">#</a></h2>
 <p>Finally, we wanted to compare this function with the original method, so here we reproduce Fig. 2c from Yuter and
-Houze (1995) to demonstrate that it works the same. Instead of using the <cite>pcolormesh</cite> function, we are using
+Houze (1995) to demonstrate that it works the same. Instead of using the <code class="docutils literal notranslate"><span class="pre">pcolormesh</span></code> function, we are using
 contour lines.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># get test data</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># get test data</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">DATASETS</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;ddop.910815.213931.cdf&quot;</span><span class="p">)</span>
 <span class="n">grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
 
@@ -869,19 +874,8 @@ contour lines.</p>
 <span class="c1"># Mon. Wea. Rev. 123, 1941-1963. https://doi.org/10.1175/1520-0493(1995)123%3C1941:TDKAME%3E2.0.CO;2</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_cfad_006.png" srcset="../../_images/sphx_glr_plot_cfad_006.png" alt="Yuter and Houze (1995) Fig. 2c" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.653 seconds)</p>
-<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-retrieve-plot-cfad-py">
-<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/8fef9e6273d2bd008ef548d306e473f7/plot_cfad.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_cfad.ipynb</span></code></a></p>
-</div>
-<div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/36a6893635898d891de5614ab4719c0f/plot_cfad.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_cfad.py</span></code></a></p>
-</div>
-<div class="sphx-glr-download sphx-glr-download-zip docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/422f684956c90b77f98e307629348f8d/plot_cfad.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_cfad.zip</span></code></a></p>
 </div>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
 </section>
 
@@ -946,7 +940,7 @@ contour lines.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/examples/retrieve/plot_cfad.rst.txt"
+      <li><a href="../../_sources/examples/retrieve/plot_cfad.ipynb.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
@@ -985,7 +979,7 @@ contour lines.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>

@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" data-theme="light">
+<html lang="en" data-content_root="../../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Hydrometeor Classification with Custom Frequency Settings &#8212; Py-ART 2.2.0 documentation</title>
   
@@ -47,9 +47,9 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=90673249"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/documentation_options.js?v=b21de401"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -539,35 +539,16 @@
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                   <div class="sphx-glr-download-link-note admonition note">
-<p class="admonition-title">Note</p>
-<p><a class="reference internal" href="#sphx-glr-download-examples-retrieve-plot-hydrometeor-class-x-band-py"><span class="std std-ref">Go to the end</span></a>
-to download the full example code.</p>
-</div>
-<section class="sphx-glr-example-title" id="hydrometeor-classification-with-custom-frequency-settings">
-<span id="sphx-glr-examples-retrieve-plot-hydrometeor-class-x-band-py"></span><h1>Hydrometeor Classification with Custom Frequency Settings<a class="headerlink" href="#hydrometeor-classification-with-custom-frequency-settings" title="Permalink to this heading">#</a></h1>
-<blockquote>
-<div><p>This script shows how to use hydrometeor classification for X-band radar data.
+                   <section class="tex2jax_ignore mathjax_ignore" id="hydrometeor-classification-with-custom-frequency-settings">
+<h1>Hydrometeor Classification with Custom Frequency Settings<a class="headerlink" href="#hydrometeor-classification-with-custom-frequency-settings" title="Link to this heading">#</a></h1>
+<p>This script shows how to use hydrometeor classification for X-band radar data.
 We are reading radar data, plotting some variables of interest and applying the
 classification to identify types of precipitation.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>The script initially attempts hydrometeor classification without specific radar frequency information for band selection.</p>
-</div>
-</div></blockquote>
-<ul class="sphx-glr-horizontal">
-<li><img src="../../_images/sphx_glr_plot_hydrometeor_class_x_band_001.png" srcset="../../_images/sphx_glr_plot_hydrometeor_class_x_band_001.png" alt="6.0 Deg. 2022-03-14T03:00:16Z  Equivalent reflectivity factor,  6.0 Deg. 2022-03-14T03:00:16Z  Corrected log differential reflectivity hv,  6.0 Deg. 2022-03-14T03:00:16Z  Specific differential phase hv" class = "sphx-glr-multi-img"/></li>
-<li><img src="../../_images/sphx_glr_plot_hydrometeor_class_x_band_002.png" srcset="../../_images/sphx_glr_plot_hydrometeor_class_x_band_002.png" alt="6.0 Deg. 2022-03-14T03:00:16Z  Corrected equivalent reflectivity factor,  6.0 Deg. 2022-03-14T03:00:16Z  Radar echo classification" class = "sphx-glr-multi-img"/></li>
-</ul>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;nyquist_velocity&#39;: {&#39;long_name&#39;: &#39;Nyquist velocity&#39;, &#39;units&#39;: &#39;m/s&#39;, &#39;standard_name&#39;: &#39;nyquist_velocity&#39;, &#39;data&#39;: masked_array(data=[15.9, 15.9, 15.9, ..., 15.9, 15.9, 15.9],
-             mask=False,
-       fill_value=1e+20)}}
-</pre></div>
-</div>
-<div class="line-block">
-<div class="line"><br /></div>
-</div>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<p>.. note::
+The script initially attempts hydrometeor classification without specific radar frequency information for band selection.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">open_radar_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATASETS</span>
 
@@ -782,19 +763,8 @@ classification to identify types of precipitation.</p>
 <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">display</span><span class="o">.</span><span class="n">cbs</span></a><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">adjust_fhc_colorbar_for_pyart</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">display</span><span class="o">.</span><span class="n">cbs</span></a><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 9.879 seconds)</p>
-<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-retrieve-plot-hydrometeor-class-x-band-py">
-<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/284155deb2676d4078d36e57fe980d9c/plot_hydrometeor_class_x_band.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_hydrometeor_class_x_band.ipynb</span></code></a></p>
-</div>
-<div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/2934505096b2c0e9fcae441f49906916/plot_hydrometeor_class_x_band.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_hydrometeor_class_x_band.py</span></code></a></p>
-</div>
-<div class="sphx-glr-download sphx-glr-download-zip docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/3d9a790c335b161c1cd717cff023f996/plot_hydrometeor_class_x_band.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_hydrometeor_class_x_band.zip</span></code></a></p>
 </div>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
 
 <div class="section ablog__blog_comments">
@@ -843,7 +813,7 @@ classification to identify types of precipitation.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/examples/retrieve/plot_hydrometeor_class_x_band.rst.txt"
+      <li><a href="../../_sources/examples/retrieve/plot_hydrometeor_class_x_band.ipynb.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
@@ -882,7 +852,7 @@ classification to identify types of precipitation.</p>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>

@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" data-theme="light">
+<html lang="en" data-content_root="../../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Plot Max-CAPPI &#8212; Py-ART 2.2.0 documentation</title>
   
@@ -47,9 +47,9 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=90673249"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/documentation_options.js?v=b21de401"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -539,16 +539,13 @@
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                   <div class="sphx-glr-download-link-note admonition note">
-<p class="admonition-title">Note</p>
-<p><a class="reference internal" href="#sphx-glr-download-examples-plotting-plot-max-cappi-py"><span class="std std-ref">Go to the end</span></a>
-to download the full example code.</p>
-</div>
-<section class="sphx-glr-example-title" id="plot-max-cappi">
-<span id="sphx-glr-examples-plotting-plot-max-cappi-py"></span><h1>Plot Max-CAPPI<a class="headerlink" href="#plot-max-cappi" title="Permalink to this heading">#</a></h1>
+                   <section class="tex2jax_ignore mathjax_ignore" id="plot-max-cappi">
+<h1>Plot Max-CAPPI<a class="headerlink" href="#plot-max-cappi" title="Link to this heading">#</a></h1>
 <p>This is an example of how to plot a Max-CAPPI
 within a Py-ART grid display object.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Hamid Ali Syed (syed44@purdue.edu)</span>
 <span class="c1"># License: BSD 3 clause</span>
@@ -560,9 +557,13 @@ within a Py-ART grid display object.</p>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyart.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_test_data</span>
 </pre></div>
 </div>
+</div>
+</div>
 <section id="max-cappi-display">
-<h2>MAX-CAPPI Display<a class="headerlink" href="#max-cappi-display" title="Permalink to this heading">#</a></h2>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define and Read in the test data</span>
+<h2>MAX-CAPPI Display<a class="headerlink" href="#max-cappi-display" title="Link to this heading">#</a></h2>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define and Read in the test data</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">grid_file</span></a> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">&quot;20110520100000_nexrad_grid.nc&quot;</span><span class="p">)</span>
 <span class="n">grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_grid</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">grid_file</span></a><span class="p">)</span>
 
@@ -572,11 +573,15 @@ within a Py-ART grid display object.</p>
 <span class="n">gdisplay</span><span class="o">.</span><span class="n">plot_maxcappi</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;REF&quot;</span><span class="p">,</span> <span class="n">range_rings</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">add_slogan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_max_cappi_001.png" srcset="../../_images/sphx_glr_plot_max_cappi_001.png" alt="plot max cappi" class = "sphx-glr-single-img"/></section>
+</div>
+</div>
+</section>
 <section id="second-example">
-<h2>Second Example<a class="headerlink" href="#second-example" title="Permalink to this heading">#</a></h2>
+<h2>Second Example<a class="headerlink" href="#second-example" title="Link to this heading">#</a></h2>
 <p>Let’s read in a Nexrad data and create a grid.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">logging</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">datetime</span><span class="w"> </span><span class="kn">import</span> <a href="https://docs.python.org/3/library/datetime.html#datetime.datetime" title="datetime.datetime" class="sphx-glr-backref-module-datetime sphx-glr-backref-type-py-class"><span class="n">datetime</span></a>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">fsspec</span>
@@ -646,24 +651,8 @@ within a Py-ART grid display object.</p>
     <span class="n">gdisplay</span><span class="o">.</span><span class="n">plot_maxcappi</span><span class="p">(</span><span class="n">field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;HomeyerRainbow&quot;</span><span class="p">,</span> <span class="n">add_slogan</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_max_cappi_002.png" srcset="../../_images/sphx_glr_plot_max_cappi_002.png" alt="plot max cappi" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>WARNING:matplotlib.font_manager:findfont: Font family &#39;Courier New&#39; not found.
-WARNING:matplotlib.font_manager:findfont: Font family &#39;Courier New&#39; not found.
-WARNING:matplotlib.font_manager:findfont: Font family &#39;Courier New&#39; not found.
-</pre></div>
-</div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 12.322 seconds)</p>
-<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plotting-plot-max-cappi-py">
-<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/8eaf8ca0ba6238acf1f7b2e6a865219c/plot_max_cappi.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_max_cappi.ipynb</span></code></a></p>
-</div>
-<div class="sphx-glr-download sphx-glr-download-python docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/d90a317368a6bdf17f00f86e7b502fc4/plot_max_cappi.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_max_cappi.py</span></code></a></p>
-</div>
-<div class="sphx-glr-download sphx-glr-download-zip docutils container">
-<p><a class="reference download internal" download="" href="../../_downloads/3e4e352c88f759a6a25973ce5452d39c/plot_max_cappi.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_max_cappi.zip</span></code></a></p>
 </div>
 </div>
-<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
 </section>
 
@@ -726,7 +715,7 @@ WARNING:matplotlib.font_manager:findfont: Font family &#39;Courier New&#39; not 
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/examples/plotting/plot_max_cappi.rst.txt"
+      <li><a href="../../_sources/examples/plotting/plot_max_cappi.ipynb.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
@@ -765,7 +754,7 @@ WARNING:matplotlib.font_manager:findfont: Font family &#39;Courier New&#39; not 
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>

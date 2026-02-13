@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="" data-theme="light">
+<html lang="en" data-content_root="../../" data-theme="light">
 
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>pyart.core.RadarSpectra &#8212; Py-ART 2.2.0 documentation</title>
   
@@ -47,9 +47,9 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
 
-    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js?v=90673249"></script>
-    <script src="../../_static/doctools.js?v=888ff710"></script>
-    <script src="../../_static/sphinx_highlight.js?v=4825356b"></script>
+    <script src="../../_static/documentation_options.js?v=b21de401"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../../_static/copybutton.js?v=f281be69"></script>
     <script src="../../_static/design-tabs.js?v=f930bc37"></script>
@@ -1155,10 +1155,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <section id="pyart-core-radarspectra">
-<h1>pyart.core.RadarSpectra<a class="headerlink" href="#pyart-core-radarspectra" title="Permalink to this heading">#</a></h1>
+<h1>pyart.core.RadarSpectra<a class="headerlink" href="#pyart-core-radarspectra" title="Link to this heading">#</a></h1>
 <dl class="py class">
 <dt class="sig sig-object py" id="pyart.core.RadarSpectra">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pyart.core.</span></span><span class="sig-name descname"><span class="pre">RadarSpectra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scan_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">altitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sweep_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sweep_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sweep_start_ray_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sweep_end_ray_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">azimuth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npulses_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">velocity_bins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">altitude_agl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_scan_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rays_are_indexed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ray_angle_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scan_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">antenna_transition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instrument_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar_calibration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">georefs_applied</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pyart.core.RadarSpectra" title="Permalink to this definition">#</a></dt>
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">pyart.core.</span></span><span class="sig-name descname"><span class="pre">RadarSpectra</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">time</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">_range</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fields</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scan_type</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">latitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">longitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">altitude</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sweep_number</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sweep_mode</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fixed_angle</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sweep_start_ray_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">sweep_end_ray_index</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">azimuth</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">elevation</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">npulses_max</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">velocity_bins</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">altitude_agl</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">target_scan_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rays_are_indexed</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">ray_angle_res</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">scan_rate</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">antenna_transition</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instrument_parameters</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">radar_calibration</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">georefs_applied</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/core/radar_spectra.html#RadarSpectra"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.core.RadarSpectra" title="Link to this definition">#</a></dt>
 <dd><p>A class for storing antenna coordinate radar spectra data.
 The structure of the Radar class is based on the CF/Radial Data file
 format. Global attributes and variables (section 4.1 and 4.3) are
@@ -1212,12 +1212,12 @@ representations are not forbidden.</p></li>
 <li><p><strong>elevation</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Elevation of antenna, relative to the horizontal plane. Elevation
 angles are recommended to be expressed in the range of [-180, 180],
 but other representations are not forbidden.</p></li>
-<li><p><strong>gate_z</strong> (<em>gate_x</em><em>, </em><em>gate_y</em><em>,</em>) – Location of each gate in a Cartesian coordinate system assuming a
+<li><p><strong>gate_z</strong> (<a class="reference internal" href="pyart.core.RadarSpectra.gate_x.html#pyart.core.RadarSpectra.gate_x" title="pyart.core.RadarSpectra.gate_x"><em>gate_x</em></a><em>, </em><a class="reference internal" href="pyart.core.RadarSpectra.gate_y.html#pyart.core.RadarSpectra.gate_y" title="pyart.core.RadarSpectra.gate_y"><em>gate_y</em></a><em>,</em>) – Location of each gate in a Cartesian coordinate system assuming a
 standard atmosphere with a 4/3 Earth’s radius model. The data keys of
 these attributes are create upon first access from the data in the
 range, azimuth and elevation attributes. If these attributes are
 changed use <a class="reference internal" href="pyart.core.RadarSpectra.init_gate_x_y_z.html#pyart.core.RadarSpectra.init_gate_x_y_z" title="pyart.core.RadarSpectra.init_gate_x_y_z"><code class="xref py py-func docutils literal notranslate"><span class="pre">init_gate_x_y_z()</span></code></a> to reset.</p></li>
-<li><p><strong>gate_latitude</strong> (<em>gate_longitude</em><em>,</em>) – Geographic location of each gate. The projection parameter(s) defined
+<li><p><strong>gate_latitude</strong> (<a class="reference internal" href="pyart.core.RadarSpectra.gate_longitude.html#pyart.core.RadarSpectra.gate_longitude" title="pyart.core.RadarSpectra.gate_longitude"><em>gate_longitude</em></a><em>,</em>) – Geographic location of each gate. The projection parameter(s) defined
 in the <cite>projection</cite> attribute are used to perform an inverse map
 projection from the Cartesian gate locations relative to the radar
 location to longitudes and latitudes. If these attributes are changed
@@ -1262,7 +1262,7 @@ set to None, indicating these parameters are not available</p></li>
 </dl>
 </dd></dl>
 
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.RadarSpectra.check_field_exists.html#pyart.core.RadarSpectra.check_field_exists" title="pyart.core.RadarSpectra.check_field_exists"><code class="xref py py-obj docutils literal notranslate"><span class="pre">check_field_exists</span></code></a>(field_name)</p></td>
 <td><p>Check that a field exists in the fields dictionary.</p></td>
@@ -1318,7 +1318,7 @@ set to None, indicating these parameters are not available</p></li>
 </tbody>
 </table>
 </div>
-<div class="pst-scrollable-table-container"><table class="autosummary longtable table autosummary">
+<div class="pst-scrollable-table-container"><table class="autosummary longtable table">
 <tbody>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyart.core.RadarSpectra.altitude.html#pyart.core.RadarSpectra.altitude" title="pyart.core.RadarSpectra.altitude"><code class="xref py py-obj docutils literal notranslate"><span class="pre">altitude</span></code></a></p></td>
 <td><p></p></td>
@@ -1503,7 +1503,7 @@ set to None, indicating these parameters are not available</p></li>
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 7.1.2.
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
     <br/>
   </p>
 </div>
