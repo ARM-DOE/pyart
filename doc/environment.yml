@@ -13,8 +13,8 @@ dependencies:
   - metpy
   - cartopy
   - cvxopt
-  - xarray>=2024.10.0
-  - sphinx<7.2
+  - xarray
+  - sphinx
   - ipython
   - pandoc
   - pkg-config
@@ -35,7 +35,7 @@ dependencies:
   - pre_commit
   - cmweather
   - mda-xdrlib
-  - xradar>=0.8.0
+  - xradar
   - dask
   - ablog
   - pip
