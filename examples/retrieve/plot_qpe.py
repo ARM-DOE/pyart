@@ -120,7 +120,7 @@ def download_nexrad(timezone_str, date, site, local_date=False):
             utc_date = date.replace(tzinfo=timezone.utc)
         else:
             utc_date = date.replace(tzinfo=timezone.utc)
-        
+
         logging.info(f"Time: {utc_date}")
         fs = fsspec.filesystem("s3", anon=True)
         nexrad_path = utc_date.strftime(

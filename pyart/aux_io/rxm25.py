@@ -11,7 +11,6 @@ import numpy as np
 import pyart
 
 from ..config import get_metadata
-from ..exceptions import MissingOptionalDependency
 from ..testing import make_empty_ppi_radar
 
 
