@@ -32,7 +32,7 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/copybutton.css?v=76b2166b" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery.css?v=d2d258e8" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
@@ -480,6 +480,7 @@
     <span class="n">vel_field</span><span class="o">=</span><span class="s2">&quot;velocity&quot;</span><span class="p">,</span>
     <span class="n">same_nyquist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">nyquist_vector_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">max_height_diff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Create a Constant Altitude Plan Position Indicator (CAPPI) from radar data.</span>
@@ -505,6 +506,11 @@
 <span class="sd">    nyquist_vector_idx : int, optional</span>
 <span class="sd">        Index for the Nyquist velocity vector if `same_nyquist` is True.</span>
 <span class="sd">        Default is 0.</span>
+<span class="sd">    max_height_diff : float, optional</span>
+<span class="sd">        Maximum allowed difference (meters) between the requested CAPPI height</span>
+<span class="sd">        and the closest available gate height. Gates farther than this</span>
+<span class="sd">        threshold are masked out. If None, a data-driven tolerance equal to</span>
+<span class="sd">        twice the median vertical gate spacing is used. Default is None.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
@@ -531,6 +537,7 @@
     <span class="c1"># Initialize containers for the stacked data and nyquist velocities</span>
     <span class="n">data_stack</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">nyquist_stack</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">gate_z_stack</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># Process each sweep individually</span>
     <span class="k">for</span> <span class="n">sweep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">):</span>
@@ -544,6 +551,25 @@
             <span class="p">)</span>
             <span class="n">nyquist</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
+        <span class="c1"># Extract and sort azimuth angles (used across all fields)</span>
+        <span class="n">azimuth</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span>
+        <span class="n">azimuth_sorted_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">azimuth</span><span class="p">)</span>
+        <span class="n">azimuth_sorted</span> <span class="o">=</span> <span class="n">azimuth</span><span class="p">[</span><span class="n">azimuth_sorted_idx</span><span class="p">]</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">][</span><span class="n">azimuth_sorted_idx</span><span class="p">]</span>
+
+        <span class="c1"># Gate heights from radar geometry already include the 4/3 Earth-radius refractivity model</span>
+        <span class="n">sweep_gate_z</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">][</span><span class="n">azimuth_sorted_idx</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="n">sweep</span> <span class="o">==</span> <span class="n">first_sweep</span><span class="p">:</span>
+            <span class="n">azimuth_final</span> <span class="o">=</span> <span class="n">azimuth_sorted</span>
+            <span class="n">time_final</span> <span class="o">=</span> <span class="n">time</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># Interpolate gate heights to the reference azimuth grid (keeps refractivity-aware heights aligned)</span>
+            <span class="n">gate_interpolator</span> <span class="o">=</span> <span class="n">RectBivariateSpline</span><span class="p">(</span>
+                <span class="n">azimuth_sorted</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">sweep_gate_z</span>
+            <span class="p">)</span>
+            <span class="n">sweep_gate_z</span> <span class="o">=</span> <span class="n">gate_interpolator</span><span class="p">(</span><span class="n">azimuth_final</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+
         <span class="n">sweep_data</span> <span class="o">=</span> <span class="p">{}</span>
 
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
@@ -554,27 +580,21 @@
                 <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span>
                     <span class="n">data</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span><span class="p">[</span><span class="n">sweep_slice</span><span class="p">,</span> <span class="p">:]</span>
                 <span class="p">)</span>
-            <span class="n">time</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span>
 
-            <span class="c1"># Extract and sort azimuth angles</span>
-            <span class="n">azimuth</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span>
-            <span class="n">azimuth_sorted_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">azimuth</span><span class="p">)</span>
-            <span class="n">azimuth</span> <span class="o">=</span> <span class="n">azimuth</span><span class="p">[</span><span class="n">azimuth_sorted_idx</span><span class="p">]</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">azimuth_sorted_idx</span><span class="p">]</span>
 
-            <span class="c1"># Store initial lat/lon for reordering</span>
-            <span class="k">if</span> <span class="n">sweep</span> <span class="o">==</span> <span class="n">first_sweep</span><span class="p">:</span>
-                <span class="n">azimuth_final</span> <span class="o">=</span> <span class="n">azimuth</span>
-                <span class="n">time_final</span> <span class="o">=</span> <span class="n">time</span>
-            <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">sweep</span> <span class="o">!=</span> <span class="n">first_sweep</span><span class="p">:</span>
                 <span class="c1"># Interpolate data for consistent azimuth ordering across sweeps</span>
-                <span class="n">interpolator</span> <span class="o">=</span> <span class="n">RectBivariateSpline</span><span class="p">(</span><span class="n">azimuth</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">data</span><span class="p">)</span>
+                <span class="n">interpolator</span> <span class="o">=</span> <span class="n">RectBivariateSpline</span><span class="p">(</span>
+                    <span class="n">azimuth_sorted</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">data</span>
+                <span class="p">)</span>
                 <span class="n">data</span> <span class="o">=</span> <span class="n">interpolator</span><span class="p">(</span><span class="n">azimuth_final</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
 
             <span class="n">sweep_data</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
 
         <span class="n">data_stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sweep_data</span><span class="p">)</span>
         <span class="n">nyquist_stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nyquist</span><span class="p">)</span>
+        <span class="n">gate_z_stack</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">sweep_gate_z</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
 
     <span class="n">nyquist_stack</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nyquist_stack</span><span class="p">)</span>
 
@@ -585,7 +605,46 @@
         <span class="n">data_stack</span> <span class="o">=</span> <span class="p">[</span>
             <span class="n">sweep_data</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sweep_data</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">data_stack</span><span class="p">)</span> <span class="k">if</span> <span class="n">nyquist_mask</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
         <span class="p">]</span>
+        <span class="n">gate_z_stack</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="n">sweep_gate_z</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">sweep_gate_z</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">gate_z_stack</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">nyquist_mask</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="p">]</span>
 
+    <span class="n">z_3d</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">gate_z_stack</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Find nearest gates to requested height using refractivity/curvature-adjusted geometry</span>
+    <span class="n">height_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">z_3d</span> <span class="o">-</span> <span class="n">height</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+    <span class="n">selected_gate_z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">take_along_axis</span><span class="p">(</span>
+        <span class="n">z_3d</span><span class="p">,</span> <span class="n">height_idx</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Derive a height tolerance if none provided. Use the median positive gate-to-gate</span>
+    <span class="c1"># spacing across the volume to approximate vertical resolution.</span>
+    <span class="k">if</span> <span class="n">max_height_diff</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">z_sorted</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">z_3d</span><span class="o">.</span><span class="n">ravel</span><span class="p">())</span>
+        <span class="n">dz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">z_sorted</span><span class="p">)</span>
+        <span class="n">dz</span> <span class="o">=</span> <span class="n">dz</span><span class="p">[</span><span class="n">dz</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">dz</span><span class="o">.</span><span class="n">size</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">derived_tol</span> <span class="o">=</span> <span class="mf">1000.0</span>  <span class="c1"># fallback to 1 km</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">derived_tol</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">median</span><span class="p">(</span><span class="n">dz</span><span class="p">)</span>
+        <span class="n">height_tol</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="mf">500.0</span><span class="p">,</span> <span class="n">derived_tol</span><span class="p">)</span>  <span class="c1"># enforce a sensible floor</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">height_tol</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">max_height_diff</span><span class="p">)</span>
+
+    <span class="c1"># Mask gates that are too far from the requested height (e.g., asking for 20 km</span>
+    <span class="c1"># when the volume tops out near 14 km). Also warn when the request is outside</span>
+    <span class="c1"># the available volume.</span>
+    <span class="n">max_available</span> <span class="o">=</span> <span class="n">z_3d</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+    <span class="n">min_available</span> <span class="o">=</span> <span class="n">z_3d</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">height</span> <span class="o">&gt;</span> <span class="n">max_available</span> <span class="o">+</span> <span class="n">height_tol</span> <span class="ow">or</span> <span class="n">height</span> <span class="o">&lt;</span> <span class="n">min_available</span> <span class="o">-</span> <span class="n">height_tol</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;Warning: requested CAPPI height </span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s2"> m is outside available gates &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">min_available</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">max_available</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> m). Output will be fully masked.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="n">height_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">selected_gate_z</span> <span class="o">-</span> <span class="n">height</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">height_tol</span>
     <span class="c1"># Generate CAPPI for each field using data_stack</span>
     <span class="n">fields_data</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">fields</span><span class="p">:</span>
@@ -595,23 +654,12 @@
 
         <span class="c1"># Sort azimuth for all sweeps</span>
         <span class="n">dim0</span> <span class="o">=</span> <span class="n">data_3d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span>
-        <span class="n">azimuths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">359</span><span class="p">,</span> <span class="n">dim0</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-        <span class="n">elevation_angles</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][:</span> <span class="n">data_3d</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
-        <span class="n">ranges</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
 
-        <span class="n">theta</span> <span class="o">=</span> <span class="p">(</span><span class="mi">450</span> <span class="o">-</span> <span class="n">azimuths</span><span class="p">)</span> <span class="o">%</span> <span class="mi">360</span>
-        <span class="n">THETA</span><span class="p">,</span> <span class="n">PHI</span><span class="p">,</span> <span class="n">R</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">theta</span><span class="p">,</span> <span class="n">elevation_angles</span><span class="p">,</span> <span class="n">ranges</span><span class="p">)</span>
-        <span class="n">Z</span> <span class="o">=</span> <span class="n">R</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">PHI</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span> <span class="o">/</span> <span class="mi">180</span><span class="p">)</span>
-
-        <span class="c1"># Extract the data slice corresponding to the requested height</span>
-        <span class="n">height_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">Z</span> <span class="o">-</span> <span class="n">height</span><span class="p">),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
-        <span class="n">CAPPI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-            <span class="p">[</span>
-                <span class="n">data_3d</span><span class="p">[</span><span class="n">height_idx</span><span class="p">[</span><span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">],</span> <span class="n">j</span><span class="p">,</span> <span class="n">i</span><span class="p">]</span>
-                <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim0</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
-                <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">dim0</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
-            <span class="p">]</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="n">dim0</span><span class="p">)</span>
+        <span class="c1"># Extract the data slice corresponding to the requested height using gate geometry (curved Earth)</span>
+        <span class="n">CAPPI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">take_along_axis</span><span class="p">(</span>
+            <span class="n">data_3d</span><span class="p">,</span> <span class="n">height_idx</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">squeeze</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+        <span class="n">CAPPI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">CAPPI</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">height_mask</span><span class="p">)</span>
 
         <span class="c1"># Retrieve units and handle case where units might be missing</span>
         <span class="n">units</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;units&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
@@ -673,22 +721,32 @@
     <span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_final</span>
     <span class="n">time</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dtime</span>
 
-    <span class="c1"># Create the Radar object with the new CAPPI data</span>
+    <span class="c1"># CAPPI represents a single synthesized sweep on the reference azimuth grid</span>
+    <span class="n">n_rays</span> <span class="o">=</span> <span class="n">azimuth_final</span><span class="o">.</span><span class="n">size</span>
+    <span class="n">sweep_number</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)}</span>
+    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;ppi&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;object&quot;</span><span class="p">)}</span>
+    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)}</span>
+    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">n_rays</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)}</span>
+    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)}</span>
+
+    <span class="c1"># Create the Radar object with the new CAPPI data.  Keep site metadata but</span>
+    <span class="c1"># reset sweep descriptors and azimuth to match the CAPPI grid so display</span>
+    <span class="c1"># libraries do not mis-align fields (which showed up as a 90° rotation).</span>
     <span class="k">return</span> <span class="n">Radar</span><span class="p">(</span>
-        <span class="n">time</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+        <span class="n">time</span><span class="o">=</span><span class="n">time</span><span class="p">,</span>
         <span class="n">_range</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
         <span class="n">fields</span><span class="o">=</span><span class="n">fields_data</span><span class="p">,</span>
         <span class="n">metadata</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
-        <span class="n">scan_type</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span><span class="p">,</span>
+        <span class="n">scan_type</span><span class="o">=</span><span class="s2">&quot;ppi&quot;</span><span class="p">,</span>
         <span class="n">latitude</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
         <span class="n">longitude</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
         <span class="n">altitude</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
-        <span class="n">sweep_number</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
-        <span class="n">sweep_mode</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_mode</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
-        <span class="n">fixed_angle</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
-        <span class="n">sweep_start_ray_index</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
-        <span class="n">sweep_end_ray_index</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
-        <span class="n">azimuth</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
+        <span class="n">sweep_number</span><span class="o">=</span><span class="n">sweep_number</span><span class="p">,</span>
+        <span class="n">sweep_mode</span><span class="o">=</span><span class="n">sweep_mode</span><span class="p">,</span>
+        <span class="n">fixed_angle</span><span class="o">=</span><span class="n">fixed_angle</span><span class="p">,</span>
+        <span class="n">sweep_start_ray_index</span><span class="o">=</span><span class="n">sweep_start_ray_index</span><span class="p">,</span>
+        <span class="n">sweep_end_ray_index</span><span class="o">=</span><span class="n">sweep_end_ray_index</span><span class="p">,</span>
+        <span class="n">azimuth</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">azimuth_final</span><span class="p">},</span>
         <span class="n">elevation</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">elevation_final</span><span class="p">},</span>
         <span class="n">instrument_parameters</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">,</span>
     <span class="p">)</span></div>
