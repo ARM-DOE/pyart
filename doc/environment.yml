@@ -31,7 +31,6 @@ dependencies:
   - sphinx-gallery
   - sphinx-design
   - sphinx-copybutton
-  - nbsphinx
   - pre_commit
   - cmweather
   - mda-xdrlib
