@@ -539,22 +539,29 @@
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                   <section class="tex2jax_ignore mathjax_ignore" id="radar-based-quantitative-precipitation-estimation-qpe">
-<h1>Radar-Based Quantitative Precipitation Estimation (QPE)<a class="headerlink" href="#radar-based-quantitative-precipitation-estimation-qpe" title="Link to this heading">#</a></h1>
+                   <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-examples-retrieve-plot-qpe-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="radar-based-quantitative-precipitation-estimation-qpe">
+<span id="sphx-glr-examples-retrieve-plot-qpe-py"></span><h1>Radar-Based Quantitative Precipitation Estimation (QPE)<a class="headerlink" href="#radar-based-quantitative-precipitation-estimation-qpe" title="Link to this heading">#</a></h1>
 <p>This script processes radar data to compute vertical column profiles at a specific point location
 and estimate rain rates using categorized reflectivity. The rain rates are then saved as a
 NetCDF file.</p>
 <ul class="simple">
-<li><p>The <code class="docutils literal notranslate"><span class="pre">column_profile</span></code> function extracts a vertical profile at a given latitude/longitude.</p></li>
-<li><p>The <code class="docutils literal notranslate"><span class="pre">rain_rate_categorized</span></code> function computes rain rates based on categorized reflectivity.</p></li>
+<li><p>The <cite>column_profile</cite> function extracts a vertical profile at a given latitude/longitude.</p></li>
+<li><p>The <cite>rain_rate_categorized</cite> function computes rain rates based on categorized reflectivity.</p></li>
 <li><p>The script reads multiple radar files, processes them, and visualizes the results.</p></li>
 </ul>
 <p><strong>Note:</strong> If you want to increase the area considered for the vertical profile, you can increase
-<code class="docutils literal notranslate"><span class="pre">azimuth_spread</span></code> and <code class="docutils literal notranslate"><span class="pre">spatial_spread</span></code>. Each increment corresponds to the radar’s azimuth resolution
+<cite>azimuth_spread</cite> and <cite>spatial_spread</cite>. Each increment corresponds to the radar’s azimuth resolution
 and range resolution, respectively.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../_images/sphx_glr_plot_qpe_001.png" srcset="../../_images/sphx_glr_plot_qpe_001.png" alt="QPE" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_qpe_002.png" srcset="../../_images/sphx_glr_plot_qpe_002.png" alt="QPE" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Hamid Ali Syed (syed@rixvi.com)</span>
 <span class="c1"># License: BSD 3-Clause</span>
@@ -718,8 +725,19 @@ and range resolution, respectively.</p>
 <span class="c1"># https://doi.org/10.1175/1520-0450(1995)034&lt;1978:CCOTDS&gt;2.0.CO;2.</span>
 </pre></div>
 </div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 24.525 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-retrieve-plot-qpe-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/38d0cf632e991bae6ff20d32f780367c/plot_qpe.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_qpe.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/8025b47d03c237bcf7fbe9807d8d418f/plot_qpe.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_qpe.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/018c7dfc81fd885cf80bfa8c9264d816/plot_qpe.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_qpe.zip</span></code></a></p>
 </div>
 </div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
 
 <div class="section ablog__blog_comments">
@@ -768,7 +786,7 @@ and range resolution, respectively.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/examples/retrieve/plot_qpe.ipynb.txt"
+      <li><a href="../../_sources/examples/retrieve/plot_qpe.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
@@ -798,7 +816,7 @@ and range resolution, respectively.</p>
 
   <p class="copyright">
     
-      © Copyright 2013-2024, Py-ART developers.
+      © Copyright 2013-2026, Py-ART developers.
       <br/>
     
   </p>

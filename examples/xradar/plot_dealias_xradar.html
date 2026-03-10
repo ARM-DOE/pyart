@@ -539,12 +539,15 @@
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                   <section class="tex2jax_ignore mathjax_ignore" id="dealias-radial-velocities-using-xradar-and-py-art">
-<h1>Dealias Radial Velocities Using Xradar and Py-ART<a class="headerlink" href="#dealias-radial-velocities-using-xradar-and-py-art" title="Link to this heading">#</a></h1>
+                   <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-examples-xradar-plot-dealias-xradar-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="dealias-radial-velocities-using-xradar-and-py-art">
+<span id="sphx-glr-examples-xradar-plot-dealias-xradar-py"></span><h1>Dealias Radial Velocities Using Xradar and Py-ART<a class="headerlink" href="#dealias-radial-velocities-using-xradar-and-py-art" title="Link to this heading">#</a></h1>
 <p>An example which uses xradar and Py-ART to dealias radial velocities.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Author: Max Grover (mgrover@anl.gov)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Author: Max Grover (mgrover@anl.gov)</span>
 <span class="c1"># License: BSD 3 clause</span>
 
 
@@ -573,13 +576,9 @@
 <span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;velocity_texture&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vel_texture</span></a><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
 <p><strong>Visualize our velocity texture field</strong>
 Let’s use the RadarMapDisplay to visualize the texture field</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
     <span class="s2">&quot;velocity_texture&quot;</span><span class="p">,</span>
@@ -593,24 +592,16 @@ Let’s use the RadarMapDisplay to visualize the texture field</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-</div>
-<p><strong>Determine a Velocity Texture Threshold Value</strong></p>
+<img src="../../_images/sphx_glr_plot_dealias_xradar_001.png" srcset="../../_images/sphx_glr_plot_dealias_xradar_001.png" alt="xsapr-sg 2.5 Deg. 2011-05-20T06:42:42Z  Texture of radial velocity of scatters away from instrument" class = "sphx-glr-single-img"/><p><strong>Determine a Velocity Texture Threshold Value</strong></p>
 <p>We can use the xradar/xarray plotting functionality here</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span><span class="p">[</span><span class="s2">&quot;sweep_0&quot;</span><span class="p">][</span><span class="s2">&quot;velocity_texture&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">()</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span><span class="p">[</span><span class="s2">&quot;sweep_0&quot;</span><span class="p">][</span><span class="s2">&quot;velocity_texture&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">plot</span><span class="o">.</span><span class="n">hist</span><span class="p">()</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-</div>
-<p><strong>Apply a Gatefilter Mask</strong></p>
+<img src="../../_images/sphx_glr_plot_dealias_xradar_002.png" srcset="../../_images/sphx_glr_plot_dealias_xradar_002.png" alt="latitude = 36.49 [degrees_north], longitude = -..." class = "sphx-glr-single-img"/><p><strong>Apply a Gatefilter Mask</strong></p>
 <p>We now apply this threshold, along with a reflectivity threshold,
 and make use of the region-based dealiasing algorithm</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure the gatefilter</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure the gatefilter</span>
 <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_above</span><span class="p">(</span><span class="s2">&quot;velocity_texture&quot;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
 <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">&quot;corrected_reflectivity_horizontal&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
@@ -627,13 +618,9 @@ and make use of the region-based dealiasing algorithm</p>
 <span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;corrected_velocity&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">velocity_dealiased</span></a><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
 <p><strong>Visualize the Cleaned Radial Velocities</strong></p>
 <p>We can visualize the uncorrected and corrected radial velocity fields</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi</span><span class="p">(</span>
@@ -656,8 +643,19 @@ and make use of the region-based dealiasing algorithm</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
+<img src="../../_images/sphx_glr_plot_dealias_xradar_003.png" srcset="../../_images/sphx_glr_plot_dealias_xradar_003.png" alt="xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Radial velocity of scatterers away from instrument, xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Corrected radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 9.894 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-xradar-plot-dealias-xradar-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/220b8a65594d85025c6b3d61e5ae378a/plot_dealias_xradar.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_dealias_xradar.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/07c3340346ad12389ac9752f6f220eb5/plot_dealias_xradar.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_dealias_xradar.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/2423382f77a49592b3c807cc29f058f9/plot_dealias_xradar.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_dealias_xradar.zip</span></code></a></p>
 </div>
 </div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
 
 <div class="section ablog__blog_comments">
@@ -706,7 +704,7 @@ and make use of the region-based dealiasing algorithm</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/examples/xradar/plot_dealias_xradar.ipynb.txt"
+      <li><a href="../../_sources/examples/xradar/plot_dealias_xradar.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
@@ -736,7 +734,7 @@ and make use of the region-based dealiasing algorithm</p>
 
   <p class="copyright">
     
-      © Copyright 2013-2024, Py-ART developers.
+      © Copyright 2013-2026, Py-ART developers.
       <br/>
     
   </p>

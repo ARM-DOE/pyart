@@ -539,13 +539,16 @@
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                   <section class="tex2jax_ignore mathjax_ignore" id="dealias-doppler-velocities-for-an-rhi-file">
-<h1>Dealias doppler velocities for an RHI file<a class="headerlink" href="#dealias-doppler-velocities-for-an-rhi-file" title="Link to this heading">#</a></h1>
+                   <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-examples-correct-plot-dealias-rhi-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="dealias-doppler-velocities-for-an-rhi-file">
+<span id="sphx-glr-examples-correct-plot-dealias-rhi-py"></span><h1>Dealias doppler velocities for an RHI file<a class="headerlink" href="#dealias-doppler-velocities-for-an-rhi-file" title="Link to this heading">#</a></h1>
 <p>In this example doppler velocities from range height indicator (RHI) scans are dealiased,
 using custom parameters with the region-based dealiasing algorithm in Py-ART.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Max Grover (mgrover@anl.gov)</span>
 
@@ -559,13 +562,9 @@ using custom parameters with the region-based dealiasing algorithm in Py-ART.</p
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">file</span></a><span class="p">)</span>
 </pre></div>
 </div>
-</div>
-</div>
 <p><strong>Apply the default parameters for dealiasing</strong></p>
 <p>Now let’s apply the default region-based technique</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Retrieve the nyquist velocity from the first sweep</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Retrieve the nyquist velocity from the first sweep</span>
 <a href="https://numpy.org/doc/stable/reference/arrays.scalars.html#numpy.float32" title="numpy.float32" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-attribute"><span class="n">nyq</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span></a><span class="p">[</span><span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="c1"># Apply the dealiasing algorithm with default parameters</span>
@@ -613,7 +612,8 @@ using custom parameters with the region-based dealiasing algorithm in Py-ART.</p
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xlim.html#matplotlib.pyplot.xlim" title="matplotlib.pyplot.xlim" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span></a><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
 </pre></div>
 </div>
-</div>
+<img src="../../_images/sphx_glr_plot_dealias_rhi_001.png" srcset="../../_images/sphx_glr_plot_dealias_rhi_001.png" alt="Uncorrected Radial Velocity, Corrected Radial Velocity" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(20.0, 60.0)
+</pre></div>
 </div>
 <p><strong>Refining the technique</strong></p>
 <p>If we use the default configuration, notice how extreme
@@ -623,9 +623,7 @@ results in much larger values than would be expected.
 It is considered best practice to apply a base-level of
 quality control here to improve the results. We can use velocity
 texture as a base level, where the noisier data will be removed.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate the velocity texture and add it to the radar object</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Calculate the velocity texture and add it to the radar object</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">vel_texture</span></a> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">calculate_velocity_texture</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">vel_field</span><span class="o">=</span><span class="s2">&quot;VEL&quot;</span><span class="p">,</span>
@@ -683,8 +681,22 @@ texture as a base level, where the noisier data will be removed.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xlim.html#matplotlib.pyplot.xlim" title="matplotlib.pyplot.xlim" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span></a><span class="p">(</span><span class="mi">20</span><span class="p">,</span> <span class="mi">60</span><span class="p">)</span>
 </pre></div>
 </div>
+<img src="../../_images/sphx_glr_plot_dealias_rhi_002.png" srcset="../../_images/sphx_glr_plot_dealias_rhi_002.png" alt="Uncorrected Radial Velocity, Corrected Radial Velocity" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>(20.0, 60.0)
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 10.204 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-correct-plot-dealias-rhi-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/745ae210e18fcd727d1be2e491f39652/plot_dealias_rhi.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_dealias_rhi.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/fd10b2b63ef1e8eee280fa01b5d517a1/plot_dealias_rhi.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_dealias_rhi.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/f1823cb0db83d2379cdaf3185babd023/plot_dealias_rhi.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_dealias_rhi.zip</span></code></a></p>
 </div>
 </div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
 
 <div class="section ablog__blog_comments">
@@ -733,7 +745,7 @@ texture as a base level, where the noisier data will be removed.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/examples/correct/plot_dealias_rhi.ipynb.txt"
+      <li><a href="../../_sources/examples/correct/plot_dealias_rhi.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
@@ -763,7 +775,7 @@ texture as a base level, where the noisier data will be removed.</p>
 
   <p class="copyright">
     
-      © Copyright 2013-2024, Py-ART developers.
+      © Copyright 2013-2026, Py-ART developers.
       <br/>
     
   </p>

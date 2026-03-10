@@ -539,8 +539,13 @@
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                   <section class="tex2jax_ignore mathjax_ignore" id="map-a-single-ppi-sweep-to-a-cartesian-grid-using-2d-weighting">
-<h1>Map a single PPI sweep to a Cartesian grid using 2D weighting<a class="headerlink" href="#map-a-single-ppi-sweep-to-a-cartesian-grid-using-2d-weighting" title="Link to this heading">#</a></h1>
+                   <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-examples-mapping-plot-grid-single-sweep-ppi-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="map-a-single-ppi-sweep-to-a-cartesian-grid-using-2d-weighting">
+<span id="sphx-glr-examples-mapping-plot-grid-single-sweep-ppi-py"></span><h1>Map a single PPI sweep to a Cartesian grid using 2D weighting<a class="headerlink" href="#map-a-single-ppi-sweep-to-a-cartesian-grid-using-2d-weighting" title="Link to this heading">#</a></h1>
 <p>Map the reflectivity field of a single PPI sweep from Antenna (polar) coordinates
 to a Cartesian grid, while using a 2D weighting.
 This solution is valid only for this case (single PPI sweep), yet it is a useful one
@@ -549,9 +554,34 @@ The exclusion of the z-dimension from the RoI and weighting calculations results
 minor errors, especially considering the high co-variance of neighboring radar
 volumes and the typically small Cartesian grid separation. Errors are effectively
 negligible at low elevation angles common to PPI sweeps.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../_images/sphx_glr_plot_grid_single_sweep_ppi_001.png" srcset="../../_images/sphx_glr_plot_grid_single_sweep_ppi_001.png" alt="polar, KaSACR-1 0.5 Deg. 2020-03-12T00:01:20Z  Equivalent reflectivity factor, KaSACR-1 2.0 Deg. 2020-03-12T00:03:50Z  Equivalent reflectivity factor" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_grid_single_sweep_ppi_002.png" srcset="../../_images/sphx_glr_plot_grid_single_sweep_ppi_002.png" alt="Cartesian gridded, sweep #2, sweep #4" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_plot_grid_single_sweep_ppi_003.png" srcset="../../_images/sphx_glr_plot_grid_single_sweep_ppi_003.png" alt="Cartesian gridded, sweep #2, sweep #4" class = "sphx-glr-multi-img"/></li>
+</ul>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Total sweeps = 4
+===
+
+now displaying Ze data for 2nd and 4th sweeps in polar coordinates
+(both approaching the 40 km range denoted by the purple ring)
+
+===
+===
+
+now displaying gridded Ze data for 2nd and 4th (final) sweeps; note the truncated max range in the case of the 4th sweep
+
+===
+===
+
+Using 2D weighting by setting h_factor and dist_factor z component to 0.0, the max range looks OK now
+
+===
+</pre></div>
+</div>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># =====================</span>
 <span class="c1"># Author: Israel Silber</span>
@@ -643,8 +673,19 @@ negligible at low elevation angles common to PPI sweeps.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 8.522 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-mapping-plot-grid-single-sweep-ppi-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/62694da872c4ac8eac778bc26d85befa/plot_grid_single_sweep_ppi.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_grid_single_sweep_ppi.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/c27be9392c66eb9d4f54e3a917bcbb97/plot_grid_single_sweep_ppi.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_grid_single_sweep_ppi.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/215077bfd9708e2acf1fb59cb789c743/plot_grid_single_sweep_ppi.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_grid_single_sweep_ppi.zip</span></code></a></p>
 </div>
 </div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
 
 <div class="section ablog__blog_comments">
@@ -693,7 +734,7 @@ negligible at low elevation angles common to PPI sweeps.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/examples/mapping/plot_grid_single_sweep_ppi.ipynb.txt"
+      <li><a href="../../_sources/examples/mapping/plot_grid_single_sweep_ppi.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
@@ -723,7 +764,7 @@ negligible at low elevation angles common to PPI sweeps.</p>
 
   <p class="copyright">
     
-      © Copyright 2013-2024, Py-ART developers.
+      © Copyright 2013-2026, Py-ART developers.
       <br/>
     
   </p>

@@ -539,13 +539,16 @@
                 
 <div id="searchbox"></div>
                 <article class="bd-article">
-                   <section class="tex2jax_ignore mathjax_ignore" id="calculating-and-plotting-a-cloud-mask">
-<h1>Calculating and Plotting a Cloud Mask<a class="headerlink" href="#calculating-and-plotting-a-cloud-mask" title="Link to this heading">#</a></h1>
+                   <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p><a class="reference internal" href="#sphx-glr-download-examples-correct-plot-cloud-mask-py"><span class="std std-ref">Go to the end</span></a>
+to download the full example code.</p>
+</div>
+<section class="sphx-glr-example-title" id="calculating-and-plotting-a-cloud-mask">
+<span id="sphx-glr-examples-correct-plot-cloud-mask-py"></span><h1>Calculating and Plotting a Cloud Mask<a class="headerlink" href="#calculating-and-plotting-a-cloud-mask" title="Link to this heading">#</a></h1>
 <p>This example shows how to correct and plot reflectivity from an ARM
 KAZR using a noise floor cloud mask.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
 
 <span class="c1"># Author: Adam Theisen and Zach Sherman</span>
 <span class="c1"># License: BSD 3 clause</span>
@@ -557,13 +560,9 @@ KAZR using a noise floor cloud mask.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 </pre></div>
 </div>
-</div>
-</div>
 <p><strong>Read and plot raw data</strong></p>
 <p>First let’s read and plot our dataset without any mask.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fetch and read in the ARM KAZR file.</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fetch and read in the ARM KAZR file.</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">DATASETS</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;sgpkazrgeC1.a1.20190529.000002.cdf&quot;</span><span class="p">)</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">aux_io</span><span class="o">.</span><span class="n">read_kazr</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
 
@@ -574,15 +573,11 @@ KAZR using a noise floor cloud mask.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-</div>
-</div>
-<p><strong>Calculate cloud mask and plot corrected data</strong></p>
+<img src="../../_images/sphx_glr_plot_cloud_mask_001.png" srcset="../../_images/sphx_glr_plot_cloud_mask_001.png" alt="2019-05-29T15:00:00Z  Reflectivity, copolar" class = "sphx-glr-single-img"/><p><strong>Calculate cloud mask and plot corrected data</strong></p>
 <p>Now lets apply a mask by using the calc_cloud_mask function
 that will use a noise floor calculation from range and more
 to calculate the mask.</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># First lets correct the data by calculating the mask.</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># First lets correct the data by calculating the mask.</span>
 <span class="n">cloud_mask_radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">calc_cloud_mask</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="s2">&quot;reflectivity_copol&quot;</span><span class="p">,</span> <span class="s2">&quot;range&quot;</span><span class="p">)</span>
 
 <span class="c1"># In this new radar object we should now have a new cloud mask field.</span>
@@ -608,8 +603,38 @@ to calculate the mask.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
+<img src="../../_images/sphx_glr_plot_cloud_mask_002.png" srcset="../../_images/sphx_glr_plot_cloud_mask_002.png" alt="2019-05-29T15:00:00Z  Reflectivity, copolar" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;long_name&#39;: &#39;Cloud mask 2 (2D box)&#39;, &#39;units&#39;: &#39;1&#39;, &#39;comment&#39;: &#39;The mask uses a 2D box to filter out noise.&#39;, &#39;flag_values&#39;: [0, 1], &#39;flag_meanings&#39;: [&#39;no_cloud&#39;, &#39;cloud&#39;], &#39;data&#39;: masked_array(
+  data=[[0, 0, 0, ..., 0, 0, 0],
+        [0, 0, 1, ..., 0, 0, 0],
+        [0, 1, 1, ..., 0, 0, 0],
+        ...,
+        [0, 1, 1, ..., 0, 0, 0],
+        [0, 0, 1, ..., 0, 0, 0],
+        [0, 0, 0, ..., 0, 0, 0]],
+  mask=[[False, False, False, ..., False, False, False],
+        [False, False, False, ..., False, False, False],
+        [False, False, False, ..., False, False, False],
+        ...,
+        [False, False, False, ..., False, False, False],
+        [False, False, False, ..., False, False, False],
+        [False, False, False, ..., False, False, False]],
+  fill_value=np.int64(999999),
+  dtype=int16)}
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.042 seconds)</p>
+<div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-correct-plot-cloud-mask-py">
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/e417eb06d7ddaf7b02425f979fd10ab4/plot_cloud_mask.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_cloud_mask.ipynb</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/507fce1ff610c02b5a302b5e844cb7bc/plot_cloud_mask.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">plot_cloud_mask.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-zip docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/113656d11b78abf152bbfd5d68a9e2e6/plot_cloud_mask.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">zipped:</span> <span class="pre">plot_cloud_mask.zip</span></code></a></p>
 </div>
 </div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
 </section>
 
 <div class="section ablog__blog_comments">
@@ -658,7 +683,7 @@ to calculate the mask.</p>
   <div role="note" aria-label="source link">
     <h3>This Page</h3>
     <ul class="this-page-menu">
-      <li><a href="../../_sources/examples/correct/plot_cloud_mask.ipynb.txt"
+      <li><a href="../../_sources/examples/correct/plot_cloud_mask.rst.txt"
             rel="nofollow">Show Source</a></li>
     </ul>
    </div></div>
@@ -688,7 +713,7 @@ to calculate the mask.</p>
 
   <p class="copyright">
     
-      © Copyright 2013-2024, Py-ART developers.
+      © Copyright 2013-2026, Py-ART developers.
       <br/>
     
   </p>
