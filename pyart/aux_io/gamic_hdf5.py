@@ -362,7 +362,7 @@ def _get_instrument_params(gfile, filemetadata, pulse_width):
 
     dic = filemetadata("prt_ratio")
     dic["data"] = gfile.sweep_expand(
-        [[1, 2.0 / 3.0, 3.0 / 4.0, 4.0 / 5.0][i] for i in unfolding]
+        [[1, 2.0 / 3.0, 3.0 / 4.0, 4.0 / 5.0, 5.0 / 6.0, 6.0 / 7.0 ][i] for i in unfolding]
     )
     instrument_params["prt_ratio"] = dic
 
