@@ -91,6 +91,26 @@ noisedBZ_vv = "noisedBZ_vv"
 rain_rate = "rain_rate"
 radar_estimated_rain_rate = "radar_estimated_rain_rate"
 radar_echo_classification = "radar_echo_classification"
+hydroclass_entropy = "hydroclass_entropy"
+proportion_AG = "proportion_AG"
+proportion_CR = "proportion_CR"
+proportion_LR = "proportion_LR"
+proportion_RP = "proportion_RP"
+proportion_RN = "proportion_RN"
+proportion_VI = "proportion_VI"
+proportion_WS = "proportion_WS"
+proportion_MH = "proportion_MH"
+proportion_IH = "proportion_IH"
+hydroclass_entropy = "hydroclass_entropy"
+proportion_AG = "proportion_AG"
+proportion_CR = "proportion_CR"
+proportion_LR = "proportion_LR"
+proportion_RP = "proportion_RP"
+proportion_RN = "proportion_RN"
+proportion_VI = "proportion_VI"
+proportion_WS = "proportion_WS"
+proportion_MH = "proportion_MH"
+proportion_IH = "proportion_IH"
 specific_attenuation = "specific_attenuation"
 specific_differential_attenuation = "specific_differential_attenuation"
 clutter_filter_power_removed = "clutter_filter_power_removed"
@@ -186,6 +206,16 @@ DEFAULT_FIELD_NAMES = {
     "rain_rate": rain_rate,
     "radar_estimated_rain_rate": radar_estimated_rain_rate,
     "radar_echo_classification": radar_echo_classification,
+    "hydroclass_entropy": hydroclass_entropy,
+    "proportion_AG": proportion_AG,
+    "proportion_CR": proportion_CR,
+    "proportion_LR": proportion_LR,
+    "proportion_RP": proportion_RP,
+    "proportion_RN": proportion_RN,
+    "proportion_VI": proportion_VI,
+    "proportion_WS": proportion_WS,
+    "proportion_MH": proportion_MH,
+    "proportion_IH": proportion_IH,
     "specific_attenuation": specific_attenuation,
     "differential_phase_texture": differential_phase_texture,
     "eastward_wind_component": eastward_wind_component,
@@ -467,6 +497,47 @@ DEFAULT_METADATA = {
         "long_name": "Geoferences have been applied to ray",
         "comment": "1 if georefs have been applied, 0 otherwise",
     },
+    "eastward_velocity": {
+        "units": "meters_per_second",
+        "long_name": "platform_eastward_velocity",
+        "comment": "EW velocity of the platform. Positive is eastwards.",
+    },
+    "northward_velocity": {
+        "units": "meters_per_second",
+        "long_name": "platform_northward_velocity",
+        "comment": "NS velocity of the platform. Positive is northwards.",
+    },
+    "vertical_velocity": {
+        "units": "meters_per_second",
+        "long_name": "platform_vertical_velocity",
+        "comment": "Vertical velocity of the platform. Positive is up.",
+    },
+    "eastward_wind": {
+        "units": "meters_per_second",
+        "long_name": "platform_eastward_wind",
+        "comment": "EW wind at the platform location. Positive is eastwards.",
+    },
+    "northward_wind": {
+        "units": "meters_per_second",
+        "long_name": "platform_northward_wind",
+        "comment": "NS wind at the platform location. Positive is northwards.",
+    },
+    "vertical_wind": {
+        "units": "meters_per_second",
+        "standard_name": "platform_vertical_wind",
+        "comment": "Vertical wind at the platform location. Positive is up.",
+    },
+    "heading_change_rate": {
+        "units": "degrees",
+        "long_name": "platform_heading_angle_rate_of_change",
+    },
+    "pitch_change_rate": {
+        "units": "degrees",
+        "long_name": "platform_pitch_angle_rate_of_change",
+    },
+    "roll_change_rate": {
+        "units": "degrees",
+    },
     # Reflectivity fields
     reflectivity: {
         "units": "dBZ",
@@ -638,6 +709,66 @@ DEFAULT_METADATA = {
         "units": "legend",
         "standard_name": "radar_echo_classification",
         "long_name": "Radar Echo classification",
+        "coordinates": "elevation azimuth range",
+    },
+    hydroclass_entropy: {
+        "units": "-",
+        "standard_name": "hydroclass_entropy",
+        "long_name": "Semi-supervised hydrometeor classification entropy",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_AG: {
+        "units": "percent",
+        "standard_name": "proportion_AG",
+        "long_name": "Aggregates proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_CR: {
+        "units": "percent",
+        "standard_name": "proportion_CR",
+        "long_name": "Crystals proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_LR: {
+        "units": "percent",
+        "standard_name": "proportion_LR",
+        "long_name": "Light Rain proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_RP: {
+        "units": "percent",
+        "standard_name": "proportion_RP",
+        "long_name": "Rimed particles proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_RN: {
+        "units": "percent",
+        "standard_name": "proportion_RN",
+        "long_name": "Rain proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_VI: {
+        "units": "percent",
+        "standard_name": "proportion_VI",
+        "long_name": "Vertical Ice Crystals proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_WS: {
+        "units": "percent",
+        "standard_name": "proportion_WS",
+        "long_name": "Wet Snow proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_MH: {
+        "units": "percent",
+        "standard_name": "proportion_MH",
+        "long_name": "Melting Hail proportion",
+        "coordinates": "elevation azimuth range",
+    },
+    proportion_IH: {
+        "units": "percent",
+        "standard_name": "proportion_IH",
+        "long_name": "Ice Hail proportion",
         "coordinates": "elevation azimuth range",
     },
     specific_attenuation: {
@@ -1072,6 +1203,9 @@ nexrad_level3_mapping = {
     134: None,  # High Resolution VIL
     135: None,  # Enhanced Echo Tops
     138: radar_estimated_rain_rate,  # Digital Storm Total Precipitation
+    153: reflectivity,  # Super Resolution Base Reflectivity Data Array
+    154: velocity,  # Super Resolution Base Velocity Data Array
+    155: spectrum_width,  # Super Resolution Base Spectrum Width Data Array
     159: differential_reflectivity,  # Digital Differential Reflectivity
     161: cross_correlation_ratio,  # Digital Correlation Coefficient
     163: specific_differential_phase,  # Digital Specific Differential Phase
@@ -1410,54 +1544,64 @@ def spectrum_width_limit(container=None, selection=0):
 
 DEFAULT_FIELD_COLORMAP = {
     # field name : colormap
-    reflectivity: "pyart_HomeyerRainbow",
-    corrected_reflectivity: "pyart_HomeyerRainbow",
-    total_power: "pyart_HomeyerRainbow",
-    signal_to_noise_ratio: "pyart_Carbone17",
-    velocity: "pyart_BuDRd18",
-    corrected_velocity: "pyart_BuDRd18",
-    simulated_velocity: "pyart_BuDRd18",
-    eastward_wind_component: "pyart_BuDRd18",
-    northward_wind_component: "pyart_BuDRd18",
-    vertical_wind_component: "pyart_BuDRd18",
-    spectrum_width: "pyart_NWS_SPW",
-    normalized_coherent_power: "pyart_Carbone17",
-    differential_reflectivity: "pyart_RefDiff",
-    corrected_differential_reflectivity: "pyart_RefDiff",
-    clutter_filter_power_removed: "pyart_RefDiff",
-    cross_correlation_ratio: "pyart_RefDiff",
-    logarithmic_cross_correlation_ratio: "pyart_RefDiff",
-    differential_phase: "pyart_Wild25",
-    unfolded_differential_phase: "pyart_Wild25",
-    corrected_differential_phase: "pyart_Wild25",
-    specific_differential_phase: "pyart_Theodore16",
-    corrected_specific_differential_phase: "pyart_Theodore16",
-    linear_depolarization_ratio: "pyart_SCook18",
-    linear_depolarization_ratio_h: "pyart_SCook18",
-    linear_depolarization_ratio_v: "pyart_SCook18",
-    circular_depolarization_ratio: "pyart_SCook18",
-    rain_rate: "pyart_RRate11",
-    radar_estimated_rain_rate: "pyart_RRate11",
-    radar_echo_classification: "pyart_LangRainbow12",
-    specific_attenuation: "pyart_Carbone17",
-    differential_phase_texture: "pyart_BlueBrown11",
-    height: "pyart_SCook18",
-    interpolated_profile: "pyart_SCook18",
-    noisedBZ_hh: "pyart_HomeyerRainbow",
-    noisedBZ_vv: "pyart_HomeyerRainbow",
+    reflectivity: "HomeyerRainbow",
+    corrected_reflectivity: "HomeyerRainbow",
+    total_power: "HomeyerRainbow",
+    signal_to_noise_ratio: "Carbone17",
+    velocity: "BuDRd18",
+    corrected_velocity: "BuDRd18",
+    simulated_velocity: "BuDRd18",
+    eastward_wind_component: "BuDRd18",
+    northward_wind_component: "BuDRd18",
+    vertical_wind_component: "BuDRd18",
+    spectrum_width: "NWS_SPW",
+    normalized_coherent_power: "Carbone17",
+    differential_reflectivity: "RefDiff",
+    corrected_differential_reflectivity: "RefDiff",
+    clutter_filter_power_removed: "RefDiff",
+    cross_correlation_ratio: "RefDiff",
+    logarithmic_cross_correlation_ratio: "RefDiff",
+    differential_phase: "Wild25",
+    unfolded_differential_phase: "Wild25",
+    corrected_differential_phase: "Wild25",
+    specific_differential_phase: "Theodore16",
+    corrected_specific_differential_phase: "Theodore16",
+    linear_depolarization_ratio: "SCook18",
+    linear_depolarization_ratio_h: "SCook18",
+    linear_depolarization_ratio_v: "SCook18",
+    circular_depolarization_ratio: "SCook18",
+    rain_rate: "RRate11",
+    radar_estimated_rain_rate: "RRate11",
+    radar_echo_classification: "LangRainbow12",
+    hydroclass_entropy: "LangRainbow12",
+    proportion_AG: "LangRainbow12",
+    proportion_CR: "LangRainbow12",
+    proportion_LR: "LangRainbow12",
+    proportion_RP: "LangRainbow12",
+    proportion_RN: "LangRainbow12",
+    proportion_VI: "LangRainbow12",
+    proportion_WS: "LangRainbow12",
+    proportion_MH: "LangRainbow12",
+    proportion_IH: "LangRainbow12",
+    specific_attenuation: "Carbone17",
+    differential_phase_texture: "BlueBrown11",
+    height: "SCook18",
+    interpolated_profile: "SCook18",
+    noisedBZ_hh: "HomeyerRainbow",
+    noisedBZ_vv: "HomeyerRainbow",
     # Additional reflectivity like fields
-    "CZ": "pyart_HomeyerRainbow",
-    "DZ": "pyart_HomeyerRainbow",
-    "AZ": "pyart_HomeyerRainbow",
-    "Z": "pyart_HomeyerRainbow",
-    "dbz": "pyart_HomeyerRainbow",
-    "DBZ": "pyart_HomeyerRainbow",
-    "dBZ": "pyart_HomeyerRainbow",
-    "DBZH": "pyart_HomeyerRainbow",
-    "DBZ_S": "pyart_HomeyerRainbow",
-    "DBZ_K": "pyart_HomeyerRainbow",
-    "reflectivity_horizontal": "pyart_HomeyerRainbow",
-    "corr_reflectivity": "pyart_HomeyerRainbow",
+    "CZ": "HomeyerRainbow",
+    "DZ": "HomeyerRainbow",
+    "AZ": "HomeyerRainbow",
+    "Z": "HomeyerRainbow",
+    "dbz": "HomeyerRainbow",
+    "DBZ": "HomeyerRainbow",
+    "dBZ": "HomeyerRainbow",
+    "DBZH": "HomeyerRainbow",
+    "DBZ_S": "HomeyerRainbow",
+    "DBZ_K": "HomeyerRainbow",
+    "reflectivity_horizontal": "HomeyerRainbow",
+    "corr_reflectivity": "HomeyerRainbow",
 }
 
 # map each field to a limit or a limit function
@@ -1489,6 +1633,16 @@ DEFAULT_FIELD_LIMITS = {
     rain_rate: (0.0, 50.0),
     radar_estimated_rain_rate: (0.0, 50.0),
     radar_echo_classification: (0, 11),
+    hydroclass_entropy: (0.0, 1.0),
+    proportion_AG: (0.0, 100.0),
+    proportion_CR: (0.0, 100.0),
+    proportion_LR: (0.0, 100.0),
+    proportion_RP: (0.0, 100.0),
+    proportion_RN: (0.0, 100.0),
+    proportion_VI: (0.0, 100.0),
+    proportion_WS: (0.0, 100.0),
+    proportion_MH: (0.0, 100.0),
+    proportion_IH: (0.0, 100.0),
     specific_attenuation: (0.0, 10.0),
     differential_phase_texture: (0, 180.0),
     height: (0, 20000),

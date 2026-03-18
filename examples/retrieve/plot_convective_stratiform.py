@@ -244,7 +244,7 @@ plt.show()
 # Let's get a NEXRAD file from Hurricane Ian
 
 # Read in file
-nexrad_file = "s3://noaa-nexrad-level2/2022/09/28/KTBW/KTBW20220928_190142_V06"
+nexrad_file = "s3://unidata-nexrad-level2/2022/09/28/KTBW/KTBW20220928_190142_V06"
 radar = pyart.io.read_nexrad_archive(nexrad_file)
 
 # extract the lowest sweep
@@ -338,7 +338,7 @@ plt.show()
 # reflecitivity.
 
 # Read in file
-nexrad_file = "s3://noaa-nexrad-level2/2021/02/07/KOKX/KOKX20210207_161413_V06"
+nexrad_file = "s3://unidata-nexrad-level2/2021/02/07/KOKX/KOKX20210207_161413_V06"
 radar = pyart.io.read_nexrad_archive(nexrad_file)
 
 # extract the lowest sweep

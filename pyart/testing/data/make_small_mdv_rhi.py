@@ -151,7 +151,7 @@ out.write(struct.pack(fmt, *packet))
 
 # read/write elevs chunk
 f.seek(elevs_chunk_offset)
-fmt = "%df" % (2)
+fmt = f"{2}f"
 packet = list(struct.unpack(fmt, f.read(struct.calcsize(fmt))))
 out.write(struct.pack(fmt, *packet))
 

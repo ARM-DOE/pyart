@@ -170,26 +170,33 @@ class Grid:
     def projection_proj(self):
         # Proj instance as specified by the projection attribute.
         # Raises a ValueError if the pyart_aeqd projection is specified.
-        projparams = self.get_projparams()
-        if projparams["proj"] == "pyart_aeqd":
-            raise ValueError(
-                "Proj instance can not be made for the pyart_aeqd projection"
-            )
         if not _PYPROJ_AVAILABLE:
             raise MissingOptionalDependency(
                 "PyProj is required to create a Proj instance but it "
                 + "is not installed"
             )
+        projparams = self.get_projparams()
+
+        # Check if projparams is dictionary and check for pyart_aeqd
+        if isinstance(projparams, dict):
+            if projparams["proj"] == "pyart_aeqd":
+                raise ValueError(
+                    "Proj instance can not be made for the pyart_aeqd projection"
+                )
+        # Get proj instance from a proj str or dict
         proj = pyproj.Proj(projparams)
         return proj
 
     def get_projparams(self):
-        """Return a projparam dict from the projection attribute."""
-        projparams = self.projection.copy()
-        if projparams.pop("_include_lon_0_lat_0", False):
-            projparams["lon_0"] = self.origin_longitude["data"][0]
-            projparams["lat_0"] = self.origin_latitude["data"][0]
-        return projparams
+        """Return a projparam dict or str from the projection attribute."""
+        if isinstance(self.projection, dict):
+            projparams = self.projection.copy()
+            if projparams.pop("_include_lon_0_lat_0", False):
+                projparams["lon_0"] = self.origin_longitude["data"][0]
+                projparams["lat_0"] = self.origin_latitude["data"][0]
+            return projparams
+        else:
+            return self.projection
 
     def _find_and_check_nradar(self):
         """
@@ -313,60 +320,136 @@ class Grid:
         x, y, z : dict, 1D
             Distance from the grid origin for each Cartesian coordinate axis
             in a one dimensional array.
-
         """
-
         if not _XARRAY_AVAILABLE:
             raise MissingOptionalDependency(
-                "Xarray is required to use Grid.to_xarray but is not " + "installed!"
+                "Xarray is required to use Grid.to_xarray but is not installed!"
             )
+
+        def _process_radar_name(radar_name):
+            """Process radar_name to handle different formats."""
+            if radar_name.dtype.kind == "S" and radar_name.ndim > 1:
+                # Join each row of bytes into a single byte string
+                return np.array(
+                    [b"".join(row) for row in radar_name],
+                    dtype=f"|S{radar_name.shape[1]}",
+                )
+            return radar_name
 
         lon, lat = self.get_point_longitude_latitude()
         z = self.z["data"]
         y = self.y["data"]
         x = self.x["data"]
 
-        time = np.array([num2date(self.time["data"][0], self.time["units"])])
+        time = np.array([num2date(self.time["data"][0], units=self.time["units"])])
 
         ds = xarray.Dataset()
-        for field in list(self.fields.keys()):
-            field_data = self.fields[field]["data"]
+        for field, field_info in self.fields.items():
+            field_data = field_info["data"]
             data = xarray.DataArray(
                 np.ma.expand_dims(field_data, 0),
                 dims=("time", "z", "y", "x"),
                 coords={
-                    "time": (["time"], time),
-                    "z": (["z"], z),
+                    "time": time,
+                    "z": z,
                     "lat": (["y", "x"], lat),
                     "lon": (["y", "x"], lon),
-                    "y": (["y"], y),
-                    "x": (["x"], x),
+                    "y": y,
+                    "x": x,
                 },
             )
-            for meta in list(self.fields[field].keys()):
-                if meta != "data":
-                    data.attrs.update({meta: self.fields[field][meta]})
-
+            data.attrs.update({k: v for k, v in field_info.items() if k != "data"})
             ds[field] = data
-            ds.lon.attrs = [
-                ("long_name", "longitude of grid cell center"),
-                ("units", "degree_E"),
-                ("standard_name", "Longitude"),
-            ]
-            ds.lat.attrs = [
-                ("long_name", "latitude of grid cell center"),
-                ("units", "degree_N"),
-                ("standard_name", "Latitude"),
-            ]
 
-            ds.z.attrs = get_metadata("z")
-            ds.y.attrs = get_metadata("y")
-            ds.x.attrs = get_metadata("x")
+        ds.lon.attrs = {
+            "long_name": "longitude of grid cell center",
+            "units": "degree_E",
+            "standard_name": "Longitude",
+        }
+        ds.lat.attrs = {
+            "long_name": "latitude of grid cell center",
+            "units": "degree_N",
+            "standard_name": "Latitude",
+        }
 
-            ds.z.encoding["_FillValue"] = None
-            ds.lat.encoding["_FillValue"] = None
-            ds.lon.encoding["_FillValue"] = None
-            ds.close()
+        for attr in [ds.z, ds.lat, ds.lon]:
+            attr.encoding["_FillValue"] = None
+
+        from ..io.grid_io import _make_coordinatesystem_dict
+
+        ds.coords["ProjectionCoordinateSystem"] = xarray.DataArray(
+            data=np.array(1, dtype="int32"),
+            attrs=_make_coordinatesystem_dict(self),
+        )
+
+        projection = self.projection.copy()
+        if "_include_lon_0_lat_0" in projection:
+            projection["_include_lon_0_lat_0"] = str(
+                projection["_include_lon_0_lat_0"]
+            ).lower()
+        ds.coords["projection"] = xarray.DataArray(
+            data=np.array(1, dtype="int32"),
+            attrs=projection,
+        )
+
+        # Handle origin and radar attributes with appropriate dimensions
+        for attr_name in [
+            "origin_latitude",
+            "origin_longitude",
+            "origin_altitude",
+        ]:
+            if hasattr(self, attr_name):
+                attr_data = getattr(self, attr_name)
+                if attr_data is not None:
+                    attr_value = np.ma.expand_dims(attr_data["data"][0], 0)
+                    ds.coords[attr_name] = xarray.DataArray(
+                        attr_value, dims=("time",), attrs=get_metadata(attr_name)
+                    )
+
+        # Radar-specific attributes that should have the nradar dimension
+        for attr_name in [
+            "radar_altitude",
+            "radar_latitude",
+            "radar_longitude",
+            "radar_time",
+        ]:
+            if hasattr(self, attr_name):
+                attr_data = getattr(self, attr_name)
+                if attr_data is not None:
+                    ds.coords[attr_name] = xarray.DataArray(
+                        attr_data["data"],
+                        dims=("nradar",),
+                        attrs=get_metadata(attr_name),
+                    )
+
+        if "radar_time" in ds.variables:
+            ds.radar_time.attrs.pop("calendar")
+
+        # Handle radar_name and ensure it has the correct dimension
+        if self.radar_name is not None:
+            radar_name = _process_radar_name(self.radar_name["data"])
+            ds.coords["radar_name"] = xarray.DataArray(
+                radar_name, dims=("nradar",), attrs=get_metadata("radar_name")
+            )
+        else:
+            radar_name = np.array(["ExampleRadar"], dtype="U")
+            ds.coords["radar_name"] = xarray.DataArray(
+                radar_name, dims=("nradar",), attrs=get_metadata("radar_name")
+            )
+
+        # Add radar_name to attributes
+        ds.attrs["radar_name"] = (
+            radar_name.tolist() if radar_name.size > 1 else radar_name.item()
+        )
+        ds.attrs["nradar"] = radar_name.size
+        ds.attrs.update(self.metadata)
+        for key in ds.attrs:
+            try:
+                ds.attrs[key] = ds.attrs[key].decode("utf-8")
+            except AttributeError:
+                pass
+
+        ds.close()
         return ds
 
     def add_field(self, field_name, field_dict, replace_existing=False):
@@ -389,7 +472,7 @@ class Grid:
         if "data" not in field_dict:
             raise KeyError('Field dictionary must contain a "data" key')
         if field_name in self.fields and replace_existing is False:
-            raise ValueError("A field named %s already exists" % (field_name))
+            raise ValueError(f"A field named {field_name} already exists")
         if field_dict["data"].shape != (self.nz, self.ny, self.nx):
             raise ValueError("Field has invalid shape")
 

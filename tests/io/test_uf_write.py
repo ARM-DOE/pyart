@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's uf_write module. """
+"""Unit Tests for Py-ART's uf_write module."""
 
 try:
     from StringIO import StringIO

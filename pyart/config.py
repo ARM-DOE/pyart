@@ -142,9 +142,10 @@ def get_field_colormap(field):
     if field in _DEFAULT_FIELD_COLORMAP:
         return _DEFAULT_FIELD_COLORMAP[field]
     else:
-        import matplotlib.cm
+        import matplotlib
 
-        return matplotlib.cm.get_cmap().name
+        # Use the default matplotlib colormap
+        return matplotlib.colormaps.get_cmap("Spectral_r").name
 
 
 def get_field_limits(field, container=None, selection=0):

@@ -792,13 +792,12 @@ class Radar:
         """
         # check that the field dictionary to add is valid
         if field_name in self.fields and replace_existing is False:
-            err = "A field with name: %s already exists" % (field_name)
+            err = f"A field with name: {field_name} already exists"
             raise ValueError(err)
         if "data" not in dic:
             raise KeyError("dic must contain a 'data' key")
         if dic["data"].shape != (self.nrays, self.ngates):
-            t = (self.nrays, self.ngates)
-            err = "'data' has invalid shape, should be (%i, %i)" % t
+            err = f"'data' has invalid shape, should be ({self.nrays}, {self.ngates})"
             raise ValueError(err)
         # add the field
         self.fields[field_name] = dic
@@ -818,10 +817,10 @@ class Radar:
         replace_existing : bool, optional
             If True, replaces the fields in the radar object with
             copies of those fields with the applied gatefilter.
-            False will return new fields with the appended 'filtered_'
+            False will return new fields with the appended "filtered"
             prefix.
         include_fields : list, optional
-            List of fields to have filtered applied to. If none, all
+            List of fields to have filter applied to. If none, all
             fields will have applied filter.
 
         """
@@ -836,7 +835,7 @@ class Radar:
                     self.fields[field]["data"] = np.ma.masked_where(
                         gatefilter.gate_excluded, self.fields[field]["data"]
                     )
-            # Add new fields with prefix 'filtered_'
+            # Add new fields with prefix "filtered"
             else:
                 for field in include_fields:
                     field_dict = copy.deepcopy(self.fields[field])
@@ -892,7 +891,7 @@ class Radar:
 
         """
         if existing_field_name not in self.fields:
-            err = "field %s does not exist in object" % (existing_field_name)
+            err = f"field {existing_field_name} does not exist in object"
             raise ValueError(err)
         dic = {}
         for k, v in self.fields[existing_field_name].items():

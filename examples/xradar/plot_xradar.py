@@ -21,10 +21,10 @@ filename = get_test_data("swx_20120520_0641.nc")
 tree = xd.io.open_cfradial1_datatree(filename)
 
 # Give the tree Py-ART radar methods
-radar = pyart.xradar.Xradar(tree)
+radar = tree.pyart.to_radar()
 
 # Plot the Reflectivity Field (corrected_reflectivity_horizontal)
 display = pyart.graph.RadarMapDisplay(radar)
 display.plot_ppi(
-    "corrected_reflectivity_horizontal", cmap="pyart_ChaseSpectral", vmin=-20, vmax=70
+    "corrected_reflectivity_horizontal", cmap="ChaseSpectral", vmin=-20, vmax=70
 )

@@ -11,17 +11,14 @@ precipitation features are deemphasized using a gray scale and the regions
 with just snow and just rain are depicted in a corresponding full-color scale.
 The ultimate utility of image muting radar reflectivity is to reduce the misinterpretation
 of regions of melting or mixed precipitation as opposed to heavy snow or heavy rain.
+See Tomkins et al. (2022) for full details.
 
 """
 
 print(__doc__)
 
-# Author: Laura Tomkins (lmtomkin@ncsu.edu)
+# Author: Laura Tomkins (lauramtomkins@gmail.com)
 # License: BSD 3 clause
-# citation: Tomkins, L. M., Yuter, S. E., Miller, M. A., and Allen, L. R., 2022:
-# Image muting of mixed precipitation to improve identification of regions
-# of heavy snow in radar data. Atmos. Meas. Tech., 15, 5515–5525,
-# https://doi.org/10.5194/amt-15-5515-2022
 
 import matplotlib.colors as mcolors
 import matplotlib.pyplot as plt
@@ -30,7 +27,7 @@ import numpy as np
 import pyart
 
 # Read in file
-nexrad_file = "s3://noaa-nexrad-level2/2020/02/07/KBGM/KBGM20200207_132642_V06"
+nexrad_file = "s3://unidata-nexrad-level2/2020/02/07/KBGM/KBGM20200207_132642_V06"
 radar = pyart.io.read_nexrad_archive(nexrad_file)
 
 # Mute radar object
@@ -65,3 +62,10 @@ display.plot("muted_reflectivity", 0, vmin=5, vmax=45, cmap=muted_cmap)
 display.set_limits((-300, 300), (-300, 300))
 ax.set_aspect("equal")
 plt.show()
+
+# References
+# ----------
+# Tomkins, L. M., Yuter, S. E., Miller, M. A., and Allen, L. R., 2022:
+# Image muting of mixed precipitation to improve identification of regions
+# of heavy snow in radar data. Atmos. Meas. Tech., 15, 5515–5525,
+# https://doi.org/10.5194/amt-15-5515-2022

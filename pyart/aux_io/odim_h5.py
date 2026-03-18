@@ -4,6 +4,7 @@ Routines for reading ODIM_H5 files.
 """
 
 import datetime
+import warnings
 
 import numpy as np
 
@@ -48,7 +49,7 @@ def read_odim_h5(
     include_fields=None,
     include_datasets=None,
     exclude_datasets=None,
-    **kwargs
+    **kwargs,
 ):
     """
     Read a ODIM_H5 file.
@@ -106,6 +107,11 @@ def read_odim_h5(
     # * support for other objects (SCAN, XSEC)
 
     # check that h5py is available
+    warnings.warn(
+        "Py-ART's ODIM module is deprecated, please use xradar to read in the file using "
+        "xd.io.open_odim_datatree",
+        UserWarning,
+    )
     if not _H5PY_AVAILABLE:
         raise MissingOptionalDependency(
             "h5py is required to use read_odim_h5 but is not installed"
@@ -130,7 +136,7 @@ def read_odim_h5(
     with h5py.File(filename, "r") as hfile:
         odim_object = _to_str(hfile["what"].attrs["object"])
         if odim_object not in ["PVOL", "SCAN", "ELEV", "AZIM"]:
-            raise NotImplementedError("object: %s not implemented." % (odim_object))
+            raise NotImplementedError(f"object: {odim_object} not implemented.")
 
         # determine the number of sweeps by the number of groups which
         # begin with dataset
@@ -166,8 +172,10 @@ def read_odim_h5(
         metadata["odim_conventions"] = _to_str(hfile.attrs["Conventions"])
 
         h_what = hfile["what"].attrs
-        metadata["version"] = _to_str(h_what["version"])
-        metadata["source"] = _to_str(h_what["source"])
+        if "version" in h_what:
+            metadata["version"] = _to_str(h_what["version"])
+        if "source" in h_what:
+            metadata["source"] = _to_str(h_what["source"])
 
         try:
             ds1_how = hfile[datasets[0]]["how"].attrs
@@ -374,10 +382,10 @@ def read_odim_h5(
                 try:
                     sweep_data = _get_odim_h5_sweep_data(hfile[dset][h_field_key])
                 except KeyError:
-                    sweep_data = np.zeros((rays_in_sweep, max_nbins)) + np.NaN
+                    sweep_data = np.zeros((rays_in_sweep, max_nbins)) + np.nan
                 sweep_nbins = sweep_data.shape[1]
                 fdata[start : start + rays_in_sweep, :sweep_nbins] = sweep_data[:]
-                # set data to NaN if its beyond the range of this sweep
+                # set data to nan if its beyond the range of this sweep
                 fdata[start : start + rays_in_sweep, sweep_nbins:max_nbins] = np.nan
                 start += rays_in_sweep
             # create field dictionary

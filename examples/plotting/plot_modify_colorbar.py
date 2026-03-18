@@ -7,6 +7,7 @@ This is an example of how to modify a colobar
 within a Py-ART display object.
 
 """
+
 print(__doc__)
 
 # Author: Joe O'Brien (obrienj@anl.gov)
@@ -19,7 +20,8 @@ import pyart
 from pyart.testing import get_test_data
 
 #########################################
-# ** Initial PPI Map Display
+# Initial PPI Map Display
+# -----------------------
 #
 # Let's plot a PPI Map Display
 # and take a look at the colorbar
@@ -50,7 +52,7 @@ display.plot_ppi_map(
     vmax=60,
     embellish=False,
     norm=None,
-    cmap="pyart_HomeyerRainbow",
+    cmap="HomeyerRainbow",
 )
 
 # Add gridlines
@@ -76,8 +78,9 @@ gl.ylabel_style = {"size": 14}
 del display
 
 ############################################
-# ** Colorbar Position / Title Manipulation
-
+# Colorbar Position / Title Manipulation
+# --------------------------------------
+#
 # Now, let's update the colorbar position
 # to match the display
 
@@ -99,7 +102,7 @@ ppi_map = display.plot_ppi_map(
     vmax=60,
     embellish=False,
     norm=None,
-    cmap="pyart_HomeyerRainbow",
+    cmap="HomeyerRainbow",
 )
 
 # Add gridlines

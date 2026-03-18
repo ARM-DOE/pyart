@@ -11,10 +11,6 @@ on:
       - '.github/workflows/wheels.yml'
   workflow_dispatch:
 
-env:
-  CIBW_TEST_REQUIRES: pytest
-  CIBW_TEST_COMMAND: "pytest {project}/tests"
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -26,38 +22,30 @@ jobs:
     strategy:
       matrix:
         os: [
-          ubuntu-20.04,
-          windows-2019,
-          macos-11,
+          ubuntu-latest,
+          windows-latest,
+          macos-latest,
+          macos-15-intel,
         ]
       fail-fast: false
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Install python
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
 
       - name: Fetch all history for all tags and branches
         run: |
            git fetch --prune --unshallow
 
       - name: Build wheels for CPython
-        uses: pypa/cibuildwheel@v2.17.0
+        uses: pypa/cibuildwheel@v3.4.0
         with:
           output-dir: dist
-        env:
-          CIBW_BUILD: "cp39-* cp310-* cp311-* cp312*"
-          CIBW_SKIP: "*-musllinux_*"  #  numpy doesn't have wheels for musllinux so we can't build some quickly and without bloating
-          CIBW_ARCHS_LINUX: "x86_64"
-          CIBW_ARCHS_MACOS: x86_64 arm64
-          MACOSX_DEPLOYMENT_TARGET: "10.9" # as of CIBW 2.9, this is the default value, pin it so it can't be bumped silently
-          CIBW_ARCHS_WINDOWS: "auto64"
-          CIBW_BUILD_VERBOSITY: 1
-          CIBW_ENVIRONMENT: PIP_ONLY_BINARY=":all:"
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v7
         with:
           name: wheels-${{ matrix.os }}
           path: ./dist/*.whl
@@ -67,13 +55,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - name: Build sdist
         run: pipx run build --sdist
 
       - name: Upload sdist
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: sdist
           path: dist/*.tar.gz
@@ -86,20 +74,20 @@ jobs:
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     steps:
       - name: Download sdist
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           name: sdist
           path: dist
 
       - name: Download wheels
-        uses: actions/download-artifact@v4
+        uses: actions/download-artifact@v8
         with:
           pattern: wheels-*
           path: dist
           merge-multiple: true
 
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.8.14
+        uses: pypa/gh-action-pypi-publish@v1.13.0
         with:
           user: __token__
           password: ${{ secrets.PYPI_TOKEN }}

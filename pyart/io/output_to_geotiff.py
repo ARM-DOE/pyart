@@ -33,6 +33,8 @@ def write_grid_geotiff(
     warp=False,
     sld=False,
     use_doublequotes=True,
+    transparent_bg=True,
+    opacity=1.0,
 ):
     """
     Write a Py-ART Grid object to a GeoTIFF file.
@@ -100,6 +102,17 @@ def write_grid_geotiff(
 
         False - Use single quotes instead.
 
+    transparent_bg : bool, optional
+        True - Sets alpha value of masked pixels to zero producing a
+               transparent background
+
+        False - Sets alpha value of masked pixels to value assigned by
+                opacity parameter
+
+    opacity : float, optional
+        Alpha value to be assigned to all pixels (except for transparent background)
+        Value must be between 0 (transparent) and 1 (opaque)
+
     """
     if not IMPORT_FLAG:
         raise MissingOptionalDependency("GDAL not detected, GeoTIFF output failure!")
@@ -156,9 +169,11 @@ def write_grid_geotiff(
         )
     else:
         # Assign data RGB levels based on value relative to vmax/vmin
-        rarr, garr, barr = _get_rgb_values(data, vmin, vmax, color_levels, cmap)
+        rarr, garr, barr, aarr = _get_rgb_values(
+            data, vmin, vmax, color_levels, cmap, transparent_bg, opacity
+        )
         dst_ds = out_driver.Create(
-            ofile, data.shape[1], data.shape[0], 3, gdal.GDT_Byte
+            ofile, data.shape[1], data.shape[0], 4, gdal.GDT_Byte
         )
 
     # Common Projection and GeoTransform
@@ -172,6 +187,7 @@ def write_grid_geotiff(
         dst_ds.GetRasterBand(1).WriteArray(rarr[::-1, :])
         dst_ds.GetRasterBand(2).WriteArray(garr[::-1, :])
         dst_ds.GetRasterBand(3).WriteArray(barr[::-1, :])
+        dst_ds.GetRasterBand(4).WriteArray(aarr[::-1, :])
     dst_ds.FlushCache()
     dst_ds = None
 
@@ -202,7 +218,7 @@ def write_grid_geotiff(
         shutil.move(ofile + "_tmp.tif", ofile)
 
 
-def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
+def _get_rgb_values(data, vmin, vmax, color_levels, cmap, transpbg, op):
     """
     Get RGB values for later output to GeoTIFF, given a 2D data field,
     display min/max and color table info. Missing data get numpy.nan.
@@ -221,6 +237,11 @@ def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
         with steps << 255 (e.g., hydrometeor ID).
     cmap : str or matplotlib.colors.Colormap object, optional
         Colormap to use for RGB output or SLD file.
+    transpbg : bool
+        True - generate alpha channel with masked values set to 0
+        False - generate alpha channel with masked values set to op value
+    op : float
+        Opacity of image, value of 0 is transparent, value of 1 is opaque
 
     Returns
     -------
@@ -230,6 +251,8 @@ def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
         Blue channel indices (range = 0-255).
     garr : numpy.ndarray object, dtype int
         Green channel indices (range = 0-255).
+    aarr : numpy.ndarray object, dtype int
+        Alpha channel indices (range = 0-255).
 
     """
     frac = (data - vmin) / float(vmax - vmin)
@@ -242,7 +265,8 @@ def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
     rarr = []
     garr = []
     barr = []
-    cmap = plt.cm.get_cmap(cmap)
+    aarr = []
+    cmap = plt.get_cmap(cmap)
     for val in index:
         if not np.isnan(val):
             ind = int(np.round(val))
@@ -250,14 +274,21 @@ def _get_rgb_values(data, vmin, vmax, color_levels, cmap):
             rarr.append(int(np.round(r * 255)))
             garr.append(int(np.round(g * 255)))
             barr.append(int(np.round(b * 255)))
+            aarr.append(int(np.round(op * 255)))
         else:
             rarr.append(np.nan)
             garr.append(np.nan)
             barr.append(np.nan)
+            if not transpbg:
+                aarr.append(int(np.round(op * 255)))
+            else:
+                aarr.append(0)
+
     rarr = np.reshape(rarr, data.shape)
     garr = np.reshape(garr, data.shape)
     barr = np.reshape(barr, data.shape)
-    return rarr, garr, barr
+    aarr = np.reshape(aarr, data.shape)
+    return rarr, garr, barr, aarr
 
 
 def _create_sld(cmap, vmin, vmax, filename, color_levels=None):
@@ -287,7 +318,7 @@ def _create_sld(cmap, vmin, vmax, filename, color_levels=None):
         with steps << 255 (e.g., hydrometeor ID).
 
     """
-    cmap = plt.cm.get_cmap(cmap)
+    cmap = plt.get_cmap(cmap)
     if color_levels is None:
         color_levels = 255
     name, _ = filename.split(".")

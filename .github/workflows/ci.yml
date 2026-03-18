@@ -27,19 +27,21 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.10", "3.11", "3.12"]
+        python-version: ["3.11", "3.12", "3.13"]
         os: [macos, ubuntu, windows]
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       # Install dependencies
       - name: Setup Conda Environment
-        uses: mamba-org/setup-micromamba@v1
+        uses: mamba-org/setup-micromamba@v2.0.7
         with:
           environment-file: continuous_integration/environment-ci.yml
-          environment-name: pyart-dev
+          init-shell: >-
+            bash
           cache-downloads: true
+          post-cleanup: "all"
           create-args: python=${{ matrix.python-version }}
 
       - name: Fetch all history for all tags and branches
@@ -54,7 +56,7 @@ jobs:
       - name: Run Linting
         shell: bash -l {0}
         run: |
-          ruff .
+          ruff check .
 
       - name: Run Tests
         id: run_tests
@@ -63,10 +65,28 @@ jobs:
           python -m pytest -v --cov=./ --cov-report=xml
 
       - name: Upload code coverage to Codecov
-        uses: codecov/codecov-action@v4.2.0
+        uses: codecov/codecov-action@v5.5.2
         with:
           file: ./coverage.xml
           flags: unittests
           env_vars: OS,PYTHON
           name: codecov-umbrella
           fail_ci_if_error: false
+
+
+  oldestdeps:
+    name: Check oldest dependencies
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v6
+      - uses: astral-sh/setup-uv@v7
+        with:
+          python-version: '3.10.0'
+          prune-cache: false
+
+      - name: Install PyART
+        run: uv sync --group test --resolution=lowest-direct
+
+      - name: Run Tests
+        run: uv run --no-sync python -m pytest -v

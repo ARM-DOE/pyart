@@ -21,7 +21,7 @@ def read_mdv(
     exclude_fields=None,
     include_fields=None,
     delay_field_loading=False,
-    **kwargs
+    **kwargs,
 ):
     """
     Read a MDV file.
@@ -96,7 +96,7 @@ def read_mdv(
     scan_type = mdvfile.projection
 
     if scan_type not in ["ppi", "rhi"]:
-        raise NotImplementedError("No support for scan_type %s." % scan_type)
+        raise NotImplementedError(f"No support for scan_type {scan_type}.")
 
     # time
     time = filemetadata("time")

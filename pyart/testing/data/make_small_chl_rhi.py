@@ -6,7 +6,6 @@ from a two scan RHI volume.
 All field data is left untouched.
 """
 
-
 # parameters
 INFILE = "CHL20120705_230123"
 OUTFILE = "example_chl_rhi.chl"

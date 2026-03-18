@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/cfradial.py module. """
+"""Unit Tests for Py-ART's io/cfradial.py module."""
 
 import warnings
 
@@ -179,7 +179,7 @@ def test_antenna_transition():
 )
 def test_instument_parameters(keys):
     # instrument_parameter sub-convention
-    description = "instrument_parameters: %s" % keys
+    description = f"instrument_parameters: {keys}"
     check_instrument_parameter.description = description
     check_instrument_parameter(keys)
 
@@ -217,7 +217,7 @@ def test_nsweeps():
     ],
 )
 def test_field_dics(field):
-    description = "field : %s, dictionary" % field
+    description = f"field : {field}, dictionary"
     check_field_dic.description = description
     check_field_dic(field)
 
@@ -237,7 +237,7 @@ def check_field_dic(field):
     ],
 )
 def test_field_shapes(field):
-    description = "field : %s, shape" % field
+    description = f"field : {field}, shape"
     check_field_shape.description = description
     check_field_shape(field)
 
@@ -253,7 +253,7 @@ fields = {
 
 @pytest.mark.parametrize("field, field_type", fields.items(), ids=list(fields.keys()))
 def test_field_types(field, field_type):
-    description = "field : %s, type" % field
+    description = f"field : {field}, type"
     check_field_type.description = description
     check_field_type(field, field_type)
 
@@ -271,7 +271,7 @@ fields = {
 def test_field_first_points(field, field_value):
     # these values can be found using:
     # [round(radar.fields[f]['data'][0,0]) for f in radar.fields]
-    description = "field : %s, first point" % field
+    description = f"field : {field}, first point"
     check_field_first_point.description = description
     check_field_first_point(field, field_value)
 
@@ -486,7 +486,7 @@ def attribute_equal(class1, class2, key, allow_str_case_diff=True):
     a1 = getattr(class1, key)
     a2 = getattr(class2, key)
 
-    assert type(a1) == type(a2)
+    assert type(a1) == type(a2)  # noqa
 
     if isinstance(a1, str) and allow_str_case_diff:
         assert a1.upper() == a2.upper()

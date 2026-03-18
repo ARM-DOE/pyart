@@ -1,7 +1,6 @@
 name: pyart-docs
 channels:
   - conda-forge
-  - defaults
 dependencies:
   - gdal
   - numpy
@@ -15,13 +14,14 @@ dependencies:
   - cartopy
   - cvxopt
   - xarray
-  - sphinx<7.2
+  - sphinx
   - ipython
   - pandoc
   - pkg-config
   - Cython
   - fsspec
   - s3fs
+  - gcsfs>=2025.3.2
   - glpk
   - cftime
   - shapely
@@ -31,13 +31,13 @@ dependencies:
   - sphinx-gallery
   - sphinx-design
   - sphinx-copybutton
-  - nbsphinx
   - pre_commit
   - cmweather
   - mda-xdrlib
   - xradar
+  - dask
+  - ablog
   - pip
   - pip:
       - pooch
       - versioneer
-      - ablog

@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's graph/common.py module. """
+"""Unit Tests for Py-ART's graph/common.py module."""
 
 import datetime
 
@@ -33,7 +33,7 @@ def test_parse_ax_fig():
 
 def test_parse_cmap():
     assert common.parse_cmap("jet", "foo") == "jet"
-    assert common.parse_cmap(None, "reflectivity") == "pyart_HomeyerRainbow"
+    assert common.parse_cmap(None, "reflectivity") == "HomeyerRainbow"
 
 
 def test_parse_vmin_vmax():

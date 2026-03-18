@@ -10,6 +10,7 @@ from copy import deepcopy
 from warnings import warn
 
 import numpy as np
+import numpy.ma as ma
 from scipy.integrate import cumulative_trapezoid
 
 from ..config import get_field_name, get_fillvalue, get_metadata
@@ -47,6 +48,12 @@ def calculate_attenuation_zphi(
     The attenuation is computed up to a user defined freezing level height
     or up to where temperatures in a temperature field are positive.
     The coefficients are either user-defined or radar frequency dependent.
+
+    NOTE: The base 10 forumulation that uses attenuated radar reflectivity and
+    differential phase that is used in this function can be found in Gu et al (2011).
+
+    NOTE: The base 10 forumulation that uses attenuated radar reflectivity and
+    differential phase that is used in this function can be found in Gu et al (2011).
 
     Parameters
     ----------
@@ -279,6 +286,7 @@ def calculate_attenuation_zphi(
                 phidp_max = np.median(ray_phase_shift[last_six_good])
                 self_cons_number = 10.0 ** (0.1 * beta * a_coef * phidp_max) - 1.0
                 I_indef = cumulative_trapezoid(0.46 * beta * dr * ray_refl_linear[::-1])
+                I_indef = cumulative_trapezoid(0.46 * beta * dr * ray_refl_linear[::-1])
                 I_indef = np.append(I_indef, I_indef[-1])[::-1]
 
                 # set the specific attenutation and attenuation
@@ -289,6 +297,7 @@ def calculate_attenuation_zphi(
                 )
 
                 pia[ray, :-1] = cumulative_trapezoid(ah[ray, :]) * dr * 2.0
+                pia[ray, :-1] = cumulative_trapezoid(ah[ray, :]) * dr * 2.0
                 pia[ray, -1] = pia[ray, -2]
 
                 # if ZDR exists, set the specific differential attenuation
@@ -298,6 +307,7 @@ def calculate_attenuation_zphi(
                         ah[ray, 0 : end_gate_arr[ray]], d
                     )
 
+                    pida[ray, :-1] = cumulative_trapezoid(adiff[ray, :]) * dr * 2.0
                     pida[ray, :-1] = cumulative_trapezoid(adiff[ray, :]) * dr * 2.0
                     pida[ray, -1] = pida[ray, -2]
 
@@ -1036,6 +1046,7 @@ def calculate_attenuation(
             reflectivity_linear = 10.0 ** (0.1 * beta * sm_refl)
             self_cons_number = 10.0 ** (0.1 * beta * a_coef * phidp_max) - 1.0
             I_indef = cumulative_trapezoid(0.46 * beta * dr * reflectivity_linear[::-1])
+            I_indef = cumulative_trapezoid(0.46 * beta * dr * reflectivity_linear[::-1])
             I_indef = np.append(I_indef, I_indef[-1])[::-1]
 
             # set the specific attenutation and attenuation
@@ -1046,6 +1057,7 @@ def calculate_attenuation(
             )
 
             atten[i, :-1] = cumulative_trapezoid(specific_atten[i, :]) * dr * 2.0
+            atten[i, :-1] = cumulative_trapezoid(specific_atten[i, :]) * dr * 2.0
             atten[i, -1] = atten[i, -2]
 
     # prepare output field dictionaries
@@ -1055,6 +1067,10 @@ def calculate_attenuation(
 
     cor_z = get_metadata(corr_refl_field)
     cor_z["data"] = atten + reflectivity_horizontal + z_offset
+
+    # If the numpy arrays are not masked arrays, convert it before returning
+    if isinstance(cor_z["data"], np.ndarray):
+        cor_z["data"] = ma.masked_invalid(cor_z["data"])
     cor_z["data"].mask = init_refl_correct.mask
     cor_z["_FillValue"] = get_fillvalue()
 

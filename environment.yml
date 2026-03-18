@@ -4,7 +4,7 @@ channels:
   - conda-forge
   - defaults
 dependencies:
-  - python=3.9
+  - python=3.13
   - numpy
   - scipy
   - matplotlib
@@ -16,6 +16,7 @@ dependencies:
   - xradar
   - mda-xdrlib
   - pip
+  - cmweather
   - pip:
     - wheel
     - watchdog

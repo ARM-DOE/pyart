@@ -637,12 +637,20 @@ class GateFilter:
             marked = self._get_fdata(field) > value
         return self._merge(marked, op, exclude_masked)
 
+    def exclude_above_toa(self, value, exclude_masked=True, op="or", inclusive=False):
+        """Exclude gates above a given toa value."""
+        if inclusive:
+            marked = self._radar.gate_altitude["data"] >= value
+        else:
+            marked = self._radar.gate_altitude["data"] > value
+        return self._merge(marked, op, exclude_masked)
+
     def exclude_inside(
         self, field, v1, v2, exclude_masked=True, op="or", inclusive=True
     ):
         """Exclude gates where a given field is inside a given interval."""
         if v2 < v1:
-            (v1, v2) = (v2, v1)
+            v1, v2 = (v2, v1)
         fdata = self._get_fdata(field)
         if inclusive:
             marked = (fdata >= v1) & (fdata <= v2)
@@ -655,7 +663,7 @@ class GateFilter:
     ):
         """Exclude gates where a given field is outside a given interval."""
         if v2 < v1:
-            (v1, v2) = (v2, v1)
+            v1, v2 = (v2, v1)
         fdata = self._get_fdata(field)
         if inclusive:
             marked = (fdata <= v1) | (fdata >= v2)
@@ -693,6 +701,15 @@ class GateFilter:
         Exclude gates where an invalid value occurs in a field (NaNs or infs).
         """
         marked = ~np.isfinite(self._get_fdata(field))
+        return self._merge(marked, op, exclude_masked)
+
+    def exclude_last_gates(self, field, n_gates=10, exclude_masked=True, op="or"):
+        """
+        Excludes a number of gates at the end of each ray. This is useful
+        for when trying to exclude "ring artifacts" in some datasets.
+        """
+        marked = np.full(self._get_fdata(field).shape, False)
+        marked[:, -n_gates:] = True
         return self._merge(marked, op, exclude_masked)
 
     def exclude_gates(self, mask, exclude_masked=True, op="or"):
@@ -800,7 +817,7 @@ class GateFilter:
     ):
         """Include gates where a given field is inside a given interval."""
         if v2 < v1:
-            (v1, v2) = (v2, v1)
+            v1, v2 = (v2, v1)
         fdata = self._get_fdata(field)
         if inclusive:
             marked = (fdata >= v1) & (fdata <= v2)
@@ -813,7 +830,7 @@ class GateFilter:
     ):
         """Include gates where a given field is outside a given interval."""
         if v2 < v1:
-            (v1, v2) = (v2, v1)
+            v1, v2 = (v2, v1)
         fdata = self._get_fdata(field)
         if inclusive:
             marked = (fdata <= v1) | (fdata >= v2)

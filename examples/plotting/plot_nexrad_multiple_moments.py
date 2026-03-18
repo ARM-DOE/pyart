@@ -7,6 +7,7 @@ An example which creates a plot containing multiple moments taken from a
 NEXRAD Archive file.
 
 """
+
 print(__doc__)
 
 # Author: Jonathan J. Helmus (jhelmus@anl.gov)

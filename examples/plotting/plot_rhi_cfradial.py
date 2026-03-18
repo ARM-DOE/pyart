@@ -7,6 +7,7 @@ An example which creates a multiple panel RHI plot of a CF/Radial file using
 a RadarDisplay object.
 
 """
+
 print(__doc__)
 
 # Author: Jonathan J. Helmus (jhelmus@anl.gov)
@@ -34,7 +35,7 @@ nplots = radar.nsweeps
 
 for snum in radar.sweep_number["data"]:
     fixed_angle = radar.fixed_angle["data"][snum]
-    title = "HSRHI Az=%.3f" % (fixed_angle)
+    title = f"HSRHI Az={fixed_angle:.3f}"
     ax = fig.add_subplot(nplots, 1, snum + 1)
     display.plot(
         "reflectivity_horizontal",

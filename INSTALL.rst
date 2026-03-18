@@ -1,13 +1,13 @@
-==============================
-Building and installing Py-ART
-==============================
+============
+Installation
+============
 
 Required Dependencies
 =====================
 
 Py-ART requires the following software.
 
-* Python__ 3.9x, 3.10x or 3.11x
+* Python__ 3.11x, 3.12x or 3.13x
 
 __ http://www.python.org
 
@@ -31,6 +31,49 @@ __ https://github.com/Unidata/netcdf4-python
 
 __ https://docs.xarray.dev/en/stable/
 
+* pooch__
+
+__ https://pypi.org/project/pooch/
+
+* Cython__
+
+__ https://cython.readthedocs.io/en/latest/
+
+* setuptools__
+
+__ https://setuptools.pypa.io/en/latest/index.html
+
+* cartopy__
+
+__ https://scitools.org.uk/cartopy/docs/latest/
+
+* cmweather__
+
+__ https://cmweather.readthedocs.io/en/latest/
+
+* xradar__
+
+__ https://docs.openradarscience.org/projects/xradar/en/stable/
+
+* xarray__
+
+__ https://docs.xarray.dev/en/stable/
+
+* mda-xdrlib__
+
+__ https://github.com/MDAnalysis/mda-xdrlib
+
+* fsspec__
+
+__ https://filesystem-spec.readthedocs.io/en/latest/
+
+* s3fs__
+
+__ https://s3fs.readthedocs.io/en/latest/
+
+* pandas__
+
+__ https://pandas.pydata.org/
 
 Optional Dependencies
 =====================
@@ -38,8 +81,6 @@ Optional Dependencies
 The following packages are recommended for a fully-functional Py-ART
 installation, but the package will install and work with reduced functionality
 without these packages.
-
-* `TRMM RSL <https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/>`_
 
 * `CyLP <https://github.com/mpy/CyLP>`_ or
   `PyGLPK <https://tfinley.net/software/pyglpk/>`_ or
@@ -49,10 +90,29 @@ without these packages.
 * `Basemap <https://matplotlib.org/basemap/>`_ But Cartopy is recommended as
   basemap will no longer have support.
 
-* `xarray <https://docs.xarray.dev/en/stable/>`_
 * `pyproj <https://github.com/pyproj4/pyproj>`_
 
 * `pytest <https://docs.pytest.org/en/latest/>`_
+
+* `metpy <https://unidata.github.io/MetPy/latest/>`_
+
+Instructions for Installing
+===========================
+
+You can install using pip, conda, or pixi! We recommend using pixi, using the instructions below
+
+1. Install pixi if you have not done so already https://pixi.sh/latest/installation/
+
+2. Create a Py-ART environment using the following commands
+
+::
+
+    $ pixi init pyart_dev
+    $ cd pyart_dev
+    $ pixi add arm_pyart
+
+This will build your environment and install all the required dependencies!
+
 
 Obtaining the latest source
 ===========================
@@ -66,9 +126,10 @@ The latest source can be checked out using
 
     $ git clone https://github.com/ARM-DOE/pyart.git
 
-
 Installing from Source
 ======================
+
+NOTE: TRMM RSL is deprecated, please consider using radx to convert files such as DORADE.
 
 The path to the TRMM RSL library must be provided during install. This can
 either be done by setting the ``RSL_PATH`` environmentation variable. In bash

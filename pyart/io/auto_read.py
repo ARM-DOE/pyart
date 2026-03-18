@@ -130,7 +130,7 @@ def read(filename, use_rsl=False, **kwargs):
             return read_uf(filename, **kwargs)
 
     # RSL only supported file formats
-    rsl_formats = ["HDF4", "RSL", "DORAD", "LASSEN"]
+    rsl_formats = ["HDF4", "RSL", "DORADE", "LASSEN"]
     if filetype in rsl_formats and _RSL_AVAILABLE:
         return read_rsl(filename, **kwargs)
 
@@ -151,7 +151,7 @@ def determine_filetype(filename):
     * 'UF'
     * 'HDF4'
     * 'RSL'
-    * 'DORAD'
+    * 'DORADE'
     * 'SIGMET'
     * 'LASSEN'
     * 'BZ2'

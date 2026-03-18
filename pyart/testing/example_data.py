@@ -1,12 +1,22 @@
 import importlib.resources
 
 import pooch
+from pooch.downloaders import HTTPDownloader
 
 DATASETS = pooch.create(
     path=pooch.os_cache("pyart-datasets"),
     base_url="https://adc.arm.gov/pyart/example_data/",
     env="PYART_DATASETS_DIR",
 )
+
+headers = {
+    "user-agent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"
+}
+
+
+def add_header_to_download(url, output_file, mypooch):
+    download = HTTPDownloader(headers=headers)
+    download(url, output_file, mypooch)
 
 
 with open(importlib.resources.files("pyart.testing") / "registry.txt") as registry_file:
@@ -41,4 +51,4 @@ def get_test_data(file):
     path_to_file = str
         Local path to the desired file
     """
-    return DATASETS.fetch(file)
+    return DATASETS.fetch(file, downloader=add_header_to_download)

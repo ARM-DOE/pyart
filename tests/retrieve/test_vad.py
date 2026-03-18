@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's retrieve/vad.py module. """
+"""Unit Tests for Py-ART's retrieve/vad.py module."""
 
 import numpy as np
 from numpy.testing import assert_allclose

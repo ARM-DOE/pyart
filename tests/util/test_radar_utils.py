@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's util/radar_utils.py module. """
+"""Unit Tests for Py-ART's util/radar_utils.py module."""
 
 import numpy as np
 
@@ -103,6 +103,16 @@ def test_subset_radar():
     assert radarcut.elevation["data"].min() >= ele_min
     assert radarcut.elevation["data"].max() <= ele_max
     assert list(radarcut.fields) == ["f1"]
+
+
+def test_ma_broadcast_to():
+    buf = np.ma.zeros(5)
+    buf.mask = [1, 1, 0, 0, 0]
+    buf_broad = pyart.util.radar_utils.ma_broadcast_to(buf, (10, 5))
+    assert buf_broad.shape == (10, 5)
+    assert buf_broad.mask.shape == (10, 5)
+    expected_mask = np.tile(np.array([True, True, False, False, False]), [10, 1])
+    assert np.all(expected_mask == buf_broad.mask)
 
 
 # read in example file

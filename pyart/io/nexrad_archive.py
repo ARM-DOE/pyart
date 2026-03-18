@@ -103,6 +103,11 @@ def read_nexrad_archive(
     .. [2] http://thredds.ucar.edu/thredds/catalog.html
 
     """
+    warnings.warn(
+        "Py-ART's NEXRAD Level 2 module is deprecated, please use xradar to read in the file using "
+        "xd.io.open_nexradlevel2_datatree",
+        UserWarning,
+    )
     # test for non empty kwargs
     _test_arguments(kwargs)
 

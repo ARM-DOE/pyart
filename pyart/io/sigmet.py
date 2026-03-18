@@ -32,7 +32,7 @@ def read_sigmet(
     debug=False,
     ignore_xhdr=False,
     ignore_sweep_start_ms=None,
-    **kwargs
+    **kwargs,
 ):
     """
     Read a Sigmet (IRIS) product file.
@@ -115,6 +115,11 @@ def read_sigmet(
         Radar object.
 
     """
+    warnings.warn(
+        "Py-ART's SIGMET module is deprecated, please use xradar to read in the file using "
+        "xd.io.open_iris_datatree",
+        UserWarning,
+    )
     # test for non empty kwargs
     _test_arguments(kwargs)
 
@@ -456,7 +461,7 @@ def read_sigmet(
         t = _sigmet_noaa_hh._decode_noaa_hh_hdr(
             sigmet_data["XHDR_FULL"], filemetadata, azimuth, elevation
         )
-        (latitude, longitude, altitude, extended_header_params) = t
+        latitude, longitude, altitude, extended_header_params = t
         metadata["platform_type"] = "aircraft"
         # scan_type determined from the antenna_scan_mode parameters
         noaa_hh_scan_modes = {4: "ppi", 7: "rhi"}
@@ -491,7 +496,7 @@ def read_sigmet(
         azimuth,
         elevation,
         instrument_parameters=instrument_parameters,
-        **extended_header_params
+        **extended_header_params,
     )
 
 

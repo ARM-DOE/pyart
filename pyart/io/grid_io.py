@@ -3,8 +3,8 @@ Reading and writing Grid objects.
 
 """
 
-import datetime
 import warnings
+from datetime import datetime, timezone
 
 import netCDF4
 import numpy as np
@@ -311,7 +311,7 @@ def write_grid(
     if arm_time_variables:
         time = grid.time
         dt = netCDF4.num2date(time["data"][0], time["units"])
-        td = dt - datetime.datetime.utcfromtimestamp(0)
+        td = dt - datetime.fromtimestamp(0, tz=timezone.utc).replace(tzinfo=None)
         td = td.seconds + td.days * 24 * 3600
 
         base_time = {

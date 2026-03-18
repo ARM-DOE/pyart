@@ -7,6 +7,7 @@ An example which creates an RHI plot of velocity using a RadarDisplay object
 and adding Reflectivity contours from the same MDV file.
 
 """
+
 print(__doc__)
 
 # Author: Cory Weber (cweber@anl.gov)
@@ -29,9 +30,6 @@ fig = plt.figure(figsize=[20, 5])
 ax = fig.add_subplot(111)
 
 # plot velocity
-# cmap is the color ramp being used in this case blue to red no 18
-# https://github.com/ARM-DOE/pyart/blob/master/pyart/graph/cm.py
-# for more information
 
 display.plot(
     "velocity",
@@ -40,7 +38,7 @@ display.plot(
     vmax=20.0,
     fig=fig,
     ax=ax,
-    cmap="pyart_BuDRd18",
+    cmap="balance",
     colorbar_label="Velocity (m/s)",
 )
 

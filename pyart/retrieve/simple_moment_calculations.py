@@ -165,6 +165,11 @@ def compute_l(radar, rhohv_field=None, l_field=None):
     l_field_out : dict
         L field.
 
+    References
+    ----------
+    Ryzhkov, A. V., 2001: Interpretation of Polarimetric Radar Covariance Matrix for Meteorological Scatterers: Theoretical Analysis.
+    J. Atmos. Oceanic Technol., 18, 315–328, https://doi.org/10.1175/1520-0426(2001)018<0315:IOPRCM>2.0.CO;2.
+
     """
     # parse the field parameters
     if rhohv_field is None:
@@ -191,6 +196,8 @@ def compute_cdr(radar, rhohv_field=None, zdr_field=None, cdr_field=None):
     """
     Computes the Circular Depolarization Ratio.
 
+
+
     Parameters
     ----------
     radar : Radar
@@ -206,6 +213,13 @@ def compute_cdr(radar, rhohv_field=None, zdr_field=None, cdr_field=None):
     -------
     cdr : dict
         CDR field.
+
+    References
+    ----------
+    Matrosov, S. Y., 2004: Depolarization Estimates from Linear H and V Measurements with Weather
+    Radars Operating in Simultaneous Transmission–Simultaneous Receiving Mode.
+    J. Atmos. Oceanic Technol., 21, 574–583,
+    https://doi.org/10.1175/1520-0426(2004)021<0574:DEFLHA>2.0.CO;2.
 
     """
     # parse the field parameters

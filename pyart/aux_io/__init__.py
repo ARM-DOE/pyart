@@ -14,6 +14,7 @@ priority.
 """
 
 from .arm_vpt import read_kazr  # noqa
+from .arm_vpt import read_mmcr  # noqa
 from .d3r_gcpex_nc import read_d3r_gcpex_nc  # noqa
 from .edge_netcdf import read_edge_netcdf  # noqa
 from .gamic_hdf5 import read_gamic  # noqa

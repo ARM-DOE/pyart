@@ -13,7 +13,6 @@ Created on Thu Oct 12 23:12:19 2017
     atwt2d
 """
 
-
 import numpy as np
 
 
