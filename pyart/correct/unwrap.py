@@ -34,7 +34,7 @@ def dealias_unwrap_phase(
 ):
     """
     Dealias Doppler velocities using multi-dimensional phase unwrapping
-    [1]_ and [2]_.
+    [Herráez2002]_ and [Abdul-Rahman2005]_.
 
     Parameters
     ----------
@@ -98,11 +98,11 @@ def dealias_unwrap_phase(
 
     References
     ----------
-    .. [1] Miguel Arevallilo Herraez, David R. Burton, Michael J. Lalor,
+    .. [Herráez2002] Miguel Arevallilo Herraez, David R. Burton, Michael J. Lalor,
         and Munther A. Gdeisat, "Fast two-dimensional phase-unwrapping
         algorithm based on sorting by reliability following a noncontinuous
         path", Journal Applied Optics, Vol. 41, No. 35 (2002) 7437,
-    .. [2] Abdul-Rahman, H., Gdeisat, M., Burton, D., & Lalor, M., "Fast
+    .. [Abdul-Rahman2005] Abdul-Rahman, H., Gdeisat, M., Burton, D., & Lalor, M., "Fast
         three-dimensional phase-unwrapping algorithm based on sorting by
         reliability following a non-continuous path. In W. Osten,
         C. Gorecki, & E. L. Novak (Eds.), Optical Metrology (2005) 32--40,

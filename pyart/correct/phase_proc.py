@@ -1039,7 +1039,7 @@ def phase_proc_lp(
     coef=0.914,
 ):
     """
-    Phase process using a LP method [1].
+    Phase process using a LP method [Giangrande2013]_.
 
     Parameters
     ----------
@@ -1104,7 +1104,7 @@ def phase_proc_lp(
 
     References
     ----------
-    [1] Giangrande, S.E., R. McGraw, and L. Lei. An Application of
+    [Giangrande2013] Giangrande, S.E., R. McGraw, and L. Lei. An Application of
     Linear Programming to Polarimetric Radar Differential Phase Processing.
     J. Atmos. and Oceanic Tech, 2013, 30, 1716.
 
@@ -1255,7 +1255,7 @@ def phase_proc_lp_gf(
     doc=0,
 ):
     """
-    Phase process using a LP method [1] using Py-ART's Gatefilter.
+    Phase process using a LP method [Giangrande2013]_ using Py-ART's Gatefilter.
 
     Parameters
     ----------
@@ -1319,7 +1319,7 @@ def phase_proc_lp_gf(
 
     References
     ----------
-    [1] Giangrande, S.E., R. McGraw, and L. Lei. An Application of
+    [Giangrande2013] Giangrande, S.E., R. McGraw, and L. Lei. An Application of
     Linear Programming to Polarimetric Radar Differential Phase Processing.
     J. Atmos. and Oceanic Tech, 2013, 30, 1716.
 
