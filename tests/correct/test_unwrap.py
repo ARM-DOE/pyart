@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's correct/unwrap.py module. """
+"""Unit Tests for Py-ART's correct/unwrap.py module."""
 
 # python test_dealias.py
 # to recreate a dealias_plot.png file showing the before and after doppler

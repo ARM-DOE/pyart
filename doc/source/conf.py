@@ -54,11 +54,21 @@ extensions = [
     "ablog",
 ]
 
-exclude_patterns = ["_build", "**.ipynb_checkpoints"]
+exclude_patterns = [
+    "_build",
+    "**.ipynb_checkpoints",
+    "examples/**/*.ipynb",
+    "examples/**/*.py",
+    "examples/**/*.zip",
+    "examples/**/*.md5",
+    "examples/**/*.json",
+]
+
 sphinx_gallery_conf = {
     "examples_dirs": "../../examples",
     "gallery_dirs": "examples",
     "abort_on_example_error": True,
+    "filename_pattern": r"plot_.*\.py$",
 }
 
 
@@ -96,7 +106,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "Py-ART"
-copyright = "2013-2024, Py-ART developers"
+copyright = "2013-2026, Py-ART developers"
 author = "Py-ART developers"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -121,11 +131,6 @@ release = parsed_version["full"]
 # This is also used if you do content translation via gettext catalogs.
 # Usually you set "language" from the command line for these cases.
 language = "en"
-
-# List of patterns, relative to source directory, that match files and
-# directories to ignore when looking for source files.
-# This patterns also effect to html_static_path and html_extra_path
-exclude_patterns = ["*.ipynb"]
 
 # The name of the Pygments (syntax highlighting) style to use.
 pygments_style = "sphinx"
@@ -269,7 +274,7 @@ myst_heading_anchors = 2
 intersphinx_mapping = {
     "python": ("https://docs.python.org/3/", None),
     "numpy": ("https://numpy.org/doc/stable", None),
-    "scipy": ("https://docs.scipy.org/doc/scipy/reference/", None),
+    "scipy": ("https://docs.scipy.org/doc/scipy/", None),
     "pandas": ("https://pandas.pydata.org/pandas-docs/stable", None),
     "matplotlib": ("https://matplotlib.org/stable", None),
 }

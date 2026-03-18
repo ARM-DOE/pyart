@@ -1,4 +1,4 @@
-""" Unit tests for bias and noise module. """
+"""Unit tests for bias and noise module."""
 
 import dask
 import numpy as np

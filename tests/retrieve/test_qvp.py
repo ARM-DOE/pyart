@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's retrieve/qvp.py module. """
+"""Unit Tests for Py-ART's retrieve/qvp.py module."""
 
 import datetime
 

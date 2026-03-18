@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's correct/region_dealias.py module. """
+"""Unit Tests for Py-ART's correct/region_dealias.py module."""
 
 # python test_
 # to recreate a dealias_plot.png file showing the before and after doppler

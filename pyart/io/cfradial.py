@@ -314,6 +314,8 @@ def read_cfradial(
         field_name = filemetadata.get_field_name(key)
         if field_name is None:
             if exclude_fields is not None and key in exclude_fields:
+                if include_fields is None:
+                    continue
                 if key not in include_fields:
                     continue
             if include_fields is None or key in include_fields:

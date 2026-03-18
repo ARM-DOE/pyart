@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's _debug_info module. """
+"""Unit Tests for Py-ART's _debug_info module."""
 
 import sys
 import warnings

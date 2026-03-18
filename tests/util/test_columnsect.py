@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's util/columnsect.py module. """
+"""Unit Tests for Py-ART's util/columnsect.py module."""
 
 import numpy as np
 

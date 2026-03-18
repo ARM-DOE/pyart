@@ -148,7 +148,7 @@ class RadarMapDisplay(RadarDisplay):
         ticklabs=None,
         alpha=None,
         edgecolors="face",
-        **kwargs
+        **kwargs,
     ):
         """
         Plot a PPI volume sweep onto a geographic map.
@@ -348,7 +348,7 @@ class RadarMapDisplay(RadarDisplay):
             edgecolors=edgecolors,
             norm=norm,
             transform=self.grid_projection,
-            **kwargs
+            **kwargs,
         )
 
         # plot as raster in vector graphics files
@@ -437,7 +437,7 @@ class RadarMapDisplay(RadarDisplay):
         symbol="ro",
         label_text=None,
         label_offset=(None, None),
-        **kwargs
+        **kwargs,
     ):
         """
         Plot a point on the current map.

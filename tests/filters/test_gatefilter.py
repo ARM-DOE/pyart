@@ -1,4 +1,4 @@
-""" Unit tests for Py-ART's correct/filters.py module. """
+"""Unit tests for Py-ART's correct/filters.py module."""
 
 import netCDF4
 import numpy as np

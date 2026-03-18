@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's core/grid.py module. """
+"""Unit Tests for Py-ART's core/grid.py module."""
 
 import functools
 import pickle
@@ -110,7 +110,6 @@ def test_grid_to_xarray():
 
 def _check_dicts_similar(dic1, dic2):
     for k, v in dic1.items():
-        print("Checking key:", k)
         if k == "data":
             assert_almost_equal(v, dic2[k])
         else:

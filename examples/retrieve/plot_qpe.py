@@ -21,12 +21,11 @@ print(__doc__)
 # License: BSD 3-Clause
 
 import logging
-from datetime import datetime
+from datetime import datetime, timezone
 
 import fsspec
 import matplotlib.pyplot as plt
 import numpy as np
-import pytz
 import xarray as xr
 
 import pyart
@@ -113,18 +112,19 @@ def rain_rate_categorized(
     return rr
 
 
-def download_nexrad(timezone, date, site, local_date=False):
+def download_nexrad(timezone_str, date, site, local_date=False):
     """Download NEXRAD radar data from an S3 bucket."""
     try:
-        utc_date = (
-            pytz.timezone(timezone).localize(date).astimezone(pytz.utc)
-            if local_date
-            else date
-        )
+        if local_date:
+            # Convert local time to UTC
+            utc_date = date.replace(tzinfo=timezone.utc)
+        else:
+            utc_date = date.replace(tzinfo=timezone.utc)
+
         logging.info(f"Time: {utc_date}")
         fs = fsspec.filesystem("s3", anon=True)
         nexrad_path = utc_date.strftime(
-            f"s3://noaa-nexrad-level2/%Y/%m/%d/{site}/{site}%Y%m%d_%H*"
+            f"s3://unidata-nexrad-level2/%Y/%m/%d/{site}/{site}%Y%m%d_%H*"
         )
         files = sorted(fs.glob(nexrad_path))
         return [file for file in files if not file.endswith("_MDM")]
@@ -135,9 +135,9 @@ def download_nexrad(timezone, date, site, local_date=False):
 
 # Load NEXRAD data
 site = "KGWX"
-timezone = "UTC"
-date = datetime(2022, 3, 31, 0, 0)
-files = download_nexrad(timezone, date, site, local_date=False)[:5]
+timezone_str = "UTC"
+date = datetime(2022, 3, 31, 0, 0, tzinfo=timezone.utc)
+files = download_nexrad(timezone_str, date, site, local_date=False)[:5]
 
 rain_rate_list = []
 

@@ -30,7 +30,7 @@ def read_kazr_spectra(
     file_field_names=False,
     exclude_fields=None,
     include_fields=None,
-    **kwargs
+    **kwargs,
 ):
     """
     Read a ARM KAZR spectra netCDF file.

@@ -210,7 +210,9 @@ def calc_cloud_mask(
     counts_threshold=12,
 ):
     """
-    Primary function for calculating the cloud mask.
+    Primary function for calculating the cloud mask. Note: This function has
+    only been tested on Ka-band ARM Zenith radars (KAZR) and will only work on cloud
+    radars.
 
     Parameters
     ----------
@@ -301,7 +303,9 @@ def calc_cloud_mask(
 
 def calc_noise_floor(radar, field, height):
     """
-    Calculation for getting the noise floor
+    Calculation for getting the noise floor Note: This function has
+    only been tested on Ka-band ARM Zenith radars (KAZR) and will only work on cloud
+    radars.
 
     Parameters
     ----------
@@ -347,7 +351,9 @@ def calc_noise_floor(radar, field, height):
 
 def cloud_threshold(data, n_avg=1.0, nffts=None):
     """
-    Calculates the noise floor from a cloud threshold.
+    Calculates the noise floor from a cloud threshold. Note: This function has
+    only been tested on Ka-band ARM Zenith radars (KAZR) and will only work on cloud
+    radars.
 
     Parameters
     ----------
@@ -414,8 +420,9 @@ def cloud_threshold(data, n_avg=1.0, nffts=None):
 
 def range_correction(radar, field, height):
     """
-    Corrects reflectivity for range to help get the
-    correct noise floor values
+    Corrects reflectivity for range to help get the correct noise floor
+    values Note: This function has only been tested on Ka-band ARM Zenith
+    radars (KAZR) and will only work on cloud radars.
 
     Parameters
     ----------

@@ -82,8 +82,6 @@ The following packages are recommended for a fully-functional Py-ART
 installation, but the package will install and work with reduced functionality
 without these packages.
 
-* `TRMM RSL <https://trmm-fc.gsfc.nasa.gov/trmm_gv/software/rsl/>`_
-
 * `CyLP <https://github.com/mpy/CyLP>`_ or
   `PyGLPK <https://tfinley.net/software/pyglpk/>`_ or
   `CVXOPT <https://cvxopt.org/>`_ and their dependencies.
@@ -130,6 +128,8 @@ The latest source can be checked out using
 
 Installing from Source
 ======================
+
+NOTE: TRMM RSL is deprecated, please consider using radx to convert files such as DORADE.
 
 The path to the TRMM RSL library must be provided during install. This can
 either be done by setting the ``RSL_PATH`` environmentation variable. In bash

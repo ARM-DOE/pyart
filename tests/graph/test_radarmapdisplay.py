@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's graph/radarmapdisplay.py module. """
+"""Unit Tests for Py-ART's graph/radarmapdisplay.py module."""
 
 # execute this script to create figure_plot_radar_display_*.png files.
 

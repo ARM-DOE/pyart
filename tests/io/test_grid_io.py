@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/grid_io.py module. """
+"""Unit Tests for Py-ART's io/grid_io.py module."""
 
 import netCDF4
 import numpy as np

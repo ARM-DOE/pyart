@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/nexrad_cdm.py module. """
+"""Unit Tests for Py-ART's io/nexrad_cdm.py module."""
 
 import bz2
 

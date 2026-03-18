@@ -19,7 +19,7 @@ def dealias_fourdd(
     debug=False,
     max_shear=0.05,
     sign=1,
-    **kwargs
+    **kwargs,
 ):
     """
     **Deprecated in Py-ART 2.0. Please use the region-based dealiaser.

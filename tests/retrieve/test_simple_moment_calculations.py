@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's retrieve/simple_moment_calculation.py module. """
+"""Unit Tests for Py-ART's retrieve/simple_moment_calculation.py module."""
 
 import numpy as np
 from numpy.testing import assert_allclose
