@@ -1104,9 +1104,9 @@ def phase_proc_lp(
 
     References
     ----------
-    [Giangrande2013] Giangrande, S.E., R. McGraw, and L. Lei. An Application of
-    Linear Programming to Polarimetric Radar Differential Phase Processing.
-    J. Atmos. and Oceanic Tech, 2013, 30, 1716.
+    .. [Giangrande2013] Giangrande, S.E., R. McGraw, and L. Lei. An Application of
+        Linear Programming to Polarimetric Radar Differential Phase Processing.
+        J. Atmos. and Oceanic Tech, 2013, 30, 1716.
 
     """
     # parse the field parameters
@@ -1319,9 +1319,9 @@ def phase_proc_lp_gf(
 
     References
     ----------
-    [Giangrande2013] Giangrande, S.E., R. McGraw, and L. Lei. An Application of
-    Linear Programming to Polarimetric Radar Differential Phase Processing.
-    J. Atmos. and Oceanic Tech, 2013, 30, 1716.
+    .. [Giangrande2013] Giangrande, S.E., R. McGraw, and L. Lei. An Application of
+        Linear Programming to Polarimetric Radar Differential Phase Processing.
+        J. Atmos. and Oceanic Tech, 2013, 30, 1716.
 
     """
     # parse the field parameters
