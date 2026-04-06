@@ -369,6 +369,7 @@ but you would like to start a new branch with a different task in mind. It
 is recommended that your new branch is based on your main. First::
 
                 git checkout main
+
 Then::
 
                 git checkout -b <branch_name>
