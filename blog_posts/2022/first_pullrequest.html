@@ -616,14 +616,14 @@ to the source code for further collaboration.</p>
 <p>You will then need to run the installation commands from the RSL library:</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">./</span><span class="n">configure</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="o">./</span><span class="n">configure</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">make</span> <span class="n">install</span> 
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="n">make</span> <span class="n">install</span> 
 </pre></div>
 </div>
 </div>
@@ -641,7 +641,7 @@ to the source code for further collaboration.</p>
 <h2>Lastly, activate the ‘pyart-docs’ environment and install the python script within your forked repository<a class="headerlink" href="#lastly-activate-the-pyart-docs-environment-and-install-the-python-script-within-your-forked-repository" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span> <span class="n">pip</span> <span class="n">install</span> <span class="o">-</span><span class="n">e</span> <span class="o">.</span>
 </pre></div>
 </div>
 </div>
@@ -649,9 +649,8 @@ to the source code for further collaboration.</p>
 </section>
 <section id="okay-you-should-be-installed-now-and-ready-to-make-changes-to-the-source-code">
 <h2>OKAY! You should be installed now, and ready to make changes to the source code!<a class="headerlink" href="#okay-you-should-be-installed-now-and-ready-to-make-changes-to-the-source-code" title="Link to this heading">#</a></h2>
-<ol class="arabic simple">
-<li><p>First, create a New Branch for our Changes</p></li>
-</ol>
+<section id="first-create-a-new-branch-for-our-changes">
+<h3>1. First, create a New Branch for our Changes<a class="headerlink" href="#first-create-a-new-branch-for-our-changes" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">checkout</span> <span class="o">-</span><span class="n">b</span> <span class="n">newblog_post</span>
@@ -659,9 +658,9 @@ to the source code for further collaboration.</p>
 </div>
 </div>
 </div>
-<ol class="arabic simple" start="2">
-<li><p>Push New Branch To Remote</p></li>
-</ol>
+</section>
+<section id="push-new-branch-to-remote">
+<h3>2. Push New Branch To Remote<a class="headerlink" href="#push-new-branch-to-remote" title="Link to this heading">#</a></h3>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">push</span> <span class="o">--</span><span class="nb">set</span><span class="o">-</span><span class="n">upstream</span> <span class="n">origin</span> <span class="n">newblog_post</span>
@@ -850,6 +849,7 @@ to the source code for further collaboration.</p>
 </div>
 </div>
 </section>
+</section>
 <section id="now-lets-commit-these-changes-to-github">
 <h2>Now lets commit these changes to github!<a class="headerlink" href="#now-lets-commit-these-changes-to-github" title="Link to this heading">#</a></h2>
 <p>The git ‘status’ command will show which branch we are working on and all changes made</p>
@@ -976,7 +976,11 @@ After adding the new images for the docs and updated (and new) code, we need to 
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#third-create-the-pyart-docs-conda-environment">Third, create the “pyart-docs” conda environment</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fourth-we-will-need-to-install-the-trmm-rsl-library">Fourth, we will need to install the (TRMM RSL Library)</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#lastly-activate-the-pyart-docs-environment-and-install-the-python-script-within-your-forked-repository">Lastly, activate the ‘pyart-docs’ environment and install the python script within your forked repository</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#okay-you-should-be-installed-now-and-ready-to-make-changes-to-the-source-code">OKAY! You should be installed now, and ready to make changes to the source code!</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#okay-you-should-be-installed-now-and-ready-to-make-changes-to-the-source-code">OKAY! You should be installed now, and ready to make changes to the source code!</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#first-create-a-new-branch-for-our-changes">1. First, create a New Branch for our Changes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#push-new-branch-to-remote">2. Push New Branch To Remote</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#now-lets-commit-these-changes-to-github">Now lets commit these changes to github!</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#after-creating-a-pull-request-this-is-what-it-looks-like-on-github">After Creating a Pull Request, this is what it looks like on GitHub</a></li>
 </ul>

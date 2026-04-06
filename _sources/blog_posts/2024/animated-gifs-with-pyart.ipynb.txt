@@ -59,7 +59,7 @@
    "id": "24db5ea4-c1c2-4417-a546-d833cec5b9f8",
    "metadata": {},
    "source": [
-    "## Set up the AWS S3 filysystem\n",
+    "### Set up the AWS S3 filysystem\n",
     "This allows you to pull nexrad-level-2 data files from the AWS repository."
    ]
   },
@@ -78,7 +78,7 @@
    "id": "da16c075-2379-46a9-a66b-0c68c6f31841",
    "metadata": {},
    "source": [
-    "## Selecting your date, station, and time period"
+    "### Selecting your date, station, and time period"
    ]
   },
   {
@@ -108,7 +108,7 @@
    "id": "52f5557d-a609-4ca6-ba9c-57a9f3fbf088",
    "metadata": {},
    "source": [
-    "## OPTIONAL* setting up individual locations to be plotted on your map\n",
+    "### OPTIONAL* setting up individual locations to be plotted on your map\n",
     "\n",
     "In this example, two plots are pointed due to their relevance to the example weather event: The ATMOS facility at Argonne National Laboratory, Lemont, IL, and Sawmill Creek in Darien, IL. The latitude and longitude for each site should be placed at the same index (IE. Index 0 in both latitude and longitude should contain the latitude and longitude data for that one site. This also applies to the labels, markers, and colors. Any object in the index 0 slot will apply to that same point.)\n",
     "\n"
@@ -183,7 +183,7 @@
    "id": "1c8fbb97-8d82-4752-85f2-378039b75fb9",
    "metadata": {},
    "source": [
-    "## Checking your plottable radar products\n",
+    "### Checking your plottable radar products\n",
     "This function reads one of the radar files in your file list and prints out the available products for plotting. One file should represent all products available in each radar file in the list. Although if you are pulling data from files pre 2011, dual-pol products won't be available. "
    ]
   },
@@ -260,7 +260,7 @@
    "id": "c72bad93-1e67-43c2-9366-67da7506d23b",
    "metadata": {},
    "source": [
-    "## Looping through the radar data\n",
+    "### Looping through the radar data\n",
     "\n",
     "This code allows us to loop through each radar file read. A progress message is printed when a new file has started being processed. \n",
     "The if statement tells the code to skip files that are unable to be read."
@@ -288,29 +288,29 @@
     "tags": []
    },
    "source": [
-    "## Plotting code with added features and plotted points\n",
+    "### Plotting code with added features and plotted points\n",
     "\n",
     "The radar product being plotted can be changed based on the needs of the individual, but for this example, we will use reflectivity to make a singular gif. \n",
     "\n",
-    "## Customizing the range of plotted data\n",
+    "### Customizing the range of plotted data\n",
     "Vmin and vmax represent the range of dBz values you'd like to plot on the radar. Sometimes, one may want to raise the lower limit to reduce clutter or nonmeteorological scatter that often appears as low reflectivity blobs near the radar. Basically the maximum and minimum values for your colorbar as well.\n",
     "\n",
     "The sweep is the elevation being scanned. For example, sweep 0 is the lowest level scanned by the radar. \n",
     "\n",
-    "## Counties\n",
+    "### Counties\n",
     "\n",
     "Counties can be added with the ax.add_feature line. Further additions can be made using cartopy.cfeature if needed. \n",
     "\n",
-    "## Location plotting \n",
+    "### Location plotting \n",
     "The for loop in this cell is used to plot the location data provided in the aforementioned variables. \n",
     "\n",
-    "## Zooming \n",
+    "### Zooming \n",
     "The x and ylim functions will allow you to control the zoom on your plot. The grid on the plot is representative of latitude (y) and longitude (x) lines. For this example, we are zoomed in over the points.\n",
     "\n",
-    "## Colorbar\n",
+    "### Colorbar\n",
     "The built in colorbar is disabled and one was created manually to make it fit the image better. Purely an aesthetic decision.\n",
     "\n",
-    "## NOTE \n",
+    "### NOTE \n",
     "This code is meant to go under the for loop. Don't run it on its own as it won't work as intended. Full code block will be below"
    ]
   },
@@ -380,7 +380,7 @@
    "id": "3eb8f6a9-f06c-4ad7-a3c3-f39f18e83dde",
    "metadata": {},
    "source": [
-    "## Full code block constructed properly within the for loop."
+    "### Full code block constructed properly within the for loop."
    ]
   },
   {
@@ -706,6 +706,14 @@
     "# Summary\n",
     "Within this blog post, we walked through how MetPy and PyART can be used to loop through NEXRAD level 2 data from a recent convective rainfall event and create an animated gif over a location."
    ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "id": "5463730e-f831-48b9-a781-4500cec57d95",
+   "metadata": {},
+   "outputs": [],
+   "source": []
   }
  ],
  "metadata": {
@@ -726,10 +734,10 @@
    "name": "python",
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
-   "version": "3.13.2"
-  },
-  "tags": "radar,data-viz,CROCUS,",
-  "title": "Creating animated gifs with NEXRAD Level 2 radar data using Py-ART"
+   "version": "3.12.3"
+ },
+ "tags": "radar,data-viz,CROCUS,",
+ "title": "Creating animated gifs with NEXRAD Level 2 radar data using Py-ART"
  },
  "nbformat": 4,
  "nbformat_minor": 5
