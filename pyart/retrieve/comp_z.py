@@ -13,7 +13,7 @@ from scipy.interpolate import RectBivariateSpline
 from pyart.core import Radar
 
 
-def composite_reflectivity(radar, field="reflectivity", gatefilter=None):
+def composite_reflectivity(radar, field="reflectivity", gatefilter=None,same_nyquist=True,nyquist_vector_idx=0):
     """
     Composite Reflectivity
 
@@ -41,6 +41,14 @@ def composite_reflectivity(radar, field="reflectivity", gatefilter=None):
     gatefilter : GateFilter
         GateFilter instance. None will result in no gatefilter mask being
         applied to data.
+    same_nyquist: bool
+        During a volume scan (i.e., file) the PRF (nyqust velocity) can change.
+        This can create some odd artifacts at times with if data quality is low on certain scans. 
+        To get around this, you can change the code to only take the max of scans with the same nyquist +/- 1 m/s.
+        Defult this will be on (True), but folks can turn this off. 
+    nyquist_vector_idx: int
+        This integer works alongside the same_nyquist parameter. Do you want to match all the nyquists to sweep 0? use idx 0, sweep 1, use idx 1. 
+        By default it is set to 0. 
 
     Returns
     -------
@@ -58,6 +66,7 @@ def composite_reflectivity(radar, field="reflectivity", gatefilter=None):
     # Determine the lowest sweep (used for metadata and such)
     minimum_sweep = np.min(radar.sweep_number["data"])
 
+
     # loop over all measured sweeps
     for sweep in sorted(radar.sweep_number["data"]):
         # get start and stop index numbers
@@ -66,6 +75,9 @@ def composite_reflectivity(radar, field="reflectivity", gatefilter=None):
         # grab radar data
         z = radar.get_field(sweep, field)
         z_dtype = z.dtype
+        
+        #get the nyquist, so we know which sweeps are the same sens.
+        nyquist =  np.asarray([np.round(radar.get_nyquist_vel(sweep=sweep))])
 
         # Use gatefilter
         if gatefilter is not None:
@@ -111,9 +123,19 @@ def composite_reflectivity(radar, field="reflectivity", gatefilter=None):
         # if first sweep, create new dim, otherwise concat them up
         if sweep == minimum_sweep:
             z_stack = copy.deepcopy(z[np.newaxis, :, :])
+            nyquist_stack = copy.deepcopy(nyquist[np.newaxis,:])
         else:
             z_stack = np.concatenate([z_stack, z[np.newaxis, :, :]])
+            nyquist_stack = np.concatenate([nyquist_stack, nyquist[np.newaxis,:]])
 
+    #only stack up sweeps with the same nyquist
+    if same_nyquist:
+        left = np.where(nyquist_stack >= nyquist_stack[nyquist_vector_idx]-1)[0]
+        right = np.where(nyquist_stack <= nyquist_stack[nyquist_vector_idx]+1)[0]
+        same_ny = np.intersect1d(left,right)
+
+        z_stack = z_stack[same_ny]
+    
     # now that the stack is made, take max across vertical
     compz = z_stack.max(axis=0).astype(z_dtype)
 
