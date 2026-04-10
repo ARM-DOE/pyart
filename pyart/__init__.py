@@ -9,8 +9,8 @@ Py-ART: The Python ARM Radar Toolkit
 _citation_text = """
 ## You are using the Python ARM Radar Toolkit (Py-ART), an open source
 ## library for working with weather radar data. Py-ART is partly supported
-## by the U.S. Department of Energy Office of Science as part of 
-## the Atmospheric Radiation Measurement (ARM) User Facility. 
+## by the U.S. Department of Energy Office of Science as part of
+## the Atmospheric Radiation Measurement (ARM) User Facility.
 ##
 ## If you use this software to prepare a publication, please cite:
 ##
