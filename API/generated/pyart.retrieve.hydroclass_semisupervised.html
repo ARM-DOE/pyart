@@ -1256,6 +1256,16 @@ radar measurements, Atmos. Meas. Tech., 11, 4847–4866,
 <a class="reference external" href="https://doi.org/10.5194/amt-11-4847-2018">https://doi.org/10.5194/amt-11-4847-2018</a>, 2018.</p>
 <section id="usage">
 <h2>Usage<a class="headerlink" href="#usage" title="Link to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">hydro_class</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">hydroclass_semisupervised</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span>
+    <span class="n">refl_field</span><span class="o">=</span><span class="s2">&quot;corrected_reflectivity&quot;</span><span class="p">,</span>
+    <span class="n">zdr_field</span><span class="o">=</span><span class="s2">&quot;corrected_differential_reflectivity&quot;</span><span class="p">,</span>
+    <span class="n">kdp_field</span><span class="o">=</span><span class="s2">&quot;specific_differential_phase&quot;</span><span class="p">,</span>
+    <span class="n">rhv_field</span><span class="o">=</span><span class="s2">&quot;uncorrected_cross_correlation_ratio&quot;</span><span class="p">,</span>
+    <span class="n">temp_field</span><span class="o">=</span><span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
 <p class="rubric">Notes</p>
 <p>The default hydrometeor classification is valid for C-band radars. For X-band radars,
 if frequency information is not present in the <cite>radar.instrument_parameters</cite>, the user-supplied
@@ -1263,6 +1273,13 @@ if frequency information is not present in the <cite>radar.instrument_parameters
 <cite>radar_freq</cite> parameter are missing, the algorithm defaults to the C band.</p>
 <p>If the radar frequency information is missing from the radar object, you can add it in
 <cite>radar.instrument_parameters</cite>, as follows:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">&quot;frequency&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Radar frequency&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;Hz&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">9.2e9</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
 </section>
 </dd></dl>
 

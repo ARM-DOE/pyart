@@ -1178,7 +1178,7 @@
 <dt class="sig sig-object py" id="pyart.correct.dealias_unwrap_phase">
 <span class="sig-prename descclassname"><span class="pre">pyart.correct.</span></span><span class="sig-name descname"><span class="pre">dealias_unwrap_phase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">unwrap_unit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'sweep'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">nyquist_vel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">check_nyquist_uniform</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gatefilter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rays_wrap_around</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">keep_original</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_limits</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">corr_vel_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">skip_checks</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/correct/unwrap.html#dealias_unwrap_phase"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.correct.dealias_unwrap_phase" title="Link to this definition">#</a></dt>
 <dd><p>Dealias Doppler velocities using multi-dimensional phase unwrapping
-<a class="footnote-reference brackets" href="#id3" id="id1" role="doc-noteref"><span class="fn-bracket">[</span>1<span class="fn-bracket">]</span></a> and <a class="footnote-reference brackets" href="#id4" id="id2" role="doc-noteref"><span class="fn-bracket">[</span>2<span class="fn-bracket">]</span></a>.</p>
+<a class="reference internal" href="#herraez2002" id="id1"><span>[Herráez2002]</span></a> and <a class="reference internal" href="#abdul-rahman2005" id="id2"><span>[Abdul-Rahman2005]</span></a>.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
@@ -1230,23 +1230,23 @@ array is stored under the ‘data’ key.</p>
 </dd>
 </dl>
 <p class="rubric">References</p>
-<aside class="footnote-list brackets">
-<aside class="footnote brackets" id="id3" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">1</a><span class="fn-bracket">]</span></span>
+<div role="list" class="citation-list">
+<div class="citation" id="herraez2002" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">Herráez2002</a><span class="fn-bracket">]</span></span>
 <p>Miguel Arevallilo Herraez, David R. Burton, Michael J. Lalor,
 and Munther A. Gdeisat, “Fast two-dimensional phase-unwrapping
 algorithm based on sorting by reliability following a noncontinuous
 path”, Journal Applied Optics, Vol. 41, No. 35 (2002) 7437,</p>
-</aside>
-<aside class="footnote brackets" id="id4" role="doc-footnote">
-<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">2</a><span class="fn-bracket">]</span></span>
+</div>
+<div class="citation" id="abdul-rahman2005" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">Abdul-Rahman2005</a><span class="fn-bracket">]</span></span>
 <p>Abdul-Rahman, H., Gdeisat, M., Burton, D., &amp; Lalor, M., “Fast
 three-dimensional phase-unwrapping algorithm based on sorting by
 reliability following a non-continuous path. In W. Osten,
 C. Gorecki, &amp; E. L. Novak (Eds.), Optical Metrology (2005) 32–40,
 International Society for Optics and Photonics.</p>
-</aside>
-</aside>
+</div>
+</div>
 </dd></dl>
 
 </section>

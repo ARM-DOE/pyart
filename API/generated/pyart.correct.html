@@ -1213,13 +1213,13 @@
 <td><p>Corrects RhoHV for noise according to eq.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.dealias_fourdd.html#pyart.correct.dealias_fourdd" title="pyart.correct.dealias_fourdd"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dealias_fourdd</span></code></a>(radar[, last_radar, ...])</p></td>
-<td><p><a href="#id1"><span class="problematic" id="id2">**</span></a>Deprecated in Py-ART 2.0. Please use the region-based dealiaser.</p></td>
+<td><p>Deprecated in Py-ART 2.0.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.dealias_region_based.html#pyart.correct.dealias_region_based" title="pyart.correct.dealias_region_based"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dealias_region_based</span></code></a>(radar[, ref_vel_field, ...])</p></td>
 <td><p>Dealias Doppler velocities using a region based algorithm.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.dealias_unwrap_phase.html#pyart.correct.dealias_unwrap_phase" title="pyart.correct.dealias_unwrap_phase"><code class="xref py py-obj docutils literal notranslate"><span class="pre">dealias_unwrap_phase</span></code></a>(radar[, unwrap_unit, ...])</p></td>
-<td><p>Dealias Doppler velocities using multi-dimensional phase unwrapping <a href="#id5"><span class="problematic" id="id3">[1]_</span></a> and <a href="#id6"><span class="problematic" id="id4">[2]_</span></a>.</p></td>
+<td><p>Dealias Doppler velocities using multi-dimensional phase unwrapping <a class="reference internal" href="pyart.correct.dealias_unwrap_phase.html#herraez2002" id="id1"><span>[Herráez2002]</span></a> and <a class="reference internal" href="pyart.correct.dealias_unwrap_phase.html#abdul-rahman2005" id="id2"><span>[Abdul-Rahman2005]</span></a>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.despeckle_field.html#pyart.correct.despeckle_field" title="pyart.correct.despeckle_field"><code class="xref py py-obj docutils literal notranslate"><span class="pre">despeckle_field</span></code></a>(radar, field[, label_dict, ...])</p></td>
 <td><p>Despeckle a radar volume by identifying small objects in each scan and masking them out.</p></td>
@@ -1231,10 +1231,10 @@
 <td><p>Create a filter which removes undesired gates based on moments.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.phase_proc_lp.html#pyart.correct.phase_proc_lp" title="pyart.correct.phase_proc_lp"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phase_proc_lp</span></code></a>(radar, offset[, debug, ...])</p></td>
-<td><p>Phase process using a LP method [1].</p></td>
+<td><p>Phase process using a LP method <a class="reference internal" href="pyart.correct.phase_proc_lp_gf.html#giangrande2013" id="id3"><span>[Giangrande2013]</span></a>.</p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="pyart.correct.phase_proc_lp_gf.html#pyart.correct.phase_proc_lp_gf" title="pyart.correct.phase_proc_lp_gf"><code class="xref py py-obj docutils literal notranslate"><span class="pre">phase_proc_lp_gf</span></code></a>(radar[, gatefilter, debug, ...])</p></td>
-<td><p>Phase process using a LP method [1] using Py-ART's Gatefilter.</p></td>
+<td><p>Phase process using a LP method <a class="reference internal" href="pyart.correct.phase_proc_lp_gf.html#giangrande2013" id="id4"><span>[Giangrande2013]</span></a> using Py-ART's Gatefilter.</p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="pyart.correct.range_correction.html#pyart.correct.range_correction" title="pyart.correct.range_correction"><code class="xref py py-obj docutils literal notranslate"><span class="pre">range_correction</span></code></a>(radar, field, height)</p></td>
 <td><p>Corrects reflectivity for range to help get the correct noise floor values Note: This function has only been tested on Ka-band ARM Zenith radars (KAZR) and will only work on cloud radars.</p></td>
