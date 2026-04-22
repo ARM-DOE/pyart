@@ -48,11 +48,19 @@ def test_instrument_parameters(filename=filename):
     radar = pyart.xradar.Xradar(dtree)
     assert radar.instrument_parameters["instrument_name"] == "SPOLRVP8"
     assert_allclose(
-        radar.instrument_parameters["latitude"]["data"], np.array(22.52669907)
+        radar.instrument_parameters["sweep_fixed_angle"]["data"][0], np.array(0.4999)
     )
-    assert_allclose(
-        radar.instrument_parameters["longitude"]["data"], np.array(120.4335022)
+    assert radar.instrument_parameters["sweep_group_name"]["data"][0] == "sweep_0"
+
+
+def test_coords(filename=filename):
+    dtree = xd.io.open_cfradial1_datatree(
+        filename,
+        optional=False,
     )
+    radar = pyart.xradar.Xradar(dtree)
+    assert_allclose(radar.xradar.coords["latitude"].values, np.array(22.52669907))
+    assert_allclose(radar.xradar.coords["longitude"].values, np.array(120.4335022))
 
 
 def test_get_gate_x_y_z(filename=filename):
