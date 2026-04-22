@@ -27,7 +27,6 @@ classifiers = [
     "Intended Audience :: Developers",
     "Programming Language :: Python",
     "Programming Language :: Python :: 3",
-    "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
     "Programming Language :: Python :: 3.12",
     "Programming Language :: Python :: 3.13",
@@ -41,10 +40,10 @@ classifiers = [
     "Framework :: Matplotlib",
 ]
 urls = {Homepage = "https://github.com/ARM-DOE/pyart"}
-requires-python = ">=3.10"
+requires-python = ">=3.11"
 dependencies = [
     "cartopy>=0.22.0",
-    "cftime>=1.5.1.1",
+    "cftime>=1.5.2",
     "fsspec>=2021.11.0",
     "matplotlib>=3.5.0",
     "mda-xdrlib>=0.2.0",
@@ -57,7 +56,7 @@ dependencies = [
     "s3fs>=2021.11.0",
     "scipy>=1.7.3",
     "xarray>=2024.10.0",
-    "xradar>=0.8.0",
+    "xradar>=0.12.0",
 ]
 dynamic = ["readme", "version"]
 
