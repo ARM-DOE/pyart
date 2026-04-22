@@ -116,7 +116,7 @@ We can use the xradar/xarray plotting functionality here
 
 
 .. image-sg:: /examples/xradar/images/sphx_glr_plot_dealias_xradar_002.png
-   :alt: latitude = 36.49 [degrees_north], longitude = -...
+   :alt: latitude = 36.49 [degrees_north], altitude = 21...
    :srcset: /examples/xradar/images/sphx_glr_plot_dealias_xradar_002.png
    :class: sphx-glr-single-img
 
@@ -205,7 +205,7 @@ We can visualize the uncorrected and corrected radial velocity fields
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 9.458 seconds)
+   **Total running time of the script:** (0 minutes 9.642 seconds)
 
 
 .. _sphx_glr_download_examples_xradar_plot_dealias_xradar.py:

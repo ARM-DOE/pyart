@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
@@ -42,10 +42,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
 
     <script src="../_static/documentation_options.js?v=b21de401"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
@@ -100,7 +100,9 @@
   
   <button type="button" class="btn rounded-pill" id="pst-back-to-top">
     <i class="fa-solid fa-arrow-up"></i>Back to top</button>
-
+  
+  
+  
   
   <dialog id="pst-search-dialog">
     
@@ -502,7 +504,7 @@ including making binary and source files available on PyPI and conda-forge.</p>
 <h2>Make the tagged git release<a class="headerlink" href="#make-the-tagged-git-release" title="Link to this heading">#</a></h2>
 <p>First you will create a new tag and message associated with that tag.
 After that you will push the new tag to Py-ART’s upstream. Upstream should
-point to <a class="reference external" href="https://github.com/ARM-DOE/pyart.git">https://github.com/ARM-DOE/pyart.git</a>. Make sure when creating a new tag
+point to <a class="github reference external" href="https://github.com/ARM-DOE/pyart.git">ARM-DOE/pyart.git</a>. Make sure when creating a new tag
 to not commit anything to the tag until the release process is done. Otherwise
 the automatic version creator will create a .post extension that will break PyPI.</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">tag</span> <span class="o">-</span><span class="n">a</span> <span class="n">v1</span><span class="mf">.8.0</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;Py-ART version 1.8.0&quot;</span>
@@ -524,14 +526,14 @@ these notes.</p>
 </pre></div>
 </div>
 <p>Automatically, when you click draft a new release found here
-<a class="reference external" href="https://github.com/ARM-DOE/pyart/releases/new">https://github.com/ARM-DOE/pyart/releases/new</a> there is a button to click
+<a class="github reference external" href="https://github.com/ARM-DOE/pyart/releases/new">ARM-DOE/pyart</a> there is a button to click
 called Generate release notes. Which will generate release notes between
 the new tag and the one prior.</p>
 </section>
 <section id="update-the-github-release-and-trigger-the-pypi-upload">
 <h2>Update the GitHub Release and Trigger the PyPI Upload<a class="headerlink" href="#update-the-github-release-and-trigger-the-pypi-upload" title="Link to this heading">#</a></h2>
 <p>From the ARM-DOE Github page, click on the Releases tab and make a new release.
-<a class="reference external" href="https://github.com/ARM-DOE/pyart/releases">https://github.com/ARM-DOE/pyart/releases</a> Use the existing tag pushed for the
+<a class="github reference external" href="https://github.com/ARM-DOE/pyart/releases">ARM-DOE/pyart</a> Use the existing tag pushed for the
 version. Include the release notes. Once you select release, a Github action
 will be triggered, generating the source files and uploding them to PyPI.</p>
 </section>
@@ -650,8 +652,8 @@ announcement as a template and include the release notes written above.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -685,7 +687,7 @@ announcement as a template and include the release notes written above.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.17.1.
 </p></div>
       
     </div>
