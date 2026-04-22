@@ -30,7 +30,7 @@ from copy import deepcopy
 from warnings import warn
 
 import numpy as np
-from netCDF4 import num2pydate
+from cftime import num2pydate
 from scipy.interpolate import interp1d
 
 from ..core.transforms import antenna_to_cartesian
