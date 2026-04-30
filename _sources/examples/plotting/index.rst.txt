@@ -10,6 +10,10 @@ Plotting examples
 Plotting real world radar data with Py-ART.
 
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 

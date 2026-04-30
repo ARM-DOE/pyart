@@ -10,6 +10,10 @@ Xradar Examples
 Examples of using Xradar with Py-ART to accomplish different tasks.
 
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 

@@ -10,6 +10,10 @@ Mapping examples
 Mapping one or multiple radars from antenna coordinates to a Cartesian grid.
 
 
+.. raw:: html
+
+  <div id='sg-tag-list' class='sphx-glr-tag-list'></div>
+
 
 .. raw:: html
 

@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=d2d258e8" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=fd6457a4" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -52,6 +52,7 @@
     <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
     <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
     <script src="../_static/design-tabs.js?v=f930bc37"></script>
     <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
     <script>
@@ -552,10 +553,10 @@
                    <section id="example-gallery">
 <h1>Example Gallery<a class="headerlink" href="#example-gallery" title="Link to this heading">#</a></h1>
 <p>The files used in these examples are available for <a class="reference external" href="https://adc.arm.gov/pyart/example_data/">download</a>.</p>
-<div class="sphx-glr-thumbnails"></div><section id="moment-correction-examples">
+<div id='sg-tag-list' class='sphx-glr-tag-list'></div><div class="sphx-glr-thumbnails"></div><section id="moment-correction-examples">
 <h2>Moment correction examples<a class="headerlink" href="#moment-correction-examples" title="Link to this heading">#</a></h2>
 <p>Performing radar moment corrections in antenna (radial) coordinates.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to calculate the ZDR bias from VPT/Birdbath scans. The technique here uses a vertically pointing scan in regions of light rain. In these regions, raindrops should be approximately spherical and therefore their ZDR near zero. Therefore, we want the average ZDR in these regions. This code applies reflectivity and cross correlation ratio-based threshold to the ZDR bias calculation to ensure that we are taking the average ZDR in light rain."><img alt="" src="../_images/sphx_glr_plot_zdr_check_thumb.png" />
+<div id='sg-tag-list' class='sphx-glr-tag-list'></div><div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to calculate the ZDR bias from VPT/Birdbath scans. The technique here uses a vertically pointing scan in regions of light rain. In these regions, raindrops should be approximately spherical and therefore their ZDR near zero. Therefore, we want the average ZDR in these regions. This code applies reflectivity and cross correlation ratio-based threshold to the ZDR bias calculation to ensure that we are taking the average ZDR in light rain."><img alt="" src="../_images/sphx_glr_plot_zdr_check_thumb.png" />
 <p><a class="reference internal" href="correct/plot_zdr_check.html"><span class="doc">ZDR Bias Calculation</span></a></p>
   <div class="sphx-glr-thumbnail-title">ZDR Bias Calculation</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="This example shows how to correct and plot reflectivity from an ARM KAZR using a noise floor cloud mask."><img alt="" src="../_images/sphx_glr_plot_cloud_mask_thumb.png" />
@@ -574,7 +575,7 @@
 <section id="input-output-examples">
 <h2>Input/Output Examples<a class="headerlink" href="#input-output-examples" title="Link to this heading">#</a></h2>
 <p>Reading/writing a variety of radar data using Py-ART.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="An example which uses xradar and Py-ART to read and plot Cfradial2/FM301 data."><img alt="" src="../_images/sphx_glr_plot_read_cfradial2_thumb.png" />
+<div id='sg-tag-list' class='sphx-glr-tag-list'></div><div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="An example which uses xradar and Py-ART to read and plot Cfradial2/FM301 data."><img alt="" src="../_images/sphx_glr_plot_read_cfradial2_thumb.png" />
 <p><a class="reference internal" href="io/plot_read_cfradial2.html"><span class="doc">Read and Plot Cfradial2/FM301 data Using Xradar and Py-ART</span></a></p>
   <div class="sphx-glr-thumbnail-title">Read and Plot Cfradial2/FM301 data Using Xradar and Py-ART</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="Within this example, we show how you can remotely access Next Generation Weather Radar (NEXRAD) Data from Google Cloud Storage and plot quick looks of the datasets."><img alt="" src="../_images/sphx_glr_plot_nexrad_data_google_cloud_thumb.png" />
@@ -590,7 +591,7 @@
 <section id="mapping-examples">
 <h2>Mapping examples<a class="headerlink" href="#mapping-examples" title="Link to this heading">#</a></h2>
 <p>Mapping one or multiple radars from antenna coordinates to a Cartesian grid.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of a single radar from Antenna coordinates to a Cartesian grid."><img alt="" src="../_images/sphx_glr_plot_map_one_radar_to_grid_thumb.png" />
+<div id='sg-tag-list' class='sphx-glr-tag-list'></div><div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of a single radar from Antenna coordinates to a Cartesian grid."><img alt="" src="../_images/sphx_glr_plot_map_one_radar_to_grid_thumb.png" />
 <p><a class="reference internal" href="mapping/plot_map_one_radar_to_grid.html"><span class="doc">Map a single radar to a Cartesian grid</span></a></p>
   <div class="sphx-glr-thumbnail-title">Map a single radar to a Cartesian grid</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="Map the reflectivity field of two nearby ARM XSARP radars from antenna coordinates to a Cartesian grid."><img alt="" src="../_images/sphx_glr_plot_map_two_radars_to_grid_thumb.png" />
@@ -606,7 +607,7 @@
 <section id="plotting-examples">
 <h2>Plotting examples<a class="headerlink" href="#plotting-examples" title="Link to this heading">#</a></h2>
 <p>Plotting real world radar data with Py-ART.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="An example which creates a RHI plot of a MDV file using a RadarDisplay object."><img alt="" src="../_images/sphx_glr_plot_rhi_mdv_thumb.png" />
+<div id='sg-tag-list' class='sphx-glr-tag-list'></div><div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="An example which creates a RHI plot of a MDV file using a RadarDisplay object."><img alt="" src="../_images/sphx_glr_plot_rhi_mdv_thumb.png" />
 <p><a class="reference internal" href="plotting/plot_rhi_mdv.html"><span class="doc">Create a RHI plot from a MDV file</span></a></p>
   <div class="sphx-glr-thumbnail-title">Create a RHI plot from a MDV file</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="This is an example of how to plot a corner reflector."><img alt="" src="../_images/sphx_glr_plot_corner_reflector_thumb.png" />
@@ -670,7 +671,7 @@
 <section id="retrieval-examples">
 <h2>Retrieval Examples<a class="headerlink" href="#retrieval-examples" title="Link to this heading">#</a></h2>
 <p>Retrievals from various radars, such as additional fields or subsets of the data.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Given a radar and a point, extract the column of radar data values above a point"><img alt="" src="../_images/sphx_glr_plot_column_subset_thumb.png" />
+<div id='sg-tag-list' class='sphx-glr-tag-list'></div><div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="Given a radar and a point, extract the column of radar data values above a point"><img alt="" src="../_images/sphx_glr_plot_column_subset_thumb.png" />
 <p><a class="reference internal" href="retrieve/plot_column_subset.html"><span class="doc">Extract a radar column above a point</span></a></p>
   <div class="sphx-glr-thumbnail-title">Extract a radar column above a point</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="Calculates and plots the composite reflectivity, or the maximum reflectivity across all of the elevations."><img alt="" src="../_images/sphx_glr_plot_composite_reflectivity_thumb.png" />
@@ -701,7 +702,7 @@
 <section id="xradar-examples">
 <h2>Xradar Examples<a class="headerlink" href="#xradar-examples" title="Link to this heading">#</a></h2>
 <p>Examples of using Xradar with Py-ART to accomplish different tasks.</p>
-<div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="An example which uses xradar and Py-ART to create a PPI plot of a Cfradial file."><img alt="" src="../_images/sphx_glr_plot_xradar_thumb.png" />
+<div id='sg-tag-list' class='sphx-glr-tag-list'></div><div class="sphx-glr-thumbnails"><div class="sphx-glr-thumbcontainer" tooltip="An example which uses xradar and Py-ART to create a PPI plot of a Cfradial file."><img alt="" src="../_images/sphx_glr_plot_xradar_thumb.png" />
 <p><a class="reference internal" href="xradar/plot_xradar.html"><span class="doc">Plot a PPI Using Xradar and Py-ART</span></a></p>
   <div class="sphx-glr-thumbnail-title">Plot a PPI Using Xradar and Py-ART</div>
 </div><div class="sphx-glr-thumbcontainer" tooltip="An example which uses xradar and Py-ART to grid a PPI file."><img alt="" src="../_images/sphx_glr_plot_grid_xradar_thumb.png" />
