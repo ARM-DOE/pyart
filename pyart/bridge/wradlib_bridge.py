@@ -68,7 +68,7 @@ def texture_of_complex_phase(radar, phidp_field=None, phidp_texture_field=None):
     complex_phase = np.exp(1j * (phidp * np.pi / 180.0))
 
     # calculate texture using wradlib
-    w_texture_complex = wradlib.dp.texture((np.real(complex_phase) + 1.0) * 180)
+    w_texture_complex = wradlib.util.texture((np.real(complex_phase) + 1.0) * 180)
 
     texture_field = get_metadata(phidp_texture_field)
     texture_field["data"] = w_texture_complex

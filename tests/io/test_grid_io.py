@@ -2,7 +2,8 @@
 
 import netCDF4
 import numpy as np
-from numpy.testing import assert_almost_equal, assert_warns
+import pytest
+from numpy.testing import assert_almost_equal
 
 import pyart
 from pyart.io.common import stringarray_to_chararray
@@ -100,7 +101,7 @@ def test_write_grid_fields_list():
         grid2 = pyart.io.read_grid(tmpfile)
         assert "reflectivity" in grid2.fields.keys()
         include_fields = ["foo"]
-        assert_warns(
+        pytest.warns(
             UserWarning,
             pyart.io.write_grid,
             tmpfile_warn,
@@ -180,7 +181,7 @@ def test_bad_shaped_field():
         dset.close()
 
         # warning should be raised about incorrect shape of bad_field var
-        assert_warns(UserWarning, pyart.io.read_grid, tmpfile)
+        pytest.warns(UserWarning, pyart.io.read_grid, tmpfile)
 
 
 def test_write_projection_coordinate_system():
@@ -225,7 +226,7 @@ def test_unknown_projection():
 
     with pyart.testing.InTemporaryDirectory():
         tmpfile = "tmp_grid.nc"
-        assert_warns(
+        pytest.warns(
             UserWarning, pyart.io.write_grid, tmpfile, grid, write_proj_coord_sys=True
         )
         dset = netCDF4.Dataset(tmpfile, "r")

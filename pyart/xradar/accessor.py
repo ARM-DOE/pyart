@@ -782,7 +782,7 @@ class Xradar:
             )
 
         # Merge based on the sweep number
-        merged = concat(ds_list, dim="sweep_number")
+        merged = concat(ds_list, dim="sweep_number", join="outer", coords="different")
 
         # Stack the sweep number and azimuth together
         stacked = merged.stack(gates=["sweep_number", "azimuth"]).transpose()
