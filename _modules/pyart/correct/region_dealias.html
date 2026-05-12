@@ -742,7 +742,6 @@
                 <span class="n">nyq_adjustments</span> <span class="o">=</span> <span class="n">fmin_l_bfgs_b</span><span class="p">(</span>
                     <span class="n">cost_function</span><span class="p">,</span>
                     <span class="n">gfold</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">nfeatures_corr</span><span class="p">),</span>
-                    <span class="n">disp</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
                     <span class="n">fprime</span><span class="o">=</span><span class="n">gradient</span><span class="p">,</span>
                     <span class="n">bounds</span><span class="o">=</span><span class="n">bounds_list</span><span class="p">,</span>
                     <span class="n">maxiter</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>
