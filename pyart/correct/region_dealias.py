@@ -266,7 +266,6 @@ def dealias_region_based(
                 nyq_adjustments = fmin_l_bfgs_b(
                     cost_function,
                     gfold * np.ones(nfeatures_corr),
-                    disp=True,
                     fprime=gradient,
                     bounds=bounds_list,
                     maxiter=200,
