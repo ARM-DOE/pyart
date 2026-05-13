@@ -296,6 +296,51 @@ def read_cfradial(
     else:
         pitch = None
 
+    if "heading_change_rate" in ncvars:
+        heading_change_rate = _ncvar_to_dict(ncvars["heading_change_rate"])
+    else:
+        heading_change_rate = None
+
+    if "pitch_change_rate" in ncvars:
+        pitch_change_rate = _ncvar_to_dict(ncvars["pitch_change_rate"])
+    else:
+        pitch_change_rate = None
+
+    if "roll_change_rate" in ncvars:
+        roll_change_rate = _ncvar_to_dict(ncvars["roll_change_rate"])
+    else:
+        roll_change_rate = None
+
+    if "eastward_velocity" in ncvars:
+        eastward_velocity = _ncvar_to_dict(ncvars["eastward_velocity"])
+    else:
+        eastward_velocity = None
+
+    if "northward_velocity" in ncvars:
+        northward_velocity = _ncvar_to_dict(ncvars["northward_velocity"])
+    else:
+        northward_velocity = None
+
+    if "vertical_velocity" in ncvars:
+        vertical_velocity = _ncvar_to_dict(ncvars["vertical_velocity"])
+    else:
+        vertical_velocity = None
+
+    if "eastward_wind" in ncvars:
+        eastward_wind = _ncvar_to_dict(ncvars["eastward_wind"])
+    else:
+        eastward_wind = None
+
+    if "northward_wind" in ncvars:
+        northward_wind = _ncvar_to_dict(ncvars["northward_wind"])
+    else:
+        northward_wind = None
+
+    if "vertical_wind" in ncvars:
+        vertical_wind = _ncvar_to_dict(ncvars["vertical_wind"])
+    else:
+        vertical_wind = None
+
     if "georefs_applied" in ncvars:
         georefs_applied = _ncvar_to_dict(ncvars["georefs_applied"])
     else:
@@ -379,6 +424,15 @@ def read_cfradial(
         drift=drift,
         heading=heading,
         pitch=pitch,
+        heading_change_rate=heading_change_rate,
+        pitch_change_rate=pitch_change_rate,
+        roll_change_rate=roll_change_rate,
+        eastward_velocity=eastward_velocity,
+        northward_velocity=northward_velocity,
+        vertical_velocity=vertical_velocity,
+        eastward_wind=eastward_wind,
+        northward_wind=northward_wind,
+        vertical_wind=vertical_wind,
         georefs_applied=georefs_applied,
     )
 
@@ -805,6 +859,37 @@ def write_cfradial(
 
     if radar.pitch is not None:
         _create_ncvar(radar.pitch, dataset, "pitch", ("time",))
+
+    if radar.heading_change_rate is not None:
+        _create_ncvar(
+            radar.heading_change_rate, dataset, "heading_change_rate", ("time",)
+        )
+
+    if radar.pitch_change_rate is not None:
+        _create_ncvar(radar.pitch_change_rate, dataset, "pitch_change_rate", ("time",))
+
+    if radar.roll_change_rate is not None:
+        _create_ncvar(radar.roll_change_rate, dataset, "roll_change_rate", ("time",))
+
+    if radar.eastward_velocity is not None:
+        _create_ncvar(radar.eastward_velocity, dataset, "eastward_velocity", ("time",))
+
+    if radar.northward_velocity is not None:
+        _create_ncvar(
+            radar.northward_velocity, dataset, "northward_velocity", ("time",)
+        )
+
+    if radar.vertical_velocity is not None:
+        _create_ncvar(radar.vertical_velocity, dataset, "vertical_velocity", ("time",))
+
+    if radar.eastward_wind is not None:
+        _create_ncvar(radar.eastward_wind, dataset, "eastward_wind", ("time",))
+
+    if radar.northward_wind is not None:
+        _create_ncvar(radar.northward_wind, dataset, "northward_wind", ("time",))
+
+    if radar.vertical_wind is not None:
+        _create_ncvar(radar.vertical_wind, dataset, "vertical_wind", ("time",))
 
     if radar.georefs_applied is not None:
         _create_ncvar(radar.georefs_applied, dataset, "georefs_applied", ("time",))
