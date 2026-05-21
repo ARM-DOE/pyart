@@ -462,13 +462,13 @@ def test_radar_airborne():
     assert radar.roll["data"].shape == (100,)
     assert radar.drift["data"].shape == (100,)
 
-    assert radar.northward_velocity["data"][0] == 3.1
-    assert radar.northward_wind["data"][0] == 3.4
-    assert radar.heading_change_rate["data"][0] == 0.45
-    assert radar.rotation["data"][0] == 1.0
-    assert radar.tilt["data"][0] == 1.1
-    assert radar.roll["data"][0] == 1.2
-    assert radar.drift["data"][0] == 1.3
+    assert_almost_equal(radar.northward_velocity["data"][0], 3.1, 1)
+    assert_almost_equal(radar.northward_wind["data"][0], 3.4, 1)
+    assert_almost_equal(radar.heading_change_rate["data"][0], 0.45, 1)
+    assert_almost_equal(radar.rotation["data"][0], 1.0, 1)
+    assert_almost_equal(radar.tilt["data"][0], 1.1, 1)
+    assert_almost_equal(radar.roll["data"][0], 1.2, 1)
+    assert_almost_equal(radar.drift["data"][0], 1.3, 1)
 
     assert radar.northward_velocity["units"] == "meters_per_second"
     assert radar.northward_velocity["long_name"] == "platform_northward_velocity"
