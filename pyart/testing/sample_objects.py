@@ -132,6 +132,134 @@ def make_empty_rhi_radar(ngates, rays_per_sweep, nsweeps):
     return radar
 
 
+def make_empty_rhi_airborne_radar(ngates, rays_per_sweep, nsweeps):
+    """
+    Return an Airborne Radar object, representing a RHI scan.
+
+    Parameters
+    ----------
+    ngates : int
+        Number of gates per ray.
+    rays_per_sweep : int
+        Number of rays in each PPI sweep.
+    nsweeps : int
+        Number of sweeps.
+
+    Returns
+    -------
+    radar : Radar
+        Radar object with no fields, other parameters are set to default
+        values.
+
+    """
+    nrays = rays_per_sweep * nsweeps
+
+    time = get_metadata("time")
+    _range = get_metadata("range")
+    latitude = get_metadata("latitude")
+    longitude = get_metadata("longitude")
+    altitude = get_metadata("altitude")
+    sweep_number = get_metadata("sweep_number")
+    sweep_mode = get_metadata("sweep_mode")
+    fixed_angle = get_metadata("fixed_angle")
+    sweep_start_ray_index = get_metadata("sweep_start_ray_index")
+    sweep_end_ray_index = get_metadata("sweep_end_ray_index")
+    azimuth = get_metadata("azimuth")
+    elevation = get_metadata("elevation")
+    antenna_transition = get_metadata("antenna_transition")
+
+    eastward_velocity = get_metadata("eastward_velocity")
+    northward_velocity = get_metadata("northward_velocity")
+    vertical_velocity = get_metadata("vertical_velocity")
+    eastward_wind = get_metadata("eastward_wind")
+    northward_wind = get_metadata("northward_wind")
+    vertical_wind = get_metadata("vertical_wind")
+    heading_change_rate = get_metadata("heading_change_rate")
+    pitch_change_rate = get_metadata("pitch_change_rate")
+    roll_change_rate = get_metadata("roll_change_rate")
+    rotation = get_metadata("rotation")
+    tilt = get_metadata("tilt")
+    roll = get_metadata("roll")
+    drift = get_metadata("drift")
+    heading = get_metadata("heading")
+    pitch = get_metadata("pitch")
+
+    fields = {}
+    scan_type = "rhi"
+    metadata = {"instrument_name": "fake_radar"}
+
+    time["data"] = np.arange(nrays, dtype="float64")
+    time["units"] = "seconds since 1989-01-01T00:00:01Z"
+    _range["data"] = np.linspace(0, 1000, ngates).astype("float32")
+
+    latitude["data"] = np.array([36.5], dtype="float64")
+    longitude["data"] = np.array([-97.5], dtype="float64")
+    altitude["data"] = np.array([200], dtype="float64")
+
+    sweep_number["data"] = np.arange(nsweeps, dtype="int32")
+    sweep_mode["data"] = np.array(["rhi"] * nsweeps)
+    fixed_angle["data"] = np.array([0.75] * nsweeps, dtype="float32")
+    sweep_start_ray_index["data"] = np.arange(0, nrays, rays_per_sweep, dtype="int32")
+    sweep_end_ray_index["data"] = np.arange(
+        rays_per_sweep - 1, nrays, rays_per_sweep, dtype="int32"
+    )
+    antenna_transition["data"] = np.zeros(nrays)
+
+    azimuth["data"] = np.array([0.75] * nrays, dtype="float32")
+    elevation["data"] = np.arange(nrays, dtype="float32")
+
+    eastward_velocity["data"] = np.array([3.0] * nrays, dtype="float32")
+    northward_velocity["data"] = np.array([3.1] * nrays, dtype="float32")
+    vertical_velocity["data"] = np.array([3.2] * nrays, dtype="float32")
+    eastward_wind["data"] = np.array([3.3] * nrays, dtype="float32")
+    northward_wind["data"] = np.array([3.4] * nrays, dtype="float32")
+    vertical_wind["data"] = np.array([3.5] * nrays, dtype="float32")
+    heading_change_rate["data"] = np.array([0.45] * nrays, dtype="float32")
+    pitch_change_rate["data"] = np.array([0.5] * nrays, dtype="float32")
+    roll_change_rate["data"] = np.array([0.55] * nrays, dtype="float32")
+    rotation["data"] = np.array([1.0] * nrays, dtype="float32")
+    tilt["data"] = np.array([1.1] * nrays, dtype="float32")
+    roll["data"] = np.array([1.2] * nrays, dtype="float32")
+    drift["data"] = np.array([1.3] * nrays, dtype="float32")
+    heading["data"] = np.array([1.4] * nrays, dtype="float32")
+    pitch["data"] = np.array([1.5] * nrays, dtype="float32")
+
+    return Radar(
+        time,
+        _range,
+        fields,
+        metadata,
+        scan_type,
+        latitude,
+        longitude,
+        altitude,
+        sweep_number,
+        sweep_mode,
+        fixed_angle,
+        sweep_start_ray_index,
+        sweep_end_ray_index,
+        azimuth,
+        elevation,
+        antenna_transition=antenna_transition,
+        instrument_parameters=None,
+        eastward_velocity=eastward_velocity,
+        northward_velocity=northward_velocity,
+        vertical_velocity=vertical_velocity,
+        eastward_wind=eastward_wind,
+        northward_wind=northward_wind,
+        vertical_wind=vertical_wind,
+        heading_change_rate=heading_change_rate,
+        pitch_change_rate=pitch_change_rate,
+        roll_change_rate=roll_change_rate,
+        rotation=rotation,
+        tilt=tilt,
+        roll=roll,
+        drift=drift,
+        heading=heading,
+        pitch=pitch,
+    )
+
+
 def make_target_radar():
     """
     Return a PPI radar with a target like reflectivity field.
