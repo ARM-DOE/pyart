@@ -673,6 +673,15 @@
         <span class="n">drift</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">heading</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">pitch</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">heading_change_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">pitch_change_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">roll_change_rate</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">eastward_velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">northward_velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">vertical_velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">northward_wind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">eastward_wind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+        <span class="n">vertical_wind</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">georefs_applied</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
         <span class="k">if</span> <span class="s2">&quot;calendar&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">time</span><span class="p">:</span>
@@ -710,6 +719,15 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">heading</span> <span class="o">=</span> <span class="n">heading</span>  <span class="c1"># optional</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pitch</span> <span class="o">=</span> <span class="n">pitch</span>  <span class="c1"># optional</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">georefs_applied</span> <span class="o">=</span> <span class="n">georefs_applied</span>  <span class="c1"># optional</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">heading_change_rate</span> <span class="o">=</span> <span class="n">heading_change_rate</span>  <span class="c1"># optional</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pitch_change_rate</span> <span class="o">=</span> <span class="n">pitch_change_rate</span>  <span class="c1"># optional</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">roll_change_rate</span> <span class="o">=</span> <span class="n">roll_change_rate</span>  <span class="c1"># optional</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eastward_velocity</span> <span class="o">=</span> <span class="n">eastward_velocity</span>  <span class="c1"># optional</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">northward_velocity</span> <span class="o">=</span> <span class="n">northward_velocity</span>  <span class="c1"># optional</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertical_velocity</span> <span class="o">=</span> <span class="n">vertical_velocity</span>  <span class="c1"># optional</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">northward_wind</span> <span class="o">=</span> <span class="n">northward_wind</span>  <span class="c1"># optional</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">eastward_wind</span> <span class="o">=</span> <span class="n">eastward_wind</span>  <span class="c1"># optional</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vertical_wind</span> <span class="o">=</span> <span class="n">vertical_wind</span>  <span class="c1"># optional</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">instrument_parameters</span> <span class="o">=</span> <span class="n">instrument_parameters</span>  <span class="c1"># optional</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">radar_calibration</span> <span class="o">=</span> <span class="n">radar_calibration</span>  <span class="c1"># optional</span>
@@ -1278,6 +1296,24 @@
             <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;heading&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pitch</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;pitch&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">heading_change_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;heading_change_rate&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">pitch_change_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;pitch_change_rate&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">roll_change_rate</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;roll_change_rate&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eastward_wind</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;eastward_wind&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">northward_wind</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;northward_wind&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertical_wind</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;vertical_wind&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">eastward_velocity</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;eastward_velocity&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">northward_velocity</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;northward_velocity&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">vertical_velocity</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;vertical_velocity&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">georefs_applied</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_dic_info</span><span class="p">(</span><span class="s2">&quot;georefs_applied&quot;</span><span class="p">,</span> <span class="n">level</span><span class="p">,</span> <span class="n">out</span><span class="p">)</span>
 

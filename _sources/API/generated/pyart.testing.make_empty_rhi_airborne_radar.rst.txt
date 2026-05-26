@@ -1,0 +1,6 @@
+pyart.testing.make\_empty\_rhi\_airborne\_radar
+===============================================
+
+.. currentmodule:: pyart.testing
+
+.. autofunction:: make_empty_rhi_airborne_radar
