@@ -1,14 +1,9 @@
 name: Build CI Wheels
 
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - 'v*'
-  pull_request:
-    paths:
-      - '.github/workflows/wheels.yml'
+  release:
+    types:
+      - published
   workflow_dispatch:
 
 concurrency:
@@ -70,6 +65,9 @@ jobs:
     name: Publish to PyPI
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
+    environment: pypi
+    permissions:
+      id-token: write
     # upload to PyPI on every tag starting with 'v-'
     if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
     steps:
@@ -88,6 +86,3 @@ jobs:
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@v1.14.0
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_TOKEN }}
