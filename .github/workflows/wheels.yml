@@ -63,6 +63,7 @@ jobs:
     environment: pypi
     permissions:
       id-token: write
+    if: github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v')
     steps:
       - name: Download sdist
         uses: actions/download-artifact@v8
