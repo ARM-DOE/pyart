@@ -7,8 +7,8 @@ import warnings
 
 import netCDF4
 import numpy as np
-from scipy.spatial.distance import cdist
 import xarray as xr
+from scipy.spatial.distance import cdist
 
 from ..config import get_fillvalue, get_metadata
 from ..core.grid import Grid
