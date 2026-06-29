@@ -379,9 +379,13 @@ def write_grid(
         for field, field_dic in grid.fields.items():
             if field in include_fields:
                 field_check += 1
-                field_dic["data"] = field_dic["data"].reshape((1,) + field_dic["data"].shape, copy=False)
+                field_dic["data"] = field_dic["data"].reshape(
+                    (1,) + field_dic["data"].shape, copy=False
+                )
                 _create_ncvar(field_dic, dset, field, ("time", "z", "y", "x"))
-                field_dic["data"] = field_dic["data"].reshape(field_dic["data"].shape[1:])
+                field_dic["data"] = field_dic["data"].reshape(
+                    field_dic["data"].shape[1:], copy=False
+                )
             else:
                 continue
         if field_check == 0:
