@@ -7,7 +7,7 @@ import warnings
 
 import netCDF4
 import numpy as np
-import scipy.spatial
+from scipy.spatial.distance import cdist
 import xarray as xr
 
 from ..config import get_fillvalue, get_metadata
@@ -269,7 +269,9 @@ class NNLocator:
             ind = self.tree.query_ball_point(q, r)
             if len(ind) == 0:
                 return ind, 0
-            dist = scipy.spatial.minkowski_distance(q, self.tree.data[ind])
+            dist = cdist(
+                np.atleast_2d(q), self.tree.data[ind], metric="minkowski"
+            ).ravel()
 
             return ind, dist
 

@@ -595,7 +595,7 @@ class MdvFile:
 
             # read the decompressed data, reshape and mask
             sw_data = np.frombuffer(decompr_data, np_form).astype("float32")
-            sw_data.shape = (ny, nx)
+            sw_data = sw_data.reshape((ny, nx), copy=False)
             mask = sw_data == field_header["bad_data_value"]
             np.putmask(sw_data, mask, [np.nan])
 
