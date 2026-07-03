@@ -11,7 +11,6 @@ import numpy as np
 # Local imports
 # Local imports
 from ..config import get_field_name, get_fillvalue, get_metadata
-from ..core import Grid
 from ..util.radar_utils import ma_broadcast_to
 from ._echo_class import _feature_detection, steiner_class_buff
 from ._echo_class_wt import calc_scale_break, wavelet_reclass
