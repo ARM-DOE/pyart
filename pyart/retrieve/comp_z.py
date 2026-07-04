@@ -17,7 +17,7 @@ def composite_reflectivity(
     radar,
     field="reflectivity",
     gatefilter=None,
-    same_nyquist=True,
+    same_nyquist=False,
     nyquist_vector_idx=0,
 ):
     """
@@ -47,14 +47,15 @@ def composite_reflectivity(
     gatefilter : GateFilter
         GateFilter instance. None will result in no gatefilter mask being
         applied to data.
-    same_nyquist: bool
-        During a volume scan (i.e., file) the PRF (nyqust velocity) can change.
-        This can create some odd artifacts at times with if data quality is low on certain scans.
-        To get around this, you can change the code to only take the max of scans with the same nyquist +/- 1 m/s.
-        Defult this will be on (True), but folks can turn this off.
-    nyquist_vector_idx: int
-        This integer works alongside the same_nyquist parameter. Do you want to match all the nyquists to sweep 0? use idx 0, sweep 1, use idx 1.
-        By default it is set to 0.
+    same_nyquist : bool
+        During a volume scan (i.e., file) the PRF (Nyquist velocity) can change.
+        This can create odd artifacts when data quality is low on certain scans.
+        To avoid this, only the max of scans sharing the reference sweep's
+        Nyquist (+/- 1 m/s) is taken. Default is off (False); set to True to
+        enable this filtering (requires the radar to have Nyquist velocity).
+    nyquist_vector_idx : int
+        Index of the reference sweep whose Nyquist the other sweeps are matched
+        to when same_nyquist is True. Default is 0 (the first sweep).
 
     Returns
     -------
@@ -81,8 +82,9 @@ def composite_reflectivity(
         z = radar.get_field(sweep, field)
         z_dtype = z.dtype
 
-        # get the nyquist, so we know which sweeps are the same sens.
-        nyquist = np.asarray([np.round(radar.get_nyquist_vel(sweep=sweep))])
+        # get the nyquist (only needed when filtering sweeps by matching nyquist)
+        if same_nyquist:
+            nyquist = np.asarray([np.round(radar.get_nyquist_vel(sweep=sweep))])
 
         # Use gatefilter
         if gatefilter is not None:
@@ -128,10 +130,12 @@ def composite_reflectivity(
         # if first sweep, create new dim, otherwise concat them up
         if sweep == minimum_sweep:
             z_stack = copy.deepcopy(z[np.newaxis, :, :])
-            nyquist_stack = copy.deepcopy(nyquist[np.newaxis, :])
+            if same_nyquist:
+                nyquist_stack = copy.deepcopy(nyquist[np.newaxis, :])
         else:
             z_stack = np.concatenate([z_stack, z[np.newaxis, :, :]])
-            nyquist_stack = np.concatenate([nyquist_stack, nyquist[np.newaxis, :]])
+            if same_nyquist:
+                nyquist_stack = np.concatenate([nyquist_stack, nyquist[np.newaxis, :]])
 
     # only stack up sweeps with the same nyquist
     if same_nyquist:
