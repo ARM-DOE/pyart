@@ -724,6 +724,7 @@ def hydroclass_semisupervised(
     Usage
     -----
     .. code-block:: python
+
         hydro_class = pyart.retrieve.hydroclass_semisupervised(
             radar,
             refl_field="corrected_reflectivity",
@@ -744,6 +745,7 @@ def hydroclass_semisupervised(
     `radar.instrument_parameters`, as follows:
 
     .. code-block:: python
+
         radar.instrument_parameters["frequency"] = {
             "long_name": "Radar frequency",
             "units": "Hz",

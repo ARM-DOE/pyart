@@ -6,7 +6,7 @@ import netCDF4
 import numpy as np
 import pytest
 from numpy.ma.core import MaskedArray
-from numpy.testing import assert_almost_equal, assert_array_equal, assert_warns
+from numpy.testing import assert_almost_equal, assert_array_equal
 
 import pyart
 
@@ -310,7 +310,7 @@ def test_write_ppi_fields_list():
         dset = netCDF4.Dataset(tmpfile)
         check_dataset_to_ref(dset, ref)
         include_fields = ["foo"]
-        assert_warns(
+        pytest.warns(
             UserWarning,
             pyart.io.write_cfradial,
             tmpfile_warn,

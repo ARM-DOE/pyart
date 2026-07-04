@@ -30,7 +30,7 @@ from copy import deepcopy
 from warnings import warn
 
 import numpy as np
-from netCDF4 import num2date
+from cftime import num2date
 from scipy.interpolate import interp1d
 
 from ..core.transforms import antenna_to_cartesian
@@ -1761,7 +1761,13 @@ def _update_qvp_metadata(qvp, ref_time, lon, lat, elev=90.0):
         The updated QVP object
 
     """
-    start_time = num2date(0, qvp.time["units"], qvp.time["calendar"])
+    start_time = num2date(
+        0,
+        qvp.time["units"],
+        qvp.time["calendar"],
+        only_use_cftime_datetimes=False,
+        only_use_python_datetimes=True,
+    )
     qvp.time["data"] = np.append(
         qvp.time["data"], (ref_time - start_time).total_seconds()
     )
@@ -1801,7 +1807,13 @@ def _update_along_coord_metadata(acoord, ref_time, elevation, azimuth):
         The updated along coordinate object
 
     """
-    start_time = num2date(0, acoord.time["units"], acoord.time["calendar"])
+    start_time = num2date(
+        0,
+        acoord.time["units"],
+        acoord.time["calendar"],
+        only_use_cftime_datetimes=False,
+        only_use_python_datetimes=True,
+    )
     acoord.time["data"] = np.append(
         acoord.time["data"], (ref_time - start_time).total_seconds()
     )

@@ -782,7 +782,13 @@ class Xradar:
             )
 
         # Merge based on the sweep number
-        merged = concat(ds_list, dim="sweep_number")
+        merged = concat(
+            ds_list,
+            coords="different",
+            join="outer",
+            compat="equals",
+            dim="sweep_number",
+        )
 
         # Stack the sweep number and azimuth together
         stacked = merged.stack(gates=["sweep_number", "azimuth"]).transpose()
@@ -1005,9 +1011,12 @@ class Xradar:
         )
         dt_sweeps["sweep_group_name"] = sweep_group_name_data
         dt_sweeps["sweep_fixed_angle"] = sweep_fixed_angle_data
-        dt_sweeps["latitude"] = self.xradar.latitude
-        dt_sweeps["longitude"] = self.xradar.longitude
-        dt_sweeps["altitude"] = self.xradar.altitude
+
+        dt_sweeps.ds = dt_sweeps.ds.assign_coords(
+            latitude=self.xradar.coords["latitude"],
+            longitude=self.xradar.coords["longitude"],
+            altitude=self.xradar.coords["altitude"],
+        )
         return dt_sweeps.pyart.to_radar()
 
 

@@ -31,11 +31,11 @@ jobs:
         os: [macos, ubuntu, windows]
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       # Install dependencies
       - name: Setup Conda Environment
-        uses: mamba-org/setup-micromamba@v2.0.7
+        uses: mamba-org/setup-micromamba@v3.0.0
         with:
           environment-file: continuous_integration/environment-ci.yml
           init-shell: >-
@@ -65,9 +65,9 @@ jobs:
           python -m pytest -v --cov=./ --cov-report=xml
 
       - name: Upload code coverage to Codecov
-        uses: codecov/codecov-action@v5.5.2
+        uses: codecov/codecov-action@v7.0.0
         with:
-          file: ./coverage.xml
+          files: ./coverage.xml
           flags: unittests
           env_vars: OS,PYTHON
           name: codecov-umbrella
@@ -79,10 +79,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v7
         with:
-          python-version: '3.10.0'
+          python-version: '3.11'
           prune-cache: false
 
       - name: Install PyART

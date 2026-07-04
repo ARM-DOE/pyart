@@ -450,6 +450,44 @@ def test_radar_creation():
     assert isinstance(radar, pyart.core.Radar)
 
 
+def test_radar_airborne():
+    radar = pyart.testing.make_empty_rhi_airborne_radar(5, 20, 5)
+    assert isinstance(radar, pyart.core.Radar)
+
+    assert radar.northward_velocity["data"].shape == (100,)
+    assert radar.northward_wind["data"].shape == (100,)
+    assert radar.heading_change_rate["data"].shape == (100,)
+    assert radar.rotation["data"].shape == (100,)
+    assert radar.tilt["data"].shape == (100,)
+    assert radar.roll["data"].shape == (100,)
+    assert radar.drift["data"].shape == (100,)
+
+    assert_almost_equal(radar.northward_velocity["data"][0], 3.1, 1)
+    assert_almost_equal(radar.northward_wind["data"][0], 3.4, 1)
+    assert_almost_equal(radar.heading_change_rate["data"][0], 0.45, 1)
+    assert_almost_equal(radar.rotation["data"][0], 1.0, 1)
+    assert_almost_equal(radar.tilt["data"][0], 1.1, 1)
+    assert_almost_equal(radar.roll["data"][0], 1.2, 1)
+    assert_almost_equal(radar.drift["data"][0], 1.3, 1)
+
+    assert radar.northward_velocity["units"] == "meters_per_second"
+    assert radar.northward_velocity["long_name"] == "platform_northward_velocity"
+    assert (
+        radar.northward_velocity["comment"]
+        == "NS velocity of the platform. Positive is northwards."
+    )
+
+    assert radar.heading_change_rate["units"] == "degrees_per_second"
+    assert (
+        radar.heading_change_rate["long_name"]
+        == "platform_heading_angle_rate_of_change"
+    )
+
+    assert radar.drift["units"] == "degrees"
+    assert radar.drift["standard_name"] == "platform_drift_angle"
+    assert radar.drift["long_name"] == "Platform drift angle"
+
+
 def test_add_field():
     radar = pyart.testing.make_target_radar()
     dic = {"data": np.zeros((360, 50)), "standard_name": "test"}

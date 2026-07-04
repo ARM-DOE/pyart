@@ -22,7 +22,7 @@ def dealias_fourdd(
     **kwargs,
 ):
     """
-    **Deprecated in Py-ART 2.0. Please use the region-based dealiaser.
+    Deprecated in Py-ART 2.0. Please use the region-based dealiaser.
 
     Dealias Doppler velocities using the 4DD algorithm.
 
