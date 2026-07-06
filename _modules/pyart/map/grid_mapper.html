@@ -495,8 +495,8 @@
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">netCDF4</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">scipy.spatial</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">xarray</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xr</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">scipy.spatial.distance</span><span class="w"> </span><span class="kn">import</span> <span class="n">cdist</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">..config</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_fillvalue</span><span class="p">,</span> <span class="n">get_metadata</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">..core.grid</span><span class="w"> </span><span class="kn">import</span> <span class="n">Grid</span>
@@ -760,7 +760,9 @@
             <span class="n">ind</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">query_ball_point</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="n">r</span><span class="p">)</span>
             <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ind</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">return</span> <span class="n">ind</span><span class="p">,</span> <span class="mi">0</span>
-            <span class="n">dist</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">spatial</span><span class="o">.</span><span class="n">minkowski_distance</span><span class="p">(</span><span class="n">q</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">ind</span><span class="p">])</span>
+            <span class="n">dist</span> <span class="o">=</span> <span class="n">cdist</span><span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">atleast_2d</span><span class="p">(</span><span class="n">q</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">tree</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="n">ind</span><span class="p">],</span> <span class="n">metric</span><span class="o">=</span><span class="s2">&quot;minkowski&quot;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">ravel</span><span class="p">()</span>
 
             <span class="k">return</span> <span class="n">ind</span><span class="p">,</span> <span class="n">dist</span>
 
