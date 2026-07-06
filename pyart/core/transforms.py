@@ -535,7 +535,7 @@ def cartesian_to_geographic(x, y, projparams):
     -----
     The default ``pyart_aeqd`` projection assumes a spherical Earth (no pyproj
     required) and can differ from an ellipsoidal (WGS84) result by a few hundred
-    metres far from the origin. If pyproj is installed, pass an ellipsoidal
+    meters far from the origin. If pyproj is installed, pass an ellipsoidal
     projection instead::
 
         cartesian_to_geographic(x, y, {"proj": "aeqd", "ellps": "WGS84", "lon_0": lon_0, "lat_0": lat_0})
