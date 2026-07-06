@@ -1036,6 +1036,15 @@
 <span class="sd">    lon, lat : array</span>
 <span class="sd">        Longitude and latitude of the Cartesian coordinates in degrees.</span>
 
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    The default ``pyart_aeqd`` projection assumes a spherical Earth (no pyproj</span>
+<span class="sd">    required) and can differ from an ellipsoidal (WGS84) result by a few hundred</span>
+<span class="sd">    meters far from the origin. If pyproj is installed, pass an ellipsoidal</span>
+<span class="sd">    projection instead::</span>
+
+<span class="sd">        cartesian_to_geographic(x, y, {&quot;proj&quot;: &quot;aeqd&quot;, &quot;ellps&quot;: &quot;WGS84&quot;, &quot;lon_0&quot;: lon_0, &quot;lat_0&quot;: lat_0})</span>
+
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">projparams</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">projparams</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;proj&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;pyart_aeqd&quot;</span><span class="p">:</span>
         <span class="c1"># Use Py-ART&#39;s Azimuthal equidistance projection</span>
@@ -1148,6 +1157,11 @@
 <span class="sd">    -------</span>
 <span class="sd">    lon, lat : array</span>
 <span class="sd">        Longitude and latitude of Cartesian coordinates in degrees.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    Spherical Earth only. For ellipsoidal (WGS84) accuracy, use</span>
+<span class="sd">    :func:`cartesian_to_geographic` with an ellipsoidal projection (needs pyproj).</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
