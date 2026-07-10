@@ -11,6 +11,9 @@ omit =
 	pyart/correct/dealias.py
 	pyart/graph/gridmapdisplay_basemap.py
 	pyart/graph/radarmapdisplay_basemap.py
+        pyart/graph/gridmapdisplay.py
+        pyart/graph/radarmapdisplay.py
+        pyart/graph/plot_maxcappi.py
 
 [report]
 exclude_lines =
