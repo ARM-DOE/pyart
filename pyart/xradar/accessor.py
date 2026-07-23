@@ -671,9 +671,7 @@ class Xradar:
             # Georeference a version with any colliding moments dropped so
             # that those moments are left untouched in combined_sweeps.
             conflicts = [
-                var
-                for var in ("x", "y", "z")
-                if var in self.combined_sweeps.data_vars
+                var for var in ("x", "y", "z") if var in self.combined_sweeps.data_vars
             ]
             if conflicts:
                 georeferenced = self.combined_sweeps.drop_vars(
