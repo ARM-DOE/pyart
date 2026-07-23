@@ -1,0 +1,205 @@
+name: CI Upstream
+
+on:
+  schedule:
+    # Runs nightly, off-peak, ahead of the regular CI's 09Z schedule.
+    - cron: "0 6 * * *"
+  workflow_dispatch: # allows triggering the workflow run manually
+  pull_request:
+    branches:
+      - main
+    # "unlabeled" is included so that removing the run-upstream-ci label
+    # triggers a new pull_request event on the same concurrency group,
+    # cancelling any already-running upstream-dev job (see the
+    # `concurrency` block below) instead of leaving it running to
+    # completion after the label that gated it is gone.
+    types: [opened, reopened, synchronize, labeled, unlabeled]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+env:
+  FORCE_COLOR: 3
+
+jobs:
+  upstream-dev:
+    name: upstream-dev
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    if: |
+      github.repository == 'ARM-DOE/pyart'
+      && (
+        github.event_name == 'schedule'
+        || github.event_name == 'workflow_dispatch'
+        || (
+          github.event_name == 'pull_request'
+          && contains(github.event.pull_request.labels.*.name, 'run-upstream-ci')
+        )
+      )
+    defaults:
+      run:
+        shell: bash -l {0}
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.14"]
+
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0 # Fetch all history for all branches and tags.
+
+      # Install dependencies
+      - name: Setup Conda Environment
+        uses: mamba-org/setup-micromamba@v3.0.0
+        with:
+          environment-file: continuous_integration/environment-ci.yml
+          init-shell: >-
+            bash
+          cache-downloads: true
+          post-cleanup: "all"
+          create-args: >-
+            python=${{ matrix.python-version }}
+            pytest-reportlog
+
+      - name: Install Py-ART
+        run: |
+          python -m pip install -e . --no-deps --force-reinstall
+
+      # Force-install dev versions of the packages that historically break
+      # the xradar accessor: xradar/xarray from git main, and nightly
+      # numpy/scipy/pandas wheels from the scientific-python nightly index.
+      - name: Install upstream-dev xradar and xarray
+        run: |
+          python -m pip install --no-deps --upgrade \
+            git+https://github.com/openradar/xradar.git \
+            git+https://github.com/pydata/xarray.git
+
+      - name: Install upstream-dev numpy/scipy/pandas
+        run: |
+          python -m pip install \
+            -i https://pypi.anaconda.org/scientific-python-nightly-wheels/simple \
+            --no-deps \
+            --pre \
+            --upgrade \
+            numpy \
+            scipy \
+            pandas
+
+      - name: Version info
+        run: |
+          conda list
+          python -m pip list
+
+      - name: Import Py-ART
+        run: |
+          python -c 'import pyart'
+
+      - name: Run Tests
+        if: success()
+        id: status
+        run: |
+          python -m pytest tests/ --report-log output-log.jsonl
+
+      - name: Upload log file
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: log file
+          path: output-log.jsonl
+          if-no-files-found: ignore
+
+  create-issue:
+    name: report failing upstream-dev run
+    needs: upstream-dev
+    runs-on: ubuntu-latest
+    if: |
+      always()
+      && needs.upstream-dev.result == 'failure'
+      && github.event_name == 'schedule'
+      && github.repository == 'ARM-DOE/pyart'
+
+    permissions:
+      issues: write # open or update an issue for failed CI runs
+
+    steps:
+      - name: Download log file
+        id: download-log
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: log file
+          path: logs/
+
+      - name: Check whether a pytest report log was produced
+        id: check-log
+        run: |
+          if [ -f logs/output-log.jsonl ]; then
+            echo "found=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "found=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Normal path: pytest ran and produced a report-log (test failures,
+      # or breakage surfaced as test collection/import errors).
+      - name: Generate and publish the report
+        if: steps.check-log.outputs.found == 'true'
+        uses: scientific-python/issue-from-pytest-log-action@v1.6.0
+        with:
+          log-path: logs/output-log.jsonl
+          issue-title: "Nightly upstream-dev CI failed"
+          # Comma-separated labels are supported: the action passes this
+          # straight to `gh issue create --label`, whose docs demonstrate
+          # `--label "bug,help wanted"` as a single multi-label flag. This
+          # yields the same {CI, upstream} label set as the github-script
+          # fallback below, so the two paths' issues share a label set.
+          issue-label: "CI,upstream"
+
+      # Fallback path: the job failed before pytest ever ran (conda solve,
+      # the xradar/xarray dev install, or the "Import Py-ART" smoke step),
+      # so there is no report-log to summarize. Still open/update an issue
+      # so this class of upstream breakage isn't silently swallowed.
+      - name: Open or update a fallback issue
+        if: steps.check-log.outputs.found == 'false'
+        uses: actions/github-script@v8
+        with:
+          script: |
+            const title = "Nightly upstream-dev CI failed before tests ran";
+            const workflow_url = `${context.serverUrl}/${context.repo.owner}/${context.repo.repo}/actions/runs/${context.runId}`;
+            const body = [
+              `The [nightly upstream-dev CI](${workflow_url}) failed before pytest produced a report log.`,
+              "",
+              "This usually means one of the environment-setup or dev-dependency-install steps " +
+                "failed (conda/mamba solve, the `xradar`/`xarray` git-main install, the nightly " +
+                "numpy/scipy/pandas wheel install, or the `import pyart` smoke check) rather than " +
+                "an actual test failure. See the workflow run for logs.",
+            ].join("\n");
+
+            const existing = await github.rest.issues.listForRepo({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: "open",
+              labels: "CI,upstream",
+            });
+            const match = existing.data.find((i) => i.title === title);
+
+            if (match) {
+              await github.rest.issues.update({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                issue_number: match.number,
+                body,
+              });
+            } else {
+              await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title,
+                body,
+                labels: ["CI", "upstream"],
+              });
+            }
