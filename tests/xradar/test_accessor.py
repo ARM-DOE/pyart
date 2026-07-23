@@ -1,4 +1,7 @@
+import io
+
 import numpy as np
+import pyproj
 import pytest
 import xarray as xr
 import xradar as xd
@@ -288,6 +291,133 @@ def test_to_pyart_radar_wraps_datatree():
 def test_to_pyart_radar_raises_typeerror_on_unsupported_type():
     with pytest.raises(TypeError):
         pyart.xradar.to_pyart_radar({"not": "a radar"})
+
+
+def test_get_elevation(filename=filename):
+    dtree = xd.io.open_cfradial1_datatree(
+        filename,
+        optional=False,
+    )
+    radar = pyart.xradar.Xradar(dtree)
+    elevations = radar.get_elevation(0)
+    s = radar.get_slice(0)
+    assert elevations.shape == (480,)
+    assert_allclose(elevations, radar.elevation["data"][s])
+    # copy=True should return an equal but distinct array
+    elevations_copy = radar.get_elevation(0, copy=True)
+    assert elevations_copy is not radar.elevation["data"][s]
+    assert_allclose(elevations_copy, elevations)
+
+
+def test_get_gate_area(filename=filename):
+    dtree = xd.io.open_cfradial1_datatree(
+        filename,
+        optional=False,
+    )
+    radar = pyart.xradar.Xradar(dtree)
+    area = radar.get_gate_area(0)
+    nrays_sweep = radar.get_slice(0).stop - radar.get_slice(0).start
+    assert area.shape == (nrays_sweep - 1, radar.ngates - 1)
+    assert np.all(area > 0)
+
+    # locked known value for the first gate area of sweep 0
+    assert_allclose(area[0, 0], 441.78647, rtol=1e-5)
+
+
+def test_info(filename=filename):
+    dtree = xd.io.open_cfradial1_datatree(
+        filename,
+        optional=False,
+    )
+    radar = pyart.xradar.Xradar(dtree)
+
+    out = io.StringIO()
+    radar.info(level="compact", out=out)
+    compact_output = out.getvalue()
+    assert "DBZ:" in compact_output
+    assert "nsweeps: 9" in compact_output
+    assert "nrays:" in compact_output
+
+    out = io.StringIO()
+    radar.info(level="standard", out=out)
+    standard_output = out.getvalue()
+    assert "DBZ:" in standard_output
+    assert "nsweeps: 9" in standard_output
+    assert "ngates: 996" in standard_output
+    assert "sweep_mode:" in standard_output
+
+    with pytest.raises(ValueError):
+        radar.info(level="invalid")
+
+
+def test_rays_per_sweep(filename=filename):
+    dtree = xd.io.open_cfradial1_datatree(
+        filename,
+        optional=False,
+    )
+    radar = pyart.xradar.Xradar(dtree)
+    rays_per_sweep = radar.rays_per_sweep
+    assert "data" in rays_per_sweep
+    expected = (
+        radar.sweep_end_ray_index["data"] - radar.sweep_start_ray_index["data"] + 1
+    )
+    assert_allclose(rays_per_sweep["data"], expected)
+    assert rays_per_sweep["data"].shape == (radar.nsweeps,)
+
+    # init_rays_per_sweep should reset the attribute
+    radar.init_rays_per_sweep()
+    assert_allclose(radar.rays_per_sweep["data"], expected)
+
+
+def test_init_gate_altitude_alias(filename=filename):
+    dtree = xd.io.open_cfradial1_datatree(
+        filename,
+        optional=False,
+    )
+    radar = pyart.xradar.Xradar(dtree)
+    radar.init_gate_altitude()
+    assert_allclose(
+        radar.gate_altitude["data"], radar.altitude["data"] + radar.gate_z["data"]
+    )
+
+
+def test_xgrid_projection_proj():
+    grid = pyart.testing.make_target_grid()
+
+    with pyart.testing.InTemporaryDirectory():
+        tmpfile = "tmp_grid_proj.nc"
+        pyart.io.write_grid(tmpfile, grid)
+        grid_ds = xr.open_dataset(tmpfile, decode_times=False)
+        xgrid = pyart.xradar.Xgrid(grid_ds)
+
+        # default pyart_aeqd projection cannot be turned into a Proj
+        with pytest.raises(ValueError):
+            xgrid.projection_proj
+
+        xgrid.projection["proj"] = "aeqd"
+        proj = xgrid.projection_proj
+        assert isinstance(proj, pyproj.Proj)
+        grid_ds.close()
+
+
+def test_xgrid_write_roundtrip():
+    grid = pyart.testing.make_target_grid()
+
+    with pyart.testing.InTemporaryDirectory():
+        tmpfile = "tmp_grid_source.nc"
+        pyart.io.write_grid(tmpfile, grid)
+        grid_ds = xr.open_dataset(tmpfile, decode_times=False)
+        xgrid = pyart.xradar.Xgrid(grid_ds)
+
+        out_file = "tmp_grid_written.nc"
+        xgrid.write(out_file)
+
+        grid_read = pyart.io.read_grid(out_file)
+        assert_allclose(
+            grid_read.fields["reflectivity"]["data"],
+            xgrid.fields["reflectivity"]["data"],
+        )
+        grid_ds.close()
 
 
 def test_field_named_z_not_shadowed_by_georeference_coordinate(filename=filename):

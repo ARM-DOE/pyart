@@ -4,6 +4,7 @@ Utilities for interfacing between xradar and Py-ART
 """
 
 import copy
+import sys
 
 import numpy as np
 import pandas as pd
@@ -34,6 +35,7 @@ from ..core.transforms import (
     cartesian_to_geographic,
     cartesian_vectors_to_geographic,
 )
+from ..exceptions import MissingOptionalDependency
 from ..lazydict import LazyLoadDict
 
 
@@ -112,6 +114,63 @@ class Xgrid:
             projparams["lon_0"] = self.origin_longitude["data"][0]
             projparams["lat_0"] = self.origin_latitude["data"][0]
         return projparams
+
+    @property
+    def projection_proj(self):
+        """Return a pyproj.Proj instance as specified by the projection attribute.
+
+        Raises a ValueError if the pyart_aeqd projection is specified.
+        """
+        try:
+            import pyproj
+        except ImportError as err:
+            raise MissingOptionalDependency(
+                "PyProj is required to create a Proj instance but it "
+                "is not installed"
+            ) from err
+        projparams = self.get_projparams()
+
+        if isinstance(projparams, dict) and projparams["proj"] == "pyart_aeqd":
+            raise ValueError(
+                "Proj instance can not be made for the pyart_aeqd projection"
+            )
+        return pyproj.Proj(projparams)
+
+    def write(
+        self,
+        filename,
+        format="NETCDF4",
+        arm_time_variables=False,
+        arm_alt_lat_lon_variables=False,
+    ):
+        """
+        Write the Xgrid object to a NetCDF file.
+
+        Parameters
+        ----------
+        filename : str
+            Filename to save to.
+        format : str, optional
+            NetCDF format, one of 'NETCDF4', 'NETCDF4_CLASSIC',
+            'NETCDF3_CLASSIC' or 'NETCDF3_64BIT'.
+        arm_time_variables : bool, optional
+            True to write the ARM standard time variables base_time and
+            time_offset. False will not write these variables.
+        arm_alt_lat_lon_variables : bool, optional
+            True to write the ARM standard alt, lat, lon variables.
+            False will not write these variables.
+
+        """
+        # delayed import to avoid circular import
+        from ..io.grid_io import write_grid
+
+        write_grid(
+            filename,
+            self,
+            format=format,
+            arm_time_variables=arm_time_variables,
+            arm_alt_lat_lon_variables=arm_alt_lat_lon_variables,
+        )
 
     @property
     def metadata(self):
@@ -366,6 +425,7 @@ class Xradar:
         self.init_gate_x_y_z()
         self.init_gate_longitude_latitude()
         self.init_gate_alt()
+        self.init_rays_per_sweep()
 
         # Extra methods needed for compatibility
         self.rays_are_indexed = None
@@ -774,6 +834,9 @@ class Xradar:
                 data=np.mean(self.altitude["data"]) + self.gate_z["data"]
             )
 
+    # Alias matching pyart.core.Radar's attribute name.
+    init_gate_altitude = init_gate_alt
+
     def init_gate_longitude_latitude(self):
         """
         Initialize or reset the gate_longitude and gate_latitude attributes.
@@ -968,6 +1031,189 @@ class Xradar:
         else:
             return azimuths
 
+    def get_elevation(self, sweep, copy=False):
+        """
+        Return an array of elevation angles for a given sweep.
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve data for, 0 based.
+        copy : bool, optional
+            True to return a copy of the elevations. False, the default,
+            returns a view of the elevations (when possible), changing this
+            data will change the data in the underlying Radar object.
+
+        Returns
+        -------
+        elevation : array
+            Array containing the elevation angles for a given sweep.
+
+        """
+        s = self.get_slice(sweep)
+        elevation = self.elevation["data"][s]
+        if copy:
+            return elevation.copy()
+        else:
+            return elevation
+
+    def get_gate_area(self, sweep):
+        """
+        Return the area of each gate in a sweep. Units of area will be the
+        same as those of the range variable, squared.
+
+        Assumptions:
+            1. Azimuth data is in degrees.
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve gate locations from, 0 based.
+
+        Returns
+        -------
+        area : 2D array of size (ngates - 1, nrays - 1)
+            Array containing the area (in m * m) of each gate in the sweep.
+
+        """
+        s = self.get_slice(sweep)
+        azimuths = self.azimuth["data"][s]
+        ranges = self.range["data"]
+
+        circular_area = np.pi * ranges**2
+        annular_area = np.diff(circular_area)
+
+        az_diffs = np.diff(azimuths)
+        az_diffs[az_diffs < 0.0] += 360
+
+        d_azimuths = az_diffs / 360.0  # Fraction of a full circle
+
+        dca, daz = np.meshgrid(annular_area, d_azimuths)
+
+        area = np.abs(dca * daz)
+        return area
+
+    def init_rays_per_sweep(self):
+        """Initialize or reset the rays_per_sweep attribute."""
+        lazydic = LazyLoadDict(get_metadata("rays_per_sweep"))
+        lazydic.set_lazy("data", _rays_per_sweep_data_factory(self))
+        self.rays_per_sweep = lazydic
+
+    def info(self, level="standard", out=sys.stdout):
+        """
+        Print information on radar.
+
+        Parameters
+        ----------
+        level : {'compact', 'standard', 'full', 'c', 's', 'f'}, optional
+            Level of information on radar object to print, compact is
+            minimal information, standard more and full everything.
+        out : file-like, optional
+            Stream to direct output to, default is to print information
+            to standard out (the screen).
+
+        """
+        if level == "c":
+            level = "compact"
+        elif level == "s":
+            level = "standard"
+        elif level == "f":
+            level = "full"
+
+        if level not in ["standard", "compact", "full"]:
+            raise ValueError("invalid level parameter")
+
+        self._dic_info("altitude", level, out)
+        self._dic_info("antenna_transition", level, out)
+        self._dic_info("azimuth", level, out)
+        self._dic_info("elevation", level, out)
+
+        print("fields:", file=out)
+        for field_name, field_dic in self.fields.items():
+            self._dic_info(field_name, level, out, field_dic, 1)
+
+        self._dic_info("fixed_angle", level, out)
+
+        if self.instrument_parameters is None or not self.instrument_parameters:
+            print("instrument_parameters: None", file=out)
+        else:
+            print("instrument_parameters:", file=out)
+            for name, dic in self.instrument_parameters.items():
+                self._dic_info(name, level, out, dic, 1)
+
+        self._dic_info("latitude", level, out)
+        self._dic_info("longitude", level, out)
+
+        print("nsweeps:", self.nsweeps, file=out)
+        print("ngates:", self.ngates, file=out)
+        print("nrays:", self.nrays, file=out)
+
+        self._dic_info("range", level, out)
+        print("scan_type:", self.scan_type, file=out)
+        self._dic_info("sweep_end_ray_index", level, out)
+        self._dic_info("sweep_mode", level, out)
+        self._dic_info("sweep_number", level, out)
+        self._dic_info("sweep_start_ray_index", level, out)
+        self._dic_info("target_scan_rate", level, out)
+        self._dic_info("time", level, out)
+
+        # always print out all metadata last
+        self._dic_info("metadata", "full", out)
+
+    def _dic_info(self, attr, level, out, dic=None, ident_level=0):
+        """Print information on a dictionary attribute."""
+        if dic is None:
+            dic = getattr(self, attr, None)
+
+        ilvl0 = "\t" * ident_level
+        ilvl1 = "\t" * (ident_level + 1)
+
+        if dic is None:
+            print(str(attr) + ": None", file=out)
+            return
+
+        # some instrument_parameters entries (e.g. root dataset attrs
+        # picked up by find_instrument_parameters) are plain scalars
+        # rather than {'data': ..., ...} dictionaries.
+        if not hasattr(dic, "items"):
+            print(ilvl0 + str(attr) + ":", dic, file=out)
+            return
+
+        # make a string summary of the data key if it exists.
+        if "data" not in dic:
+            d_str = "Missing"
+        elif not isinstance(dic["data"], np.ndarray):
+            d_str = "<not a ndarray>"
+        else:
+            data = dic["data"]
+            t = (data.dtype, data.shape)
+            d_str = "<ndarray of type: {} and shape: {}>".format(*t)
+
+        # compact, only data summary
+        if level == "compact":
+            print(ilvl0 + str(attr) + ":", d_str, file=out)
+
+        # standard, all keys, only summary for data
+        elif level == "standard":
+            print(ilvl0 + str(attr) + ":", file=out)
+            print(ilvl1 + "data:", d_str, file=out)
+            for key, val in dic.items():
+                if key == "data":
+                    continue
+                print(ilvl1 + key + ":", val, file=out)
+
+        # full, all keys, full data
+        elif level == "full":
+            print(str(attr) + ":", file=out)
+            if "data" in dic:
+                print(ilvl1 + "data:", dic["data"], file=out)
+            for key, val in dic.items():
+                if key == "data":
+                    continue
+                print(ilvl1 + key + ":", val, file=out)
+
+        return
+
     def get_projparams(self):
         projparams = self.projection.copy()
         if projparams.pop("_include_lon_0_lat_0", False):
@@ -1087,6 +1333,18 @@ def _point_altitude_data_factory(grid):
         return grid.origin_altitude["data"][0] + grid.point_z["data"]
 
     return _point_altitude_data
+
+
+def _rays_per_sweep_data_factory(radar):
+    """Return a function which returns the number of rays per sweep."""
+
+    def _rays_per_sweep_data():
+        """The function which returns the number of rays per sweep."""
+        return (
+            radar.sweep_end_ray_index["data"] - radar.sweep_start_ray_index["data"] + 1
+        )
+
+    return _rays_per_sweep_data
 
 
 def _gate_lon_lat_data_factory(radar, coordinate):
