@@ -342,6 +342,19 @@ class Xgrid:
 
 
 class Xradar:
+    """
+    Wraps an xradar DataTree into a Py-ART Radar-like object.
+
+    Optional Radar attributes (None when absent in the source file):
+    ``antenna_transition``, ``rays_are_indexed``, ``ray_angle_res``,
+    ``target_scan_rate``, ``scan_rate``, ``altitude_agl``, ``rotation``,
+    ``tilt``, ``roll``, ``drift``, ``heading``, ``pitch``,
+    ``georefs_applied`` and ``radar_calibration`` are populated from the
+    DataTree when the corresponding variable/group is present, and are
+    ``None`` otherwise (never fabricated) -- matching how :class:`Radar`
+    treats these attributes for files that lack them.
+    """
+
     def __init__(self, xradar, default_sweep="sweep_0", scan_type=None):
         # Make sure that first dimension is azimuth
         self.xradar = apply_to_sweeps(xradar, ensure_dim)
@@ -392,7 +405,6 @@ class Xradar:
         )
         self.fixed_angle = dict(data=self.combined_sweeps.sweep_fixed_angle.values)
         self.fixed_angle.update(self.combined_sweeps.sweep_fixed_angle.attrs)
-        self.antenna_transition = None
         self.latitude = dict(
             data=np.expand_dims(self.xradar["latitude"].values, axis=0)
         )
@@ -427,10 +439,22 @@ class Xradar:
         self.init_gate_alt()
         self.init_rays_per_sweep()
 
-        # Extra methods needed for compatibility
-        self.rays_are_indexed = None
-        self.ray_angle_res = None
-        self.target_scan_rate = None
+        # Optional Radar attrs: looked up from the DataTree when present,
+        # else None (never fabricated). See class docstring.
+        self.antenna_transition = self._find_optional_attr("antenna_transition")
+        self.rays_are_indexed = self._find_optional_attr("rays_are_indexed")
+        self.ray_angle_res = self._find_optional_attr("ray_angle_res")
+        self.target_scan_rate = self._find_optional_attr("target_scan_rate")
+        self.scan_rate = self._find_optional_attr("scan_rate")
+        self.altitude_agl = self._find_optional_attr("altitude_agl")
+        self.rotation = self._find_optional_attr("rotation")
+        self.tilt = self._find_optional_attr("tilt")
+        self.roll = self._find_optional_attr("roll")
+        self.drift = self._find_optional_attr("drift")
+        self.heading = self._find_optional_attr("heading")
+        self.pitch = self._find_optional_attr("pitch")
+        self.georefs_applied = self._find_optional_attr("georefs_applied")
+        self.radar_calibration = self._find_radar_calibration()
 
     def __repr__(self):
         return formatting.datatree_repr(self.xradar)
@@ -523,6 +547,62 @@ class Xradar:
                 instrument_parameters[field] = field_dict
 
         return instrument_parameters
+
+    def _find_optional_attr(self, name):
+        """
+        Look up an optional Radar-style attribute by variable name.
+
+        Checks the combined (per-ray) sweeps dataset first, then the
+        root of the DataTree, for a variable named ``name``. Returns a
+        Radar-style ``dict(data=..., **attrs)`` if found, else ``None``
+        -- values are never fabricated when absent from the source file.
+
+        Parameters
+        ----------
+        name : str
+            Name of the variable to look up.
+
+        Returns
+        -------
+        dict or None
+        """
+        if name in self.combined_sweeps.variables:
+            da = self.combined_sweeps[name]
+        elif name in self.xradar.ds.variables:
+            da = self.xradar.ds[name]
+        else:
+            return None
+        dic = dict(data=np.asarray(da.values))
+        dic.update(da.attrs)
+        return dic
+
+    def _find_radar_calibration(self):
+        """
+        Look up the optional ``radar_calibration`` subgroup.
+
+        Mirrors :py:func:`find_instrument_parameters`'s handling of the
+        ``radar_parameters`` subgroup. Returns ``None`` if no
+        ``radar_calibration`` child node is present in the DataTree.
+
+        Returns
+        -------
+        dict or None
+        """
+        if "radar_calibration" not in list(self.xradar.children):
+            return None
+        calib_dict = self.xradar["radar_calibration"].ds.to_dict(data="array")
+        radar_calibration = calib_dict["data_vars"]
+        if not radar_calibration:
+            return None
+        for field in radar_calibration:
+            field_dict = radar_calibration[field]
+            if "attrs" in field_dict:
+                for param in field_dict["attrs"]:
+                    field_dict[param] = field_dict["attrs"][param]
+                del field_dict["attrs"]
+            if "dims" in field_dict:
+                del field_dict["dims"]
+        return radar_calibration
 
     def iter_start(self):
         """Return an iterator over the sweep start indices."""

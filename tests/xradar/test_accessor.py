@@ -420,6 +420,71 @@ def test_xgrid_write_roundtrip():
         grid_ds.close()
 
 
+def test_optional_platform_scan_attrs_default_to_none(filename=filename):
+    # None of these variables are present in this fixture file, so the
+    # attributes must exist (no AttributeError) and be None, matching
+    # Radar's behavior for optional attrs absent from the source file.
+    dtree = xd.io.open_cfradial1_datatree(
+        filename,
+        optional=False,
+    )
+    radar = pyart.xradar.Xradar(dtree)
+
+    optional_attrs = [
+        "antenna_transition",
+        "rays_are_indexed",
+        "ray_angle_res",
+        "target_scan_rate",
+        "scan_rate",
+        "altitude_agl",
+        "rotation",
+        "tilt",
+        "roll",
+        "drift",
+        "heading",
+        "pitch",
+        "georefs_applied",
+        "radar_calibration",
+    ]
+    for attr in optional_attrs:
+        assert hasattr(radar, attr)
+        assert getattr(radar, attr) is None
+
+
+def test_optional_platform_scan_attrs_populated_when_present(filename=filename):
+    dtree = xd.io.open_cfradial1_datatree(
+        filename,
+        optional=False,
+    )
+
+    # Inject a scan-rate variable (per-ray) into each sweep dataset with
+    # known values and attributes.
+    scan_rate_attrs = {"units": "degrees/second", "long_name": "antenna scan rate"}
+    heading_attrs = {"units": "degrees", "long_name": "platform heading"}
+    for sweep in dtree.match("sweep_*"):
+        sweep_ds = dtree[sweep].to_dataset()
+        n = sweep_ds.sizes["azimuth"]
+        sweep_ds["scan_rate"] = (("azimuth",), np.full(n, 5.0, dtype="float64"))
+        sweep_ds["scan_rate"].attrs = scan_rate_attrs
+        sweep_ds["heading"] = (("azimuth",), np.full(n, 45.0, dtype="float64"))
+        sweep_ds["heading"].attrs = heading_attrs
+        dtree[sweep].ds = sweep_ds
+
+    radar = pyart.xradar.Xradar(dtree)
+
+    assert radar.scan_rate is not None
+    assert radar.scan_rate["data"].shape == (radar.nrays,)
+    assert_allclose(radar.scan_rate["data"], 5.0)
+    assert radar.scan_rate["units"] == "degrees/second"
+    assert radar.scan_rate["long_name"] == "antenna scan rate"
+
+    assert radar.heading is not None
+    assert radar.heading["data"].shape == (radar.nrays,)
+    assert_allclose(radar.heading["data"], 45.0)
+    assert radar.heading["units"] == "degrees"
+    assert radar.heading["long_name"] == "platform heading"
+
+
 def test_field_named_z_not_shadowed_by_georeference_coordinate(filename=filename):
     # Regression test for GH #1765: a moment named 'z' (as GAMIC stores
     # reflectivity) must not be dropped/overwritten by the Cartesian height
