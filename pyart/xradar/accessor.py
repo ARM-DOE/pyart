@@ -40,6 +40,16 @@ from ..lazydict import LazyLoadDict
 
 
 class Xgrid:
+    """
+    Wraps a Cf-compliant xarray Dataset into a Py-ART Grid-like object.
+
+    Parameters
+    ----------
+    grid_ds : xarray.Dataset
+        The xarray Dataset to convert to a Py-ART grid. Times must not be
+        decoded (``decode_times=False``) when the Dataset is opened.
+    """
+
     def __init__(self, grid_ds):
         """
         Wraps a Cf-compliant xarray Dataset into a PyART Grid Object.
@@ -661,12 +671,19 @@ class Xradar:
             raise ValueError(err)
         # add the field
         self.fields[field_name] = dic
+        # The coordinate that uniquely identifies a ray within a sweep
+        # depends on the scan mode: azimuth for PPI-like sweeps, elevation
+        # for RHI sweeps (see _combine_sweeps for why "azimuth" cannot be
+        # used to drop_duplicates() on an RHI sweep).
+        ray_key = "elevation" if self.scan_type == "rhi" else "azimuth"
         for sweep in range(self.nsweeps):
-            sweep_ds = (
-                self.xradar[f"sweep_{sweep}"].to_dataset().drop_duplicates("azimuth")
-            )
+            sweep_ds = self.xradar[f"sweep_{sweep}"].to_dataset()
+            ray_dim = sweep_ds[ray_key].dims[0]
+            if ray_dim != ray_key:
+                sweep_ds = sweep_ds.swap_dims({ray_dim: ray_key})
+            sweep_ds = sweep_ds.drop_duplicates(ray_key)
             sweep_ds[field_name] = (
-                ("azimuth", "range"),
+                (ray_key, "range"),
                 self.fields[field_name]["data"][self.get_slice(sweep)],
             )
             attrs = dic.copy()
@@ -814,10 +831,15 @@ class Xradar:
                 var for var in ("x", "y", "z") if var in self.combined_sweeps.data_vars
             ]
             if conflicts:
-                georeferenced = self.combined_sweeps.drop_vars(
-                    conflicts
-                ).xradar.georeference()
-                data = georeferenced.sel(sweep_number=sweep)
+                # self.xradar is never mutated by this path (georeference()
+                # is only applied to the dropped-conflicts copy), so the
+                # result can be cached and reused across repeated calls
+                # instead of re-georeferencing the whole dataset every time.
+                if getattr(self, "_collision_georeferenced", None) is None:
+                    self._collision_georeferenced = self.combined_sweeps.drop_vars(
+                        conflicts
+                    ).xradar.georeference()
+                data = self._collision_georeferenced.sel(sweep_number=sweep)
                 return data["x"].values, data["y"].values, data["z"].values
             self.combined_sweeps = self.combined_sweeps.xradar.georeference()
 
@@ -930,14 +952,25 @@ class Xradar:
         self.gate_latitude = gate_latitude
 
     def _combine_sweeps(self):
+        # The coordinate that uniquely identifies a ray within a sweep
+        # depends on the scan mode: azimuth varies per ray for
+        # azimuth-surveillance (PPI-like) sweeps, while elevation varies per
+        # ray for RHI sweeps (azimuth is instead (near-)constant across an
+        # RHI sweep). This coordinate is used below both to drop duplicate
+        # rays (e.g. from overlapping transition rays between sweeps) and as
+        # the dimension aligned/stacked across sweeps -- using "azimuth" for
+        # RHI sweeps would drop_duplicates() every ray in the sweep down to
+        # one, since they all share the same azimuth.
+        ray_key = "elevation" if self.scan_type == "rhi" else "azimuth"
+
         # Loop through and extract the different datasets
         ds_list = []
         for sweep in self.sweep_group_names:
-            ds_list.append(
-                self.xradar[sweep]
-                .ds.drop_duplicates("azimuth")
-                .set_coords("sweep_number")
-            )
+            sweep_ds = self.xradar[sweep].ds
+            ray_dim = sweep_ds[ray_key].dims[0]
+            if ray_dim != ray_key:
+                sweep_ds = sweep_ds.swap_dims({ray_dim: ray_key})
+            ds_list.append(sweep_ds.drop_duplicates(ray_key).set_coords("sweep_number"))
 
         # Merge based on the sweep number
         merged = concat(
@@ -948,10 +981,10 @@ class Xradar:
             dim="sweep_number",
         )
 
-        # Stack the sweep number and azimuth together
-        stacked = merged.stack(gates=["sweep_number", "azimuth"]).transpose()
+        # Stack the sweep number and per-ray coordinate together
+        stacked = merged.stack(gates=["sweep_number", ray_key]).transpose()
 
-        # Select the valid azimuths
+        # Select the valid rays
         good_azimuths = stacked.time.dropna("gates", how="all").gates
         stacked = stacked.sel(gates=good_azimuths)
 
@@ -1079,8 +1112,14 @@ class Xradar:
         # 'x', 'y' or 'z' is never shadowed by a same-named coordinate.
         for field in self.combined_sweeps.data_vars:
             if self.combined_sweeps[field].dims == ("gates", "range"):
+                # Classic pyart.core.Radar fields are numpy.ma.MaskedArray,
+                # masked where a gate is missing. xarray/xradar decode a
+                # variable's _FillValue to NaN on load, so recover that mask
+                # here (masked_invalid also masks pre-existing NaNs/infs);
+                # dtype and attrs are preserved.
+                data = np.ma.masked_invalid(self.combined_sweeps[field].values)
                 fields[field] = {
-                    "data": self.combined_sweeps[field].values,
+                    "data": data,
                     **self.combined_sweeps[field].attrs,
                 }
         return fields
@@ -1152,7 +1191,7 @@ class Xradar:
 
         Returns
         -------
-        area : 2D array of size (ngates - 1, nrays - 1)
+        area : 2D array of size (nrays - 1, ngates - 1)
             Array containing the area (in m * m) of each gate in the sweep.
 
         """

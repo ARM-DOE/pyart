@@ -511,10 +511,14 @@ def test_field_named_z_not_shadowed_by_georeference_coordinate(filename=filename
     x, y, z = radar.get_gate_x_y_z(0)
     assert z.shape == (480, 996)
 
-    # The 'z' moment must still be discoverable as a field with its
-    # original data, not the georeferenced height coordinate.
-    refreshed_fields = radar._find_fields(radar.combined_sweeps)
-    assert "z" in refreshed_fields
-    assert_allclose(refreshed_fields["z"]["data"], original_z)
-    assert "x" not in refreshed_fields
-    assert "y" not in refreshed_fields
+    # The 'z' moment must still be discoverable as a field, through the
+    # public field-access surface, with its original data -- not the
+    # georeferenced height coordinate.
+    assert "z" in radar.fields
+    assert "x" not in radar.fields
+    assert "y" not in radar.fields
+    assert_allclose(radar.fields["z"]["data"], original_z)
+    for sweep in range(radar.nsweeps):
+        assert_allclose(radar.get_field(sweep, "z"), original_z[radar.get_slice(sweep)])
+    with pytest.raises(KeyError):
+        radar.get_field(0, "x")
