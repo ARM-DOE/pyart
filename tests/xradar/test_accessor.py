@@ -258,3 +258,33 @@ def test_grid_xradar():
     grid = pyart.map.grid_from_radars([radar], **COMMON_MAP_TO_GRID_ARGS)
     assert (10, 9, 3) == (grid.nx, grid.ny, grid.nz)
     assert_allclose(np.min(grid.fields["DBZ"]["data"]), -1.3201784)
+
+
+def test_to_pyart_radar_passes_radar_through():
+    radar = pyart.testing.make_target_radar()
+    result = pyart.xradar.to_pyart_radar(radar)
+    assert result is radar
+
+
+def test_to_pyart_radar_passes_xradar_through():
+    dtree = xd.io.open_cfradial1_datatree(
+        filename,
+        optional=False,
+    )
+    xradar_obj = pyart.xradar.Xradar(dtree)
+    result = pyart.xradar.to_pyart_radar(xradar_obj)
+    assert result is xradar_obj
+
+
+def test_to_pyart_radar_wraps_datatree():
+    dtree = xd.io.open_cfradial1_datatree(
+        filename,
+        optional=False,
+    )
+    result = pyart.xradar.to_pyart_radar(dtree)
+    assert isinstance(result, pyart.xradar.Xradar)
+
+
+def test_to_pyart_radar_raises_typeerror_on_unsupported_type():
+    with pytest.raises(TypeError):
+        pyart.xradar.to_pyart_radar({"not": "a radar"})

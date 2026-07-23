@@ -28,6 +28,7 @@ from xradar.accessors import XradarAccessor
 from xradar.util import apply_to_sweeps, get_sweep_keys
 
 from ..config import get_metadata
+from ..core.radar import Radar
 from ..core.transforms import (
     antenna_vectors_to_cartesian,
     cartesian_to_geographic,
@@ -1124,6 +1125,38 @@ class XradarDataTreeAccessor(XradarAccessor):
         """
         dt = self.xarray_obj
         return Xradar(dt, scan_type=scan_type)
+
+
+def to_pyart_radar(radar):
+    """
+    Coerce a radar-like object into an object usable by Py-ART algorithms.
+
+    Parameters
+    ----------
+    radar : Radar, Xradar or xarray.DataTree
+        The object to coerce. `pyart.core.Radar` and `Xradar` instances are
+        returned unchanged (the latter duck-types `Radar`). An xradar
+        `xarray.DataTree` is wrapped into an `Xradar` instance.
+
+    Returns
+    -------
+    radar : Radar or Xradar
+        A Py-ART compatible radar object.
+
+    Raises
+    ------
+    TypeError
+        If `radar` is not a `Radar`, `Xradar`, or `xarray.DataTree` instance.
+
+    """
+    if isinstance(radar, (Radar, Xradar)):
+        return radar
+    if isinstance(radar, DataTree):
+        return Xradar(radar)
+    raise TypeError(
+        "radar must be a pyart.core.Radar, pyart.xradar.Xradar, or "
+        f"xarray.DataTree instance, got {type(radar)!r}"
+    )
 
 
 def ensure_dim(ds, dim="azimuth"):
