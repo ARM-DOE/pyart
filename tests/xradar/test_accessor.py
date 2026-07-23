@@ -288,3 +288,38 @@ def test_to_pyart_radar_wraps_datatree():
 def test_to_pyart_radar_raises_typeerror_on_unsupported_type():
     with pytest.raises(TypeError):
         pyart.xradar.to_pyart_radar({"not": "a radar"})
+
+
+def test_field_named_z_not_shadowed_by_georeference_coordinate(filename=filename):
+    # Regression test for GH #1765: a moment named 'z' (as GAMIC stores
+    # reflectivity) must not be dropped/overwritten by the Cartesian height
+    # coordinate that xradar.georeference() adds when Xradar computes gate
+    # locations.
+    dtree = xd.io.open_cfradial1_datatree(
+        filename,
+        optional=False,
+    )
+    for sweep in dtree.match("sweep_*"):
+        if "DBZ" in dtree[sweep].ds:
+            dtree[sweep].ds = dtree[sweep].ds.rename({"DBZ": "z"})
+
+    radar = pyart.xradar.Xradar(dtree)
+
+    assert "z" in radar.fields
+    # Coordinates must not leak into fields just because their dims match.
+    assert "x" not in radar.fields
+    assert "y" not in radar.fields
+    original_z = radar.fields["z"]["data"].copy()
+
+    # Trigger the internal xradar.georeference() call used to compute gate
+    # locations.
+    x, y, z = radar.get_gate_x_y_z(0)
+    assert z.shape == (480, 996)
+
+    # The 'z' moment must still be discoverable as a field with its
+    # original data, not the georeferenced height coordinate.
+    refreshed_fields = radar._find_fields(radar.combined_sweeps)
+    assert "z" in refreshed_fields
+    assert_allclose(refreshed_fields["z"]["data"], original_z)
+    assert "x" not in refreshed_fields
+    assert "y" not in refreshed_fields

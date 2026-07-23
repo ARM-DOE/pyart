@@ -665,6 +665,22 @@ class Xradar:
         """
         # Check to see if the data needs to be georeferenced
         if "x" not in self.xradar[f"sweep_{sweep}"].coords:
+            # xradar.georeference() assigns x/y/z as coordinates, which
+            # would silently overwrite any data variable with the same
+            # name (e.g. a GAMIC 'z' reflectivity moment, see GH #1765).
+            # Georeference a version with any colliding moments dropped so
+            # that those moments are left untouched in combined_sweeps.
+            conflicts = [
+                var
+                for var in ("x", "y", "z")
+                if var in self.combined_sweeps.data_vars
+            ]
+            if conflicts:
+                georeferenced = self.combined_sweeps.drop_vars(
+                    conflicts
+                ).xradar.georeference()
+                data = georeferenced.sel(sweep_number=sweep)
+                return data["x"].values, data["y"].values, data["z"].values
             self.combined_sweeps = self.combined_sweeps.xradar.georeference()
 
         data = self.combined_sweeps.sel(sweep_number=sweep)
@@ -917,7 +933,10 @@ class Xradar:
 
     def _find_fields(self, ds):
         fields = {}
-        for field in self.combined_sweeps.variables:
+        # Only consider data variables, not coordinates (e.g. the x/y/z
+        # coordinates added by xradar.georeference()), so a moment named
+        # 'x', 'y' or 'z' is never shadowed by a same-named coordinate.
+        for field in self.combined_sweeps.data_vars:
             if self.combined_sweeps[field].dims == ("gates", "range"):
                 fields[field] = {
                     "data": self.combined_sweeps[field].values,
