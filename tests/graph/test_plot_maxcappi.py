@@ -1,10 +1,18 @@
 import os
+import sys
 
 import matplotlib.pyplot as plt
+import pytest
 
 import pyart
 
+skip_cartopy_py314 = pytest.mark.skipif(
+    sys.version_info >= (3, 14),
+    reason="Cartopy-based plotting skipped on Python 3.14",
+)
 
+
+@skip_cartopy_py314
 def test_plot_maxcappi_simple(outfile=None):
     """
     Test the basic functionality of plot_maxcappi.
@@ -27,6 +35,7 @@ def test_plot_maxcappi_simple(outfile=None):
     plt.close()
 
 
+@skip_cartopy_py314
 def test_plot_maxcappi_with_save(outfile=None):
     """
     Test plot_maxcappi and save the output to a file.
@@ -55,6 +64,7 @@ def test_plot_maxcappi_with_save(outfile=None):
     assert os.path.exists(outfile), "The plot was not saved as expected."
 
 
+@skip_cartopy_py314
 def test_plot_maxcappi_with_all_options(outfile=None):
     """
     Test plot_maxcappi with all options enabled.

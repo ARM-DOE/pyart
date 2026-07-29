@@ -1,19 +1,9 @@
 name: Build CI Wheels
 
 on:
-  push:
-    branches:
-      - main
-    tags:
-      - 'v*'
-  pull_request:
-    paths:
-      - '.github/workflows/wheels.yml'
-  workflow_dispatch:
-
-concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  release:
+    types:
+      - published
 
 jobs:
   build_wheels:
@@ -31,17 +21,17 @@ jobs:
 
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@v7
 
       - name: Fetch all history for all tags and branches
         run: |
            git fetch --prune --unshallow
 
       - name: Build wheels for CPython
-        uses: pypa/cibuildwheel@v3.4.1
+        uses: pypa/cibuildwheel@v4.1.0
         with:
           output-dir: dist
 
@@ -55,7 +45,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Build sdist
         run: pipx run build --sdist
@@ -70,8 +60,10 @@ jobs:
     name: Publish to PyPI
     needs: [build_wheels, build_sdist]
     runs-on: ubuntu-latest
-    # upload to PyPI on every tag starting with 'v-'
-    if: github.event_name == 'push' && startsWith(github.event.ref, 'refs/tags/v')
+    environment: pypi
+    permissions:
+      id-token: write
+    if: github.event_name == 'release' && startsWith(github.event.release.tag_name, 'v')
     steps:
       - name: Download sdist
         uses: actions/download-artifact@v8
@@ -87,7 +79,4 @@ jobs:
           merge-multiple: true
 
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@v1.14.0
-        with:
-          user: __token__
-          password: ${{ secrets.PYPI_TOKEN }}
+        uses: pypa/gh-action-pypi-publish@v1.14.1

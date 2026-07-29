@@ -27,11 +27,11 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.11", "3.12", "3.13"]
+        python-version: ["3.12", "3.13", "3.14"]
         os: [macos, ubuntu, windows]
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       # Install dependencies
       - name: Setup Conda Environment
@@ -65,7 +65,7 @@ jobs:
           python -m pytest -v --cov=./ --cov-report=xml
 
       - name: Upload code coverage to Codecov
-        uses: codecov/codecov-action@v6.0.1
+        uses: codecov/codecov-action@v7.0.0
         with:
           files: ./coverage.xml
           flags: unittests
@@ -79,7 +79,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v7
         with:
           python-version: '3.11'

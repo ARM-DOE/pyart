@@ -6,13 +6,21 @@
 # in baseline_images directory. Currently this test only determines if files
 # can be created, not that they are correct.
 
+import sys
+
 import matplotlib.pyplot as plt
 import numpy as np
 import pytest
 
 import pyart
 
+skip_cartopy_py314 = pytest.mark.skipif(
+    sys.version_info >= (3, 14),
+    reason="Cartopy-based plotting skipped on Python 3.14",
+)
 
+
+@skip_cartopy_py314
 # Top level Figure generating tests
 @pytest.mark.skipif(
     not pyart.graph.radarmapdisplay._CARTOPY_AVAILABLE,

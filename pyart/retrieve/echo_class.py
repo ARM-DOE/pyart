@@ -11,7 +11,6 @@ import numpy as np
 # Local imports
 # Local imports
 from ..config import get_field_name, get_fillvalue, get_metadata
-from ..core import Grid
 from ..util.radar_utils import ma_broadcast_to
 from ._echo_class import _feature_detection, steiner_class_buff
 from ._echo_class_wt import calc_scale_break, wavelet_reclass
@@ -1281,8 +1280,9 @@ def conv_strat_raut(
     conv_scale_km=25,
     min_reflectivity=5,
     conv_min_refl=25,
-    conv_core_threshold=42,
+    always_core_thres=42,
     override_checks=False,
+    conv_core_threshold=None,
 ):
     """
     A computationally efficient method to classify radar echoes into convective cores, mixed convection,
@@ -1293,8 +1293,8 @@ def conv_strat_raut(
 
     Parameters
     ----------
-    grid : PyART Grid
-        Grid object containing radar data.
+    grid : PyART Grid or Grid-like object
+        Grid or XGrid object containing radar data.
     refl_field : str
         Field name for reflectivity data in the Py-ART grid object.
     zr_a : float, optional
@@ -1324,14 +1324,21 @@ def conv_strat_raut(
     conv_min_refl : float, optional
         Reflectivity values lower than this threshold will be always considered as non-convective.
         Default is 25 dBZ. Recommended values are between 25 and 30 dBZ.
-    conv_core_threshold : float, optional
-        Reflectivities above this threshold are classified as convective cores if wavelet components are significant (See: conv_wt_threshold).
+    always_core_thres : float, optional
+        Threshold for points that are always convective. Reflectivities above this threshold are
+        classified as convective cores if wavelet components are significant (See: conv_wt_threshold).
         Default is 42 dBZ.
         Recommended value must be is greater than or equal to 40 dBZ. The algorithm is not sensitive to this value.
+        This parameter is named to match the other classifiers in this module
+        (e.g. ``conv_strat_yuter``, ``feature_detection``).
     override_checks : bool, optional
         If set to True, the function will bypass the sanity checks for above parameter values.
         This allows the user to use custom values for parameters, even if they fall outside
         the recommended ranges. The default is False.
+    conv_core_threshold : float, optional
+        Deprecated alias for ``always_core_thres``, kept for backward compatibility.
+        If provided, its value is used and a ``DeprecationWarning`` is emitted.
+        Default is None (use ``always_core_thres``).
 
     Returns
     -------
@@ -1355,11 +1362,40 @@ def conv_strat_raut(
 
     Raut, B. A., Louf, V., Gayatri, K., Murugavel, P., Konwar, M., & Prabhakaran, T. (2020). A multiresolution technique
     for the classification of precipitation echoes in radar data. IEEE Trans. Geosci. Remote Sens., 58(8), 5409-5415.
+
+    Examples
+    --------
+    Working directly from an xarray Dataset by wrapping it in a Grid-like
+    ``pyart.xradar.Xgrid`` (open with ``decode_times=False``, as required by
+    ``Xgrid``):
+
+    >>> import pyart, xarray as xr
+    >>> ds = xr.open_dataset("my_grid.nc", decode_times=False)
+    >>> xgrid = pyart.xradar.Xgrid(ds)
+    >>> result = pyart.retrieve.conv_strat_raut(xgrid, "reflectivity", cappi_level=0)
+    >>> xgrid.add_field("wt_reclass", result["wt_reclass"], replace_existing=True)
+    >>> ds_out = xgrid.to_xarray()
     """
 
-    # Check if the grid is a Py-ART Grid object
-    if not isinstance(grid, Grid):
-        raise TypeError("The 'grid' is not a Py-ART Grid object.")
+    # Accept any Grid-like object via duck typing, so that Grid wrappers such as
+    # pyart.xradar.Xgrid (built from a CF-compliant xarray Dataset) work too. We
+    # only rely on the attributes actually used below (.fields, .x, .y), which
+    # keeps this consistent with the other grid classifiers and avoids importing
+    # the optional xarray/xradar packages here.
+    if not (hasattr(grid, "fields") and hasattr(grid, "x") and hasattr(grid, "y")):
+        raise TypeError(
+            "The 'grid' must be a Py-ART Grid or a Grid-like object "
+            "(e.g. pyart.xradar.Xgrid) exposing .fields, .x and .y."
+        )
+
+    # Backward-compatible handling of the renamed 'conv_core_threshold' parameter.
+    if conv_core_threshold is not None:
+        warn(
+            "The 'conv_core_threshold' parameter is deprecated and will be "
+            "removed in a future release; use 'always_core_thres' instead.",
+            DeprecationWarning,
+        )
+        always_core_thres = conv_core_threshold
 
     # Check if dx and dy are the same, and warn if not
     dx = grid.x["data"][1] - grid.x["data"][0]
@@ -1378,9 +1414,9 @@ def conv_strat_raut(
 
     # Sanity checks for parameters if override_checks is False
     if not override_checks:
-        conv_core_threshold = max(
-            40, conv_core_threshold
-        )  # Ensure conv_core_threshold is at least 40 dBZ
+        always_core_thres = max(
+            40, always_core_thres
+        )  # Ensure always_core_thres is at least 40 dBZ
         core_wt_threshold = max(
             4, min(core_wt_threshold, 6)
         )  # core_wt_threshold should be between 4 and 6
@@ -1409,7 +1445,7 @@ def conv_strat_raut(
         scale_break=scale_break,
         min_reflectivity=min_reflectivity,
         conv_min_refl=conv_min_refl,
-        conv_core_threshold=conv_core_threshold,
+        conv_core_threshold=always_core_thres,
     )
 
     reclass = np.expand_dims(reclass, axis=0)
@@ -1434,7 +1470,7 @@ def conv_strat_raut(
                 "scale_break_used": int(scale_break_km),
                 "min_reflectivity": min_reflectivity,
                 "conv_min_refl": conv_min_refl,
-                "conv_core_threshold": conv_core_threshold,
+                "always_core_thres": always_core_thres,
             },
         }
     }
