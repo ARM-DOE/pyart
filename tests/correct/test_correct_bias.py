@@ -50,6 +50,29 @@ def test_calc_zdr_offset():
     assert_almost_equal(results["profile_reflectivity"][15], 14.37, decimal=2)
 
 
+def test_calc_zdr_offset_xradar():
+    xd = pytest.importorskip("xradar")
+
+    xsapr_test_file = DATASETS.fetch("sgpxsaprcfrvptI4.a1.20200205.100827.nc")
+    dtree = xd.io.open_cfradial1_datatree(xsapr_test_file, optional=False)
+    xradar_obj = pyart.xradar.Xradar(dtree)
+
+    gatefilter = pyart.filters.GateFilter(xradar_obj)
+    gatefilter.exclude_below("cross_correlation_ratio_hv", 0.995)
+    gatefilter.exclude_above("cross_correlation_ratio_hv", 1)
+    gatefilter.exclude_below("reflectivity", 10)
+    gatefilter.exclude_above("reflectivity", 30)
+
+    results = pyart.correct.calc_zdr_offset(
+        xradar_obj,
+        zdr_var="differential_reflectivity",
+        gatefilter=gatefilter,
+        height_range=(1000, 3000),
+    )
+    assert_almost_equal(results["bias"], 2.69, decimal=2)
+    assert_almost_equal(results["profile_reflectivity"][15], 14.37, decimal=2)
+
+
 def test_calc_noise_floor():
     expected = [-46.25460013, -46.48371626, -46.3314618, -46.82639895, -46.76403711]
 
@@ -59,7 +82,7 @@ def test_calc_noise_floor():
 
     bad_radar = "foo"
     pytest.raises(
-        ValueError,
+        TypeError,
         pyart.correct.calc_noise_floor,
         bad_radar,
         "reflectivity_copol",
@@ -77,7 +100,7 @@ def test_range_correction():
 
     bad_radar = "foo"
     pytest.raises(
-        ValueError,
+        TypeError,
         pyart.correct.range_correction,
         bad_radar,
         "reflectivity_copol",
@@ -143,7 +166,7 @@ def test_calc_cloud_mask():
 
     bad_radar = "foo"
     pytest.raises(
-        ValueError,
+        TypeError,
         pyart.correct.calc_cloud_mask,
         bad_radar,
         "reflectivity_copol",

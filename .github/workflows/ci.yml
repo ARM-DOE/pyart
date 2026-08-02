@@ -35,7 +35,7 @@ jobs:
 
       # Install dependencies
       - name: Setup Conda Environment
-        uses: mamba-org/setup-micromamba@v3.0.0
+        uses: mamba-org/setup-micromamba@v3.1.0
         with:
           environment-file: continuous_integration/environment-ci.yml
           init-shell: >-
