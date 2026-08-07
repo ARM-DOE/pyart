@@ -15,7 +15,7 @@ ensuring that:
 
 This policy applies regardless of whether the code was written by hand, with AI
 assistance, or generated entirely by an AI tool. It is adapted from the
-[xarray AI Usage Policy](https://github.com/pydata/xarray/blob/main/doc/contribute/ai-policy.md) and [Py-ART AI Usage Policy]()
+[xarray AI Usage Policy](https://github.com/pydata/xarray/blob/main/doc/contribute/ai-policy.md) and [xradar AI Usage Policy]()
 and aligns with similar efforts across the scientific Python ecosystem, with
 pyart-specific additions for CI, packaging, and dependency changes.
 
@@ -64,7 +64,11 @@ You must have personally reviewed and understood all changes before submitting.
 If you used AI to generate code, you are expected to have read it critically and
 tested it. As with a hand-written PR, the description should explain the
 approach and reasoning behind the changes. Do not leave it to reviewers to
-figure out what the code does and why.
+figure out what the code does and why. For example, for changes touching
+retrievals, corrections, or any physical calculations, reviewing the code
+is not sufficient — validate the output against a reference dataset, a
+published result, or the prior implementation, and say so in the PR
+description.
 
 #### Not Acceptable
 
@@ -100,6 +104,12 @@ scope. Maintainers will use it to confirm the work is a good fit for the
 project, surface concerns early, and agree on how the change should be
 structured **before any code is written**. This prevents the common AI-era
 pattern of a surprise diff that nobody asked for and nobody wants to review.
+
+**No AI generated Issues or pull request reviews.** When opening an issue,
+the issue can not be open via an agent. Pull requests reviews also can not
+be AI generated. Doing so, would defeat the purpose of discussing AI
+generated or assisted code by involving a real person to ensure these
+changes are correct and meaningful.
 
 Maintainers reserve the right to close PRs where the scope makes meaningful
 review impractical, or when they suspect this policy has been violated.
