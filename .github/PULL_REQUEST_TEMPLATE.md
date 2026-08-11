@@ -14,9 +14,7 @@ List issue references this PR closes (for example: `Closes #123`, `Fixes #456`).
 ## Validation
 Mark each item as done or N/A. Add one short evidence line for each item.
 
-- [ ] I ran ruff
-
-- [ ] I ran import-linter
+- [ ] I ran pre-commit or ruff
 
 - [ ] I ran tests
 
