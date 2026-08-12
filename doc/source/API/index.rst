@@ -31,4 +31,5 @@ Documentation is broken down by directory and module.
    util
    bridge
    testing
+   xradar
    _debug_info
