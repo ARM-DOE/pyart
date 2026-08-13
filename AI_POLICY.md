@@ -68,7 +68,8 @@ figure out what the code does and why. For example, for changes touching
 retrievals, corrections, or any physical calculations, reviewing the code
 is not sufficient — validate the output against a reference dataset, a
 published result, or the prior implementation, and say so in the PR
-description.
+description. Providing a jupyter notebook as well for showcasing the new code
+is appreciated.
 
 #### Not Acceptable
 
@@ -82,7 +83,8 @@ description.
 > code at my direction, and I have fully read and validated the changes.
 
 > I pointed an agent at the issue and it generated a first draft. I reviewed
-> the changes thoroughly and understand the implementation well.
+> the changes thoroughly, understand the implementation well and tested the
+> changes.
 
 ### Prefer Small PRs and Open an Issue First
 
