@@ -39,7 +39,7 @@ def get_nexrad_location(station):
         loc["units"] = "m"
 
     return loc["lat"], loc["lon"], loc["elev"]
-    
+
 
 # Locations of NEXRAD locations was retrieved from NOAA's
 # Historical Observing Metadata Repository (HOMR) on
