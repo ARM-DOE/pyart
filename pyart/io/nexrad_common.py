@@ -26,18 +26,20 @@ def get_nexrad_location(station):
     """
     loc = NEXRAD_LOCATIONS[station.upper()]
 
-    # Convert from feet to meters for elevation units. Read into a local
-    # variable and return a new value rather than writing back into
-    # loc["elev"] -- loc is a reference into the shared, module-level
-    # NEXRAD_LOCATIONS dict, so mutating it in place applied this
-    # conversion permanently. A second call for the same station then
-    # converted the already-converted value again, silently corrupting
-    # the elevation (e.g. KTLX: 1213 ft -> 369.72 m on the first call,
-    # then -> 112.7 m on the second).
-    elev_m = loc["elev"] * 0.3048
+    # The bundled table stores elevation in feet.  This function has always
+    # converted the entry in place, leaving the shared, module-level
+    # NEXRAD_LOCATIONS dict holding meters; that side effect is kept here
+    # because downstream code may read the table directly after calling this
+    # function.  The entry is now tagged with its units so the conversion is
+    # applied at most once.  Previously a second call for the same station
+    # re-applied it and silently corrupted the value (KTLX: 1213 ft ->
+    # 369.72 m on the first call, then -> 112.69 m on the second).
+    if loc.get("units") != "m":
+        loc["elev"] = loc["elev"] * 0.3048
+        loc["units"] = "m"
 
-    return loc["lat"], loc["lon"], elev_m
-
+    return loc["lat"], loc["lon"], loc["elev"]
+    
 
 # Locations of NEXRAD locations was retrieved from NOAA's
 # Historical Observing Metadata Repository (HOMR) on
