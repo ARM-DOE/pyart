@@ -1,0 +1,1108 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Fast Wavelet-Based Classification of Radar Echoes into Convection Core, Mixed-Intermediate and Stratiform Classes &#8212; Py-ART 2.2.5 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-binder.css?v=f4aeca0c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-dataframe.css?v=2082cf3c" />
+    <link rel="stylesheet" type="text/css" href="../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css?v=40b48845" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+
+    <script src="../_static/documentation_options.js?v=ea147abf"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/sg-tags.js?v=d80f6fa4"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){ dataLayer.push(arguments); }
+                gtag('consent', 'default', {
+                    'ad_storage': 'denied',
+                    'ad_user_data': 'denied',
+                    'ad_personalization': 'denied',
+                    'analytics_storage': 'denied'
+                });
+            </script>
+    <script async="async" src="https://www.googletagmanager.com/gtag/js?id=G-JJEG3CV376"></script>
+    <script>
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-JJEG3CV376');
+            </script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'notebooks/wavelet_echo_class_example';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../_static/doc_shared.js?v=6c7402a7"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="The Py-ART Radar object and indexing" href="the_pyart_radar_object_and_indexing.html" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="2.2" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+   
+<link
+  rel="alternate"
+  type="application/atom+xml"
+  href="../blog/atom.xml"
+  title="PyART Blog"
+/>
+  
+  </head>
+  <body data-default-mode="light">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">Py-ART 2.2.5 documentation</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../userguide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples/index.html">
+    Example Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../API/index.html">
+    API Reference Manual
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/index.html">
+    Developer’s Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../blog.html">
+    Blog
+  </a>
+</li>
+
+            <li class="nav-item dropdown">
+                <button class="btn dropdown-toggle nav-item" type="button"
+                data-bs-toggle="dropdown" aria-expanded="false"
+                aria-controls="pst-nav-more-links">
+                    More
+                </button>
+                <ul id="pst-nav-more-links" class="dropdown-menu">
+                    
+<li class=" current active">
+  <a class="nav-link dropdown-item nav-internal" href="../notebook-gallery.html">
+    Notebook Gallery
+  </a>
+</li>
+
+
+<li class=" ">
+  <a class="nav-link dropdown-item nav-external" href="https://github.com/ARM-DOE/pyart/releases">
+    Release Notes
+  </a>
+</li>
+
+                </ul>
+            </li>
+            
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ARM-DOE/pyart" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/Py_ART" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i><span class="visually-hidden">Twitter</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../userguide/index.html">
+    User Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../examples/index.html">
+    Example Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../API/index.html">
+    API Reference Manual
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../dev/index.html">
+    Developer’s Guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../blog.html">
+    Blog
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../notebook-gallery.html">
+    Notebook Gallery
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-external" href="https://github.com/ARM-DOE/pyart/releases">
+    Release Notes
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/ARM-DOE/pyart" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://twitter.com/Py_ART" title="Twitter" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-twitter fa-lg" aria-hidden="true"></i><span class="visually-hidden">Twitter</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+  <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><p aria-level="2" class="caption" role="heading"><span class="caption-text">Notebooks</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="basic_ingest_using_test_radar_object.html">Creating a basic ingest of a NetCDF file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="changing_fields_and_saving.html">Field manipulation and Saving the Radar Object to a file.</a></li>
+<li class="toctree-l1"><a class="reference internal" href="dealiasing_velocity.html">Dealiasing Velocity</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mapping_data_to_a_cartesian_grid.html">Mapping Data to a Cartesian Grid</a></li>
+<li class="toctree-l1"><a class="reference internal" href="masking_data_with_gatefilters.html">Masking Data With Py-ART Gatefilters</a></li>
+<li class="toctree-l1"><a class="reference internal" href="the_pyart_radar_object_and_indexing.html">The Py-ART Radar object and indexing</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Fast Wavelet-Based Classification of Radar Echoes into Convection Core, Mixed-Intermediate and Stratiform Classes</a></li>
+
+
+
+
+
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="../notebook-gallery.html" class="nav-link">Notebook Gallery</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Fast Wavelet-Based Classification of Radar Echoes into Convection Core, Mixed-Intermediate and Stratiform Classes</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                   <section class="tex2jax_ignore mathjax_ignore" id="fast-wavelet-based-classification-of-radar-echoes-into-convection-core-mixed-intermediate-and-stratiform-classes">
+<h1>Fast Wavelet-Based Classification of Radar Echoes into Convection Core, Mixed-Intermediate and Stratiform Classes<a class="headerlink" href="#fast-wavelet-based-classification-of-radar-echoes-into-convection-core-mixed-intermediate-and-stratiform-classes" title="Link to this heading">#</a></h1>
+<p>This cookbook demonstrates the wavelet-based radar echo classification method from Raut et al. (2008 and 2020) [1, 2].</p>
+<section id="introduction">
+<h2>Introduction:<a class="headerlink" href="#introduction" title="Link to this heading">#</a></h2>
+<p>In radar data, convective regions are characterized by horizontal inhomogeneity, generally high reflectivity than surrounding echoes, and vertical growth, as opposed to the more horizontally homogeneous stratiform regions. Historically, radar echoes were classified into convective and stratiform categories using reflectivity thresholds, typically around 40 dBZ. However, this approach is not reliable as significant fraction of convection has reflectivities comparable to stratiform rain below the 40dBZ threshold. To address these challenges, algorithms that consider the horizontal reflectivity structure as an additinal criteria were developed although the threshold was still used as the primary criteria [3, 4, 5].</p>
+<p>The rain exhibit a wide range of spatial frequencies, or scales, embedded within self-similar structures [6] and convection and stratiform can be identified by the scale analysis of the images. Fourier transform (FT), although can compute the power spectrum of these images to study the dominant frequencies, cannot identify localized structure within the image. A multiresolution approximation separates features of different scales within the image. Wavelets iteratively decompose the image into different resolutions or scales. The á trous wavelet transform (WT) is particularly prominent in astrophysics and medical imaging.</p>
+</section>
+<section id="the-a-trous-wavelet-transform">
+<h2>The Á Trous Wavelet Transform<a class="headerlink" href="#the-a-trous-wavelet-transform" title="Link to this heading">#</a></h2>
+<p>The á trous wavelet transform, as proposed by Shensa [7] and further developed by Starck and Murtagh [8], is utilized in this algorithm. This algorithm employs a scaling function at dyadically increasing scales to approximate the original image at successively coarser resolutions and the wavelet coefficients at a given scale are the difference between two successive approximations.</p>
+<p>This has significant implications for meteorological analysis, particularly in the classification of convection from stratiform regions in radar and satellite data. The multiresolution analysis offers an objective classification scheme to classify embedded or isolated convection without the need for specific conditions and intensity thresholds.</p>
+</section>
+<section id="classification-scheme">
+<h2>Classification Scheme<a class="headerlink" href="#classification-scheme" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Transform Reflectivity to Rain Field</strong>: The first step involves transforming the reflectivity field into a rain field. The standard ZR relationship should work for most radars.</p></li>
+<li><p><strong>Compute Wavelet Transform (WT) of the Rain Field</strong>:
+The WT is computed for the rain field across <code class="docutils literal notranslate"><span class="pre">n</span></code> different scales, where <code class="docutils literal notranslate"><span class="pre">n</span></code> can be 15-30 kilometers as discussed in Raut et al (2018) [9]. This process breaks down the rain field into various scales.</p></li>
+<li><p><strong>Sum of Wavelet Scales (wt_sum)</strong>:
+The next step is to sum up all these ‘n’ wavelet scales.</p></li>
+<li><p>The classification of the precipitation type is then determined based on <code class="docutils literal notranslate"><span class="pre">wt_sum</span></code> and the original dBZ values (<code class="docutils literal notranslate"><span class="pre">vol_data</span></code>):</p>
+<ul class="simple">
+<li><p><strong>Unclassified</strong>: If <code class="docutils literal notranslate"><span class="pre">reflectivity</span> <span class="pre">&lt;</span> <span class="pre">min_dbz_threshold</span></code>, the precipitation is too low to be classified.</p></li>
+<li><p><strong>Convective Core</strong>: If <code class="docutils literal notranslate"><span class="pre">wt_sum</span> <span class="pre">≥</span> <span class="pre">conv_wt_threshold</span> <span class="pre">AND</span> <span class="pre">reflectivity</span> <span class="pre">&gt;</span> <span class="pre">conv_dbz_threshold</span></code>, the precipitation is classified as ‘Convective Core’. This implies a higher intensity and potentially active collision and coalescence.</p></li>
+<li><p><strong>Mix or Intermediate</strong>: If <code class="docutils literal notranslate"><span class="pre">conv_wt_threshold</span> <span class="pre">&gt;</span> <span class="pre">wt_sum</span> <span class="pre">≥</span> <span class="pre">tran_wt_threshold</span> <span class="pre">AND</span> <span class="pre">reflectivity</span> <span class="pre">&gt;</span> <span class="pre">conv_dbz_threshold</span></code>, the precipitation is categorized as ‘Intermediate or Mix Convective’. This rain is not as intense as convective core but it has more significant liquid water content than stratiform.</p></li>
+<li><p><strong>Stratiform</strong>: If <code class="docutils literal notranslate"><span class="pre">wt_sum</span> <span class="pre">&lt;</span> <span class="pre">tran_wt_threshold</span> <span class="pre">AND</span> <span class="pre">reflectivity</span> <span class="pre">&gt;</span> <span class="pre">min_dbz_threshold</span></code>, the precipitation is classified as ‘Stratiform or non-convective’. This is typically more uniform and less intense than convective class.</p></li>
+</ul>
+</li>
+</ol>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="test-examples">
+<h1>Test Examples<a class="headerlink" href="#test-examples" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>## You are using the Python ARM Radar Toolkit (Py-ART), an open source
+## library for working with weather radar data. Py-ART is partly
+## supported by the U.S. Department of Energy as part of the Atmospheric
+## Radiation Measurement (ARM) Climate Research Facility, an Office of
+## Science user facility.
+##
+## If you use this software to prepare a publication, please cite:
+##
+##     JJ Helmus and SM Collis, JORS 2016, doi: 10.5334/jors.119
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="case-1">
+<h1>Case 1<a class="headerlink" href="#case-1" title="Link to this heading">#</a></h1>
+<section id="reading-and-preparing-radar-data">
+<h2>Reading and Preparing Radar Data<a class="headerlink" href="#reading-and-preparing-radar-data" title="Link to this heading">#</a></h2>
+<p>We load a sample radar data file using Py-ART, extracts the lowest sweep, and then interpolates this data onto a cartesian grid. The dx and dy variables represent the grid resolution in the x and y directions, respectively.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># read in the test file</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">testing</span><span class="o">.</span><span class="n">get_test_data</span><span class="p">(</span><span class="s2">"swx_20120520_0641.nc"</span><span class="p">)</span>
+<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
+
+<span class="c1"># extract the lowest sweep</span>
+<span class="n">radar</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">extract_sweeps</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># interpolate to grid</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">grid_from_radars</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">radar</span><span class="p">,),</span>
+    <span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">201</span><span class="p">),</span>
+    <span class="n">grid_limits</span><span class="o">=</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">50000.0</span><span class="p">,</span> <span class="mf">50000.0</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">50000.0</span><span class="p">,</span> <span class="mf">50000.0</span><span class="p">)),</span>
+    <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s2">"reflectivity_horizontal"</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="c1"># get dx dy</span>
+<span class="n">dx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">dy</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="using-peak-feature-detection">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">Peak</span> <span class="pre">Feature</span> <span class="pre">Detection</span></code><a class="headerlink" href="#using-peak-feature-detection" title="Link to this heading">#</a></h3>
+<p>Lets now performs convective-stratiform classification on the radar data using the Yuter method [4, 5], which is a part of Py-ART’s retrieve module. The result is added to the grid as a new field for further analysis or visualization.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># convective stratiform classification Yuter</span>
+<span class="n">convsf_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">conv_strat_yuter</span><span class="p">(</span>
+    <span class="n">grid</span><span class="p">,</span>
+    <span class="n">dx</span><span class="p">,</span>
+    <span class="n">dy</span><span class="p">,</span>
+    <span class="n">refl_field</span><span class="o">=</span><span class="s2">"reflectivity_horizontal"</span><span class="p">,</span>
+    <span class="n">always_core_thres</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+    <span class="n">bkg_rad_km</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">use_cosine</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">max_diff</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">zero_diff_cos_val</span><span class="o">=</span><span class="mi">55</span><span class="p">,</span>
+    <span class="n">weak_echo_thres</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">max_conv_rad_km</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">estimate_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">"convsf"</span><span class="p">,</span> <span class="n">convsf_dict</span><span class="p">[</span><span class="s2">"feature_detection"</span><span class="p">],</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/bhupendra/anaconda3/envs/pyart/lib/python3.12/site-packages/scipy/ndimage/_filters.py:1769: RuntimeWarning: Mean of empty slice
+  _nd_image.generic_filter(input, function, footprint, output, mode,
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="using-wavelet-scale-analysis">
+<h3>Using <code class="docutils literal notranslate"><span class="pre">Wavelet</span> <span class="pre">Scale</span> <span class="pre">Analysis</span></code><a class="headerlink" href="#using-wavelet-scale-analysis" title="Link to this heading">#</a></h3>
+<p>The function processes radar data using a Py-ART Grid object and a specified reflectivity field (<code class="docutils literal notranslate"><span class="pre">refl_field</span></code>). It offers options to adjust the Z-R relationship coefficients (<code class="docutils literal notranslate"><span class="pre">zr_a</span></code> and <code class="docutils literal notranslate"><span class="pre">zr_b</span></code>) and various thresholds for tailored classification. The output is a dictionary, <code class="docutils literal notranslate"><span class="pre">reclass_dict</span></code>, ready for integration into a Py-ART Grid. This dictionary includes the classification results, a description of the categories, and a record of the used parameters for transparency and reference.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reclass_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">conv_strat_raut</span><span class="p">(</span>
+    <span class="n">grid</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="s2">"reflectivity_horizontal"</span>
+<span class="p">)</span>
+
+<span class="c1"># add field</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">"wt_reclass"</span><span class="p">,</span> <span class="n">reclass_dict</span><span class="p">[</span><span class="s2">"wt_reclass"</span><span class="p">],</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">reclass_dict</span><span class="p">[</span><span class="s2">"wt_reclass"</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/bhupendra/projects/pyart/pyart/retrieve/_echo_class_wt.py:175: RuntimeWarning: invalid value encountered in cast
+  return wt_class.astype(np.int32)
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{'data': masked_array(
+   data=[[[--, --, --, ..., --, --, --],
+          [--, --, --, ..., --, --, --],
+          [--, --, --, ..., --, --, --],
+          ...,
+          [--, --, --, ..., --, --, --],
+          [--, --, --, ..., --, --, --],
+          [--, --, --, ..., --, --, --]]],
+   mask=[[[ True,  True,  True, ...,  True,  True,  True],
+          [ True,  True,  True, ...,  True,  True,  True],
+          [ True,  True,  True, ...,  True,  True,  True],
+          ...,
+          [ True,  True,  True, ...,  True,  True,  True],
+          [ True,  True,  True, ...,  True,  True,  True],
+          [ True,  True,  True, ...,  True,  True,  True]]],
+   fill_value=999999,
+   dtype=int32),
+ 'standard_name': 'wavelet_echo_class',
+ 'long_name': 'Wavelet-based multiresolution radar echo classification',
+ 'valid_min': 0,
+ 'valid_max': 3,
+ 'classification_description': '0: Unclassified, 1: Stratiform, 2: Mixed-Intermediate, 3: Convective Cores',
+ 'parameters': {'refl_field': 'reflectivity_horizontal',
+  'cappi_level': 0,
+  'zr_a': 200,
+  'zr_b': 1.6,
+  'core_wt_threshold': 5,
+  'conv_wt_threshold': 1.5,
+  'conv_scale_km': 25,
+  'scale_break_used': 32,
+  'min_reflectivity': 5,
+  'conv_min_refl': 25,
+  'conv_core_threshold': 42}}
+</pre></div>
+</div>
+</div>
+</div>
+<p>The classification parameters are returned in the dictionary along with the masked array. Although <code class="docutils literal notranslate"><span class="pre">conv_scale_km</span></code> was set to <code class="docutils literal notranslate"><span class="pre">25</span></code>, the algorithm calculated the <code class="docutils literal notranslate"><span class="pre">scale_break</span></code> as <code class="docutils literal notranslate"><span class="pre">32km</span></code>. This variation depends on the data resolution. Parameters outside the specified range will automatically be adjusted to fall within the permissible range. To disable this automatic adjustment and override the range checks, set <code class="docutils literal notranslate"><span class="pre">override_checks</span></code> to <code class="docutils literal notranslate"><span class="pre">True</span></code>.</p>
+</section>
+</section>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="plotting">
+<h1>Plotting<a class="headerlink" href="#plotting" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Required imports</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">cartopy.crs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ccrs</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mcolors</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">GridMapDisplay</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+<span class="c1"># Create a colormap for reflectivity</span>
+<span class="n">magma_r_cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">"magma_r"</span><span class="p">)</span>
+<span class="n">ref_cmap</span> <span class="o">=</span> <span class="n">mcolors</span><span class="o">.</span><span class="n">LinearSegmentedColormap</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span>
+    <span class="s2">"ref_cmap"</span><span class="p">,</span> <span class="n">magma_r_cmap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="n">magma_r_cmap</span><span class="o">.</span><span class="n">N</span><span class="p">))</span>
+<span class="p">)</span>
+
+<span class="c1"># Define the projection</span>
+<span class="n">projection</span> <span class="o">=</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(</span>
+    <span class="n">central_latitude</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">central_longitude</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="c1"># Create a figure with a 2x2 layout</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="c1"># First panel - Reflectivity (Top Left)</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_grid</span><span class="p">(</span>
+    <span class="s2">"reflectivity_horizontal"</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">55</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="n">ref_cmap</span><span class="p">,</span>
+    <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Second panel - CSY (Top Right)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_grid</span><span class="p">(</span>
+    <span class="s2">"convsf"</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">"pyart_HomeyerRainbow"</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
+    <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+    <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">5</span> <span class="o">/</span> <span class="mi">3</span><span class="p">],</span>
+    <span class="n">ticklabs</span><span class="o">=</span><span class="p">[</span><span class="s2">"&lt; 5dBZ"</span><span class="p">,</span> <span class="s2">"Stratiform"</span><span class="p">,</span> <span class="s2">"Convective"</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="c1"># Third panel - WT (Bottom Left)</span>
+<span class="n">ax3</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_grid</span><span class="p">(</span>
+    <span class="s2">"wt_reclass"</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">"pyart_HomeyerRainbow"</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax3</span><span class="p">,</span>
+    <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+    <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">],</span>
+    <span class="n">ticklabs</span><span class="o">=</span><span class="p">[</span><span class="s2">"&lt; 5dBZ"</span><span class="p">,</span> <span class="s2">"Non-Convective"</span><span class="p">,</span> <span class="s2">"Convective (Mixed)"</span><span class="p">,</span> <span class="s2">"Convective (Cores)"</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="c1"># Show the plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/0f29121603639bfc98b199f7040b3936d5fc51e5060056f92b2f7452e8a70a20.png" src="../_images/0f29121603639bfc98b199f7040b3936d5fc51e5060056f92b2f7452e8a70a20.png" />
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="case-2">
+<h1>Case 2<a class="headerlink" href="#case-2" title="Link to this heading">#</a></h1>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read in file</span>
+<span class="n">nexrad_file</span> <span class="o">=</span> <span class="s2">"s3://noaa-nexrad-level2/2022/09/28/KTBW/KTBW20220928_190142_V06"</span>
+<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><span class="n">nexrad_file</span><span class="p">)</span>
+
+<span class="c1"># extract the lowest sweep</span>
+<span class="n">radar</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">extract_sweeps</span><span class="p">([</span><span class="mi">0</span><span class="p">])</span>
+
+<span class="c1"># interpolate to grid</span>
+<span class="n">grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">grid_from_radars</span><span class="p">(</span>
+    <span class="p">(</span><span class="n">radar</span><span class="p">,),</span>
+    <span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">201</span><span class="p">,</span> <span class="mi">201</span><span class="p">),</span>
+    <span class="n">grid_limits</span><span class="o">=</span><span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">10000</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">200000.0</span><span class="p">,</span> <span class="mf">200000.0</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mf">200000.0</span><span class="p">,</span> <span class="mf">200000.0</span><span class="p">)),</span>
+    <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s2">"reflectivity"</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="c1"># get dx dy</span>
+<span class="n">dx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+<span class="n">dy</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># convective stratiform classification Yuter</span>
+<span class="n">convsf_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">conv_strat_yuter</span><span class="p">(</span>
+    <span class="n">grid</span><span class="p">,</span>
+    <span class="n">dx</span><span class="p">,</span>
+    <span class="n">dy</span><span class="p">,</span>
+    <span class="n">refl_field</span><span class="o">=</span><span class="s2">"reflectivity"</span><span class="p">,</span>
+    <span class="n">always_core_thres</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
+    <span class="n">bkg_rad_km</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
+    <span class="n">use_cosine</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">max_diff</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">zero_diff_cos_val</span><span class="o">=</span><span class="mi">55</span><span class="p">,</span>
+    <span class="n">weak_echo_thres</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
+    <span class="n">max_conv_rad_km</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">estimate_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">)</span>
+
+
+<span class="c1"># add to grid object</span>
+<span class="c1"># mask zero values (no surface echo)</span>
+<span class="n">convsf_masked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_equal</span><span class="p">(</span><span class="n">convsf_dict</span><span class="p">[</span><span class="s2">"feature_detection"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+<span class="c1"># mask 3 values (weak echo)</span>
+<span class="n">convsf_masked</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_equal</span><span class="p">(</span><span class="n">convsf_masked</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="c1"># add dimension to array to add to grid object</span>
+<span class="n">convsf_dict</span><span class="p">[</span><span class="s2">"feature_detection"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">convsf_masked</span>
+<span class="c1"># add field</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">"convsf"</span><span class="p">,</span> <span class="n">convsf_dict</span><span class="p">[</span><span class="s2">"feature_detection"</span><span class="p">],</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/bhupendra/anaconda3/envs/pyart/lib/python3.12/site-packages/scipy/ndimage/_filters.py:1769: RuntimeWarning: Mean of empty slice
+  _nd_image.generic_filter(input, function, footprint, output, mode,
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">reclass_dict</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">conv_strat_raut</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="s2">"reflectivity"</span><span class="p">)</span>
+
+<span class="c1"># add field</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">"wt_reclass"</span><span class="p">,</span> <span class="n">reclass_dict</span><span class="p">[</span><span class="s2">"wt_reclass"</span><span class="p">],</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">reclass_dict</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/bhupendra/projects/pyart/pyart/retrieve/_echo_class_wt.py:175: RuntimeWarning: invalid value encountered in cast
+  return wt_class.astype(np.int32)
+</pre></div>
+</div>
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{'wt_reclass': {'data': masked_array(
+    data=[[[--, --, --, ..., --, --, --],
+           [--, --, --, ..., --, --, --],
+           [--, --, --, ..., --, --, --],
+           ...,
+           [--, --, --, ..., 1, 1, 1],
+           [--, --, --, ..., 1, 1, 1],
+           [--, --, --, ..., 1, 1, 1]]],
+    mask=[[[ True,  True,  True, ...,  True,  True,  True],
+           [ True,  True,  True, ...,  True,  True,  True],
+           [ True,  True,  True, ...,  True,  True,  True],
+           ...,
+           [ True,  True,  True, ..., False, False, False],
+           [ True,  True,  True, ..., False, False, False],
+           [ True,  True,  True, ..., False, False, False]]],
+    fill_value=999999,
+    dtype=int32),
+  'standard_name': 'wavelet_echo_class',
+  'long_name': 'Wavelet-based multiresolution radar echo classification',
+  'valid_min': 0,
+  'valid_max': 3,
+  'classification_description': '0: Unclassified, 1: Stratiform, 2: Mixed-Intermediate, 3: Convective Cores',
+  'parameters': {'refl_field': 'reflectivity',
+   'cappi_level': 0,
+   'zr_a': 200,
+   'zr_b': 1.6,
+   'core_wt_threshold': 5,
+   'conv_wt_threshold': 1.5,
+   'conv_scale_km': 25,
+   'scale_break_used': 32,
+   'min_reflectivity': 5,
+   'conv_min_refl': 25,
+   'conv_core_threshold': 42}}}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Required imports</span>
+
+<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">GridMapDisplay</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
+
+<span class="c1"># Create a colormap for reflectivity</span>
+<span class="n">magma_r_cmap</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">"magma_r"</span><span class="p">)</span>
+<span class="n">ref_cmap</span> <span class="o">=</span> <span class="n">mcolors</span><span class="o">.</span><span class="n">LinearSegmentedColormap</span><span class="o">.</span><span class="n">from_list</span><span class="p">(</span>
+    <span class="s2">"ref_cmap"</span><span class="p">,</span> <span class="n">magma_r_cmap</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">,</span> <span class="n">magma_r_cmap</span><span class="o">.</span><span class="n">N</span><span class="p">))</span>
+<span class="p">)</span>
+
+<span class="c1"># Define the projection</span>
+<span class="n">projection</span> <span class="o">=</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">AlbersEqualArea</span><span class="p">(</span>
+    <span class="n">central_latitude</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+    <span class="n">central_longitude</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="c1"># Create a figure with a 2x2 layout</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">18</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="c1"># First panel - Reflectivity (Top Left)</span>
+<span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_grid</span><span class="p">(</span>
+    <span class="s2">"reflectivity"</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">55</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">ref_cmap</span><span class="p">,</span> <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span>
+<span class="p">)</span>
+
+<span class="c1"># Second panel - csy (Bottom Left)</span>
+<span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_grid</span><span class="p">(</span>
+    <span class="s2">"convsf"</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">"pyart_HomeyerRainbow"</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
+    <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+    <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span> <span class="o">/</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="n">ticklabs</span><span class="o">=</span><span class="p">[</span><span class="s2">"&lt; 5dBZ"</span><span class="p">,</span> <span class="s2">"Stratiform"</span><span class="p">,</span> <span class="s2">"Convective"</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="c1"># third  panel - reclass (Bottom Right)</span>
+<span class="n">ax3</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_grid</span><span class="p">(</span>
+    <span class="s2">"wt_reclass"</span><span class="p">,</span>
+    <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">vmax</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">"pyart_HomeyerRainbow"</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+    <span class="n">ax</span><span class="o">=</span><span class="n">ax3</span><span class="p">,</span>
+    <span class="n">transform</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
+    <span class="n">ticks</span><span class="o">=</span><span class="p">[</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">,</span> <span class="mf">2.5</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">],</span>
+    <span class="n">ticklabs</span><span class="o">=</span><span class="p">[</span><span class="s2">"&lt; 5dBZ"</span><span class="p">,</span> <span class="s2">"Non-Convective"</span><span class="p">,</span> <span class="s2">"Convective (Mixed)"</span><span class="p">,</span> <span class="s2">"Convective (Cores)"</span><span class="p">],</span>
+<span class="p">)</span>
+
+<span class="c1"># Show the plot</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/b45a5104dff8d724c6216f172e58791e275d876f200a7c0b869f117aa6a6aca0.png" src="../_images/b45a5104dff8d724c6216f172e58791e275d876f200a7c0b869f117aa6a6aca0.png" />
+</div>
+</div>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="remarks">
+<h1>Remarks:<a class="headerlink" href="#remarks" title="Link to this heading">#</a></h1>
+<p>Both the methods primarily agree on the location of the convection; however, the wavelet transform reveals more intricate details in the shape of the identified convective regions. The further separation of convection into <code class="docutils literal notranslate"><span class="pre">cores</span></code> and <code class="docutils literal notranslate"><span class="pre">intermediate-mixed</span></code> category is particularly notable. The comparison of Drop Size Distributions (DSD) for these classes shows the WT method’s efficiency in segregating radar rainfall regions that are microphysically distinct [2]. The stratiform or non-convective precipitation, characterized by smaller drops and the lowest drop density, contrasts with convective core precipitation, which exhibits a high drop density and abundance of large drops. The intermediate or mixed rain category, marked by a high concentration of small and medium size drops and a lack of large drops, provides further insights into the microphysical processes and the convective-stratiform organization.</p>
+<section id="references">
+<h2>References:<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p>Raut, B. A., Karekar, R. N., &amp; Puranik, D. M. (2008). “Wavelet-based technique to extract convective clouds from infrared satellite images.” IEEE Geosci. Remote Sens. Lett., 5(3), 328–330. <a class="reference external" href="https://doi.org/10.1109/LGRS.2008.916072">DOI</a></p></li>
+<li><p>Raut, B. A., Louf, V., Gayatri, K., Murugavel, P., Konwar, M., &amp; Prabhakaran, T. (2020). “A Multiresolution Technique for the Classification of Precipitation Echoes in Radar Data.” IEEE Trans. Geosci. Remote Sens., 58(8), 5409. <a class="reference external" href="https://doi.org/10.1109/TGRS.2020.2965649">DOI</a></p></li>
+<li><p>Churchill, D. D., &amp; Houze, R. A. (1984). “Development and structure of winter monsoon cloud clusters on 10 December 1978.” J. Atmos. Sci., 41(6), 933-960. <a class="reference external" href="https://doi.org/10.1175/1520-0469(1984)041%3C0933:DASOWM%3E2.0.CO;2">DOI</a></p></li>
+<li><p>Steiner, M. R., Houze Jr., R. A., &amp; Yuter, S. E. (1995). “Climatological Characterization of Three-Dimensional Storm Structure from Operational Radar and Rain Gauge Data.” J. Appl. Meteor., 34, 1978-2007. <a class="reference external" href="https://doi.org/10.1175/1520-0450(1995)034%3C1978:CCOTDS%3E2.0.CO;2">DOI</a></p></li>
+<li><p>Yuter, S. E., &amp; Houze Jr., R. A. (1997). “Measurements of raindrop size distributions over the Pacific warm pool and implications for Z-R relations.” J. Appl. Meteor., 36, 847-867. <a class="reference external" href="https://doi.org/10.1175/1520-0450(1997)036%3C0847:MORSDO%3E2.0.CO;2">DOI</a></p></li>
+<li><p>Lovejoy, S., &amp; Schertzer, D. (1985). “Generalized scale invariance in the atmosphere and fractal models of rain.” Water Resour. Res., 21(8), 1233–1250. <a class="reference external" href="https://doi.org/10.1029/WR021i008p01233">DOI</a></p></li>
+<li><p>Starck, J.-L., Murtagh, F. D., &amp; Bijaoui, A. (1998). “Image Processing and Data Analysis: The Multiscale Approach.” Cambridge Univ. Press.</p></li>
+<li><p>Shensa, M. J. (1992). “The discrete wavelet transform: Wedding the à trous and Mallat algorithms.” IEEE Trans. Signal Process., 40(10), 2464–2482. <a class="reference external" href="https://doi.org/10.1109/78.157290">DOI</a></p></li>
+<li><p>Raut, B. A., Seed, A. W., Reeder, M. J., &amp; Jakob, C. (2018). “A multiplicative cascade model for high-resolution space-time downscaling of rainfall.” J. Geophys. Res. Atmos., 123(4), 2050–2067. <a class="reference external" href="https://doi.org/10.1002/2017JD027148">DOI</a></p></li>
+</ol>
+</section>
+</section>
+
+<div class="section ablog__blog_comments">
+   
+</div>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="the_pyart_radar_object_and_indexing.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">The Py-ART Radar object and indexing</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Fast Wavelet-Based Classification of Radar Echoes into Convection Core, Mixed-Intermediate and Stratiform Classes</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-a-trous-wavelet-transform">The Á Trous Wavelet Transform</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classification-scheme">Classification Scheme</a></li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#test-examples">Test Examples</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#case-1">Case 1</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-and-preparing-radar-data">Reading and Preparing Radar Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-peak-feature-detection">Using <code class="docutils literal notranslate"><span class="pre">Peak</span> <span class="pre">Feature</span> <span class="pre">Detection</span></code></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-wavelet-scale-analysis">Using <code class="docutils literal notranslate"><span class="pre">Wavelet</span> <span class="pre">Scale</span> <span class="pre">Analysis</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting">Plotting</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#case-2">Case 2</a></li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#remarks">Remarks:</a><ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References:</a></li>
+</ul>
+</li>
+</ul>
+
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
+
+  <div class="tocsection sourcelink">
+    <a href="../_sources/notebooks/wavelet_echo_class_example.ipynb.txt">
+      <i class="fa-solid fa-file-lines"></i> Show Source
+    </a>
+  </div>
+</div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2013-2026, Py-ART developers.
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
