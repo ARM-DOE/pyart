@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
@@ -42,10 +42,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
@@ -550,7 +550,7 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load the radar file</span>
-<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;KATX20130717_195021_V06&quot;</span><span class="p">)</span>
+<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">"KATX20130717_195021_V06"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -693,7 +693,7 @@ sweep_mode:
 	units: unitless
 	standard_name: sweep_mode
 	long_name: Sweep mode
-	comment: Options are: &quot;sector&quot;, &quot;coplane&quot;, &quot;rhi&quot;, &quot;vertical_pointing&quot;, &quot;idle&quot;, &quot;azimuth_surveillance&quot;, &quot;elevation_surveillance&quot;, &quot;sunscan&quot;, &quot;pointing&quot;, &quot;manual_ppi&quot;, &quot;manual_rhi&quot;
+	comment: Options are: "sector", "coplane", "rhi", "vertical_pointing", "idle", "azimuth_surveillance", "elevation_surveillance", "sunscan", "pointing", "manual_ppi", "manual_rhi"
 sweep_number:
 	data: &lt;ndarray of type: int32 and shape: (16,)&gt;
 	units: count
@@ -729,7 +729,7 @@ metadata:
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s view the elevation parameter. Py-ART stores all fields as 2D masked arrays</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let's view the elevation parameter. Py-ART stores all fields as 2D masked arrays</span>
 <span class="c1"># of dimensions (number of rays) x (number of gates). Therefore, as the elevation can change with</span>
 <span class="c1"># each ray, the data in the elevation array is a 1D array of dimension (number of rays)</span>
 <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span>
@@ -737,12 +737,12 @@ metadata:
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;units&#39;: &#39;degrees&#39;,
- &#39;standard_name&#39;: &#39;beam_elevation_angle&#39;,
- &#39;long_name&#39;: &#39;elevation_angle_from_horizontal_plane&#39;,
- &#39;axis&#39;: &#39;radial_elevation_coordinate&#39;,
- &#39;comment&#39;: &#39;Elevation of antenna relative to the horizontal plane&#39;,
- &#39;data&#39;: array([ 0.7470703,  0.7196045,  0.6893921, ..., 19.511719 , 19.511719 ,
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{'units': 'degrees',
+ 'standard_name': 'beam_elevation_angle',
+ 'long_name': 'elevation_angle_from_horizontal_plane',
+ 'axis': 'radial_elevation_coordinate',
+ 'comment': 'Elevation of antenna relative to the horizontal plane',
+ 'data': array([ 0.7470703,  0.7196045,  0.6893921, ..., 19.511719 , 19.511719 ,
         19.511719 ], dtype=float32)}
 </pre></div>
 </div>
@@ -753,7 +753,7 @@ metadata:
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># If we just want the elevations of one sweep, we can use the get_slice() function</span>
 <span class="c1"># of the Radar object to just get the elevations from one slice.</span>
 <span class="n">sweep_1</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_1</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">sweep_1</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -886,19 +886,19 @@ metadata:
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># All of the radar fields are stored in a dictionary called radar.fields. This dictionary</span>
 <span class="c1"># contains entries that correspond to the field names in the file.</span>
-<span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">]</span>
+<span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">"reflectivity"</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{&#39;units&#39;: &#39;dBZ&#39;,
- &#39;standard_name&#39;: &#39;equivalent_reflectivity_factor&#39;,
- &#39;long_name&#39;: &#39;Reflectivity&#39;,
- &#39;valid_max&#39;: 94.5,
- &#39;valid_min&#39;: -32.0,
- &#39;coordinates&#39;: &#39;elevation azimuth range&#39;,
- &#39;_FillValue&#39;: -9999.0,
- &#39;data&#39;: masked_array(
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>{'units': 'dBZ',
+ 'standard_name': 'equivalent_reflectivity_factor',
+ 'long_name': 'Reflectivity',
+ 'valid_max': 94.5,
+ 'valid_min': -32.0,
+ 'coordinates': 'elevation azimuth range',
+ '_FillValue': -9999.0,
+ 'data': masked_array(
    data=[[10.5, 7.5, --, ..., --, --, --],
          [--, --, --, ..., --, --, --],
          [9.5, --, --, ..., --, --, --],
@@ -922,9 +922,9 @@ metadata:
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># This shows entries such as the data itself, coordinates, long name, and units. You can</span>
-<span class="c1"># access the array with the reflectivity data itself using radar.fields[&#39;reflectivity&#39;][&#39;data&#39;].</span>
+<span class="c1"># access the array with the reflectivity data itself using radar.fields['reflectivity']['data'].</span>
 <span class="c1"># This is stored as a 2D masked array with dimensions (number of rays) x (number of gates)</span>
-<span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+<span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">"reflectivity"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -955,7 +955,7 @@ metadata:
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># If you just want the data from one slice, you can get the indicies for the</span>
 <span class="c1"># slice using radar.get_slice()</span>
 <span class="n">slice_indices</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">slice_indices</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">"reflectivity"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="n">slice_indices</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -976,7 +976,7 @@ metadata:
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># You can also iterate over each slice by using radar.iter_slice() This example</span>
 <span class="c1"># returns the mean reflectivity of each sweep.</span>
 <span class="n">reflectivity</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">()</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">"reflectivity"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">()</span>
 <span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">reflectivity</span><span class="p">)</span>
 </pre></div>
@@ -993,7 +993,7 @@ metadata:
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># You can also view the important radar instrument parameters. One commonly used parameter</span>
 <span class="c1"># is the nyquist velocity, which is the maximum magnitude of the velocity the radar is</span>
 <span class="c1"># capable of recording before a phenomena known as aliasing occurs.</span>
-<span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+<span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">"nyquist_velocity"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -1060,8 +1060,8 @@ metadata:
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1095,7 +1095,7 @@ metadata:
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -42,10 +42,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -598,14 +598,14 @@ another radar in Antenna coordinates and compare the fields.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyart.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_test_data</span>
 
-<a href="https://docs.python.org/3/library/warnings.html#warnings.filterwarnings" title="warnings.filterwarnings" class="sphx-glr-backref-module-warnings sphx-glr-backref-type-py-function"><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span></a><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/warnings.html#warnings.filterwarnings" title="warnings.filterwarnings" class="sphx-glr-backref-module-warnings sphx-glr-backref-type-py-function"><span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span></a><span class="p">(</span><span class="s2">"ignore"</span><span class="p">)</span>
 </pre></div>
 </div>
 <p><strong>Read in the Data</strong></p>
 <p>For this example, we use two XSAPR radars from our test data.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># read in the data from both XSAPR radars</span>
-<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">xsapr_sw_file</span></a> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">&quot;swx_20120520_0641.nc&quot;</span><span class="p">)</span>
-<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">xsapr_se_file</span></a> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">&quot;sex_20120520_0641.nc&quot;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">xsapr_sw_file</span></a> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">"swx_20120520_0641.nc"</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">xsapr_se_file</span></a> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">"sex_20120520_0641.nc"</span><span class="p">)</span>
 <span class="n">radar_sw</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">xsapr_sw_file</span></a><span class="p">)</span>
 <span class="n">radar_se</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">xsapr_se_file</span></a><span class="p">)</span>
 </pre></div>
@@ -618,7 +618,7 @@ We also need to set a distance (meters) and time (seconds)
 between the source and destination gate allowed for an
 adequate match), using the distance_tolerance/time_tolerance variables.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar_sw</span><span class="p">)</span>
-<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">"reflectivity_horizontal"</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 <span class="n">gmapper</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">GateMapper</span><span class="p">(</span>
     <span class="n">radar_sw</span><span class="p">,</span>
     <span class="n">radar_se</span><span class="p">,</span>
@@ -626,7 +626,7 @@ adequate match), using the distance_tolerance/time_tolerance variables.</p>
     <span class="n">time_tolerance</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
     <span class="n">gatefilter_src</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="n">radar_sw_mapped_to_radar_se</span> <span class="o">=</span> <span class="n">gmapper</span><span class="o">.</span><span class="n">mapped_radar</span><span class="p">([</span><span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">])</span>
+<span class="n">radar_sw_mapped_to_radar_se</span> <span class="o">=</span> <span class="n">gmapper</span><span class="o">.</span><span class="n">mapped_radar</span><span class="p">([</span><span class="s2">"reflectivity_horizontal"</span><span class="p">])</span>
 </pre></div>
 </div>
 <p><strong>Plot the Original Data</strong></p>
@@ -638,7 +638,7 @@ in reflectivity values!</p>
 <span class="c1"># Plot the southwestern radar</span>
 <span class="n">disp1</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar_sw</span><span class="p">)</span>
 <span class="n">disp1</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">,</span>
+    <span class="s2">"reflectivity_horizontal"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span>
@@ -654,7 +654,7 @@ in reflectivity values!</p>
 <span class="n">ax2</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 <span class="n">disp2</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar_se</span><span class="p">)</span>
 <span class="n">disp2</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">,</span>
+    <span class="s2">"reflectivity_horizontal"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span>
@@ -676,7 +676,7 @@ to the new remapped field - there are similarities…</p>
 <span class="c1"># Plot the southeastern radar</span>
 <span class="n">disp1</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar_se</span><span class="p">)</span>
 <span class="n">disp1</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">,</span>
+    <span class="s2">"reflectivity_horizontal"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span>
@@ -693,7 +693,7 @@ to the new remapped field - there are similarities…</p>
 <span class="n">ax2</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 <span class="n">disp2</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar_sw_mapped_to_radar_se</span><span class="p">)</span>
 <span class="n">disp2</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">,</span>
+    <span class="s2">"reflectivity_horizontal"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span>
@@ -714,9 +714,9 @@ Keep in mind there is a time difference of ~ 1 minute between these plots,
 leading to small difference due to the precipitation moving through the
 domain over the course of that minute.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Extract the numpy arrays for our reflectivity fields</span>
-<a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="numpy.ma.MaskedArray" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">reflectivity_se_radar</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar_se</span><span class="o">.</span><span class="n">fields</span></a><span class="p">[</span><span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-<a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="numpy.ma.MaskedArray" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">reflectivity_sw_radar</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar_sw_mapped_to_radar_se</span><span class="o">.</span><span class="n">fields</span></a><span class="p">[</span><span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">][</span>
-    <span class="s2">&quot;data&quot;</span>
+<a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="numpy.ma.MaskedArray" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">reflectivity_se_radar</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar_se</span><span class="o">.</span><span class="n">fields</span></a><span class="p">[</span><span class="s2">"reflectivity_horizontal"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
+<a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="numpy.ma.MaskedArray" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">reflectivity_sw_radar</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar_sw_mapped_to_radar_se</span><span class="o">.</span><span class="n">fields</span></a><span class="p">[</span><span class="s2">"reflectivity_horizontal"</span><span class="p">][</span>
+    <span class="s2">"data"</span>
 <span class="p">]</span>
 
 <span class="c1"># Calculate the difference between the southeastern and southwestern radar</span>
@@ -724,8 +724,8 @@ domain over the course of that minute.</p>
 
 <span class="c1"># Add a field like this to the radar_se radar object</span>
 <span class="n">radar_se</span><span class="o">.</span><span class="n">add_field_like</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">,</span>
-    <span class="n">field_name</span><span class="o">=</span><span class="s2">&quot;reflectivity_bias&quot;</span><span class="p">,</span>
+    <span class="s2">"reflectivity_horizontal"</span><span class="p">,</span>
+    <span class="n">field_name</span><span class="o">=</span><span class="s2">"reflectivity_bias"</span><span class="p">,</span>
     <span class="n">data</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="numpy.ma.MaskedArray" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">reflectivity_difference</span></a><span class="p">,</span>
 <span class="p">)</span>
 
@@ -736,9 +736,9 @@ domain over the course of that minute.</p>
 <span class="c1"># Plot the difference field</span>
 <span class="n">disp1</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar_se</span><span class="p">)</span>
 <span class="n">disp1</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity_bias&quot;</span><span class="p">,</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;balance&quot;</span><span class="p">,</span>
-    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;Reflectivity Difference </span><span class="se">\n</span><span class="s2"> XSAPR Southwest - XSPAR Southeast&quot;</span><span class="p">,</span>
+    <span class="s2">"reflectivity_bias"</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">"balance"</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">"Reflectivity Difference </span><span class="se">\n</span><span class="s2"> XSAPR Southwest - XSPAR Southeast"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">30</span><span class="p">,</span>
@@ -757,7 +757,7 @@ domain over the course of that minute.</p>
 a 2-dimensional histogram,which is more helpful in this
 case where our scans don’t neccessarily match exactly in time.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Include elevations above the lowest one</span>
-<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">incl_gates</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.argwhere.html#numpy.argwhere" title="numpy.argwhere" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar_sw_mapped_to_radar_se</span><span class="o">.</span><span class="n">elevation</span></a><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">)</span>
+<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">incl_gates</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.argwhere.html#numpy.argwhere" title="numpy.argwhere" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">argwhere</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar_sw_mapped_to_radar_se</span><span class="o">.</span><span class="n">elevation</span></a><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">)</span>
 
 <span class="c1"># Filter the reflectivity fields using the filter created above</span>
 <a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="numpy.ma.MaskedArray" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">refl_se</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/maskedarray.baseclass.html#numpy.ma.MaskedArray" title="numpy.ma.MaskedArray" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">reflectivity_se_radar</span></a><span class="p">[</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">incl_gates</span></a><span class="p">,</span> <span class="p">:]</span>
@@ -780,17 +780,17 @@ case where our scans don’t neccessarily match exactly in time.</p>
 
 <span class="c1"># Create a 1-1 comparison</span>
 <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.meshgrid.html#numpy.meshgrid" title="numpy.meshgrid" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span></a><span class="p">((</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">bins</span></a><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">bins</span></a><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span> <span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">bins</span></a><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">bins</span></a><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">)</span>
-<a href="https://matplotlib.org/stable/api/collections_api.html#matplotlib.collections.QuadMesh" title="matplotlib.collections.QuadMesh" class="sphx-glr-backref-module-matplotlib-collections sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">c</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.pcolormesh.html#matplotlib.pyplot.pcolormesh" title="matplotlib.pyplot.pcolormesh" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">log10</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ma.MaskedArray.T.html#numpy.ma.MaskedArray.T" title="numpy.ma.MaskedArray.T" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-property"><span class="n">hist</span><span class="o">.</span><span class="n">T</span></a><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;HomeyerRainbow&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/collections_api.html#matplotlib.collections.QuadMesh" title="matplotlib.collections.QuadMesh" class="sphx-glr-backref-module-matplotlib-collections sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">c</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.pcolormesh.html#matplotlib.pyplot.pcolormesh" title="matplotlib.pyplot.pcolormesh" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">pcolormesh</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">x</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">y</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ufunc.html#numpy.ufunc" title="numpy.ufunc" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">log10</span></a><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ma.MaskedArray.T.html#numpy.ma.MaskedArray.T" title="numpy.ma.MaskedArray.T" class="sphx-glr-backref-module-numpy-ma sphx-glr-backref-type-py-property"><span class="n">hist</span><span class="o">.</span><span class="n">T</span></a><span class="p">),</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"HomeyerRainbow"</span><span class="p">)</span>
 
 <span class="c1"># Add a colorbar and labels</span>
-<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.colorbar.html#matplotlib.pyplot.colorbar" title="matplotlib.pyplot.colorbar" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span></a><span class="p">(</span><a href="https://matplotlib.org/stable/api/collections_api.html#matplotlib.collections.QuadMesh" title="matplotlib.collections.QuadMesh" class="sphx-glr-backref-module-matplotlib-collections sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">c</span></a><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;$log_</span><span class="si">{10}</span><span class="s2">$ counts&quot;</span><span class="p">)</span>
-<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xlabel.html#matplotlib.pyplot.xlabel" title="matplotlib.pyplot.xlabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span></a><span class="p">(</span><span class="s2">&quot;XSAPR Southeast $Z_</span><span class="si">{H}</span><span class="s2">$ [dBZ]&quot;</span><span class="p">)</span>
-<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.ylabel.html#matplotlib.pyplot.ylabel" title="matplotlib.pyplot.ylabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span></a><span class="p">(</span><span class="s2">&quot;XSAPR Southwest $Z_</span><span class="si">{H}</span><span class="s2">$ [dBZ]&quot;</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.colorbar.html#matplotlib.pyplot.colorbar" title="matplotlib.pyplot.colorbar" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">colorbar</span></a><span class="p">(</span><a href="https://matplotlib.org/stable/api/collections_api.html#matplotlib.collections.QuadMesh" title="matplotlib.collections.QuadMesh" class="sphx-glr-backref-module-matplotlib-collections sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">c</span></a><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"$log_</span><span class="si">{10}</span><span class="s2">$ counts"</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xlabel.html#matplotlib.pyplot.xlabel" title="matplotlib.pyplot.xlabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span></a><span class="p">(</span><span class="s2">"XSAPR Southeast $Z_</span><span class="si">{H}</span><span class="s2">$ [dBZ]"</span><span class="p">)</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.ylabel.html#matplotlib.pyplot.ylabel" title="matplotlib.pyplot.ylabel" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span></a><span class="p">(</span><span class="s2">"XSAPR Southwest $Z_</span><span class="si">{H}</span><span class="s2">$ [dBZ]"</span><span class="p">)</span>
 
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_004.png" srcset="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_004.png" alt="plot compare two radars gatemapper" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 26.084 seconds)</p>
+<img src="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_004.png" srcset="../../_images/sphx_glr_plot_compare_two_radars_gatemapper_004.png" alt="plot compare two radars gatemapper" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 33.104 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-mapping-plot-compare-two-radars-gatemapper-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/90707e77ca454c783149e887506fcb68/plot_compare_two_radars_gatemapper.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_compare_two_radars_gatemapper.ipynb</span></code></a></p>
@@ -869,8 +869,8 @@ case where our scans don’t neccessarily match exactly in time.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -904,7 +904,7 @@ case where our scans don’t neccessarily match exactly in time.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

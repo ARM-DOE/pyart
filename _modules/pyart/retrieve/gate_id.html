@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,11 +486,11 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.retrieve.gate_id</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Functions that retrieve height of the gates and the profile interpolated</span>
 <span class="sd">onto the radar gates.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="k">try</span><span class="p">:</span>
     <span class="kn">from</span><span class="w"> </span><span class="nn">netCDF4</span><span class="w"> </span><span class="kn">import</span> <span class="n">DatetimeGregorian</span><span class="p">,</span> <span class="n">num2date</span>
@@ -509,7 +509,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">map_profile_to_gates</span><span class="p">(</span>
     <span class="n">profile</span><span class="p">,</span> <span class="n">heights</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">toa</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">profile_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">height_field</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Given a profile of a variable map it to the gates of radar assuming 4/3Re.</span>
 
 <span class="sd">    Parameters</span>
@@ -536,10 +536,10 @@
 <span class="sd">        Field dictionaries containing the height of the gates and the profile</span>
 <span class="sd">        interpolated onto the radar gates.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># retrieve the Z coordinates of the radar gates</span>
-    <span class="n">rg</span><span class="p">,</span> <span class="n">azg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
-    <span class="n">rg</span><span class="p">,</span> <span class="n">eleg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">rg</span><span class="p">,</span> <span class="n">azg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span>
+    <span class="n">rg</span><span class="p">,</span> <span class="n">eleg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">antenna_to_cartesian</span><span class="p">(</span><span class="n">rg</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="n">azg</span><span class="p">,</span> <span class="n">eleg</span><span class="p">)</span>
 
     <span class="c1"># Check that z is not a MaskedArray</span>
@@ -558,18 +558,18 @@
     <span class="n">f_interp</span> <span class="o">=</span> <span class="n">interpolate</span><span class="o">.</span><span class="n">interp1d</span><span class="p">(</span>
         <span class="n">heights</span><span class="p">[:</span><span class="n">toa</span><span class="p">],</span> <span class="n">profile</span><span class="p">[:</span><span class="n">toa</span><span class="p">],</span> <span class="n">bounds_error</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">fill_value</span><span class="o">=</span><span class="n">get_fillvalue</span><span class="p">()</span>
     <span class="p">)</span>
-    <span class="n">fld</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_equal</span><span class="p">(</span><span class="n">f_interp</span><span class="p">(</span><span class="n">z</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> <span class="n">get_fillvalue</span><span class="p">())</span>
+    <span class="n">fld</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_equal</span><span class="p">(</span><span class="n">f_interp</span><span class="p">(</span><span class="n">z</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span> <span class="n">get_fillvalue</span><span class="p">())</span>
 
     <span class="c1"># populate field dictionaries</span>
     <span class="k">if</span> <span class="n">height_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">height_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;height&quot;</span><span class="p">)</span>
+        <span class="n">height_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"height"</span><span class="p">)</span>
     <span class="n">height_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">height_field</span><span class="p">)</span>
-    <span class="n">height_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">height_dict</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">z</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">profile_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">profile_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;interpolated_profile&quot;</span><span class="p">)</span>
+        <span class="n">profile_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"interpolated_profile"</span><span class="p">)</span>
     <span class="n">profile_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">profile_field</span><span class="p">)</span>
-    <span class="n">profile_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fld</span>
+    <span class="n">profile_dict</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">fld</span>
 
     <span class="k">return</span> <span class="n">height_dict</span><span class="p">,</span> <span class="n">profile_dict</span></div>
 
@@ -578,9 +578,9 @@
 <div class="viewcode-block" id="fetch_radar_time_profile">
 <a class="viewcode-back" href="../../../API/generated/pyart.retrieve.fetch_radar_time_profile.html#pyart.retrieve.fetch_radar_time_profile">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">fetch_radar_time_profile</span><span class="p">(</span>
-    <span class="n">sonde_dset</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">time_key</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="n">height_key</span><span class="o">=</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="n">nvars</span><span class="o">=</span><span class="kc">None</span>
+    <span class="n">sonde_dset</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">time_key</span><span class="o">=</span><span class="s2">"time"</span><span class="p">,</span> <span class="n">height_key</span><span class="o">=</span><span class="s2">"height"</span><span class="p">,</span> <span class="n">nvars</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Extract the correct profile from a interpolated sonde.</span>
 
 <span class="sd">    This is an ARM specific method which extract the correct profile out of</span>
@@ -606,13 +606,13 @@
 <span class="sd">    return_dic : dict</span>
 <span class="sd">        Profiles at the start time of the radar.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">ncvars</span> <span class="o">=</span> <span class="n">sonde_dset</span><span class="o">.</span><span class="n">variables</span>
     <span class="k">if</span> <span class="n">nvars</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">time_height_shape</span> <span class="o">=</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="n">time_key</span><span class="p">]),</span> <span class="nb">len</span><span class="p">(</span><span class="n">ncvars</span><span class="p">[</span><span class="n">height_key</span><span class="p">]))</span>
         <span class="n">nvars</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">ncvars</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">v</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="n">time_height_shape</span><span class="p">]</span>
 
-    <span class="n">radar_start</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">])</span>
+    <span class="n">radar_start</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">])</span>
     <span class="n">radar_day_start</span> <span class="o">=</span> <span class="n">DatetimeGregorian</span><span class="p">(</span>
         <span class="n">radar_start</span><span class="o">.</span><span class="n">year</span><span class="p">,</span> <span class="n">radar_start</span><span class="o">.</span><span class="n">month</span><span class="p">,</span> <span class="n">radar_start</span><span class="o">.</span><span class="n">day</span>
     <span class="p">)</span>
@@ -655,8 +655,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -690,7 +690,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

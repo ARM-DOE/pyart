@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,10 +486,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.retrieve.comp_z</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Calculate the composite reflectivity</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">copy</span>
 
@@ -503,13 +503,13 @@
 
 <div class="viewcode-block" id="composite_reflectivity">
 <a class="viewcode-back" href="../../../API/generated/pyart.retrieve.composite_reflectivity.html#pyart.retrieve.composite_reflectivity">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">composite_reflectivity</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">composite_reflectivity</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="s2">"reflectivity"</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Composite Reflectivity</span>
 
 <span class="sd">    Often a legacy product, composite reflectivity is:</span>
-<span class="sd">    &quot;A display or mapping of the maximum radar reflectivity factor at any</span>
-<span class="sd">    altitude as a function of position on the ground.&quot; - AMS Glossary</span>
+<span class="sd">    "A display or mapping of the maximum radar reflectivity factor at any</span>
+<span class="sd">    altitude as a function of position on the ground." - AMS Glossary</span>
 <span class="sd">    This is more useful for the dry regions of the world, where maximum</span>
 <span class="sd">    reflectivity values are found aloft, as opposed to the lowest scan.</span>
 <span class="sd">    Alternatively this is useful for comparing to NWP since composite Z</span>
@@ -527,7 +527,7 @@
 <span class="sd">        Radar object used.</span>
 <span class="sd">    field : str</span>
 <span class="sd">        Reflectivity field name to use to look up reflectivity data. In the</span>
-<span class="sd">        radar object. Default field name is &#39;reflectivity&#39;.</span>
+<span class="sd">        radar object. Default field name is 'reflectivity'.</span>
 <span class="sd">    gatefilter : GateFilter</span>
 <span class="sd">        GateFilter instance. None will result in no gatefilter mask being</span>
 <span class="sd">        applied to data.</span>
@@ -540,16 +540,16 @@
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    American Meteorological Society, 2022: &quot;Composite reflectivity&quot;. Glossary of Meteorology,</span>
+<span class="sd">    American Meteorological Society, 2022: "Composite reflectivity". Glossary of Meteorology,</span>
 <span class="sd">    http://glossary.ametsoc.org/wiki/Composite_reflectivity</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Determine the lowest sweep (used for metadata and such)</span>
-    <span class="n">minimum_sweep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">minimum_sweep</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span>
 
     <span class="c1"># loop over all measured sweeps</span>
-    <span class="k">for</span> <span class="n">sweep</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]):</span>
+    <span class="k">for</span> <span class="n">sweep</span> <span class="ow">in</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]):</span>
         <span class="c1"># get start and stop index numbers</span>
         <span class="n">sweep_slice</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_slice</span><span class="p">(</span><span class="n">sweep</span><span class="p">)</span>
 
@@ -563,15 +563,15 @@
             <span class="n">z</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">mask_sweep</span><span class="p">)</span>
 
         <span class="c1"># extract lat lons</span>
-        <span class="n">lon</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">,</span> <span class="p">:]</span>
-        <span class="n">lat</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">lon</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">,</span> <span class="p">:]</span>
+        <span class="n">lat</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">,</span> <span class="p">:]</span>
 
         <span class="c1"># get the range and time</span>
-        <span class="n">ranges</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-        <span class="n">time</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">ranges</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
 
         <span class="c1"># get azimuth</span>
-        <span class="n">az</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span>
+        <span class="n">az</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span>
         <span class="c1"># get order of azimuths</span>
         <span class="n">az_ids</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">az</span><span class="p">)</span>
 
@@ -610,34 +610,34 @@
     <span class="c1"># since we are using the whole volume scan, report mean time</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">dtime</span> <span class="o">=</span> <span class="n">to_datetime</span><span class="p">(</span>
-            <span class="n">num2date</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;ISO8601&quot;</span><span class="p">,</span>
+            <span class="n">num2date</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"ISO8601"</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="n">dtime</span> <span class="o">=</span> <span class="n">to_datetime</span><span class="p">(</span>
-            <span class="n">num2date</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+            <span class="n">num2date</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
         <span class="p">)</span>
     <span class="n">dtime</span> <span class="o">=</span> <span class="n">dtime</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
     <span class="c1"># return dict, because this is was pyart does with lots of things</span>
     <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">fields</span><span class="p">[</span><span class="s2">&quot;composite_reflectivity&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">compz</span><span class="p">,</span>
-        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;dBZ&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;composite_reflectivity&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="s2">&quot;composite reflectivity computed from calculating the max radar value in each radar gate vertically after reordering&quot;</span><span class="p">,</span>
+    <span class="n">fields</span><span class="p">[</span><span class="s2">"composite_reflectivity"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s2">"data"</span><span class="p">:</span> <span class="n">compz</span><span class="p">,</span>
+        <span class="s2">"units"</span><span class="p">:</span> <span class="s2">"dBZ"</span><span class="p">,</span>
+        <span class="s2">"long_name"</span><span class="p">:</span> <span class="s2">"composite_reflectivity"</span><span class="p">,</span>
+        <span class="s2">"comment"</span><span class="p">:</span> <span class="s2">"composite reflectivity computed from calculating the max radar value in each radar gate vertically after reordering"</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="n">time</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_final</span>
-    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dtime</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_final</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">"mean"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dtime</span>
 
     <span class="n">gate_longitude</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_longitude</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">gate_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lon_0</span>
-    <span class="n">gate_longitude</span><span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;reordered longitude grid, [az,range]&quot;</span>
+    <span class="n">gate_longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">lon_0</span>
+    <span class="n">gate_longitude</span><span class="p">[</span><span class="s2">"comment"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"reordered longitude grid, [az,range]"</span>
     <span class="n">gate_latitude</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_latitude</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">gate_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">lat_0</span>
-    <span class="n">gate_latitude</span><span class="p">[</span><span class="s2">&quot;comment&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;reordered latitude grid, [az,range]&quot;</span>
+    <span class="n">gate_latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">lat_0</span>
+    <span class="n">gate_latitude</span><span class="p">[</span><span class="s2">"comment"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"reordered latitude grid, [az,range]"</span>
 
     <span class="n">_range</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -648,20 +648,20 @@
     <span class="n">instrument_parameters</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span>
 
     <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+    <span class="n">sweep_number</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">)</span>
     <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_mode</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
+    <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_mode</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]])</span>
     <span class="n">ray_shape</span> <span class="o">=</span> <span class="n">compz</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">azimuth</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">azimuth_final</span>
+    <span class="n">azimuth</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">azimuth_final</span>
     <span class="n">elevation</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ray_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">elevation</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">ray_shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
     <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">fixed_angle</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
     <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">)</span>
     <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ray_shape</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">ray_shape</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">Radar</span><span class="p">(</span>
         <span class="n">time</span><span class="p">,</span>
@@ -714,8 +714,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -749,7 +749,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

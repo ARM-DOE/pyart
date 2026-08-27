@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
@@ -42,10 +42,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
@@ -521,7 +521,7 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In this notebook, we will show how to map data in Antenna coordinates to</span>
-<span class="c1"># a Cartesian grid using Py-ART&#39;s map submodule.</span>
+<span class="c1"># a Cartesian grid using Py-ART's map submodule.</span>
 </pre></div>
 </div>
 </div>
@@ -552,7 +552,7 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read the data that is in antenna coordinates.</span>
-<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;110635.mdv&quot;</span><span class="p">)</span>
+<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">"110635.mdv"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -561,9 +561,9 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Py-ART has the Grid object which has characteristics that are similar to that of the</span>
 <span class="c1"># Radar object, except that the data are stored in Cartesian coordinates instead of the</span>
-<span class="c1"># radar&#39;s coordinates. Much like the Radar object, the fields are accessible by simply</span>
-<span class="c1"># accessing grid.fields[&#39;field_name&#39;][&#39;data&#39;], and the object contains parameters such as the</span>
-<span class="c1"># radar&#39;s location and projection.</span>
+<span class="c1"># radar's coordinates. Much like the Radar object, the fields are accessible by simply</span>
+<span class="c1"># accessing grid.fields['field_name']['data'], and the object contains parameters such as the</span>
+<span class="c1"># radar's location and projection.</span>
 </pre></div>
 </div>
 </div>
@@ -590,7 +590,7 @@
 </div>
 <div class="cell_output docutils container">
 <div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>c:\users\sherm\documents\dev\pyart\pyart\map\gates_to_grid.py:160: DeprecationWarning: Barnes weighting function is deprecated. Please use Barnes 2 to be consistent with Pauley and Wu 1990.
-  warnings.warn(&quot;Barnes weighting function is deprecated.&quot;
+  warnings.warn("Barnes weighting function is deprecated."
 </pre></div>
 </div>
 </div>
@@ -599,7 +599,7 @@
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># If with look at the coordinate data, we can see we have 201 points between</span>
 <span class="c1"># -100000 and 100000 meters.</span>
-<span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+<span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
 </pre></div>
 </div>
 </div>
@@ -644,11 +644,11 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In Py-ART&#39;s graphing suite, there is a display class similar to RadarMapDisplay,</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># In Py-ART's graphing suite, there is a display class similar to RadarMapDisplay,</span>
 <span class="c1"># but for grids. To plot the grid:</span>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">GridMapDisplay</span><span class="p">(</span><span class="n">grid</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_grid</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_grid</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -666,7 +666,7 @@ C:\Users\sherm\Anaconda3\envs\pyart_env\lib\site-packages\cartopy\mpl\geoaxes.py
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># We can even do both longitudnal and latitudnal slices. Change the lat parameter to view</span>
 <span class="c1"># different portions of the storm!</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_latitude_slice</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="mf">36.75</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_latitude_slice</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="mf">36.75</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -680,12 +680,12 @@ C:\Users\sherm\Anaconda3\envs\pyart_env\lib\site-packages\cartopy\mpl\geoaxes.py
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># As you can see, this Grid suffers from gaps in data as well as artificial &quot;feathers&quot; near the</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># As you can see, this Grid suffers from gaps in data as well as artificial "feathers" near the</span>
 <span class="c1"># top that are simply the result of projecting the data to Cartesian coordinates. We would like</span>
-<span class="c1"># to eliminate these as much as possible. Thankfully, Py-ART let&#39;s us, on top of specifying the grid</span>
+<span class="c1"># to eliminate these as much as possible. Thankfully, Py-ART let's us, on top of specifying the grid</span>
 <span class="c1"># resolution, also place in a custom radius of influence which controls how many points surrounding</span>
 <span class="c1"># the gate are factored into the interpolation. We can also change the weighting function used to</span>
-<span class="c1">#&#39;nearest neighbor&#39;, &#39;barnes&#39; or &#39;cressman&#39;. Let&#39;s try increasing the minimum radius of influence to 1.75 km</span>
+<span class="c1">#'nearest neighbor', 'barnes' or 'cressman'. Let's try increasing the minimum radius of influence to 1.75 km</span>
 <span class="c1"># and use Cressman as the weighting function.</span>
 <span class="n">grid_better</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">grid_from_radars</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
@@ -698,9 +698,9 @@ C:\Users\sherm\Anaconda3\envs\pyart_env\lib\site-packages\cartopy\mpl\geoaxes.py
         <span class="p">(</span><span class="o">-</span><span class="mf">100000.0</span><span class="p">,</span> <span class="mf">100000.0</span><span class="p">),</span>
         <span class="p">(</span><span class="o">-</span><span class="mi">100000</span><span class="p">,</span> <span class="mf">100000.0</span><span class="p">),</span>
     <span class="p">),</span>
-    <span class="n">roi_func</span><span class="o">=</span><span class="s2">&quot;dist_beam&quot;</span><span class="p">,</span>
+    <span class="n">roi_func</span><span class="o">=</span><span class="s2">"dist_beam"</span><span class="p">,</span>
     <span class="n">min_radius</span><span class="o">=</span><span class="mf">1750.0</span><span class="p">,</span>
-    <span class="n">weighting_function</span><span class="o">=</span><span class="s2">&quot;cressman&quot;</span><span class="p">,</span>
+    <span class="n">weighting_function</span><span class="o">=</span><span class="s2">"cressman"</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -711,7 +711,7 @@ C:\Users\sherm\Anaconda3\envs\pyart_env\lib\site-packages\cartopy\mpl\geoaxes.py
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># As you can see, most of the artifacts at higher altitudes have been smoothed out, but we</span>
 <span class="c1"># have lost some spatial resolution as a result.</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">GridMapDisplay</span><span class="p">(</span><span class="n">grid_better</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_latitude_slice</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="mf">36.75</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot_latitude_slice</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">,</span> <span class="n">lat</span><span class="o">=</span><span class="mf">36.75</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">])</span>
 </pre></div>
 </div>
@@ -789,8 +789,8 @@ C:\Users\sherm\Anaconda3\envs\pyart_env\lib\site-packages\cartopy\mpl\geoaxes.py
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -824,7 +824,7 @@ C:\Users\sherm\Anaconda3\envs\pyart_env\lib\site-packages\cartopy\mpl\geoaxes.py
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,10 +486,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.io.mdv_grid</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Utilities for reading and writing of MDV grid files.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
@@ -507,12 +507,12 @@
 <div class="viewcode-block" id="write_grid_mdv">
 <a class="viewcode-back" href="../../../API/generated/pyart.io.write_grid_mdv.html#pyart.io.write_grid_mdv">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">write_grid_mdv</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">grid</span><span class="p">,</span> <span class="n">mdv_field_names</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">field_write_order</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Write grid object to MDV file.</span>
 
 <span class="sd">    Create a MDV file containing data from the provided grid instance.</span>
 
-<span class="sd">    The MDV file will contain parameters from the &#39;source&#39; key if contained</span>
+<span class="sd">    The MDV file will contain parameters from the 'source' key if contained</span>
 <span class="sd">    in grid.metadata. If this key or parameters related to the radar location</span>
 <span class="sd">    and name are not present in the grid a default or sentinel value.</span>
 <span class="sd">    will be written in the MDV file in the place of the parameter.</span>
@@ -542,13 +542,13 @@
 
 <span class="sd">        * XY grid must be regular (equal spacing), Z can be irregular.</span>
 <span class="sd">        * The number of Z levels must not exceed 122.</span>
-<span class="sd">        * Fields can be encoded in the file using the &#39;_Write_as_dtype&#39; key</span>
-<span class="sd">          specifying one of &#39;uint8&#39;, &#39;uint16&#39; or &#39;float32&#39;. Use the</span>
-<span class="sd">          &#39;scale_factor&#39; and &#39;add_offset&#39; keys to specify scaling. Field</span>
+<span class="sd">        * Fields can be encoded in the file using the '_Write_as_dtype' key</span>
+<span class="sd">          specifying one of 'uint8', 'uint16' or 'float32'. Use the</span>
+<span class="sd">          'scale_factor' and 'add_offset' keys to specify scaling. Field</span>
 <span class="sd">          data in the Grid object should be uncompressed, that is to say</span>
 <span class="sd">          it has had the scaling applied.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># first of all firm field list</span>
     <span class="k">if</span> <span class="n">field_write_order</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">field_write_order</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -560,14 +560,14 @@
                 <span class="n">field_write_order</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">ifield</span><span class="p">)</span>
 
     <span class="c1"># mount empty mdv file</span>
-    <span class="n">grid_shape</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_write_order</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+    <span class="n">grid_shape</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_write_order</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">"data"</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
     <span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">grid_shape</span>
     <span class="n">nfields</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">field_write_order</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">nz</span> <span class="o">&gt;</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">MDV_MAX_VLEVELS</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="p">(</span>
-                <span class="s2">&quot;</span><span class="si">%i</span><span class="s2"> vlevels exceed MDV_MAX_VLEVELS = </span><span class="si">%i</span><span class="s2">. Extra &quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;levels will be ignored&quot;</span>
+                <span class="s2">"</span><span class="si">%i</span><span class="s2"> vlevels exceed MDV_MAX_VLEVELS = </span><span class="si">%i</span><span class="s2">. Extra "</span>
+                <span class="o">+</span> <span class="s2">"levels will be ignored"</span>
             <span class="p">)</span>
             <span class="o">%</span> <span class="p">(</span><span class="n">nz</span><span class="p">,</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">MDV_MAX_VLEVELS</span><span class="p">)</span>
         <span class="p">)</span>
@@ -576,140 +576,140 @@
     <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">_get_field_headers</span><span class="p">(</span><span class="n">nfields</span><span class="p">)</span>
     <span class="n">mdv</span><span class="o">.</span><span class="n">vlevel_headers</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">_get_vlevel_headers</span><span class="p">(</span><span class="n">nfields</span><span class="p">)</span>
     <span class="n">mdv</span><span class="o">.</span><span class="n">fields_data</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="n">nfields</span>
-    <span class="n">mdv</span><span class="o">.</span><span class="n">projection</span> <span class="o">=</span> <span class="s2">&quot;flat&quot;</span>
+    <span class="n">mdv</span><span class="o">.</span><span class="n">projection</span> <span class="o">=</span> <span class="s2">"flat"</span>
 
     <span class="c1"># fill headers</span>
     <span class="n">d</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span>
     <span class="n">grid_datetime</span> <span class="o">=</span> <span class="n">_time_dic_to_datetime</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
-    <span class="n">mdv</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="s2">&quot;time_centroid&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid_datetime</span>
-    <span class="n">mdv</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="s2">&quot;time_begin&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid_datetime</span>
-    <span class="n">mdv</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="s2">&quot;time_end&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid_datetime</span>
+    <span class="n">mdv</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="s2">"time_centroid"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid_datetime</span>
+    <span class="n">mdv</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="s2">"time_begin"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid_datetime</span>
+    <span class="n">mdv</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="s2">"time_end"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid_datetime</span>
     <span class="n">mdv</span><span class="o">.</span><span class="n">_time_dict_into_header</span><span class="p">()</span>
 
-    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;data_dimension&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># XXX are grid&#39;s always 3d?</span>
-    <span class="c1"># =DATA_SYNTHESIS, I don&#39;t realy know, so miscellaneous!</span>
-    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;data_collection_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
-    <span class="k">if</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;m&quot;</span> <span class="ow">or</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;meters&quot;</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;native_vlevel_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
-    <span class="k">elif</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;</span><span class="se">\xc2</span><span class="s2">&quot;</span> <span class="ow">or</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;degree&quot;</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;native_vlevel_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span>
-    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;vlevel_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;native_vlevel_type&quot;</span><span class="p">]</span>
-    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;nfields&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfields</span>
-    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;max_nx&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nx</span>
-    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;max_ny&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ny</span>
-    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;max_nz&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nz</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">"data_dimension"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># XXX are grid's always 3d?</span>
+    <span class="c1"># =DATA_SYNTHESIS, I don't realy know, so miscellaneous!</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">"data_collection_type"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="k">if</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"m"</span> <span class="ow">or</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"meters"</span><span class="p">:</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"native_vlevel_type"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+    <span class="k">elif</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"</span><span class="se">\xc2</span><span class="s2">"</span> <span class="ow">or</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"degree"</span><span class="p">:</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"native_vlevel_type"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">9</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">"vlevel_type"</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">"native_vlevel_type"</span><span class="p">]</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">"nfields"</span><span class="p">]</span> <span class="o">=</span> <span class="n">nfields</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">"max_nx"</span><span class="p">]</span> <span class="o">=</span> <span class="n">nx</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">"max_ny"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ny</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">"max_nz"</span><span class="p">]</span> <span class="o">=</span> <span class="n">nz</span>
     <span class="n">td</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span><span class="p">)</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span>
         <span class="mi">1970</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">tzinfo</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">timezone</span><span class="o">.</span><span class="n">utc</span>
     <span class="p">)</span>
-    <span class="n">d</span><span class="p">[</span><span class="s2">&quot;time_written&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+    <span class="n">d</span><span class="p">[</span><span class="s2">"time_written"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
         <span class="nb">round</span><span class="p">(</span><span class="n">td</span><span class="o">.</span><span class="n">microseconds</span> <span class="o">+</span> <span class="p">(</span><span class="n">td</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">td</span><span class="o">.</span><span class="n">days</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="mi">6</span><span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="mi">6</span>
     <span class="p">)</span>
 
     <span class="c1"># sensor location using radar_ attribute or origin_ if not available</span>
     <span class="k">if</span> <span class="n">grid</span><span class="o">.</span><span class="n">radar_longitude</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">grid</span><span class="o">.</span><span class="n">nradar</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;sensor_lon&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">radar_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"sensor_lon"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">radar_longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;sensor_lon&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">origin_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"sensor_lon"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">origin_longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">grid</span><span class="o">.</span><span class="n">radar_latitude</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">grid</span><span class="o">.</span><span class="n">nradar</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;sensor_lat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">radar_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"sensor_lat"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">radar_latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;sensor_lat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">origin_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"sensor_lat"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">origin_latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">grid</span><span class="o">.</span><span class="n">radar_altitude</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">grid</span><span class="o">.</span><span class="n">nradar</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;sensor_alt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">radar_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1000.0</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"sensor_alt"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">radar_altitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1000.0</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;sensor_alt&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">origin_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1000.0</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"sensor_alt"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">origin_altitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1000.0</span>
 
     <span class="k">for</span> <span class="n">meta_key</span><span class="p">,</span> <span class="n">mdv_key</span> <span class="ow">in</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">MDV_METADATA_MAP</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="k">if</span> <span class="n">meta_key</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="n">mdv_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">meta_key</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ASCII&quot;</span><span class="p">)</span>
+            <span class="n">d</span><span class="p">[</span><span class="n">mdv_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="n">meta_key</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"ASCII"</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">ifield</span><span class="p">,</span> <span class="n">field</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">field_write_order</span><span class="p">):</span>
         <span class="n">d</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="n">ifield</span><span class="p">]</span>
         <span class="n">v</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">vlevel_headers</span><span class="p">[</span><span class="n">ifield</span><span class="p">]</span>
 
         <span class="c1"># fill fields_header</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;nx&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nx</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;ny&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ny</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;nz&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nz</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;proj_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">PROJ_FLAT</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"nx"</span><span class="p">]</span> <span class="o">=</span> <span class="n">nx</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"ny"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ny</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"nz"</span><span class="p">]</span> <span class="o">=</span> <span class="n">nz</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"proj_type"</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">PROJ_FLAT</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;_Write_as_dtype&quot;</span><span class="p">])</span>
+            <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"_Write_as_dtype"</span><span class="p">])</span>
         <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>  <span class="c1"># default to float32 encoding</span>
             <span class="n">dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span>
         <span class="k">if</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">uint8</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;encoding_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">ENCODING_INT8</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;data_element_nbytes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"encoding_type"</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">ENCODING_INT8</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"data_element_nbytes"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
         <span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">uint16</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;encoding_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">ENCODING_INT16</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;data_element_nbytes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"encoding_type"</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">ENCODING_INT16</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"data_element_nbytes"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span>
         <span class="k">elif</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">float32</span> <span class="ow">or</span> <span class="n">dtype</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;encoding_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">ENCODING_FLOAT32</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;data_element_nbytes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"encoding_type"</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">ENCODING_FLOAT32</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"data_element_nbytes"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Unsuported encoding </span><span class="si">{</span><span class="n">dtype</span><span class="si">}</span><span class="s2">, encoding must be &quot;</span>
-                <span class="s2">&quot;uint8, uint16 or float32 as specfied by &quot;</span>
-                <span class="s2">&quot;the &#39;_Write_as_dtype key&quot;</span>
+                <span class="sa">f</span><span class="s2">"Unsuported encoding </span><span class="si">{</span><span class="n">dtype</span><span class="si">}</span><span class="s2">, encoding must be "</span>
+                <span class="s2">"uint8, uint16 or float32 as specfied by "</span>
+                <span class="s2">"the '_Write_as_dtype key"</span>
             <span class="p">)</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;compression_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># zlib</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"compression_type"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>  <span class="c1"># zlib</span>
 
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;scaling_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># SCALING_SPECIFIED (by the user)</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;native_vlevel_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span><span class="p">[</span><span class="s2">&quot;vlevel_type&quot;</span><span class="p">]</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;vlevel_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span><span class="p">[</span><span class="s2">&quot;vlevel_type&quot;</span><span class="p">]</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;data_dimension&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;proj_origin_lat&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">origin_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;proj_origin_lon&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">origin_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;grid_dx&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.0</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;grid_dy&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.0</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;grid_minx&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.0</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;grid_miny&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.0</span>
-        <span class="k">if</span> <span class="s2">&quot;scale_factor&quot;</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;scale&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;scale_factor&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s2">&quot;add_offset&quot;</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;bias&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;add_offset&quot;</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"scaling_type"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">4</span>  <span class="c1"># SCALING_SPECIFIED (by the user)</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"native_vlevel_type"</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span><span class="p">[</span><span class="s2">"vlevel_type"</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"vlevel_type"</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span><span class="p">[</span><span class="s2">"vlevel_type"</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"data_dimension"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">3</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"proj_origin_lat"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">origin_latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"proj_origin_lon"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">origin_longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"grid_dx"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.0</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"grid_dy"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.0</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"grid_minx"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.0</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"grid_miny"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">1000.0</span>
+        <span class="k">if</span> <span class="s2">"scale_factor"</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"scale"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"scale_factor"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">"add_offset"</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"bias"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"add_offset"</span><span class="p">]</span>
 
         <span class="c1"># bad_data prioritise _FillValue</span>
-        <span class="k">if</span> <span class="s2">&quot;_FillValue&quot;</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;bad_data_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="s2">&quot;missing_value&quot;</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;bad_data_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;missing_value&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">"_FillValue"</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"bad_data_value"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"_FillValue"</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="s2">"missing_value"</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"bad_data_value"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"missing_value"</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;bad_data_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"bad_data_value"</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
         <span class="c1"># missing_data prioritise missing_value</span>
-        <span class="k">if</span> <span class="s2">&quot;missing_value&quot;</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;missing_data_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;missing_value&quot;</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="s2">&quot;_FillValue&quot;</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;missing_data_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">"missing_value"</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"missing_data_value"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"missing_value"</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="s2">"_FillValue"</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"missing_data_value"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"_FillValue"</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;missing_data_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"missing_data_value"</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
 
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;min_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;max_value&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
-        <span class="k">if</span> <span class="s2">&quot;standard_name&quot;</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;field_name_long&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ASCII&quot;</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="s2">&quot;long_name&quot;</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;field_name_long&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ASCII&quot;</span><span class="p">)</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"min_value"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">])</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"max_value"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">])</span>
+        <span class="k">if</span> <span class="s2">"standard_name"</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"field_name_long"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"standard_name"</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"ASCII"</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="s2">"long_name"</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"field_name_long"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"long_name"</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"ASCII"</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">mdv_field_names</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;field_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdv_field_names</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ASCII&quot;</span><span class="p">)</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"field_name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdv_field_names</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"ASCII"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;field_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ASCII&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="s2">&quot;units&quot;</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">d</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;units&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">&quot;ASCII&quot;</span><span class="p">)</span>
-        <span class="n">d</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;none&quot;</span>  <span class="c1"># XXX not implemented</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"field_name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">field</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"ASCII"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"units"</span> <span class="ow">in</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">d</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"units"</span><span class="p">]</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s2">"ASCII"</span><span class="p">)</span>
+        <span class="n">d</span><span class="p">[</span><span class="s2">"transform"</span><span class="p">]</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">"none"</span>  <span class="c1"># XXX not implemented</span>
 
         <span class="c1"># fill vlevels_header</span>
         <span class="n">typ</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">122</span>
         <span class="n">level</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">122</span>
         <span class="k">for</span> <span class="n">iz</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nz</span><span class="p">):</span>
-            <span class="n">typ</span><span class="p">[</span><span class="n">iz</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">&quot;vlevel_type&quot;</span><span class="p">]</span>
-            <span class="n">level</span><span class="p">[</span><span class="n">iz</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">iz</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1000.0</span>
-        <span class="n">v</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">typ</span>
-        <span class="n">v</span><span class="p">[</span><span class="s2">&quot;level&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">level</span>
+            <span class="n">typ</span><span class="p">[</span><span class="n">iz</span><span class="p">]</span> <span class="o">=</span> <span class="n">d</span><span class="p">[</span><span class="s2">"vlevel_type"</span><span class="p">]</span>
+            <span class="n">level</span><span class="p">[</span><span class="n">iz</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">iz</span><span class="p">]</span> <span class="o">/</span> <span class="mf">1000.0</span>
+        <span class="n">v</span><span class="p">[</span><span class="s2">"type"</span><span class="p">]</span> <span class="o">=</span> <span class="n">typ</span>
+        <span class="n">v</span><span class="p">[</span><span class="s2">"level"</span><span class="p">]</span> <span class="o">=</span> <span class="n">level</span>
 
         <span class="c1"># put data to field</span>
-        <span class="n">mdv</span><span class="o">.</span><span class="n">fields_data</span><span class="p">[</span><span class="n">ifield</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">mdv</span><span class="o">.</span><span class="n">fields_data</span><span class="p">[</span><span class="n">ifield</span><span class="p">]</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
 
     <span class="c1"># write the file</span>
     <span class="n">mdv</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span></div>
@@ -727,7 +727,7 @@
     <span class="n">delay_field_loading</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Read a MDV file to a Grid Object.</span>
 
 <span class="sd">    Parameters</span>
@@ -750,13 +750,13 @@
 <span class="sd">    file_field_names : bool, optional</span>
 <span class="sd">        True to use the MDV data type names for the field names. If this</span>
 <span class="sd">        case the field_names parameter is ignored. The field dictionary will</span>
-<span class="sd">        likely only have a &#39;data&#39; key, unless the fields are defined in</span>
+<span class="sd">        likely only have a 'data' key, unless the fields are defined in</span>
 <span class="sd">        `additional_metadata`.</span>
 <span class="sd">    exclude_fields : list or None, optional</span>
 <span class="sd">        List of fields to exclude from the grid object. This is applied</span>
 <span class="sd">        after the `file_field_names` and `field_names` parameters.</span>
 <span class="sd">    delay_field_loading : bool</span>
-<span class="sd">        True to delay loading of field data from the file until the &#39;data&#39;</span>
+<span class="sd">        True to delay loading of field data from the file until the 'data'</span>
 <span class="sd">        key in a particular field dictionary is accessed. In this case</span>
 <span class="sd">        the field attribute of the returned Radar object will contain</span>
 <span class="sd">        LazyLoadDict objects not dict objects.</span>
@@ -779,105 +779,105 @@
 <span class="sd">        * All fields must have the same projection.</span>
 <span class="sd">        * Vlevels types must not vary.</span>
 <span class="sd">        * Projection must not be PROJ_POLAR_RADAR (9) or PROJ_RHI_RADAR (13).</span>
-<span class="sd">        * Correct unit in the Z axis are just availible for &#39;vlevel_type&#39;</span>
+<span class="sd">        * Correct unit in the Z axis are just availible for 'vlevel_type'</span>
 <span class="sd">          equal to VERT_TYPE_Z(4), VERT_TYPE_ELEV(9), VERT_TYPE_AZ(17),</span>
 <span class="sd">          VERT_TYPE_PRESSURE(3) and VERT_TYPE_THETA(7).</span>
 <span class="sd">        * The behavior in cases of 2D data is unknown but most likely will not</span>
 <span class="sd">          fail.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># test for non empty kwargs</span>
     <span class="n">_test_arguments</span><span class="p">(</span><span class="n">kwargs</span><span class="p">)</span>
 
     <span class="c1"># XXX add tests for conversion limitations</span>
     <span class="c1"># create metadata retrieval object</span>
     <span class="n">filemetadata</span> <span class="o">=</span> <span class="n">FileMetadata</span><span class="p">(</span>
-        <span class="s2">&quot;mdv&quot;</span><span class="p">,</span> <span class="n">field_names</span><span class="p">,</span> <span class="n">additional_metadata</span><span class="p">,</span> <span class="n">file_field_names</span><span class="p">,</span> <span class="n">exclude_fields</span>
+        <span class="s2">"mdv"</span><span class="p">,</span> <span class="n">field_names</span><span class="p">,</span> <span class="n">additional_metadata</span><span class="p">,</span> <span class="n">file_field_names</span><span class="p">,</span> <span class="n">exclude_fields</span>
     <span class="p">)</span>
     <span class="n">mdv</span> <span class="o">=</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">MdvFile</span><span class="p">(</span><span class="n">prepare_for_read</span><span class="p">(</span><span class="n">filename</span><span class="p">))</span>
 
     <span class="c1"># time dictionaries</span>
-    <span class="n">units</span> <span class="o">=</span> <span class="n">make_time_unit_str</span><span class="p">(</span><span class="n">mdv</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="s2">&quot;time_begin&quot;</span><span class="p">])</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;grid_time&quot;</span><span class="p">)</span>
-    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">date2num</span><span class="p">(</span><span class="n">mdv</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="s2">&quot;time_centroid&quot;</span><span class="p">],</span> <span class="n">units</span><span class="p">)])</span>
-    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">units</span>
+    <span class="n">units</span> <span class="o">=</span> <span class="n">make_time_unit_str</span><span class="p">(</span><span class="n">mdv</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="s2">"time_begin"</span><span class="p">])</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"grid_time"</span><span class="p">)</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">date2num</span><span class="p">(</span><span class="n">mdv</span><span class="o">.</span><span class="n">times</span><span class="p">[</span><span class="s2">"time_centroid"</span><span class="p">],</span> <span class="n">units</span><span class="p">)])</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">=</span> <span class="n">units</span>
 
     <span class="c1"># origin dictionaries</span>
-    <span class="n">origin_altitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;origin_altitude&quot;</span><span class="p">)</span>
-    <span class="n">origin_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span><span class="p">[</span><span class="s2">&quot;sensor_alt&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span>
+    <span class="n">origin_altitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"origin_altitude"</span><span class="p">)</span>
+    <span class="n">origin_altitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span><span class="p">[</span><span class="s2">"sensor_alt"</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span>
     <span class="p">)</span>
 
-    <span class="n">origin_latitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;origin_latitude&quot;</span><span class="p">)</span>
-    <span class="n">origin_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span><span class="p">[</span><span class="s2">&quot;sensor_lat&quot;</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span>
+    <span class="n">origin_latitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"origin_latitude"</span><span class="p">)</span>
+    <span class="n">origin_latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span><span class="p">[</span><span class="s2">"sensor_lat"</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span>
     <span class="p">)</span>
 
-    <span class="n">origin_longitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;origin_longitude&quot;</span><span class="p">)</span>
-    <span class="n">origin_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span><span class="p">[</span><span class="s2">&quot;sensor_lon&quot;</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span>
+    <span class="n">origin_longitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"origin_longitude"</span><span class="p">)</span>
+    <span class="n">origin_longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span><span class="p">[</span><span class="s2">"sensor_lon"</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span>
     <span class="p">)</span>
 
     <span class="c1"># grid coordinate dictionaries</span>
-    <span class="n">nz</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span><span class="p">[</span><span class="s2">&quot;max_nz&quot;</span><span class="p">]</span>
-    <span class="n">ny</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span><span class="p">[</span><span class="s2">&quot;max_ny&quot;</span><span class="p">]</span>
-    <span class="n">nx</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span><span class="p">[</span><span class="s2">&quot;max_nx&quot;</span><span class="p">]</span>
-    <span class="n">z_line</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">vlevel_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;level&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">nz</span><span class="p">]</span>
-    <span class="n">y_start</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;grid_miny&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.0</span>
-    <span class="n">x_start</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;grid_minx&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.0</span>
-    <span class="n">y_step</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;grid_dy&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.0</span>
-    <span class="n">x_step</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;grid_dx&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.0</span>
+    <span class="n">nz</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span><span class="p">[</span><span class="s2">"max_nz"</span><span class="p">]</span>
+    <span class="n">ny</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span><span class="p">[</span><span class="s2">"max_ny"</span><span class="p">]</span>
+    <span class="n">nx</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span><span class="p">[</span><span class="s2">"max_nx"</span><span class="p">]</span>
+    <span class="n">z_line</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">vlevel_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"level"</span><span class="p">][</span><span class="mi">0</span><span class="p">:</span><span class="n">nz</span><span class="p">]</span>
+    <span class="n">y_start</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"grid_miny"</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.0</span>
+    <span class="n">x_start</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"grid_minx"</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.0</span>
+    <span class="n">y_step</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"grid_dy"</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.0</span>
+    <span class="n">x_step</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"grid_dx"</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.0</span>
 
-    <span class="k">if</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;proj_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">PROJ_LATLON</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"proj_type"</span><span class="p">]</span> <span class="o">==</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">PROJ_LATLON</span><span class="p">:</span>
         <span class="c1"># x and y dimensions have units of degrees</span>
-        <span class="n">xunits</span> <span class="o">=</span> <span class="s2">&quot;degree_E&quot;</span>
-        <span class="n">yunits</span> <span class="o">=</span> <span class="s2">&quot;degree_N&quot;</span>
-        <span class="n">y_start</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;grid_miny&quot;</span><span class="p">]</span>
-        <span class="n">x_start</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;grid_minx&quot;</span><span class="p">]</span>
-        <span class="n">y_step</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;grid_dy&quot;</span><span class="p">]</span>
-        <span class="n">x_step</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;grid_dx&quot;</span><span class="p">]</span>
+        <span class="n">xunits</span> <span class="o">=</span> <span class="s2">"degree_E"</span>
+        <span class="n">yunits</span> <span class="o">=</span> <span class="s2">"degree_N"</span>
+        <span class="n">y_start</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"grid_miny"</span><span class="p">]</span>
+        <span class="n">x_start</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"grid_minx"</span><span class="p">]</span>
+        <span class="n">y_step</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"grid_dy"</span><span class="p">]</span>
+        <span class="n">x_step</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"grid_dx"</span><span class="p">]</span>
     <span class="k">elif</span> <span class="p">(</span>
-        <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;proj_type&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">PROJ_POLAR_RADAR</span>
-        <span class="ow">and</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;proj_type&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">PROJ_RHI_RADAR</span>
+        <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"proj_type"</span><span class="p">]</span> <span class="o">!=</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">PROJ_POLAR_RADAR</span>
+        <span class="ow">and</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"proj_type"</span><span class="p">]</span> <span class="o">!=</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">PROJ_RHI_RADAR</span>
     <span class="p">):</span>
-        <span class="n">xunits</span> <span class="o">=</span> <span class="s2">&quot;m&quot;</span>
-        <span class="n">yunits</span> <span class="o">=</span> <span class="s2">&quot;m&quot;</span>
+        <span class="n">xunits</span> <span class="o">=</span> <span class="s2">"m"</span>
+        <span class="n">yunits</span> <span class="o">=</span> <span class="s2">"m"</span>
 
-    <span class="k">if</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;vlevel_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>  <span class="c1"># VERT_TYPE_Z</span>
-        <span class="n">zunits</span> <span class="o">=</span> <span class="s2">&quot;m&quot;</span>
+    <span class="k">if</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"vlevel_type"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">4</span><span class="p">:</span>  <span class="c1"># VERT_TYPE_Z</span>
+        <span class="n">zunits</span> <span class="o">=</span> <span class="s2">"m"</span>
         <span class="n">z_line</span> <span class="o">=</span> <span class="p">[</span><span class="n">e</span> <span class="o">*</span> <span class="mf">1000.0</span> <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">z_line</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;vlevel_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">9</span><span class="p">:</span>  <span class="c1"># VERT_TYPE_ELEV</span>
-        <span class="n">zunits</span> <span class="o">=</span> <span class="s2">&quot;degree&quot;</span>  <span class="c1"># elevation</span>
-    <span class="k">elif</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;vlevel_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">17</span><span class="p">:</span>  <span class="c1"># VERT_TYPE_AZ</span>
-        <span class="n">zunits</span> <span class="o">=</span> <span class="s2">&quot;degree&quot;</span>  <span class="c1"># azimuth</span>
-    <span class="k">elif</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;vlevel_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1"># VERT_TYPE_PRESSURE</span>
-        <span class="n">zunits</span> <span class="o">=</span> <span class="s2">&quot;mb&quot;</span>
-    <span class="k">elif</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;vlevel_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>  <span class="c1"># VERT_TYPE_THETA</span>
-        <span class="n">zunits</span> <span class="o">=</span> <span class="s2">&quot;kelvin&quot;</span>
+    <span class="k">elif</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"vlevel_type"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">9</span><span class="p">:</span>  <span class="c1"># VERT_TYPE_ELEV</span>
+        <span class="n">zunits</span> <span class="o">=</span> <span class="s2">"degree"</span>  <span class="c1"># elevation</span>
+    <span class="k">elif</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"vlevel_type"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">17</span><span class="p">:</span>  <span class="c1"># VERT_TYPE_AZ</span>
+        <span class="n">zunits</span> <span class="o">=</span> <span class="s2">"degree"</span>  <span class="c1"># azimuth</span>
+    <span class="k">elif</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"vlevel_type"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">3</span><span class="p">:</span>  <span class="c1"># VERT_TYPE_PRESSURE</span>
+        <span class="n">zunits</span> <span class="o">=</span> <span class="s2">"mb"</span>
+    <span class="k">elif</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"vlevel_type"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">7</span><span class="p">:</span>  <span class="c1"># VERT_TYPE_THETA</span>
+        <span class="n">zunits</span> <span class="o">=</span> <span class="s2">"kelvin"</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
             <span class="p">(</span>
-                <span class="s2">&quot;While reading MDV found unexpected &#39;vlevel_type&#39;&quot;</span>
-                <span class="o">+</span> <span class="s2">&quot; (</span><span class="si">%i</span><span class="s2">), units in the z axis set to &#39;unknown&#39;&quot;</span>
+                <span class="s2">"While reading MDV found unexpected 'vlevel_type'"</span>
+                <span class="o">+</span> <span class="s2">" (</span><span class="si">%i</span><span class="s2">), units in the z axis set to 'unknown'"</span>
             <span class="p">)</span>
-            <span class="o">%</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;vlevel_type&quot;</span><span class="p">]</span>
+            <span class="o">%</span> <span class="n">mdv</span><span class="o">.</span><span class="n">field_headers</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span><span class="s2">"vlevel_type"</span><span class="p">]</span>
         <span class="p">)</span>
-        <span class="n">zunits</span> <span class="o">=</span> <span class="s2">&quot;unknown&quot;</span>
+        <span class="n">zunits</span> <span class="o">=</span> <span class="s2">"unknown"</span>
 
-    <span class="n">x</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
-    <span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x_start</span><span class="p">,</span> <span class="n">x_start</span> <span class="o">+</span> <span class="n">x_step</span> <span class="o">*</span> <span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">nx</span><span class="p">)</span>
-    <span class="n">x</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xunits</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"x"</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x_start</span><span class="p">,</span> <span class="n">x_start</span> <span class="o">+</span> <span class="n">x_step</span> <span class="o">*</span> <span class="p">(</span><span class="n">nx</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">nx</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">=</span> <span class="n">xunits</span>
 
-    <span class="n">y</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
-    <span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">y_start</span><span class="p">,</span> <span class="n">y_start</span> <span class="o">+</span> <span class="n">y_step</span> <span class="o">*</span> <span class="p">(</span><span class="n">ny</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">ny</span><span class="p">)</span>
-    <span class="n">y</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">yunits</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"y"</span><span class="p">)</span>
+    <span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">y_start</span><span class="p">,</span> <span class="n">y_start</span> <span class="o">+</span> <span class="n">y_step</span> <span class="o">*</span> <span class="p">(</span><span class="n">ny</span> <span class="o">-</span> <span class="mi">1</span><span class="p">),</span> <span class="n">ny</span><span class="p">)</span>
+    <span class="n">y</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">=</span> <span class="n">yunits</span>
 
-    <span class="n">z</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">)</span>
-    <span class="n">z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">z_line</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
-    <span class="n">z</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">zunits</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"z"</span><span class="p">)</span>
+    <span class="n">z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">z_line</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">)</span>
+    <span class="n">z</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">=</span> <span class="n">zunits</span>
 
     <span class="c1"># metadata</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">)</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"metadata"</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">meta_key</span><span class="p">,</span> <span class="n">mdv_key</span> <span class="ow">in</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">MDV_METADATA_MAP</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
         <span class="n">metadata</span><span class="p">[</span><span class="n">meta_key</span><span class="p">]</span> <span class="o">=</span> <span class="n">mdv</span><span class="o">.</span><span class="n">master_header</span><span class="p">[</span><span class="n">mdv_key</span><span class="p">]</span>
 
@@ -890,15 +890,15 @@
             <span class="k">continue</span>
         <span class="n">field_dic</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
 
-        <span class="n">field_dic</span><span class="p">[</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+        <span class="n">field_dic</span><span class="p">[</span><span class="s2">"_FillValue"</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
         <span class="n">dataextractor</span> <span class="o">=</span> <span class="n">mdv_common</span><span class="o">.</span><span class="n">_MdvVolumeDataExtractor</span><span class="p">(</span>
             <span class="n">mdv</span><span class="p">,</span> <span class="n">mdv</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">mdv_field</span><span class="p">),</span> <span class="n">get_fillvalue</span><span class="p">(),</span> <span class="n">two_dims</span><span class="o">=</span><span class="kc">False</span>
         <span class="p">)</span>
         <span class="k">if</span> <span class="n">delay_field_loading</span><span class="p">:</span>
             <span class="n">field_dic</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">field_dic</span><span class="p">)</span>
-            <span class="n">field_dic</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">dataextractor</span><span class="p">)</span>
+            <span class="n">field_dic</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="n">dataextractor</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">field_dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataextractor</span><span class="p">()</span>
+            <span class="n">field_dic</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dataextractor</span><span class="p">()</span>
         <span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">field_dic</span>
 
     <span class="k">if</span> <span class="ow">not</span> <span class="n">delay_field_loading</span><span class="p">:</span>
@@ -919,12 +919,12 @@
 
 <span class="c1"># This function may be helpful in other cases and could be moved in common</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">_time_dic_to_datetime</span><span class="p">(</span><span class="n">dic</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a datetime for the first element in a time dictionary.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="s2">&quot;calendar&quot;</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
-        <span class="n">calendar</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="s2">&quot;calendar&quot;</span><span class="p">]</span>
+<span class="w">    </span><span class="sd">"""Return a datetime for the first element in a time dictionary."""</span>
+    <span class="k">if</span> <span class="s2">"calendar"</span> <span class="ow">in</span> <span class="n">dic</span><span class="p">:</span>
+        <span class="n">calendar</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="s2">"calendar"</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">calendar</span> <span class="o">=</span> <span class="s2">&quot;standard&quot;</span>
-    <span class="k">return</span> <span class="n">num2date</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">dic</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">],</span> <span class="n">calendar</span><span class="p">)</span>
+        <span class="n">calendar</span> <span class="o">=</span> <span class="s2">"standard"</span>
+    <span class="k">return</span> <span class="n">num2date</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">dic</span><span class="p">[</span><span class="s2">"units"</span><span class="p">],</span> <span class="n">calendar</span><span class="p">)</span>
 </pre></div>
 <div class="section ablog__blog_comments">
    
@@ -957,8 +957,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -992,7 +992,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

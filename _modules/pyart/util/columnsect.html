@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,11 +486,11 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.util.columnsect</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Function for extracting the radar column above a target</span>
 <span class="sd">given position in latitude, longitude</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
@@ -505,7 +505,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">column_vertical_profile</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">azimuth_spread</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">spatial_spread</span><span class="o">=</span><span class="mi">3</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Given the location (in latitude, longitude) of a target, return the rays</span>
 <span class="sd">    that correspond to radar column above the target, allowing for user</span>
 <span class="sd">    defined range of azimuths and range gates to be included within this</span>
@@ -549,25 +549,25 @@
 <span class="sd">    Bukovčić, P., A. Ryzhkov, and D. Zrnić, 2020: Polarimetric Relations for</span>
 <span class="sd">    Snow Estimation—Radar Verification. J. Appl. Meteor. Climatol.,</span>
 <span class="sd">    59, 991–1009, https://doi.org/10.1175/JAMC-D-19-0140.1.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Define the spatial range to use within extraction</span>
-    <span class="n">spatial_range</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;meters_between_gates&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">spatial_spread</span>
+    <span class="n">spatial_range</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"meters_between_gates"</span><span class="p">]</span> <span class="o">*</span> <span class="n">spatial_spread</span>
 
     <span class="c1"># Define a dictionary structure to contain the extracted features</span>
     <span class="n">total_moment</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
-    <span class="n">total_moment</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;height&quot;</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">&quot;time_offset&quot;</span><span class="p">:</span> <span class="p">[]})</span>
+    <span class="n">total_moment</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"height"</span><span class="p">:</span> <span class="p">[],</span> <span class="s2">"time_offset"</span><span class="p">:</span> <span class="p">[]})</span>
 
     <span class="c1"># Define the start of the radar volume</span>
-    <span class="n">base_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="n">datetime_from_radar</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span> <span class="s2">&quot;ns&quot;</span><span class="p">)</span>
+    <span class="n">base_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="n">datetime_from_radar</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span> <span class="s2">"ns"</span><span class="p">)</span>
 
     <span class="c1"># call the sphere_distance function</span>
     <span class="n">dis</span> <span class="o">=</span> <span class="n">sphere_distance</span><span class="p">(</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">longitude</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">longitude</span>
     <span class="p">)</span>
     <span class="c1"># calculate forward azimuth angle</span>
     <span class="n">forazi</span> <span class="o">=</span> <span class="n">for_azimuth</span><span class="p">(</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">longitude</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">longitude</span>
     <span class="p">)</span>
 
     <span class="c1"># Iterate through radar sweeps, extract desired section</span>
@@ -578,7 +578,7 @@
 
         <span class="c1"># call the new sweep rays</span>
         <span class="n">center</span><span class="p">,</span> <span class="n">spread</span> <span class="o">=</span> <span class="n">get_sweep_rays</span><span class="p">(</span>
-            <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep</span><span class="p">],</span> <span class="n">forazi</span><span class="p">,</span> <span class="n">azimuth_spread</span><span class="o">=</span><span class="n">azimuth_spread</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">sweep</span><span class="p">],</span> <span class="n">forazi</span><span class="p">,</span> <span class="n">azimuth_spread</span><span class="o">=</span><span class="n">azimuth_spread</span>
         <span class="p">)</span>
 
         <span class="c1"># add the start indice of each ray</span>
@@ -591,9 +591,9 @@
         <span class="k">for</span> <span class="n">ray</span> <span class="ow">in</span> <span class="n">center</span><span class="p">:</span>
             <span class="c1"># Convert gates from antenna or cartesian coordinates</span>
             <span class="n">rhi_x</span><span class="p">,</span> <span class="n">rhi_y</span><span class="p">,</span> <span class="n">rhi_z</span> <span class="o">=</span> <span class="n">antenna_vectors_to_cartesian</span><span class="p">(</span>
-                <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
-                <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span>
-                <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span>
                 <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="c1"># Calculate distance to target</span>
@@ -608,17 +608,17 @@
             <span class="n">moment</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">moment</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+</span> <span class="n">subset</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">moment</span><span class="p">}</span>
             <span class="c1"># Add radar elevation to height gates</span>
             <span class="c1"># to define height as center of each gate above sea level</span>
-            <span class="n">zgates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rhi_z</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">tar_gate</span><span class="p">]</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">zgates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rhi_z</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">tar_gate</span><span class="p">]</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
             <span class="c1"># Determine the time for the individual gates</span>
-            <span class="n">gate_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">])</span>
+            <span class="n">gate_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">ray</span><span class="p">])</span>
 
         <span class="c1"># Convert to Cartesian Coordinates</span>
         <span class="c1"># Determine the center of each gate for the subsetted rays.</span>
         <span class="k">for</span> <span class="n">ray</span> <span class="ow">in</span> <span class="n">spread</span><span class="p">:</span>
             <span class="n">rhi_x</span><span class="p">,</span> <span class="n">rhi_y</span><span class="p">,</span> <span class="n">rhi_z</span> <span class="o">=</span> <span class="n">antenna_vectors_to_cartesian</span><span class="p">(</span>
-                <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
-                <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span>
-                <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span>
                 <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="c1"># Calculate distance to target</span>
@@ -633,15 +633,15 @@
             <span class="n">moment</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="n">moment</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">+</span> <span class="n">subset</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">moment</span><span class="p">}</span>
             <span class="c1"># Add radar elevation to height gates</span>
             <span class="c1"># to define height as center of each gate above sea level</span>
-            <span class="n">zgates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rhi_z</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">tar_gate</span><span class="p">]</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
+            <span class="n">zgates</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">rhi_z</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="n">tar_gate</span><span class="p">]</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]))</span>
             <span class="c1"># Determine the time for the individual gates</span>
-            <span class="n">gate_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">])</span>
+            <span class="n">gate_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">ray</span><span class="p">])</span>
 
         <span class="c1"># Average all azimuth moments into a single value for the sweep</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">total_moment</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;height&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"height"</span><span class="p">:</span>
                 <span class="n">total_moment</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">zgates</span><span class="p">)))</span>
-            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">&quot;time_offset&quot;</span><span class="p">:</span>
+            <span class="k">elif</span> <span class="n">key</span> <span class="o">==</span> <span class="s2">"time_offset"</span><span class="p">:</span>
                 <span class="n">total_moment</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">gate_time</span><span class="p">)),</span> <span class="mi">4</span><span class="p">))</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">total_moment</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
@@ -649,7 +649,7 @@
                 <span class="p">)</span>
 
     <span class="c1"># Add the base time for the radar</span>
-    <span class="n">total_moment</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;base_time&quot;</span><span class="p">:</span> <span class="n">base_time</span><span class="p">})</span>
+    <span class="n">total_moment</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"base_time"</span><span class="p">:</span> <span class="n">base_time</span><span class="p">})</span>
 
     <span class="c1"># Convert to xarray</span>
     <span class="k">return</span> <span class="n">assemble_column</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">total_moment</span><span class="p">,</span> <span class="n">forazi</span><span class="p">,</span> <span class="n">dis</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">)</span></div>
@@ -659,7 +659,7 @@
 <div class="viewcode-block" id="sphere_distance">
 <a class="viewcode-back" href="../../../API/generated/pyart.util.sphere_distance.html#pyart.util.sphere_distance">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">sphere_distance</span><span class="p">(</span><span class="n">radar_latitude</span><span class="p">,</span> <span class="n">target_latitude</span><span class="p">,</span> <span class="n">radar_longitude</span><span class="p">,</span> <span class="n">target_longitude</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculated of the great circle distance between radar and target</span>
 
 <span class="sd">    Assumptions</span>
@@ -683,7 +683,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    distance : float, [meters]</span>
 <span class="sd">        Great-Circle Distance between radar and target in meters</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># check if latitude, longitudes are valid</span>
     <span class="n">check_latitude</span><span class="p">(</span><span class="n">radar_latitude</span><span class="p">)</span>
     <span class="n">check_latitude</span><span class="p">(</span><span class="n">target_latitude</span><span class="p">)</span>
@@ -715,7 +715,7 @@
 <div class="viewcode-block" id="for_azimuth">
 <a class="viewcode-back" href="../../../API/generated/pyart.util.for_azimuth.html#pyart.util.for_azimuth">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">for_azimuth</span><span class="p">(</span><span class="n">radar_latitude</span><span class="p">,</span> <span class="n">target_latitude</span><span class="p">,</span> <span class="n">radar_longitude</span><span class="p">,</span> <span class="n">target_longitude</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculation of inital bearing alongitudeg a great-circle arc</span>
 <span class="sd">    Known as Forward Azimuth Angle.</span>
 
@@ -742,7 +742,7 @@
 <span class="sd">        azimuth angle from the radar where</span>
 <span class="sd">        target is located within the scan.</span>
 <span class="sd">        output is in degrees.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># check the input latitude/longitude</span>
     <span class="n">check_latitude</span><span class="p">(</span><span class="n">radar_latitude</span><span class="p">)</span>
     <span class="n">check_latitude</span><span class="p">(</span><span class="n">target_latitude</span><span class="p">)</span>
@@ -778,7 +778,7 @@
 <div class="viewcode-block" id="get_field_location">
 <a class="viewcode-back" href="../../../API/generated/pyart.util.get_field_location.html#pyart.util.get_field_location">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_field_location</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Given the location (in latitude, longitude) of a target, extract the</span>
 <span class="sd">    radar column above that point for further analysis.</span>
 
@@ -803,7 +803,7 @@
 <span class="sd">    column : xarray DataSet</span>
 <span class="sd">        Xarray Dataset containing the radar column above the target for</span>
 <span class="sd">        the various fields within the radar object.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Make sure latitude, longitudes are valid</span>
     <span class="n">check_latitude</span><span class="p">(</span><span class="n">latitude</span><span class="p">)</span>
@@ -817,12 +817,12 @@
 
     <span class="c1"># call the sphere_distance function</span>
     <span class="n">dis</span> <span class="o">=</span> <span class="n">sphere_distance</span><span class="p">(</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">longitude</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">longitude</span>
     <span class="p">)</span>
 
     <span class="c1"># call the for_azimuth function</span>
     <span class="n">azim</span> <span class="o">=</span> <span class="n">for_azimuth</span><span class="p">(</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">longitude</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">longitude</span>
     <span class="p">)</span>
 
     <span class="c1"># call the get_column_ray function</span>
@@ -830,9 +830,9 @@
 
     <span class="c1"># Determine the center of each gate for the subsetted rays.</span>
     <span class="n">rhi_x</span><span class="p">,</span> <span class="n">rhi_y</span><span class="p">,</span> <span class="n">rhi_z</span> <span class="o">=</span> <span class="n">antenna_vectors_to_cartesian</span><span class="p">(</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">ray</span><span class="p">],</span>
         <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="c1"># Calculate distance from the x,y coordinates to target</span>
@@ -840,42 +840,42 @@
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ray</span><span class="p">)):</span>
         <span class="n">tar_gate</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">rhidis</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="p">(</span><span class="n">dis</span><span class="p">)))</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">moment</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">tar_gate</span><span class="p">]</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="n">ray</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">tar_gate</span><span class="p">]</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span><span class="p">:</span>
                 <span class="n">moment</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">moment</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">tar_gate</span><span class="p">])</span>
+                <span class="n">moment</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="n">ray</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">tar_gate</span><span class="p">])</span>
         <span class="c1"># Add radar elevation to height gates</span>
         <span class="c1"># to define height as center of each gate above sea level</span>
-        <span class="n">zgate</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rhi_z</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">tar_gate</span><span class="p">]</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">zgate</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rhi_z</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">tar_gate</span><span class="p">]</span> <span class="o">+</span> <span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">])</span>
 
     <span class="c1"># Determine the time at the center of each ray within the column</span>
     <span class="c1"># Define the start of the radar volume as a numpy datetime object for xr</span>
-    <span class="n">base_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="n">datetime_from_radar</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span> <span class="s2">&quot;ns&quot;</span><span class="p">)</span>
+    <span class="n">base_time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">datetime64</span><span class="p">(</span><span class="n">datetime_from_radar</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span><span class="o">.</span><span class="n">isoformat</span><span class="p">(),</span> <span class="s2">"ns"</span><span class="p">)</span>
     <span class="c1"># Convert Py-ART radar object time (time since volume start) to time delta</span>
     <span class="c1"># Add to base time to have sequential time within the xr Dataset</span>
     <span class="c1"># for easier future merging/work</span>
     <span class="n">combined_time</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">ray</span><span class="p">)):</span>
-        <span class="n">delta</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_timedelta</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">unit</span><span class="o">=</span><span class="s2">&quot;s&quot;</span><span class="p">)</span>
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_timedelta</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">ray</span><span class="p">[</span><span class="n">i</span><span class="p">]],</span> <span class="n">unit</span><span class="o">=</span><span class="s2">"s"</span><span class="p">)</span>
         <span class="n">total_time</span> <span class="o">=</span> <span class="n">base_time</span> <span class="o">+</span> <span class="n">delta</span>
         <span class="n">combined_time</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">total_time</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">())</span>
 
     <span class="c1"># Create a blank list to hold the xarray DataArrays</span>
     <span class="n">ds_container</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">da_meta</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;units&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;standard_name&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;long_name&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;valid_max&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;valid_min&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;coordinates&quot;</span><span class="p">,</span>
+        <span class="s2">"units"</span><span class="p">,</span>
+        <span class="s2">"standard_name"</span><span class="p">,</span>
+        <span class="s2">"long_name"</span><span class="p">,</span>
+        <span class="s2">"valid_max"</span><span class="p">,</span>
+        <span class="s2">"valid_min"</span><span class="p">,</span>
+        <span class="s2">"coordinates"</span><span class="p">,</span>
     <span class="p">]</span>
     <span class="c1"># Convert the moment dictionary to xarray DataArray.</span>
     <span class="c1"># Apply radar object meta data to DataArray attribute</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">moment</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s2">&quot;height&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s2">"height"</span><span class="p">:</span>
             <span class="n">da</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
-                <span class="n">moment</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">zgate</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]</span>
+                <span class="n">moment</span><span class="p">[</span><span class="n">key</span><span class="p">],</span> <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">zgate</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="n">key</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="s2">"height"</span><span class="p">]</span>
             <span class="p">)</span>
             <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">da_meta</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
@@ -883,47 +883,47 @@
             <span class="c1"># Append to ds container</span>
             <span class="n">ds_container</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">da</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="n">key</span><span class="p">))</span>
 
-    <span class="c1"># Add additional DataArrays &#39;base_time&#39; and &#39;time_offset&#39;</span>
+    <span class="c1"># Add additional DataArrays 'base_time' and 'time_offset'</span>
     <span class="c1"># if not present within the radar object.</span>
-    <span class="n">da_base</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">base_time</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;base_time&quot;</span><span class="p">)</span>
+    <span class="n">da_base</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">base_time</span><span class="p">,</span> <span class="n">name</span><span class="o">=</span><span class="s2">"base_time"</span><span class="p">)</span>
     <span class="n">da_offset</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
-        <span class="n">combined_time</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">zgate</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s2">&quot;time_offset&quot;</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]</span>
+        <span class="n">combined_time</span><span class="p">,</span> <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">zgate</span><span class="p">),</span> <span class="n">name</span><span class="o">=</span><span class="s2">"time_offset"</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="s2">"height"</span><span class="p">]</span>
     <span class="p">)</span>
-    <span class="n">ds_container</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">da_base</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;base_time&quot;</span><span class="p">))</span>
-    <span class="n">ds_container</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">da_offset</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">&quot;time_offset&quot;</span><span class="p">))</span>
+    <span class="n">ds_container</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">da_base</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"base_time"</span><span class="p">))</span>
+    <span class="n">ds_container</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">da_offset</span><span class="o">.</span><span class="n">to_dataset</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s2">"time_offset"</span><span class="p">))</span>
 
     <span class="c1"># Create a xarray DataSet from the DataArrays</span>
     <span class="n">column</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">ds_container</span><span class="p">)</span>
 
     <span class="c1"># Assign Attributes for the Height and Times</span>
     <span class="n">height_des</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;Height Above Sea Level [in meters] for the Center of Each&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot; Radar Gate Above the Target Location&quot;</span>
+        <span class="s2">"Height Above Sea Level [in meters] for the Center of Each"</span>
+        <span class="o">+</span> <span class="s2">" Radar Gate Above the Target Location"</span>
     <span class="p">)</span>
     <span class="n">column</span><span class="o">.</span><span class="n">height</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-        <span class="n">long_name</span><span class="o">=</span><span class="s2">&quot;Height of Radar Beam&quot;</span><span class="p">,</span>
-        <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span>
-        <span class="n">standard_name</span><span class="o">=</span><span class="s2">&quot;height&quot;</span><span class="p">,</span>
+        <span class="n">long_name</span><span class="o">=</span><span class="s2">"Height of Radar Beam"</span><span class="p">,</span>
+        <span class="n">units</span><span class="o">=</span><span class="s2">"m"</span><span class="p">,</span>
+        <span class="n">standard_name</span><span class="o">=</span><span class="s2">"height"</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="n">height_des</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="n">column</span><span class="o">.</span><span class="n">base_time</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">long_name</span><span class="o">=</span><span class="s2">&quot;UTC Reference Time&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;seconds&quot;</span><span class="p">)</span>
+    <span class="n">column</span><span class="o">.</span><span class="n">base_time</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">long_name</span><span class="o">=</span><span class="s2">"UTC Reference Time"</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">"seconds"</span><span class="p">)</span>
 
-    <span class="n">time_long</span> <span class="o">=</span> <span class="s2">&quot;Time in Seconds Since Volume Start&quot;</span>
+    <span class="n">time_long</span> <span class="o">=</span> <span class="s2">"Time in Seconds Since Volume Start"</span>
     <span class="n">time_des</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;Time in Seconds Since Volume Start that Cooresponds&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot; to the Center of Each Height Gate&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot; Above the Target Location&quot;</span>
+        <span class="s2">"Time in Seconds Since Volume Start that Cooresponds"</span>
+        <span class="o">+</span> <span class="s2">" to the Center of Each Height Gate"</span>
+        <span class="o">+</span> <span class="s2">" Above the Target Location"</span>
     <span class="p">)</span>
     <span class="n">column</span><span class="o">.</span><span class="n">time_offset</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-        <span class="n">long_name</span><span class="o">=</span><span class="n">time_long</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;seconds&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">time_des</span>
+        <span class="n">long_name</span><span class="o">=</span><span class="n">time_long</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">"seconds"</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">time_des</span>
     <span class="p">)</span>
 
     <span class="c1"># Assign Global Attributes to the DataSet</span>
-    <span class="n">column</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;distance_from_radar&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">dis</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; km&quot;</span>
-    <span class="n">column</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;azimuth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">azim</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; degrees&quot;</span>
-    <span class="n">column</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;latitude_of_location&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">latitude</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; degrees&quot;</span>
-    <span class="n">column</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;longitude_of_location&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">longitude</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; degrees&quot;</span>
+    <span class="n">column</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"distance_from_radar"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">dis</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">+</span> <span class="s2">" km"</span>
+    <span class="n">column</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"azimuth"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">azim</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">+</span> <span class="s2">" degrees"</span>
+    <span class="n">column</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"latitude_of_location"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">latitude</span><span class="p">)</span> <span class="o">+</span> <span class="s2">" degrees"</span>
+    <span class="n">column</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"longitude_of_location"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">longitude</span><span class="p">)</span> <span class="o">+</span> <span class="s2">" degrees"</span>
     <span class="k">return</span> <span class="n">column</span></div>
 
 
@@ -931,7 +931,7 @@
 <div class="viewcode-block" id="get_column_rays">
 <a class="viewcode-back" href="../../../API/generated/pyart.util.get_column_rays.html#pyart.util.get_column_rays">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_column_rays</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Given the location (in latitude,longitude) of a target, return the rays</span>
 <span class="sd">    that correspond to radar column above the target.</span>
 
@@ -948,43 +948,43 @@
 <span class="sd">    nrays : List</span>
 <span class="sd">        radar ray indices that correspond to the column above a</span>
 <span class="sd">        target location.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">azimuth</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">azimuth</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">azimuth</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">azimuth</span> <span class="o">&gt;=</span> <span class="mi">360</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;azimuth not valid (not between 0-360 degrees)&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"azimuth not valid (not between 0-360 degrees)"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-            <span class="s2">&quot;radar azimuth type not valid.&quot;</span>
-            <span class="s2">&quot; Please convert input to be an int or float.&quot;</span>
+            <span class="s2">"radar azimuth type not valid."</span>
+            <span class="s2">" Please convert input to be an int or float."</span>
         <span class="p">)</span>
     <span class="c1"># define a list to hold the valid rays</span>
     <span class="n">rays</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="c1"># check to see which radar scan</span>
-    <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">&quot;rhi&quot;</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="n">nstart</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-            <span class="n">nstop</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">"rhi"</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
+            <span class="n">nstart</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+            <span class="n">nstop</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
             <span class="n">counter</span> <span class="o">=</span> <span class="mi">0</span>
             <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nstart</span><span class="p">,</span> <span class="n">nstop</span><span class="p">):</span>
-                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">nstart</span> <span class="o">+</span> <span class="n">counter</span><span class="p">]</span> <span class="o">-</span> <span class="n">azimuth</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+                <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">nstart</span> <span class="o">+</span> <span class="n">counter</span><span class="p">]</span> <span class="o">-</span> <span class="n">azimuth</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
                     <span class="n">rays</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nstart</span> <span class="o">+</span> <span class="n">counter</span><span class="p">)</span>
                 <span class="n">counter</span> <span class="o">+=</span> <span class="mi">1</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># taken from pyart.graph.RadarDisplay.get_azimuth_rhi_data_x_y_z</span>
         <span class="k">for</span> <span class="n">sweep</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">():</span>
-            <span class="n">sweep_azi</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep</span><span class="p">]</span>
+            <span class="n">sweep_azi</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">sweep</span><span class="p">]</span>
             <span class="n">nray</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">sweep_azi</span> <span class="o">-</span> <span class="n">azimuth</span><span class="p">))</span>
             <span class="n">rays</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nray</span> <span class="o">+</span> <span class="n">sweep</span><span class="o">.</span><span class="n">start</span><span class="p">)</span>
     <span class="c1"># make sure rays were found</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rays</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;No rays were found between azimuth and target&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"No rays were found between azimuth and target"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">rays</span></div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">get_sweep_rays</span><span class="p">(</span><span class="n">sweep_azi</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">azimuth_spread</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Extract the specific rays for a given azimuth from a radar sweep</span>
 
 <span class="sd">    Azimuth spread determines the +/- degrees azimuth to include within</span>
@@ -1008,7 +1008,7 @@
 <span class="sd">        List of integers cooresponding to ray indices within the spread</span>
 <span class="sd">        of azimuths emcompassing the target</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># determine resolution of azimuth angles</span>
     <span class="n">resolution</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">((</span><span class="n">sweep_azi</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">sweep_azi</span><span class="p">[</span><span class="mi">0</span><span class="p">]),</span> <span class="mi">3</span><span class="p">)</span>
 
@@ -1021,7 +1021,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">subset_fields</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">ray</span><span class="p">,</span> <span class="n">target_gates</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Parameter</span>
 <span class="sd">    ---------</span>
 <span class="sd">    radar : pyart.core.radar object</span>
@@ -1034,26 +1034,26 @@
 <span class="sd">    fields : dict</span>
 <span class="sd">        dictionary containing averaged subset fields for target location</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># initiate a diciontary to hold the moment data.</span>
     <span class="n">moment</span> <span class="o">=</span> <span class="p">{</span><span class="n">key</span><span class="p">:</span> <span class="p">[]</span> <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">()}</span>
 
     <span class="c1"># Iterate over input rays and average according to input method</span>
     <span class="c1"># future - allow users to input weights for spatial averaging</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">moment</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s2">&quot;height&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">,</span> <span class="n">target_gates</span><span class="p">])</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s2">"height"</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">all</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="n">ray</span><span class="p">,</span> <span class="n">target_gates</span><span class="p">])</span> <span class="ow">is</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span><span class="p">:</span>
                 <span class="n">moment</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">moment</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
-                    <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">,</span> <span class="n">target_gates</span><span class="p">])</span>
+                    <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="n">ray</span><span class="p">,</span> <span class="n">target_gates</span><span class="p">])</span>
                 <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">moment</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">assemble_column</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">total_moment</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">distance</span><span class="p">,</span> <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    With a dictionary containing the extracted fields from a radar sweep,</span>
 <span class="sd">    assemble individual gates and fields into an xarray DataSet</span>
 
@@ -1080,20 +1080,20 @@
 <span class="sd">        Xarray Dataset containing the radar column above the target for</span>
 <span class="sd">        the various fields within the radar object.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Create a blank list to hold the xarray DataArrays</span>
     <span class="n">ds_container</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">da_meta</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="s2">&quot;units&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;standard_name&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;long_name&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;valid_max&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;valid_min&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;coordinates&quot;</span><span class="p">,</span>
+        <span class="s2">"units"</span><span class="p">,</span>
+        <span class="s2">"standard_name"</span><span class="p">,</span>
+        <span class="s2">"long_name"</span><span class="p">,</span>
+        <span class="s2">"valid_max"</span><span class="p">,</span>
+        <span class="s2">"valid_min"</span><span class="p">,</span>
+        <span class="s2">"coordinates"</span><span class="p">,</span>
     <span class="p">]</span>
     <span class="c1"># Skip these fields and apply meta data after creation</span>
     <span class="c1"># of the Xarray DataSet</span>
-    <span class="n">skip</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="s2">&quot;base_time&quot;</span><span class="p">]</span>
+    <span class="n">skip</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"height"</span><span class="p">,</span> <span class="s2">"base_time"</span><span class="p">]</span>
     <span class="c1"># Convert the moment dictionary to xarray DataArray.</span>
     <span class="c1"># Apply radar object meta data to DataArray attribute</span>
     <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">total_moment</span><span class="p">:</span>
@@ -1106,12 +1106,12 @@
             <span class="c1"># dimension/coordinates</span>
             <span class="n">da</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
                 <span class="n">total_moment</span><span class="p">[</span><span class="n">key</span><span class="p">],</span>
-                <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">total_moment</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]),</span>
+                <span class="n">coords</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span><span class="n">height</span><span class="o">=</span><span class="n">total_moment</span><span class="p">[</span><span class="s2">"height"</span><span class="p">]),</span>
                 <span class="n">name</span><span class="o">=</span><span class="n">key</span><span class="p">,</span>
-                <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">],</span>
+                <span class="n">dims</span><span class="o">=</span><span class="p">[</span><span class="s2">"height"</span><span class="p">],</span>
             <span class="p">)</span>
             <span class="c1"># Add meta data for the radar fields</span>
-            <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s2">&quot;time_offset&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s2">"time_offset"</span><span class="p">:</span>
                 <span class="k">for</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">da_meta</span><span class="p">:</span>
                     <span class="k">if</span> <span class="n">tag</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
                         <span class="n">da</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">tag</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="n">tag</span><span class="p">]</span>
@@ -1122,61 +1122,61 @@
     <span class="n">column</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">ds_container</span><span class="p">)</span>
 
     <span class="c1"># Add the scan times back into the merged column</span>
-    <span class="n">column</span><span class="p">[</span><span class="s2">&quot;base_time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">total_moment</span><span class="p">[</span><span class="s2">&quot;base_time&quot;</span><span class="p">]</span>
+    <span class="n">column</span><span class="p">[</span><span class="s2">"base_time"</span><span class="p">]</span> <span class="o">=</span> <span class="n">total_moment</span><span class="p">[</span><span class="s2">"base_time"</span><span class="p">]</span>
     <span class="n">column</span><span class="o">.</span><span class="n">base_time</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
         <span class="n">long_name</span><span class="o">=</span><span class="p">(</span>
-            <span class="s2">&quot;Start time of individual radar scan volumes &quot;</span>
-            <span class="o">+</span> <span class="s2">&quot; from which column are extracted &quot;</span>
+            <span class="s2">"Start time of individual radar scan volumes "</span>
+            <span class="o">+</span> <span class="s2">" from which column are extracted "</span>
         <span class="p">),</span>
-        <span class="n">units</span><span class="o">=</span><span class="s2">&quot;UTC Time&quot;</span><span class="p">,</span>
+        <span class="n">units</span><span class="o">=</span><span class="s2">"UTC Time"</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="c1"># Assign Attributes for the Height and Times</span>
     <span class="n">height_des</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;Height Above Sea Level [in meters] for the Center of Each&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot; Radar Gate Above the Target Location&quot;</span>
+        <span class="s2">"Height Above Sea Level [in meters] for the Center of Each"</span>
+        <span class="o">+</span> <span class="s2">" Radar Gate Above the Target Location"</span>
     <span class="p">)</span>
     <span class="n">column</span><span class="o">.</span><span class="n">height</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-        <span class="n">long_name</span><span class="o">=</span><span class="s2">&quot;Height of Radar Beam&quot;</span><span class="p">,</span>
-        <span class="n">units</span><span class="o">=</span><span class="s2">&quot;m&quot;</span><span class="p">,</span>
-        <span class="n">standard_name</span><span class="o">=</span><span class="s2">&quot;height&quot;</span><span class="p">,</span>
+        <span class="n">long_name</span><span class="o">=</span><span class="s2">"Height of Radar Beam"</span><span class="p">,</span>
+        <span class="n">units</span><span class="o">=</span><span class="s2">"m"</span><span class="p">,</span>
+        <span class="n">standard_name</span><span class="o">=</span><span class="s2">"height"</span><span class="p">,</span>
         <span class="n">description</span><span class="o">=</span><span class="n">height_des</span><span class="p">,</span>
     <span class="p">)</span>
 
-    <span class="n">time_long</span> <span class="o">=</span> <span class="s2">&quot;Time in Seconds Since Volume Start to the Center of Each Gate&quot;</span>
+    <span class="n">time_long</span> <span class="o">=</span> <span class="s2">"Time in Seconds Since Volume Start to the Center of Each Gate"</span>
     <span class="n">time_des</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;Time in Seconds Since Volume Start (i.e. base_time) that Cooresponds&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot; to the Center of Each Height Gate&quot;</span>
-        <span class="o">+</span> <span class="s2">&quot; Above the Target Location&quot;</span>
+        <span class="s2">"Time in Seconds Since Volume Start (i.e. base_time) that Cooresponds"</span>
+        <span class="o">+</span> <span class="s2">" to the Center of Each Height Gate"</span>
+        <span class="o">+</span> <span class="s2">" Above the Target Location"</span>
     <span class="p">)</span>
     <span class="n">column</span><span class="o">.</span><span class="n">time_offset</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-        <span class="n">long_name</span><span class="o">=</span><span class="n">time_long</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;seconds&quot;</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">time_des</span>
+        <span class="n">long_name</span><span class="o">=</span><span class="n">time_long</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">"seconds"</span><span class="p">,</span> <span class="n">description</span><span class="o">=</span><span class="n">time_des</span>
     <span class="p">)</span>
 
     <span class="c1"># Add latitude, longitude as variable in extracted column</span>
-    <span class="n">column</span><span class="p">[</span><span class="s2">&quot;latitude&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">latitude</span>
+    <span class="n">column</span><span class="p">[</span><span class="s2">"latitude"</span><span class="p">]</span> <span class="o">=</span> <span class="n">latitude</span>
     <span class="n">column</span><span class="o">.</span><span class="n">latitude</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-        <span class="n">long_name</span><span class="o">=</span><span class="s2">&quot;Latitude of Location Column is Extracted Above&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;deg&quot;</span>
+        <span class="n">long_name</span><span class="o">=</span><span class="s2">"Latitude of Location Column is Extracted Above"</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">"deg"</span>
     <span class="p">)</span>
-    <span class="n">column</span><span class="p">[</span><span class="s2">&quot;longitude&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">longitude</span>
+    <span class="n">column</span><span class="p">[</span><span class="s2">"longitude"</span><span class="p">]</span> <span class="o">=</span> <span class="n">longitude</span>
     <span class="n">column</span><span class="o">.</span><span class="n">longitude</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-        <span class="n">long_name</span><span class="o">=</span><span class="s2">&quot;Longitude of Location Column is Extracted Above&quot;</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;deg&quot;</span>
+        <span class="n">long_name</span><span class="o">=</span><span class="s2">"Longitude of Location Column is Extracted Above"</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">"deg"</span>
     <span class="p">)</span>
 
     <span class="c1"># Assign Global Attributes to the DataSet</span>
-    <span class="n">column</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;distance_from_radar&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">distance</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; km&quot;</span>
-    <span class="n">column</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;azimuth&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">azimuth</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; degrees&quot;</span>
-    <span class="n">column</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;latitude_of_location&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">latitude</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; degrees&quot;</span>
-    <span class="n">column</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;longitude_of_location&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">longitude</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot; degrees&quot;</span>
+    <span class="n">column</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"distance_from_radar"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">distance</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">+</span> <span class="s2">" km"</span>
+    <span class="n">column</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"azimuth"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">around</span><span class="p">(</span><span class="n">azimuth</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span> <span class="o">+</span> <span class="s2">" degrees"</span>
+    <span class="n">column</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"latitude_of_location"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">latitude</span><span class="p">)</span> <span class="o">+</span> <span class="s2">" degrees"</span>
+    <span class="n">column</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"longitude_of_location"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">longitude</span><span class="p">)</span> <span class="o">+</span> <span class="s2">" degrees"</span>
 
     <span class="c1"># Drop duplicated heights, keep latest value</span>
-    <span class="n">column</span> <span class="o">=</span> <span class="n">column</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">&quot;height&quot;</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">&quot;last&quot;</span><span class="p">)</span>
+    <span class="n">column</span> <span class="o">=</span> <span class="n">column</span><span class="o">.</span><span class="n">drop_duplicates</span><span class="p">(</span><span class="n">dim</span><span class="o">=</span><span class="s2">"height"</span><span class="p">,</span> <span class="n">keep</span><span class="o">=</span><span class="s2">"last"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">column</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">check_latitude</span><span class="p">(</span><span class="n">latitude</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Function to check if input latitude is valid for type and value.</span>
 
 <span class="sd">    Parameters</span>
@@ -1184,7 +1184,7 @@
 <span class="sd">    latitude : int, float</span>
 <span class="sd">        Latitude of a location that should be between 90S and 90N</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="p">(</span>
         <span class="nb">isinstance</span><span class="p">(</span><span class="n">latitude</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
         <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">latitude</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
@@ -1192,24 +1192,24 @@
     <span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">latitude</span> <span class="o">&lt;=</span> <span class="o">-</span><span class="mi">90</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">latitude</span> <span class="o">&gt;=</span> <span class="mi">90</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Latitude not between -90 and 90 degrees, need to &quot;</span>
-                <span class="s2">&quot;convert to values between -90 and 90&quot;</span>
+                <span class="s2">"Latitude not between -90 and 90 degrees, need to "</span>
+                <span class="s2">"convert to values between -90 and 90"</span>
             <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-            <span class="s2">&quot;Latitude type not valid, need to convert input to be an int or float&quot;</span>
+            <span class="s2">"Latitude type not valid, need to convert input to be an int or float"</span>
         <span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">check_longitude</span><span class="p">(</span><span class="n">longitude</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Function to check if input latitude is valid for type and value.</span>
 
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
 <span class="sd">    longitude : int, float</span>
 <span class="sd">        Longitude of a location taht should be between 180W and 180E</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="p">(</span>
         <span class="nb">isinstance</span><span class="p">(</span><span class="n">longitude</span><span class="p">,</span> <span class="nb">int</span><span class="p">)</span>
         <span class="ow">or</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">longitude</span><span class="p">,</span> <span class="nb">float</span><span class="p">)</span>
@@ -1217,13 +1217,13 @@
     <span class="p">)</span> <span class="ow">is</span> <span class="kc">True</span><span class="p">:</span>
         <span class="k">if</span> <span class="p">(</span><span class="n">longitude</span> <span class="o">&lt;=</span> <span class="o">-</span><span class="mi">180</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">longitude</span> <span class="o">&gt;=</span> <span class="mi">180</span><span class="p">):</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Longitude not valid between -180 and 180&quot;</span>
-                <span class="s2">&quot; degrees, need to convert to values between&quot;</span>
-                <span class="s2">&quot;  -180 and 180&quot;</span>
+                <span class="s2">"Longitude not valid between -180 and 180"</span>
+                <span class="s2">" degrees, need to convert to values between"</span>
+                <span class="s2">"  -180 and 180"</span>
             <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-            <span class="s2">&quot;Longitude type not valid, need to convert input to be an int or float&quot;</span>
+            <span class="s2">"Longitude type not valid, need to convert input to be an int or float"</span>
         <span class="p">)</span>
 </pre></div>
 <div class="section ablog__blog_comments">
@@ -1257,8 +1257,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1292,7 +1292,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

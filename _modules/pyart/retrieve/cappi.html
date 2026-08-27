@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,9 +486,9 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.retrieve.cappi</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Constant Altitude Plan Position Indicator</span>
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">netCDF4</span><span class="w"> </span><span class="kn">import</span> <span class="n">num2date</span>
@@ -505,12 +505,12 @@
     <span class="n">fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">height</span><span class="o">=</span><span class="mi">2000</span><span class="p">,</span>
     <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">vel_field</span><span class="o">=</span><span class="s2">&quot;velocity&quot;</span><span class="p">,</span>
+    <span class="n">vel_field</span><span class="o">=</span><span class="s2">"velocity"</span><span class="p">,</span>
     <span class="n">same_nyquist</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">nyquist_vector_idx</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">max_height_diff</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Create a Constant Altitude Plan Position Indicator (CAPPI) from radar data.</span>
 
 <span class="sd">    Parameters</span>
@@ -527,7 +527,7 @@
 <span class="sd">        Default is None.</span>
 <span class="sd">    vel_field : str, optional</span>
 <span class="sd">        The name of the velocity field to be used for determining the Nyquist velocity.</span>
-<span class="sd">        Default is &#39;velocity&#39;.</span>
+<span class="sd">        Default is 'velocity'.</span>
 <span class="sd">    same_nyquist : bool, optional</span>
 <span class="sd">        Whether to only stack sweeps with the same Nyquist velocity.</span>
 <span class="sd">        Default is True.</span>
@@ -554,7 +554,7 @@
 <span class="sd">    Author</span>
 <span class="sd">    ------</span>
 <span class="sd">    Hamid Ali Syed (@syedhamidali)</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">if</span> <span class="n">fields</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">fields</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">())</span>
@@ -575,18 +575,18 @@
             <span class="n">nyquist</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">nyquist</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">LookupError</span><span class="p">:</span>
             <span class="nb">print</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Nyquist velocity unavailable for sweep </span><span class="si">{</span><span class="n">sweep</span><span class="si">}</span><span class="s2">. Estimating using maximum velocity.&quot;</span>
+                <span class="sa">f</span><span class="s2">"Nyquist velocity unavailable for sweep </span><span class="si">{</span><span class="n">sweep</span><span class="si">}</span><span class="s2">. Estimating using maximum velocity."</span>
             <span class="p">)</span>
-            <span class="n">nyquist</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
+            <span class="n">nyquist</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
 
         <span class="c1"># Extract and sort azimuth angles (used across all fields)</span>
-        <span class="n">azimuth</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span>
+        <span class="n">azimuth</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">]</span>
         <span class="n">azimuth_sorted_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">azimuth</span><span class="p">)</span>
         <span class="n">azimuth_sorted</span> <span class="o">=</span> <span class="n">azimuth</span><span class="p">[</span><span class="n">azimuth_sorted_idx</span><span class="p">]</span>
-        <span class="n">time</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">][</span><span class="n">azimuth_sorted_idx</span><span class="p">]</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">][</span><span class="n">azimuth_sorted_idx</span><span class="p">]</span>
 
         <span class="c1"># Gate heights from radar geometry already include the 4/3 Earth-radius refractivity model</span>
-        <span class="n">sweep_gate_z</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">][</span><span class="n">azimuth_sorted_idx</span><span class="p">]</span>
+        <span class="n">sweep_gate_z</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">sweep_slice</span><span class="p">][</span><span class="n">azimuth_sorted_idx</span><span class="p">]</span>
 
         <span class="k">if</span> <span class="n">sweep</span> <span class="o">==</span> <span class="n">first_sweep</span><span class="p">:</span>
             <span class="n">azimuth_final</span> <span class="o">=</span> <span class="n">azimuth_sorted</span>
@@ -594,9 +594,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># Interpolate gate heights to the reference azimuth grid (keeps refractivity-aware heights aligned)</span>
             <span class="n">gate_interpolator</span> <span class="o">=</span> <span class="n">RectBivariateSpline</span><span class="p">(</span>
-                <span class="n">azimuth_sorted</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">sweep_gate_z</span>
+                <span class="n">azimuth_sorted</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span> <span class="n">sweep_gate_z</span>
             <span class="p">)</span>
-            <span class="n">sweep_gate_z</span> <span class="o">=</span> <span class="n">gate_interpolator</span><span class="p">(</span><span class="n">azimuth_final</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+            <span class="n">sweep_gate_z</span> <span class="o">=</span> <span class="n">gate_interpolator</span><span class="p">(</span><span class="n">azimuth_final</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span>
 
         <span class="n">sweep_data</span> <span class="o">=</span> <span class="p">{}</span>
 
@@ -614,9 +614,9 @@
             <span class="k">if</span> <span class="n">sweep</span> <span class="o">!=</span> <span class="n">first_sweep</span><span class="p">:</span>
                 <span class="c1"># Interpolate data for consistent azimuth ordering across sweeps</span>
                 <span class="n">interpolator</span> <span class="o">=</span> <span class="n">RectBivariateSpline</span><span class="p">(</span>
-                    <span class="n">azimuth_sorted</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">data</span>
+                    <span class="n">azimuth_sorted</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span> <span class="n">data</span>
                 <span class="p">)</span>
-                <span class="n">data</span> <span class="o">=</span> <span class="n">interpolator</span><span class="p">(</span><span class="n">azimuth_final</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+                <span class="n">data</span> <span class="o">=</span> <span class="n">interpolator</span><span class="p">(</span><span class="n">azimuth_final</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span>
 
             <span class="n">sweep_data</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:]</span>
 
@@ -668,8 +668,8 @@
     <span class="n">min_available</span> <span class="o">=</span> <span class="n">z_3d</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">height</span> <span class="o">&gt;</span> <span class="n">max_available</span> <span class="o">+</span> <span class="n">height_tol</span> <span class="ow">or</span> <span class="n">height</span> <span class="o">&lt;</span> <span class="n">min_available</span> <span class="o">-</span> <span class="n">height_tol</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="sa">f</span><span class="s2">&quot;Warning: requested CAPPI height </span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s2"> m is outside available gates &quot;</span>
-            <span class="sa">f</span><span class="s2">&quot;(</span><span class="si">{</span><span class="n">min_available</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">max_available</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> m). Output will be fully masked.&quot;</span>
+            <span class="sa">f</span><span class="s2">"Warning: requested CAPPI height </span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s2"> m is outside available gates "</span>
+            <span class="sa">f</span><span class="s2">"(</span><span class="si">{</span><span class="n">min_available</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">max_available</span><span class="si">:</span><span class="s2">.0f</span><span class="si">}</span><span class="s2"> m). Output will be fully masked."</span>
         <span class="p">)</span>
 
     <span class="n">height_mask</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">selected_gate_z</span> <span class="o">-</span> <span class="n">height</span><span class="p">)</span> <span class="o">&gt;</span> <span class="n">height_tol</span>
@@ -690,25 +690,25 @@
         <span class="n">CAPPI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">CAPPI</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">height_mask</span><span class="p">)</span>
 
         <span class="c1"># Retrieve units and handle case where units might be missing</span>
-        <span class="n">units</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;units&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
+        <span class="n">units</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"units"</span><span class="p">,</span> <span class="s2">""</span><span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
 
         <span class="c1"># Determine valid_min and valid_max based on units</span>
-        <span class="k">if</span> <span class="n">units</span> <span class="o">==</span> <span class="s2">&quot;dbz&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">units</span> <span class="o">==</span> <span class="s2">"dbz"</span><span class="p">:</span>
             <span class="n">valid_min</span><span class="p">,</span> <span class="n">valid_max</span> <span class="o">=</span> <span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">80</span>
-        <span class="k">elif</span> <span class="n">units</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;m/s&quot;</span><span class="p">,</span> <span class="s2">&quot;meters per second&quot;</span><span class="p">]:</span>
+        <span class="k">elif</span> <span class="n">units</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"m/s"</span><span class="p">,</span> <span class="s2">"meters per second"</span><span class="p">]:</span>
             <span class="n">valid_min</span><span class="p">,</span> <span class="n">valid_max</span> <span class="o">=</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">100</span>
-        <span class="k">elif</span> <span class="n">units</span> <span class="o">==</span> <span class="s2">&quot;db&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">units</span> <span class="o">==</span> <span class="s2">"db"</span><span class="p">:</span>
             <span class="n">valid_min</span><span class="p">,</span> <span class="n">valid_max</span> <span class="o">=</span> <span class="o">-</span><span class="mf">7.9</span><span class="p">,</span> <span class="mf">7.9</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="c1"># If units are not found or don&#39;t match known types, set default values or skip masking</span>
+            <span class="c1"># If units are not found or don't match known types, set default values or skip masking</span>
             <span class="n">valid_min</span><span class="p">,</span> <span class="n">valid_max</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span>
 
         <span class="c1"># If valid_min or valid_max are still None, set them to conservative defaults or skip</span>
         <span class="k">if</span> <span class="n">valid_min</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: valid_min not set for </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2">, using default of -1e10&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Warning: valid_min not set for </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2">, using default of -1e10"</span><span class="p">)</span>
             <span class="n">valid_min</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1e10</span>  <span class="c1"># Conservative default</span>
         <span class="k">if</span> <span class="n">valid_max</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Warning: valid_max not set for </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2">, using default of 1e10&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Warning: valid_max not set for </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2">, using default of 1e10"</span><span class="p">)</span>
             <span class="n">valid_max</span> <span class="o">=</span> <span class="mf">1e10</span>  <span class="c1"># Conservative default</span>
 
         <span class="c1"># Apply valid_min and valid_max masking</span>
@@ -718,44 +718,44 @@
             <span class="n">CAPPI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_greater</span><span class="p">(</span><span class="n">CAPPI</span><span class="p">,</span> <span class="n">valid_max</span><span class="p">)</span>
 
         <span class="c1"># Convert to masked array with the specified fill value</span>
-        <span class="n">CAPPI</span><span class="o">.</span><span class="n">set_fill_value</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
+        <span class="n">CAPPI</span><span class="o">.</span><span class="n">set_fill_value</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"_FillValue"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">))</span>
         <span class="n">CAPPI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">CAPPI</span><span class="p">)</span>
         <span class="n">CAPPI</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_outside</span><span class="p">(</span><span class="n">CAPPI</span><span class="p">,</span> <span class="n">valid_min</span><span class="p">,</span> <span class="n">valid_max</span><span class="p">)</span>
 
         <span class="n">fields_data</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">CAPPI</span><span class="p">,</span>
-            <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;units&quot;</span><span class="p">],</span>
-            <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;CAPPI </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s2"> meters&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;comment&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;CAPPI </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> calculated at a height of </span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s2"> meters&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;_FillValue&quot;</span><span class="p">:</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">),</span>
+            <span class="s2">"data"</span><span class="p">:</span> <span class="n">CAPPI</span><span class="p">,</span>
+            <span class="s2">"units"</span><span class="p">:</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"units"</span><span class="p">],</span>
+            <span class="s2">"long_name"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"CAPPI </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> at </span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s2"> meters"</span><span class="p">,</span>
+            <span class="s2">"comment"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"CAPPI </span><span class="si">{</span><span class="n">field</span><span class="si">}</span><span class="s2"> calculated at a height of </span><span class="si">{</span><span class="n">height</span><span class="si">}</span><span class="s2"> meters"</span><span class="p">,</span>
+            <span class="s2">"_FillValue"</span><span class="p">:</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"_FillValue"</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">),</span>
         <span class="p">}</span>
 
     <span class="c1"># Set the elevation to zeros for CAPPI</span>
-    <span class="n">elevation_final</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dim0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">elevation_final</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">dim0</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
 
     <span class="c1"># Since we are using the whole volume scan, report mean time</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">dtime</span> <span class="o">=</span> <span class="n">to_datetime</span><span class="p">(</span>
-            <span class="n">num2date</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
-            <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;ISO8601&quot;</span><span class="p">,</span>
+            <span class="n">num2date</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"ISO8601"</span><span class="p">,</span>
         <span class="p">)</span>
     <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
         <span class="n">dtime</span> <span class="o">=</span> <span class="n">to_datetime</span><span class="p">(</span>
-            <span class="n">num2date</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
+            <span class="n">num2date</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">])</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">)</span>
         <span class="p">)</span>
     <span class="n">dtime</span> <span class="o">=</span> <span class="n">dtime</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
     <span class="n">time</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_final</span>
-    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;mean&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">dtime</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_final</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">"mean"</span><span class="p">]</span> <span class="o">=</span> <span class="n">dtime</span>
 
     <span class="c1"># CAPPI represents a single synthesized sweep on the reference azimuth grid</span>
     <span class="n">n_rays</span> <span class="o">=</span> <span class="n">azimuth_final</span><span class="o">.</span><span class="n">size</span>
-    <span class="n">sweep_number</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)}</span>
-    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;ppi&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;object&quot;</span><span class="p">)}</span>
-    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)}</span>
-    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">n_rays</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)}</span>
-    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)}</span>
+    <span class="n">sweep_number</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"data"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">)}</span>
+    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"data"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"ppi"</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"object"</span><span class="p">)}</span>
+    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"data"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">)}</span>
+    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"data"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">n_rays</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">)}</span>
+    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"data"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)}</span>
 
     <span class="c1"># Create the Radar object with the new CAPPI data.  Keep site metadata but</span>
     <span class="c1"># reset sweep descriptors and azimuth to match the CAPPI grid so display</span>
@@ -765,7 +765,7 @@
         <span class="n">_range</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
         <span class="n">fields</span><span class="o">=</span><span class="n">fields_data</span><span class="p">,</span>
         <span class="n">metadata</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">metadata</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
-        <span class="n">scan_type</span><span class="o">=</span><span class="s2">&quot;ppi&quot;</span><span class="p">,</span>
+        <span class="n">scan_type</span><span class="o">=</span><span class="s2">"ppi"</span><span class="p">,</span>
         <span class="n">latitude</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">latitude</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
         <span class="n">longitude</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">longitude</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
         <span class="n">altitude</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">altitude</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
@@ -774,8 +774,8 @@
         <span class="n">fixed_angle</span><span class="o">=</span><span class="n">fixed_angle</span><span class="p">,</span>
         <span class="n">sweep_start_ray_index</span><span class="o">=</span><span class="n">sweep_start_ray_index</span><span class="p">,</span>
         <span class="n">sweep_end_ray_index</span><span class="o">=</span><span class="n">sweep_end_ray_index</span><span class="p">,</span>
-        <span class="n">azimuth</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">azimuth_final</span><span class="p">},</span>
-        <span class="n">elevation</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">elevation_final</span><span class="p">},</span>
+        <span class="n">azimuth</span><span class="o">=</span><span class="p">{</span><span class="s2">"data"</span><span class="p">:</span> <span class="n">azimuth_final</span><span class="p">},</span>
+        <span class="n">elevation</span><span class="o">=</span><span class="p">{</span><span class="s2">"data"</span><span class="p">:</span> <span class="n">elevation_final</span><span class="p">},</span>
         <span class="n">instrument_parameters</span><span class="o">=</span><span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">,</span>
     <span class="p">)</span></div>
 
@@ -811,8 +811,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -846,7 +846,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -42,10 +42,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -644,7 +644,7 @@
 
 <span class="n">templocation</span> <span class="o">=</span> <span class="n">tempfile</span><span class="o">.</span><span class="n">mkdtemp</span><span class="p">()</span>
 
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -659,13 +659,13 @@
 <p>We start by setting up our Amazon bucket, setting anonymous access.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">filesystem</span><span class="p">(</span><span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="n">anon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">filesystem</span><span class="p">(</span><span class="s2">"s3"</span><span class="p">,</span> <span class="n">anon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 <span class="n">date</span> <span class="o">=</span> <span class="n">datetime</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">17</span><span class="p">)</span>
-<span class="n">site</span> <span class="o">=</span> <span class="s2">&quot;KMKX&quot;</span>
+<span class="n">site</span> <span class="o">=</span> <span class="s2">"KMKX"</span>
 
 <span class="n">nexrad_path</span> <span class="o">=</span> <span class="n">date</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span>
-    <span class="sa">f</span><span class="s2">&quot;s3://unidata-nexrad-level2/%Y/%m/%d/</span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2">%Y%m%d_%H*&quot;</span>
+    <span class="sa">f</span><span class="s2">"s3://unidata-nexrad-level2/%Y/%m/%d/</span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2">%Y%m%d_%H*"</span>
 <span class="p">)</span>
 <span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">fs</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">nexrad_path</span><span class="p">))</span>
 <span class="n">files</span>
@@ -673,16 +673,16 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_170101_V06&#39;,
- &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_170739_V06&#39;,
- &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_171431_V06&#39;,
- &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_172123_V06&#39;,
- &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_172814_V06&#39;,
- &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_173452_V06&#39;,
- &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_174130_V06&#39;,
- &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_174807_V06&#39;,
- &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_175459_V06&#39;,
- &#39;unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_175459_V06_MDM&#39;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>['unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_170101_V06',
+ 'unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_170739_V06',
+ 'unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_171431_V06',
+ 'unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_172123_V06',
+ 'unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_172814_V06',
+ 'unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_173452_V06',
+ 'unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_174130_V06',
+ 'unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_174807_V06',
+ 'unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_175459_V06',
+ 'unidata-nexrad-level2/2021/09/07/KMKX/KMKX20210907_175459_V06_MDM']
 </pre></div>
 </div>
 </div>
@@ -693,7 +693,7 @@
 <p>Let’s read the first file using <code class="docutils literal notranslate"><span class="pre">pyart.io.read_nexrad_archive</span></code></p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><span class="s2">&quot;s3://&quot;</span> <span class="o">+</span> <span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><span class="s2">"s3://"</span> <span class="o">+</span> <span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 </pre></div>
 </div>
 </div>
@@ -711,11 +711,11 @@
 <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">USCOUNTIES</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
 
 <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+    <span class="s2">"reflectivity"</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
     <span class="n">embellish</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">add_grid_lines</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;ChaseSpectral&quot;</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">"ChaseSpectral"</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span>
     <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
 <span class="p">)</span>
@@ -741,9 +741,9 @@
 <p>We also set the minimum and maximum latitudes/longitudes to plot, based on the image above.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">radar_id</span> <span class="o">=</span> <span class="s2">&quot;KMKX&quot;</span>
-<span class="n">start</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span><span class="o">.</span><span class="n">tz_localize</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span>
-<span class="n">end</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">tz_localize</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">radar_id</span> <span class="o">=</span> <span class="s2">"KMKX"</span>
+<span class="n">start</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">15</span><span class="p">)</span><span class="o">.</span><span class="n">tz_localize</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="s2">"UTC"</span><span class="p">)</span>
+<span class="n">end</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timestamp</span><span class="p">(</span><span class="mi">2021</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mi">7</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span><span class="o">.</span><span class="n">tz_localize</span><span class="p">(</span><span class="n">tz</span><span class="o">=</span><span class="s2">"UTC"</span><span class="p">)</span>
 
 
 <span class="n">min_lon</span> <span class="o">=</span> <span class="o">-</span><span class="mi">90</span>
@@ -763,7 +763,7 @@
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure the nexrad interface using our time and location</span>
 <span class="n">conn</span> <span class="o">=</span> <span class="n">nexradaws</span><span class="o">.</span><span class="n">NexradAwsInterface</span><span class="p">()</span>
 <span class="n">scans</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">get_avail_scans_in_range</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="n">radar_id</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;There are </span><span class="si">{}</span><span class="s2"> scans available between </span><span class="si">{}</span><span class="s2"> and </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">scans</span><span class="p">),</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">))</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">"There are </span><span class="si">{}</span><span class="s2"> scans available between </span><span class="si">{}</span><span class="s2"> and </span><span class="si">{}</span><span class="se">\n</span><span class="s2">"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">scans</span><span class="p">),</span> <span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">))</span>
 
 <span class="c1"># Download the files</span>
 <span class="n">results</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">download</span><span class="p">(</span><span class="n">scans</span><span class="p">,</span> <span class="n">templocation</span><span class="p">)</span>
@@ -856,8 +856,8 @@ Downloaded KMKX20210907_195056_V06
 <p>Since the only variable that changes is the category and year, we can configure a function to help us generalize the code!</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">read_spc_reports</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">hazard</span><span class="p">,</span> <span class="n">timezone</span><span class="o">=</span><span class="s2">&quot;Etc/GMT+6&quot;</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">read_spc_reports</span><span class="p">(</span><span class="n">start_time</span><span class="p">,</span> <span class="n">end_time</span><span class="p">,</span> <span class="n">hazard</span><span class="p">,</span> <span class="n">timezone</span><span class="o">=</span><span class="s2">"Etc/GMT+6"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Reads in SPC report data remotely from the SPC</span>
 <span class="sd">    archive</span>
 
@@ -874,26 +874,26 @@ Downloaded KMKX20210907_195056_V06
 <span class="sd">    Returns</span>
 <span class="sd">    ==========</span>
 <span class="sd">    df: pandas.DataFrame with the data</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Read in the reports from the SPC archive</span>
     <span class="n">reports</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;https://www.spc.noaa.gov/wcm/data/</span><span class="si">{</span><span class="n">start_time</span><span class="o">.</span><span class="n">year</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">hazard</span><span class="si">}</span><span class="s2">.csv&quot;</span>
+        <span class="sa">f</span><span class="s2">"https://www.spc.noaa.gov/wcm/data/</span><span class="si">{</span><span class="n">start_time</span><span class="o">.</span><span class="n">year</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">hazard</span><span class="si">}</span><span class="s2">.csv"</span>
     <span class="p">)</span>
 
     <span class="c1"># Conver to datetime using the date and time columns</span>
-    <span class="n">reports</span><span class="p">[</span><span class="s2">&quot;datetime&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">reports</span><span class="o">.</span><span class="n">date</span> <span class="o">+</span> <span class="s2">&quot; &quot;</span> <span class="o">+</span> <span class="n">reports</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
-    <span class="n">reports</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;datetime&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">reports</span><span class="p">[</span><span class="s2">"datetime"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">reports</span><span class="o">.</span><span class="n">date</span> <span class="o">+</span> <span class="s2">" "</span> <span class="o">+</span> <span class="n">reports</span><span class="o">.</span><span class="n">time</span><span class="p">)</span>
+    <span class="n">reports</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">"datetime"</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Convert from local time to UTC time</span>
     <span class="n">reports</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">reports</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">tz_localize</span><span class="p">(</span>
-        <span class="n">timezone</span><span class="p">,</span> <span class="n">ambiguous</span><span class="o">=</span><span class="s2">&quot;NaT&quot;</span><span class="p">,</span> <span class="n">nonexistent</span><span class="o">=</span><span class="s2">&quot;shift_forward&quot;</span>
-    <span class="p">)</span><span class="o">.</span><span class="n">tz_convert</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span>
+        <span class="n">timezone</span><span class="p">,</span> <span class="n">ambiguous</span><span class="o">=</span><span class="s2">"NaT"</span><span class="p">,</span> <span class="n">nonexistent</span><span class="o">=</span><span class="s2">"shift_forward"</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">tz_convert</span><span class="p">(</span><span class="s2">"UTC"</span><span class="p">)</span>
 
-    <span class="c1"># Subset down to 30 minutes before/after the radar times we&#39;re plotting</span>
+    <span class="c1"># Subset down to 30 minutes before/after the radar times we're plotting</span>
     <span class="n">reports</span><span class="p">[</span>
-        <span class="p">((</span><span class="n">start_time</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">30</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M&quot;</span><span class="p">))</span> <span class="p">:</span> <span class="p">(</span>
-            <span class="p">(</span><span class="n">end_time</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">30</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M&quot;</span><span class="p">)</span>
+        <span class="p">((</span><span class="n">start_time</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">30</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M"</span><span class="p">))</span> <span class="p">:</span> <span class="p">(</span>
+            <span class="p">(</span><span class="n">end_time</span> <span class="o">+</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">30</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M"</span><span class="p">)</span>
         <span class="p">)</span>
     <span class="p">]</span>
 
@@ -907,9 +907,9 @@ Downloaded KMKX20210907_195056_V06
 <p>Now that we have our function, we can read in the reports and assign to different dataframes!</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wind_reports</span> <span class="o">=</span> <span class="n">read_spc_reports</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="s2">&quot;wind&quot;</span><span class="p">)</span>
-<span class="n">tornado_reports</span> <span class="o">=</span> <span class="n">read_spc_reports</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="s2">&quot;torn&quot;</span><span class="p">)</span>
-<span class="n">hail_reports</span> <span class="o">=</span> <span class="n">read_spc_reports</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="s2">&quot;hail&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wind_reports</span> <span class="o">=</span> <span class="n">read_spc_reports</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="s2">"wind"</span><span class="p">)</span>
+<span class="n">tornado_reports</span> <span class="o">=</span> <span class="n">read_spc_reports</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="s2">"torn"</span><span class="p">)</span>
+<span class="n">hail_reports</span> <span class="o">=</span> <span class="n">read_spc_reports</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="s2">"hail"</span><span class="p">)</span>
 <span class="n">hail_reports</span>
 </pre></div>
 </div>
@@ -1261,11 +1261,11 @@ Downloaded KMKX20210907_195056_V06
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">gc_latlon_bear_dist</span><span class="p">(</span><span class="n">lat1</span><span class="p">,</span> <span class="n">lon1</span><span class="p">,</span> <span class="n">bear</span><span class="p">,</span> <span class="n">dist</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Input lat1/lon1 as decimal degrees, as well as bearing and distance from</span>
 <span class="sd">    the coordinate. Returns lat2/lon2 of final destination. Cannot be</span>
 <span class="sd">    vectorized due to atan2.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">re</span> <span class="o">=</span> <span class="mf">6371.1</span>  <span class="c1"># km</span>
     <span class="n">lat1r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">lat1</span><span class="p">)</span>
     <span class="n">lon1r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">lon1</span><span class="p">)</span>
@@ -1282,9 +1282,9 @@ Downloaded KMKX20210907_195056_V06
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">add_scale_line</span><span class="p">(</span>
-    <span class="n">scale</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">projection</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="kc">None</span>
+    <span class="n">scale</span><span class="p">,</span> <span class="n">ax</span><span class="p">,</span> <span class="n">projection</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"k"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">fontweight</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Adds a line that shows the map scale in km. The line will automatically</span>
 <span class="sd">    scale based on zoom level of the map. Works with cartopy.</span>
 
@@ -1302,7 +1302,7 @@ Downloaded KMKX20210907_195056_V06
 <span class="sd">    ----------------</span>
 <span class="sd">    color : str</span>
 <span class="sd">        Color of line and text to draw. Default is black.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">frac_lat</span> <span class="o">=</span> <span class="mf">0.15</span>  <span class="c1"># distance fraction from bottom of plot</span>
     <span class="n">frac_lon</span> <span class="o">=</span> <span class="mf">0.5</span>  <span class="c1"># distance fraction from left of plot</span>
     <span class="n">e1</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_extent</span><span class="p">()</span>
@@ -1317,13 +1317,13 @@ Downloaded KMKX20210907_195056_V06
     <span class="p">)</span>  <span class="c1"># right point</span>
     <span class="k">if</span> <span class="n">lon1</span> <span class="o">&lt;=</span> <span class="n">e1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="ow">or</span> <span class="n">lon2</span> <span class="o">&gt;=</span> <span class="n">e1</span><span class="p">[</span><span class="mi">1</span><span class="p">]:</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;Scale line longer than extent of plot! &quot;</span>
-            <span class="o">+</span> <span class="s2">&quot;Try shortening for best effect.&quot;</span>
+            <span class="s2">"Scale line longer than extent of plot! "</span>
+            <span class="o">+</span> <span class="s2">"Try shortening for best effect."</span>
         <span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
         <span class="p">[</span><span class="n">lon1</span><span class="p">,</span> <span class="n">lon2</span><span class="p">],</span>
         <span class="p">[</span><span class="n">lat1</span><span class="p">,</span> <span class="n">lat2</span><span class="p">],</span>
-        <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+        <span class="n">linestyle</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span>
         <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
         <span class="n">transform</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
         <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">,</span>
@@ -1338,7 +1338,7 @@ Downloaded KMKX20210907_195056_V06
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
         <span class="p">[</span><span class="n">lon1a</span><span class="p">,</span> <span class="n">lon1b</span><span class="p">],</span>
         <span class="p">[</span><span class="n">lat1a</span><span class="p">,</span> <span class="n">lat1b</span><span class="p">],</span>
-        <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+        <span class="n">linestyle</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span>
         <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
         <span class="n">transform</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
         <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">,</span>
@@ -1353,7 +1353,7 @@ Downloaded KMKX20210907_195056_V06
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
         <span class="p">[</span><span class="n">lon2a</span><span class="p">,</span> <span class="n">lon2b</span><span class="p">],</span>
         <span class="p">[</span><span class="n">lat2a</span><span class="p">,</span> <span class="n">lat2b</span><span class="p">],</span>
-        <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span>
+        <span class="n">linestyle</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span>
         <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
         <span class="n">transform</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
         <span class="n">linewidth</span><span class="o">=</span><span class="n">linewidth</span><span class="p">,</span>
@@ -1362,9 +1362,9 @@ Downloaded KMKX20210907_195056_V06
     <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
         <span class="n">center_lon</span><span class="p">,</span>
         <span class="n">center_lat</span> <span class="o">-</span> <span class="n">frac_lat</span> <span class="o">*</span> <span class="p">(</span><span class="n">e1</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">e1</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="mf">4.0</span><span class="p">,</span>
-        <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">scale</span><span class="p">))</span> <span class="o">+</span> <span class="s2">&quot; km&quot;</span><span class="p">,</span>
-        <span class="n">horizontalalignment</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
-        <span class="n">verticalalignment</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span>
+        <span class="nb">str</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">scale</span><span class="p">))</span> <span class="o">+</span> <span class="s2">" km"</span><span class="p">,</span>
+        <span class="n">horizontalalignment</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span>
+        <span class="n">verticalalignment</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span>
         <span class="n">color</span><span class="o">=</span><span class="n">color</span><span class="p">,</span>
         <span class="n">fontweight</span><span class="o">=</span><span class="n">fontweight</span><span class="p">,</span>
         <span class="n">fontsize</span><span class="o">=</span><span class="n">fontsize</span><span class="p">,</span>
@@ -1376,13 +1376,13 @@ Downloaded KMKX20210907_195056_V06
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">scan</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">results</span><span class="o">.</span><span class="n">iter_success</span><span class="p">(),</span> <span class="n">start</span><span class="o">=</span><span class="mi">1</span><span class="p">):</span>
-    <span class="c1">## skip the files ending in &quot;MDM&quot;</span>
-    <span class="k">if</span> <span class="n">scan</span><span class="o">.</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span> <span class="o">!=</span> <span class="s2">&quot;MDM&quot;</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;working on &quot;</span> <span class="o">+</span> <span class="n">scan</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
+    <span class="c1">## skip the files ending in "MDM"</span>
+    <span class="k">if</span> <span class="n">scan</span><span class="o">.</span><span class="n">filename</span><span class="p">[</span><span class="o">-</span><span class="mi">3</span><span class="p">:]</span> <span class="o">!=</span> <span class="s2">"MDM"</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"working on "</span> <span class="o">+</span> <span class="n">scan</span><span class="o">.</span><span class="n">filename</span><span class="p">)</span>
 
         <span class="n">this_time</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span>
-            <span class="n">scan</span><span class="o">.</span><span class="n">filename</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">17</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">_%H%M&quot;</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">tz_localize</span><span class="p">(</span><span class="s2">&quot;UTC&quot;</span><span class="p">)</span>
+            <span class="n">scan</span><span class="o">.</span><span class="n">filename</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">17</span><span class="p">],</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"%Y%m</span><span class="si">%d</span><span class="s2">_%H%M"</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">tz_localize</span><span class="p">(</span><span class="s2">"UTC"</span><span class="p">)</span>
 
         <span class="n">radar</span> <span class="o">=</span> <span class="n">scan</span><span class="o">.</span><span class="n">open_pyart</span><span class="p">()</span>
         <span class="c1"># display = pyart.graph.RadarDisplay(radar)</span>
@@ -1400,7 +1400,7 @@ Downloaded KMKX20210907_195056_V06
         <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 
         <span class="c1"># Lets remove reflectivity values below a threshold.</span>
-        <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.5</span><span class="p">)</span>
+        <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">,</span> <span class="o">-</span><span class="mf">2.5</span><span class="p">)</span>
 
         <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 
@@ -1408,11 +1408,11 @@ Downloaded KMKX20210907_195056_V06
         <span class="n">ax1</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_axes</span><span class="p">(</span><span class="n">map_panel_axes</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">)</span>
 
         <span class="c1"># Add some various map elements to the plot to make it recognizable.</span>
-        <span class="n">ax1</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">USCOUNTIES</span><span class="o">.</span><span class="n">with_scale</span><span class="p">(</span><span class="s2">&quot;500k&quot;</span><span class="p">),</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
-        <span class="n">ax1</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">cfeature</span><span class="o">.</span><span class="n">STATES</span><span class="o">.</span><span class="n">with_scale</span><span class="p">(</span><span class="s2">&quot;10m&quot;</span><span class="p">),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">USCOUNTIES</span><span class="o">.</span><span class="n">with_scale</span><span class="p">(</span><span class="s2">"500k"</span><span class="p">),</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">,</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
+        <span class="n">ax1</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">cfeature</span><span class="o">.</span><span class="n">STATES</span><span class="o">.</span><span class="n">with_scale</span><span class="p">(</span><span class="s2">"10m"</span><span class="p">),</span> <span class="n">linewidth</span><span class="o">=</span><span class="mf">3.0</span><span class="p">)</span>
 
         <span class="n">cf</span> <span class="o">=</span> <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-            <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+            <span class="s2">"reflectivity"</span><span class="p">,</span>
             <span class="mi">0</span><span class="p">,</span>
             <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span>
             <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
@@ -1422,24 +1422,24 @@ Downloaded KMKX20210907_195056_V06
             <span class="n">min_lat</span><span class="o">=</span><span class="n">min_lat</span><span class="p">,</span>
             <span class="n">max_lat</span><span class="o">=</span><span class="n">max_lat</span><span class="p">,</span>
             <span class="n">title</span><span class="o">=</span><span class="n">radar_id</span>
-            <span class="o">+</span> <span class="s2">&quot; Reflectivity and Severe Weather Reports, &quot;</span>
-            <span class="o">+</span> <span class="n">this_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%H%M UTC </span><span class="si">%d</span><span class="s2"> %b %Y&quot;</span><span class="p">),</span>
+            <span class="o">+</span> <span class="s2">" Reflectivity and Severe Weather Reports, "</span>
+            <span class="o">+</span> <span class="n">this_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%H%M UTC </span><span class="si">%d</span><span class="s2"> %b %Y"</span><span class="p">),</span>
             <span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
-            <span class="n">resolution</span><span class="o">=</span><span class="s2">&quot;10m&quot;</span><span class="p">,</span>
+            <span class="n">resolution</span><span class="o">=</span><span class="s2">"10m"</span><span class="p">,</span>
             <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span>
-            <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;ChaseSpectral&quot;</span><span class="p">,</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="s2">"ChaseSpectral"</span><span class="p">,</span>
             <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
             <span class="n">lat_lines</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
             <span class="n">lon_lines</span><span class="o">=</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
         <span class="p">)</span>
 
         <span class="c1">## plot horizontal colorbar</span>
-        <span class="n">display</span><span class="o">.</span><span class="n">plot_colorbar</span><span class="p">(</span><span class="n">cf</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.07</span><span class="p">)</span>
+        <span class="n">display</span><span class="o">.</span><span class="n">plot_colorbar</span><span class="p">(</span><span class="n">cf</span><span class="p">,</span> <span class="n">orient</span><span class="o">=</span><span class="s2">"horizontal"</span><span class="p">,</span> <span class="n">pad</span><span class="o">=</span><span class="mf">0.07</span><span class="p">)</span>
 
         <span class="c1"># Plot range rings if desired</span>
-        <span class="c1"># display.plot_range_ring(25., color=&#39;gray&#39;, linestyle=&#39;dashed&#39;)</span>
-        <span class="c1"># display.plot_range_ring(50., color=&#39;gray&#39;, linestyle=&#39;dashed&#39;)</span>
-        <span class="c1"># display.plot_range_ring(100., color=&#39;gray&#39;, linestyle=&#39;dashed&#39;)</span>
+        <span class="c1"># display.plot_range_ring(25., color='gray', linestyle='dashed')</span>
+        <span class="c1"># display.plot_range_ring(50., color='gray', linestyle='dashed')</span>
+        <span class="c1"># display.plot_range_ring(100., color='gray', linestyle='dashed')</span>
 
         <span class="n">ax1</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">min_lon</span><span class="p">,</span> <span class="n">max_lon</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">crs</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
         <span class="n">ax1</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">min_lat</span><span class="p">,</span> <span class="n">max_lat</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">),</span> <span class="n">crs</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
@@ -1447,67 +1447,67 @@ Downloaded KMKX20210907_195056_V06
         <span class="c1">## add marker points for severe reports</span>
         <span class="n">wind_reports_now</span> <span class="o">=</span> <span class="n">wind_reports</span><span class="p">[</span>
             <span class="p">(</span>
-                <span class="p">(</span><span class="n">start</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">30</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M&quot;</span><span class="p">)</span>
-            <span class="p">)</span> <span class="p">:</span> <span class="n">this_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M&quot;</span><span class="p">)</span>
+                <span class="p">(</span><span class="n">start</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">30</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M"</span><span class="p">)</span>
+            <span class="p">)</span> <span class="p">:</span> <span class="n">this_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M"</span><span class="p">)</span>
         <span class="p">]</span>
         <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
             <span class="n">wind_reports_now</span><span class="o">.</span><span class="n">slon</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
             <span class="n">wind_reports_now</span><span class="o">.</span><span class="n">slat</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
             <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-            <span class="n">facecolors</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
-            <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;deepskyblue&quot;</span><span class="p">,</span>
+            <span class="n">facecolors</span><span class="o">=</span><span class="s2">"none"</span><span class="p">,</span>
+            <span class="n">edgecolors</span><span class="o">=</span><span class="s2">"deepskyblue"</span><span class="p">,</span>
             <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.8</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Wind Reports&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">"Wind Reports"</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">tornado_reports_now</span> <span class="o">=</span> <span class="n">tornado_reports</span><span class="p">[</span>
             <span class="p">(</span>
-                <span class="p">(</span><span class="n">start</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">30</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M&quot;</span><span class="p">)</span>
-            <span class="p">)</span> <span class="p">:</span> <span class="n">this_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M&quot;</span><span class="p">)</span>
+                <span class="p">(</span><span class="n">start</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">30</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M"</span><span class="p">)</span>
+            <span class="p">)</span> <span class="p">:</span> <span class="n">this_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M"</span><span class="p">)</span>
         <span class="p">]</span>
         <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
             <span class="n">tornado_reports_now</span><span class="o">.</span><span class="n">slon</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
             <span class="n">tornado_reports_now</span><span class="o">.</span><span class="n">slat</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
             <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-            <span class="n">facecolors</span><span class="o">=</span><span class="s2">&quot;tab:red&quot;</span><span class="p">,</span>
-            <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
-            <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;v&quot;</span><span class="p">,</span>
+            <span class="n">facecolors</span><span class="o">=</span><span class="s2">"tab:red"</span><span class="p">,</span>
+            <span class="n">edgecolors</span><span class="o">=</span><span class="s2">"black"</span><span class="p">,</span>
+            <span class="n">marker</span><span class="o">=</span><span class="s2">"v"</span><span class="p">,</span>
             <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Tornado Reports&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">"Tornado Reports"</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">hail_reports_now</span> <span class="o">=</span> <span class="n">hail_reports</span><span class="p">[</span>
             <span class="p">(</span>
-                <span class="p">(</span><span class="n">start</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">30</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M&quot;</span><span class="p">)</span>
-            <span class="p">)</span> <span class="p">:</span> <span class="n">this_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M&quot;</span><span class="p">)</span>
+                <span class="p">(</span><span class="n">start</span> <span class="o">-</span> <span class="n">pd</span><span class="o">.</span><span class="n">Timedelta</span><span class="p">(</span><span class="n">minutes</span><span class="o">=</span><span class="mi">30</span><span class="p">))</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M"</span><span class="p">)</span>
+            <span class="p">)</span> <span class="p">:</span> <span class="n">this_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y-%m-</span><span class="si">%d</span><span class="s2"> %H:%M"</span><span class="p">)</span>
         <span class="p">]</span>
         <span class="n">ax1</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
             <span class="n">hail_reports_now</span><span class="o">.</span><span class="n">slon</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
             <span class="n">hail_reports_now</span><span class="o">.</span><span class="n">slat</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">tolist</span><span class="p">(),</span>
             <span class="n">s</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
-            <span class="n">facecolors</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
-            <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;lawngreen&quot;</span><span class="p">,</span>
+            <span class="n">facecolors</span><span class="o">=</span><span class="s2">"none"</span><span class="p">,</span>
+            <span class="n">edgecolors</span><span class="o">=</span><span class="s2">"lawngreen"</span><span class="p">,</span>
             <span class="n">linewidths</span><span class="o">=</span><span class="mf">1.8</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Hail Reports&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">"Hail Reports"</span><span class="p">,</span>
         <span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"upper right"</span><span class="p">)</span>
 
         <span class="n">add_scale_line</span><span class="p">(</span>
             <span class="mf">100.0</span><span class="p">,</span>
             <span class="n">ax1</span><span class="p">,</span>
             <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;black&quot;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">"black"</span><span class="p">,</span>
             <span class="n">linewidth</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
             <span class="n">fontsize</span><span class="o">=</span><span class="mi">18</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span>
-            <span class="n">scan</span><span class="o">.</span><span class="n">radar_id</span> <span class="o">+</span> <span class="s2">&quot;_&quot;</span> <span class="o">+</span> <span class="n">scan</span><span class="o">.</span><span class="n">filename</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">17</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;_dz_rpts.png&quot;</span><span class="p">,</span>
-            <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">&quot;tight&quot;</span><span class="p">,</span>
+            <span class="n">scan</span><span class="o">.</span><span class="n">radar_id</span> <span class="o">+</span> <span class="s2">"_"</span> <span class="o">+</span> <span class="n">scan</span><span class="o">.</span><span class="n">filename</span><span class="p">[</span><span class="mi">4</span><span class="p">:</span><span class="mi">17</span><span class="p">]</span> <span class="o">+</span> <span class="s2">"_dz_rpts.png"</span><span class="p">,</span>
+            <span class="n">bbox_inches</span><span class="o">=</span><span class="s2">"tight"</span><span class="p">,</span>
             <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span>
-            <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;white&quot;</span><span class="p">,</span>
+            <span class="n">facecolor</span><span class="o">=</span><span class="s2">"white"</span><span class="p">,</span>
             <span class="n">transparent</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="c1"># plt.show()</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s2">&quot;all&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="s2">"all"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1571,8 +1571,8 @@ working on KMKX20210907_195642_V06
 <p>We use the <code class="docutils literal notranslate"><span class="pre">imageio</span></code> library to create an animation of the images (an mp4 file).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">map_images</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radar_id</span><span class="si">}</span><span class="s2">*&quot;</span><span class="p">))</span>
-<span class="n">gif_title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">radar_id</span><span class="si">}</span><span class="s2">-map-animation.mp4&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">map_images</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">radar_id</span><span class="si">}</span><span class="s2">*"</span><span class="p">))</span>
+<span class="n">gif_title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">radar_id</span><span class="si">}</span><span class="s2">-map-animation.mp4"</span>
 
 <span class="c1"># Check to see if the file exists - if it does, delete it</span>
 <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">gif_title</span><span class="p">):</span>
@@ -1726,8 +1726,8 @@ working on KMKX20210907_195642_V06
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1761,7 +1761,7 @@ working on KMKX20210907_195642_V06
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

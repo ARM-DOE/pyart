@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,10 +486,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.io.sigmet</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Reading and writing of Sigmet (raw format) files</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
@@ -516,7 +516,7 @@
     <span class="n">file_field_names</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">time_ordered</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
+    <span class="n">time_ordered</span><span class="o">=</span><span class="s2">"none"</span><span class="p">,</span>
     <span class="n">full_xhdr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">noaa_hh_hdr</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">debug</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
@@ -524,7 +524,7 @@
     <span class="n">ignore_sweep_start_ms</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Read a Sigmet (IRIS) product file.</span>
 
 <span class="sd">    Parameters</span>
@@ -547,7 +547,7 @@
 <span class="sd">    file_field_names : bool, optional</span>
 <span class="sd">        True to use the Sigmet data type names for the field names. If this</span>
 <span class="sd">        case the field_names parameter is ignored. The field dictionary will</span>
-<span class="sd">        likely only have a &#39;data&#39; key, unless the fields are defined in</span>
+<span class="sd">        likely only have a 'data' key, unless the fields are defined in</span>
 <span class="sd">        `additional_metadata`.</span>
 <span class="sd">    exclude_fields : list or None, optional</span>
 <span class="sd">        List of fields to exclude from the radar object. This is applied</span>
@@ -557,17 +557,17 @@
 <span class="sd">        List of fields to include from the radar object. This is applied</span>
 <span class="sd">        after the `file_field_names` and `field_names` parameters. Set</span>
 <span class="sd">        to None to include all fields not specified by exclude_fields.</span>
-<span class="sd">    time_ordered : &#39;none&#39;, &#39;sequential&#39;, &#39;full&#39;, ...,  optional</span>
+<span class="sd">    time_ordered : 'none', 'sequential', 'full', ...,  optional</span>
 <span class="sd">        Parameter controlling if and how the rays are re-ordered by time.</span>
-<span class="sd">        The default, &#39;none&#39; keeps the rays ordered in the same manner as</span>
-<span class="sd">        they appears in the Sigmet file. &#39;sequential&#39; will determind and</span>
+<span class="sd">        The default, 'none' keeps the rays ordered in the same manner as</span>
+<span class="sd">        they appears in the Sigmet file. 'sequential' will determind and</span>
 <span class="sd">        apply an operation which maintains a sequential ray order in elevation</span>
 <span class="sd">        or azimuth yet orders the rays according to time. If no operation can</span>
 <span class="sd">        be found to accomplish this a warning is issue and the rays are</span>
-<span class="sd">        returned in their original order. &#39;roll&#39;, &#39;reverse&#39;, and</span>
-<span class="sd">        &#39;reverse_and_roll&#39; will apply that operation to the rays in order to</span>
+<span class="sd">        returned in their original order. 'roll', 'reverse', and</span>
+<span class="sd">        'reverse_and_roll' will apply that operation to the rays in order to</span>
 <span class="sd">        place them in time order, direct use of these is not recommended.</span>
-<span class="sd">        &#39;full&#39; will order the rays in strictly time increasing order,</span>
+<span class="sd">        'full' will order the rays in strictly time increasing order,</span>
 <span class="sd">        but the rays will likely become non-sequential, thisoption is not</span>
 <span class="sd">        recommended unless strict time increasing order is required.</span>
 <span class="sd">    full_xhdr : bool or None</span>
@@ -604,10 +604,10 @@
 <span class="sd">    radar : Radar</span>
 <span class="sd">        Radar object.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-        <span class="s2">&quot;Py-ART&#39;s SIGMET module is deprecated, please use xradar to read in the file using &quot;</span>
-        <span class="s2">&quot;xd.io.open_iris_datatree&quot;</span><span class="p">,</span>
+        <span class="s2">"Py-ART's SIGMET module is deprecated, please use xradar to read in the file using "</span>
+        <span class="s2">"xd.io.open_iris_datatree"</span><span class="p">,</span>
         <span class="ne">UserWarning</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="c1"># test for non empty kwargs</span>
@@ -615,7 +615,7 @@
 
     <span class="c1"># create metadata retrieval object</span>
     <span class="n">filemetadata</span> <span class="o">=</span> <span class="n">FileMetadata</span><span class="p">(</span>
-        <span class="s2">&quot;sigmet&quot;</span><span class="p">,</span>
+        <span class="s2">"sigmet"</span><span class="p">,</span>
         <span class="n">field_names</span><span class="p">,</span>
         <span class="n">additional_metadata</span><span class="p">,</span>
         <span class="n">file_field_names</span><span class="p">,</span>
@@ -625,15 +625,15 @@
 
     <span class="c1"># open the file</span>
     <span class="n">sigmetfile</span> <span class="o">=</span> <span class="n">SigmetFile</span><span class="p">(</span><span class="n">prepare_for_read</span><span class="p">(</span><span class="n">filename</span><span class="p">),</span> <span class="n">debug</span><span class="o">=</span><span class="n">debug</span><span class="p">)</span>
-    <span class="n">ingest_config</span> <span class="o">=</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">ingest_header</span><span class="p">[</span><span class="s2">&quot;ingest_configuration&quot;</span><span class="p">]</span>
-    <span class="n">task_config</span> <span class="o">=</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">ingest_header</span><span class="p">[</span><span class="s2">&quot;task_configuration&quot;</span><span class="p">]</span>
+    <span class="n">ingest_config</span> <span class="o">=</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">ingest_header</span><span class="p">[</span><span class="s2">"ingest_configuration"</span><span class="p">]</span>
+    <span class="n">task_config</span> <span class="o">=</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">ingest_header</span><span class="p">[</span><span class="s2">"task_configuration"</span><span class="p">]</span>
 
     <span class="c1"># determine if full extended headers should be read</span>
     <span class="k">if</span> <span class="n">noaa_hh_hdr</span><span class="p">:</span>
         <span class="n">full_xhdr</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">if</span> <span class="n">full_xhdr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">type_mask</span> <span class="o">=</span> <span class="n">task_config</span><span class="p">[</span><span class="s2">&quot;task_dsp_info&quot;</span><span class="p">][</span><span class="s2">&quot;current_data_type_mask&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">type_mask</span><span class="p">[</span><span class="s2">&quot;extended_header_type&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">type_mask</span> <span class="o">=</span> <span class="n">task_config</span><span class="p">[</span><span class="s2">"task_dsp_info"</span><span class="p">][</span><span class="s2">"current_data_type_mask"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">type_mask</span><span class="p">[</span><span class="s2">"extended_header_type"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="n">full_xhdr</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">full_xhdr</span> <span class="o">=</span> <span class="kc">False</span>
@@ -641,36 +641,36 @@
     <span class="c1"># read data</span>
     <span class="n">sigmet_data</span><span class="p">,</span> <span class="n">sigmet_metadata</span> <span class="o">=</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">read_data</span><span class="p">(</span><span class="n">full_xhdr</span><span class="o">=</span><span class="n">full_xhdr</span><span class="p">)</span>
     <span class="n">first_data_type</span> <span class="o">=</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">data_type_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-    <span class="k">if</span> <span class="n">first_data_type</span> <span class="o">==</span> <span class="s2">&quot;XHDR&quot;</span><span class="p">:</span>  <span class="c1"># don&#39;t use XHDR as the first data type</span>
+    <span class="k">if</span> <span class="n">first_data_type</span> <span class="o">==</span> <span class="s2">"XHDR"</span><span class="p">:</span>  <span class="c1"># don't use XHDR as the first data type</span>
         <span class="n">first_data_type</span> <span class="o">=</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">data_type_names</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">sigmetfile</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="n">nsweeps</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span> <span class="o">=</span> <span class="n">sigmet_data</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
 
     <span class="k">if</span> <span class="n">nsweeps</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="s2">&quot;File contains no readable sweep data.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">OSError</span><span class="p">(</span><span class="s2">"File contains no readable sweep data."</span><span class="p">)</span>
 
     <span class="c1"># ignore extended header if user requested</span>
     <span class="k">if</span> <span class="n">ignore_xhdr</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">&quot;XHDR&quot;</span> <span class="ow">in</span> <span class="n">sigmet_data</span><span class="p">:</span>
-            <span class="n">sigmet_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;XHDR&quot;</span><span class="p">)</span>
-            <span class="n">sigmet_metadata</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;XHDR&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"XHDR"</span> <span class="ow">in</span> <span class="n">sigmet_data</span><span class="p">:</span>
+            <span class="n">sigmet_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"XHDR"</span><span class="p">)</span>
+            <span class="n">sigmet_metadata</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"XHDR"</span><span class="p">)</span>
 
     <span class="c1"># parse the extended headers for time</span>
-    <span class="k">if</span> <span class="n">full_xhdr</span> <span class="ow">and</span> <span class="s2">&quot;XHDR&quot;</span> <span class="ow">in</span> <span class="n">sigmet_data</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">full_xhdr</span> <span class="ow">and</span> <span class="s2">"XHDR"</span> <span class="ow">in</span> <span class="n">sigmet_data</span><span class="p">:</span>
         <span class="c1"># extract the ms timing data and store the full header for later</span>
         <span class="c1"># analysis, keep both in the sigmet_data dictionary so time ordering</span>
-        <span class="c1"># and removal of missing rays is performed on these &quot;fields&quot;</span>
-        <span class="n">xhdr</span> <span class="o">=</span> <span class="n">sigmet_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;XHDR&quot;</span><span class="p">)</span>
-        <span class="n">sigmet_data</span><span class="p">[</span><span class="s2">&quot;XHDR&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xhdr</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="s2">&quot;i4&quot;</span><span class="p">)</span>
-        <span class="n">sigmet_data</span><span class="p">[</span><span class="s2">&quot;XHDR_FULL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xhdr</span>
+        <span class="c1"># and removal of missing rays is performed on these "fields"</span>
+        <span class="n">xhdr</span> <span class="o">=</span> <span class="n">sigmet_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"XHDR"</span><span class="p">)</span>
+        <span class="n">sigmet_data</span><span class="p">[</span><span class="s2">"XHDR"</span><span class="p">]</span> <span class="o">=</span> <span class="n">xhdr</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:</span><span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="s2">"i4"</span><span class="p">)</span>
+        <span class="n">sigmet_data</span><span class="p">[</span><span class="s2">"XHDR_FULL"</span><span class="p">]</span> <span class="o">=</span> <span class="n">xhdr</span>
         <span class="n">xhdr_metadata</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="s2">&quot;XHDR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">xhdr_metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="s2">&quot;XHDR&quot;</span><span class="p">][</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="n">sigmet_metadata</span><span class="p">[</span><span class="s2">&quot;XHDR_FULL&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xhdr_metadata</span>
+        <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="s2">"XHDR"</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">xhdr_metadata</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="s2">"XHDR"</span><span class="p">][</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+        <span class="n">sigmet_metadata</span><span class="p">[</span><span class="s2">"XHDR_FULL"</span><span class="p">]</span> <span class="o">=</span> <span class="n">xhdr_metadata</span>
 
     <span class="c1"># remove missing rays from the data</span>
-    <span class="n">good_rays</span> <span class="o">=</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">][</span><span class="s2">&quot;nbins&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span>
-    <span class="n">rays_missing</span> <span class="o">=</span> <span class="p">(</span><span class="n">sigmet_metadata</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">][</span><span class="s2">&quot;nbins&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+    <span class="n">good_rays</span> <span class="o">=</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">][</span><span class="s2">"nbins"</span><span class="p">]</span> <span class="o">!=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="n">rays_missing</span> <span class="o">=</span> <span class="p">(</span><span class="n">sigmet_metadata</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">][</span><span class="s2">"nbins"</span><span class="p">]</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
     <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">sigmet_data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
         <span class="n">sigmet_data</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigmet_data</span><span class="p">[</span><span class="n">field_name</span><span class="p">][</span><span class="n">good_rays</span><span class="p">]</span>
         <span class="n">field_metadata</span> <span class="o">=</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
@@ -679,40 +679,40 @@
     <span class="n">rays_per_sweep</span> <span class="o">=</span> <span class="n">good_rays</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
     <span class="c1"># time order</span>
-    <span class="k">if</span> <span class="n">time_ordered</span> <span class="o">==</span> <span class="s2">&quot;sequential&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">time_ordered</span> <span class="o">==</span> <span class="s2">"sequential"</span><span class="p">:</span>
         <span class="c1"># Determine appropiate time ordering operation for the sweep and</span>
         <span class="c1"># determine if that operation will in fact order the times.</span>
         <span class="c1"># If it does not issue a warning and perform no time ordering</span>
-        <span class="k">if</span> <span class="n">task_config</span><span class="p">[</span><span class="s2">&quot;task_scan_info&quot;</span><span class="p">][</span><span class="s2">&quot;antenna_scan_mode&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">task_config</span><span class="p">[</span><span class="s2">"task_scan_info"</span><span class="p">][</span><span class="s2">"antenna_scan_mode"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
             <span class="c1"># RHI scan</span>
             <span class="k">if</span> <span class="n">_is_time_ordered_by_reversal</span><span class="p">(</span>
                 <span class="n">sigmet_data</span><span class="p">,</span> <span class="n">sigmet_metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span>
             <span class="p">):</span>
-                <span class="n">time_ordered</span> <span class="o">=</span> <span class="s2">&quot;reverse&quot;</span>
+                <span class="n">time_ordered</span> <span class="o">=</span> <span class="s2">"reverse"</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Rays not collected sequentially in time.&quot;</span><span class="p">)</span>
-                <span class="n">time_ordered</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">"Rays not collected sequentially in time."</span><span class="p">)</span>
+                <span class="n">time_ordered</span> <span class="o">=</span> <span class="s2">"none"</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># PPI scan</span>
             <span class="k">if</span> <span class="n">_is_time_ordered_by_roll</span><span class="p">(</span><span class="n">sigmet_data</span><span class="p">,</span> <span class="n">sigmet_metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
-                <span class="n">time_ordered</span> <span class="o">=</span> <span class="s2">&quot;roll&quot;</span>
+                <span class="n">time_ordered</span> <span class="o">=</span> <span class="s2">"roll"</span>
             <span class="k">elif</span> <span class="n">_is_time_ordered_by_reverse_roll</span><span class="p">(</span>
                 <span class="n">sigmet_data</span><span class="p">,</span> <span class="n">sigmet_metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span>
             <span class="p">):</span>
-                <span class="n">time_ordered</span> <span class="o">=</span> <span class="s2">&quot;reverse_and_roll&quot;</span>
+                <span class="n">time_ordered</span> <span class="o">=</span> <span class="s2">"reverse_and_roll"</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Rays not collected sequentially in time.&quot;</span><span class="p">)</span>
-                <span class="n">time_ordered</span> <span class="o">=</span> <span class="s2">&quot;none&quot;</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">"Rays not collected sequentially in time."</span><span class="p">)</span>
+                <span class="n">time_ordered</span> <span class="o">=</span> <span class="s2">"none"</span>
 
-    <span class="k">if</span> <span class="n">time_ordered</span> <span class="o">==</span> <span class="s2">&quot;full&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">time_ordered</span> <span class="o">==</span> <span class="s2">"full"</span><span class="p">:</span>
         <span class="n">_time_order_data_and_metadata_full</span><span class="p">(</span><span class="n">sigmet_data</span><span class="p">,</span> <span class="n">sigmet_metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">time_ordered</span> <span class="o">==</span> <span class="s2">&quot;reverse&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">time_ordered</span> <span class="o">==</span> <span class="s2">"reverse"</span><span class="p">:</span>
         <span class="n">_time_order_data_and_metadata_reverse</span><span class="p">(</span>
             <span class="n">sigmet_data</span><span class="p">,</span> <span class="n">sigmet_metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span>
         <span class="p">)</span>
-    <span class="k">if</span> <span class="n">time_ordered</span> <span class="o">==</span> <span class="s2">&quot;roll&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">time_ordered</span> <span class="o">==</span> <span class="s2">"roll"</span><span class="p">:</span>
         <span class="n">_time_order_data_and_metadata_roll</span><span class="p">(</span><span class="n">sigmet_data</span><span class="p">,</span> <span class="n">sigmet_metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">time_ordered</span> <span class="o">==</span> <span class="s2">&quot;reverse_and_roll&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">time_ordered</span> <span class="o">==</span> <span class="s2">"reverse_and_roll"</span><span class="p">:</span>
         <span class="c1"># reverse followed by roll</span>
         <span class="n">_time_order_data_and_metadata_reverse</span><span class="p">(</span>
             <span class="n">sigmet_data</span><span class="p">,</span> <span class="n">sigmet_metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span>
@@ -722,12 +722,12 @@
     <span class="c1"># sweep_start_ray_index and sweep_end_ray_index</span>
     <span class="n">ray_count</span> <span class="o">=</span> <span class="n">good_rays</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
     <span class="n">total_rays</span> <span class="o">=</span> <span class="n">ray_count</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
-    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_start_ray_index&quot;</span><span class="p">)</span>
-    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_end_ray_index&quot;</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"sweep_start_ray_index"</span><span class="p">)</span>
+    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"sweep_end_ray_index"</span><span class="p">)</span>
 
-    <span class="n">ssri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">ray_count</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
-    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ssri</span>
-    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">ray_count</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">ssri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">ray_count</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"int32"</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ssri</span>
+    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">ray_count</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"int32"</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
 
     <span class="c1"># time</span>
     <span class="c1"># The time of each ray collected in a Sigmet file is stored in the ray</span>
@@ -737,7 +737,7 @@
     <span class="c1"># precision. The time of the sweep start is recorded in the ingest data</span>
     <span class="c1"># header to millisecond percision.</span>
     <span class="c1"># The method below sets the volume starting time to the time of the first</span>
-    <span class="c1"># sweep truncated to the nearest second so that values time[&#39;data&#39;] are</span>
+    <span class="c1"># sweep truncated to the nearest second so that values time['data'] are</span>
     <span class="c1"># always positive. The timing of each ray is then calculated from the</span>
     <span class="c1"># offset of the time of the sweep from this volume starting time</span>
     <span class="c1"># and the offset from the sweep start to the ray recorded in the ray</span>
@@ -752,17 +752,17 @@
     <span class="c1"># a negative error which is undesired.</span>
 
     <span class="c1"># extract times from the ray headers</span>
-    <span class="k">if</span> <span class="s2">&quot;XHDR&quot;</span> <span class="ow">in</span> <span class="n">sigmet_data</span><span class="p">:</span>  <span class="c1"># use time in extended headers</span>
-        <span class="n">tdata</span> <span class="o">=</span> <span class="n">sigmet_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;XHDR&quot;</span><span class="p">)</span>
-        <span class="n">tdata</span> <span class="o">=</span> <span class="p">(</span><span class="n">tdata</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">"XHDR"</span> <span class="ow">in</span> <span class="n">sigmet_data</span><span class="p">:</span>  <span class="c1"># use time in extended headers</span>
+        <span class="n">tdata</span> <span class="o">=</span> <span class="n">sigmet_data</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"XHDR"</span><span class="p">)</span>
+        <span class="n">tdata</span> <span class="o">=</span> <span class="p">(</span><span class="n">tdata</span><span class="o">.</span><span class="n">flatten</span><span class="p">()</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"float64"</span><span class="p">)</span>
         <span class="n">sigmet_extended_header</span> <span class="o">=</span> <span class="kc">True</span>
     <span class="k">else</span><span class="p">:</span>  <span class="c1"># use times from the standard ray headers</span>
-        <span class="n">tdata</span> <span class="o">=</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">][</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+        <span class="n">tdata</span> <span class="o">=</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">][</span><span class="s2">"time"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"float64"</span><span class="p">)</span>
         <span class="n">sigmet_extended_header</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="c1"># determine sweep start times and possibly trucate them to sec. precision</span>
     <span class="n">dts</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">ymds_time_to_datetime</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;sweep_start_time&quot;</span><span class="p">])</span>
+        <span class="n">ymds_time_to_datetime</span><span class="p">(</span><span class="n">d</span><span class="p">[</span><span class="s2">"sweep_start_time"</span><span class="p">])</span>
         <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">ingest_data_headers</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">]</span>
     <span class="p">]</span>
     <span class="k">if</span> <span class="n">ignore_sweep_start_ms</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -775,199 +775,199 @@
 
     <span class="c1"># add sweep start times to all time values in each sweep.</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">dt</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">dts</span><span class="p">):</span>
-        <span class="n">start</span> <span class="o">=</span> <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
-        <span class="n">end</span> <span class="o">=</span> <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">start</span> <span class="o">=</span> <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
+        <span class="n">end</span> <span class="o">=</span> <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
         <span class="n">td</span> <span class="o">=</span> <span class="n">dt</span> <span class="o">-</span> <span class="n">dt_start</span>  <span class="c1"># time delta from volume start</span>
         <span class="n">tdata</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="p">(</span>
             <span class="n">td</span><span class="o">.</span><span class="n">microseconds</span> <span class="o">+</span> <span class="p">(</span><span class="n">td</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">td</span><span class="o">.</span><span class="n">days</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">3600</span><span class="p">)</span> <span class="o">*</span> <span class="mi">10</span><span class="o">**</span><span class="mi">6</span>
         <span class="p">)</span> <span class="o">/</span> <span class="mi">10</span><span class="o">**</span><span class="mi">6</span>
 
     <span class="c1"># stores this data in the time dictionary</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
-    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tdata</span>
-    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_time_unit_str</span><span class="p">(</span><span class="n">dt_start</span><span class="p">)</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"time"</span><span class="p">)</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">tdata</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_time_unit_str</span><span class="p">(</span><span class="n">dt_start</span><span class="p">)</span>
 
     <span class="c1"># _range</span>
-    <span class="n">_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">)</span>
-    <span class="n">range_info</span> <span class="o">=</span> <span class="n">task_config</span><span class="p">[</span><span class="s2">&quot;task_range_info&quot;</span><span class="p">]</span>
-    <span class="n">gate_0</span> <span class="o">=</span> <span class="n">range_info</span><span class="p">[</span><span class="s2">&quot;first_bin_range&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">100.0</span>  <span class="c1"># meters</span>
-    <span class="n">gate_nbin</span> <span class="o">=</span> <span class="n">range_info</span><span class="p">[</span><span class="s2">&quot;last_bin_range&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">100.0</span>  <span class="c1"># meters</span>
+    <span class="n">_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"range"</span><span class="p">)</span>
+    <span class="n">range_info</span> <span class="o">=</span> <span class="n">task_config</span><span class="p">[</span><span class="s2">"task_range_info"</span><span class="p">]</span>
+    <span class="n">gate_0</span> <span class="o">=</span> <span class="n">range_info</span><span class="p">[</span><span class="s2">"first_bin_range"</span><span class="p">]</span> <span class="o">/</span> <span class="mf">100.0</span>  <span class="c1"># meters</span>
+    <span class="n">gate_nbin</span> <span class="o">=</span> <span class="n">range_info</span><span class="p">[</span><span class="s2">"last_bin_range"</span><span class="p">]</span> <span class="o">/</span> <span class="mf">100.0</span>  <span class="c1"># meters</span>
     <span class="n">gate_size</span> <span class="o">=</span> <span class="nb">round</span><span class="p">((</span><span class="n">gate_nbin</span> <span class="o">-</span> <span class="n">gate_0</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">nbins</span><span class="p">))</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gate_0</span> <span class="o">+</span> <span class="n">gate_size</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbins</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;meters_to_center_of_first_gate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">gate_0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;meters_between_gates&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">gate_size</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">gate_0</span> <span class="o">+</span> <span class="n">gate_size</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbins</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">"meters_to_center_of_first_gate"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">gate_0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">"meters_between_gates"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">gate_size</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
 
     <span class="c1"># fields</span>
     <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">data_type_name</span><span class="p">,</span> <span class="n">fdata</span> <span class="ow">in</span> <span class="n">sigmet_data</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-        <span class="k">if</span> <span class="n">data_type_name</span> <span class="o">==</span> <span class="s2">&quot;XHDR_FULL&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">data_type_name</span> <span class="o">==</span> <span class="s2">"XHDR_FULL"</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="o">.</span><span class="n">get_field_name</span><span class="p">(</span><span class="n">data_type_name</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">continue</span>
         <span class="n">field_dic</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
-        <span class="n">field_dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fdata</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">nbins</span><span class="p">)</span>
-        <span class="n">field_dic</span><span class="p">[</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+        <span class="n">field_dic</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">fdata</span><span class="o">.</span><span class="n">reshape</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">nbins</span><span class="p">)</span>
+        <span class="n">field_dic</span><span class="p">[</span><span class="s2">"_FillValue"</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
         <span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">field_dic</span>
 
     <span class="c1"># metadata</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">)</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;original_container&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;sigmet&quot;</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;instrument_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ingest_config</span><span class="p">[</span><span class="s2">&quot;site_name&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;sigmet_task_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">product_hdr</span><span class="p">[</span><span class="s2">&quot;product_configuration&quot;</span><span class="p">][</span>
-        <span class="s2">&quot;task_name&quot;</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"metadata"</span><span class="p">)</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">"original_container"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"sigmet"</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">"instrument_name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ingest_config</span><span class="p">[</span><span class="s2">"site_name"</span><span class="p">]</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">"sigmet_task_name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">product_hdr</span><span class="p">[</span><span class="s2">"product_configuration"</span><span class="p">][</span>
+        <span class="s2">"task_name"</span>
     <span class="p">]</span>
 
     <span class="k">if</span> <span class="n">sigmet_extended_header</span><span class="p">:</span>
-        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;sigmet_extended_header&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;true&quot;</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">"sigmet_extended_header"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"true"</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;sigmet_extended_header&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;false&quot;</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;time_ordered&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_ordered</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;rays_missing&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rays_missing</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">"sigmet_extended_header"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"false"</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">"time_ordered"</span><span class="p">]</span> <span class="o">=</span> <span class="n">time_ordered</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">"rays_missing"</span><span class="p">]</span> <span class="o">=</span> <span class="n">rays_missing</span>
 
     <span class="c1"># scan_type</span>
-    <span class="k">if</span> <span class="n">task_config</span><span class="p">[</span><span class="s2">&quot;task_scan_info&quot;</span><span class="p">][</span><span class="s2">&quot;antenna_scan_mode&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
-        <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">&quot;rhi&quot;</span>
+    <span class="k">if</span> <span class="n">task_config</span><span class="p">[</span><span class="s2">"task_scan_info"</span><span class="p">][</span><span class="s2">"antenna_scan_mode"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">"rhi"</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">&quot;ppi&quot;</span>
+        <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">"ppi"</span>
 
     <span class="c1"># latitude</span>
-    <span class="n">latitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;latitude&quot;</span><span class="p">)</span>
-    <span class="n">lat</span> <span class="o">=</span> <span class="n">bin4_to_angle</span><span class="p">(</span><span class="n">ingest_config</span><span class="p">[</span><span class="s2">&quot;latitude_radar&quot;</span><span class="p">])</span>
+    <span class="n">latitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"latitude"</span><span class="p">)</span>
+    <span class="n">lat</span> <span class="o">=</span> <span class="n">bin4_to_angle</span><span class="p">(</span><span class="n">ingest_config</span><span class="p">[</span><span class="s2">"latitude_radar"</span><span class="p">])</span>
     <span class="k">if</span> <span class="n">lat</span> <span class="o">&gt;</span> <span class="mf">180.0</span><span class="p">:</span>
         <span class="n">lat</span> <span class="o">-=</span> <span class="mf">360.0</span>
-    <span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lat</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="n">latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lat</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">)</span>
 
     <span class="c1"># longitude</span>
-    <span class="n">longitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;longitude&quot;</span><span class="p">)</span>
-    <span class="n">lon</span> <span class="o">=</span> <span class="n">bin4_to_angle</span><span class="p">(</span><span class="n">ingest_config</span><span class="p">[</span><span class="s2">&quot;longitude_radar&quot;</span><span class="p">])</span>
+    <span class="n">longitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"longitude"</span><span class="p">)</span>
+    <span class="n">lon</span> <span class="o">=</span> <span class="n">bin4_to_angle</span><span class="p">(</span><span class="n">ingest_config</span><span class="p">[</span><span class="s2">"longitude_radar"</span><span class="p">])</span>
     <span class="k">if</span> <span class="n">lon</span> <span class="o">&gt;</span> <span class="mf">180.0</span><span class="p">:</span>
         <span class="n">lon</span> <span class="o">-=</span> <span class="mf">360.0</span>
-    <span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lon</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="n">longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lon</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">)</span>
 
     <span class="c1"># altitude</span>
-    <span class="n">altitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;altitude&quot;</span><span class="p">)</span>
-    <span class="n">alt</span> <span class="o">=</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">product_hdr</span><span class="p">[</span><span class="s2">&quot;product_end&quot;</span><span class="p">][</span><span class="s2">&quot;ground_height&quot;</span><span class="p">]</span>
-    <span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">alt</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="n">altitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"altitude"</span><span class="p">)</span>
+    <span class="n">alt</span> <span class="o">=</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">product_hdr</span><span class="p">[</span><span class="s2">"product_end"</span><span class="p">][</span><span class="s2">"ground_height"</span><span class="p">]</span>
+    <span class="n">altitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">alt</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">)</span>
 
     <span class="c1"># sweep_number</span>
-    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_number&quot;</span><span class="p">)</span>
-    <span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"sweep_number"</span><span class="p">)</span>
+    <span class="n">sweep_number</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">)</span>
 
     <span class="c1"># fixed_angle</span>
-    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;fixed_angle&quot;</span><span class="p">)</span>
-    <span class="n">fa</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s2">&quot;fixed_angle&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">ingest_data_headers</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">]]</span>
-    <span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">bin2_to_angle</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fa</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"fixed_angle"</span><span class="p">)</span>
+    <span class="n">fa</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span><span class="p">[</span><span class="s2">"fixed_angle"</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">ingest_data_headers</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">]]</span>
+    <span class="n">fixed_angle</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">bin2_to_angle</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">fa</span><span class="p">))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"float32"</span><span class="p">)</span>
 
     <span class="c1"># azimuth</span>
-    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;azimuth&quot;</span><span class="p">)</span>
-    <span class="n">az0</span> <span class="o">=</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">][</span><span class="s2">&quot;azimuth_0&quot;</span><span class="p">]</span>
-    <span class="n">az1</span> <span class="o">=</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">][</span><span class="s2">&quot;azimuth_1&quot;</span><span class="p">]</span>
-    <span class="n">az_data</span> <span class="o">=</span> <span class="n">mean_of_two_angles_deg</span><span class="p">(</span><span class="n">az0</span><span class="p">,</span> <span class="n">az1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"azimuth"</span><span class="p">)</span>
+    <span class="n">az0</span> <span class="o">=</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">][</span><span class="s2">"azimuth_0"</span><span class="p">]</span>
+    <span class="n">az1</span> <span class="o">=</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">][</span><span class="s2">"azimuth_1"</span><span class="p">]</span>
+    <span class="n">az_data</span> <span class="o">=</span> <span class="n">mean_of_two_angles_deg</span><span class="p">(</span><span class="n">az0</span><span class="p">,</span> <span class="n">az1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"float32"</span><span class="p">)</span>
     <span class="n">az_data</span><span class="p">[</span><span class="n">az_data</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">+=</span> <span class="mf">360.0</span>
-    <span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">az_data</span>
+    <span class="n">azimuth</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">az_data</span>
 
     <span class="c1"># elevation</span>
-    <span class="n">elevation</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;elevation&quot;</span><span class="p">)</span>
-    <span class="n">el0</span> <span class="o">=</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">][</span><span class="s2">&quot;elevation_0&quot;</span><span class="p">]</span>
-    <span class="n">el1</span> <span class="o">=</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">][</span><span class="s2">&quot;elevation_1&quot;</span><span class="p">]</span>
-    <span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_of_two_angles_deg</span><span class="p">(</span><span class="n">el0</span><span class="p">,</span> <span class="n">el1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">elevation</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"elevation"</span><span class="p">)</span>
+    <span class="n">el0</span> <span class="o">=</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">][</span><span class="s2">"elevation_0"</span><span class="p">]</span>
+    <span class="n">el1</span> <span class="o">=</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">][</span><span class="s2">"elevation_1"</span><span class="p">]</span>
+    <span class="n">elevation</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">mean_of_two_angles_deg</span><span class="p">(</span><span class="n">el0</span><span class="p">,</span> <span class="n">el1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"float32"</span><span class="p">)</span>
 
     <span class="c1"># instrument_parameters</span>
-    <span class="n">prt</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;prt&quot;</span><span class="p">)</span>
-    <span class="n">prt_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;prt_mode&quot;</span><span class="p">)</span>
-    <span class="n">nyquist_velocity</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">)</span>
-    <span class="n">unambiguous_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;unambiguous_range&quot;</span><span class="p">)</span>
-    <span class="n">beam_width_h</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;radar_beam_width_h&quot;</span><span class="p">)</span>
-    <span class="n">beam_width_v</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;radar_beam_width_v&quot;</span><span class="p">)</span>
-    <span class="n">pulse_width</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;pulse_width&quot;</span><span class="p">)</span>
-    <span class="n">prt_ratio</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;prt_ratio&quot;</span><span class="p">)</span>
-    <span class="n">frequency</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;frequency&quot;</span><span class="p">)</span>
+    <span class="n">prt</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"prt"</span><span class="p">)</span>
+    <span class="n">prt_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"prt_mode"</span><span class="p">)</span>
+    <span class="n">nyquist_velocity</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"nyquist_velocity"</span><span class="p">)</span>
+    <span class="n">unambiguous_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"unambiguous_range"</span><span class="p">)</span>
+    <span class="n">beam_width_h</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"radar_beam_width_h"</span><span class="p">)</span>
+    <span class="n">beam_width_v</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"radar_beam_width_v"</span><span class="p">)</span>
+    <span class="n">pulse_width</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"pulse_width"</span><span class="p">)</span>
+    <span class="n">prt_ratio</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"prt_ratio"</span><span class="p">)</span>
+    <span class="n">frequency</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"frequency"</span><span class="p">)</span>
 
-    <span class="n">prt_value</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">product_hdr</span><span class="p">[</span><span class="s2">&quot;product_end&quot;</span><span class="p">][</span><span class="s2">&quot;prf&quot;</span><span class="p">]</span>
-    <span class="n">prt</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prt_value</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">prt_value</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">product_hdr</span><span class="p">[</span><span class="s2">"product_end"</span><span class="p">][</span><span class="s2">"prf"</span><span class="p">]</span>
+    <span class="n">prt</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">prt_value</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
 
     <span class="n">ur_value</span> <span class="o">=</span> <span class="n">SPEED_OF_LIGHT</span> <span class="o">*</span> <span class="n">prt_value</span> <span class="o">/</span> <span class="mf">2.0</span>
-    <span class="n">unambiguous_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ur_value</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">unambiguous_range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ur_value</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
 
-    <span class="n">multi_prf_flag</span> <span class="o">=</span> <span class="n">task_config</span><span class="p">[</span><span class="s2">&quot;task_dsp_info&quot;</span><span class="p">][</span><span class="s2">&quot;multi_prf_flag&quot;</span><span class="p">]</span>
+    <span class="n">multi_prf_flag</span> <span class="o">=</span> <span class="n">task_config</span><span class="p">[</span><span class="s2">"task_dsp_info"</span><span class="p">][</span><span class="s2">"multi_prf_flag"</span><span class="p">]</span>
     <span class="n">prf_multiplier</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">][</span><span class="n">multi_prf_flag</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">prf_multiplier</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">prt_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s2">&quot;dual&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
+        <span class="n">prt_mode</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s2">"dual"</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"S"</span><span class="p">)</span>
         <span class="n">ratio</span> <span class="o">=</span> <span class="p">(</span><span class="n">prf_multiplier</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">/</span> <span class="p">(</span><span class="n">prf_multiplier</span><span class="p">)</span>  <span class="c1"># N+1/N</span>
-        <span class="n">prt_ratio</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ratio</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+        <span class="n">prt_ratio</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ratio</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">prt_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s2">&quot;fixed&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
-        <span class="n">prt_ratio</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+        <span class="n">prt_mode</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s2">"fixed"</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"S"</span><span class="p">)</span>
+        <span class="n">prt_ratio</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
 
-    <span class="n">wavelength_m</span> <span class="o">=</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">product_hdr</span><span class="p">[</span><span class="s2">&quot;product_end&quot;</span><span class="p">][</span><span class="s2">&quot;wavelength&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mf">10000.0</span>
+    <span class="n">wavelength_m</span> <span class="o">=</span> <span class="n">sigmetfile</span><span class="o">.</span><span class="n">product_hdr</span><span class="p">[</span><span class="s2">"product_end"</span><span class="p">][</span><span class="s2">"wavelength"</span><span class="p">]</span> <span class="o">/</span> <span class="mf">10000.0</span>
 
     <span class="c1"># Compute the frequency from the wavelength</span>
-    <span class="n">frequency</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lambda2nu</span><span class="p">(</span><span class="n">wavelength_m</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">frequency</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">lambda2nu</span><span class="p">(</span><span class="n">wavelength_m</span><span class="p">)],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
 
     <span class="c1"># Compute the nyquist velocity from the wavelength</span>
     <span class="n">nv_value</span> <span class="o">=</span> <span class="n">wavelength_m</span> <span class="o">/</span> <span class="p">(</span><span class="mf">4.0</span> <span class="o">*</span> <span class="n">prt_value</span><span class="p">)</span> <span class="o">*</span> <span class="n">prf_multiplier</span>
-    <span class="n">nyquist_velocity</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">nv_value</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">beam_width_h</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">bin4_to_angle</span><span class="p">(</span><span class="n">task_config</span><span class="p">[</span><span class="s2">&quot;task_misc_info&quot;</span><span class="p">][</span><span class="s2">&quot;horizontal_beamwidth&quot;</span><span class="p">])],</span>
-        <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span>
+    <span class="n">nyquist_velocity</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">nv_value</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">beam_width_h</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">bin4_to_angle</span><span class="p">(</span><span class="n">task_config</span><span class="p">[</span><span class="s2">"task_misc_info"</span><span class="p">][</span><span class="s2">"horizontal_beamwidth"</span><span class="p">])],</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">beam_width_v</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">bin4_to_angle</span><span class="p">(</span><span class="n">task_config</span><span class="p">[</span><span class="s2">&quot;task_misc_info&quot;</span><span class="p">][</span><span class="s2">&quot;vertical_beamwidth&quot;</span><span class="p">])],</span>
-        <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span>
+    <span class="n">beam_width_v</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">bin4_to_angle</span><span class="p">(</span><span class="n">task_config</span><span class="p">[</span><span class="s2">"task_misc_info"</span><span class="p">][</span><span class="s2">"vertical_beamwidth"</span><span class="p">])],</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">,</span>
     <span class="p">)</span>
-    <span class="n">pulse_width</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-        <span class="p">[</span><span class="n">task_config</span><span class="p">[</span><span class="s2">&quot;task_dsp_info&quot;</span><span class="p">][</span><span class="s2">&quot;pulse_width&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e-8</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]),</span>
-        <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">,</span>
+    <span class="n">pulse_width</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
+        <span class="p">[</span><span class="n">task_config</span><span class="p">[</span><span class="s2">"task_dsp_info"</span><span class="p">][</span><span class="s2">"pulse_width"</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1e-8</span><span class="p">]</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]),</span>
+        <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">instrument_parameters</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;unambiguous_range&quot;</span><span class="p">:</span> <span class="n">unambiguous_range</span><span class="p">,</span>
-        <span class="s2">&quot;prt_mode&quot;</span><span class="p">:</span> <span class="n">prt_mode</span><span class="p">,</span>
-        <span class="s2">&quot;prt&quot;</span><span class="p">:</span> <span class="n">prt</span><span class="p">,</span>
-        <span class="s2">&quot;prt_ratio&quot;</span><span class="p">:</span> <span class="n">prt_ratio</span><span class="p">,</span>
-        <span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">:</span> <span class="n">nyquist_velocity</span><span class="p">,</span>
-        <span class="s2">&quot;radar_beam_width_h&quot;</span><span class="p">:</span> <span class="n">beam_width_h</span><span class="p">,</span>
-        <span class="s2">&quot;radar_beam_width_v&quot;</span><span class="p">:</span> <span class="n">beam_width_v</span><span class="p">,</span>
-        <span class="s2">&quot;pulse_width&quot;</span><span class="p">:</span> <span class="n">pulse_width</span><span class="p">,</span>
-        <span class="s2">&quot;frequency&quot;</span><span class="p">:</span> <span class="n">frequency</span><span class="p">,</span>
+        <span class="s2">"unambiguous_range"</span><span class="p">:</span> <span class="n">unambiguous_range</span><span class="p">,</span>
+        <span class="s2">"prt_mode"</span><span class="p">:</span> <span class="n">prt_mode</span><span class="p">,</span>
+        <span class="s2">"prt"</span><span class="p">:</span> <span class="n">prt</span><span class="p">,</span>
+        <span class="s2">"prt_ratio"</span><span class="p">:</span> <span class="n">prt_ratio</span><span class="p">,</span>
+        <span class="s2">"nyquist_velocity"</span><span class="p">:</span> <span class="n">nyquist_velocity</span><span class="p">,</span>
+        <span class="s2">"radar_beam_width_h"</span><span class="p">:</span> <span class="n">beam_width_h</span><span class="p">,</span>
+        <span class="s2">"radar_beam_width_v"</span><span class="p">:</span> <span class="n">beam_width_v</span><span class="p">,</span>
+        <span class="s2">"pulse_width"</span><span class="p">:</span> <span class="n">pulse_width</span><span class="p">,</span>
+        <span class="s2">"frequency"</span><span class="p">:</span> <span class="n">frequency</span><span class="p">,</span>
     <span class="p">}</span>
     <span class="k">if</span> <span class="n">prf_multiplier</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">prf_flag</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;prf_flag&quot;</span><span class="p">)</span>
-        <span class="n">prf_flag</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">][</span><span class="s2">&quot;prf_flag&quot;</span><span class="p">]</span>
-        <span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">&quot;prf_flag&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prf_flag</span>
+        <span class="n">prf_flag</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"prf_flag"</span><span class="p">)</span>
+        <span class="n">prf_flag</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">sigmet_metadata</span><span class="p">[</span><span class="n">first_data_type</span><span class="p">][</span><span class="s2">"prf_flag"</span><span class="p">]</span>
+        <span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">"prf_flag"</span><span class="p">]</span> <span class="o">=</span> <span class="n">prf_flag</span>
 
     <span class="c1"># decode extended headers</span>
     <span class="n">extended_header_params</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">if</span> <span class="n">noaa_hh_hdr</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">type_mask</span> <span class="o">=</span> <span class="n">task_config</span><span class="p">[</span><span class="s2">&quot;task_dsp_info&quot;</span><span class="p">][</span><span class="s2">&quot;current_data_type_mask&quot;</span><span class="p">]</span>
-        <span class="n">htype</span> <span class="o">=</span> <span class="n">type_mask</span><span class="p">[</span><span class="s2">&quot;extended_header_type&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">full_xhdr</span> <span class="ow">and</span> <span class="n">htype</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">sigmet_data</span><span class="p">[</span><span class="s2">&quot;XHDR_FULL&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">136</span><span class="p">:</span>
+        <span class="n">type_mask</span> <span class="o">=</span> <span class="n">task_config</span><span class="p">[</span><span class="s2">"task_dsp_info"</span><span class="p">][</span><span class="s2">"current_data_type_mask"</span><span class="p">]</span>
+        <span class="n">htype</span> <span class="o">=</span> <span class="n">type_mask</span><span class="p">[</span><span class="s2">"extended_header_type"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">full_xhdr</span> <span class="ow">and</span> <span class="n">htype</span> <span class="o">==</span> <span class="mi">2</span> <span class="ow">and</span> <span class="n">sigmet_data</span><span class="p">[</span><span class="s2">"XHDR_FULL"</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="mi">3</span><span class="p">]</span> <span class="o">==</span> <span class="mi">136</span><span class="p">:</span>
             <span class="n">noaa_hh_hdr</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">noaa_hh_hdr</span> <span class="o">=</span> <span class="kc">False</span>
 
     <span class="k">if</span> <span class="n">noaa_hh_hdr</span><span class="p">:</span>
         <span class="n">t</span> <span class="o">=</span> <span class="n">_sigmet_noaa_hh</span><span class="o">.</span><span class="n">_decode_noaa_hh_hdr</span><span class="p">(</span>
-            <span class="n">sigmet_data</span><span class="p">[</span><span class="s2">&quot;XHDR_FULL&quot;</span><span class="p">],</span> <span class="n">filemetadata</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span>
+            <span class="n">sigmet_data</span><span class="p">[</span><span class="s2">"XHDR_FULL"</span><span class="p">],</span> <span class="n">filemetadata</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span>
         <span class="p">)</span>
         <span class="n">latitude</span><span class="p">,</span> <span class="n">longitude</span><span class="p">,</span> <span class="n">altitude</span><span class="p">,</span> <span class="n">extended_header_params</span> <span class="o">=</span> <span class="n">t</span>
-        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;platform_type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;aircraft&quot;</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">"platform_type"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"aircraft"</span>
         <span class="c1"># scan_type determined from the antenna_scan_mode parameters</span>
-        <span class="n">noaa_hh_scan_modes</span> <span class="o">=</span> <span class="p">{</span><span class="mi">4</span><span class="p">:</span> <span class="s2">&quot;ppi&quot;</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span> <span class="s2">&quot;rhi&quot;</span><span class="p">}</span>
-        <span class="n">scan_mode</span> <span class="o">=</span> <span class="n">task_config</span><span class="p">[</span><span class="s2">&quot;task_scan_info&quot;</span><span class="p">][</span><span class="s2">&quot;antenna_scan_mode&quot;</span><span class="p">]</span>
+        <span class="n">noaa_hh_scan_modes</span> <span class="o">=</span> <span class="p">{</span><span class="mi">4</span><span class="p">:</span> <span class="s2">"ppi"</span><span class="p">,</span> <span class="mi">7</span><span class="p">:</span> <span class="s2">"rhi"</span><span class="p">}</span>
+        <span class="n">scan_mode</span> <span class="o">=</span> <span class="n">task_config</span><span class="p">[</span><span class="s2">"task_scan_info"</span><span class="p">][</span><span class="s2">"antenna_scan_mode"</span><span class="p">]</span>
         <span class="k">if</span> <span class="n">scan_mode</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">noaa_hh_scan_modes</span><span class="p">:</span>
-            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown antenna_scan_mode, defaulting to &#39;rhi&#39;.&quot;</span><span class="p">)</span>
-            <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">&quot;rhi&quot;</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">"Unknown antenna_scan_mode, defaulting to 'rhi'."</span><span class="p">)</span>
+            <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">"rhi"</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">scan_type</span> <span class="o">=</span> <span class="n">noaa_hh_scan_modes</span><span class="p">[</span><span class="n">scan_mode</span><span class="p">]</span>
 
     <span class="c1"># sweep_mode</span>
-    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_mode&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">scan_type</span> <span class="o">==</span> <span class="s2">&quot;ppi&quot;</span><span class="p">:</span>
-        <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s2">&quot;azimuth_surveillance&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
+    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"sweep_mode"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">scan_type</span> <span class="o">==</span> <span class="s2">"ppi"</span><span class="p">:</span>
+        <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s2">"azimuth_surveillance"</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"S"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s2">&quot;rhi&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S&quot;</span><span class="p">)</span>
+        <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s2">"rhi"</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"S"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">Radar</span><span class="p">(</span>
         <span class="n">time</span><span class="p">,</span>
@@ -992,15 +992,15 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_is_time_ordered_by_reversal</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Returns if volume can be time ordered by reversing some or all sweeps.</span>
 <span class="sd">    True if the volume can be time ordered, False if not.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="s2">&quot;XHDR&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;XHDR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="s2">"XHDR"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"XHDR"</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="nb">list</span><span class="p">(</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">())[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">"time"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"int32"</span><span class="p">)</span>
     <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">nrays</span> <span class="ow">in</span> <span class="n">rays_per_sweep</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">nrays</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">nrays</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -1016,15 +1016,15 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_is_time_ordered_by_roll</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Returns if volume can be time ordered by rolling some or all sweeps.</span>
 <span class="sd">    True if the volume can be time ordered, False if not.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="s2">&quot;XHDR&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;XHDR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="s2">"XHDR"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"XHDR"</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">"time"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"int32"</span><span class="p">)</span>
     <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">nrays</span> <span class="ow">in</span> <span class="n">rays_per_sweep</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">nrays</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">nrays</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -1044,15 +1044,15 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_is_time_ordered_by_reverse_roll</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Returns if volume can be time ordered by reversing and rolling some or all</span>
 <span class="sd">    sweeps. True if the volume can be time ordered, False if not.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="s2">&quot;XHDR&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;XHDR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="s2">"XHDR"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"XHDR"</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">"time"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"int32"</span><span class="p">)</span>
     <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">nrays</span> <span class="ow">in</span> <span class="n">rays_per_sweep</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">nrays</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">nrays</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
@@ -1075,21 +1075,21 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_time_order_data_and_metadata_roll</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Put Sigmet data and metadata in time increasing order using a roll</span>
 <span class="sd">    operation.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Sigmet data is stored by sweep in azimuth or elevation increasing order.</span>
     <span class="c1"># Time ordering PPI scans can typically be achieved by rolling the</span>
     <span class="c1"># ray collected first to the beginning of the sweep, which is performed</span>
     <span class="c1"># here.  Perfect time ordering is achieved if the rays within the sweep</span>
     <span class="c1"># were collected sequentially in a clockwise manner from 0 to 360 degrees</span>
     <span class="c1"># regardless of the first azimuth collected.</span>
-    <span class="k">if</span> <span class="s2">&quot;XHDR&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;XHDR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s2">"XHDR"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"XHDR"</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">"time"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"int32"</span><span class="p">)</span>
 
     <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">nrays</span> <span class="ow">in</span> <span class="n">rays_per_sweep</span><span class="p">:</span>
@@ -1115,20 +1115,20 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_time_order_data_and_metadata_reverse</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Put Sigmet data and metadata in time increasing order by reverse sweep in</span>
 <span class="sd">    time reversed order.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Sigmet data is stored by sweep in azimuth or elevation increasing order.</span>
     <span class="c1"># Time ordering RHI scans can typically be achieved by reversing the</span>
     <span class="c1"># ray order of sweep collected in time from 180 to 0 degrees.</span>
     <span class="c1"># Perfect time ordering is achieved if the rays within all sweeps</span>
     <span class="c1"># were collected sequentially from 0 to 180 degree or 180 to 0 degrees.</span>
-    <span class="k">if</span> <span class="s2">&quot;XHDR&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;XHDR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s2">"XHDR"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"XHDR"</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">"time"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"int32"</span><span class="p">)</span>
 
     <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">nrays</span> <span class="ow">in</span> <span class="n">rays_per_sweep</span><span class="p">:</span>
@@ -1152,10 +1152,10 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_time_order_data_and_metadata_full</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">metadata</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Put Sigmet data and metadata in time increasing order by sorting the</span>
 <span class="sd">    times.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Sigmet data is stored by sweep in azimuth or elevation increasing order.</span>
     <span class="c1"># When rays within the sweeps are collected non-sequentially or in a</span>
     <span class="c1"># complex manner, perfect time ordering can only be achived by sorting</span>
@@ -1163,11 +1163,11 @@
     <span class="c1"># This ordering method should only be used as a last resort when perfect</span>
     <span class="c1"># time ordering is required in the output and other ordering operations</span>
     <span class="c1"># (roll, reverse, reverse-roll) will not order the rays correctly.</span>
-    <span class="k">if</span> <span class="s2">&quot;XHDR&quot;</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">&quot;XHDR&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="k">if</span> <span class="s2">"XHDR"</span> <span class="ow">in</span> <span class="n">data</span><span class="p">:</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="s2">"XHDR"</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
         <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span> <span class="o">=</span> <span class="n">ref_time</span><span class="o">.</span><span class="n">shape</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+        <span class="n">ref_time</span> <span class="o">=</span> <span class="n">metadata</span><span class="p">[</span><span class="n">metadata</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">"time"</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"int32"</span><span class="p">)</span>
 
     <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">nrays</span> <span class="ow">in</span> <span class="n">rays_per_sweep</span><span class="p">:</span>
@@ -1182,7 +1182,7 @@
         <span class="n">sweep_time_diff</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">diff</span><span class="p">(</span><span class="n">ref_time</span><span class="p">[</span><span class="n">s</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">sweep_time_diff</span><span class="o">.</span><span class="n">min</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">continue</span>  <span class="c1"># already time ordered</span>
-        <span class="n">sort_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">sweep_time</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">&quot;mergesort&quot;</span><span class="p">)</span>
+        <span class="n">sort_idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">(</span><span class="n">sweep_time</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s2">"mergesort"</span><span class="p">)</span>
 
         <span class="c1"># sort the data and metadata for each field</span>
         <span class="k">for</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">data</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
@@ -1194,11 +1194,11 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">ymds_time_to_datetime</span><span class="p">(</span><span class="n">ymds</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a datetime object from a Sigmet ymds_time dictionary.&quot;&quot;&quot;</span>
-    <span class="n">dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">ymds</span><span class="p">[</span><span class="s2">&quot;year&quot;</span><span class="p">],</span> <span class="n">ymds</span><span class="p">[</span><span class="s2">&quot;month&quot;</span><span class="p">],</span> <span class="n">ymds</span><span class="p">[</span><span class="s2">&quot;day&quot;</span><span class="p">])</span>
+<span class="w">    </span><span class="sd">"""Return a datetime object from a Sigmet ymds_time dictionary."""</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="n">ymds</span><span class="p">[</span><span class="s2">"year"</span><span class="p">],</span> <span class="n">ymds</span><span class="p">[</span><span class="s2">"month"</span><span class="p">],</span> <span class="n">ymds</span><span class="p">[</span><span class="s2">"day"</span><span class="p">])</span>
     <span class="c1"># lowest 10 bits of millisecond parameter specifies milliseconds</span>
-    <span class="n">microsec</span> <span class="o">=</span> <span class="mf">1e3</span> <span class="o">*</span> <span class="p">(</span><span class="n">ymds</span><span class="p">[</span><span class="s2">&quot;milliseconds&quot;</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mb">0b1111111111</span><span class="p">)</span>
-    <span class="n">delta</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">ymds</span><span class="p">[</span><span class="s2">&quot;seconds&quot;</span><span class="p">],</span> <span class="n">microseconds</span><span class="o">=</span><span class="n">microsec</span><span class="p">)</span>
+    <span class="n">microsec</span> <span class="o">=</span> <span class="mf">1e3</span> <span class="o">*</span> <span class="p">(</span><span class="n">ymds</span><span class="p">[</span><span class="s2">"milliseconds"</span><span class="p">]</span> <span class="o">&amp;</span> <span class="mb">0b1111111111</span><span class="p">)</span>
+    <span class="n">delta</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">ymds</span><span class="p">[</span><span class="s2">"seconds"</span><span class="p">],</span> <span class="n">microseconds</span><span class="o">=</span><span class="n">microsec</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">dt</span> <span class="o">+</span> <span class="n">delta</span>
 </pre></div>
 <div class="section ablog__blog_comments">
@@ -1232,8 +1232,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1267,7 +1267,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

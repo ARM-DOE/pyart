@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -42,10 +42,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -724,7 +724,7 @@ information on how to obtain a username and token.
 .. code-block:: python
 
     act.discovery.download_data(
-        &quot;userName&quot;, &quot;XXXXXXXXXXXXXXXX&quot;, &quot;sgpmetE13.b1&quot;, &quot;2017-01-14&quot;, &quot;2017-01-20&quot;
+        "userName", "XXXXXXXXXXXXXXXX", "sgpmetE13.b1", "2017-01-14", "2017-01-20"
     )
 <span class=" -Color -Color-Red">File:</span>      ~/mambaforge/envs/pyart-dev/lib/python3.11/site-packages/act/discovery/arm.py
 <span class=" -Color -Color-Red">Type:</span>      function
@@ -738,11 +738,11 @@ information on how to obtain a username and token.
 <p>Use your ARM username and token in the following cell to search and download your data!</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">username</span> <span class="o">=</span> <span class="s2">&quot;USERNAME&quot;</span>
-<span class="n">token</span> <span class="o">=</span> <span class="s2">&quot;TOKEN&quot;</span>
-<span class="n">datastream</span> <span class="o">=</span> <span class="s2">&quot;epckasacrcfrS2.a1&quot;</span>
-<span class="n">startdate</span> <span class="o">=</span> <span class="s2">&quot;2024-01-21T01:00:00&quot;</span>
-<span class="n">enddate</span> <span class="o">=</span> <span class="s2">&quot;2024-01-21T01:30:00&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">username</span> <span class="o">=</span> <span class="s2">"USERNAME"</span>
+<span class="n">token</span> <span class="o">=</span> <span class="s2">"TOKEN"</span>
+<span class="n">datastream</span> <span class="o">=</span> <span class="s2">"epckasacrcfrS2.a1"</span>
+<span class="n">startdate</span> <span class="o">=</span> <span class="s2">"2024-01-21T01:00:00"</span>
+<span class="n">enddate</span> <span class="o">=</span> <span class="s2">"2024-01-21T01:30:00"</span>
 </pre></div>
 </div>
 </div>
@@ -785,7 +785,7 @@ User Facility. https://doi.org/10.5439/1469302
 <p>Now that we have a directory full of files, we can read these into Py-ART. The trick is figuring out which ones we are interested in.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">&quot;epckasacrcfrS2.a1/*&quot;</span><span class="p">))</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="s2">"epckasacrcfrS2.a1/*"</span><span class="p">))</span>
 </pre></div>
 </div>
 </div>
@@ -804,7 +804,7 @@ User Facility. https://doi.org/10.5439/1469302
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
+    <span class="s2">"reflectivity"</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -825,7 +825,7 @@ User Facility. https://doi.org/10.5439/1469302
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&#39;ppi&#39;
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>'ppi'
 </pre></div>
 </div>
 </div>
@@ -835,7 +835,7 @@ User Facility. https://doi.org/10.5439/1469302
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> has </span><span class="si">{</span><span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span><span class="si">}</span><span class="s2"> scan strategy!&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> has </span><span class="si">{</span><span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span><span class="si">}</span><span class="s2"> scan strategy!"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -868,28 +868,28 @@ epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012914.nc has ppi scan strategy!
 <span class="k">for</span> <span class="n">file</span> <span class="ow">in</span> <span class="n">files</span><span class="p">:</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">&quot;ppi&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">"ppi"</span><span class="p">:</span>
         <span class="n">ppi_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
-    <span class="k">elif</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">&quot;rhi&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">==</span> <span class="s2">"rhi"</span><span class="p">:</span>
         <span class="n">rhi_files</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
 
     <span class="k">else</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> is not a PPI or RHI scan&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2"> is not a PPI or RHI scan"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;RHI Files: </span><span class="si">{</span><span class="n">rhi_files</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;PPI Files: </span><span class="si">{</span><span class="n">ppi_files</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"RHI Files: </span><span class="si">{</span><span class="n">rhi_files</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"PPI Files: </span><span class="si">{</span><span class="n">ppi_files</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RHI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010118.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010436.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010757.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.011116.nc&#39;]
-PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.011434.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.011640.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.011845.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012051.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012257.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012503.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012708.nc&#39;, &#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012914.nc&#39;]
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>RHI Files: ['epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010118.nc', 'epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010436.nc', 'epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010757.nc', 'epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.011116.nc']
+PPI Files: ['epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc', 'epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.011434.nc', 'epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.011640.nc', 'epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.011845.nc', 'epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012051.nc', 'epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012257.nc', 'epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012503.nc', 'epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012708.nc', 'epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.012914.nc']
 </pre></div>
 </div>
 </div>
@@ -903,7 +903,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
     <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">file</span><span class="p">)</span>
     <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
     <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-        <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
+        <span class="s2">"reflectivity"</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
     <span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -970,7 +970,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
     <span class="c1"># Plot reflectivity</span>
     <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
     <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-    <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+    <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 
@@ -978,12 +978,12 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
     <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
     <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
     <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-        <span class="s2">&quot;mean_doppler_velocity&quot;</span><span class="p">,</span>
+        <span class="s2">"mean_doppler_velocity"</span><span class="p">,</span>
         <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">vmin</span><span class="o">=-</span><span class="mi">12</span><span class="p">,</span>
         <span class="n">vmax</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
         <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
-        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_balance&quot;</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s2">"pyart_balance"</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
@@ -1020,7 +1020,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
 <span class="c1"># Plot reflectivity</span>
 <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 
@@ -1028,12 +1028,12 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
 <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="s2">&quot;signal_to_noise_ratio_copolar_h&quot;</span><span class="p">,</span>
+    <span class="s2">"signal_to_noise_ratio_copolar_h"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span>
     <span class="n">vmax</span><span class="o">=</span><span class="mi">40</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_ChaseSpectral&quot;</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">"pyart_ChaseSpectral"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
@@ -1055,7 +1055,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
 <span class="k">for</span> <span class="n">threshold_value</span> <span class="ow">in</span> <span class="n">threshold</span><span class="p">:</span>
     <span class="c1"># Mask the data using the gatefilter</span>
     <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-    <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">&quot;signal_to_noise_ratio_copolar_h&quot;</span><span class="p">,</span> <span class="n">threshold_value</span><span class="p">)</span>
+    <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">"signal_to_noise_ratio_copolar_h"</span><span class="p">,</span> <span class="n">threshold_value</span><span class="p">)</span>
 
     <span class="c1"># Plot the figure</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
@@ -1064,7 +1064,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
     <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
     <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
     <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-        <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span>
+        <span class="s2">"reflectivity"</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span>
     <span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
@@ -1073,18 +1073,18 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
     <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
     <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
     <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-        <span class="s2">&quot;mean_doppler_velocity&quot;</span><span class="p">,</span>
+        <span class="s2">"mean_doppler_velocity"</span><span class="p">,</span>
         <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">vmin</span><span class="o">=-</span><span class="mi">12</span><span class="p">,</span>
         <span class="n">vmax</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
         <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span>
         <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
-        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_balance&quot;</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s2">"pyart_balance"</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">suptitle</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;Data Quality Mask with Signal to Noise &lt; </span><span class="si">{</span><span class="n">threshold_value</span><span class="si">}</span><span class="s2"> dB&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span>
+        <span class="sa">f</span><span class="s2">"Data Quality Mask with Signal to Noise &lt; </span><span class="si">{</span><span class="n">threshold_value</span><span class="si">}</span><span class="s2"> dB"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">16</span>
     <span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">tight_layout</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
@@ -1104,7 +1104,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">&quot;signal_to_noise_ratio_copolar_h&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">"signal_to_noise_ratio_copolar_h"</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1121,7 +1121,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
 <span class="c1"># Plot reflectivity</span>
 <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
+<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 
@@ -1129,13 +1129,13 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
 <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="s2">&quot;mean_doppler_velocity&quot;</span><span class="p">,</span>
+    <span class="s2">"mean_doppler_velocity"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">12</span><span class="p">,</span>
     <span class="n">vmax</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
     <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_balance&quot;</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">"pyart_balance"</span><span class="p">,</span>
 <span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
 <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
@@ -1156,7 +1156,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
 
     <span class="c1"># Apply our data quality flag</span>
     <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-    <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">&quot;signal_to_noise_ratio_copolar_h&quot;</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">)</span>
+    <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">"signal_to_noise_ratio_copolar_h"</span><span class="p">,</span> <span class="o">-</span><span class="mi">5</span><span class="p">)</span>
 
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">16</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
 
@@ -1164,7 +1164,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
     <span class="n">ax1</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">121</span><span class="p">)</span>
     <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
     <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-        <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span>
+        <span class="s2">"reflectivity"</span><span class="p">,</span> <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">ax1</span>
     <span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
@@ -1173,13 +1173,13 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
     <span class="n">ax2</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">122</span><span class="p">)</span>
     <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
     <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-        <span class="s2">&quot;mean_doppler_velocity&quot;</span><span class="p">,</span>
+        <span class="s2">"mean_doppler_velocity"</span><span class="p">,</span>
         <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">vmin</span><span class="o">=-</span><span class="mi">12</span><span class="p">,</span>
         <span class="n">vmax</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
         <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span>
         <span class="n">ax</span><span class="o">=</span><span class="n">ax2</span><span class="p">,</span>
-        <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_balance&quot;</span><span class="p">,</span>
+        <span class="n">cmap</span><span class="o">=</span><span class="s2">"pyart_balance"</span><span class="p">,</span>
     <span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
@@ -1189,7 +1189,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mgrover/mambaforge/envs/pyart-dev/lib/python3.11/site-packages/numpy/core/fromnumeric.py:784: UserWarning: Warning: &#39;partition&#39; will ignore the &#39;mask&#39; of the MaskedArray.
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/Users/mgrover/mambaforge/envs/pyart-dev/lib/python3.11/site-packages/numpy/core/fromnumeric.py:784: UserWarning: Warning: 'partition' will ignore the 'mask' of the MaskedArray.
   a.partition(kth, axis=axis, kind=kind, order=order)
 </pre></div>
 </div>
@@ -1213,25 +1213,25 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
     <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
     <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">ppi_radar</span><span class="p">)</span>
     <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-        <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+        <span class="s2">"reflectivity"</span><span class="p">,</span>
         <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
         <span class="n">vmin</span><span class="o">=-</span><span class="mi">40</span><span class="p">,</span>
         <span class="n">vmax</span><span class="o">=</span><span class="mi">30</span><span class="p">,</span>
         <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-        <span class="n">resolution</span><span class="o">=</span><span class="s2">&quot;10m&quot;</span><span class="p">,</span>
+        <span class="n">resolution</span><span class="o">=</span><span class="s2">"10m"</span><span class="p">,</span>
         <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
     <span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
         <span class="n">lon</span><span class="p">,</span>
         <span class="n">lat</span><span class="p">,</span>
         <span class="n">s</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span>
-        <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;RHI at </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">rhi_radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s1"> degrees&#39;</span><span class="p">,</span>
-        <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span>
+        <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">'RHI at </span><span class="si">{</span><span class="nb">round</span><span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="n">rhi_radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]),</span><span class="w"> </span><span class="mi">2</span><span class="p">)</span><span class="si">}</span><span class="s1"> degrees'</span><span class="p">,</span>
+        <span class="n">color</span><span class="o">=</span><span class="s2">"k"</span><span class="p">,</span>
     <span class="p">)</span>
 
     <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">cfeature</span><span class="o">.</span><span class="n">OCEAN</span><span class="p">)</span>
 
-    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper left&quot;</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"upper left"</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
@@ -1365,8 +1365,8 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1400,7 +1400,7 @@ PPI Files: [&#39;epckasacrcfrS2.a1/epckasacrcfrS2.a1.20240121.010020.nc&#39;, &#
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

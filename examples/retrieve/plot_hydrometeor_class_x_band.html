@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -42,10 +42,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -595,7 +595,7 @@ classification to identify types of precipitation.</p>
 <li><img src="../../_images/sphx_glr_plot_hydrometeor_class_x_band_001.png" srcset="../../_images/sphx_glr_plot_hydrometeor_class_x_band_001.png" alt="6.0 Deg. 2022-03-14T03:00:16Z  Equivalent reflectivity factor,  6.0 Deg. 2022-03-14T03:00:16Z  Corrected log differential reflectivity hv,  6.0 Deg. 2022-03-14T03:00:16Z  Specific differential phase hv" class = "sphx-glr-multi-img"/></li>
 <li><img src="../../_images/sphx_glr_plot_hydrometeor_class_x_band_002.png" srcset="../../_images/sphx_glr_plot_hydrometeor_class_x_band_002.png" alt="6.0 Deg. 2022-03-14T03:00:16Z  Corrected equivalent reflectivity factor,  6.0 Deg. 2022-03-14T03:00:16Z  Radar echo classification" class = "sphx-glr-multi-img"/></li>
 </ul>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{&#39;nyquist_velocity&#39;: {&#39;long_name&#39;: &#39;Nyquist velocity&#39;, &#39;units&#39;: &#39;m/s&#39;, &#39;standard_name&#39;: &#39;nyquist_velocity&#39;, &#39;data&#39;: masked_array(data=[15.9, 15.9, 15.9, ..., 15.9, 15.9, 15.9],
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{'nyquist_velocity': {'long_name': 'Nyquist velocity', 'units': 'm/s', 'standard_name': 'nyquist_velocity', 'data': masked_array(data=[15.9, 15.9, 15.9, ..., 15.9, 15.9, 15.9],
              mask=False,
        fill_value=1e+20)}}
 </pre></div>
@@ -609,24 +609,24 @@ classification to identify types of precipitation.</p>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 
-<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">DATASETS</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;gucxprecipradarcmacppiS2.c1.20220314.025840.nc&quot;</span><span class="p">)</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">DATASETS</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"gucxprecipradarcmacppiS2.c1.20220314.025840.nc"</span><span class="p">)</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
 
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">figure</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">15</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
 
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a> <span class="o">=</span> <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">&quot;DBZ&quot;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>  <span class="c1"># DBZ corrected_reflectivity</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a> <span class="o">=</span> <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">"DBZ"</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">50</span><span class="p">)</span>  <span class="c1"># DBZ corrected_reflectivity</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xlim.html#matplotlib.pyplot.xlim" title="matplotlib.pyplot.xlim" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span></a><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.ylim.html#matplotlib.pyplot.ylim" title="matplotlib.pyplot.ylim" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span></a><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax2</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax2</span></a> <span class="o">=</span> <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">&quot;corrected_differential_reflectivity&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Carbone42&quot;</span><span class="p">)</span>  <span class="c1"># ZDR</span>
+<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax2</span></a> <span class="o">=</span> <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">"corrected_differential_reflectivity"</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"Carbone42"</span><span class="p">)</span>  <span class="c1"># ZDR</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xlim.html#matplotlib.pyplot.xlim" title="matplotlib.pyplot.xlim" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span></a><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.ylim.html#matplotlib.pyplot.ylim" title="matplotlib.pyplot.ylim" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">ylim</span></a><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 
 <span class="n">ax3</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-<span class="n">ax3</span> <span class="o">=</span> <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">&quot;corrected_specific_diff_phase&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;Carbone42&quot;</span><span class="p">)</span>  <span class="c1"># KDP</span>
+<span class="n">ax3</span> <span class="o">=</span> <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">"corrected_specific_diff_phase"</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"Carbone42"</span><span class="p">)</span>  <span class="c1"># KDP</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.xlim.html#matplotlib.pyplot.xlim" title="matplotlib.pyplot.xlim" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">xlim</span></a><span class="p">(</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
 
 <span class="c1"># ### When instrument parameters does not have radar frequency info.</span>
@@ -639,14 +639,14 @@ classification to identify types of precipitation.</p>
 <span class="c1"># Get classification</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hydromet_class</span></a> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">hydroclass_semisupervised</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
-    <span class="n">refl_field</span><span class="o">=</span><span class="s2">&quot;corrected_reflectivity&quot;</span><span class="p">,</span>
-    <span class="n">zdr_field</span><span class="o">=</span><span class="s2">&quot;corrected_differential_reflectivity&quot;</span><span class="p">,</span>
-    <span class="n">kdp_field</span><span class="o">=</span><span class="s2">&quot;filtered_corrected_specific_diff_phase&quot;</span><span class="p">,</span>
-    <span class="n">rhv_field</span><span class="o">=</span><span class="s2">&quot;RHOHV&quot;</span><span class="p">,</span>
-    <span class="n">temp_field</span><span class="o">=</span><span class="s2">&quot;sounding_temperature&quot;</span><span class="p">,</span>
-<span class="p">)[</span><span class="s2">&quot;hydro&quot;</span><span class="p">]</span>
+    <span class="n">refl_field</span><span class="o">=</span><span class="s2">"corrected_reflectivity"</span><span class="p">,</span>
+    <span class="n">zdr_field</span><span class="o">=</span><span class="s2">"corrected_differential_reflectivity"</span><span class="p">,</span>
+    <span class="n">kdp_field</span><span class="o">=</span><span class="s2">"filtered_corrected_specific_diff_phase"</span><span class="p">,</span>
+    <span class="n">rhv_field</span><span class="o">=</span><span class="s2">"RHOHV"</span><span class="p">,</span>
+    <span class="n">temp_field</span><span class="o">=</span><span class="s2">"sounding_temperature"</span><span class="p">,</span>
+<span class="p">)[</span><span class="s2">"hydro"</span><span class="p">]</span>
 
-<span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;hydro_classification&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hydromet_class</span></a><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">"hydro_classification"</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hydromet_class</span></a><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 
 <span class="c1"># Use `radar_freq` parameters</span>
@@ -656,44 +656,44 @@ classification to identify types of precipitation.</p>
 <span class="c1"># Get classification</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hydromet_class</span></a> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">hydroclass_semisupervised</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
-    <span class="n">refl_field</span><span class="o">=</span><span class="s2">&quot;corrected_reflectivity&quot;</span><span class="p">,</span>
-    <span class="n">zdr_field</span><span class="o">=</span><span class="s2">&quot;corrected_differential_reflectivity&quot;</span><span class="p">,</span>
-    <span class="n">kdp_field</span><span class="o">=</span><span class="s2">&quot;filtered_corrected_specific_diff_phase&quot;</span><span class="p">,</span>
-    <span class="n">rhv_field</span><span class="o">=</span><span class="s2">&quot;RHOHV&quot;</span><span class="p">,</span>
-    <span class="n">temp_field</span><span class="o">=</span><span class="s2">&quot;sounding_temperature&quot;</span><span class="p">,</span>
+    <span class="n">refl_field</span><span class="o">=</span><span class="s2">"corrected_reflectivity"</span><span class="p">,</span>
+    <span class="n">zdr_field</span><span class="o">=</span><span class="s2">"corrected_differential_reflectivity"</span><span class="p">,</span>
+    <span class="n">kdp_field</span><span class="o">=</span><span class="s2">"filtered_corrected_specific_diff_phase"</span><span class="p">,</span>
+    <span class="n">rhv_field</span><span class="o">=</span><span class="s2">"RHOHV"</span><span class="p">,</span>
+    <span class="n">temp_field</span><span class="o">=</span><span class="s2">"sounding_temperature"</span><span class="p">,</span>
     <span class="n">radar_freq</span><span class="o">=</span><span class="mf">9.2e9</span><span class="p">,</span>
-<span class="p">)[</span><span class="s2">&quot;hydro&quot;</span><span class="p">]</span>
+<span class="p">)[</span><span class="s2">"hydro"</span><span class="p">]</span>
 
-<span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;hydro_classification&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hydromet_class</span></a><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">"hydro_classification"</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hydromet_class</span></a><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 
 <span class="c1"># Add radar frequency to the radar object</span>
 <span class="c1"># Incorporating radar frequency into the radar object enhances processing pipeline.</span>
 
 <span class="c1"># Add X-band frequency information to radar.instrument_parameters</span>
-<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span></a><span class="p">[</span><span class="s2">&quot;frequency&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Radar frequency&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;Hz&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="p">[</span><span class="mf">9.2e9</span><span class="p">],</span>
+<a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span></a><span class="p">[</span><span class="s2">"frequency"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">"long_name"</span><span class="p">:</span> <span class="s2">"Radar frequency"</span><span class="p">,</span>
+    <span class="s2">"units"</span><span class="p">:</span> <span class="s2">"Hz"</span><span class="p">,</span>
+    <span class="s2">"data"</span><span class="p">:</span> <span class="p">[</span><span class="mf">9.2e9</span><span class="p">],</span>
 <span class="p">}</span>
 
 <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span></a>
 
 
-<span class="c1"># Let&#39;s run the classification again and the warning should change telling the radar frequency from instrument parameters is used.</span>
+<span class="c1"># Let's run the classification again and the warning should change telling the radar frequency from instrument parameters is used.</span>
 
 
 <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hydromet_class</span></a> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">retrieve</span><span class="o">.</span><span class="n">hydroclass_semisupervised</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
-    <span class="n">refl_field</span><span class="o">=</span><span class="s2">&quot;corrected_reflectivity&quot;</span><span class="p">,</span>
-    <span class="n">zdr_field</span><span class="o">=</span><span class="s2">&quot;corrected_differential_reflectivity&quot;</span><span class="p">,</span>
-    <span class="n">kdp_field</span><span class="o">=</span><span class="s2">&quot;filtered_corrected_specific_diff_phase&quot;</span><span class="p">,</span>
-    <span class="n">rhv_field</span><span class="o">=</span><span class="s2">&quot;RHOHV&quot;</span><span class="p">,</span>
-    <span class="n">temp_field</span><span class="o">=</span><span class="s2">&quot;sounding_temperature&quot;</span><span class="p">,</span>
+    <span class="n">refl_field</span><span class="o">=</span><span class="s2">"corrected_reflectivity"</span><span class="p">,</span>
+    <span class="n">zdr_field</span><span class="o">=</span><span class="s2">"corrected_differential_reflectivity"</span><span class="p">,</span>
+    <span class="n">kdp_field</span><span class="o">=</span><span class="s2">"filtered_corrected_specific_diff_phase"</span><span class="p">,</span>
+    <span class="n">rhv_field</span><span class="o">=</span><span class="s2">"RHOHV"</span><span class="p">,</span>
+    <span class="n">temp_field</span><span class="o">=</span><span class="s2">"sounding_temperature"</span><span class="p">,</span>
     <span class="n">radar_freq</span><span class="o">=</span><span class="mf">9.2e9</span><span class="p">,</span>
-<span class="p">)[</span><span class="s2">&quot;hydro&quot;</span><span class="p">]</span>
+<span class="p">)[</span><span class="s2">"hydro"</span><span class="p">]</span>
 
-<span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;hydro_classification&quot;</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hydromet_class</span></a><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">"hydro_classification"</span><span class="p">,</span> <a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hydromet_class</span></a><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
 
 <span class="c1"># Note that the frequency used here is from the radar object, not the user supplied.</span>
@@ -704,16 +704,16 @@ classification to identify types of precipitation.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.colors</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">colors</span>
 
 <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hid_colors</span></a> <span class="o">=</span> <span class="p">[</span>
-    <span class="s2">&quot;White&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;LightBlue&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;MediumBlue&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;DarkOrange&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;LightPink&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Cyan&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;DarkGray&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Lime&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Yellow&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;Red&quot;</span><span class="p">,</span>
+    <span class="s2">"White"</span><span class="p">,</span>
+    <span class="s2">"LightBlue"</span><span class="p">,</span>
+    <span class="s2">"MediumBlue"</span><span class="p">,</span>
+    <span class="s2">"DarkOrange"</span><span class="p">,</span>
+    <span class="s2">"LightPink"</span><span class="p">,</span>
+    <span class="s2">"Cyan"</span><span class="p">,</span>
+    <span class="s2">"DarkGray"</span><span class="p">,</span>
+    <span class="s2">"Lime"</span><span class="p">,</span>
+    <span class="s2">"Yellow"</span><span class="p">,</span>
+    <span class="s2">"Red"</span><span class="p">,</span>
 <span class="p">]</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib.colors.ListedColormap" title="matplotlib.colors.ListedColormap" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cmaphid</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib.colors.ListedColormap" title="matplotlib.colors.ListedColormap" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class"><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hid_colors</span></a><span class="p">)</span>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib.colors.ListedColormap" title="matplotlib.colors.ListedColormap" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cmapmeth</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib.colors.ListedColormap" title="matplotlib.colors.ListedColormap" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class"><span class="n">colors</span><span class="o">.</span><span class="n">ListedColormap</span></a><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">hid_colors</span></a><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">6</span><span class="p">])</span>
@@ -724,18 +724,18 @@ classification to identify types of precipitation.</p>
     <span class="n">cb</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html#numpy.arange" title="numpy.arange" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="mf">1.4</span><span class="p">,</span> <span class="mi">9</span><span class="p">,</span> <span class="mf">0.9</span><span class="p">))</span>
     <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span>
         <span class="p">[</span>
-            <span class="s2">&quot;Aggregates&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Ice Crystals&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Light rain&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Rain&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Vertical Ice&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Wet snow&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;HD Graupel&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Melting hail&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;Dry hail or high-density graupel&quot;</span><span class="p">,</span>
+            <span class="s2">"Aggregates"</span><span class="p">,</span>
+            <span class="s2">"Ice Crystals"</span><span class="p">,</span>
+            <span class="s2">"Light rain"</span><span class="p">,</span>
+            <span class="s2">"Rain"</span><span class="p">,</span>
+            <span class="s2">"Vertical Ice"</span><span class="p">,</span>
+            <span class="s2">"Wet snow"</span><span class="p">,</span>
+            <span class="s2">"HD Graupel"</span><span class="p">,</span>
+            <span class="s2">"Melting hail"</span><span class="p">,</span>
+            <span class="s2">"Dry hail or high-density graupel"</span><span class="p">,</span>
         <span class="p">]</span>
     <span class="p">)</span>
-    <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
     <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">cb</span>
 
@@ -744,14 +744,14 @@ classification to identify types of precipitation.</p>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">tropical</span><span class="p">:</span>
         <span class="n">cb</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html#numpy.arange" title="numpy.arange" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="mf">1.25</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mf">0.833</span><span class="p">))</span>
         <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span>
-            <span class="p">[</span><span class="s2">&quot;R(Kdp, Zdr)&quot;</span><span class="p">,</span> <span class="s2">&quot;R(Kdp)&quot;</span><span class="p">,</span> <span class="s2">&quot;R(Z, Zdr)&quot;</span><span class="p">,</span> <span class="s2">&quot;R(Z)&quot;</span><span class="p">,</span> <span class="s2">&quot;R(Zrain)&quot;</span><span class="p">]</span>
+            <span class="p">[</span><span class="s2">"R(Kdp, Zdr)"</span><span class="p">,</span> <span class="s2">"R(Kdp)"</span><span class="p">,</span> <span class="s2">"R(Z, Zdr)"</span><span class="p">,</span> <span class="s2">"R(Z)"</span><span class="p">,</span> <span class="s2">"R(Zrain)"</span><span class="p">]</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">cb</span><span class="o">.</span><span class="n">set_ticks</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html#numpy.arange" title="numpy.arange" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="mf">1.3</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mf">0.85</span><span class="p">))</span>
         <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">(</span>
-            <span class="p">[</span><span class="s2">&quot;R(Kdp, Zdr)&quot;</span><span class="p">,</span> <span class="s2">&quot;R(Kdp)&quot;</span><span class="p">,</span> <span class="s2">&quot;R(Z, Zdr)&quot;</span><span class="p">,</span> <span class="s2">&quot;R(Z_all)&quot;</span><span class="p">,</span> <span class="s2">&quot;R(Z_c)&quot;</span><span class="p">,</span> <span class="s2">&quot;R(Z_s)&quot;</span><span class="p">]</span>
+            <span class="p">[</span><span class="s2">"R(Kdp, Zdr)"</span><span class="p">,</span> <span class="s2">"R(Kdp)"</span><span class="p">,</span> <span class="s2">"R(Z, Zdr)"</span><span class="p">,</span> <span class="s2">"R(Z_all)"</span><span class="p">,</span> <span class="s2">"R(Z_c)"</span><span class="p">,</span> <span class="s2">"R(Z_s)"</span><span class="p">]</span>
         <span class="p">)</span>
-    <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">)</span>
+    <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">""</span><span class="p">)</span>
     <span class="n">cb</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">tick_params</span><span class="p">(</span><span class="n">length</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">cb</span>
 
@@ -759,16 +759,16 @@ classification to identify types of precipitation.</p>
 <span class="k">def</span><span class="w"> </span><span class="nf">two_panel_plot</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="n">var1</span><span class="o">=</span><span class="s2">&quot;corrected_reflectivity&quot;</span><span class="p">,</span>
+    <span class="n">var1</span><span class="o">=</span><span class="s2">"corrected_reflectivity"</span><span class="p">,</span>
     <span class="n">vmin1</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">vmax1</span><span class="o">=</span><span class="mi">65</span><span class="p">,</span>
-    <span class="n">cmap1</span><span class="o">=</span><span class="s2">&quot;RdYlBu_r&quot;</span><span class="p">,</span>
-    <span class="n">units1</span><span class="o">=</span><span class="s2">&quot;dBZ&quot;</span><span class="p">,</span>
-    <span class="n">var2</span><span class="o">=</span><span class="s2">&quot;corrected_differential_reflectivity&quot;</span><span class="p">,</span>
+    <span class="n">cmap1</span><span class="o">=</span><span class="s2">"RdYlBu_r"</span><span class="p">,</span>
+    <span class="n">units1</span><span class="o">=</span><span class="s2">"dBZ"</span><span class="p">,</span>
+    <span class="n">var2</span><span class="o">=</span><span class="s2">"corrected_differential_reflectivity"</span><span class="p">,</span>
     <span class="n">vmin2</span><span class="o">=-</span><span class="mi">5</span><span class="p">,</span>
     <span class="n">vmax2</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
-    <span class="n">cmap2</span><span class="o">=</span><span class="s2">&quot;RdYlBu_r&quot;</span><span class="p">,</span>
-    <span class="n">units2</span><span class="o">=</span><span class="s2">&quot;dB&quot;</span><span class="p">,</span>
+    <span class="n">cmap2</span><span class="o">=</span><span class="s2">"RdYlBu_r"</span><span class="p">,</span>
+    <span class="n">units2</span><span class="o">=</span><span class="s2">"dB"</span><span class="p">,</span>
     <span class="n">return_flag</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">xlim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">],</span>
     <span class="n">ylim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">],</span>
@@ -805,12 +805,12 @@ classification to identify types of precipitation.</p>
 <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a><span class="p">,</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax1</span></a><span class="p">,</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.html#matplotlib.axes.Axes" title="matplotlib.axes.Axes" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">ax2</span></a><span class="p">,</span> <span class="n">display</span> <span class="o">=</span> <span class="n">two_panel_plot</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="n">var1</span><span class="o">=</span><span class="s2">&quot;corrected_reflectivity&quot;</span><span class="p">,</span>
-    <span class="n">var2</span><span class="o">=</span><span class="s2">&quot;hydro_classification&quot;</span><span class="p">,</span>
+    <span class="n">var1</span><span class="o">=</span><span class="s2">"corrected_reflectivity"</span><span class="p">,</span>
+    <span class="n">var2</span><span class="o">=</span><span class="s2">"hydro_classification"</span><span class="p">,</span>
     <span class="n">vmin2</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">vmax2</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
     <span class="n">cmap2</span><span class="o">=</span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.ListedColormap.html#matplotlib.colors.ListedColormap" title="matplotlib.colors.ListedColormap" class="sphx-glr-backref-module-matplotlib-colors sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cmaphid</span></a><span class="p">,</span>
-    <span class="n">units2</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span>
+    <span class="n">units2</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span>
     <span class="n">return_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">xlim</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">lim</span></a><span class="p">,</span>
     <span class="n">ylim</span><span class="o">=</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">lim</span></a><span class="p">,</span>
@@ -818,7 +818,7 @@ classification to identify types of precipitation.</p>
 <a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">display</span><span class="o">.</span><span class="n">cbs</span></a><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">adjust_fhc_colorbar_for_pyart</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">display</span><span class="o">.</span><span class="n">cbs</span></a><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 7.097 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 10.530 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-retrieve-plot-hydrometeor-class-x-band-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/284155deb2676d4078d36e57fe980d9c/plot_hydrometeor_class_x_band.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_hydrometeor_class_x_band.ipynb</span></code></a></p>
@@ -897,8 +897,8 @@ classification to identify types of precipitation.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -932,7 +932,7 @@ classification to identify types of precipitation.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

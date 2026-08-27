@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,10 +486,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.retrieve.simple_moment_calculations</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Simple moment calculations.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy</span><span class="w"> </span><span class="kn">import</span> <span class="n">ndimage</span>
@@ -504,7 +504,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_snr_from_reflectivity</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">snr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">toa</span><span class="o">=</span><span class="mf">25000.0</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculate the signal to noise ratio, in dB, from the reflectivity field.</span>
 
 <span class="sd">    Parameters</span>
@@ -525,33 +525,33 @@
 <span class="sd">    snr : field dictionary</span>
 <span class="sd">        Field dictionary containing the signal to noise ratio.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">snr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">snr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;signal_to_noise_ratio&quot;</span><span class="p">)</span>
+        <span class="n">snr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"signal_to_noise_ratio"</span><span class="p">)</span>
 
     <span class="n">range_grid</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.0</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">1.0</span>
     <span class="p">)</span>
 
     <span class="c1"># remove range scale.. This is basically the radar constant scaled dBm</span>
-    <span class="n">pseudo_power</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="mf">20.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>
+    <span class="n">pseudo_power</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">-</span> <span class="mf">20.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span>
         <span class="n">range_grid</span> <span class="o">/</span> <span class="mf">1000.0</span>
     <span class="p">)</span>
 
     <span class="c1"># Noise floor estimate</span>
     <span class="c1"># 25km.. should be no scatterers, not even planes, this high</span>
     <span class="c1"># we could get undone by AP though.. also sun</span>
-    <span class="n">rg</span><span class="p">,</span> <span class="n">azg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
-    <span class="n">rg</span><span class="p">,</span> <span class="n">eleg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">rg</span><span class="p">,</span> <span class="n">azg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span>
+    <span class="n">rg</span><span class="p">,</span> <span class="n">eleg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span> <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">z</span> <span class="o">=</span> <span class="n">antenna_to_cartesian</span><span class="p">(</span><span class="n">rg</span> <span class="o">/</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="n">azg</span><span class="p">,</span> <span class="n">eleg</span><span class="p">)</span>  <span class="c1"># XXX: need to fix</span>
 
     <span class="n">points_above</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">z</span> <span class="o">&gt;</span> <span class="n">toa</span><span class="p">)</span>
     <span class="n">noise_floor_estimate</span> <span class="o">=</span> <span class="n">pseudo_power</span><span class="p">[</span><span class="n">points_above</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span>
 
     <span class="n">snr_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">snr_field</span><span class="p">)</span>
-    <span class="n">snr_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">pseudo_power</span> <span class="o">-</span> <span class="n">noise_floor_estimate</span>
+    <span class="n">snr_dict</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">pseudo_power</span> <span class="o">-</span> <span class="n">noise_floor_estimate</span>
     <span class="k">return</span> <span class="n">snr_dict</span></div>
 
 
@@ -559,7 +559,7 @@
 <div class="viewcode-block" id="compute_noisedBZ">
 <a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_noisedBZ.html#pyart.retrieve.compute_noisedBZ">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_noisedBZ</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">noisedBZ_val</span><span class="p">,</span> <span class="n">_range</span><span class="p">,</span> <span class="n">ref_dist</span><span class="p">,</span> <span class="n">noise_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Computes noise in dBZ from reference noise value.</span>
 
 <span class="sd">    Parameters</span>
@@ -580,15 +580,15 @@
 <span class="sd">    noisedBZ : dict</span>
 <span class="sd">        The noise field.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">noise_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">noise_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;noisedBZ_hh&quot;</span><span class="p">)</span>
+        <span class="n">noise_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"noisedBZ_hh"</span><span class="p">)</span>
 
     <span class="n">noisedBZ_vec</span> <span class="o">=</span> <span class="n">noisedBZ_val</span> <span class="o">+</span> <span class="mf">20.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">1e-3</span> <span class="o">*</span> <span class="n">_range</span> <span class="o">/</span> <span class="n">ref_dist</span><span class="p">)</span>
 
     <span class="n">noisedBZ</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">noise_field</span><span class="p">)</span>
-    <span class="n">noisedBZ</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">noisedBZ_vec</span><span class="p">,</span> <span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">noisedBZ</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">noisedBZ_vec</span><span class="p">,</span> <span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
 
     <span class="k">return</span> <span class="n">noisedBZ</span></div>
 
@@ -597,7 +597,7 @@
 <div class="viewcode-block" id="compute_snr">
 <a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_snr.html#pyart.retrieve.compute_snr">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_snr</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">noise_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">snr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Computes SNR from a reflectivity field and the noise in dBZ.</span>
 
 <span class="sd">    Parameters</span>
@@ -616,29 +616,29 @@
 <span class="sd">    snr : dict</span>
 <span class="sd">        The SNR field.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">noise_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">noise_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;noisedBZ_hh&quot;</span><span class="p">)</span>
+        <span class="n">noise_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"noisedBZ_hh"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">snr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">snr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;signal_to_noise_ratio&quot;</span><span class="p">)</span>
+        <span class="n">snr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"signal_to_noise_ratio"</span><span class="p">)</span>
 
     <span class="c1"># extract fields from radar</span>
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">refl</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">refl</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Field not available: &quot;</span> <span class="o">+</span> <span class="n">refl_field</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">"Field not available: "</span> <span class="o">+</span> <span class="n">refl_field</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">noise_field</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">noisedBZ</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">noise_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">noisedBZ</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">noise_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Field not available: &quot;</span> <span class="o">+</span> <span class="n">noise_field</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">"Field not available: "</span> <span class="o">+</span> <span class="n">noise_field</span><span class="p">)</span>
 
     <span class="n">snr_data</span> <span class="o">=</span> <span class="n">refl</span> <span class="o">-</span> <span class="n">noisedBZ</span>
 
     <span class="n">snr</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">snr_field</span><span class="p">)</span>
-    <span class="n">snr</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">snr_data</span>
+    <span class="n">snr</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">snr_data</span>
 
     <span class="k">return</span> <span class="n">snr</span></div>
 
@@ -647,7 +647,7 @@
 <div class="viewcode-block" id="compute_l">
 <a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_l.html#pyart.retrieve.compute_l">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_l</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">rhohv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">l_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Computes Rhohv in logarithmic scale according to L=-log10(1-RhoHV).</span>
 
 <span class="sd">    Parameters</span>
@@ -669,24 +669,24 @@
 <span class="sd">    Ryzhkov, A. V., 2001: Interpretation of Polarimetric Radar Covariance Matrix for Meteorological Scatterers: Theoretical Analysis.</span>
 <span class="sd">    J. Atmos. Oceanic Technol., 18, 315–328, https://doi.org/10.1175/1520-0426(2001)018&lt;0315:IOPRCM&gt;2.0.CO;2.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">rhohv_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">rhohv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">)</span>
+        <span class="n">rhohv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"cross_correlation_ratio"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">l_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">l_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;logarithmic_cross_correlation_ratio&quot;</span><span class="p">)</span>
+        <span class="n">l_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"logarithmic_cross_correlation_ratio"</span><span class="p">)</span>
 
     <span class="c1"># extract rhohv field from radar</span>
     <span class="k">if</span> <span class="n">rhohv_field</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">rhohv</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">rhohv_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">rhohv</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">rhohv_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Field not available: &quot;</span> <span class="o">+</span> <span class="n">rhohv_field</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">"Field not available: "</span> <span class="o">+</span> <span class="n">rhohv_field</span><span class="p">)</span>
 
     <span class="n">rhohv</span><span class="p">[</span><span class="n">rhohv</span> <span class="o">&gt;=</span> <span class="mf">1.0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.9999</span>
     <span class="n">l_data</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">rhohv</span><span class="p">)</span>
 
     <span class="n">l_field_out</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">l_field</span><span class="p">)</span>
-    <span class="n">l_field_out</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">l_data</span>
+    <span class="n">l_field_out</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">l_data</span>
 
     <span class="k">return</span> <span class="n">l_field_out</span></div>
 
@@ -695,7 +695,7 @@
 <div class="viewcode-block" id="compute_cdr">
 <a class="viewcode-back" href="../../../API/generated/pyart.retrieve.compute_cdr.html#pyart.retrieve.compute_cdr">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">compute_cdr</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">rhohv_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">zdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">cdr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Computes the Circular Depolarization Ratio.</span>
 
 
@@ -723,24 +723,24 @@
 <span class="sd">    J. Atmos. Oceanic Technol., 21, 574–583,</span>
 <span class="sd">    https://doi.org/10.1175/1520-0426(2004)021&lt;0574:DEFLHA&gt;2.0.CO;2.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">rhohv_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">rhohv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">)</span>
+        <span class="n">rhohv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"cross_correlation_ratio"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">zdr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">zdr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;differential_reflectivity&quot;</span><span class="p">)</span>
+        <span class="n">zdr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"differential_reflectivity"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">cdr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">cdr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;circular_depolarization_ratio&quot;</span><span class="p">)</span>
+        <span class="n">cdr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"circular_depolarization_ratio"</span><span class="p">)</span>
 
     <span class="c1"># extract fields from radar</span>
     <span class="k">if</span> <span class="n">rhohv_field</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">rhohv</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">rhohv_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">rhohv</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">rhohv_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Field not available: &quot;</span> <span class="o">+</span> <span class="n">rhohv_field</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">"Field not available: "</span> <span class="o">+</span> <span class="n">rhohv_field</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">zdr_field</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">zdrdB</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">zdr_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">zdrdB</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">zdr_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Field not available: &quot;</span> <span class="o">+</span> <span class="n">zdr_field</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">"Field not available: "</span> <span class="o">+</span> <span class="n">zdr_field</span><span class="p">)</span>
 
     <span class="n">zdr</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">zdrdB</span><span class="p">)</span>
 
@@ -750,7 +750,7 @@
     <span class="p">)</span>
 
     <span class="n">cdr</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">cdr_field</span><span class="p">)</span>
-    <span class="n">cdr</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cdr_data</span>
+    <span class="n">cdr</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">cdr_data</span>
 
     <span class="k">return</span> <span class="n">cdr</span></div>
 
@@ -761,7 +761,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">calculate_velocity_texture</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">wind_size</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span> <span class="n">nyq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">check_nyq_uniform</span><span class="o">=</span><span class="kc">True</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Derive the texture of the velocity field.</span>
 
 <span class="sd">    Parameters</span>
@@ -790,17 +790,17 @@
 <span class="sd">        A dictionary containing the field entries for the radial velocity</span>
 <span class="sd">        texture.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Parse names of velocity field</span>
     <span class="k">if</span> <span class="n">vel_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">vel_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;velocity&quot;</span><span class="p">)</span>
+        <span class="n">vel_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"velocity"</span><span class="p">)</span>
 
     <span class="c1"># Set wind_size as a tuple if input is int</span>
     <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">wind_size</span><span class="p">,</span> <span class="nb">int</span><span class="p">):</span>
         <span class="n">wind_size</span> <span class="o">=</span> <span class="p">(</span><span class="n">wind_size</span><span class="p">,</span> <span class="n">wind_size</span><span class="p">)</span>
 
     <span class="c1"># Allocate memory for texture field</span>
-    <span class="n">vel_texture</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
+    <span class="n">vel_texture</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">)</span>
 
     <span class="c1"># If an array of nyquist velocities is derived, use different</span>
     <span class="c1"># nyquist velocites for each sweep in texture calculation according to</span>
@@ -814,18 +814,18 @@
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">nsweeps</span><span class="p">):</span>
             <span class="n">start_ray</span><span class="p">,</span> <span class="n">end_ray</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_start_end</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
             <span class="n">inds</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="n">start_ray</span><span class="p">,</span> <span class="n">end_ray</span><span class="p">)</span>
-            <span class="n">vel_sweep</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">inds</span><span class="p">]</span>
+            <span class="n">vel_sweep</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="n">inds</span><span class="p">]</span>
             <span class="n">vel_texture</span><span class="p">[</span><span class="n">inds</span><span class="p">]</span> <span class="o">=</span> <span class="n">angular_texture_2d</span><span class="p">(</span><span class="n">vel_sweep</span><span class="p">,</span> <span class="n">wind_size</span><span class="p">,</span> <span class="n">nyq</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">vel_texture</span> <span class="o">=</span> <span class="n">angular_texture_2d</span><span class="p">(</span>
-            <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">wind_size</span><span class="p">,</span> <span class="n">nyq</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">],</span> <span class="n">wind_size</span><span class="p">,</span> <span class="n">nyq</span>
         <span class="p">)</span>
-    <span class="n">vel_texture_field</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;velocity&quot;</span><span class="p">)</span>
-    <span class="n">vel_texture_field</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Doppler velocity texture&quot;</span>
-    <span class="n">vel_texture_field</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
-        <span class="s2">&quot;texture_of_radial_velocity&quot;</span> <span class="o">+</span> <span class="s2">&quot;_of_scatters_away_from_instrument&quot;</span>
+    <span class="n">vel_texture_field</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"velocity"</span><span class="p">)</span>
+    <span class="n">vel_texture_field</span><span class="p">[</span><span class="s2">"long_name"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Doppler velocity texture"</span>
+    <span class="n">vel_texture_field</span><span class="p">[</span><span class="s2">"standard_name"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="s2">"texture_of_radial_velocity"</span> <span class="o">+</span> <span class="s2">"_of_scatters_away_from_instrument"</span>
     <span class="p">)</span>
-    <span class="n">vel_texture_field</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">median_filter</span><span class="p">(</span><span class="n">vel_texture</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">wind_size</span><span class="p">)</span>
+    <span class="n">vel_texture_field</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ndimage</span><span class="o">.</span><span class="n">median_filter</span><span class="p">(</span><span class="n">vel_texture</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="n">wind_size</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">vel_texture_field</span></div>
 
 </pre></div>
@@ -860,8 +860,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -895,7 +895,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,10 +486,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.retrieve.qpe</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Functions for rainfall rate estimation.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
 
@@ -502,7 +502,7 @@
 <div class="viewcode-block" id="est_rain_rate_zpoly">
 <a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_zpoly.html#pyart.retrieve.est_rain_rate_zpoly">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">est_rain_rate_zpoly</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Estimates rainfall rate from reflectivity using a polynomial Z-R relation</span>
 <span class="sd">    developed at McGill University.</span>
 
@@ -529,15 +529,15 @@
 <span class="sd">    Joss et al. Operational Use of Radar for Precipitation Measurements</span>
 <span class="sd">    in Switzerland. 1998. Vdf Hochschulverlag AG ETH Zurich: 134.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">rr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">rr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;radar_estimated_rain_rate&quot;</span><span class="p">)</span>
+        <span class="n">rr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"radar_estimated_rain_rate"</span><span class="p">)</span>
 
     <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">refl_field</span><span class="p">)</span>
-    <span class="n">refl</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">refl</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
 
     <span class="n">refl2</span> <span class="o">=</span> <span class="n">refl</span> <span class="o">*</span> <span class="n">refl</span>
     <span class="n">refl3</span> <span class="o">=</span> <span class="n">refl</span> <span class="o">*</span> <span class="n">refl2</span>
@@ -548,7 +548,7 @@
     <span class="p">)</span>
 
     <span class="n">rain</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">rr_field</span><span class="p">)</span>
-    <span class="n">rain</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rr_data</span>
+    <span class="n">rain</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">rr_data</span>
 
     <span class="k">return</span> <span class="n">rain</span></div>
 
@@ -557,7 +557,7 @@
 <div class="viewcode-block" id="est_rain_rate_z">
 <a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_z.html#pyart.retrieve.est_rain_rate_z">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">est_rain_rate_z</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.0376</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="mf">0.6112</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Estimates rainfall rate from reflectivity using a power law.</span>
 
 <span class="sd">    Parameters</span>
@@ -581,20 +581,20 @@
 <span class="sd">    Fabry, Frédéric. Radar Meterology. 2015. Ch 9. pg 148-165.</span>
 <span class="sd">    https://doi.org/10.1017/CBO9781107707405</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">rr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">rr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;radar_estimated_rain_rate&quot;</span><span class="p">)</span>
+        <span class="n">rr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"radar_estimated_rain_rate"</span><span class="p">)</span>
 
     <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">refl_field</span><span class="p">)</span>
-    <span class="n">refl</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">refl</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
 
     <span class="n">rr_data</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">refl</span><span class="p">),</span> <span class="n">beta</span><span class="p">)</span>
 
     <span class="n">rain</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">rr_field</span><span class="p">)</span>
-    <span class="n">rain</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rr_data</span>
+    <span class="n">rain</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">rr_data</span>
 
     <span class="k">return</span> <span class="n">rain</span></div>
 
@@ -603,7 +603,7 @@
 <div class="viewcode-block" id="est_rain_rate_kdp">
 <a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_kdp.html#pyart.retrieve.est_rain_rate_kdp">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">est_rain_rate_kdp</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">kdp_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Estimates rainfall rate from kdp using alpha power law.</span>
 
 <span class="sd">    Parameters</span>
@@ -631,35 +631,35 @@
 <span class="sd">    Quarterly Journal of the Royal Meteorological Society. 2012.</span>
 <span class="sd">    https://doi.org/10.1002/qj.1934</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># select the coefficients as alpha function of frequency band</span>
     <span class="k">if</span> <span class="n">alpha</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">beta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># assign coefficients according to radar frequency</span>
-        <span class="k">if</span> <span class="s2">&quot;frequency&quot;</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"frequency"</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">:</span>
             <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="n">_get_coeff_rkdp</span><span class="p">(</span>
-                <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">&quot;frequency&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">"frequency"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="n">_coeff_rkdp_table</span><span class="p">()[</span><span class="s2">&quot;C&quot;</span><span class="p">]</span>
+            <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="n">_coeff_rkdp_table</span><span class="p">()[</span><span class="s2">"C"</span><span class="p">]</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;Radar frequency unknown. &quot;</span>
-                <span class="s2">&quot;Default coefficients for C band will be applied.&quot;</span>
+                <span class="s2">"Radar frequency unknown. "</span>
+                <span class="s2">"Default coefficients for C band will be applied."</span>
             <span class="p">)</span>
 
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">kdp_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">kdp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;specific_differential_phase&quot;</span><span class="p">)</span>
+        <span class="n">kdp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"specific_differential_phase"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">rr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">rr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;radar_estimated_rain_rate&quot;</span><span class="p">)</span>
+        <span class="n">rr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"radar_estimated_rain_rate"</span><span class="p">)</span>
 
     <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">kdp_field</span><span class="p">)</span>
-    <span class="n">kdp</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">kdp_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">kdp</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">kdp_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
 
     <span class="n">kdp</span><span class="p">[</span><span class="n">kdp</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">rr_data</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">kdp</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span>
 
     <span class="n">rain</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">rr_field</span><span class="p">)</span>
-    <span class="n">rain</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rr_data</span>
+    <span class="n">rain</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">rr_data</span>
 
     <span class="k">return</span> <span class="n">rain</span></div>
 
@@ -668,7 +668,7 @@
 <div class="viewcode-block" id="est_rain_rate_a">
 <a class="viewcode-back" href="../../../API/generated/pyart.retrieve.est_rain_rate_a.html#pyart.retrieve.est_rain_rate_a">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">est_rain_rate_a</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">a_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">rr_field</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Estimates rainfall rate from specific attenuation using alpha power law.</span>
 
 <span class="sd">    Parameters</span>
@@ -700,34 +700,34 @@
 <span class="sd">    Partial Beam Blockage, and Radar Networking. Journal of Atmospheric and</span>
 <span class="sd">    Oceanic Technology, 31, 599-619.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># select the coefficients as alpha function of frequency band</span>
     <span class="k">if</span> <span class="n">alpha</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">or</span> <span class="n">beta</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># assign coefficients according to radar frequency</span>
-        <span class="k">if</span> <span class="s2">&quot;frequency&quot;</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">:</span>
+        <span class="k">if</span> <span class="s2">"frequency"</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">:</span>
             <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="n">_get_coeff_ra</span><span class="p">(</span>
-                <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">&quot;frequency&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">"frequency"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="n">_coeff_ra_table</span><span class="p">()[</span><span class="s2">&quot;C&quot;</span><span class="p">]</span>
+            <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="n">_coeff_ra_table</span><span class="p">()[</span><span class="s2">"C"</span><span class="p">]</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;Radar frequency unknown. &quot;</span>
-                <span class="s2">&quot;Default coefficients for C band will be applied.&quot;</span>
+                <span class="s2">"Radar frequency unknown. "</span>
+                <span class="s2">"Default coefficients for C band will be applied."</span>
             <span class="p">)</span>
 
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">a_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">a_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;specific_attenuation&quot;</span><span class="p">)</span>
+        <span class="n">a_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"specific_attenuation"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">rr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">rr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;radar_estimated_rain_rate&quot;</span><span class="p">)</span>
+        <span class="n">rr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"radar_estimated_rain_rate"</span><span class="p">)</span>
 
     <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">a_field</span><span class="p">)</span>
-    <span class="n">att</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">a_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">att</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">a_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
 
     <span class="n">rr_data</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">power</span><span class="p">(</span><span class="n">att</span><span class="p">,</span> <span class="n">beta</span><span class="p">)</span>
 
     <span class="n">rain</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">rr_field</span><span class="p">)</span>
-    <span class="n">rain</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rr_data</span>
+    <span class="n">rain</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">rr_data</span>
 
     <span class="k">return</span> <span class="n">rain</span></div>
 
@@ -748,7 +748,7 @@
     <span class="n">thresh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">thresh_max</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Estimates rainfall rate from a blending of power law r-kdp and r-z</span>
 <span class="sd">    relations.</span>
 
@@ -783,14 +783,14 @@
 <span class="sd">    rain_main : dict</span>
 <span class="sd">        Field dictionary containing the rainfall rate.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">kdp_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">kdp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;specific_differential_phase&quot;</span><span class="p">)</span>
+        <span class="n">kdp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"specific_differential_phase"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">rr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">rr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;radar_estimated_rain_rate&quot;</span><span class="p">)</span>
+        <span class="n">rr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"radar_estimated_rain_rate"</span><span class="p">)</span>
 
     <span class="n">rain_z</span> <span class="o">=</span> <span class="n">est_rain_rate_z</span><span class="p">(</span>
         <span class="n">radar</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alphaz</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">betaz</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span> <span class="n">rr_field</span><span class="o">=</span><span class="n">rr_field</span>
@@ -816,14 +816,14 @@
         <span class="n">thresh</span> <span class="o">=</span> <span class="mf">40.0</span>
         <span class="n">thresh_max</span> <span class="o">=</span> <span class="kc">True</span>
         <span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;Unknown main field. Using &quot;</span> <span class="o">+</span> <span class="n">refl_field</span> <span class="o">+</span> <span class="s2">&quot; with threshold &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">thresh</span><span class="p">)</span>
+            <span class="s2">"Unknown main field. Using "</span> <span class="o">+</span> <span class="n">refl_field</span> <span class="o">+</span> <span class="s2">" with threshold "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">thresh</span><span class="p">)</span>
         <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">thresh_max</span><span class="p">:</span>
-        <span class="n">is_secondary</span> <span class="o">=</span> <span class="n">rain_main</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">thresh</span>
+        <span class="n">is_secondary</span> <span class="o">=</span> <span class="n">rain_main</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">thresh</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">is_secondary</span> <span class="o">=</span> <span class="n">rain_main</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">thresh</span>
-    <span class="n">rain_main</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">is_secondary</span><span class="p">]</span> <span class="o">=</span> <span class="n">rain_secondary</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">is_secondary</span><span class="p">]</span>
+        <span class="n">is_secondary</span> <span class="o">=</span> <span class="n">rain_main</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">thresh</span>
+    <span class="n">rain_main</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">is_secondary</span><span class="p">]</span> <span class="o">=</span> <span class="n">rain_secondary</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">is_secondary</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">rain_main</span></div>
 
@@ -844,7 +844,7 @@
     <span class="n">thresh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">thresh_max</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Estimates rainfall rate from a blending of power law r-alpha and r-z</span>
 <span class="sd">    relations.</span>
 
@@ -878,14 +878,14 @@
 <span class="sd">    rain_main : dict</span>
 <span class="sd">        Field dictionary containing the rainfall rate.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">a_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">a_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;specific_attenuation&quot;</span><span class="p">)</span>
+        <span class="n">a_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"specific_attenuation"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">rr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">rr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;radar_estimated_rain_rate&quot;</span><span class="p">)</span>
+        <span class="n">rr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"radar_estimated_rain_rate"</span><span class="p">)</span>
 
     <span class="n">rain_z</span> <span class="o">=</span> <span class="n">est_rain_rate_z</span><span class="p">(</span>
         <span class="n">radar</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="n">alphaz</span><span class="p">,</span> <span class="n">beta</span><span class="o">=</span><span class="n">betaz</span><span class="p">,</span> <span class="n">refl_field</span><span class="o">=</span><span class="n">refl_field</span><span class="p">,</span> <span class="n">rr_field</span><span class="o">=</span><span class="n">rr_field</span>
@@ -910,14 +910,14 @@
         <span class="n">rain_secondary</span> <span class="o">=</span> <span class="n">rain_z</span>
         <span class="n">thresh</span> <span class="o">=</span> <span class="mf">0.04</span>
         <span class="n">thresh_max</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown main field. Using &quot;</span> <span class="o">+</span> <span class="n">a_field</span> <span class="o">+</span> <span class="s2">&quot; with threshold &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">thresh</span><span class="p">))</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">"Unknown main field. Using "</span> <span class="o">+</span> <span class="n">a_field</span> <span class="o">+</span> <span class="s2">" with threshold "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">thresh</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">thresh_max</span><span class="p">:</span>
-        <span class="n">is_secondary</span> <span class="o">=</span> <span class="n">rain_main</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">thresh</span>
+        <span class="n">is_secondary</span> <span class="o">=</span> <span class="n">rain_main</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">thresh</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">is_secondary</span> <span class="o">=</span> <span class="n">rain_main</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">thresh</span>
+        <span class="n">is_secondary</span> <span class="o">=</span> <span class="n">rain_main</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">thresh</span>
 
-    <span class="n">rain_main</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">is_secondary</span><span class="p">]</span> <span class="o">=</span> <span class="n">rain_secondary</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">is_secondary</span><span class="p">]</span>
+    <span class="n">rain_main</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">is_secondary</span><span class="p">]</span> <span class="o">=</span> <span class="n">rain_secondary</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">is_secondary</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">rain_main</span></div>
 
@@ -942,7 +942,7 @@
     <span class="n">thresh</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">thresh_max</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Estimates rainfall rate using different relations between R and the</span>
 <span class="sd">    polarimetric variables depending on the hydrometeor type.</span>
 
@@ -995,22 +995,22 @@
 <span class="sd">    through statistical clustering of polarimetric radar measurements: a semi-supervised approach,</span>
 <span class="sd">    Atmos. Meas. Tech., 9, 4425–4445, https://doi.org/10.5194/amt-9-4425-2016, 2016.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># parse the field parameters</span>
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">a_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">a_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;specific_attenuation&quot;</span><span class="p">)</span>
+        <span class="n">a_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"specific_attenuation"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">hydro_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">hydro_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;radar_echo_classification&quot;</span><span class="p">)</span>
+        <span class="n">hydro_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"radar_echo_classification"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">rr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">rr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;radar_estimated_rain_rate&quot;</span><span class="p">)</span>
+        <span class="n">rr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"radar_estimated_rain_rate"</span><span class="p">)</span>
 
     <span class="c1"># extract fields and parameters from radar</span>
     <span class="k">if</span> <span class="n">hydro_field</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">:</span>
-        <span class="n">hydroclass</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">hydro_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">hydroclass</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">hydro_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Field not available: &quot;</span> <span class="o">+</span> <span class="n">hydro_field</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">"Field not available: "</span> <span class="o">+</span> <span class="n">hydro_field</span><span class="p">)</span>
 
     <span class="c1"># get the location of each hydrometeor class</span>
     <span class="n">is_ds</span> <span class="o">=</span> <span class="n">hydroclass</span> <span class="o">==</span> <span class="mi">1</span>
@@ -1035,17 +1035,17 @@
     <span class="p">)</span>
 
     <span class="c1"># initialize rainfall rate field</span>
-    <span class="n">rr_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">hydroclass</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">rr_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">hydroclass</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
     <span class="n">rr_data</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
     <span class="n">rr_data</span><span class="o">.</span><span class="n">set_fill_value</span><span class="p">(</span><span class="n">get_fillvalue</span><span class="p">())</span>
 
     <span class="c1"># apply the relations for each type</span>
     <span class="c1"># solid phase</span>
-    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_ds</span><span class="p">]</span> <span class="o">=</span> <span class="n">snow_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">is_ds</span><span class="p">]</span>
-    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_cr</span><span class="p">]</span> <span class="o">=</span> <span class="n">snow_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">is_cr</span><span class="p">]</span>
-    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_vi</span><span class="p">]</span> <span class="o">=</span> <span class="n">snow_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">is_vi</span><span class="p">]</span>
-    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_gr</span><span class="p">]</span> <span class="o">=</span> <span class="n">snow_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">is_gr</span><span class="p">]</span>
-    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_ih</span><span class="p">]</span> <span class="o">=</span> <span class="n">snow_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">is_ih</span><span class="p">]</span>
+    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_ds</span><span class="p">]</span> <span class="o">=</span> <span class="n">snow_z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">is_ds</span><span class="p">]</span>
+    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_cr</span><span class="p">]</span> <span class="o">=</span> <span class="n">snow_z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">is_cr</span><span class="p">]</span>
+    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_vi</span><span class="p">]</span> <span class="o">=</span> <span class="n">snow_z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">is_vi</span><span class="p">]</span>
+    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_gr</span><span class="p">]</span> <span class="o">=</span> <span class="n">snow_z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">is_gr</span><span class="p">]</span>
+    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_ih</span><span class="p">]</span> <span class="o">=</span> <span class="n">snow_z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">is_ih</span><span class="p">]</span>
 
     <span class="c1"># rain</span>
     <span class="k">if</span> <span class="n">main_field</span> <span class="o">==</span> <span class="n">refl_field</span><span class="p">:</span>
@@ -1064,31 +1064,31 @@
         <span class="n">rain_secondary</span> <span class="o">=</span> <span class="n">rain_z</span>
         <span class="n">thresh</span> <span class="o">=</span> <span class="mf">0.04</span>
         <span class="n">thresh_max</span> <span class="o">=</span> <span class="kc">False</span>
-        <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown main field. Using &quot;</span> <span class="o">+</span> <span class="n">a_field</span> <span class="o">+</span> <span class="s2">&quot; with threshold &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">thresh</span><span class="p">))</span>
+        <span class="n">warn</span><span class="p">(</span><span class="s2">"Unknown main field. Using "</span> <span class="o">+</span> <span class="n">a_field</span> <span class="o">+</span> <span class="s2">" with threshold "</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">thresh</span><span class="p">))</span>
 
     <span class="k">if</span> <span class="n">thresh_max</span><span class="p">:</span>
-        <span class="n">is_secondary</span> <span class="o">=</span> <span class="n">rain_main</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">thresh</span>
+        <span class="n">is_secondary</span> <span class="o">=</span> <span class="n">rain_main</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">thresh</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">is_secondary</span> <span class="o">=</span> <span class="n">rain_main</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">thresh</span>
+        <span class="n">is_secondary</span> <span class="o">=</span> <span class="n">rain_main</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">&lt;</span> <span class="n">thresh</span>
 
-    <span class="n">rain_main</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">is_secondary</span><span class="p">]</span> <span class="o">=</span> <span class="n">rain_secondary</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">is_secondary</span><span class="p">]</span>
+    <span class="n">rain_main</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">is_secondary</span><span class="p">]</span> <span class="o">=</span> <span class="n">rain_secondary</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">is_secondary</span><span class="p">]</span>
 
-    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_lr</span><span class="p">]</span> <span class="o">=</span> <span class="n">rain_main</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">is_lr</span><span class="p">]</span>
-    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_rn</span><span class="p">]</span> <span class="o">=</span> <span class="n">rain_main</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">is_rn</span><span class="p">]</span>
+    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_lr</span><span class="p">]</span> <span class="o">=</span> <span class="n">rain_main</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">is_lr</span><span class="p">]</span>
+    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_rn</span><span class="p">]</span> <span class="o">=</span> <span class="n">rain_main</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">is_rn</span><span class="p">]</span>
 
     <span class="c1"># mixed phase</span>
-    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_ws</span><span class="p">]</span> <span class="o">=</span> <span class="n">mp_factor</span> <span class="o">*</span> <span class="n">rain_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">is_ws</span><span class="p">]</span>
-    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_mh</span><span class="p">]</span> <span class="o">=</span> <span class="n">mp_factor</span> <span class="o">*</span> <span class="n">rain_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">is_mh</span><span class="p">]</span>
+    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_ws</span><span class="p">]</span> <span class="o">=</span> <span class="n">mp_factor</span> <span class="o">*</span> <span class="n">rain_z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">is_ws</span><span class="p">]</span>
+    <span class="n">rr_data</span><span class="p">[</span><span class="n">is_mh</span><span class="p">]</span> <span class="o">=</span> <span class="n">mp_factor</span> <span class="o">*</span> <span class="n">rain_z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">is_mh</span><span class="p">]</span>
 
     <span class="n">rain</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">rr_field</span><span class="p">)</span>
-    <span class="n">rain</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rr_data</span>
+    <span class="n">rain</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">rr_data</span>
 
     <span class="k">return</span> <span class="n">rain</span></div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_get_coeff_rkdp</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Get the R(kdp) power law coefficients for a particular frequency.</span>
 
 <span class="sd">    Parameters</span>
@@ -1101,7 +1101,7 @@
 <span class="sd">    alpha, beta : floats</span>
 <span class="sd">        The coefficient and exponent of the power law.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">coeff_rkdp_dict</span> <span class="o">=</span> <span class="n">_coeff_rkdp_table</span><span class="p">()</span>
 
     <span class="n">freq_band</span> <span class="o">=</span> <span class="n">get_freq_band</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
@@ -1109,22 +1109,22 @@
         <span class="k">return</span> <span class="n">coeff_rkdp_dict</span><span class="p">[</span><span class="n">freq_band</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">freq</span> <span class="o">&lt;</span> <span class="mf">2e9</span><span class="p">:</span>
-        <span class="n">freq_band_aux</span> <span class="o">=</span> <span class="s2">&quot;S&quot;</span>
+        <span class="n">freq_band_aux</span> <span class="o">=</span> <span class="s2">"S"</span>
     <span class="k">elif</span> <span class="n">freq</span> <span class="o">&gt;</span> <span class="mf">12e9</span><span class="p">:</span>
-        <span class="n">freq_band_aux</span> <span class="o">=</span> <span class="s2">&quot;X&quot;</span>
+        <span class="n">freq_band_aux</span> <span class="o">=</span> <span class="s2">"X"</span>
 
     <span class="n">warn</span><span class="p">(</span>
-        <span class="s2">&quot;Radar frequency out of range. &quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;Coefficients only applied to S, C or X band. &quot;</span>
+        <span class="s2">"Radar frequency out of range. "</span>
+        <span class="o">+</span> <span class="s2">"Coefficients only applied to S, C or X band. "</span>
         <span class="o">+</span> <span class="n">freq_band_aux</span>
-        <span class="o">+</span> <span class="s2">&quot; band coefficients will be used.&quot;</span>
+        <span class="o">+</span> <span class="s2">" band coefficients will be used."</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">coeff_rkdp_dict</span><span class="p">[</span><span class="n">freq_band_aux</span><span class="p">]</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_coeff_rkdp_table</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Defines the R(kdp) power law coefficients for each frequency band.</span>
 
 <span class="sd">    Returns</span>
@@ -1132,23 +1132,23 @@
 <span class="sd">    coeff_rkdp_dict : dict</span>
 <span class="sd">        A dictionary with the coefficients at each band.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">coeff_rkdp_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
     <span class="c1"># S band: Beard and Chuang coefficients</span>
-    <span class="n">coeff_rkdp_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">50.70</span><span class="p">,</span> <span class="mf">0.8500</span><span class="p">)})</span>
+    <span class="n">coeff_rkdp_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"S"</span><span class="p">:</span> <span class="p">(</span><span class="mf">50.70</span><span class="p">,</span> <span class="mf">0.8500</span><span class="p">)})</span>
 
     <span class="c1"># C band: Beard and Chuang coefficients</span>
-    <span class="n">coeff_rkdp_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">29.70</span><span class="p">,</span> <span class="mf">0.8500</span><span class="p">)})</span>
+    <span class="n">coeff_rkdp_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"C"</span><span class="p">:</span> <span class="p">(</span><span class="mf">29.70</span><span class="p">,</span> <span class="mf">0.8500</span><span class="p">)})</span>
 
     <span class="c1"># X band: Brandes coefficients</span>
-    <span class="n">coeff_rkdp_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">15.81</span><span class="p">,</span> <span class="mf">0.7992</span><span class="p">)})</span>
+    <span class="n">coeff_rkdp_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"X"</span><span class="p">:</span> <span class="p">(</span><span class="mf">15.81</span><span class="p">,</span> <span class="mf">0.7992</span><span class="p">)})</span>
 
     <span class="k">return</span> <span class="n">coeff_rkdp_dict</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_get_coeff_ra</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Get the R(A) power law coefficients for a particular frequency.</span>
 
 <span class="sd">    Parameters</span>
@@ -1161,7 +1161,7 @@
 <span class="sd">    alpha, beta : floats</span>
 <span class="sd">        The coefficient and exponent of the power law.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">coeff_ra_dict</span> <span class="o">=</span> <span class="n">_coeff_ra_table</span><span class="p">()</span>
 
     <span class="n">freq_band</span> <span class="o">=</span> <span class="n">get_freq_band</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
@@ -1169,22 +1169,22 @@
         <span class="k">return</span> <span class="n">coeff_ra_dict</span><span class="p">[</span><span class="n">freq_band</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">freq</span> <span class="o">&lt;</span> <span class="mf">2e9</span><span class="p">:</span>
-        <span class="n">freq_band_aux</span> <span class="o">=</span> <span class="s2">&quot;S&quot;</span>
+        <span class="n">freq_band_aux</span> <span class="o">=</span> <span class="s2">"S"</span>
     <span class="k">elif</span> <span class="n">freq</span> <span class="o">&gt;</span> <span class="mf">12e9</span><span class="p">:</span>
-        <span class="n">freq_band_aux</span> <span class="o">=</span> <span class="s2">&quot;X&quot;</span>
+        <span class="n">freq_band_aux</span> <span class="o">=</span> <span class="s2">"X"</span>
 
     <span class="n">warn</span><span class="p">(</span>
-        <span class="s2">&quot;Radar frequency out of range. &quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;Coefficients only applied to S, C or X band. &quot;</span>
+        <span class="s2">"Radar frequency out of range. "</span>
+        <span class="o">+</span> <span class="s2">"Coefficients only applied to S, C or X band. "</span>
         <span class="o">+</span> <span class="n">freq_band_aux</span>
-        <span class="o">+</span> <span class="s2">&quot; band coefficients will be used.&quot;</span>
+        <span class="o">+</span> <span class="s2">" band coefficients will be used."</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">coeff_ra_dict</span><span class="p">[</span><span class="n">freq_band_aux</span><span class="p">]</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_coeff_ra_table</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Defines the R(A) power law coefficients for each frequency band.</span>
 
 <span class="sd">    Returns</span>
@@ -1192,25 +1192,25 @@
 <span class="sd">    coeff_ra_dict : dict</span>
 <span class="sd">        A dictionary with the coefficients at each band.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">coeff_ra_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
 
     <span class="c1"># S band: at 10 deg C according to tables from Ryzhkov et al. 2014</span>
-    <span class="n">coeff_ra_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">3100.0</span><span class="p">,</span> <span class="mf">1.03</span><span class="p">)})</span>
+    <span class="n">coeff_ra_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"S"</span><span class="p">:</span> <span class="p">(</span><span class="mf">3100.0</span><span class="p">,</span> <span class="mf">1.03</span><span class="p">)})</span>
 
     <span class="c1"># C band: at 10 deg C according to tables from Diederich et al. 2015</span>
-    <span class="n">coeff_ra_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">250.0</span><span class="p">,</span> <span class="mf">0.91</span><span class="p">)})</span>
+    <span class="n">coeff_ra_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"C"</span><span class="p">:</span> <span class="p">(</span><span class="mf">250.0</span><span class="p">,</span> <span class="mf">0.91</span><span class="p">)})</span>
 
     <span class="c1"># X band: at 10 deg C according to tables from Diederich et al. 2015</span>
-    <span class="n">coeff_ra_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">45.5</span><span class="p">,</span> <span class="mf">0.83</span><span class="p">)})</span>
+    <span class="n">coeff_ra_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"X"</span><span class="p">:</span> <span class="p">(</span><span class="mf">45.5</span><span class="p">,</span> <span class="mf">0.83</span><span class="p">)})</span>
 
     <span class="k">return</span> <span class="n">coeff_ra_dict</span>
 
 
 <div class="viewcode-block" id="ZtoR">
 <a class="viewcode-back" href="../../../API/generated/pyart.retrieve.ZtoR.html#pyart.retrieve.ZtoR">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">ZtoR</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">ref_field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">1.4</span><span class="p">,</span> <span class="n">save_name</span><span class="o">=</span><span class="s2">&quot;NWS_primary_prate&quot;</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">ZtoR</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">ref_field</span><span class="o">=</span><span class="s2">"reflectivity"</span><span class="p">,</span> <span class="n">a</span><span class="o">=</span><span class="mi">300</span><span class="p">,</span> <span class="n">b</span><span class="o">=</span><span class="mf">1.4</span><span class="p">,</span> <span class="n">save_name</span><span class="o">=</span><span class="s2">"NWS_primary_prate"</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Convert reflectivity (dBZ) to precipitation rate (mm/hr)</span>
 
 <span class="sd">    Author: Laura Tomkins (lauramtomkins@gmail.com)</span>
@@ -1221,7 +1221,7 @@
 <span class="sd">        Radar object used.</span>
 <span class="sd">    ref_field : str</span>
 <span class="sd">        Reflectivity field name to use to look up reflectivity data. In the</span>
-<span class="sd">        radar object. Default field name is &#39;reflectivity&#39;. Units are expected</span>
+<span class="sd">        radar object. Default field name is 'reflectivity'. Units are expected</span>
 <span class="sd">        to be dBZ.</span>
 <span class="sd">    a : float</span>
 <span class="sd">        a value (coefficient) in the Z-R relationship</span>
@@ -1235,13 +1235,13 @@
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
-<span class="sd">    American Meteorological Society, 2022: &quot;Z-R relation&quot;. Glossary of Meteorology,</span>
+<span class="sd">    American Meteorological Society, 2022: "Z-R relation". Glossary of Meteorology,</span>
 <span class="sd">    https://glossary.ametsoc.org/wiki/Z-r_relation</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># get reflectivity data</span>
-    <span class="n">ref_data</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">ref_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">ref_data</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">ref_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
     <span class="n">ref_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_invalid</span><span class="p">(</span><span class="n">ref_data</span><span class="p">)</span>
 
     <span class="c1"># convert to linear reflectivity</span>
@@ -1250,12 +1250,12 @@
 
     <span class="c1"># create dictionary</span>
     <span class="n">prate_dict</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">precip_rate</span><span class="p">,</span>
-        <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="n">save_name</span><span class="p">,</span>
-        <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">save_name</span><span class="si">}</span><span class="s2"> rescaled from linear reflectivity&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;mm/hr&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;valid_min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;valid_max&quot;</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>
+        <span class="s2">"data"</span><span class="p">:</span> <span class="n">precip_rate</span><span class="p">,</span>
+        <span class="s2">"standard_name"</span><span class="p">:</span> <span class="n">save_name</span><span class="p">,</span>
+        <span class="s2">"long_name"</span><span class="p">:</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">save_name</span><span class="si">}</span><span class="s2"> rescaled from linear reflectivity"</span><span class="p">,</span>
+        <span class="s2">"units"</span><span class="p">:</span> <span class="s2">"mm/hr"</span><span class="p">,</span>
+        <span class="s2">"valid_min"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">"valid_max"</span><span class="p">:</span> <span class="mi">10000</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="c1"># add field to radar object</span>
@@ -1295,8 +1295,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1330,7 +1330,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

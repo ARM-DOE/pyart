@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,10 +486,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.config</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Py-ART configuration.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">traceback</span>
@@ -497,13 +497,13 @@
 
 <span class="c1"># the path to the default configuration file</span>
 <span class="n">_dirname</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="vm">__file__</span><span class="p">)</span>
-<span class="n">_DEFAULT_CONFIG_FILE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_dirname</span><span class="p">,</span> <span class="s2">&quot;default_config.py&quot;</span><span class="p">)</span>
+<span class="n">_DEFAULT_CONFIG_FILE</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">_dirname</span><span class="p">,</span> <span class="s2">"default_config.py"</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="load_config">
 <a class="viewcode-back" href="../../API/generated/pyart.config.load_config.html#pyart.config.load_config">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">load_config</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Load a Py-ART configuration from a config file.</span>
 
 <span class="sd">    The default values for a number of Py-ART parameters and metadata is</span>
@@ -524,7 +524,7 @@
 <span class="sd">    environmental variable to point to .pyart_config.py in their home</span>
 <span class="sd">    directory.</span>
 
-<span class="sd">    Py-ART&#39;s configuration can also be modified within a script or shell</span>
+<span class="sd">    Py-ART's configuration can also be modified within a script or shell</span>
 <span class="sd">    session using this function, the modification will last until a the end</span>
 <span class="sd">    of the script/session or until a new configuration is loaded.</span>
 
@@ -534,7 +534,7 @@
 <span class="sd">        Filename of configuration file. If None the default configuration</span>
 <span class="sd">        file is loaded from the Py-ART source code directory.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">filename</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">filename</span> <span class="o">=</span> <span class="n">_DEFAULT_CONFIG_FILE</span>
 
@@ -551,7 +551,7 @@
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">importlib.util</span><span class="w"> </span><span class="kn">import</span> <span class="n">module_from_spec</span><span class="p">,</span> <span class="n">spec_from_file_location</span>
 
-        <span class="n">spec</span> <span class="o">=</span> <span class="n">spec_from_file_location</span><span class="p">(</span><span class="s2">&quot;metadata_config&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="n">spec</span> <span class="o">=</span> <span class="n">spec_from_file_location</span><span class="p">(</span><span class="s2">"metadata_config"</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
         <span class="c1"># assert spec is not None</span>
         <span class="n">cfile</span> <span class="o">=</span> <span class="n">module_from_spec</span><span class="p">(</span><span class="n">spec</span><span class="p">)</span>
         <span class="c1"># assert spec.loader is not None</span>
@@ -560,7 +560,7 @@
     <span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">imp</span>
 
-        <span class="n">cfile</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">load_source</span><span class="p">(</span><span class="s2">&quot;metadata_config&quot;</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
+        <span class="n">cfile</span> <span class="o">=</span> <span class="n">imp</span><span class="o">.</span><span class="n">load_source</span><span class="p">(</span><span class="s2">"metadata_config"</span><span class="p">,</span> <span class="n">filename</span><span class="p">)</span>
 
     <span class="n">_DEFAULT_METADATA</span> <span class="o">=</span> <span class="n">cfile</span><span class="o">.</span><span class="n">DEFAULT_METADATA</span>
     <span class="n">_FILE_SPECIFIC_METADATA</span> <span class="o">=</span> <span class="n">cfile</span><span class="o">.</span><span class="n">FILE_SPECIFIC_METADATA</span>
@@ -580,7 +580,7 @@
 
 <span class="c1"># load the configuration from the enviromental parameter if it is set</span>
 <span class="c1"># if the load fails issue a warning and load the default config.</span>
-<span class="n">_config_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;PYART_CONFIG&quot;</span><span class="p">)</span>
+<span class="n">_config_file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"PYART_CONFIG"</span><span class="p">)</span>
 <span class="k">if</span> <span class="n">_config_file</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
     <span class="n">load_config</span><span class="p">(</span><span class="n">_DEFAULT_CONFIG_FILE</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
@@ -588,12 +588,12 @@
         <span class="n">load_config</span><span class="p">(</span><span class="n">_config_file</span><span class="p">)</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
-            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Loading configuration from PYART_CONFIG enviromental &quot;</span>
-            <span class="s2">&quot;variable failed:&quot;</span>
-            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">--- START IGNORED TRACEBACK --- </span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="s2">"</span><span class="se">\n</span><span class="s2">Loading configuration from PYART_CONFIG enviromental "</span>
+            <span class="s2">"variable failed:"</span>
+            <span class="s2">"</span><span class="se">\n</span><span class="s2">--- START IGNORED TRACEBACK --- </span><span class="se">\n</span><span class="s2">"</span>
             <span class="o">+</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
-            <span class="o">+</span> <span class="s2">&quot;</span><span class="se">\n</span><span class="s2"> --- END IGNORED TRACEBACK ---&quot;</span>
-            <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Loading default configuration&quot;</span>
+            <span class="o">+</span> <span class="s2">"</span><span class="se">\n</span><span class="s2"> --- END IGNORED TRACEBACK ---"</span>
+            <span class="s2">"</span><span class="se">\n</span><span class="s2">Loading default configuration"</span>
         <span class="p">)</span>
         <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
         <span class="n">load_config</span><span class="p">(</span><span class="n">_DEFAULT_CONFIG_FILE</span><span class="p">)</span>
@@ -602,12 +602,12 @@
 <div class="viewcode-block" id="get_metadata">
 <a class="viewcode-back" href="../../API/generated/pyart.testing.get_metadata.html#pyart.config.get_metadata">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_metadata</span><span class="p">(</span><span class="n">p</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return a dictionary of metadata for a given parameter, p.</span>
 
 <span class="sd">    An empty dictionary will be returned in no metadata dictionary exists for</span>
 <span class="sd">    parameter p.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">_DEFAULT_METADATA</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_DEFAULT_METADATA</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
     <span class="k">else</span><span class="p">:</span>
@@ -618,9 +618,9 @@
 <div class="viewcode-block" id="get_fillvalue">
 <a class="viewcode-back" href="../../API/generated/pyart.config.get_fillvalue.html#pyart.config.get_fillvalue">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_fillvalue</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return the current fill value.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">_FILL_VALUE</span></div>
 
 
@@ -628,9 +628,9 @@
 <div class="viewcode-block" id="get_field_name">
 <a class="viewcode-back" href="../../API/generated/pyart.config.get_field_name.html#pyart.config.get_field_name">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_field_name</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return the field name from the configuration file for a given field.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">_DEFAULT_FIELD_NAMES</span><span class="p">[</span><span class="n">field</span><span class="p">])</span></div>
 
 
@@ -638,23 +638,23 @@
 <div class="viewcode-block" id="get_field_colormap">
 <a class="viewcode-back" href="../../API/generated/pyart.config.get_field_colormap.html#pyart.config.get_field_colormap">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_field_colormap</span><span class="p">(</span><span class="n">field</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return the colormap name from the configuration file for a field name.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">_DEFAULT_FIELD_COLORMAP</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">_DEFAULT_FIELD_COLORMAP</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
 
         <span class="c1"># Use the default matplotlib colormap</span>
-        <span class="k">return</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colormaps</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;Spectral_r&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">name</span></div>
+        <span class="k">return</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">colormaps</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">"Spectral_r"</span><span class="p">)</span><span class="o">.</span><span class="n">name</span></div>
 
 
 
 <div class="viewcode-block" id="get_field_limits">
 <a class="viewcode-back" href="../../API/generated/pyart.config.get_field_limits.html#pyart.config.get_field_limits">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_field_limits</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="n">container</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">selection</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return the data limits from the configuration file for a given field,</span>
 <span class="sd">    radar and sweep.</span>
 
@@ -675,7 +675,7 @@
 <span class="sd">        Minimun and Maximun teorical value for field, if field is not</span>
 <span class="sd">        in the configuration file returns (None, None).</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">field</span> <span class="ow">in</span> <span class="n">_DEFAULT_FIELD_LIMITS</span><span class="p">:</span>
         <span class="n">limits</span> <span class="o">=</span> <span class="n">_DEFAULT_FIELD_LIMITS</span><span class="p">[</span><span class="n">field</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">callable</span><span class="p">(</span><span class="n">limits</span><span class="p">):</span>
@@ -689,7 +689,7 @@
 <div class="viewcode-block" id="get_field_mapping">
 <a class="viewcode-back" href="../../API/generated/pyart.config.get_field_mapping.html#pyart.config.get_field_mapping">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_field_mapping</span><span class="p">(</span><span class="n">filetype</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return a copy of the default field mapping for a given file type.</span>
 
 <span class="sd">    Parameters</span>
@@ -702,7 +702,7 @@
 <span class="sd">    field_mappings : dict</span>
 <span class="sd">        Dictionary mapping field names from one type to another.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">_FIELD_MAPPINGS</span><span class="p">[</span><span class="n">filetype</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span></div>
 
 
@@ -710,7 +710,7 @@
 <div class="viewcode-block" id="FileMetadata">
 <a class="viewcode-back" href="../../API/generated/pyart.config.FileMetadata.html#pyart.config.FileMetadata">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">FileMetadata</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A class for accessing metadata needed when reading files.</span>
 
 <span class="sd">    Parameters</span>
@@ -728,7 +728,7 @@
 <span class="sd">    include_fields : list of strings</span>
 <span class="sd">        Fields to include during readings.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -739,9 +739,9 @@
         <span class="n">exclude_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Initialize.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># parse filetype parameter</span>
         <span class="k">if</span> <span class="n">filetype</span> <span class="ow">in</span> <span class="n">_FILE_SPECIFIC_METADATA</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_file_specific_metadata</span> <span class="o">=</span> <span class="n">_FILE_SPECIFIC_METADATA</span><span class="p">[</span><span class="n">filetype</span><span class="p">]</span>
@@ -777,7 +777,7 @@
 <div class="viewcode-block" id="FileMetadata.get_metadata">
 <a class="viewcode-back" href="../../API/generated/pyart.config.FileMetadata.get_metadata.html#pyart.config.FileMetadata.get_metadata">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_metadata</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Retrieve metadata for a parameter `p`.</span>
 
 <span class="sd">        Parameters</span>
@@ -790,7 +790,7 @@
 <span class="sd">        dic : dict</span>
 <span class="sd">            Dictionary of metadata for the parameter.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># additional_metadata is queued first</span>
         <span class="k">if</span> <span class="n">p</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_additional_metadata</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_additional_metadata</span><span class="p">[</span><span class="n">p</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
@@ -811,16 +811,16 @@
 <div class="viewcode-block" id="FileMetadata.__call__">
 <a class="viewcode-back" href="../../API/generated/pyart.config.FileMetadata.__call__.html#pyart.config.FileMetadata.__call__">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Retrieve metadata for parameter `p`.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_metadata</span><span class="p">(</span><span class="n">p</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="FileMetadata.get_field_name">
 <a class="viewcode-back" href="../../API/generated/pyart.config.FileMetadata.get_field_name.html#pyart.config.FileMetadata.get_field_name">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_field_name</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">file_field_name</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return the name radar field for a given file field name</span>
 
 <span class="sd">        Parameters</span>
@@ -834,7 +834,7 @@
 <span class="sd">            Field name in radar object fields dictionary, None indicated</span>
 <span class="sd">            that the field should not be included.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_field_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">field_name</span> <span class="o">=</span> <span class="n">file_field_name</span>
         <span class="k">elif</span> <span class="n">file_field_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_field_names</span><span class="p">:</span>
@@ -885,8 +885,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -920,7 +920,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

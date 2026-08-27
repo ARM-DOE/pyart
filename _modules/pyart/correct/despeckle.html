@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,10 +486,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.correct.despeckle</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Find contiguous objects in scans and despeckle away ones that are too small.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">scipy.ndimage</span><span class="w"> </span><span class="kn">import</span> <span class="n">label</span>
@@ -509,7 +509,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">find_objects</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">sweeps</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">smooth</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">DELTA</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Find objects (i.e., contiguous gates) in one or more sweeps that match</span>
 <span class="sd">    thresholds. Filtering &amp; smoothing are available prior to labeling objects.</span>
 <span class="sd">    In addition, periodic boundaries are accounted for if they exist</span>
@@ -548,9 +548,9 @@
 <span class="sd">        performed on the full Radar object, then the dict is ready to be added</span>
 <span class="sd">        as a field.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Failed -&quot;</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="s2">&quot;field not found in Radar object.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">"Failed -"</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="s2">"field not found in Radar object."</span><span class="p">)</span>
     <span class="n">sweeps</span> <span class="o">=</span> <span class="n">_check_sweeps</span><span class="p">(</span><span class="n">sweeps</span><span class="p">,</span> <span class="n">radar</span><span class="p">)</span>
     <span class="n">tlo</span><span class="p">,</span> <span class="n">thi</span> <span class="o">=</span> <span class="n">_check_threshold</span><span class="p">(</span><span class="n">threshold</span><span class="p">)</span>
     <span class="n">objcnt</span> <span class="o">=</span> <span class="mi">0</span>
@@ -576,7 +576,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">despeckle_field</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">label_dict</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">threshold</span><span class="o">=-</span><span class="mi">100</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">DELTA</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Despeckle a radar volume by identifying small objects in each scan and</span>
 <span class="sd">    masking them out. User can define which field to investigate, as well as</span>
 <span class="sd">    various thresholds to use on that field and any objects found within.</span>
@@ -612,20 +612,20 @@
 <span class="sd">    gatefilter : pyart.filters.GateFilter object</span>
 <span class="sd">        Py-ART GateFilter object that includes the despeckling mask</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">field</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">&quot;Failed -&quot;</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="s2">&quot;field not found in Radar object.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s2">"Failed -"</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="s2">"field not found in Radar object."</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">label_dict</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="c1"># Label everything in the radar object&#39;s field</span>
+        <span class="c1"># Label everything in the radar object's field</span>
         <span class="n">label_dict</span> <span class="o">=</span> <span class="n">find_objects</span><span class="p">(</span>
             <span class="n">radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">threshold</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span><span class="p">,</span> <span class="n">delta</span><span class="o">=</span><span class="n">delta</span>
         <span class="p">)</span>
     <span class="k">if</span> <span class="n">gatefilter</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-    <span class="n">labels</span> <span class="o">=</span> <span class="n">label_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="n">label_dict</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
 
     <span class="c1"># Get a copy of the field in the volume</span>
-    <span class="n">data</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">*</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
     <span class="n">mask_filter</span> <span class="o">=</span> <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">mask_filter</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">fill_value</span><span class="o">=</span><span class="n">BAD</span><span class="p">)</span>
@@ -651,7 +651,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_adjust_for_periodic_boundary</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Identify all the contiguous objects in a sweep, accounting for the</span>
 <span class="sd">    periodic boundary in a 360-deg PPI. Contiguous means corners or sides</span>
 <span class="sd">    of gates touch. The algorithm appends the sweep to itself, then looks</span>
@@ -672,7 +672,7 @@
 <span class="sd">    nobj : int</span>
 <span class="sd">        Number of distinct objects identified in sweep.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
     <span class="n">labels</span><span class="p">,</span> <span class="n">nobj</span> <span class="o">=</span> <span class="n">_get_labels</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
     <span class="n">i1</span> <span class="o">=</span> <span class="mi">0</span>
@@ -689,7 +689,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_append_labels</span><span class="p">(</span><span class="n">labels</span><span class="p">,</span> <span class="n">label_storage</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Appends consecutive sweeps of labels, creating a multi-sweep 2D array.</span>
 <span class="sd">    Typically called iteratively.</span>
 
@@ -705,7 +705,7 @@
 <span class="sd">    label_storage : 2D array of ints</span>
 <span class="sd">        Updated array of object labels.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">label_storage</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
         <span class="n">label_storage</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
         <span class="n">label_storage</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">label_storage</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
@@ -715,7 +715,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_check_for_360</span><span class="p">(</span><span class="n">az</span><span class="p">,</span> <span class="n">delta</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Check if an array of azimuths indicates the sweep is a full 360 PPI.</span>
 <span class="sd">    This should also spot RHIs (effectively, a narrow azimuth sector sweep).</span>
 
@@ -733,7 +733,7 @@
 
 <span class="sd">        False - Sweep is not a 360 PPI.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Check for small gap in azimuths</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">az</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">az</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&lt;</span> <span class="n">delta</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">az</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">az</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span> <span class="o">&gt;</span> <span class="mi">360</span> <span class="o">-</span> <span class="n">delta</span><span class="p">:</span>
         <span class="c1"># Confirm small gap and not just narrow sector</span>
@@ -752,7 +752,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_check_sweeps</span><span class="p">(</span><span class="n">sweeps</span><span class="p">,</span> <span class="n">radar</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Parse the sweeps keyword and convert it to a list of ints.</span>
 <span class="sd">    The output will be iterated over.</span>
 
@@ -769,11 +769,11 @@
 <span class="sd">    sweeps : list of ints</span>
 <span class="sd">        Sweep numbers as an iterable list.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">sweeps</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">sweeps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]))</span>
+        <span class="n">sweeps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]))</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sweeps</span><span class="p">,</span> <span class="s2">&quot;__len__&quot;</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sweeps</span><span class="p">,</span> <span class="s2">"__len__"</span><span class="p">):</span>
             <span class="n">sweeps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">sweeps</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">sweeps</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">sweeps</span><span class="p">])</span>
@@ -781,7 +781,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_check_threshold</span><span class="p">(</span><span class="n">threshold</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Parse the threshold keyword and return the lower and upper boundaries for</span>
 <span class="sd">    the object search.</span>
 
@@ -800,15 +800,15 @@
 <span class="sd">        Upper bound for the threshold. Values above this will not be included</span>
 <span class="sd">        in the hunt for objects. None means no upper bound.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">threshold</span><span class="p">,</span> <span class="s2">&quot;__len__&quot;</span><span class="p">):</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">threshold</span><span class="p">,</span> <span class="s2">"__len__"</span><span class="p">):</span>
         <span class="n">threshold</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">([</span><span class="n">threshold</span><span class="p">])</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">threshold</span><span class="p">)</span> <span class="o">==</span> <span class="mi">2</span><span class="p">:</span>
         <span class="n">tlo</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">thi</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">threshold</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">2</span> <span class="ow">or</span> <span class="n">np</span><span class="o">.</span><span class="n">ndim</span><span class="p">(</span><span class="n">threshold</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">raise</span> <span class="ne">IndexError</span><span class="p">(</span>
-            <span class="s2">&quot;Fix threshold argument! Must be single scalar &quot;</span> <span class="o">+</span> <span class="s2">&quot;or 2-element tuple&quot;</span>
+            <span class="s2">"Fix threshold argument! Must be single scalar "</span> <span class="o">+</span> <span class="s2">"or 2-element tuple"</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">tlo</span> <span class="o">=</span> <span class="n">threshold</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -817,7 +817,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_generate_dict</span><span class="p">(</span><span class="n">label_storage</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Build the dictionary that includes all the object label information.</span>
 <span class="sd">    If the entire Radar object was searched, the dictionary is ready to</span>
 <span class="sd">    be added as a new field.</span>
@@ -832,20 +832,20 @@
 <span class="sd">    label_dict : dict</span>
 <span class="sd">        Dictionary containing object labels and associated metadata.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">label_dict</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">label_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">label_storage</span>
-    <span class="n">label_dict</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;None&quot;</span>
-    <span class="n">label_dict</span><span class="p">[</span><span class="s2">&quot;long_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;Objects in Scan&quot;</span>
-    <span class="n">label_dict</span><span class="p">[</span><span class="s2">&quot;standard_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;objects_in_scan&quot;</span>
-    <span class="n">label_dict</span><span class="p">[</span><span class="s2">&quot;coordinates&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;elevation azimuth range&quot;</span>
-    <span class="n">label_dict</span><span class="p">[</span><span class="s2">&quot;valid_max&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">label_storage</span><span class="p">)</span>
-    <span class="n">label_dict</span><span class="p">[</span><span class="s2">&quot;valid_min&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">label_dict</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">label_storage</span>
+    <span class="n">label_dict</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"None"</span>
+    <span class="n">label_dict</span><span class="p">[</span><span class="s2">"long_name"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"Objects in Scan"</span>
+    <span class="n">label_dict</span><span class="p">[</span><span class="s2">"standard_name"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"objects_in_scan"</span>
+    <span class="n">label_dict</span><span class="p">[</span><span class="s2">"coordinates"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"elevation azimuth range"</span>
+    <span class="n">label_dict</span><span class="p">[</span><span class="s2">"valid_max"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">label_storage</span><span class="p">)</span>
+    <span class="n">label_dict</span><span class="p">[</span><span class="s2">"valid_min"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
     <span class="k">return</span> <span class="n">label_dict</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_get_data</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">iswp</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">tlo</span><span class="p">,</span> <span class="n">thi</span><span class="p">,</span> <span class="n">window</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Get data for a field from a given sweep in a Radar object.</span>
 <span class="sd">    Data are smoothed if desired, then converted to binary 0s/1s based</span>
 <span class="sd">    on whether valid values are present.</span>
@@ -879,7 +879,7 @@
 <span class="sd">    data : 2D array of ints</span>
 <span class="sd">        Sweep as array of binary 0s/1s based on whether valid values exist.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_field</span><span class="p">(</span><span class="n">iswp</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">copy</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">gatefilter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_start_end</span><span class="p">(</span><span class="n">iswp</span><span class="p">)</span>
@@ -899,7 +899,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_get_labels</span><span class="p">(</span><span class="n">data</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Identify all the contiguous objects in a sweep. Contiguous means corners</span>
 <span class="sd">    or sides of gates touch. Uses scipy.ndimage.label.</span>
 
@@ -917,14 +917,14 @@
 <span class="sd">    nobj : int</span>
 <span class="sd">        Number of distinct objects identified in sweep.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int16&quot;</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">matrix</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int16"</span><span class="p">)</span>
     <span class="n">labels</span><span class="p">,</span> <span class="n">nobj</span> <span class="o">=</span> <span class="n">label</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">structure</span><span class="o">=</span><span class="n">matrix</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">labels</span><span class="p">,</span> <span class="n">nobj</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_smooth_data</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">window</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Perform box filtering along each ray of a sweep, and return the</span>
 <span class="sd">    smoothed field. Uses scipy.signal.convolve2d which provides excellent</span>
 <span class="sd">    performance.</span>
@@ -942,14 +942,14 @@
 <span class="sd">    data : 2D array of ints or floats</span>
 <span class="sd">        Smoothed sweep of data.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">window</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span>
             <span class="n">convolve2d</span><span class="p">(</span>
                 <span class="n">data</span><span class="p">,</span>
                 <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="mi">1</span><span class="p">,</span> <span class="n">window</span><span class="p">))</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">float</span><span class="p">(</span><span class="n">window</span><span class="p">),</span>
-                <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;same&quot;</span><span class="p">,</span>
-                <span class="n">boundary</span><span class="o">=</span><span class="s2">&quot;symm&quot;</span><span class="p">,</span>
+                <span class="n">mode</span><span class="o">=</span><span class="s2">"same"</span><span class="p">,</span>
+                <span class="n">boundary</span><span class="o">=</span><span class="s2">"symm"</span><span class="p">,</span>
             <span class="p">)</span>
         <span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
@@ -986,8 +986,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1021,7 +1021,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

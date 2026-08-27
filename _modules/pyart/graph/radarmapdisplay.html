@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,11 +486,11 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.graph.radarmapdisplay</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Class for creating plots on a geographic map using a Radar object using Cartopy</span>
 <span class="sd">for drawing maps.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
@@ -520,7 +520,7 @@
 <div class="viewcode-block" id="RadarMapDisplay">
 <a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplay.html#pyart.graph.RadarMapDisplay">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">RadarMapDisplay</span><span class="p">(</span><span class="n">RadarDisplay</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A display object for creating plots on a geographic map from data in a</span>
 <span class="sd">    Radar object.</span>
 
@@ -543,7 +543,7 @@
 <span class="sd">    cbs : list</span>
 <span class="sd">        List of colorbars created.</span>
 <span class="sd">    origin : str</span>
-<span class="sd">        &#39;Origin&#39; or &#39;Radar&#39;.</span>
+<span class="sd">        'Origin' or 'Radar'.</span>
 <span class="sd">    shift : (float, float)</span>
 <span class="sd">        Shift in meters.</span>
 <span class="sd">    loc : (float, float)</span>
@@ -564,14 +564,14 @@
 <span class="sd">        AzimuthalEquidistant cartopy projection centered on radar.</span>
 <span class="sd">        Used to transform points into map projection.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="n">shift</span><span class="o">=</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span> <span class="n">grid_projection</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Initialize the object."""</span>
         <span class="c1"># check that cartopy is available</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_CARTOPY_AVAILABLE</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
-                <span class="s2">&quot;Cartopy is required to use RadarMapDisplay but is not installed&quot;</span>
+                <span class="s2">"Cartopy is required to use RadarMapDisplay but is not installed"</span>
             <span class="p">)</span>
 
         <span class="c1"># initalize the base class</span>
@@ -586,16 +586,16 @@
             <span class="p">)</span>
 
         <span class="k">elif</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">grid_projection</span><span class="p">,</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">Projection</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;grid_projection keyword must be a cartopy.crs object&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">"grid_projection keyword must be a cartopy.crs object"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">grid_projection</span> <span class="o">=</span> <span class="n">grid_projection</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="o">=</span> <span class="kc">None</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_x0</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># x axis radar location in map coords (meters)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_y0</span> <span class="o">=</span> <span class="kc">None</span>  <span class="c1"># y axis radar location in map coords (meters)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_check_ax</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Check that a GeoAxes object exists, raise ValueError if not&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Check that a GeoAxes object exists, raise ValueError if not"""</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;no GeoAxes plotted&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"no GeoAxes plotted"</span><span class="p">)</span>
 
 <div class="viewcode-block" id="RadarMapDisplay.plot_ppi_map">
 <a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplay.plot_ppi_map.html#pyart.graph.RadarMapDisplay.plot_ppi_map">[docs]</a>
@@ -613,7 +613,7 @@
         <span class="n">title_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">colorbar_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
         <span class="n">colorbar_label</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">colorbar_orient</span><span class="o">=</span><span class="s2">&quot;vertical&quot;</span><span class="p">,</span>
+        <span class="n">colorbar_orient</span><span class="o">=</span><span class="s2">"vertical"</span><span class="p">,</span>
         <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">fig</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">lat_lines</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -627,7 +627,7 @@
         <span class="n">height</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">lon_0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">lat_0</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">resolution</span><span class="o">=</span><span class="s2">&quot;110m&quot;</span><span class="p">,</span>
+        <span class="n">resolution</span><span class="o">=</span><span class="s2">"110m"</span><span class="p">,</span>
         <span class="n">shapefile</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">shapefile_kwargs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">edges</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
@@ -639,10 +639,10 @@
         <span class="n">ticks</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">ticklabs</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">alpha</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-        <span class="n">edgecolors</span><span class="o">=</span><span class="s2">&quot;face&quot;</span><span class="p">,</span>
+        <span class="n">edgecolors</span><span class="o">=</span><span class="s2">"face"</span><span class="p">,</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Plot a PPI volume sweep onto a geographic map.</span>
 
 <span class="sd">        Parameters</span>
@@ -657,7 +657,7 @@
 <span class="sd">        mask_tuple : (str, float)</span>
 <span class="sd">            Tuple containing the field name and value below which to mask</span>
 <span class="sd">            field prior to plotting, for example to mask all data where</span>
-<span class="sd">            NCP &lt; 0.5 set mask_tuple to [&#39;NCP&#39;, 0.5]. None performs no masking.</span>
+<span class="sd">            NCP &lt; 0.5 set mask_tuple to ['NCP', 0.5]. None performs no masking.</span>
 <span class="sd">        vmin : float</span>
 <span class="sd">            Luminance minimum value, None for default value.</span>
 <span class="sd">            Parameter is ignored is norm is not None.</span>
@@ -690,7 +690,7 @@
 <span class="sd">        colorbar_label : str</span>
 <span class="sd">            Colorbar label, None will use a default label generated from the</span>
 <span class="sd">            field information.</span>
-<span class="sd">        colorbar_orient : &#39;vertical&#39; or &#39;horizontal&#39;</span>
+<span class="sd">        colorbar_orient : 'vertical' or 'horizontal'</span>
 <span class="sd">            Colorbar orientation.</span>
 <span class="sd">        ax : Cartopy GeoAxes instance</span>
 <span class="sd">            If None, create GeoAxes instance using other keyword info.</span>
@@ -720,7 +720,7 @@
 <span class="sd">        shapefile_kwargs : dict</span>
 <span class="sd">            Key word arguments used to format shapefile. Projection defaults</span>
 <span class="sd">            to lat lon (cartopy.crs.PlateCarree())</span>
-<span class="sd">        resolution : &#39;10m&#39;, &#39;50m&#39;, &#39;110m&#39;.</span>
+<span class="sd">        resolution : '10m', '50m', '110m'.</span>
 <span class="sd">            Resolution of NaturalEarthFeatures to use. See Cartopy</span>
 <span class="sd">            documentation for details.</span>
 <span class="sd">        gatefilter : GateFilter</span>
@@ -758,7 +758,7 @@
 <span class="sd">            it will color them the same as the pixels (faces).</span>
 <span class="sd">        **kwargs : additional keyword arguments to pass to pcolormesh.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># parse parameters</span>
         <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span> <span class="o">=</span> <span class="n">parse_vmin_vmax</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_radar</span><span class="p">,</span> <span class="n">field</span><span class="p">,</span> <span class="n">vmin</span><span class="p">,</span> <span class="n">vmax</span><span class="p">)</span>
         <span class="n">cmap</span> <span class="o">=</span> <span class="n">parse_cmap</span><span class="p">(</span><span class="n">cmap</span><span class="p">,</span> <span class="n">field</span><span class="p">)</span>
@@ -779,7 +779,7 @@
 
         <span class="c1"># initialize instance of GeoAxes if not provided</span>
         <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="s2">&quot;projection&quot;</span><span class="p">):</span>
+            <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="s2">"projection"</span><span class="p">):</span>
                 <span class="n">projection</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">projection</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">projection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -789,13 +789,13 @@
                         <span class="n">central_longitude</span><span class="o">=</span><span class="n">lon_0</span><span class="p">,</span> <span class="n">central_latitude</span><span class="o">=</span><span class="n">lat_0</span>
                     <span class="p">)</span>
                     <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                        <span class="s2">&quot;No projection was defined for the axes.&quot;</span>
-                        <span class="o">+</span> <span class="s2">&quot; Overridding defined axes and using default &quot;</span>
-                        <span class="o">+</span> <span class="s2">&quot;axes with projection Lambert Conformal.&quot;</span><span class="p">,</span>
+                        <span class="s2">"No projection was defined for the axes."</span>
+                        <span class="o">+</span> <span class="s2">" Overridding defined axes and using default "</span>
+                        <span class="o">+</span> <span class="s2">"axes with projection Lambert Conformal."</span><span class="p">,</span>
                         <span class="ne">UserWarning</span><span class="p">,</span>
                     <span class="p">)</span>
                 <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
-                    <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+                    <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">)</span>
                     <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">)</span>
 
         <span class="c1"># Define GeoAxes if None is provided.</span>
@@ -807,13 +807,13 @@
                     <span class="n">central_longitude</span><span class="o">=</span><span class="n">lon_0</span><span class="p">,</span> <span class="n">central_latitude</span><span class="o">=</span><span class="n">lat_0</span>
                 <span class="p">)</span>
                 <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span>
-                    <span class="s2">&quot;No projection was defined for the axes.&quot;</span>
-                    <span class="o">+</span> <span class="s2">&quot; Overridding defined axes and using default &quot;</span>
-                    <span class="o">+</span> <span class="s2">&quot;axes with projection Lambert Conformal.&quot;</span><span class="p">,</span>
+                    <span class="s2">"No projection was defined for the axes."</span>
+                    <span class="o">+</span> <span class="s2">" Overridding defined axes and using default "</span>
+                    <span class="o">+</span> <span class="s2">"axes with projection Lambert Conformal."</span><span class="p">,</span>
                     <span class="ne">UserWarning</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
-                <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+                <span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">)</span>
                 <span class="n">ax</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">axes</span><span class="p">(</span><span class="n">projection</span><span class="o">=</span><span class="n">projection</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">min_lon</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -852,13 +852,13 @@
             <span class="c1"># Create a feature for States/Admin 1 regions at 1:resolution</span>
             <span class="c1"># from Natural Earth</span>
             <span class="n">states_provinces</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">feature</span><span class="o">.</span><span class="n">NaturalEarthFeature</span><span class="p">(</span>
-                <span class="n">category</span><span class="o">=</span><span class="s2">&quot;cultural&quot;</span><span class="p">,</span>
-                <span class="n">name</span><span class="o">=</span><span class="s2">&quot;admin_1_states_provinces_lines&quot;</span><span class="p">,</span>
+                <span class="n">category</span><span class="o">=</span><span class="s2">"cultural"</span><span class="p">,</span>
+                <span class="n">name</span><span class="o">=</span><span class="s2">"admin_1_states_provinces_lines"</span><span class="p">,</span>
                 <span class="n">scale</span><span class="o">=</span><span class="n">resolution</span><span class="p">,</span>
-                <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span><span class="p">,</span>
+                <span class="n">facecolor</span><span class="o">=</span><span class="s2">"none"</span><span class="p">,</span>
             <span class="p">)</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">coastlines</span><span class="p">(</span><span class="n">resolution</span><span class="o">=</span><span class="n">resolution</span><span class="p">)</span>
-            <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">states_provinces</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span><span class="n">states_provinces</span><span class="p">,</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">add_grid_lines</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">lat_lines</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
@@ -897,8 +897,8 @@
 
             <span class="k">if</span> <span class="n">shapefile_kwargs</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
                 <span class="n">shapefile_kwargs</span> <span class="o">=</span> <span class="p">{}</span>
-            <span class="k">if</span> <span class="s2">&quot;crs&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">shapefile_kwargs</span><span class="p">:</span>
-                <span class="n">shapefile_kwargs</span><span class="p">[</span><span class="s2">&quot;crs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
+            <span class="k">if</span> <span class="s2">"crs"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">shapefile_kwargs</span><span class="p">:</span>
+                <span class="n">shapefile_kwargs</span><span class="p">[</span><span class="s2">"crs"</span><span class="p">]</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
             <span class="n">ax</span><span class="o">.</span><span class="n">add_geometries</span><span class="p">(</span><span class="n">Reader</span><span class="p">(</span><span class="n">shapefile</span><span class="p">)</span><span class="o">.</span><span class="n">geometries</span><span class="p">(),</span> <span class="o">**</span><span class="n">shapefile_kwargs</span><span class="p">)</span>
 
         <span class="k">if</span> <span class="n">title_flag</span><span class="p">:</span>
@@ -929,12 +929,12 @@
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">lon</span><span class="p">,</span>
         <span class="n">lat</span><span class="p">,</span>
-        <span class="n">symbol</span><span class="o">=</span><span class="s2">&quot;ro&quot;</span><span class="p">,</span>
+        <span class="n">symbol</span><span class="o">=</span><span class="s2">"ro"</span><span class="p">,</span>
         <span class="n">label_text</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">label_offset</span><span class="o">=</span><span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">),</span>
         <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Plot a point on the current map.</span>
 
 <span class="sd">        Additional arguments are passed to ax.plot.</span>
@@ -954,29 +954,29 @@
 <span class="sd">            Offset in lon, lat degrees for the bottom left corner of the label</span>
 <span class="sd">            text relative to the point. A value of None will use 0.01.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_ax</span><span class="p">()</span>
         <span class="n">lon_offset</span><span class="p">,</span> <span class="n">lat_offset</span> <span class="o">=</span> <span class="n">label_offset</span>
         <span class="k">if</span> <span class="n">lon_offset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">lon_offset</span> <span class="o">=</span> <span class="mf">0.01</span>
         <span class="k">if</span> <span class="n">lat_offset</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">lat_offset</span> <span class="o">=</span> <span class="mf">0.01</span>
-        <span class="k">if</span> <span class="s2">&quot;transform&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">"transform"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">"transform"</span><span class="p">]</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">symbol</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">label_text</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="c1"># the &quot;plt.annotate call&quot; does not have a &quot;transform=&quot; keyword,</span>
+            <span class="c1"># the "plt.annotate call" does not have a "transform=" keyword,</span>
             <span class="c1"># so for this one we transform the coordinates with a Cartopy call.</span>
             <span class="n">x_text</span><span class="p">,</span> <span class="n">y_text</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">projection</span><span class="o">.</span><span class="n">transform_point</span><span class="p">(</span>
-                <span class="n">lon</span> <span class="o">+</span> <span class="n">lon_offset</span><span class="p">,</span> <span class="n">lat</span> <span class="o">+</span> <span class="n">lat_offset</span><span class="p">,</span> <span class="n">src_crs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">]</span>
+                <span class="n">lon</span> <span class="o">+</span> <span class="n">lon_offset</span><span class="p">,</span> <span class="n">lat</span> <span class="o">+</span> <span class="n">lat_offset</span><span class="p">,</span> <span class="n">src_crs</span><span class="o">=</span><span class="n">kwargs</span><span class="p">[</span><span class="s2">"transform"</span><span class="p">]</span>
             <span class="p">)</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">annotate</span><span class="p">(</span><span class="n">label_text</span><span class="p">,</span> <span class="n">xy</span><span class="o">=</span><span class="p">(</span><span class="n">x_text</span><span class="p">,</span> <span class="n">y_text</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="RadarMapDisplay.plot_line_geo">
 <a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplay.plot_line_geo.html#pyart.graph.RadarMapDisplay.plot_line_geo">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">plot_line_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_lons</span><span class="p">,</span> <span class="n">line_lats</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="s2">&quot;r-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_line_geo</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_lons</span><span class="p">,</span> <span class="n">line_lats</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="s2">"r-"</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Plot a line segments on the current map given values in lat and lon.</span>
 
 <span class="sd">        Additional arguments are passed to ax.plot.</span>
@@ -990,17 +990,17 @@
 <span class="sd">        line_style : str</span>
 <span class="sd">            Matplotlib compatible string which specifies the line style.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_ax</span><span class="p">()</span>
-        <span class="k">if</span> <span class="s2">&quot;transform&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
+        <span class="k">if</span> <span class="s2">"transform"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">"transform"</span><span class="p">]</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">line_lons</span><span class="p">,</span> <span class="n">line_lats</span><span class="p">,</span> <span class="n">line_style</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="RadarMapDisplay.plot_line_xy">
 <a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplay.plot_line_xy.html#pyart.graph.RadarMapDisplay.plot_line_xy">[docs]</a>
-    <span class="k">def</span><span class="w"> </span><span class="nf">plot_line_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_x</span><span class="p">,</span> <span class="n">line_y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">plot_line_xy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">line_x</span><span class="p">,</span> <span class="n">line_y</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"r"</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Plot a line segments on the current map given radar x, y values.</span>
 
 <span class="sd">        Additional arguments are passed to ax.plot.</span>
@@ -1017,19 +1017,19 @@
 <span class="sd">        line_style : str, optional</span>
 <span class="sd">            Matplotlib compatible string which specifies the line style.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_ax</span><span class="p">()</span>
-        <span class="k">if</span> <span class="s2">&quot;transform&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;transform&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_projection</span>
+        <span class="k">if</span> <span class="s2">"transform"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">"transform"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">grid_projection</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">line_x</span><span class="p">,</span> <span class="n">line_y</span><span class="p">,</span> <span class="n">color</span><span class="p">,</span> <span class="n">line_style</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="RadarMapDisplay.plot_range_ring">
 <a class="viewcode-back" href="../../../API/generated/pyart.graph.RadarMapDisplay.plot_range_ring.html#pyart.graph.RadarMapDisplay.plot_range_ring">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">plot_range_ring</span><span class="p">(</span>
-        <span class="bp">self</span><span class="p">,</span> <span class="n">range_ring_location_km</span><span class="p">,</span> <span class="n">npts</span><span class="o">=</span><span class="mi">360</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">range_ring_location_km</span><span class="p">,</span> <span class="n">npts</span><span class="o">=</span><span class="mi">360</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"k"</span><span class="p">,</span> <span class="n">line_style</span><span class="o">=</span><span class="s2">"-"</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Plot a single range ring on the map.</span>
 
 <span class="sd">        Additional arguments are passed to ax.plot.</span>
@@ -1047,14 +1047,14 @@
 <span class="sd">            Matplotlib compatible string which specified the line</span>
 <span class="sd">            style of the ring.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># The RadarDisplay.plot_range_rings uses a col parameter to specify</span>
         <span class="c1"># the line color, deal with this here.</span>
-        <span class="k">if</span> <span class="s2">&quot;col&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;col&quot;</span><span class="p">)</span>
-            <span class="n">kwargs</span><span class="p">[</span><span class="s2">&quot;c&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span>
-        <span class="k">if</span> <span class="s2">&quot;ax&quot;</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
-            <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;ax&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"col"</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">color</span> <span class="o">=</span> <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"col"</span><span class="p">)</span>
+            <span class="n">kwargs</span><span class="p">[</span><span class="s2">"c"</span><span class="p">]</span> <span class="o">=</span> <span class="n">color</span>
+        <span class="k">if</span> <span class="s2">"ax"</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+            <span class="n">kwargs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"ax"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_check_ax</span><span class="p">()</span>
         <span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">,</span> <span class="n">npts</span><span class="p">)</span>
         <span class="n">xpts</span> <span class="o">=</span> <span class="n">range_ring_location_km</span> <span class="o">*</span> <span class="mf">1000.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
@@ -1067,22 +1067,22 @@
 <span class="c1"># These methods are a hack to allow gridlines when the projection is lambert</span>
 <span class="c1"># http://nbviewer.jupyter.org/gist/ajdawson/dd536f786741e987ae4e</span>
 <span class="k">def</span><span class="w"> </span><span class="nf">find_side</span><span class="p">(</span><span class="n">ls</span><span class="p">,</span> <span class="n">side</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Given a shapely LineString which is assumed to be rectangular, return the</span>
 <span class="sd">    line corresponding to a given side of the rectangle.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">,</span> <span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span> <span class="o">=</span> <span class="n">ls</span><span class="o">.</span><span class="n">bounds</span>
     <span class="n">points</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;left&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">),</span> <span class="p">(</span><span class="n">minx</span><span class="p">,</span> <span class="n">maxy</span><span class="p">)],</span>
-        <span class="s2">&quot;right&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="n">maxx</span><span class="p">,</span> <span class="n">miny</span><span class="p">),</span> <span class="p">(</span><span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span><span class="p">)],</span>
-        <span class="s2">&quot;bottom&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">),</span> <span class="p">(</span><span class="n">maxx</span><span class="p">,</span> <span class="n">miny</span><span class="p">)],</span>
-        <span class="s2">&quot;top&quot;</span><span class="p">:</span> <span class="p">[(</span><span class="n">minx</span><span class="p">,</span> <span class="n">maxy</span><span class="p">),</span> <span class="p">(</span><span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span><span class="p">)],</span>
+        <span class="s2">"left"</span><span class="p">:</span> <span class="p">[(</span><span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">),</span> <span class="p">(</span><span class="n">minx</span><span class="p">,</span> <span class="n">maxy</span><span class="p">)],</span>
+        <span class="s2">"right"</span><span class="p">:</span> <span class="p">[(</span><span class="n">maxx</span><span class="p">,</span> <span class="n">miny</span><span class="p">),</span> <span class="p">(</span><span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span><span class="p">)],</span>
+        <span class="s2">"bottom"</span><span class="p">:</span> <span class="p">[(</span><span class="n">minx</span><span class="p">,</span> <span class="n">miny</span><span class="p">),</span> <span class="p">(</span><span class="n">maxx</span><span class="p">,</span> <span class="n">miny</span><span class="p">)],</span>
+        <span class="s2">"top"</span><span class="p">:</span> <span class="p">[(</span><span class="n">minx</span><span class="p">,</span> <span class="n">maxy</span><span class="p">),</span> <span class="p">(</span><span class="n">maxx</span><span class="p">,</span> <span class="n">maxy</span><span class="p">)],</span>
     <span class="p">}</span>
     <span class="k">return</span> <span class="n">sgeom</span><span class="o">.</span><span class="n">LineString</span><span class="p">(</span><span class="n">points</span><span class="p">[</span><span class="n">side</span><span class="p">])</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">lambert_xticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Draw ticks on the bottom x-axis of a Lambert Conformal projection.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Draw ticks on the bottom x-axis of a Lambert Conformal projection."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">te</span><span class="p">(</span><span class="n">xy</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">xy</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -1090,14 +1090,14 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">lc</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">2</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">3</span><span class="p">],</span> <span class="n">n</span><span class="p">)))</span><span class="o">.</span><span class="n">T</span>
 
-    <span class="n">xticks</span><span class="p">,</span> <span class="n">xticklabels</span> <span class="o">=</span> <span class="n">_lambert_ticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="s2">&quot;bottom&quot;</span><span class="p">,</span> <span class="n">lc</span><span class="p">,</span> <span class="n">te</span><span class="p">)</span>
+    <span class="n">xticks</span><span class="p">,</span> <span class="n">xticklabels</span> <span class="o">=</span> <span class="n">_lambert_ticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="s2">"bottom"</span><span class="p">,</span> <span class="n">lc</span><span class="p">,</span> <span class="n">te</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">tick_bottom</span><span class="p">()</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xticks</span><span class="p">(</span><span class="n">xticks</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_xticklabels</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">get_major_formatter</span><span class="p">()(</span><span class="n">xtick</span><span class="p">)</span> <span class="k">for</span> <span class="n">xtick</span> <span class="ow">in</span> <span class="n">xticklabels</span><span class="p">])</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">lambert_yticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Draw ticks on the left y-axis of a Lambert Conformal projection.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Draw ticks on the left y-axis of a Lambert Conformal projection."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">te</span><span class="p">(</span><span class="n">xy</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">xy</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -1105,17 +1105,17 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">lc</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">n</span><span class="p">,</span> <span class="n">b</span><span class="p">):</span>
         <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">b</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">b</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span> <span class="n">n</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">n</span><span class="p">)</span> <span class="o">+</span> <span class="n">t</span><span class="p">))</span><span class="o">.</span><span class="n">T</span>
 
-    <span class="n">yticks</span><span class="p">,</span> <span class="n">yticklabels</span> <span class="o">=</span> <span class="n">_lambert_ticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">lc</span><span class="p">,</span> <span class="n">te</span><span class="p">)</span>
+    <span class="n">yticks</span><span class="p">,</span> <span class="n">yticklabels</span> <span class="o">=</span> <span class="n">_lambert_ticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="s2">"left"</span><span class="p">,</span> <span class="n">lc</span><span class="p">,</span> <span class="n">te</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">tick_left</span><span class="p">()</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_yticks</span><span class="p">(</span><span class="n">yticks</span><span class="p">)</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">set_yticklabels</span><span class="p">([</span><span class="n">ax</span><span class="o">.</span><span class="n">yaxis</span><span class="o">.</span><span class="n">get_major_formatter</span><span class="p">()(</span><span class="n">ytick</span><span class="p">)</span> <span class="k">for</span> <span class="n">ytick</span> <span class="ow">in</span> <span class="n">yticklabels</span><span class="p">])</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_lambert_ticks</span><span class="p">(</span><span class="n">ax</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">tick_location</span><span class="p">,</span> <span class="n">line_constructor</span><span class="p">,</span> <span class="n">tick_extractor</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Get the tick locations and labels for a Lambert Conformal projection.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">outline_patch</span> <span class="o">=</span> <span class="n">sgeom</span><span class="o">.</span><span class="n">LineString</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">&quot;geo&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">get_path</span><span class="p">()</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
+<span class="sd">    """</span>
+    <span class="n">outline_patch</span> <span class="o">=</span> <span class="n">sgeom</span><span class="o">.</span><span class="n">LineString</span><span class="p">(</span><span class="n">ax</span><span class="o">.</span><span class="n">spines</span><span class="p">[</span><span class="s2">"geo"</span><span class="p">]</span><span class="o">.</span><span class="n">get_path</span><span class="p">()</span><span class="o">.</span><span class="n">vertices</span><span class="o">.</span><span class="n">tolist</span><span class="p">())</span>
     <span class="n">axis</span> <span class="o">=</span> <span class="n">find_side</span><span class="p">(</span><span class="n">outline_patch</span><span class="p">,</span> <span class="n">tick_location</span><span class="p">)</span>
     <span class="n">n_steps</span> <span class="o">=</span> <span class="mi">30</span>
     <span class="n">extent</span> <span class="o">=</span> <span class="n">ax</span><span class="o">.</span><span class="n">get_extent</span><span class="p">(</span><span class="n">cartopy</span><span class="o">.</span><span class="n">crs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
@@ -1137,7 +1137,7 @@
                 <span class="n">tick</span> <span class="o">=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span>
         <span class="n">_ticks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tick</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
 
-    <span class="c1"># Remove ticks that aren&#39;t visible:</span>
+    <span class="c1"># Remove ticks that aren't visible:</span>
     <span class="n">ticklabels</span> <span class="o">=</span> <span class="n">copy</span><span class="p">(</span><span class="n">ticks</span><span class="p">)</span>
     <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
@@ -1179,8 +1179,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1214,7 +1214,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

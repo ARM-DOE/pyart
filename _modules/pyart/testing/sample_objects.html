@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,10 +486,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.testing.sample_objects</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Functions for creating sample Radar and Grid objects.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
@@ -513,7 +513,7 @@
 <div class="viewcode-block" id="make_empty_ppi_radar">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.make_empty_ppi_radar.html#pyart.testing.make_empty_ppi_radar">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">make_empty_ppi_radar</span><span class="p">(</span><span class="n">ngates</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">nsweeps</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return an Radar object, representing a PPI scan.</span>
 
 <span class="sd">    Parameters</span>
@@ -531,46 +531,46 @@
 <span class="sd">        Radar object with no fields, other parameters are set to default</span>
 <span class="sd">        values.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">nrays</span> <span class="o">=</span> <span class="n">rays_per_sweep</span> <span class="o">*</span> <span class="n">nsweeps</span>
 
-    <span class="n">time</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
-    <span class="n">_range</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">)</span>
-    <span class="n">latitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;latitude&quot;</span><span class="p">)</span>
-    <span class="n">longitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;longitude&quot;</span><span class="p">)</span>
-    <span class="n">altitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;altitude&quot;</span><span class="p">)</span>
-    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;sweep_number&quot;</span><span class="p">)</span>
-    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;sweep_mode&quot;</span><span class="p">)</span>
-    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;fixed_angle&quot;</span><span class="p">)</span>
-    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;sweep_start_ray_index&quot;</span><span class="p">)</span>
-    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;sweep_end_ray_index&quot;</span><span class="p">)</span>
-    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;azimuth&quot;</span><span class="p">)</span>
-    <span class="n">elevation</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;elevation&quot;</span><span class="p">)</span>
-    <span class="n">antenna_transition</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;antenna_transition&quot;</span><span class="p">)</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"time"</span><span class="p">)</span>
+    <span class="n">_range</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"range"</span><span class="p">)</span>
+    <span class="n">latitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"latitude"</span><span class="p">)</span>
+    <span class="n">longitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"longitude"</span><span class="p">)</span>
+    <span class="n">altitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"altitude"</span><span class="p">)</span>
+    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"sweep_number"</span><span class="p">)</span>
+    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"sweep_mode"</span><span class="p">)</span>
+    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"fixed_angle"</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"sweep_start_ray_index"</span><span class="p">)</span>
+    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"sweep_end_ray_index"</span><span class="p">)</span>
+    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"azimuth"</span><span class="p">)</span>
+    <span class="n">elevation</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"elevation"</span><span class="p">)</span>
+    <span class="n">antenna_transition</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"antenna_transition"</span><span class="p">)</span>
 
     <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">&quot;ppi&quot;</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;instrument_name&quot;</span><span class="p">:</span> <span class="s2">&quot;fake_radar&quot;</span><span class="p">}</span>
+    <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">"ppi"</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"instrument_name"</span><span class="p">:</span> <span class="s2">"fake_radar"</span><span class="p">}</span>
 
-    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
-    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;seconds since 1989-01-01T00:00:01Z&quot;</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">ngates</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">)</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"seconds since 1989-01-01T00:00:01Z"</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">ngates</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"float32"</span><span class="p">)</span>
 
-    <span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">36.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
-    <span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">97.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
-    <span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">200</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="n">latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">36.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">)</span>
+    <span class="n">longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">97.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">)</span>
+    <span class="n">altitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">200</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">)</span>
 
-    <span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
-    <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;azimuth_surveillance&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">nsweeps</span><span class="p">)</span>
-    <span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.75</span><span class="p">]</span> <span class="o">*</span> <span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
-    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
-        <span class="n">rays_per_sweep</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span>
+    <span class="n">sweep_number</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">)</span>
+    <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"azimuth_surveillance"</span><span class="p">]</span> <span class="o">*</span> <span class="n">nsweeps</span><span class="p">)</span>
+    <span class="n">fixed_angle</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.75</span><span class="p">]</span> <span class="o">*</span> <span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">)</span>
+    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+        <span class="n">rays_per_sweep</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span>
     <span class="p">)</span>
-    <span class="n">antenna_transition</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nrays</span><span class="p">)</span>
+    <span class="n">antenna_transition</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nrays</span><span class="p">)</span>
 
-    <span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.75</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">azimuth</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">elevation</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.75</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">Radar</span><span class="p">(</span>
         <span class="n">time</span><span class="p">,</span>
@@ -597,7 +597,7 @@
 <div class="viewcode-block" id="make_empty_rhi_radar">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.make_empty_rhi_radar.html#pyart.testing.make_empty_rhi_radar">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">make_empty_rhi_radar</span><span class="p">(</span><span class="n">ngates</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">nsweeps</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return an Radar object, representing a RHI scan.</span>
 
 <span class="sd">    Parameters</span>
@@ -615,13 +615,13 @@
 <span class="sd">        Radar object with no fields, other parameters are set to default</span>
 <span class="sd">        values.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">make_empty_ppi_radar</span><span class="p">(</span><span class="n">ngates</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">nsweeps</span><span class="p">)</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">=</span> <span class="s2">&quot;rhi&quot;</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">scan_type</span> <span class="o">=</span> <span class="s2">"rhi"</span>
     <span class="n">nrays</span> <span class="o">=</span> <span class="n">rays_per_sweep</span> <span class="o">*</span> <span class="n">nsweeps</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;rhi&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">nsweeps</span><span class="p">)</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.75</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">sweep_mode</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"rhi"</span><span class="p">]</span> <span class="o">*</span> <span class="n">nsweeps</span><span class="p">)</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">elevation</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">azimuth</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.75</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">radar</span></div>
 
 
@@ -629,7 +629,7 @@
 <div class="viewcode-block" id="make_empty_rhi_airborne_radar">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.make_empty_rhi_airborne_radar.html#pyart.testing.make_empty_rhi_airborne_radar">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">make_empty_rhi_airborne_radar</span><span class="p">(</span><span class="n">ngates</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">nsweeps</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return an Airborne Radar object, representing a RHI scan.</span>
 
 <span class="sd">    Parameters</span>
@@ -647,78 +647,78 @@
 <span class="sd">        Radar object with no fields, other parameters are set to default</span>
 <span class="sd">        values.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">nrays</span> <span class="o">=</span> <span class="n">rays_per_sweep</span> <span class="o">*</span> <span class="n">nsweeps</span>
 
-    <span class="n">time</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
-    <span class="n">_range</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">)</span>
-    <span class="n">latitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;latitude&quot;</span><span class="p">)</span>
-    <span class="n">longitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;longitude&quot;</span><span class="p">)</span>
-    <span class="n">altitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;altitude&quot;</span><span class="p">)</span>
-    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;sweep_number&quot;</span><span class="p">)</span>
-    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;sweep_mode&quot;</span><span class="p">)</span>
-    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;fixed_angle&quot;</span><span class="p">)</span>
-    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;sweep_start_ray_index&quot;</span><span class="p">)</span>
-    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;sweep_end_ray_index&quot;</span><span class="p">)</span>
-    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;azimuth&quot;</span><span class="p">)</span>
-    <span class="n">elevation</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;elevation&quot;</span><span class="p">)</span>
-    <span class="n">antenna_transition</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;antenna_transition&quot;</span><span class="p">)</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"time"</span><span class="p">)</span>
+    <span class="n">_range</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"range"</span><span class="p">)</span>
+    <span class="n">latitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"latitude"</span><span class="p">)</span>
+    <span class="n">longitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"longitude"</span><span class="p">)</span>
+    <span class="n">altitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"altitude"</span><span class="p">)</span>
+    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"sweep_number"</span><span class="p">)</span>
+    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"sweep_mode"</span><span class="p">)</span>
+    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"fixed_angle"</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"sweep_start_ray_index"</span><span class="p">)</span>
+    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"sweep_end_ray_index"</span><span class="p">)</span>
+    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"azimuth"</span><span class="p">)</span>
+    <span class="n">elevation</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"elevation"</span><span class="p">)</span>
+    <span class="n">antenna_transition</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"antenna_transition"</span><span class="p">)</span>
 
-    <span class="n">eastward_velocity</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;eastward_velocity&quot;</span><span class="p">)</span>
-    <span class="n">northward_velocity</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;northward_velocity&quot;</span><span class="p">)</span>
-    <span class="n">vertical_velocity</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;vertical_velocity&quot;</span><span class="p">)</span>
-    <span class="n">eastward_wind</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;eastward_wind&quot;</span><span class="p">)</span>
-    <span class="n">northward_wind</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;northward_wind&quot;</span><span class="p">)</span>
-    <span class="n">vertical_wind</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;vertical_wind&quot;</span><span class="p">)</span>
-    <span class="n">heading_change_rate</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;heading_change_rate&quot;</span><span class="p">)</span>
-    <span class="n">pitch_change_rate</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;pitch_change_rate&quot;</span><span class="p">)</span>
-    <span class="n">roll_change_rate</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;roll_change_rate&quot;</span><span class="p">)</span>
-    <span class="n">rotation</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;rotation&quot;</span><span class="p">)</span>
-    <span class="n">tilt</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;tilt&quot;</span><span class="p">)</span>
-    <span class="n">roll</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;roll&quot;</span><span class="p">)</span>
-    <span class="n">drift</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;drift&quot;</span><span class="p">)</span>
-    <span class="n">heading</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;heading&quot;</span><span class="p">)</span>
-    <span class="n">pitch</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;pitch&quot;</span><span class="p">)</span>
+    <span class="n">eastward_velocity</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"eastward_velocity"</span><span class="p">)</span>
+    <span class="n">northward_velocity</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"northward_velocity"</span><span class="p">)</span>
+    <span class="n">vertical_velocity</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"vertical_velocity"</span><span class="p">)</span>
+    <span class="n">eastward_wind</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"eastward_wind"</span><span class="p">)</span>
+    <span class="n">northward_wind</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"northward_wind"</span><span class="p">)</span>
+    <span class="n">vertical_wind</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"vertical_wind"</span><span class="p">)</span>
+    <span class="n">heading_change_rate</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"heading_change_rate"</span><span class="p">)</span>
+    <span class="n">pitch_change_rate</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"pitch_change_rate"</span><span class="p">)</span>
+    <span class="n">roll_change_rate</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"roll_change_rate"</span><span class="p">)</span>
+    <span class="n">rotation</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"rotation"</span><span class="p">)</span>
+    <span class="n">tilt</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"tilt"</span><span class="p">)</span>
+    <span class="n">roll</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"roll"</span><span class="p">)</span>
+    <span class="n">drift</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"drift"</span><span class="p">)</span>
+    <span class="n">heading</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"heading"</span><span class="p">)</span>
+    <span class="n">pitch</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"pitch"</span><span class="p">)</span>
 
     <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">&quot;rhi&quot;</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;instrument_name&quot;</span><span class="p">:</span> <span class="s2">&quot;fake_radar&quot;</span><span class="p">}</span>
+    <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">"rhi"</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"instrument_name"</span><span class="p">:</span> <span class="s2">"fake_radar"</span><span class="p">}</span>
 
-    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
-    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;seconds since 1989-01-01T00:00:01Z&quot;</span>
-    <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">ngates</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">)</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"seconds since 1989-01-01T00:00:01Z"</span>
+    <span class="n">_range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">ngates</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"float32"</span><span class="p">)</span>
 
-    <span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">36.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
-    <span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">97.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
-    <span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">200</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="n">latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">36.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">)</span>
+    <span class="n">longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">97.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">)</span>
+    <span class="n">altitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">200</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">)</span>
 
-    <span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
-    <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;rhi&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">nsweeps</span><span class="p">)</span>
-    <span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.75</span><span class="p">]</span> <span class="o">*</span> <span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
-    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
-        <span class="n">rays_per_sweep</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span>
+    <span class="n">sweep_number</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">)</span>
+    <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"rhi"</span><span class="p">]</span> <span class="o">*</span> <span class="n">nsweeps</span><span class="p">)</span>
+    <span class="n">fixed_angle</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.75</span><span class="p">]</span> <span class="o">*</span> <span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">)</span>
+    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
+        <span class="n">rays_per_sweep</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span>
     <span class="p">)</span>
-    <span class="n">antenna_transition</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nrays</span><span class="p">)</span>
+    <span class="n">antenna_transition</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nrays</span><span class="p">)</span>
 
-    <span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.75</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">azimuth</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.75</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">elevation</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
 
-    <span class="n">eastward_velocity</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.0</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">northward_velocity</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.1</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">vertical_velocity</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.2</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">eastward_wind</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.3</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">northward_wind</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.4</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">vertical_wind</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.5</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">heading_change_rate</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.45</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">pitch_change_rate</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">roll_change_rate</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.55</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">rotation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">tilt</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.1</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">roll</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.2</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">drift</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.3</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">heading</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.4</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">pitch</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.5</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">eastward_velocity</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.0</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">northward_velocity</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.1</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">vertical_velocity</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.2</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">eastward_wind</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.3</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">northward_wind</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.4</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">vertical_wind</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">3.5</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">heading_change_rate</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.45</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">pitch_change_rate</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.5</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">roll_change_rate</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.55</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">rotation</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">tilt</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.1</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">roll</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.2</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">drift</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.3</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">heading</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.4</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">pitch</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.5</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">Radar</span><span class="p">(</span>
         <span class="n">time</span><span class="p">,</span>
@@ -760,18 +760,18 @@
 <div class="viewcode-block" id="make_target_radar">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.make_target_radar.html#pyart.testing.make_target_radar">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">make_target_radar</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return a PPI radar with a target like reflectivity field.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">make_empty_ppi_radar</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)}</span>
-    <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">360</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"reflectivity"</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">)}</span>
+    <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">360</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
     <span class="n">fdata</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">fdata</span><span class="p">[:,</span> <span class="mi">10</span><span class="p">:</span><span class="mi">20</span><span class="p">]</span> <span class="o">=</span> <span class="mf">10.0</span>
     <span class="n">fdata</span><span class="p">[:,</span> <span class="mi">20</span><span class="p">:</span><span class="mi">30</span><span class="p">]</span> <span class="o">=</span> <span class="mf">20.0</span>
     <span class="n">fdata</span><span class="p">[:,</span> <span class="mi">30</span><span class="p">:</span><span class="mi">40</span><span class="p">]</span> <span class="o">=</span> <span class="mf">30.0</span>
     <span class="n">fdata</span><span class="p">[:,</span> <span class="mi">40</span><span class="p">:</span><span class="mi">50</span><span class="p">]</span> <span class="o">=</span> <span class="mf">40.0</span>
-    <span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fdata</span>
+    <span class="n">fields</span><span class="p">[</span><span class="s2">"reflectivity"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">fdata</span>
     <span class="n">radar</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="n">fields</span>
     <span class="k">return</span> <span class="n">radar</span></div>
 
@@ -780,18 +780,18 @@
 <div class="viewcode-block" id="make_target_rhi_radar">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.make_target_rhi_radar.html#pyart.testing.make_target_rhi_radar">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">make_target_rhi_radar</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return an RHI radar with a target like reflectivity field.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar</span> <span class="o">=</span> <span class="n">make_empty_rhi_radar</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)}</span>
-    <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">180</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"reflectivity"</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">)}</span>
+    <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">180</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
     <span class="n">fdata</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">:</span><span class="mi">10</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">fdata</span><span class="p">[:,</span> <span class="mi">10</span><span class="p">:</span><span class="mi">20</span><span class="p">]</span> <span class="o">=</span> <span class="mf">10.0</span>
     <span class="n">fdata</span><span class="p">[:,</span> <span class="mi">20</span><span class="p">:</span><span class="mi">30</span><span class="p">]</span> <span class="o">=</span> <span class="mf">20.0</span>
     <span class="n">fdata</span><span class="p">[:,</span> <span class="mi">30</span><span class="p">:</span><span class="mi">40</span><span class="p">]</span> <span class="o">=</span> <span class="mf">30.0</span>
     <span class="n">fdata</span><span class="p">[:,</span> <span class="mi">40</span><span class="p">:</span><span class="mi">50</span><span class="p">]</span> <span class="o">=</span> <span class="mf">40.0</span>
-    <span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fdata</span>
+    <span class="n">fields</span><span class="p">[</span><span class="s2">"reflectivity"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">fdata</span>
     <span class="n">radar</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="n">fields</span>
     <span class="k">return</span> <span class="n">radar</span></div>
 
@@ -800,28 +800,28 @@
 <div class="viewcode-block" id="make_velocity_aliased_radar">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.make_velocity_aliased_radar.html#pyart.testing.make_velocity_aliased_radar">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">make_velocity_aliased_radar</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return a PPI radar with a target like reflectivity field.</span>
 
 <span class="sd">    Set alias to False to return a de-aliased radar.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">make_empty_ppi_radar</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;meters_between_gates&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;meters_to_center_of_first_gate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">10.0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">360</span><span class="p">)}}</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"meters_between_gates"</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"meters_to_center_of_first_gate"</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"nyquist_velocity"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"data"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">10.0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">360</span><span class="p">)}}</span>
 
     <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;reflectivity&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">),</span>
-        <span class="s2">&quot;velocity&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;velocity&quot;</span><span class="p">),</span>
+        <span class="s2">"reflectivity"</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">),</span>
+        <span class="s2">"velocity"</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"velocity"</span><span class="p">),</span>
     <span class="p">}</span>
 
     <span class="c1"># fake reflectivity data, all zero reflectivity</span>
-    <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">360</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fdata</span>
+    <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">360</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">fields</span><span class="p">[</span><span class="s2">"reflectivity"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">fdata</span>
 
     <span class="c1"># fake velocity data, all zeros except a wind burst on at ~13 degrees.</span>
     <span class="c1"># burst is partially aliased.</span>
-    <span class="n">vdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">360</span> <span class="o">*</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">vdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">360</span> <span class="o">*</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
         <span class="n">vdata</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">idx</span> <span class="p">:</span> <span class="n">idx</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.001</span><span class="p">)</span>
@@ -830,7 +830,7 @@
     <span class="n">aliased</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">vdata</span> <span class="o">&gt;</span> <span class="mf">10.0</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">alias</span><span class="p">:</span>
         <span class="n">vdata</span><span class="p">[</span><span class="n">aliased</span><span class="p">]</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">20.0</span>
-    <span class="n">fields</span><span class="p">[</span><span class="s2">&quot;velocity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vdata</span>
+    <span class="n">fields</span><span class="p">[</span><span class="s2">"velocity"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">vdata</span>
 
     <span class="n">radar</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="n">fields</span>
     <span class="k">return</span> <span class="n">radar</span></div>
@@ -840,28 +840,28 @@
 <div class="viewcode-block" id="make_velocity_aliased_rhi_radar">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.make_velocity_aliased_rhi_radar.html#pyart.testing.make_velocity_aliased_rhi_radar">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">make_velocity_aliased_rhi_radar</span><span class="p">(</span><span class="n">alias</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return a RHI radar with a target like reflectivity field.</span>
 
 <span class="sd">    Set alias to False to return a de-aliased radar.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">make_empty_rhi_radar</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="mi">180</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;meters_between_gates&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;meters_to_center_of_first_gate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">10.0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">360</span><span class="p">)}}</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"meters_between_gates"</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"meters_to_center_of_first_gate"</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"nyquist_velocity"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"data"</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">10.0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">360</span><span class="p">)}}</span>
 
     <span class="n">fields</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;reflectivity&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">),</span>
-        <span class="s2">&quot;velocity&quot;</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;velocity&quot;</span><span class="p">),</span>
+        <span class="s2">"reflectivity"</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">),</span>
+        <span class="s2">"velocity"</span><span class="p">:</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"velocity"</span><span class="p">),</span>
     <span class="p">}</span>
 
     <span class="c1"># fake reflectivity data, all zero reflectivity</span>
-    <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">180</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-    <span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fdata</span>
+    <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">180</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+    <span class="n">fields</span><span class="p">[</span><span class="s2">"reflectivity"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">fdata</span>
 
     <span class="c1"># fake velocity data, all zeros except a wind burst on at ~13 degrees.</span>
     <span class="c1"># burst is partially aliased.</span>
-    <span class="n">vdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">180</span> <span class="o">*</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">vdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">180</span> <span class="o">*</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
 
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
         <span class="n">vdata</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="n">idx</span> <span class="p">:</span> <span class="n">idx</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">0.5</span> <span class="o">+</span> <span class="n">i</span> <span class="o">*</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.001</span><span class="p">)</span>
@@ -870,7 +870,7 @@
     <span class="n">aliased</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">vdata</span> <span class="o">&gt;</span> <span class="mf">10.0</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">alias</span><span class="p">:</span>
         <span class="n">vdata</span><span class="p">[</span><span class="n">aliased</span><span class="p">]</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">20.0</span>
-    <span class="n">fields</span><span class="p">[</span><span class="s2">&quot;velocity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">vdata</span>
+    <span class="n">fields</span><span class="p">[</span><span class="s2">"velocity"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">vdata</span>
 
     <span class="n">radar</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="n">fields</span>
     <span class="k">return</span> <span class="n">radar</span></div>
@@ -880,20 +880,20 @@
 <div class="viewcode-block" id="make_single_ray_radar">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.make_single_ray_radar.html#pyart.testing.make_single_ray_radar">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">make_single_ray_radar</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return a PPI radar with a single ray taken from a ARM C-SAPR Radar.</span>
 
-<span class="sd">    Radar object returned has &#39;reflectivity_horizontal&#39;,</span>
-<span class="sd">    &#39;norm_coherent_power&#39;, &#39;copol_coeff&#39;, &#39;dp_phase_shift&#39;, &#39;diff_phase&#39;, and</span>
-<span class="sd">    &#39;differential_reflectivity&#39; fields with no metadata but a &#39;data&#39; key.</span>
+<span class="sd">    Radar object returned has 'reflectivity_horizontal',</span>
+<span class="sd">    'norm_coherent_power', 'copol_coeff', 'dp_phase_shift', 'diff_phase', and</span>
+<span class="sd">    'differential_reflectivity' fields with no metadata but a 'data' key.</span>
 <span class="sd">    This radar is used for unit tests in correct modules.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">make_empty_ppi_radar</span><span class="p">(</span><span class="mi">983</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mf">117.8784</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">983</span><span class="p">)</span> <span class="o">*</span> <span class="mf">119.91698</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="mf">117.8784</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">983</span><span class="p">)</span> <span class="o">*</span> <span class="mf">119.91698</span>
     <span class="n">f</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">_EXAMPLE_RAYS_FILE</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">f</span><span class="p">[</span><span class="n">field_name</span><span class="p">]}</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"data"</span><span class="p">:</span> <span class="n">f</span><span class="p">[</span><span class="n">field_name</span><span class="p">]}</span>
     <span class="n">f</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
     <span class="k">return</span> <span class="n">radar</span></div>
 
@@ -902,7 +902,7 @@
 <div class="viewcode-block" id="make_empty_grid">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.make_empty_grid.html#pyart.testing.make_empty_grid">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">make_empty_grid</span><span class="p">(</span><span class="n">grid_shape</span><span class="p">,</span> <span class="n">grid_limits</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Make an empty grid object without any fields or metadata.</span>
 
 <span class="sd">    Parameters</span>
@@ -918,51 +918,51 @@
 <span class="sd">    grid : Grid</span>
 <span class="sd">        Empty Grid object, centered near the ARM SGP site (Oklahoma).</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;grid_time&quot;</span><span class="p">)</span>
-    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">])</span>
-    <span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;seconds since 2000-01-01T00:00:00Z&quot;</span>
+<span class="sd">    """</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"grid_time"</span><span class="p">)</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">])</span>
+    <span class="n">time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"seconds since 2000-01-01T00:00:00Z"</span>
 
     <span class="c1"># grid coordinate dictionaries</span>
     <span class="n">nz</span><span class="p">,</span> <span class="n">ny</span><span class="p">,</span> <span class="n">nx</span> <span class="o">=</span> <span class="n">grid_shape</span>
     <span class="p">(</span><span class="n">z0</span><span class="p">,</span> <span class="n">z1</span><span class="p">),</span> <span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">y1</span><span class="p">),</span> <span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">)</span> <span class="o">=</span> <span class="n">grid_limits</span>
 
-    <span class="n">x</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;x&quot;</span><span class="p">)</span>
-    <span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"x"</span><span class="p">)</span>
+    <span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">,</span> <span class="n">nx</span><span class="p">)</span>
 
-    <span class="n">y</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;y&quot;</span><span class="p">)</span>
-    <span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">ny</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"y"</span><span class="p">)</span>
+    <span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">y0</span><span class="p">,</span> <span class="n">y1</span><span class="p">,</span> <span class="n">ny</span><span class="p">)</span>
 
-    <span class="n">z</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;z&quot;</span><span class="p">)</span>
-    <span class="n">z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">z0</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">nz</span><span class="p">)</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"z"</span><span class="p">)</span>
+    <span class="n">z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">z0</span><span class="p">,</span> <span class="n">z1</span><span class="p">,</span> <span class="n">nz</span><span class="p">)</span>
 
-    <span class="n">origin_altitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;origin_altitude&quot;</span><span class="p">)</span>
-    <span class="n">origin_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">300.0</span><span class="p">])</span>
+    <span class="n">origin_altitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"origin_altitude"</span><span class="p">)</span>
+    <span class="n">origin_altitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">300.0</span><span class="p">])</span>
 
-    <span class="n">origin_latitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;origin_latitude&quot;</span><span class="p">)</span>
-    <span class="n">origin_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">36.74</span><span class="p">])</span>
+    <span class="n">origin_latitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"origin_latitude"</span><span class="p">)</span>
+    <span class="n">origin_latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">36.74</span><span class="p">])</span>
 
-    <span class="n">origin_longitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;origin_longitude&quot;</span><span class="p">)</span>
-    <span class="n">origin_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">98.1</span><span class="p">])</span>
+    <span class="n">origin_longitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"origin_longitude"</span><span class="p">)</span>
+    <span class="n">origin_longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">98.1</span><span class="p">])</span>
 
     <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="n">metadata</span> <span class="o">=</span> <span class="p">{}</span>
 
-    <span class="n">radar_latitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;radar_latitude&quot;</span><span class="p">)</span>
-    <span class="n">radar_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">36.74</span><span class="p">])</span>
+    <span class="n">radar_latitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"radar_latitude"</span><span class="p">)</span>
+    <span class="n">radar_latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">36.74</span><span class="p">])</span>
 
-    <span class="n">radar_longitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;radar_longitude&quot;</span><span class="p">)</span>
-    <span class="n">radar_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">98.1</span><span class="p">])</span>
+    <span class="n">radar_longitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"radar_longitude"</span><span class="p">)</span>
+    <span class="n">radar_longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">98.1</span><span class="p">])</span>
 
-    <span class="n">radar_altitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;radar_altitude&quot;</span><span class="p">)</span>
-    <span class="n">radar_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">300.0</span><span class="p">])</span>
+    <span class="n">radar_altitude</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"radar_altitude"</span><span class="p">)</span>
+    <span class="n">radar_altitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">300.0</span><span class="p">])</span>
 
-    <span class="n">radar_time</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;radar_time&quot;</span><span class="p">)</span>
-    <span class="n">radar_time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">])</span>
-    <span class="n">radar_time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;seconds since 2000-01-01T00:00:00Z&quot;</span>
+    <span class="n">radar_time</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"radar_time"</span><span class="p">)</span>
+    <span class="n">radar_time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.0</span><span class="p">])</span>
+    <span class="n">radar_time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"seconds since 2000-01-01T00:00:00Z"</span>
 
-    <span class="n">radar_name</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;radar_name&quot;</span><span class="p">)</span>
-    <span class="n">radar_name</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;ExampleRadar&quot;</span><span class="p">])</span>
+    <span class="n">radar_name</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"radar_name"</span><span class="p">)</span>
+    <span class="n">radar_name</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"ExampleRadar"</span><span class="p">])</span>
 
     <span class="k">return</span> <span class="n">Grid</span><span class="p">(</span>
         <span class="n">time</span><span class="p">,</span>
@@ -986,20 +986,20 @@
 <div class="viewcode-block" id="make_target_grid">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.make_target_grid.html#pyart.testing.make_target_grid">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">make_target_grid</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Make a sample Grid with a rectangular target.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">grid_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">320</span><span class="p">)</span>
     <span class="n">grid_limits</span> <span class="o">=</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">400000</span><span class="p">,</span> <span class="mi">400000</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">300000</span><span class="p">,</span> <span class="mi">300000</span><span class="p">))</span>
     <span class="n">grid</span> <span class="o">=</span> <span class="n">make_empty_grid</span><span class="p">(</span><span class="n">grid_shape</span><span class="p">,</span> <span class="n">grid_limits</span><span class="p">)</span>
 
-    <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">320</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">400</span><span class="p">,</span> <span class="mi">320</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
     <span class="n">fdata</span><span class="p">[:,</span> <span class="mi">50</span><span class="p">:</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="mi">40</span><span class="p">:</span><span class="o">-</span><span class="mi">40</span><span class="p">]</span> <span class="o">=</span> <span class="mf">10.0</span>
     <span class="n">fdata</span><span class="p">[:,</span> <span class="mi">100</span><span class="p">:</span><span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">80</span><span class="p">:</span><span class="o">-</span><span class="mi">80</span><span class="p">]</span> <span class="o">=</span> <span class="mf">20.0</span>
     <span class="n">fdata</span><span class="p">[:,</span> <span class="mi">150</span><span class="p">:</span><span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">120</span><span class="p">:</span><span class="o">-</span><span class="mi">120</span><span class="p">]</span> <span class="o">=</span> <span class="mf">30.0</span>
     <span class="n">fdata</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">5</span>
-    <span class="n">rdic</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">fdata</span><span class="p">,</span> <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;dBz&quot;</span><span class="p">}</span>
-    <span class="n">grid</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">:</span> <span class="n">rdic</span><span class="p">}</span>
+    <span class="n">rdic</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"data"</span><span class="p">:</span> <span class="n">fdata</span><span class="p">,</span> <span class="s2">"long_name"</span><span class="p">:</span> <span class="s2">"reflectivity"</span><span class="p">,</span> <span class="s2">"units"</span><span class="p">:</span> <span class="s2">"dBz"</span><span class="p">}</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"reflectivity"</span><span class="p">:</span> <span class="n">rdic</span><span class="p">}</span>
     <span class="k">return</span> <span class="n">grid</span></div>
 
 
@@ -1007,21 +1007,21 @@
 <div class="viewcode-block" id="make_storm_grid">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.make_storm_grid.html#pyart.testing.make_storm_grid">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">make_storm_grid</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Make a sample Grid with a rectangular storm target.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">grid_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">40</span><span class="p">)</span>
     <span class="n">grid_limits</span> <span class="o">=</span> <span class="p">((</span><span class="mi">0</span><span class="p">,</span> <span class="mi">500</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">400000</span><span class="p">,</span> <span class="mi">400000</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">300000</span><span class="p">,</span> <span class="mi">300000</span><span class="p">))</span>
     <span class="n">grid</span> <span class="o">=</span> <span class="n">make_empty_grid</span><span class="p">(</span><span class="n">grid_shape</span><span class="p">,</span> <span class="n">grid_limits</span><span class="p">)</span>
 
-    <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">40</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
     <span class="n">fdata</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
     <span class="n">fdata</span><span class="p">[:,</span> <span class="mi">5</span><span class="p">:</span><span class="o">-</span><span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="o">=</span> <span class="mf">20.0</span>
     <span class="n">fdata</span><span class="p">[:,</span> <span class="mi">10</span><span class="p">:</span><span class="o">-</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">:</span><span class="o">-</span><span class="mi">8</span><span class="p">]</span> <span class="o">=</span> <span class="mf">30.0</span>
     <span class="n">fdata</span><span class="p">[:,</span> <span class="mi">15</span><span class="p">:</span><span class="o">-</span><span class="mi">15</span><span class="p">,</span> <span class="mi">12</span><span class="p">:</span><span class="o">-</span><span class="mi">12</span><span class="p">]</span> <span class="o">=</span> <span class="mf">60.0</span>
     <span class="n">fdata</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+=</span> <span class="mi">5</span>
-    <span class="n">rdic</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">fdata</span><span class="p">,</span> <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;dBz&quot;</span><span class="p">}</span>
-    <span class="n">grid</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">:</span> <span class="n">rdic</span><span class="p">}</span>
+    <span class="n">rdic</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"data"</span><span class="p">:</span> <span class="n">fdata</span><span class="p">,</span> <span class="s2">"long_name"</span><span class="p">:</span> <span class="s2">"reflectivity"</span><span class="p">,</span> <span class="s2">"units"</span><span class="p">:</span> <span class="s2">"dBz"</span><span class="p">}</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"reflectivity"</span><span class="p">:</span> <span class="n">rdic</span><span class="p">}</span>
     <span class="k">return</span> <span class="n">grid</span></div>
 
 
@@ -1029,20 +1029,20 @@
 <div class="viewcode-block" id="make_normal_storm">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.make_normal_storm.html#pyart.testing.make_normal_storm">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">make_normal_storm</span><span class="p">(</span><span class="n">sigma</span><span class="p">,</span> <span class="n">mu</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Make a sample Grid with a gaussian storm target.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">test_grid</span> <span class="o">=</span> <span class="n">make_empty_grid</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">101</span><span class="p">],</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="p">(</span><span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">)])</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">test_grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">test_grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">z</span> <span class="o">=</span> <span class="n">test_grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">&quot;ij&quot;</span><span class="p">)</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">test_grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">test_grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">test_grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
+    <span class="n">zg</span><span class="p">,</span> <span class="n">yg</span><span class="p">,</span> <span class="n">xg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">meshgrid</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">indexing</span><span class="o">=</span><span class="s2">"ij"</span><span class="p">)</span>
     <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">((</span><span class="n">xg</span> <span class="o">-</span> <span class="n">mu</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">yg</span> <span class="o">-</span> <span class="n">mu</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
     <span class="n">term1</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="p">(</span><span class="n">sigma</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="p">))</span>
     <span class="n">term2</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">r</span><span class="o">**</span><span class="mi">2</span> <span class="o">/</span> <span class="p">(</span><span class="mf">2.0</span> <span class="o">*</span> <span class="n">sigma</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">term1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="n">term2</span><span class="p">)</span>
-    <span class="n">rdic</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span> <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;dBz&quot;</span><span class="p">}</span>
-    <span class="n">test_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">:</span> <span class="n">rdic</span><span class="p">})</span>
+    <span class="n">rdic</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"data"</span><span class="p">:</span> <span class="n">data</span><span class="p">,</span> <span class="s2">"long_name"</span><span class="p">:</span> <span class="s2">"reflectivity"</span><span class="p">,</span> <span class="s2">"units"</span><span class="p">:</span> <span class="s2">"dBz"</span><span class="p">}</span>
+    <span class="n">test_grid</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"reflectivity"</span><span class="p">:</span> <span class="n">rdic</span><span class="p">})</span>
     <span class="k">return</span> <span class="n">test_grid</span></div>
 
 
@@ -1052,7 +1052,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">make_gaussian_storm_grid</span><span class="p">(</span>
     <span class="n">min_value</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_value</span><span class="o">=</span><span class="mi">45</span><span class="p">,</span> <span class="n">grid_len</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span> <span class="n">sigma</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">mu</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">masked_boundary</span><span class="o">=</span><span class="mi">3</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Make a 1 km resolution grid with a Gaussian storm pattern at the center,</span>
 <span class="sd">    with two layers having the same data and masked boundaries.</span>
 
@@ -1074,7 +1074,7 @@
 <span class="sd">    Returns</span>
 <span class="sd">    --------</span>
 <span class="sd">    A Py-ART grid with the Gaussian storm field added.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Create an empty Py-ART grid</span>
     <span class="n">grid_shape</span> <span class="o">=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">grid_len</span><span class="p">,</span> <span class="n">grid_len</span><span class="p">)</span>
@@ -1106,8 +1106,8 @@
 
     <span class="n">storm_intensity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">storm_intensity</span><span class="p">,</span> <span class="n">mask</span><span class="o">=</span><span class="n">mask</span><span class="p">)</span>
     <span class="c1"># Prepare dictionary for Py-ART grid fields</span>
-    <span class="n">rdic</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">storm_intensity</span><span class="p">,</span> <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;dBz&quot;</span><span class="p">}</span>
-    <span class="n">grid</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">:</span> <span class="n">rdic</span><span class="p">}</span>
+    <span class="n">rdic</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"data"</span><span class="p">:</span> <span class="n">storm_intensity</span><span class="p">,</span> <span class="s2">"long_name"</span><span class="p">:</span> <span class="s2">"reflectivity"</span><span class="p">,</span> <span class="s2">"units"</span><span class="p">:</span> <span class="s2">"dBz"</span><span class="p">}</span>
+    <span class="n">grid</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"reflectivity"</span><span class="p">:</span> <span class="n">rdic</span><span class="p">}</span>
 
     <span class="k">return</span> <span class="n">grid</span></div>
 
@@ -1116,7 +1116,7 @@
 <div class="viewcode-block" id="make_empty_spectra_radar">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.make_empty_spectra_radar.html#pyart.testing.make_empty_spectra_radar">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">make_empty_spectra_radar</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">ngates</span><span class="p">,</span> <span class="n">npulses_max</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return a Spectra Radar object.</span>
 
 <span class="sd">    Parameters</span>
@@ -1134,61 +1134,61 @@
 <span class="sd">        Radar spectra object with an empty spectra field, other parameters are</span>
 <span class="sd">        set to default values.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_XARRAY_AVAILABLE</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
-            <span class="s2">&quot;Xarray is required to use make_empty_spectra_radar &quot;</span>
-            <span class="s2">&quot;but is not installed!&quot;</span>
+            <span class="s2">"Xarray is required to use make_empty_spectra_radar "</span>
+            <span class="s2">"but is not installed!"</span>
         <span class="p">)</span>
 
-    <span class="n">time_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
-    <span class="n">_range_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">)</span>
-    <span class="n">latitude_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;latitude&quot;</span><span class="p">)</span>
-    <span class="n">longitude_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;longitude&quot;</span><span class="p">)</span>
-    <span class="n">altitude_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;altitude&quot;</span><span class="p">)</span>
-    <span class="n">sweep_number_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;sweep_number&quot;</span><span class="p">)</span>
-    <span class="n">sweep_mode_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;sweep_mode&quot;</span><span class="p">)</span>
-    <span class="n">fixed_angle_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;fixed_angle&quot;</span><span class="p">)</span>
-    <span class="n">sweep_start_ray_index_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;sweep_start_ray_index&quot;</span><span class="p">)</span>
-    <span class="n">sweep_end_ray_index_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;sweep_end_ray_index&quot;</span><span class="p">)</span>
-    <span class="n">azimuth_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;azimuth&quot;</span><span class="p">)</span>
-    <span class="n">elevation_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;elevation&quot;</span><span class="p">)</span>
+    <span class="n">time_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"time"</span><span class="p">)</span>
+    <span class="n">_range_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"range"</span><span class="p">)</span>
+    <span class="n">latitude_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"latitude"</span><span class="p">)</span>
+    <span class="n">longitude_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"longitude"</span><span class="p">)</span>
+    <span class="n">altitude_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"altitude"</span><span class="p">)</span>
+    <span class="n">sweep_number_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"sweep_number"</span><span class="p">)</span>
+    <span class="n">sweep_mode_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"sweep_mode"</span><span class="p">)</span>
+    <span class="n">fixed_angle_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"fixed_angle"</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"sweep_start_ray_index"</span><span class="p">)</span>
+    <span class="n">sweep_end_ray_index_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"sweep_end_ray_index"</span><span class="p">)</span>
+    <span class="n">azimuth_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"azimuth"</span><span class="p">)</span>
+    <span class="n">elevation_dict</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="s2">"elevation"</span><span class="p">)</span>
 
     <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">&quot;vpt&quot;</span>
+    <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">"vpt"</span>
     <span class="n">c</span> <span class="o">=</span> <span class="mi">299792458</span>
     <span class="n">wavelength</span> <span class="o">=</span> <span class="n">c</span> <span class="o">/</span> <span class="mf">34.830</span> <span class="o">*</span> <span class="mf">1e-9</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;instrument_name&quot;</span><span class="p">:</span> <span class="s2">&quot;fake_spectra_radar&quot;</span><span class="p">,</span> <span class="s2">&quot;wavelength&quot;</span><span class="p">:</span> <span class="n">wavelength</span><span class="p">}</span>
-    <span class="n">time_dict</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;seconds since 1989-01-01T00:00:01Z&quot;</span>
-    <span class="n">time</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">time_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"instrument_name"</span><span class="p">:</span> <span class="s2">"fake_spectra_radar"</span><span class="p">,</span> <span class="s2">"wavelength"</span><span class="p">:</span> <span class="n">wavelength</span><span class="p">}</span>
+    <span class="n">time_dict</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"seconds since 1989-01-01T00:00:01Z"</span>
+    <span class="n">time</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">time_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s2">"time"</span><span class="p">)</span>
     <span class="n">_range</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">ngates</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">_range_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s2">&quot;range&quot;</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">,</span> <span class="n">ngates</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"float32"</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">_range_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s2">"range"</span>
     <span class="p">)</span>
-    <span class="n">latitude</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">36.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">latitude_dict</span><span class="p">)</span>
-    <span class="n">longitude</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">97.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">longitude_dict</span><span class="p">)</span>
-    <span class="n">altitude</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">200</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">altitude_dict</span><span class="p">)</span>
+    <span class="n">latitude</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">36.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">latitude_dict</span><span class="p">)</span>
+    <span class="n">longitude</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="mf">97.5</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">longitude_dict</span><span class="p">)</span>
+    <span class="n">altitude</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">200</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">altitude_dict</span><span class="p">)</span>
 
-    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_number_dict</span><span class="p">)</span>
-    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;spectra&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_mode_dict</span><span class="p">)</span>
+    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_number_dict</span><span class="p">)</span>
+    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"spectra"</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_mode_dict</span><span class="p">)</span>
     <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.75</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">fixed_angle_dict</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.75</span><span class="p">]</span> <span class="o">*</span> <span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">fixed_angle_dict</span>
     <span class="p">)</span>
     <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_start_ray_index_dict</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_start_ray_index_dict</span>
     <span class="p">)</span>
     <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_end_ray_index_dict</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">sweep_end_ray_index_dict</span>
     <span class="p">)</span>
 
     <span class="n">azimuth</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">azimuth_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s2">&quot;time&quot;</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">azimuth_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s2">"time"</span>
     <span class="p">)</span>
     <span class="n">elevation</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.75</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">elevation_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s2">&quot;time&quot;</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.75</span><span class="p">]</span> <span class="o">*</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">elevation_dict</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="s2">"time"</span>
     <span class="p">)</span>
-    <span class="n">npulses_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">npulses_max</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">npulses_max</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">npulses_max</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
     <span class="n">velocity_bins</span> <span class="o">=</span> <span class="n">xr</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">npulses_max</span><span class="p">)),</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{},</span> <span class="n">dims</span><span class="o">=</span><span class="s2">&quot;npulses_max&quot;</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mf">10.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">npulses_max</span><span class="p">)),</span> <span class="n">attrs</span><span class="o">=</span><span class="p">{},</span> <span class="n">dims</span><span class="o">=</span><span class="s2">"npulses_max"</span>
     <span class="p">)</span>
 
     <span class="n">fields</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">values</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">_range</span><span class="o">.</span><span class="n">values</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">npulses_max</span><span class="p">)))</span>
@@ -1219,20 +1219,20 @@
 <div class="viewcode-block" id="make_target_spectra_radar">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.make_target_spectra_radar.html#pyart.testing.make_target_spectra_radar">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">make_target_spectra_radar</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return a spectra radar with a target like spectra field.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_XARRAY_AVAILABLE</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
-            <span class="s2">&quot;Xarray is required to use make_target_spectra_radar &quot;</span>
-            <span class="s2">&quot;but is not installed!&quot;</span>
+            <span class="s2">"Xarray is required to use make_target_spectra_radar "</span>
+            <span class="s2">"but is not installed!"</span>
         <span class="p">)</span>
 
     <span class="n">radar</span> <span class="o">=</span> <span class="n">make_empty_spectra_radar</span><span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">)</span>
-    <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="mi">10</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">50</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
     <span class="n">max_value</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="p">(</span><span class="o">-</span><span class="mi">10</span> <span class="o">/</span> <span class="mi">10</span><span class="p">)</span>
     <span class="n">fdata</span><span class="p">[:,</span> <span class="p">:,</span> <span class="p">:]</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">windows</span><span class="o">.</span><span class="n">gaussian</span><span class="p">(</span><span class="mi">50</span><span class="p">,</span> <span class="n">std</span><span class="o">=</span><span class="mi">7</span><span class="p">)</span> <span class="o">*</span> <span class="n">max_value</span><span class="p">)</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="s2">&quot;spectra&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">fdata</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">ds</span><span class="p">[</span><span class="s2">"spectra"</span><span class="p">]</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">fdata</span>
     <span class="k">return</span> <span class="n">radar</span></div>
 
 </pre></div>
@@ -1267,8 +1267,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1302,7 +1302,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

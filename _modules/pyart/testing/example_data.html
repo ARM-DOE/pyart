@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -492,13 +492,13 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">pooch.downloaders</span><span class="w"> </span><span class="kn">import</span> <span class="n">HTTPDownloader</span>
 
 <span class="n">DATASETS</span> <span class="o">=</span> <span class="n">pooch</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
-    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">&quot;pyart-datasets&quot;</span><span class="p">),</span>
-    <span class="n">base_url</span><span class="o">=</span><span class="s2">&quot;https://adc.arm.gov/pyart/example_data/&quot;</span><span class="p">,</span>
-    <span class="n">env</span><span class="o">=</span><span class="s2">&quot;PYART_DATASETS_DIR&quot;</span><span class="p">,</span>
+    <span class="n">path</span><span class="o">=</span><span class="n">pooch</span><span class="o">.</span><span class="n">os_cache</span><span class="p">(</span><span class="s2">"pyart-datasets"</span><span class="p">),</span>
+    <span class="n">base_url</span><span class="o">=</span><span class="s2">"https://adc.arm.gov/pyart/example_data/"</span><span class="p">,</span>
+    <span class="n">env</span><span class="o">=</span><span class="s2">"PYART_DATASETS_DIR"</span><span class="p">,</span>
 <span class="p">)</span>
 
 <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;user-agent&quot;</span><span class="p">:</span> <span class="s2">&quot;Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36&quot;</span>
+    <span class="s2">"user-agent"</span><span class="p">:</span> <span class="s2">"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.99 Safari/537.36"</span>
 <span class="p">}</span>
 
 
@@ -507,12 +507,12 @@
     <span class="n">download</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="n">output_file</span><span class="p">,</span> <span class="n">mypooch</span><span class="p">)</span>
 
 
-<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">&quot;pyart.testing&quot;</span><span class="p">)</span> <span class="o">/</span> <span class="s2">&quot;registry.txt&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">registry_file</span><span class="p">:</span>
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">importlib</span><span class="o">.</span><span class="n">resources</span><span class="o">.</span><span class="n">files</span><span class="p">(</span><span class="s2">"pyart.testing"</span><span class="p">)</span> <span class="o">/</span> <span class="s2">"registry.txt"</span><span class="p">)</span> <span class="k">as</span> <span class="n">registry_file</span><span class="p">:</span>
     <span class="n">DATASETS</span><span class="o">.</span><span class="n">load_registry</span><span class="p">(</span><span class="n">registry_file</span><span class="p">)</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">locate</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The absolute path to the sample data storage location on disk.</span>
+<span class="w">    </span><span class="sd">"""The absolute path to the sample data storage location on disk.</span>
 <span class="sd">    This is where the data are saved on your computer. The location is</span>
 <span class="sd">    dependent on the operating system. The folder locations are defined by the</span>
 <span class="sd">    ``appdirs``  package (see the `appdirs documentation</span>
@@ -523,14 +523,14 @@
 <span class="sd">    -------</span>
 <span class="sd">    path : str</span>
 <span class="sd">        The local data storage location.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="n">DATASETS</span><span class="o">.</span><span class="n">abspath</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="get_test_data">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.get_test_data.html#pyart.testing.get_test_data">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_test_data</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Accesses the desired test data storage</span>
 <span class="sd">    Parameters</span>
 <span class="sd">    ----------</span>
@@ -540,7 +540,7 @@
 <span class="sd">    -------</span>
 <span class="sd">    path_to_file = str</span>
 <span class="sd">        Local path to the desired file</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">return</span> <span class="n">DATASETS</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">downloader</span><span class="o">=</span><span class="n">add_header_to_download</span><span class="p">)</span></div>
 
 </pre></div>
@@ -575,8 +575,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -610,7 +610,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

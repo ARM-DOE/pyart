@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,10 +486,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.core.grid</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">An class for holding gridded Radar data.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">netCDF4</span><span class="w"> </span><span class="kn">import</span> <span class="n">num2date</span>
@@ -517,7 +517,7 @@
 <div class="viewcode-block" id="Grid">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.html#pyart.core.Grid">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Grid</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A class for storing rectilinear gridded radar data in Cartesian coordinate.</span>
 
 <span class="sd">    Refer to the attribute section for information on the parameters.</span>
@@ -545,13 +545,13 @@
 <span class="sd">    projection : dic or str</span>
 <span class="sd">        Projection parameters defining the map projection used to transform</span>
 <span class="sd">        from Cartesian to geographic coordinates. None will use the default</span>
-<span class="sd">        dictionary with the &#39;proj&#39; key set to &#39;pyart_aeqd&#39; indicating that</span>
+<span class="sd">        dictionary with the 'proj' key set to 'pyart_aeqd' indicating that</span>
 <span class="sd">        the native Py-ART azimuthal equidistant projection is used. Other</span>
 <span class="sd">        values should specify a valid pyproj.Proj projparams dictionary or</span>
-<span class="sd">        string. The special key &#39;_include_lon_0_lat_0&#39; is removed when</span>
+<span class="sd">        string. The special key '_include_lon_0_lat_0' is removed when</span>
 <span class="sd">        interpreting this dictionary. If this key is present and set to True,</span>
-<span class="sd">        which is required when proj=&#39;pyart_aeqd&#39;, then the radar longitude and</span>
-<span class="sd">        latitude will be added to the dictionary as &#39;lon_0&#39; and &#39;lat_0&#39;.</span>
+<span class="sd">        which is required when proj='pyart_aeqd', then the radar longitude and</span>
+<span class="sd">        latitude will be added to the dictionary as 'lon_0' and 'lat_0'.</span>
 <span class="sd">        Use the :py:func:`get_projparams` method to retrieve a copy of this</span>
 <span class="sd">        attribute dictionary with this special key evaluated.</span>
 <span class="sd">    radar_longitude, radar_latitude, radar_altitude : dict or None, optional</span>
@@ -564,7 +564,7 @@
 <span class="sd">        Number of radars whose data was used to make the grid.</span>
 <span class="sd">    projection_proj : Proj</span>
 <span class="sd">        pyproj.Proj instance for the projection specified by the projection</span>
-<span class="sd">        attribute. If the &#39;pyart_aeqd&#39; projection is specified accessing this</span>
+<span class="sd">        attribute. If the 'pyart_aeqd' projection is specified accessing this</span>
 <span class="sd">        attribute will raise a ValueError.</span>
 <span class="sd">    point_x, point_y, point_z : LazyLoadDict</span>
 <span class="sd">        The Cartesian locations of all grid points from the origin in the</span>
@@ -584,7 +584,7 @@
 <span class="sd">        attribute is changed use :py:func:`init_point_altitude` to reset the</span>
 <span class="sd">        attribute.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
@@ -604,7 +604,7 @@
         <span class="n">radar_time</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
         <span class="n">radar_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initalize object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Initalize object."""</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">time</span> <span class="o">=</span> <span class="n">time</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="o">=</span> <span class="n">fields</span>
@@ -615,11 +615,11 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">x</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="n">y</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="n">z</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">ny</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">nz</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nx</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ny</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nz</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span>
         <span class="k">if</span> <span class="n">projection</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">projection</span> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;proj&quot;</span><span class="p">:</span> <span class="s2">&quot;pyart_aeqd&quot;</span><span class="p">,</span> <span class="s2">&quot;_include_lon_0_lat_0&quot;</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">projection</span> <span class="o">=</span> <span class="p">{</span><span class="s2">"proj"</span><span class="p">:</span> <span class="s2">"pyart_aeqd"</span><span class="p">,</span> <span class="s2">"_include_lon_0_lat_0"</span><span class="p">:</span> <span class="kc">True</span><span class="p">}</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">projection</span> <span class="o">=</span> <span class="n">projection</span>
 
@@ -638,19 +638,19 @@
         <span class="k">return</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__getstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return object&#39;s state which can be pickled.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return object's state which can be pickled."""</span>
         <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># copy the objects state</span>
         <span class="c1"># Remove unpicklable entries (those which are lazily loaded</span>
-        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;point_x&quot;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;point_y&quot;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;point_z&quot;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;point_latitude&quot;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;point_longitude&quot;</span><span class="p">]</span>
-        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">&quot;point_altitude&quot;</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">"point_x"</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">"point_y"</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">"point_z"</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">"point_latitude"</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">"point_longitude"</span><span class="p">]</span>
+        <span class="k">del</span> <span class="n">state</span><span class="p">[</span><span class="s2">"point_altitude"</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">state</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">__setstate__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Restore unpicklable entries from pickled object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Restore unpicklable entries from pickled object."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="vm">__dict__</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_point_x_y_z</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">init_point_longitude_latitude</span><span class="p">()</span>
@@ -662,16 +662,16 @@
         <span class="c1"># Raises a ValueError if the pyart_aeqd projection is specified.</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_PYPROJ_AVAILABLE</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
-                <span class="s2">&quot;PyProj is required to create a Proj instance but it &quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;is not installed&quot;</span>
+                <span class="s2">"PyProj is required to create a Proj instance but it "</span>
+                <span class="o">+</span> <span class="s2">"is not installed"</span>
             <span class="p">)</span>
         <span class="n">projparams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_projparams</span><span class="p">()</span>
 
         <span class="c1"># Check if projparams is dictionary and check for pyart_aeqd</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">projparams</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
-            <span class="k">if</span> <span class="n">projparams</span><span class="p">[</span><span class="s2">&quot;proj&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;pyart_aeqd&quot;</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">projparams</span><span class="p">[</span><span class="s2">"proj"</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"pyart_aeqd"</span><span class="p">:</span>
                 <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                    <span class="s2">&quot;Proj instance can not be made for the pyart_aeqd projection&quot;</span>
+                    <span class="s2">"Proj instance can not be made for the pyart_aeqd projection"</span>
                 <span class="p">)</span>
         <span class="c1"># Get proj instance from a proj str or dict</span>
         <span class="n">proj</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="n">projparams</span><span class="p">)</span>
@@ -680,54 +680,54 @@
 <div class="viewcode-block" id="Grid.get_projparams">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.get_projparams.html#pyart.core.Grid.get_projparams">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_projparams</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a projparam dict or str from the projection attribute.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return a projparam dict or str from the projection attribute."""</span>
         <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
             <span class="n">projparams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-            <span class="k">if</span> <span class="n">projparams</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;_include_lon_0_lat_0&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
-                <span class="n">projparams</span><span class="p">[</span><span class="s2">&quot;lon_0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-                <span class="n">projparams</span><span class="p">[</span><span class="s2">&quot;lat_0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">if</span> <span class="n">projparams</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"_include_lon_0_lat_0"</span><span class="p">,</span> <span class="kc">False</span><span class="p">):</span>
+                <span class="n">projparams</span><span class="p">[</span><span class="s2">"lon_0"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin_longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">projparams</span><span class="p">[</span><span class="s2">"lat_0"</span><span class="p">]</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">origin_latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="k">return</span> <span class="n">projparams</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span></div>
 
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_find_and_check_nradar</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return the number of radars which were used to create the grid.</span>
 
 <span class="sd">        Examine the radar attributes to determine the number of radars which</span>
 <span class="sd">        were used to create the grid. If the size of the radar attributes</span>
 <span class="sd">        are inconsistent a ValueError is raised by this method.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">nradar_set</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">nradar</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radar_latitude</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">nradar</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+            <span class="n">nradar</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span>
             <span class="n">nradar_set</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radar_longitude</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">nradar_set</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span> <span class="o">!=</span> <span class="n">nradar</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Inconsistent length of radar_ arguments.&quot;</span><span class="p">)</span>
-            <span class="n">nradar</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">nradar_set</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span> <span class="o">!=</span> <span class="n">nradar</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Inconsistent length of radar_ arguments."</span><span class="p">)</span>
+            <span class="n">nradar</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span>
             <span class="n">nradar_set</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radar_altitude</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">nradar_set</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span> <span class="o">!=</span> <span class="n">nradar</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Inconsistent length of radar_ arguments.&quot;</span><span class="p">)</span>
-            <span class="n">nradar</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">nradar_set</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_altitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span> <span class="o">!=</span> <span class="n">nradar</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Inconsistent length of radar_ arguments."</span><span class="p">)</span>
+            <span class="n">nradar</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_altitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span>
             <span class="n">nradar_set</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radar_time</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">nradar_set</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span> <span class="o">!=</span> <span class="n">nradar</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Inconsistent length of radar_ arguments.&quot;</span><span class="p">)</span>
-            <span class="n">nradar</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">nradar_set</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span> <span class="o">!=</span> <span class="n">nradar</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Inconsistent length of radar_ arguments."</span><span class="p">)</span>
+            <span class="n">nradar</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span>
             <span class="n">nradar_set</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radar_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">nradar_set</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_name</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span> <span class="o">!=</span> <span class="n">nradar</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Inconsistent length of radar_ arguments.&quot;</span><span class="p">)</span>
-            <span class="n">nradar</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_name</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+            <span class="k">if</span> <span class="n">nradar_set</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_name</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span> <span class="o">!=</span> <span class="n">nradar</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Inconsistent length of radar_ arguments."</span><span class="p">)</span>
+            <span class="n">nradar</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_name</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span>
             <span class="n">nradar_set</span> <span class="o">=</span> <span class="kc">True</span>
 
         <span class="k">return</span> <span class="n">nradar</span>
@@ -736,38 +736,38 @@
 <div class="viewcode-block" id="Grid.init_point_x_y_z">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.init_point_x_y_z.html#pyart.core.Grid.init_point_x_y_z">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">init_point_x_y_z</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize or reset the point_{x, y, z} attributes.&quot;&quot;&quot;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">point_x</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;point_x&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">point_x</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_point_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">))</span>
+<span class="w">        </span><span class="sd">"""Initialize or reset the point_{x, y, z} attributes."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">point_x</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">"point_x"</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">point_x</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="n">_point_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">point_y</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;point_y&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">point_y</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_point_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">point_y</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">"point_y"</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">point_y</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="n">_point_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">))</span>
 
-        <span class="bp">self</span><span class="o">.</span><span class="n">point_z</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;point_z&quot;</span><span class="p">))</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">point_z</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_point_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">))</span></div>
+        <span class="bp">self</span><span class="o">.</span><span class="n">point_z</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">"point_z"</span><span class="p">))</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">point_z</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="n">_point_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">"z"</span><span class="p">))</span></div>
 
 
 <div class="viewcode-block" id="Grid.init_point_longitude_latitude">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.init_point_longitude_latitude.html#pyart.core.Grid.init_point_longitude_latitude">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">init_point_longitude_latitude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Initialize or reset the point_{longitude, latitudes} attributes.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">point_longitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;point_longitude&quot;</span><span class="p">))</span>
-        <span class="n">point_longitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_point_lon_lat_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<span class="sd">        """</span>
+        <span class="n">point_longitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">"point_longitude"</span><span class="p">))</span>
+        <span class="n">point_longitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="n">_point_lon_lat_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_longitude</span> <span class="o">=</span> <span class="n">point_longitude</span>
 
-        <span class="n">point_latitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;point_latitude&quot;</span><span class="p">))</span>
-        <span class="n">point_latitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_point_lon_lat_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="n">point_latitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">"point_latitude"</span><span class="p">))</span>
+        <span class="n">point_latitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="n">_point_lon_lat_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_latitude</span> <span class="o">=</span> <span class="n">point_latitude</span></div>
 
 
 <div class="viewcode-block" id="Grid.init_point_altitude">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.init_point_altitude.html#pyart.core.Grid.init_point_altitude">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">init_point_altitude</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize the point_altitude attribute.&quot;&quot;&quot;</span>
-        <span class="n">point_altitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;point_altitude&quot;</span><span class="p">))</span>
-        <span class="n">point_altitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="n">_point_altitude_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
+<span class="w">        </span><span class="sd">"""Initialize the point_altitude attribute."""</span>
+        <span class="n">point_altitude</span> <span class="o">=</span> <span class="n">LazyLoadDict</span><span class="p">(</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">"point_altitude"</span><span class="p">))</span>
+        <span class="n">point_altitude</span><span class="o">.</span><span class="n">set_lazy</span><span class="p">(</span><span class="s2">"data"</span><span class="p">,</span> <span class="n">_point_altitude_data_factory</span><span class="p">(</span><span class="bp">self</span><span class="p">))</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">point_altitude</span> <span class="o">=</span> <span class="n">point_altitude</span></div>
 
 
@@ -776,11 +776,11 @@
     <span class="k">def</span><span class="w"> </span><span class="nf">write</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">filename</span><span class="p">,</span>
-        <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;NETCDF4&quot;</span><span class="p">,</span>
+        <span class="nb">format</span><span class="o">=</span><span class="s2">"NETCDF4"</span><span class="p">,</span>
         <span class="n">arm_time_variables</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
         <span class="n">arm_alt_lat_lon_variables</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Write the the Grid object to a NetCDF file.</span>
 
 <span class="sd">        Parameters</span>
@@ -788,8 +788,8 @@
 <span class="sd">        filename : str</span>
 <span class="sd">            Filename to save to.</span>
 <span class="sd">        format : str, optional</span>
-<span class="sd">            NetCDF format, one of &#39;NETCDF4&#39;, &#39;NETCDF4_CLASSIC&#39;,</span>
-<span class="sd">            &#39;NETCDF3_CLASSIC&#39; or &#39;NETCDF3_64BIT&#39;.</span>
+<span class="sd">            NetCDF format, one of 'NETCDF4', 'NETCDF4_CLASSIC',</span>
+<span class="sd">            'NETCDF3_CLASSIC' or 'NETCDF3_64BIT'.</span>
 <span class="sd">        arm_time_variables : bool, optional</span>
 <span class="sd">            True to write the ARM standard time variables base_time and</span>
 <span class="sd">            time_offset. False will not write these variables.</span>
@@ -797,7 +797,7 @@
 <span class="sd">            True to write the ARM standard alt, lat, lon variables.</span>
 <span class="sd">            False will not write these variables.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># delayed import to avoid circular import</span>
         <span class="kn">from</span><span class="w"> </span><span class="nn">..io.grid_io</span><span class="w"> </span><span class="kn">import</span> <span class="n">write_grid</span>
 
@@ -813,7 +813,7 @@
 <div class="viewcode-block" id="Grid.to_xarray">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.to_xarray.html#pyart.core.Grid.to_xarray">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">to_xarray</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Convert the Grid object to an xarray format.</span>
 
 <span class="sd">        Attributes</span>
@@ -827,132 +827,132 @@
 <span class="sd">        x, y, z : dict, 1D</span>
 <span class="sd">            Distance from the grid origin for each Cartesian coordinate axis</span>
 <span class="sd">            in a one dimensional array.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_XARRAY_AVAILABLE</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
-                <span class="s2">&quot;Xarray is required to use Grid.to_xarray but is not installed!&quot;</span>
+                <span class="s2">"Xarray is required to use Grid.to_xarray but is not installed!"</span>
             <span class="p">)</span>
 
         <span class="k">def</span><span class="w"> </span><span class="nf">_process_radar_name</span><span class="p">(</span><span class="n">radar_name</span><span class="p">):</span>
-<span class="w">            </span><span class="sd">&quot;&quot;&quot;Process radar_name to handle different formats.&quot;&quot;&quot;</span>
-            <span class="k">if</span> <span class="n">radar_name</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">&quot;S&quot;</span> <span class="ow">and</span> <span class="n">radar_name</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+<span class="w">            </span><span class="sd">"""Process radar_name to handle different formats."""</span>
+            <span class="k">if</span> <span class="n">radar_name</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">kind</span> <span class="o">==</span> <span class="s2">"S"</span> <span class="ow">and</span> <span class="n">radar_name</span><span class="o">.</span><span class="n">ndim</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
                 <span class="c1"># Join each row of bytes into a single byte string</span>
                 <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-                    <span class="p">[</span><span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">radar_name</span><span class="p">],</span>
-                    <span class="n">dtype</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;|S</span><span class="si">{</span><span class="n">radar_name</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span>
+                    <span class="p">[</span><span class="sa">b</span><span class="s2">""</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">radar_name</span><span class="p">],</span>
+                    <span class="n">dtype</span><span class="o">=</span><span class="sa">f</span><span class="s2">"|S</span><span class="si">{</span><span class="n">radar_name</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
                 <span class="p">)</span>
             <span class="k">return</span> <span class="n">radar_name</span>
 
         <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_point_longitude_latitude</span><span class="p">()</span>
-        <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">z</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
 
-        <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">num2date</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">])])</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">num2date</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">units</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">])])</span>
 
         <span class="n">ds</span> <span class="o">=</span> <span class="n">xarray</span><span class="o">.</span><span class="n">Dataset</span><span class="p">()</span>
         <span class="k">for</span> <span class="n">field</span><span class="p">,</span> <span class="n">field_info</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
-            <span class="n">field_data</span> <span class="o">=</span> <span class="n">field_info</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+            <span class="n">field_data</span> <span class="o">=</span> <span class="n">field_info</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
             <span class="n">data</span> <span class="o">=</span> <span class="n">xarray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
                 <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">field_data</span><span class="p">,</span> <span class="mi">0</span><span class="p">),</span>
-                <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;z&quot;</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">),</span>
+                <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">"time"</span><span class="p">,</span> <span class="s2">"z"</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">),</span>
                 <span class="n">coords</span><span class="o">=</span><span class="p">{</span>
-                    <span class="s2">&quot;time&quot;</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span>
-                    <span class="s2">&quot;z&quot;</span><span class="p">:</span> <span class="n">z</span><span class="p">,</span>
-                    <span class="s2">&quot;lat&quot;</span><span class="p">:</span> <span class="p">([</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="n">lat</span><span class="p">),</span>
-                    <span class="s2">&quot;lon&quot;</span><span class="p">:</span> <span class="p">([</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">],</span> <span class="n">lon</span><span class="p">),</span>
-                    <span class="s2">&quot;y&quot;</span><span class="p">:</span> <span class="n">y</span><span class="p">,</span>
-                    <span class="s2">&quot;x&quot;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
+                    <span class="s2">"time"</span><span class="p">:</span> <span class="n">time</span><span class="p">,</span>
+                    <span class="s2">"z"</span><span class="p">:</span> <span class="n">z</span><span class="p">,</span>
+                    <span class="s2">"lat"</span><span class="p">:</span> <span class="p">([</span><span class="s2">"y"</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">],</span> <span class="n">lat</span><span class="p">),</span>
+                    <span class="s2">"lon"</span><span class="p">:</span> <span class="p">([</span><span class="s2">"y"</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">],</span> <span class="n">lon</span><span class="p">),</span>
+                    <span class="s2">"y"</span><span class="p">:</span> <span class="n">y</span><span class="p">,</span>
+                    <span class="s2">"x"</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>
                 <span class="p">},</span>
             <span class="p">)</span>
-            <span class="n">data</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">field_info</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s2">&quot;data&quot;</span><span class="p">})</span>
+            <span class="n">data</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">k</span><span class="p">:</span> <span class="n">v</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">field_info</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span> <span class="n">k</span> <span class="o">!=</span> <span class="s2">"data"</span><span class="p">})</span>
             <span class="n">ds</span><span class="p">[</span><span class="n">field</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
 
         <span class="n">ds</span><span class="o">.</span><span class="n">lon</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;longitude of grid cell center&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;degree_E&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Longitude&quot;</span><span class="p">,</span>
+            <span class="s2">"long_name"</span><span class="p">:</span> <span class="s2">"longitude of grid cell center"</span><span class="p">,</span>
+            <span class="s2">"units"</span><span class="p">:</span> <span class="s2">"degree_E"</span><span class="p">,</span>
+            <span class="s2">"standard_name"</span><span class="p">:</span> <span class="s2">"Longitude"</span><span class="p">,</span>
         <span class="p">}</span>
         <span class="n">ds</span><span class="o">.</span><span class="n">lat</span><span class="o">.</span><span class="n">attrs</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;latitude of grid cell center&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;degree_N&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Latitude&quot;</span><span class="p">,</span>
+            <span class="s2">"long_name"</span><span class="p">:</span> <span class="s2">"latitude of grid cell center"</span><span class="p">,</span>
+            <span class="s2">"units"</span><span class="p">:</span> <span class="s2">"degree_N"</span><span class="p">,</span>
+            <span class="s2">"standard_name"</span><span class="p">:</span> <span class="s2">"Latitude"</span><span class="p">,</span>
         <span class="p">}</span>
 
         <span class="k">for</span> <span class="n">attr</span> <span class="ow">in</span> <span class="p">[</span><span class="n">ds</span><span class="o">.</span><span class="n">z</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">lat</span><span class="p">,</span> <span class="n">ds</span><span class="o">.</span><span class="n">lon</span><span class="p">]:</span>
-            <span class="n">attr</span><span class="o">.</span><span class="n">encoding</span><span class="p">[</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
+            <span class="n">attr</span><span class="o">.</span><span class="n">encoding</span><span class="p">[</span><span class="s2">"_FillValue"</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span>
 
         <span class="kn">from</span><span class="w"> </span><span class="nn">..io.grid_io</span><span class="w"> </span><span class="kn">import</span> <span class="n">_make_coordinatesystem_dict</span>
 
-        <span class="n">ds</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s2">&quot;ProjectionCoordinateSystem&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xarray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
-            <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">),</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s2">"ProjectionCoordinateSystem"</span><span class="p">]</span> <span class="o">=</span> <span class="n">xarray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">),</span>
             <span class="n">attrs</span><span class="o">=</span><span class="n">_make_coordinatesystem_dict</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span>
         <span class="p">)</span>
 
         <span class="n">projection</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">projection</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
-        <span class="k">if</span> <span class="s2">&quot;_include_lon_0_lat_0&quot;</span> <span class="ow">in</span> <span class="n">projection</span><span class="p">:</span>
-            <span class="n">projection</span><span class="p">[</span><span class="s2">&quot;_include_lon_0_lat_0&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
-                <span class="n">projection</span><span class="p">[</span><span class="s2">&quot;_include_lon_0_lat_0&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">"_include_lon_0_lat_0"</span> <span class="ow">in</span> <span class="n">projection</span><span class="p">:</span>
+            <span class="n">projection</span><span class="p">[</span><span class="s2">"_include_lon_0_lat_0"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span>
+                <span class="n">projection</span><span class="p">[</span><span class="s2">"_include_lon_0_lat_0"</span><span class="p">]</span>
             <span class="p">)</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span>
-        <span class="n">ds</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s2">&quot;projection&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xarray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
-            <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">),</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s2">"projection"</span><span class="p">]</span> <span class="o">=</span> <span class="n">xarray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+            <span class="n">data</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">),</span>
             <span class="n">attrs</span><span class="o">=</span><span class="n">projection</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Handle origin and radar attributes with appropriate dimensions</span>
         <span class="k">for</span> <span class="n">attr_name</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="s2">&quot;origin_latitude&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;origin_longitude&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;origin_altitude&quot;</span><span class="p">,</span>
+            <span class="s2">"origin_latitude"</span><span class="p">,</span>
+            <span class="s2">"origin_longitude"</span><span class="p">,</span>
+            <span class="s2">"origin_altitude"</span><span class="p">,</span>
         <span class="p">]:</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">):</span>
                 <span class="n">attr_data</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">attr_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">attr_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">attr_data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
+                    <span class="n">attr_value</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">expand_dims</span><span class="p">(</span><span class="n">attr_data</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="mi">0</span><span class="p">)</span>
                     <span class="n">ds</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">xarray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
-                        <span class="n">attr_value</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">get_metadata</span><span class="p">(</span><span class="n">attr_name</span><span class="p">)</span>
+                        <span class="n">attr_value</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">"time"</span><span class="p">,),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">get_metadata</span><span class="p">(</span><span class="n">attr_name</span><span class="p">)</span>
                     <span class="p">)</span>
 
         <span class="c1"># Radar-specific attributes that should have the nradar dimension</span>
         <span class="k">for</span> <span class="n">attr_name</span> <span class="ow">in</span> <span class="p">[</span>
-            <span class="s2">&quot;radar_altitude&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;radar_latitude&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;radar_longitude&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;radar_time&quot;</span><span class="p">,</span>
+            <span class="s2">"radar_altitude"</span><span class="p">,</span>
+            <span class="s2">"radar_latitude"</span><span class="p">,</span>
+            <span class="s2">"radar_longitude"</span><span class="p">,</span>
+            <span class="s2">"radar_time"</span><span class="p">,</span>
         <span class="p">]:</span>
             <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">):</span>
                 <span class="n">attr_data</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr_name</span><span class="p">)</span>
                 <span class="k">if</span> <span class="n">attr_data</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
                     <span class="n">ds</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="n">attr_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">xarray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
-                        <span class="n">attr_data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">],</span>
-                        <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;nradar&quot;</span><span class="p">,),</span>
+                        <span class="n">attr_data</span><span class="p">[</span><span class="s2">"data"</span><span class="p">],</span>
+                        <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">"nradar"</span><span class="p">,),</span>
                         <span class="n">attrs</span><span class="o">=</span><span class="n">get_metadata</span><span class="p">(</span><span class="n">attr_name</span><span class="p">),</span>
                     <span class="p">)</span>
 
-        <span class="k">if</span> <span class="s2">&quot;radar_time&quot;</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">variables</span><span class="p">:</span>
-            <span class="n">ds</span><span class="o">.</span><span class="n">radar_time</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">&quot;calendar&quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"radar_time"</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">variables</span><span class="p">:</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">radar_time</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"calendar"</span><span class="p">)</span>
 
         <span class="c1"># Handle radar_name and ensure it has the correct dimension</span>
         <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">radar_name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">radar_name</span> <span class="o">=</span> <span class="n">_process_radar_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_name</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
-            <span class="n">ds</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xarray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
-                <span class="n">radar_name</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;nradar&quot;</span><span class="p">,),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;radar_name&quot;</span><span class="p">)</span>
+            <span class="n">radar_name</span> <span class="o">=</span> <span class="n">_process_radar_name</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">radar_name</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s2">"radar_name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">xarray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+                <span class="n">radar_name</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">"nradar"</span><span class="p">,),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">"radar_name"</span><span class="p">)</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">radar_name</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">&quot;ExampleRadar&quot;</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;U&quot;</span><span class="p">)</span>
-            <span class="n">ds</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">xarray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
-                <span class="n">radar_name</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;nradar&quot;</span><span class="p">,),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">&quot;radar_name&quot;</span><span class="p">)</span>
+            <span class="n">radar_name</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="s2">"ExampleRadar"</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"U"</span><span class="p">)</span>
+            <span class="n">ds</span><span class="o">.</span><span class="n">coords</span><span class="p">[</span><span class="s2">"radar_name"</span><span class="p">]</span> <span class="o">=</span> <span class="n">xarray</span><span class="o">.</span><span class="n">DataArray</span><span class="p">(</span>
+                <span class="n">radar_name</span><span class="p">,</span> <span class="n">dims</span><span class="o">=</span><span class="p">(</span><span class="s2">"nradar"</span><span class="p">,),</span> <span class="n">attrs</span><span class="o">=</span><span class="n">get_metadata</span><span class="p">(</span><span class="s2">"radar_name"</span><span class="p">)</span>
             <span class="p">)</span>
 
         <span class="c1"># Add radar_name to attributes</span>
-        <span class="n">ds</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;radar_name&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"radar_name"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">radar_name</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span> <span class="k">if</span> <span class="n">radar_name</span><span class="o">.</span><span class="n">size</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="k">else</span> <span class="n">radar_name</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
         <span class="p">)</span>
-        <span class="n">ds</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;nradar&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar_name</span><span class="o">.</span><span class="n">size</span>
+        <span class="n">ds</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"nradar"</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar_name</span><span class="o">.</span><span class="n">size</span>
         <span class="n">ds</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">metadata</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">ds</span><span class="o">.</span><span class="n">attrs</span><span class="p">:</span>
             <span class="k">try</span><span class="p">:</span>
-                <span class="n">ds</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+                <span class="n">ds</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">key</span><span class="p">]</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
             <span class="k">except</span> <span class="ne">AttributeError</span><span class="p">:</span>
                 <span class="k">pass</span>
 
@@ -963,7 +963,7 @@
 <div class="viewcode-block" id="Grid.add_field">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.add_field.html#pyart.core.Grid.add_field">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">add_field</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">field_dict</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Add a field to the object.</span>
 
 <span class="sd">        Parameters</span>
@@ -977,14 +977,14 @@
 <span class="sd">            exists, overwriting the existing data. If False, a ValueError is</span>
 <span class="sd">            raised if field_name already exists.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="c1"># checks to make sure input field dictionary is valid</span>
-        <span class="k">if</span> <span class="s2">&quot;data&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">&#39;Field dictionary must contain a &quot;data&quot; key&#39;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s2">"data"</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">field_dict</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="s1">'Field dictionary must contain a "data" key'</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">fields</span> <span class="ow">and</span> <span class="n">replace_existing</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;A field named </span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2"> already exists&quot;</span><span class="p">)</span>
-        <span class="k">if</span> <span class="n">field_dict</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Field has invalid shape&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"A field named </span><span class="si">{</span><span class="n">field_name</span><span class="si">}</span><span class="s2"> already exists"</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">field_dict</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">nz</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ny</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Field has invalid shape"</span><span class="p">)</span>
 
         <span class="bp">self</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">field_dict</span></div>
 
@@ -992,7 +992,7 @@
 <div class="viewcode-block" id="Grid.get_point_longitude_latitude">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.Grid.get_point_longitude_latitude.html#pyart.core.Grid.get_point_longitude_latitude">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">get_point_longitude_latitude</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return arrays of longitude and latitude for a given grid height level.</span>
 
 <span class="sd">        Parameters</span>
@@ -1013,9 +1013,9 @@
 <span class="sd">            Arrays containing the latitude and longitudes, in degrees, of the</span>
 <span class="sd">            grid points or edges between grid points for the given height.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+<span class="sd">        """</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
         <span class="n">projparams</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_projparams</span><span class="p">()</span>
         <span class="k">return</span> <span class="n">cartesian_vectors_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="n">edges</span><span class="p">)</span></div>
 </div>
@@ -1023,52 +1023,52 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_point_data_factory</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a function which returns the locations of all points.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return a function which returns the locations of all points."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_point_data</span><span class="p">():</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The function which returns the locations of all points.&quot;&quot;&quot;</span>
-        <span class="n">reg_x</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-        <span class="n">reg_y</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-        <span class="n">reg_z</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="n">coordinate</span> <span class="o">==</span> <span class="s2">&quot;x&quot;</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">"""The function which returns the locations of all points."""</span>
+        <span class="n">reg_x</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
+        <span class="n">reg_y</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
+        <span class="n">reg_z</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">coordinate</span> <span class="o">==</span> <span class="s2">"x"</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">reg_x</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reg_z</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">reg_y</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="n">coordinate</span> <span class="o">==</span> <span class="s2">&quot;y&quot;</span><span class="p">:</span>
+        <span class="k">elif</span> <span class="n">coordinate</span> <span class="o">==</span> <span class="s2">"y"</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">reg_y</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reg_z</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">reg_x</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">assert</span> <span class="n">coordinate</span> <span class="o">==</span> <span class="s2">&quot;z&quot;</span>
+            <span class="k">assert</span> <span class="n">coordinate</span> <span class="o">==</span> <span class="s2">"z"</span>
             <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">tile</span><span class="p">(</span><span class="n">reg_z</span><span class="p">,</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">reg_x</span><span class="p">),</span> <span class="nb">len</span><span class="p">(</span><span class="n">reg_y</span><span class="p">),</span> <span class="mi">1</span><span class="p">))</span><span class="o">.</span><span class="n">swapaxes</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="n">_point_data</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_point_lon_lat_data_factory</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="n">coordinate</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a function which returns the geographic locations of points.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return a function which returns the geographic locations of points."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_point_lon_lat_data</span><span class="p">():</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The function which returns the geographic point locations.&quot;&quot;&quot;</span>
-        <span class="n">x</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">point_x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-        <span class="n">y</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">point_y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+<span class="w">        </span><span class="sd">"""The function which returns the geographic point locations."""</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">point_x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
+        <span class="n">y</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">point_y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
         <span class="n">projparams</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">get_projparams</span><span class="p">()</span>
         <span class="n">geographic_coords</span> <span class="o">=</span> <span class="n">cartesian_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">)</span>
-        <span class="c1"># Set point_latitude[&#39;data&#39;] when point_longitude[&#39;data&#39;] is evaluated</span>
+        <span class="c1"># Set point_latitude['data'] when point_longitude['data'] is evaluated</span>
         <span class="c1"># and vice-versa.  This ensures that both attributes contain data from</span>
         <span class="c1"># the same map projection and that the map projection only needs to be</span>
         <span class="c1"># evaluated once.</span>
         <span class="k">if</span> <span class="n">coordinate</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">grid</span><span class="o">.</span><span class="n">point_latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">geographic_coords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+            <span class="n">grid</span><span class="o">.</span><span class="n">point_latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">geographic_coords</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">grid</span><span class="o">.</span><span class="n">point_longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">geographic_coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">grid</span><span class="o">.</span><span class="n">point_longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">geographic_coords</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
         <span class="k">return</span> <span class="n">geographic_coords</span><span class="p">[</span><span class="n">coordinate</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">_point_lon_lat_data</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_point_altitude_data_factory</span><span class="p">(</span><span class="n">grid</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return a function which returns the point altitudes.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return a function which returns the point altitudes."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_point_altitude_data</span><span class="p">():</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;The function which returns the point altitudes.&quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="n">grid</span><span class="o">.</span><span class="n">origin_altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">grid</span><span class="o">.</span><span class="n">point_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+<span class="w">        </span><span class="sd">"""The function which returns the point altitudes."""</span>
+        <span class="k">return</span> <span class="n">grid</span><span class="o">.</span><span class="n">origin_altitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">grid</span><span class="o">.</span><span class="n">point_z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
 
     <span class="k">return</span> <span class="n">_point_altitude_data</span>
 </pre></div>
@@ -1103,8 +1103,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1138,7 +1138,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,12 +486,12 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.retrieve.srv</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Calculation of storm-relative velocity from a radar object. Code written by</span>
 <span class="sd">Edward C. Wolff. Modifications for single-sweep files suggested by Leanne</span>
 <span class="sd">Blind.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">math</span>
 
@@ -505,7 +505,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">storm_relative_velocity</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span> <span class="n">direction</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">speed</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">v</span><span class="o">=</span><span class="kc">None</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    This function calculates storm-relative Doppler velocities.</span>
 
 <span class="sd">    Parameters</span>
@@ -536,26 +536,26 @@
 <span class="sd">    sr_data : dict</span>
 <span class="sd">        Field dictionary containing storm-relative Doppler velocities in the</span>
 <span class="sd">        same units as original velocities and the specified storm speed.</span>
-<span class="sd">        Array is stored under the &#39;data&#39; key.</span>
+<span class="sd">        Array is stored under the 'data' key.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Parse the field parameter</span>
     <span class="k">if</span> <span class="n">field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;velocity&quot;</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"velocity"</span><span class="p">)</span>
 
     <span class="c1"># Obtain velocity data and copy the array</span>
-    <span class="n">sr_data</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    <span class="n">sr_data</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
 
     <span class="c1"># Specify cardinal directions that can be interpreted</span>
     <span class="n">direction_dict</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;N&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;NE&quot;</span><span class="p">:</span> <span class="mi">45</span><span class="p">,</span>
-        <span class="s2">&quot;E&quot;</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span>
-        <span class="s2">&quot;SE&quot;</span><span class="p">:</span> <span class="mi">135</span><span class="p">,</span>
-        <span class="s2">&quot;S&quot;</span><span class="p">:</span> <span class="mi">180</span><span class="p">,</span>
-        <span class="s2">&quot;SW&quot;</span><span class="p">:</span> <span class="mi">225</span><span class="p">,</span>
-        <span class="s2">&quot;W&quot;</span><span class="p">:</span> <span class="mi">270</span><span class="p">,</span>
-        <span class="s2">&quot;NW&quot;</span><span class="p">:</span> <span class="mi">315</span><span class="p">,</span>
+        <span class="s2">"N"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">"NE"</span><span class="p">:</span> <span class="mi">45</span><span class="p">,</span>
+        <span class="s2">"E"</span><span class="p">:</span> <span class="mi">90</span><span class="p">,</span>
+        <span class="s2">"SE"</span><span class="p">:</span> <span class="mi">135</span><span class="p">,</span>
+        <span class="s2">"S"</span><span class="p">:</span> <span class="mi">180</span><span class="p">,</span>
+        <span class="s2">"SW"</span><span class="p">:</span> <span class="mi">225</span><span class="p">,</span>
+        <span class="s2">"W"</span><span class="p">:</span> <span class="mi">270</span><span class="p">,</span>
+        <span class="s2">"NW"</span><span class="p">:</span> <span class="mi">315</span><span class="p">,</span>
     <span class="p">}</span>
 
     <span class="c1"># Set the direction of the storm motion vector</span>
@@ -567,9 +567,9 @@
             <span class="k">if</span> <span class="n">direction</span> <span class="ow">in</span> <span class="n">direction_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
                 <span class="n">alpha</span> <span class="o">=</span> <span class="n">direction_dict</span><span class="p">[</span><span class="n">direction</span><span class="p">]</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Direction string must be cardinal/ordinal direction&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Direction string must be cardinal/ordinal direction"</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Direction must be an integer, float, or string&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Direction must be an integer, float, or string"</span><span class="p">)</span>
     <span class="c1"># When u and v are specified</span>
     <span class="k">elif</span> <span class="n">u</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">v</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
@@ -578,29 +578,29 @@
             <span class="k">if</span> <span class="n">direction</span> <span class="o">&lt;</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="n">direction</span> <span class="o">=</span> <span class="n">direction</span> <span class="o">+</span> <span class="mi">360</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Must specify both u and v components&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Must specify both u and v components"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Must specify either speed and direction or u and v&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Must specify either speed and direction or u and v"</span><span class="p">)</span>
 
     <span class="c1"># Calculates the storm relative velocities</span>
     <span class="c1"># If the radar file contains only one sweep (e.g. some research radars)</span>
-    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">[</span><span class="s2">"data"</span><span class="p">])</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="n">sweep</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_start_end</span><span class="p">(</span><span class="n">sweep</span><span class="p">)</span>
         <span class="n">angle_array</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_azimuth</span><span class="p">(</span><span class="n">sweep</span><span class="o">=</span><span class="n">sweep</span><span class="p">)</span>
         <span class="n">ray_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">ray</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ray_array</span><span class="p">):</span>
             <span class="n">correction</span> <span class="o">=</span> <span class="n">speed</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">alpha</span> <span class="o">-</span> <span class="n">angle_array</span><span class="p">[</span><span class="n">count</span><span class="p">]))</span>
-            <span class="n">sr_data</span><span class="p">[</span><span class="n">ray</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">]</span> <span class="o">-</span> <span class="n">correction</span>
+            <span class="n">sr_data</span><span class="p">[</span><span class="n">ray</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="n">ray</span><span class="p">]</span> <span class="o">-</span> <span class="n">correction</span>
     <span class="c1"># If the radar file contains several sweeps, one volume scan (e.g. NEXRAD)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">for</span> <span class="n">sweep</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]:</span>
+        <span class="k">for</span> <span class="n">sweep</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">sweep_number</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]:</span>
             <span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_start_end</span><span class="p">(</span><span class="n">sweep</span><span class="p">)</span>
             <span class="n">angle_array</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_azimuth</span><span class="p">(</span><span class="n">sweep</span><span class="o">=</span><span class="n">sweep</span><span class="p">)</span>
             <span class="n">ray_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
             <span class="k">for</span> <span class="n">count</span><span class="p">,</span> <span class="n">ray</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">ray_array</span><span class="p">):</span>
                 <span class="n">correction</span> <span class="o">=</span> <span class="n">speed</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">alpha</span> <span class="o">-</span> <span class="n">angle_array</span><span class="p">[</span><span class="n">count</span><span class="p">]))</span>
-                <span class="n">sr_data</span><span class="p">[</span><span class="n">ray</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">ray</span><span class="p">]</span> <span class="o">-</span> <span class="n">correction</span>
+                <span class="n">sr_data</span><span class="p">[</span><span class="n">ray</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="n">ray</span><span class="p">]</span> <span class="o">-</span> <span class="n">correction</span>
 
     <span class="k">return</span> <span class="n">sr_data</span></div>
 
@@ -636,8 +636,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -671,7 +671,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

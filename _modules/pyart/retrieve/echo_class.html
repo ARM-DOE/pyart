@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,10 +486,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.retrieve.echo_class</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Functions for echo classification.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">copy</span><span class="w"> </span><span class="kn">import</span> <span class="n">deepcopy</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">warnings</span><span class="w"> </span><span class="kn">import</span> <span class="n">warn</span>
@@ -512,14 +512,14 @@
     <span class="n">dy</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">intense</span><span class="o">=</span><span class="mf">42.0</span><span class="p">,</span>
     <span class="n">work_level</span><span class="o">=</span><span class="mf">3000.0</span><span class="p">,</span>
-    <span class="n">peak_relation</span><span class="o">=</span><span class="s2">&quot;default&quot;</span><span class="p">,</span>
-    <span class="n">area_relation</span><span class="o">=</span><span class="s2">&quot;medium&quot;</span><span class="p">,</span>
+    <span class="n">peak_relation</span><span class="o">=</span><span class="s2">"default"</span><span class="p">,</span>
+    <span class="n">area_relation</span><span class="o">=</span><span class="s2">"medium"</span><span class="p">,</span>
     <span class="n">bkg_rad</span><span class="o">=</span><span class="mf">11000.0</span><span class="p">,</span>
     <span class="n">use_intense</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">fill_value</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">refl_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Partition reflectivity into convective-stratiform using the Steiner et</span>
 <span class="sd">    al. (1995) algorithm.</span>
 
@@ -538,9 +538,9 @@
 <span class="sd">        The working level (separation altitude) in meters. This is the height</span>
 <span class="sd">        at which the partitioning will be done, and should minimize bright band</span>
 <span class="sd">        contamination. See reference for more information.</span>
-<span class="sd">    peak_relation : &#39;default&#39; or &#39;sgp&#39;, optional</span>
+<span class="sd">    peak_relation : 'default' or 'sgp', optional</span>
 <span class="sd">        The peakedness relation. See reference for more information.</span>
-<span class="sd">    area_relation : &#39;small&#39;, &#39;medium&#39;, &#39;large&#39;, or &#39;sgp&#39;, optional</span>
+<span class="sd">    area_relation : 'small', 'medium', 'large', or 'sgp', optional</span>
 <span class="sd">        The convective area relation. See reference for more information.</span>
 <span class="sd">    bkg_rad : float, optional</span>
 <span class="sd">        The background radius in meters. See reference for more information.</span>
@@ -566,28 +566,28 @@
 <span class="sd">    Characterization of Three-Dimensional Storm Structure from Operational</span>
 <span class="sd">    Radar and Rain Gauge Data. J. Appl. Meteor., 34, 1978-2007.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># Get fill value</span>
     <span class="k">if</span> <span class="n">fill_value</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">fill_value</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
 
     <span class="c1"># Parse field parameters</span>
     <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
+        <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">)</span>
 
     <span class="c1"># parse dx and dy</span>
     <span class="k">if</span> <span class="n">dx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">dx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">dy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">dy</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># Get coordinates</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">y</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
-    <span class="n">z</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
 
     <span class="c1"># Get reflectivity data</span>
-    <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+    <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">])</span>
     <span class="n">ze</span> <span class="o">=</span> <span class="n">ze</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
 
     <span class="n">eclass</span> <span class="o">=</span> <span class="n">steiner_class_buff</span><span class="p">(</span>
@@ -606,17 +606,17 @@
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="p">{</span>
-        <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">eclass</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
-        <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;echo_classification&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Steiner echo classification&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;valid_min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-        <span class="s2">&quot;valid_max&quot;</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
-        <span class="s2">&quot;comment_1&quot;</span><span class="p">:</span> <span class="p">(</span>
-            <span class="s2">&quot;Convective-stratiform echo &quot;</span>
-            <span class="s2">&quot;classification based on &quot;</span>
-            <span class="s2">&quot;Steiner et al. (1995)&quot;</span>
+        <span class="s2">"data"</span><span class="p">:</span> <span class="n">eclass</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">),</span>
+        <span class="s2">"standard_name"</span><span class="p">:</span> <span class="s2">"echo_classification"</span><span class="p">,</span>
+        <span class="s2">"long_name"</span><span class="p">:</span> <span class="s2">"Steiner echo classification"</span><span class="p">,</span>
+        <span class="s2">"valid_min"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+        <span class="s2">"valid_max"</span><span class="p">:</span> <span class="mi">2</span><span class="p">,</span>
+        <span class="s2">"comment_1"</span><span class="p">:</span> <span class="p">(</span>
+            <span class="s2">"Convective-stratiform echo "</span>
+            <span class="s2">"classification based on "</span>
+            <span class="s2">"Steiner et al. (1995)"</span>
         <span class="p">),</span>
-        <span class="s2">&quot;comment_2&quot;</span><span class="p">:</span> <span class="p">(</span><span class="s2">&quot;0 = Undefined, 1 = Stratiform, &quot;</span> <span class="s2">&quot;2 = Convective&quot;</span><span class="p">),</span>
+        <span class="s2">"comment_2"</span><span class="p">:</span> <span class="p">(</span><span class="s2">"0 = Undefined, 1 = Stratiform, "</span> <span class="s2">"2 = Convective"</span><span class="p">),</span>
     <span class="p">}</span></div>
 
 
@@ -652,7 +652,7 @@
     <span class="n">estimate_flag</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
     <span class="n">estimate_offset</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Partition reflectivity into convective-stratiform using the Yuter et al. (2005)</span>
 <span class="sd">    and Yuter and Houze (1997) algorithm.</span>
 
@@ -676,10 +676,10 @@
 <span class="sd">        convective cores (True) or if a simpler scalar scheme (False) should be used.</span>
 <span class="sd">    max_diff : float, optional</span>
 <span class="sd">        Maximum difference between background average and reflectivity in order to be classified as convective.</span>
-<span class="sd">        &quot;a&quot; value in Eqn. B1 in Yuter and Houze (1997)</span>
+<span class="sd">        "a" value in Eqn. B1 in Yuter and Houze (1997)</span>
 <span class="sd">    zero_diff_cos_val : float, optional</span>
 <span class="sd">        Value where difference between background average and reflectivity is zero in the cosine function</span>
-<span class="sd">        &quot;b&quot; value in Eqn. B1 in Yuter and Houze (1997)</span>
+<span class="sd">        "b" value in Eqn. B1 in Yuter and Houze (1997)</span>
 <span class="sd">    scalar_diff : float, optional</span>
 <span class="sd">        If using a scalar difference scheme, this value is the multiplier or addition to the background average</span>
 <span class="sd">    use_addition : bool, optional</span>
@@ -741,11 +741,11 @@
 <span class="sd">    2005: Physical characterization of tropical oceanic convection observed in</span>
 <span class="sd">    KWAJEX. J. Appl. Meteor., 44, 385-415. https://doi.org/10.1175/JAM2206.1</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">warn</span><span class="p">(</span>
-        <span class="s2">&quot;This function will be deprecated in Py-ART 2.0.&quot;</span>
-        <span class="s2">&quot; Please use feature_detection function.&quot;</span><span class="p">,</span>
+        <span class="s2">"This function will be deprecated in Py-ART 2.0."</span>
+        <span class="s2">" Please use feature_detection function."</span><span class="p">,</span>
         <span class="ne">DeprecationWarning</span><span class="p">,</span>
     <span class="p">)</span>
 
@@ -820,7 +820,7 @@
     <span class="n">overest_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">underest_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    This function can be used to detect features in a field (e.g. reflectivity, rain rate, snow rate,</span>
 <span class="sd">    etc.) described by Tomkins et al. (2024) and based on original convective-stratiform algorithms developed by</span>
 <span class="sd">    Steiner et al. (1995), Yuter et al. (2005) and Yuter and Houze (1997) algorithm.</span>
@@ -846,10 +846,10 @@
 <span class="sd">        cores (True) or if a simpler scalar scheme (False) should be used.</span>
 <span class="sd">    max_diff : float, optional</span>
 <span class="sd">        Maximum difference between background average and reflectivity in order to be classified as features.</span>
-<span class="sd">        &quot;a&quot; value in Eqn. B1 in Yuter and Houze (1997)</span>
+<span class="sd">        "a" value in Eqn. B1 in Yuter and Houze (1997)</span>
 <span class="sd">    zero_diff_cos_val : float, optional</span>
 <span class="sd">        Value where difference between background average and reflectivity is zero in the cosine function</span>
-<span class="sd">        &quot;b&quot; value in Eqn. B1 in Yuter and Houze (1997)</span>
+<span class="sd">        "b" value in Eqn. B1 in Yuter and Houze (1997)</span>
 <span class="sd">    scalar_diff : float, optional</span>
 <span class="sd">        If using a scalar difference scheme, this value is the multiplier or addition to the background average</span>
 <span class="sd">    use_addition : bool, optional</span>
@@ -923,43 +923,43 @@
 <span class="sd">    in radar observations of winter storms. Atmos. Meas. Tech., 17, 3377–3399.</span>
 <span class="sd">    https://doi.org/10.5194/amt-17-3377-2024</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Maxmimum radius must be less than 5 km</span>
     <span class="k">if</span> <span class="n">max_rad_km</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
-        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Max radius must be less than 5 km, exiting&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">"Max radius must be less than 5 km, exiting"</span><span class="p">)</span>
         <span class="k">raise</span>
 
     <span class="c1"># Parse field parameters</span>
     <span class="k">if</span> <span class="n">field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
+        <span class="n">field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">)</span>
         <span class="n">dB_averaging</span> <span class="o">=</span> <span class="kc">True</span>
 
     <span class="c1"># parse dx and dy if None</span>
     <span class="k">if</span> <span class="n">dx</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">dx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">dy</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">dy</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
 
     <span class="c1"># add catch for background radius size</span>
     <span class="k">if</span> <span class="n">bkg_rad_km</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">dx</span> <span class="ow">or</span> <span class="n">bkg_rad_km</span> <span class="o">*</span> <span class="mi">1000</span> <span class="o">&lt;</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">dy</span><span class="p">:</span>
         <span class="nb">print</span><span class="p">(</span>
-            <span class="s2">&quot;Background radius for averaging must be at least 2 times dx and dy, exiting&quot;</span>
+            <span class="s2">"Background radius for averaging must be at least 2 times dx and dy, exiting"</span>
         <span class="p">)</span>
         <span class="k">raise</span>
 
     <span class="c1"># Get coordinates</span>
-    <span class="n">z</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">z</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
 
     <span class="c1"># Get reflectivity data at desired level</span>
     <span class="k">if</span> <span class="n">level_m</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
+            <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][:,</span> <span class="p">:])</span>
+            <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][:,</span> <span class="p">:])</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">zslice</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="n">level_m</span><span class="p">))</span>
-        <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">zslice</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
+        <span class="n">ze</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="n">zslice</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
 
     <span class="c1"># run feature detection algorithm</span>
     <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">feature_best</span> <span class="o">=</span> <span class="n">_feature_detection</span><span class="p">(</span>
@@ -991,14 +991,14 @@
 
     <span class="c1"># put data into a dictionary to be added as a field</span>
     <span class="n">feature_dict</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;feature_detection&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">feature_best</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span>
-            <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;feature_detection&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature Detection&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;valid_min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s2">&quot;valid_max&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-            <span class="s2">&quot;comment_1&quot;</span><span class="p">:</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">nosfcecho</span><span class="si">}</span><span class="s2"> = No surface echo/Undefined, </span><span class="si">{</span><span class="n">bkgd_val</span><span class="si">}</span><span class="s2"> = Background echo, </span><span class="si">{</span><span class="n">feat_val</span><span class="si">}</span><span class="s2"> = Features, </span><span class="si">{</span><span class="n">weakecho</span><span class="si">}</span><span class="s2"> = weak echo&quot;</span>
+        <span class="s2">"feature_detection"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"data"</span><span class="p">:</span> <span class="n">feature_best</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span>
+            <span class="s2">"standard_name"</span><span class="p">:</span> <span class="s2">"feature_detection"</span><span class="p">,</span>
+            <span class="s2">"long_name"</span><span class="p">:</span> <span class="s2">"Feature Detection"</span><span class="p">,</span>
+            <span class="s2">"valid_min"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">"valid_max"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="s2">"comment_1"</span><span class="p">:</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">nosfcecho</span><span class="si">}</span><span class="s2"> = No surface echo/Undefined, </span><span class="si">{</span><span class="n">bkgd_val</span><span class="si">}</span><span class="s2"> = Background echo, </span><span class="si">{</span><span class="n">feat_val</span><span class="si">}</span><span class="s2"> = Features, </span><span class="si">{</span><span class="n">weakecho</span><span class="si">}</span><span class="s2"> = weak echo"</span>
             <span class="p">),</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -1009,7 +1009,7 @@
         <span class="k">if</span> <span class="n">underest_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">under_field</span> <span class="o">=</span> <span class="n">ze</span> <span class="o">-</span> <span class="n">estimate_offset</span>
         <span class="k">elif</span> <span class="n">underest_field</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">under_field</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">underest_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
+            <span class="n">under_field</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">underest_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
 
         <span class="c1"># run algorithm to get feature detection underestimate</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">feature_under</span> <span class="o">=</span> <span class="n">_feature_detection</span><span class="p">(</span>
@@ -1043,7 +1043,7 @@
         <span class="k">if</span> <span class="n">overest_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">over_field</span> <span class="o">=</span> <span class="n">ze</span> <span class="o">+</span> <span class="n">estimate_offset</span>
         <span class="k">elif</span> <span class="n">overest_field</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">over_field</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">overest_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
+            <span class="n">over_field</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="n">grid</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">overest_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:])</span>
 
         <span class="c1"># run algorithm to get feature detection underestimate</span>
         <span class="n">_</span><span class="p">,</span> <span class="n">_</span><span class="p">,</span> <span class="n">feature_over</span> <span class="o">=</span> <span class="n">_feature_detection</span><span class="p">(</span>
@@ -1074,25 +1074,25 @@
         <span class="p">)</span>
 
         <span class="c1"># save into dictionaries</span>
-        <span class="n">feature_dict</span><span class="p">[</span><span class="s2">&quot;feature_under&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">feature_under</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span>
-            <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;feature_detection_under&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature Detection Underestimate&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;valid_min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s2">&quot;valid_max&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-            <span class="s2">&quot;comment_1&quot;</span><span class="p">:</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">nosfcecho</span><span class="si">}</span><span class="s2"> = No surface echo/Undefined, </span><span class="si">{</span><span class="n">bkgd_val</span><span class="si">}</span><span class="s2"> = Background echo, </span><span class="si">{</span><span class="n">feat_val</span><span class="si">}</span><span class="s2"> = Features, </span><span class="si">{</span><span class="n">weakecho</span><span class="si">}</span><span class="s2"> = weak echo&quot;</span>
+        <span class="n">feature_dict</span><span class="p">[</span><span class="s2">"feature_under"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"data"</span><span class="p">:</span> <span class="n">feature_under</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span>
+            <span class="s2">"standard_name"</span><span class="p">:</span> <span class="s2">"feature_detection_under"</span><span class="p">,</span>
+            <span class="s2">"long_name"</span><span class="p">:</span> <span class="s2">"Feature Detection Underestimate"</span><span class="p">,</span>
+            <span class="s2">"valid_min"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">"valid_max"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="s2">"comment_1"</span><span class="p">:</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">nosfcecho</span><span class="si">}</span><span class="s2"> = No surface echo/Undefined, </span><span class="si">{</span><span class="n">bkgd_val</span><span class="si">}</span><span class="s2"> = Background echo, </span><span class="si">{</span><span class="n">feat_val</span><span class="si">}</span><span class="s2"> = Features, </span><span class="si">{</span><span class="n">weakecho</span><span class="si">}</span><span class="s2"> = weak echo"</span>
             <span class="p">),</span>
         <span class="p">}</span>
 
-        <span class="n">feature_dict</span><span class="p">[</span><span class="s2">&quot;feature_over&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
-            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">feature_over</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span>
-            <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;feature_detection_over&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Feature Detection Overestimate&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;valid_min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s2">&quot;valid_max&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-            <span class="s2">&quot;comment_1&quot;</span><span class="p">:</span> <span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">nosfcecho</span><span class="si">}</span><span class="s2"> = No surface echo/Undefined, </span><span class="si">{</span><span class="n">bkgd_val</span><span class="si">}</span><span class="s2"> = Background echo, </span><span class="si">{</span><span class="n">feat_val</span><span class="si">}</span><span class="s2"> = Features, </span><span class="si">{</span><span class="n">weakecho</span><span class="si">}</span><span class="s2"> = weak echo&quot;</span>
+        <span class="n">feature_dict</span><span class="p">[</span><span class="s2">"feature_over"</span><span class="p">]</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">"data"</span><span class="p">:</span> <span class="n">feature_over</span><span class="p">[</span><span class="kc">None</span><span class="p">,</span> <span class="p">:,</span> <span class="p">:],</span>
+            <span class="s2">"standard_name"</span><span class="p">:</span> <span class="s2">"feature_detection_over"</span><span class="p">,</span>
+            <span class="s2">"long_name"</span><span class="p">:</span> <span class="s2">"Feature Detection Overestimate"</span><span class="p">,</span>
+            <span class="s2">"valid_min"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">"valid_max"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="s2">"comment_1"</span><span class="p">:</span> <span class="p">(</span>
+                <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">nosfcecho</span><span class="si">}</span><span class="s2"> = No surface echo/Undefined, </span><span class="si">{</span><span class="n">bkgd_val</span><span class="si">}</span><span class="s2"> = Background echo, </span><span class="si">{</span><span class="n">feat_val</span><span class="si">}</span><span class="s2"> = Features, </span><span class="si">{</span><span class="n">weakecho</span><span class="si">}</span><span class="s2"> = weak echo"</span>
             <span class="p">),</span>
         <span class="p">}</span>
 
@@ -1104,8 +1104,8 @@
 <a class="viewcode-back" href="../../../API/generated/pyart.retrieve.hydroclass_semisupervised.html#pyart.retrieve.hydroclass_semisupervised">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">hydroclass_semisupervised</span><span class="p">(</span>
     <span class="n">radar</span><span class="p">,</span>
-    <span class="n">hydro_names</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;AG&quot;</span><span class="p">,</span> <span class="s2">&quot;CR&quot;</span><span class="p">,</span> <span class="s2">&quot;LR&quot;</span><span class="p">,</span> <span class="s2">&quot;RP&quot;</span><span class="p">,</span> <span class="s2">&quot;RN&quot;</span><span class="p">,</span> <span class="s2">&quot;VI&quot;</span><span class="p">,</span> <span class="s2">&quot;WS&quot;</span><span class="p">,</span> <span class="s2">&quot;MH&quot;</span><span class="p">,</span> <span class="s2">&quot;IH/HDG&quot;</span><span class="p">),</span>
-    <span class="n">var_names</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Zh&quot;</span><span class="p">,</span> <span class="s2">&quot;ZDR&quot;</span><span class="p">,</span> <span class="s2">&quot;KDP&quot;</span><span class="p">,</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">,</span> <span class="s2">&quot;relH&quot;</span><span class="p">),</span>
+    <span class="n">hydro_names</span><span class="o">=</span><span class="p">(</span><span class="s2">"AG"</span><span class="p">,</span> <span class="s2">"CR"</span><span class="p">,</span> <span class="s2">"LR"</span><span class="p">,</span> <span class="s2">"RP"</span><span class="p">,</span> <span class="s2">"RN"</span><span class="p">,</span> <span class="s2">"VI"</span><span class="p">,</span> <span class="s2">"WS"</span><span class="p">,</span> <span class="s2">"MH"</span><span class="p">,</span> <span class="s2">"IH/HDG"</span><span class="p">),</span>
+    <span class="n">var_names</span><span class="o">=</span><span class="p">(</span><span class="s2">"Zh"</span><span class="p">,</span> <span class="s2">"ZDR"</span><span class="p">,</span> <span class="s2">"KDP"</span><span class="p">,</span> <span class="s2">"RhoHV"</span><span class="p">,</span> <span class="s2">"relH"</span><span class="p">),</span>
     <span class="n">mass_centers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]),</span>
     <span class="n">value</span><span class="o">=</span><span class="mf">50.0</span><span class="p">,</span>
@@ -1119,12 +1119,12 @@
     <span class="n">hydro_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">entropy_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">radar_freq</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">temp_ref</span><span class="o">=</span><span class="s2">&quot;temperature&quot;</span><span class="p">,</span>
+    <span class="n">temp_ref</span><span class="o">=</span><span class="s2">"temperature"</span><span class="p">,</span>
     <span class="n">compute_entropy</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">output_distances</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">vectorize</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Classifies precipitation echoes into hydrometeor types.</span>
 
 <span class="sd">    The `hydroclass_semisupervised` function classifies precipitation echoes in the polarimetric radar data</span>
@@ -1225,11 +1225,11 @@
 
 <span class="sd">        hydro_class = pyart.retrieve.hydroclass_semisupervised(</span>
 <span class="sd">            radar,</span>
-<span class="sd">            refl_field=&quot;corrected_reflectivity&quot;,</span>
-<span class="sd">            zdr_field=&quot;corrected_differential_reflectivity&quot;,</span>
-<span class="sd">            kdp_field=&quot;specific_differential_phase&quot;,</span>
-<span class="sd">            rhv_field=&quot;uncorrected_cross_correlation_ratio&quot;,</span>
-<span class="sd">            temp_field=&quot;temperature&quot;,</span>
+<span class="sd">            refl_field="corrected_reflectivity",</span>
+<span class="sd">            zdr_field="corrected_differential_reflectivity",</span>
+<span class="sd">            kdp_field="specific_differential_phase",</span>
+<span class="sd">            rhv_field="uncorrected_cross_correlation_ratio",</span>
+<span class="sd">            temp_field="temperature",</span>
 <span class="sd">        )</span>
 
 <span class="sd">    Notes</span>
@@ -1244,83 +1244,83 @@
 
 <span class="sd">    .. code-block:: python</span>
 
-<span class="sd">        radar.instrument_parameters[&quot;frequency&quot;] = {</span>
-<span class="sd">            &quot;long_name&quot;: &quot;Radar frequency&quot;,</span>
-<span class="sd">            &quot;units&quot;: &quot;Hz&quot;,</span>
-<span class="sd">            &quot;data&quot;: [9.2e9]</span>
+<span class="sd">        radar.instrument_parameters["frequency"] = {</span>
+<span class="sd">            "long_name": "Radar frequency",</span>
+<span class="sd">            "units": "Hz",</span>
+<span class="sd">            "data": [9.2e9]</span>
 <span class="sd">        }</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># select the centroids as a function of frequency band</span>
     <span class="k">if</span> <span class="n">mass_centers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="c1"># assign coefficients according to radar frequency</span>
-        <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span> <span class="ow">and</span> <span class="s2">&quot;frequency&quot;</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">:</span>
-            <span class="n">frequency</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">&quot;frequency&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span> <span class="ow">and</span> <span class="s2">"frequency"</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">:</span>
+            <span class="n">frequency</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">"frequency"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
             <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_get_mass_centers</span><span class="p">(</span><span class="n">frequency</span><span class="p">)</span>
-            <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Using radar frequency from instrument parameters: </span><span class="si">{</span><span class="n">frequency</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">warn</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Using radar frequency from instrument parameters: </span><span class="si">{</span><span class="n">frequency</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
         <span class="k">elif</span> <span class="n">radar_freq</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_get_mass_centers</span><span class="p">(</span><span class="n">radar_freq</span><span class="p">)</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="sa">f</span><span class="s2">&quot;Radar instrument parameters are empty. Using user-supplied radar frequency: </span><span class="si">{</span><span class="n">radar_freq</span><span class="si">}</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">"Radar instrument parameters are empty. Using user-supplied radar frequency: </span><span class="si">{</span><span class="n">radar_freq</span><span class="si">}</span><span class="s2">"</span>
             <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_mass_centers_table</span><span class="p">()[</span><span class="s2">&quot;C&quot;</span><span class="p">]</span>
+            <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">_mass_centers_table</span><span class="p">()[</span><span class="s2">"C"</span><span class="p">]</span>
             <span class="n">warn</span><span class="p">(</span>
-                <span class="s2">&quot;Radar instrument parameters and radar_freq param are empty.&quot;</span>
-                <span class="s2">&quot;So frequency is unknown. Default coefficients for C band will be applied.&quot;</span>
+                <span class="s2">"Radar instrument parameters and radar_freq param are empty."</span>
+                <span class="s2">"So frequency is unknown. Default coefficients for C band will be applied."</span>
             <span class="p">)</span>
 
     <span class="k">if</span> <span class="n">hydro_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">hydro_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;radar_echo_classification&quot;</span><span class="p">)</span>
+        <span class="n">hydro_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"radar_echo_classification"</span><span class="p">)</span>
     <span class="k">if</span> <span class="n">compute_entropy</span><span class="p">:</span>
         <span class="k">if</span> <span class="n">entropy_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-            <span class="n">entropy_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;hydroclass_entropy&quot;</span><span class="p">)</span>
+            <span class="n">entropy_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"hydroclass_entropy"</span><span class="p">)</span>
 
     <span class="c1"># Get the data fields</span>
     <span class="n">fields_dict</span> <span class="o">=</span> <span class="p">{}</span>
     <span class="k">for</span> <span class="n">var_name</span> <span class="ow">in</span> <span class="n">var_names</span><span class="p">:</span>
-        <span class="k">if</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s2">&quot;Zh&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s2">"Zh"</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">refl_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">)</span>
+                <span class="n">refl_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">)</span>
             <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">refl_field</span><span class="p">)</span>
-            <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">var_name</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])})</span>
-        <span class="k">elif</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s2">&quot;ZDR&quot;</span><span class="p">:</span>
+            <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">var_name</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">refl_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">])})</span>
+        <span class="k">elif</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s2">"ZDR"</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">zdr_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">zdr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;differential_reflectivity&quot;</span><span class="p">)</span>
+                <span class="n">zdr_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"differential_reflectivity"</span><span class="p">)</span>
             <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">zdr_field</span><span class="p">)</span>
-            <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">var_name</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">zdr_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])})</span>
-        <span class="k">elif</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s2">&quot;KDP&quot;</span><span class="p">:</span>
+            <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">var_name</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">zdr_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">])})</span>
+        <span class="k">elif</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s2">"KDP"</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">kdp_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">kdp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;specific_differential_phase&quot;</span><span class="p">)</span>
+                <span class="n">kdp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"specific_differential_phase"</span><span class="p">)</span>
             <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">kdp_field</span><span class="p">)</span>
-            <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">var_name</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">kdp_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])})</span>
-        <span class="k">elif</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">:</span>
+            <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">var_name</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">kdp_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">])})</span>
+        <span class="k">elif</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s2">"RhoHV"</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">rhv_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                <span class="n">rhv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">)</span>
+                <span class="n">rhv_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"cross_correlation_ratio"</span><span class="p">)</span>
             <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">rhv_field</span><span class="p">)</span>
-            <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">var_name</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">rhv_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])})</span>
-        <span class="k">elif</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s2">&quot;relH&quot;</span><span class="p">:</span>
-            <span class="k">if</span> <span class="n">temp_ref</span> <span class="o">==</span> <span class="s2">&quot;temperature&quot;</span><span class="p">:</span>
+            <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">var_name</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">rhv_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">])})</span>
+        <span class="k">elif</span> <span class="n">var_name</span> <span class="o">==</span> <span class="s2">"relH"</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">temp_ref</span> <span class="o">==</span> <span class="s2">"temperature"</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">temp_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">temp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;temperature&quot;</span><span class="p">)</span>
+                    <span class="n">temp_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"temperature"</span><span class="p">)</span>
                 <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">temp_field</span><span class="p">)</span>
                 <span class="c1"># convert temp in relative height respect to iso0</span>
-                <span class="n">temp</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">temp_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])</span>
+                <span class="n">temp</span> <span class="o">=</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">temp_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">])</span>
                 <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">var_name</span><span class="p">:</span> <span class="n">temp</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1000.0</span> <span class="o">/</span> <span class="n">lapse_rate</span><span class="p">)})</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="n">iso0_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-                    <span class="n">iso0_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">&quot;height_over_iso0&quot;</span><span class="p">)</span>
+                    <span class="n">iso0_field</span> <span class="o">=</span> <span class="n">get_field_name</span><span class="p">(</span><span class="s2">"height_over_iso0"</span><span class="p">)</span>
                 <span class="n">radar</span><span class="o">.</span><span class="n">check_field_exists</span><span class="p">(</span><span class="n">iso0_field</span><span class="p">)</span>
                 <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">(</span>
-                    <span class="p">{</span><span class="n">var_name</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">iso0_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">])}</span>
+                    <span class="p">{</span><span class="n">var_name</span><span class="p">:</span> <span class="n">deepcopy</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">iso0_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">])}</span>
                 <span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Variable &quot;</span>
+                <span class="s2">"Variable "</span>
                 <span class="o">+</span> <span class="n">var_name</span>
-                <span class="o">+</span> <span class="s2">&quot; unknown. &quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;Valid variable names for hydrometeor classification are: &quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;relH, Zh, ZDR, KDP and RhoHV&quot;</span>
+                <span class="o">+</span> <span class="s2">" unknown. "</span>
+                <span class="o">+</span> <span class="s2">"Valid variable names for hydrometeor classification are: "</span>
+                <span class="o">+</span> <span class="s2">"relH, Zh, ZDR, KDP and RhoHV"</span>
             <span class="p">)</span>
 
     <span class="c1"># standardize data and centroids</span>
@@ -1347,28 +1347,28 @@
     <span class="c1"># prepare output fields</span>
     <span class="n">fields_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
     <span class="n">hydro</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">hydro_field</span><span class="p">)</span>
-    <span class="n">hydro</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydroclass_data</span>
-    <span class="n">hydro</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
-    <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;NC&quot;</span><span class="p">]</span>
+    <span class="n">hydro</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">hydroclass_data</span>
+    <span class="n">hydro</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"_FillValue"</span><span class="p">:</span> <span class="mi">0</span><span class="p">})</span>
+    <span class="n">labels</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"NC"</span><span class="p">]</span>
     <span class="n">ticks</span> <span class="o">=</span> <span class="p">[</span><span class="mi">1</span><span class="p">]</span>
     <span class="n">boundaries</span> <span class="o">=</span> <span class="p">[</span><span class="o">-</span><span class="mf">0.5</span><span class="p">,</span> <span class="mf">1.5</span><span class="p">]</span>
     <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">hydro_name</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">hydro_names</span><span class="p">):</span>
         <span class="n">labels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">hydro_name</span><span class="p">)</span>
         <span class="n">ticks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
         <span class="n">boundaries</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="mf">1.5</span><span class="p">)</span>
-    <span class="n">hydro</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;labels&quot;</span><span class="p">:</span> <span class="n">labels</span><span class="p">,</span> <span class="s2">&quot;ticks&quot;</span><span class="p">:</span> <span class="n">ticks</span><span class="p">,</span> <span class="s2">&quot;boundaries&quot;</span><span class="p">:</span> <span class="n">boundaries</span><span class="p">})</span>
-    <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;hydro&quot;</span><span class="p">:</span> <span class="n">hydro</span><span class="p">})</span>
+    <span class="n">hydro</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"labels"</span><span class="p">:</span> <span class="n">labels</span><span class="p">,</span> <span class="s2">"ticks"</span><span class="p">:</span> <span class="n">ticks</span><span class="p">,</span> <span class="s2">"boundaries"</span><span class="p">:</span> <span class="n">boundaries</span><span class="p">})</span>
+    <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"hydro"</span><span class="p">:</span> <span class="n">hydro</span><span class="p">})</span>
 
     <span class="k">if</span> <span class="n">compute_entropy</span><span class="p">:</span>
         <span class="n">entropy</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">entropy_field</span><span class="p">)</span>
-        <span class="n">entropy</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_data</span>
-        <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;entropy&quot;</span><span class="p">:</span> <span class="n">entropy</span><span class="p">})</span>
+        <span class="n">entropy</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">entropy_data</span>
+        <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"entropy"</span><span class="p">:</span> <span class="n">entropy</span><span class="p">})</span>
 
         <span class="k">if</span> <span class="n">output_distances</span><span class="p">:</span>
             <span class="k">for</span> <span class="n">field_name</span> <span class="ow">in</span> <span class="n">hydro_names</span><span class="p">:</span>
-                <span class="n">field_name</span> <span class="o">=</span> <span class="s2">&quot;proportion_&quot;</span> <span class="o">+</span> <span class="n">field_name</span>
+                <span class="n">field_name</span> <span class="o">=</span> <span class="s2">"proportion_"</span> <span class="o">+</span> <span class="n">field_name</span>
                 <span class="n">prop</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
-                <span class="n">prop</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">prop_data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span>
+                <span class="n">prop</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">prop_data</span><span class="p">[:,</span> <span class="p">:,</span> <span class="n">i</span><span class="p">]</span>
                 <span class="n">fields_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="n">field_name</span><span class="p">:</span> <span class="n">prop</span><span class="p">})</span>
 
     <span class="k">return</span> <span class="n">fields_dict</span></div>
@@ -1376,7 +1376,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_standardize</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">field_name</span><span class="p">,</span> <span class="n">mx</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">mn</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Streches the radar data to -1 to 1 interval.</span>
 
 <span class="sd">    Parameters</span>
@@ -1393,8 +1393,8 @@
 <span class="sd">    field_std : dict</span>
 <span class="sd">        Standardized radar data.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s2">&quot;relH&quot;</span><span class="p">:</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s2">"relH"</span><span class="p">:</span>
         <span class="n">field_std</span> <span class="o">=</span> <span class="mf">2.0</span> <span class="o">/</span> <span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="mf">0.005</span> <span class="o">*</span> <span class="n">data</span><span class="p">))</span> <span class="o">-</span> <span class="mf">1.0</span>
         <span class="k">return</span> <span class="n">field_std</span>
 
@@ -1402,18 +1402,18 @@
         <span class="n">dlimits_dict</span> <span class="o">=</span> <span class="n">_data_limits_table</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">dlimits_dict</span><span class="p">:</span>
             <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">&quot;Field &quot;</span>
+                <span class="s2">"Field "</span>
                 <span class="o">+</span> <span class="n">field_name</span>
-                <span class="o">+</span> <span class="s2">&quot; unknown. &quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;Valid field names for standardizing are: &quot;</span>
-                <span class="o">+</span> <span class="s2">&quot;relH, Zh, ZDR, KDP and RhoHV&quot;</span>
+                <span class="o">+</span> <span class="s2">" unknown. "</span>
+                <span class="o">+</span> <span class="s2">"Valid field names for standardizing are: "</span>
+                <span class="o">+</span> <span class="s2">"relH, Zh, ZDR, KDP and RhoHV"</span>
             <span class="p">)</span>
         <span class="n">mx</span><span class="p">,</span> <span class="n">mn</span> <span class="o">=</span> <span class="n">dlimits_dict</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span>
 
-    <span class="k">if</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s2">&quot;KDP&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s2">"KDP"</span><span class="p">:</span>
         <span class="n">data</span><span class="p">[</span><span class="n">data</span> <span class="o">&lt;</span> <span class="o">-</span><span class="mf">0.5</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mf">0.5</span>
         <span class="n">data</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="n">data</span> <span class="o">+</span> <span class="mf">0.6</span><span class="p">)</span>
-    <span class="k">elif</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">:</span>
+    <span class="k">elif</span> <span class="n">field_name</span> <span class="o">==</span> <span class="s2">"RhoHV"</span><span class="p">:</span>
         <span class="c1"># avoid infinite result</span>
         <span class="n">data</span><span class="p">[</span><span class="n">data</span> <span class="o">&gt;</span> <span class="mf">1.0</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span>
         <span class="n">data</span> <span class="o">=</span> <span class="mf">10.0</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">log10</span><span class="p">(</span><span class="mf">1.0000000000001</span> <span class="o">-</span> <span class="n">data</span><span class="p">)</span>
@@ -1430,11 +1430,11 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_assign_to_class</span><span class="p">(</span>
     <span class="n">fields_dict</span><span class="p">,</span>
     <span class="n">mass_centers</span><span class="p">,</span>
-    <span class="n">var_names</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Zh&quot;</span><span class="p">,</span> <span class="s2">&quot;ZDR&quot;</span><span class="p">,</span> <span class="s2">&quot;KDP&quot;</span><span class="p">,</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">,</span> <span class="s2">&quot;relH&quot;</span><span class="p">),</span>
+    <span class="n">var_names</span><span class="o">=</span><span class="p">(</span><span class="s2">"Zh"</span><span class="p">,</span> <span class="s2">"ZDR"</span><span class="p">,</span> <span class="s2">"KDP"</span><span class="p">,</span> <span class="s2">"RhoHV"</span><span class="p">,</span> <span class="s2">"relH"</span><span class="p">),</span>
     <span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]),</span>
     <span class="n">t_vals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Assigns an hydrometeor class to a radar range bin computing</span>
 <span class="sd">    the distance between the radar variables an a centroid.</span>
 
@@ -1462,7 +1462,7 @@
 <span class="sd">        if entropy is computed, the transformed distances of each class</span>
 <span class="sd">        (proxy for proportions of each hydrometeor) (nrays, nbins, nclasses)</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># prepare data</span>
     <span class="n">nrays</span> <span class="o">=</span> <span class="n">fields_dict</span><span class="p">[</span><span class="n">var_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">nbins</span> <span class="o">=</span> <span class="n">fields_dict</span><span class="p">[</span><span class="n">var_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -1537,11 +1537,11 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_assign_to_class_scan</span><span class="p">(</span>
     <span class="n">fields_dict</span><span class="p">,</span>
     <span class="n">mass_centers</span><span class="p">,</span>
-    <span class="n">var_names</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;Zh&quot;</span><span class="p">,</span> <span class="s2">&quot;ZDR&quot;</span><span class="p">,</span> <span class="s2">&quot;KDP&quot;</span><span class="p">,</span> <span class="s2">&quot;RhoHV&quot;</span><span class="p">,</span> <span class="s2">&quot;relH&quot;</span><span class="p">),</span>
+    <span class="n">var_names</span><span class="o">=</span><span class="p">(</span><span class="s2">"Zh"</span><span class="p">,</span> <span class="s2">"ZDR"</span><span class="p">,</span> <span class="s2">"KDP"</span><span class="p">,</span> <span class="s2">"RhoHV"</span><span class="p">,</span> <span class="s2">"relH"</span><span class="p">),</span>
     <span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]),</span>
     <span class="n">t_vals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    assigns an hydrometeor class to a radar range bin computing</span>
 <span class="sd">    the distance between the radar variables an a centroid.</span>
 <span class="sd">    Computes the entire radar volume at once</span>
@@ -1571,7 +1571,7 @@
 <span class="sd">        if entropy is computed, the transformed distances of each class</span>
 <span class="sd">        (proxy for proportions of each hydrometeor) (nrays, nbins, nclasses)</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># prepare data</span>
     <span class="n">nrays</span> <span class="o">=</span> <span class="n">fields_dict</span><span class="p">[</span><span class="n">var_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
     <span class="n">nbins</span> <span class="o">=</span> <span class="n">fields_dict</span><span class="p">[</span><span class="n">var_names</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
@@ -1638,7 +1638,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_get_mass_centers</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Get mass centers for a particular frequency.</span>
 
 <span class="sd">    Parameters</span>
@@ -1652,7 +1652,7 @@
 <span class="sd">        The centroids for each variable and hydrometeor class in (nclasses,</span>
 <span class="sd">        nvariables).</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">mass_centers_dict</span> <span class="o">=</span> <span class="n">_mass_centers_table</span><span class="p">()</span>
 
     <span class="n">freq_band</span> <span class="o">=</span> <span class="n">get_freq_band</span><span class="p">(</span><span class="n">freq</span><span class="p">)</span>
@@ -1660,23 +1660,23 @@
         <span class="k">return</span> <span class="n">mass_centers_dict</span><span class="p">[</span><span class="n">freq_band</span><span class="p">]</span>
 
     <span class="k">if</span> <span class="n">freq</span> <span class="o">&lt;</span> <span class="mf">4e9</span><span class="p">:</span>
-        <span class="n">freq_band_aux</span> <span class="o">=</span> <span class="s2">&quot;C&quot;</span>
+        <span class="n">freq_band_aux</span> <span class="o">=</span> <span class="s2">"C"</span>
     <span class="k">elif</span> <span class="n">freq</span> <span class="o">&gt;</span> <span class="mf">12e9</span><span class="p">:</span>
-        <span class="n">freq_band_aux</span> <span class="o">=</span> <span class="s2">&quot;X&quot;</span>
+        <span class="n">freq_band_aux</span> <span class="o">=</span> <span class="s2">"X"</span>
 
     <span class="n">mass_centers</span> <span class="o">=</span> <span class="n">mass_centers_dict</span><span class="p">[</span><span class="n">freq_band_aux</span><span class="p">]</span>
     <span class="n">warn</span><span class="p">(</span>
-        <span class="s2">&quot;Radar frequency out of range. &quot;</span>
-        <span class="o">+</span> <span class="s2">&quot;Centroids only valid for C or X band. &quot;</span>
+        <span class="s2">"Radar frequency out of range. "</span>
+        <span class="o">+</span> <span class="s2">"Centroids only valid for C or X band. "</span>
         <span class="o">+</span> <span class="n">freq_band_aux</span>
-        <span class="o">+</span> <span class="s2">&quot; band centroids will be applied&quot;</span>
+        <span class="o">+</span> <span class="s2">" band centroids will be applied"</span>
     <span class="p">)</span>
 
     <span class="k">return</span> <span class="n">mass_centers</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_mass_centers_table</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Defines the mass centers look up table for each frequency band.</span>
 
 <span class="sd">    Returns</span>
@@ -1684,7 +1684,7 @@
 <span class="sd">    mass_centers_dict : dict</span>
 <span class="sd">        A dictionary with the mass centers for each frequency band.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">nclasses</span> <span class="o">=</span> <span class="mi">9</span>
     <span class="n">nvariables</span> <span class="o">=</span> <span class="mi">5</span>
     <span class="n">mass_centers_c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nclasses</span><span class="p">,</span> <span class="n">nvariables</span><span class="p">))</span>
@@ -1703,7 +1703,7 @@
     <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">52.3969</span><span class="p">,</span> <span class="mf">2.1094</span><span class="p">,</span> <span class="mf">2.4675</span><span class="p">,</span> <span class="mf">0.9730</span><span class="p">,</span> <span class="o">-</span><span class="mf">1550.2</span><span class="p">]</span>  <span class="c1"># MH</span>
     <span class="n">mass_centers_c</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">50.6186</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.0649</span><span class="p">,</span> <span class="mf">0.0946</span><span class="p">,</span> <span class="mf">0.9904</span><span class="p">,</span> <span class="mf">1179.9</span><span class="p">]</span>  <span class="c1"># IH/HDG</span>
 
-    <span class="n">mass_centers_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;C&quot;</span><span class="p">:</span> <span class="n">mass_centers_c</span><span class="p">})</span>
+    <span class="n">mass_centers_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"C"</span><span class="p">:</span> <span class="n">mass_centers_c</span><span class="p">})</span>
 
     <span class="c1"># X-band centroids derived for MeteoSwiss DX50 radar</span>
     <span class="c1">#                       Zh        ZDR     kdp    RhoHV   delta_Z</span>
@@ -1717,13 +1717,13 @@
     <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">7</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">52.4539</span><span class="p">,</span> <span class="mf">2.3714</span><span class="p">,</span> <span class="mf">1.1120</span><span class="p">,</span> <span class="mf">0.9382</span><span class="p">,</span> <span class="o">-</span><span class="mf">1618.5</span><span class="p">]</span>  <span class="c1"># MH</span>
     <span class="n">mass_centers_x</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="p">:]</span> <span class="o">=</span> <span class="p">[</span><span class="mf">44.2216</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3419</span><span class="p">,</span> <span class="mf">0.0687</span><span class="p">,</span> <span class="mf">0.9683</span><span class="p">,</span> <span class="mf">1272.7</span><span class="p">]</span>  <span class="c1"># IH/HDG</span>
 
-    <span class="n">mass_centers_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;X&quot;</span><span class="p">:</span> <span class="n">mass_centers_x</span><span class="p">})</span>
+    <span class="n">mass_centers_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"X"</span><span class="p">:</span> <span class="n">mass_centers_x</span><span class="p">})</span>
 
     <span class="k">return</span> <span class="n">mass_centers_dict</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_data_limits_table</span><span class="p">():</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Defines the data limits used in the standardization.</span>
 
 <span class="sd">    Returns</span>
@@ -1731,13 +1731,13 @@
 <span class="sd">    dlimits_dict : dict</span>
 <span class="sd">        A dictionary with the limits for each variable.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">dlimits_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
-    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;Zh&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">60.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.0</span><span class="p">)})</span>
-    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;ZDR&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.5</span><span class="p">)})</span>
-    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;KDP&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">7.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.0</span><span class="p">)})</span>
-    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;RhoHV&quot;</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">5.23</span><span class="p">,</span> <span class="o">-</span><span class="mf">50.0</span><span class="p">)})</span>
-    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">&quot;RelH&quot;</span><span class="p">:</span> <span class="p">(</span><span class="mf">5000.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">5000.0</span><span class="p">)})</span>
+    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"Zh"</span><span class="p">:</span> <span class="p">(</span><span class="mf">60.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.0</span><span class="p">)})</span>
+    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"ZDR"</span><span class="p">:</span> <span class="p">(</span><span class="mf">5.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">1.5</span><span class="p">)})</span>
+    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"KDP"</span><span class="p">:</span> <span class="p">(</span><span class="mf">7.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">10.0</span><span class="p">)})</span>
+    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"RhoHV"</span><span class="p">:</span> <span class="p">(</span><span class="o">-</span><span class="mf">5.23</span><span class="p">,</span> <span class="o">-</span><span class="mf">50.0</span><span class="p">)})</span>
+    <span class="n">dlimits_dict</span><span class="o">.</span><span class="n">update</span><span class="p">({</span><span class="s2">"RelH"</span><span class="p">:</span> <span class="p">(</span><span class="mf">5000.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">5000.0</span><span class="p">)})</span>
 
     <span class="k">return</span> <span class="n">dlimits_dict</span>
 
@@ -1745,7 +1745,7 @@
 <div class="viewcode-block" id="get_freq_band">
 <a class="viewcode-back" href="../../../API/generated/pyart.retrieve.get_freq_band.html#pyart.retrieve.get_freq_band">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">get_freq_band</span><span class="p">(</span><span class="n">freq</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Returns the frequency band name (S, C, X, ...).</span>
 
 <span class="sd">    Parameters</span>
@@ -1758,15 +1758,15 @@
 <span class="sd">    freq_band : str</span>
 <span class="sd">        Frequency band name.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">freq</span> <span class="o">&gt;=</span> <span class="mf">2e9</span> <span class="ow">and</span> <span class="n">freq</span> <span class="o">&lt;</span> <span class="mf">4e9</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;S&quot;</span>
+        <span class="k">return</span> <span class="s2">"S"</span>
     <span class="k">if</span> <span class="n">freq</span> <span class="o">&gt;=</span> <span class="mf">4e9</span> <span class="ow">and</span> <span class="n">freq</span> <span class="o">&lt;</span> <span class="mf">8e9</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;C&quot;</span>
+        <span class="k">return</span> <span class="s2">"C"</span>
     <span class="k">if</span> <span class="n">freq</span> <span class="o">&gt;=</span> <span class="mf">8e9</span> <span class="ow">and</span> <span class="n">freq</span> <span class="o">&lt;=</span> <span class="mf">12e9</span><span class="p">:</span>
-        <span class="k">return</span> <span class="s2">&quot;X&quot;</span>
+        <span class="k">return</span> <span class="s2">"X"</span>
 
-    <span class="n">warn</span><span class="p">(</span><span class="s2">&quot;Unknown frequency band&quot;</span><span class="p">)</span>
+    <span class="n">warn</span><span class="p">(</span><span class="s2">"Unknown frequency band"</span><span class="p">)</span>
 
     <span class="k">return</span> <span class="kc">None</span></div>
 
@@ -1789,7 +1789,7 @@
     <span class="n">override_checks</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
     <span class="n">conv_core_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A computationally efficient method to classify radar echoes into convective cores, mixed convection,</span>
 <span class="sd">    and stratiform regions for gridded radar reflectivity field.</span>
 
@@ -1803,12 +1803,12 @@
 <span class="sd">    refl_field : str</span>
 <span class="sd">        Field name for reflectivity data in the Py-ART grid object.</span>
 <span class="sd">    zr_a : float, optional</span>
-<span class="sd">        Coefficient &#39;a&#39; in the Z-R relationship Z = a*R^b for reflectivity to rain rate conversion.</span>
-<span class="sd">        The algorithm is not sensitive to precise values of &#39;zr_a&#39; and &#39;zr_b&#39;; however,</span>
+<span class="sd">        Coefficient 'a' in the Z-R relationship Z = a*R^b for reflectivity to rain rate conversion.</span>
+<span class="sd">        The algorithm is not sensitive to precise values of 'zr_a' and 'zr_b'; however,</span>
 <span class="sd">        they must be adjusted based on the type of radar used.</span>
 <span class="sd">        Default is 200.</span>
 <span class="sd">    zr_b : float, optional</span>
-<span class="sd">        Coefficient &#39;b&#39; in the Z-R relationship Z = a*R^b. Default is 1.6.</span>
+<span class="sd">        Coefficient 'b' in the Z-R relationship Z = a*R^b. Default is 1.6.</span>
 <span class="sd">    core_wt_threshold : float, optional</span>
 <span class="sd">        Threshold for wavelet components to separate convective cores from mix-intermediate type.</span>
 <span class="sd">        Default is 5. Recommended values are between 4 and 6.</span>
@@ -1825,7 +1825,7 @@
 <span class="sd">        Default is 25 km. Recommended values are between 16 and 32 km.</span>
 <span class="sd">    min_reflectivity : float, optional</span>
 <span class="sd">        Minimum reflectivity threshold. Reflectivities below this value are not classified.</span>
-<span class="sd">        Default is 5 dBZ. This value must be greater than or equal to &#39;0&#39;.</span>
+<span class="sd">        Default is 5 dBZ. This value must be greater than or equal to '0'.</span>
 <span class="sd">    conv_min_refl : float, optional</span>
 <span class="sd">        Reflectivity values lower than this threshold will be always considered as non-convective.</span>
 <span class="sd">        Default is 25 dBZ. Recommended values are between 25 and 30 dBZ.</span>
@@ -1875,39 +1875,39 @@
 <span class="sd">    ``Xgrid``):</span>
 
 <span class="sd">    &gt;&gt;&gt; import pyart, xarray as xr</span>
-<span class="sd">    &gt;&gt;&gt; ds = xr.open_dataset(&quot;my_grid.nc&quot;, decode_times=False)</span>
+<span class="sd">    &gt;&gt;&gt; ds = xr.open_dataset("my_grid.nc", decode_times=False)</span>
 <span class="sd">    &gt;&gt;&gt; xgrid = pyart.xradar.Xgrid(ds)</span>
-<span class="sd">    &gt;&gt;&gt; result = pyart.retrieve.conv_strat_raut(xgrid, &quot;reflectivity&quot;, cappi_level=0)</span>
-<span class="sd">    &gt;&gt;&gt; xgrid.add_field(&quot;wt_reclass&quot;, result[&quot;wt_reclass&quot;], replace_existing=True)</span>
+<span class="sd">    &gt;&gt;&gt; result = pyart.retrieve.conv_strat_raut(xgrid, "reflectivity", cappi_level=0)</span>
+<span class="sd">    &gt;&gt;&gt; xgrid.add_field("wt_reclass", result["wt_reclass"], replace_existing=True)</span>
 <span class="sd">    &gt;&gt;&gt; ds_out = xgrid.to_xarray()</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># Accept any Grid-like object via duck typing, so that Grid wrappers such as</span>
     <span class="c1"># pyart.xradar.Xgrid (built from a CF-compliant xarray Dataset) work too. We</span>
     <span class="c1"># only rely on the attributes actually used below (.fields, .x, .y), which</span>
     <span class="c1"># keeps this consistent with the other grid classifiers and avoids importing</span>
     <span class="c1"># the optional xarray/xradar packages here.</span>
-    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="s2">&quot;fields&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="s2">&quot;x&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="s2">&quot;y&quot;</span><span class="p">)):</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">hasattr</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="s2">"fields"</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="s2">"x"</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">grid</span><span class="p">,</span> <span class="s2">"y"</span><span class="p">)):</span>
         <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
-            <span class="s2">&quot;The &#39;grid&#39; must be a Py-ART Grid or a Grid-like object &quot;</span>
-            <span class="s2">&quot;(e.g. pyart.xradar.Xgrid) exposing .fields, .x and .y.&quot;</span>
+            <span class="s2">"The 'grid' must be a Py-ART Grid or a Grid-like object "</span>
+            <span class="s2">"(e.g. pyart.xradar.Xgrid) exposing .fields, .x and .y."</span>
         <span class="p">)</span>
 
-    <span class="c1"># Backward-compatible handling of the renamed &#39;conv_core_threshold&#39; parameter.</span>
+    <span class="c1"># Backward-compatible handling of the renamed 'conv_core_threshold' parameter.</span>
     <span class="k">if</span> <span class="n">conv_core_threshold</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;The &#39;conv_core_threshold&#39; parameter is deprecated and will be &quot;</span>
-            <span class="s2">&quot;removed in a future release; use &#39;always_core_thres&#39; instead.&quot;</span><span class="p">,</span>
+            <span class="s2">"The 'conv_core_threshold' parameter is deprecated and will be "</span>
+            <span class="s2">"removed in a future release; use 'always_core_thres' instead."</span><span class="p">,</span>
             <span class="ne">DeprecationWarning</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">always_core_thres</span> <span class="o">=</span> <span class="n">conv_core_threshold</span>
 
     <span class="c1"># Check if dx and dy are the same, and warn if not</span>
-    <span class="n">dx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-    <span class="n">dy</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dx</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">dy</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">grid</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
     <span class="k">if</span> <span class="n">dx</span> <span class="o">!=</span> <span class="n">dy</span><span class="p">:</span>
         <span class="n">warn</span><span class="p">(</span>
-            <span class="s2">&quot;Warning: Grid resolution `dx` and `dy` should be comparable for correct results.&quot;</span><span class="p">,</span>
+            <span class="s2">"Warning: Grid resolution `dx` and `dy` should be comparable for correct results."</span><span class="p">,</span>
             <span class="ne">UserWarning</span><span class="p">,</span>
         <span class="p">)</span>
 
@@ -1957,25 +1957,25 @@
 
     <span class="c1"># put data into a dictionary to be added as a field</span>
     <span class="n">reclass_dict</span> <span class="o">=</span> <span class="p">{</span>
-        <span class="s2">&quot;wt_reclass&quot;</span><span class="p">:</span> <span class="p">{</span>
-            <span class="s2">&quot;data&quot;</span><span class="p">:</span> <span class="n">reclass</span><span class="p">,</span>
-            <span class="s2">&quot;standard_name&quot;</span><span class="p">:</span> <span class="s2">&quot;wavelet_echo_class&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;long_name&quot;</span><span class="p">:</span> <span class="s2">&quot;Wavelet-based multiresolution radar echo classification&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;valid_min&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
-            <span class="s2">&quot;valid_max&quot;</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
-            <span class="s2">&quot;classification_description&quot;</span><span class="p">:</span> <span class="s2">&quot;0: Unclassified, 1: Stratiform, 2: Mixed-Intermediate, 3: Convective Cores&quot;</span><span class="p">,</span>
-            <span class="s2">&quot;parameters&quot;</span><span class="p">:</span> <span class="p">{</span>
-                <span class="s2">&quot;refl_field&quot;</span><span class="p">:</span> <span class="n">refl_field</span><span class="p">,</span>
-                <span class="s2">&quot;cappi_level&quot;</span><span class="p">:</span> <span class="n">cappi_level</span><span class="p">,</span>
-                <span class="s2">&quot;zr_a&quot;</span><span class="p">:</span> <span class="n">zr_a</span><span class="p">,</span>
-                <span class="s2">&quot;zr_b&quot;</span><span class="p">:</span> <span class="n">zr_b</span><span class="p">,</span>
-                <span class="s2">&quot;core_wt_threshold&quot;</span><span class="p">:</span> <span class="n">core_wt_threshold</span><span class="p">,</span>
-                <span class="s2">&quot;conv_wt_threshold&quot;</span><span class="p">:</span> <span class="n">conv_wt_threshold</span><span class="p">,</span>
-                <span class="s2">&quot;conv_scale_km&quot;</span><span class="p">:</span> <span class="n">conv_scale_km</span><span class="p">,</span>
-                <span class="s2">&quot;scale_break_used&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">scale_break_km</span><span class="p">),</span>
-                <span class="s2">&quot;min_reflectivity&quot;</span><span class="p">:</span> <span class="n">min_reflectivity</span><span class="p">,</span>
-                <span class="s2">&quot;conv_min_refl&quot;</span><span class="p">:</span> <span class="n">conv_min_refl</span><span class="p">,</span>
-                <span class="s2">&quot;always_core_thres&quot;</span><span class="p">:</span> <span class="n">always_core_thres</span><span class="p">,</span>
+        <span class="s2">"wt_reclass"</span><span class="p">:</span> <span class="p">{</span>
+            <span class="s2">"data"</span><span class="p">:</span> <span class="n">reclass</span><span class="p">,</span>
+            <span class="s2">"standard_name"</span><span class="p">:</span> <span class="s2">"wavelet_echo_class"</span><span class="p">,</span>
+            <span class="s2">"long_name"</span><span class="p">:</span> <span class="s2">"Wavelet-based multiresolution radar echo classification"</span><span class="p">,</span>
+            <span class="s2">"valid_min"</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+            <span class="s2">"valid_max"</span><span class="p">:</span> <span class="mi">3</span><span class="p">,</span>
+            <span class="s2">"classification_description"</span><span class="p">:</span> <span class="s2">"0: Unclassified, 1: Stratiform, 2: Mixed-Intermediate, 3: Convective Cores"</span><span class="p">,</span>
+            <span class="s2">"parameters"</span><span class="p">:</span> <span class="p">{</span>
+                <span class="s2">"refl_field"</span><span class="p">:</span> <span class="n">refl_field</span><span class="p">,</span>
+                <span class="s2">"cappi_level"</span><span class="p">:</span> <span class="n">cappi_level</span><span class="p">,</span>
+                <span class="s2">"zr_a"</span><span class="p">:</span> <span class="n">zr_a</span><span class="p">,</span>
+                <span class="s2">"zr_b"</span><span class="p">:</span> <span class="n">zr_b</span><span class="p">,</span>
+                <span class="s2">"core_wt_threshold"</span><span class="p">:</span> <span class="n">core_wt_threshold</span><span class="p">,</span>
+                <span class="s2">"conv_wt_threshold"</span><span class="p">:</span> <span class="n">conv_wt_threshold</span><span class="p">,</span>
+                <span class="s2">"conv_scale_km"</span><span class="p">:</span> <span class="n">conv_scale_km</span><span class="p">,</span>
+                <span class="s2">"scale_break_used"</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">scale_break_km</span><span class="p">),</span>
+                <span class="s2">"min_reflectivity"</span><span class="p">:</span> <span class="n">min_reflectivity</span><span class="p">,</span>
+                <span class="s2">"conv_min_refl"</span><span class="p">:</span> <span class="n">conv_min_refl</span><span class="p">,</span>
+                <span class="s2">"always_core_thres"</span><span class="p">:</span> <span class="n">always_core_thres</span><span class="p">,</span>
             <span class="p">},</span>
         <span class="p">}</span>
     <span class="p">}</span>
@@ -1987,7 +1987,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_compute_coeff_transform</span><span class="p">(</span>
     <span class="n">mass_centers</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.5</span><span class="p">]),</span> <span class="n">value</span><span class="o">=</span><span class="mf">50.0</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    get the transformation coefficients</span>
 
 <span class="sd">    Parameters</span>
@@ -2005,7 +2005,7 @@
 <span class="sd">        The coefficients used to transform the distances to each centroid for</span>
 <span class="sd">        each class (nclasses)</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">nclasses</span><span class="p">,</span> <span class="n">nvariables</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">shape</span><span class="p">(</span><span class="n">mass_centers</span><span class="p">)</span>
     <span class="n">t_vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">nclasses</span><span class="p">,</span> <span class="n">nclasses</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">mass_centers</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nclasses</span><span class="p">):</span>
@@ -2060,8 +2060,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -2095,7 +2095,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

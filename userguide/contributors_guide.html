@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
@@ -42,10 +42,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
@@ -601,10 +601,10 @@ the latest version of Py-ART:</p>
 <p>In a new .py file, the top of the code should have a brief introduction to
 the module.</p>
 <p>An example:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="sd">"""</span>
 <span class="sd">Retrieval of VADs from a radar object.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 </pre></div>
 </div>
 <p>Following the introduction code, modules are then added. To follow pep8
@@ -640,7 +640,7 @@ documentation style.</p>
     <span class="n">radar</span><span class="p">,</span> <span class="n">velocity</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_want</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">valid_ray_min</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
     <span class="n">gatefilter</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">window</span><span class="o">=</span><span class="mi">2</span><span class="p">):</span>
 
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Velocity azimuth display.</span>
 
 <span class="sd">    Parameters</span>
@@ -665,7 +665,7 @@ documentation style.</p>
 <span class="sd">        the VAD calculation.</span>
 <span class="sd">    gatefilter : GateFilter</span>
 <span class="sd">        Used to correct the velocity field before its use</span>
-<span class="sd">        in the VAD calculation. Uses Py-ART&#39;s region dealiaser.</span>
+<span class="sd">        in the VAD calculation. Uses Py-ART's region dealiaser.</span>
 <span class="sd">    window : int</span>
 <span class="sd">        Value to use for window calculation in _Averag1D</span>
 <span class="sd">        function.</span>
@@ -690,7 +690,7 @@ documentation style.</p>
 <span class="sd">    of Kinematic Properties of a Wind Field Using Doppler</span>
 <span class="sd">    Radar. J. Appl. Meteor., 7, 105–113</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 </pre></div>
 </div>
 <p>As seen, each argument has what type of object it is, an explanation of
@@ -699,7 +699,7 @@ statement of what that default value is and why.</p>
 <p>Private or smaller functions and classes can have a single line explanation.</p>
 <p>An example:</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">u_wind</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="sd">&quot;&quot;&quot; U component of horizontal wind in meters per second. &quot;&quot;&quot;</span>
+<span class="sd">""" U component of horizontal wind in meters per second. """</span>
 </pre></div>
 </div>
 </section>
@@ -724,10 +724,10 @@ function and reruns the function and compares the results to the original.</p>
     <span class="n">sim_vel</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">simulated_vel_from_profile</span><span class="p">(</span>
         <span class="n">test_radar</span><span class="p">,</span> <span class="n">profile</span><span class="p">)</span>
 
-    <span class="n">test_radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">&#39;velocity&#39;</span><span class="p">,</span> <span class="n">sim_vel</span><span class="p">,</span>
+    <span class="n">test_radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s1">'velocity'</span><span class="p">,</span> <span class="n">sim_vel</span><span class="p">,</span>
                          <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-    <span class="n">velocity</span> <span class="o">=</span> <span class="s1">&#39;velocity&#39;</span>
+    <span class="n">velocity</span> <span class="o">=</span> <span class="s1">'velocity'</span>
     <span class="n">z_start</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">z_end</span> <span class="o">=</span> <span class="mi">10</span>
     <span class="n">z_count</span> <span class="o">=</span> <span class="mi">5</span>
@@ -810,7 +810,7 @@ package for example files.</p>
 </pre></div>
 </div>
 <p>To grab a file to use for an example, use:</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">files</span> <span class="o">=</span> <span class="n">DATASETS</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s1">&#39;gucxprecipradarcmacppiS2.c1.20220314.025840.nc&#39;</span><span class="p">)</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">files</span> <span class="o">=</span> <span class="n">DATASETS</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s1">'gucxprecipradarcmacppiS2.c1.20220314.025840.nc'</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>If there isn’t a file that fits the example being created, feel free to open a PR at
@@ -869,7 +869,7 @@ a more in depth description on what your commiting.</p>
 </ul>
 <p>If you would like to type your commit in the terminal and skip the default
 editor:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s2">&quot;STY: Removing whitespace from vad.py pep8.&quot;</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">git</span> <span class="n">commit</span> <span class="o">-</span><span class="n">m</span> <span class="s2">"STY: Removing whitespace from vad.py pep8."</span>
 </pre></div>
 </div>
 <p>To use the default editor(in Linux, usually VIM), simply type:</p>
@@ -988,8 +988,8 @@ to PEP8 standards.</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1023,7 +1023,7 @@ to PEP8 standards.</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

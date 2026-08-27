@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,12 +486,12 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.core.transforms</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Transformations between coordinate systems. Routines for converting between</span>
 <span class="sd">Cartesian/Cartographic (x, y, z), Geographic (latitude, longitude, altitude)</span>
 <span class="sd">and antenna (azimuth, elevation, range) coordinate systems.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
@@ -512,7 +512,7 @@
 <div class="viewcode-block" id="antenna_to_cartesian">
 <a class="viewcode-back" href="../../../API/generated/pyart.core.antenna_to_cartesian.html#pyart.core.antenna_to_cartesian">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">antenna_to_cartesian</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return Cartesian coordinates from antenna coordinates.</span>
 
 <span class="sd">    Parameters</span>
@@ -533,7 +533,7 @@
 <span class="sd">    -----</span>
 <span class="sd">    The calculation for Cartesian coordinate is adapted from equations</span>
 <span class="sd">    2.28(b) and 2.28(c) of Doviak and Zrnic [1]_ assuming a</span>
-<span class="sd">    standard atmosphere (4/3 Earth&#39;s radius model).</span>
+<span class="sd">    standard atmosphere (4/3 Earth's radius model).</span>
 
 <span class="sd">    .. math::</span>
 
@@ -555,7 +555,7 @@
 <span class="sd">    .. [1] Doviak and Zrnic, Doppler Radar and Weather Observations, Second</span>
 <span class="sd">        Edition, 1993, p. 21.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">theta_e</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">elevations</span><span class="p">)</span>  <span class="c1"># elevation angle in radians.</span>
     <span class="n">theta_a</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">azimuths</span><span class="p">)</span>  <span class="c1"># azimuth angle in radians.</span>
     <span class="n">R</span> <span class="o">=</span> <span class="mf">6371.0</span> <span class="o">*</span> <span class="mf">1000.0</span> <span class="o">*</span> <span class="mf">4.0</span> <span class="o">/</span> <span class="mf">3.0</span>  <span class="c1"># effective radius of earth in meters.</span>
@@ -572,7 +572,7 @@
 <div class="viewcode-block" id="cartesian_to_antenna">
 <a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_to_antenna.html#pyart.core.cartesian_to_antenna">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">cartesian_to_antenna</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">z</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Returns antenna coordinates from Cartesian coordinates.</span>
 
 <span class="sd">    Parameters</span>
@@ -589,7 +589,7 @@
 <span class="sd">    elevations : array</span>
 <span class="sd">        Elevation angle of the radar in degrees.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">ranges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">z</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)</span>
     <span class="n">elevations</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan</span><span class="p">(</span><span class="n">z</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mf">2.0</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mf">2.0</span><span class="p">)))</span>
     <span class="n">azimuths</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">rad2deg</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">))</span>  <span class="c1"># [-180, 180]</span>
@@ -602,12 +602,12 @@
 <div class="viewcode-block" id="antenna_vectors_to_cartesian">
 <a class="viewcode-back" href="../../../API/generated/pyart.core.antenna_vectors_to_cartesian.html#pyart.core.antenna_vectors_to_cartesian">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">antenna_vectors_to_cartesian</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">azimuths</span><span class="p">,</span> <span class="n">elevations</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculate Cartesian coordinate for gates from antenna coordinate vectors.</span>
 
 <span class="sd">    Calculates the Cartesian coordinates for the gate centers or edges for</span>
 <span class="sd">    all gates from antenna coordinate vectors assuming a standard atmosphere</span>
-<span class="sd">    (4/3 Earth&#39;s radius model). See :py:func:`pyart.util.antenna_to_cartesian`</span>
+<span class="sd">    (4/3 Earth's radius model). See :py:func:`pyart.util.antenna_to_cartesian`</span>
 <span class="sd">    for details.</span>
 
 <span class="sd">    Parameters</span>
@@ -629,7 +629,7 @@
 <span class="sd">        Cartesian coordinates in meters from the center of the radar to the</span>
 <span class="sd">        gate centers or edges.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">edges</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">ranges</span> <span class="o">=</span> <span class="n">_interpolate_range_edges</span><span class="p">(</span><span class="n">ranges</span><span class="p">)</span>
@@ -644,7 +644,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_interpolate_range_edges</span><span class="p">(</span><span class="n">ranges</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpolate the edges of the range gates from their centers.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Interpolate the edges of the range gates from their centers."""</span>
     <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">ranges</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">ranges</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
     <span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">ranges</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">ranges</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mf">2.0</span>
     <span class="n">edges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">ranges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">ranges</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">ranges</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span>
@@ -654,7 +654,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_interpolate_elevation_edges</span><span class="p">(</span><span class="n">elevations</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpolate the edges of the elevation angles from their centers.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Interpolate the edges of the elevation angles from their centers."""</span>
     <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">elevations</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">elevations</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
     <span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">elevations</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">elevations</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mf">2.0</span>
     <span class="n">edges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">elevations</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">elevations</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">elevations</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span>
@@ -665,7 +665,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_interpolate_azimuth_edges</span><span class="p">(</span><span class="n">azimuths</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpolate the edges of the azimuth angles from their centers.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Interpolate the edges of the azimuth angles from their centers."""</span>
     <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">azimuths</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">azimuths</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
     <span class="c1"># perform interpolation and extrapolation in complex plane to</span>
     <span class="c1"># account for periodic nature of azimuth angle.</span>
@@ -684,7 +684,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_half_angle_complex</span><span class="p">(</span><span class="n">complex_angle1</span><span class="p">,</span> <span class="n">complex_angle2</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Return half the angle between complex numbers on the unit circle.</span>
 
 <span class="sd">    Parameters</span>
@@ -697,10 +697,10 @@
 <span class="sd">    half_angle : float</span>
 <span class="sd">        Half the angle between the unit vectors in degrees.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">dot_product</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">real</span><span class="p">(</span><span class="n">complex_angle1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">conj</span><span class="p">(</span><span class="n">complex_angle2</span><span class="p">))</span>
     <span class="k">if</span> <span class="n">dot_product</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;dot_product is larger than one.&quot;</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">"dot_product is larger than one."</span><span class="p">)</span>
         <span class="n">dot_product</span> <span class="o">=</span> <span class="mf">1.0</span>
     <span class="n">full_angle_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arccos</span><span class="p">(</span><span class="n">dot_product</span><span class="p">)</span>
     <span class="n">half_angle_rad</span> <span class="o">=</span> <span class="n">full_angle_rad</span> <span class="o">/</span> <span class="mf">2.0</span>
@@ -709,7 +709,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_interpolate_axes_edges</span><span class="p">(</span><span class="n">axes</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Interpolate the edges of the axes gates from their centers.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Interpolate the edges of the axes gates from their centers."""</span>
     <span class="n">edges</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">axes</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">axes</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
     <span class="n">edges</span><span class="p">[</span><span class="mi">1</span><span class="p">:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">axes</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span> <span class="o">/</span> <span class="mf">2.0</span>
     <span class="n">edges</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="p">(</span><span class="n">axes</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">axes</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mf">2.0</span>
@@ -718,7 +718,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">antenna_to_cartesian_track_relative</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">rot</span><span class="p">,</span> <span class="n">roll</span><span class="p">,</span> <span class="n">drift</span><span class="p">,</span> <span class="n">tilt</span><span class="p">,</span> <span class="n">pitch</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculate track-relative Cartesian coordinates from radar coordinates.</span>
 
 <span class="sd">    Parameters</span>
@@ -750,7 +750,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] Lee et al. (1994) Journal of Atmospheric and Oceanic Technology.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">rot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">rot</span><span class="p">)</span>  <span class="c1"># rotation angle in radians.</span>
     <span class="n">roll</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">roll</span><span class="p">)</span>  <span class="c1"># roll angle in radians.</span>
     <span class="n">drift</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">drift</span><span class="p">)</span>  <span class="c1"># drift angle in radians.</span>
@@ -775,7 +775,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">antenna_to_cartesian_earth_relative</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">rot</span><span class="p">,</span> <span class="n">roll</span><span class="p">,</span> <span class="n">heading</span><span class="p">,</span> <span class="n">tilt</span><span class="p">,</span> <span class="n">pitch</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculate earth-relative Cartesian coordinates from radar coordinates</span>
 
 <span class="sd">    Parameters</span>
@@ -807,7 +807,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] Lee et al. (1994) Journal of Atmospheric and Oceanic Technology.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">rot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">rot</span><span class="p">)</span>  <span class="c1"># rotation angle in radians.</span>
     <span class="n">roll</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">roll</span><span class="p">)</span>  <span class="c1"># roll angle in radians.</span>
     <span class="n">heading</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">heading</span><span class="p">)</span>  <span class="c1"># drift angle in radians.</span>
@@ -832,7 +832,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">antenna_to_cartesian_aircraft_relative</span><span class="p">(</span><span class="n">ranges</span><span class="p">,</span> <span class="n">rot</span><span class="p">,</span> <span class="n">tilt</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Calculate aircraft-relative Cartesian coordinates from radar coordinates.</span>
 
 <span class="sd">    Parameters</span>
@@ -858,7 +858,7 @@
 <span class="sd">    ----------</span>
 <span class="sd">    .. [1] Lee et al. (1994) Journal of Atmospheric and Oceanic Technology.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">rot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">rot</span><span class="p">)</span>  <span class="c1"># rotation angle in radians.</span>
     <span class="n">tilt</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">radians</span><span class="p">(</span><span class="n">tilt</span><span class="p">)</span>  <span class="c1"># tilt angle in radians.</span>
     <span class="n">r</span> <span class="o">=</span> <span class="n">ranges</span> <span class="o">*</span> <span class="mf">1000.0</span>  <span class="c1"># distances to gates in meters.</span>
@@ -871,7 +871,7 @@
 <div class="viewcode-block" id="geographic_to_cartesian">
 <a class="viewcode-back" href="../../../API/generated/pyart.core.geographic_to_cartesian.html#pyart.core.geographic_to_cartesian">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">geographic_to_cartesian</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">projparams</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Geographic to Cartesian coordinate transform.</span>
 
 <span class="sd">    Transform a set of Geographic coordinate (lat, lon) to a</span>
@@ -884,10 +884,10 @@
 <span class="sd">        Geographic coordinates in degrees.</span>
 <span class="sd">    projparams : dict or str</span>
 <span class="sd">        Projection parameters passed to pyproj.Proj. If this parameter is a</span>
-<span class="sd">        dictionary with a &#39;proj&#39; key equal to &#39;pyart_aeqd&#39; then a azimuthal</span>
+<span class="sd">        dictionary with a 'proj' key equal to 'pyart_aeqd' then a azimuthal</span>
 <span class="sd">        equidistant projection will be used that is native to Py-ART and</span>
 <span class="sd">        does not require pyproj to be installed. In this case a non-default</span>
-<span class="sd">        value of R can be specified by setting the &#39;R&#39; key to the desired</span>
+<span class="sd">        value of R can be specified by setting the 'R' key to the desired</span>
 <span class="sd">        value.</span>
 
 <span class="sd">    Returns</span>
@@ -896,13 +896,13 @@
 <span class="sd">        Cartesian coordinates in meters unless projparams defines a value for R</span>
 <span class="sd">        in different units.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">projparams</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">projparams</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;proj&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;pyart_aeqd&quot;</span><span class="p">:</span>
-        <span class="c1"># Use Py-ART&#39;s Azimuthal equidistance projection</span>
-        <span class="n">lon_0</span> <span class="o">=</span> <span class="n">projparams</span><span class="p">[</span><span class="s2">&quot;lon_0&quot;</span><span class="p">]</span>
-        <span class="n">lat_0</span> <span class="o">=</span> <span class="n">projparams</span><span class="p">[</span><span class="s2">&quot;lat_0&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s2">&quot;R&quot;</span> <span class="ow">in</span> <span class="n">projparams</span><span class="p">:</span>
-            <span class="n">R</span> <span class="o">=</span> <span class="n">projparams</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">projparams</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">projparams</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"proj"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"pyart_aeqd"</span><span class="p">:</span>
+        <span class="c1"># Use Py-ART's Azimuthal equidistance projection</span>
+        <span class="n">lon_0</span> <span class="o">=</span> <span class="n">projparams</span><span class="p">[</span><span class="s2">"lon_0"</span><span class="p">]</span>
+        <span class="n">lat_0</span> <span class="o">=</span> <span class="n">projparams</span><span class="p">[</span><span class="s2">"lat_0"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">"R"</span> <span class="ow">in</span> <span class="n">projparams</span><span class="p">:</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="n">projparams</span><span class="p">[</span><span class="s2">"R"</span><span class="p">]</span>
             <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">geographic_to_cartesian_aeqd</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon_0</span><span class="p">,</span> <span class="n">lat_0</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">geographic_to_cartesian_aeqd</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon_0</span><span class="p">,</span> <span class="n">lat_0</span><span class="p">)</span>
@@ -911,9 +911,9 @@
         <span class="c1"># check that pyproj is available</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_PYPROJ_AVAILABLE</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
-                <span class="s2">&quot;PyProj is required to use geographic_to_cartesian &quot;</span>
-                <span class="s2">&quot;with a projection other than pyart_aeqd but it is not &quot;</span>
-                <span class="s2">&quot;installed&quot;</span>
+                <span class="s2">"PyProj is required to use geographic_to_cartesian "</span>
+                <span class="s2">"with a projection other than pyart_aeqd but it is not "</span>
+                <span class="s2">"installed"</span>
             <span class="p">)</span>
         <span class="n">proj</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="n">projparams</span><span class="p">)</span>
         <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
@@ -924,7 +924,7 @@
 <div class="viewcode-block" id="geographic_to_cartesian_aeqd">
 <a class="viewcode-back" href="../../../API/generated/pyart.core.geographic_to_cartesian_aeqd.html#pyart.core.geographic_to_cartesian_aeqd">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">geographic_to_cartesian_aeqd</span><span class="p">(</span><span class="n">lon</span><span class="p">,</span> <span class="n">lat</span><span class="p">,</span> <span class="n">lon_0</span><span class="p">,</span> <span class="n">lat_0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">6370997.0</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Azimuthal equidistant geographic to Cartesian coordinate transform.</span>
 
 <span class="sd">    Transform a set of geographic coordinates (lat, lon) to</span>
@@ -968,7 +968,7 @@
 <span class="sd">    .. [1] Snyder, J. P. Map Projections--A Working Manual. U. S. Geological</span>
 <span class="sd">        Survey Professional Paper 1395, 1987, pp. 191-202.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">lon</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">lon</span><span class="p">))</span>
     <span class="n">lat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">lat</span><span class="p">))</span>
 
@@ -990,7 +990,7 @@
     <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
         <span class="c1"># division by zero may occur here but is properly addressed below so</span>
         <span class="c1"># the warnings can be ignored</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
         <span class="n">k</span> <span class="o">=</span> <span class="n">c</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
     <span class="c1"># fix cases where k is undefined (c is zero), k should be 1</span>
     <span class="n">k</span><span class="p">[</span><span class="n">c</span> <span class="o">==</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
@@ -1011,7 +1011,7 @@
 <div class="viewcode-block" id="cartesian_to_geographic">
 <a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_to_geographic.html#pyart.core.cartesian_to_geographic">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">cartesian_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Cartesian to Geographic coordinate transform.</span>
 
 <span class="sd">    Transform a set of Cartesian/Cartographic coordinates (x, y) to a</span>
@@ -1025,10 +1025,10 @@
 <span class="sd">        in the projparams parameter.</span>
 <span class="sd">    projparams : dict or str</span>
 <span class="sd">        Projection parameters passed to pyproj.Proj. If this parameter is a</span>
-<span class="sd">        dictionary with a &#39;proj&#39; key equal to &#39;pyart_aeqd&#39; then a azimuthal</span>
+<span class="sd">        dictionary with a 'proj' key equal to 'pyart_aeqd' then a azimuthal</span>
 <span class="sd">        equidistant projection will be used that is native to Py-ART and</span>
 <span class="sd">        does not require pyproj to be installed. In this case a non-default</span>
-<span class="sd">        value of R can be specified by setting the &#39;R&#39; key to the desired</span>
+<span class="sd">        value of R can be specified by setting the 'R' key to the desired</span>
 <span class="sd">        value.</span>
 
 <span class="sd">    Returns</span>
@@ -1043,15 +1043,15 @@
 <span class="sd">    meters far from the origin. If pyproj is installed, pass an ellipsoidal</span>
 <span class="sd">    projection instead::</span>
 
-<span class="sd">        cartesian_to_geographic(x, y, {&quot;proj&quot;: &quot;aeqd&quot;, &quot;ellps&quot;: &quot;WGS84&quot;, &quot;lon_0&quot;: lon_0, &quot;lat_0&quot;: lat_0})</span>
+<span class="sd">        cartesian_to_geographic(x, y, {"proj": "aeqd", "ellps": "WGS84", "lon_0": lon_0, "lat_0": lat_0})</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">projparams</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">projparams</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;proj&quot;</span><span class="p">)</span> <span class="o">==</span> <span class="s2">&quot;pyart_aeqd&quot;</span><span class="p">:</span>
-        <span class="c1"># Use Py-ART&#39;s Azimuthal equidistance projection</span>
-        <span class="n">lon_0</span> <span class="o">=</span> <span class="n">projparams</span><span class="p">[</span><span class="s2">&quot;lon_0&quot;</span><span class="p">]</span>
-        <span class="n">lat_0</span> <span class="o">=</span> <span class="n">projparams</span><span class="p">[</span><span class="s2">&quot;lat_0&quot;</span><span class="p">]</span>
-        <span class="k">if</span> <span class="s2">&quot;R&quot;</span> <span class="ow">in</span> <span class="n">projparams</span><span class="p">:</span>
-            <span class="n">R</span> <span class="o">=</span> <span class="n">projparams</span><span class="p">[</span><span class="s2">&quot;R&quot;</span><span class="p">]</span>
+<span class="sd">    """</span>
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">projparams</span><span class="p">,</span> <span class="nb">dict</span><span class="p">)</span> <span class="ow">and</span> <span class="n">projparams</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"proj"</span><span class="p">)</span> <span class="o">==</span> <span class="s2">"pyart_aeqd"</span><span class="p">:</span>
+        <span class="c1"># Use Py-ART's Azimuthal equidistance projection</span>
+        <span class="n">lon_0</span> <span class="o">=</span> <span class="n">projparams</span><span class="p">[</span><span class="s2">"lon_0"</span><span class="p">]</span>
+        <span class="n">lat_0</span> <span class="o">=</span> <span class="n">projparams</span><span class="p">[</span><span class="s2">"lat_0"</span><span class="p">]</span>
+        <span class="k">if</span> <span class="s2">"R"</span> <span class="ow">in</span> <span class="n">projparams</span><span class="p">:</span>
+            <span class="n">R</span> <span class="o">=</span> <span class="n">projparams</span><span class="p">[</span><span class="s2">"R"</span><span class="p">]</span>
             <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span> <span class="o">=</span> <span class="n">cartesian_to_geographic_aeqd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">lon_0</span><span class="p">,</span> <span class="n">lat_0</span><span class="p">,</span> <span class="n">R</span><span class="p">)</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span> <span class="o">=</span> <span class="n">cartesian_to_geographic_aeqd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">lon_0</span><span class="p">,</span> <span class="n">lat_0</span><span class="p">)</span>
@@ -1060,9 +1060,9 @@
         <span class="c1"># check that pyproj is available</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">_PYPROJ_AVAILABLE</span><span class="p">:</span>
             <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
-                <span class="s2">&quot;PyProj is required to use cartesian_to_geographic &quot;</span>
-                <span class="s2">&quot;with a projection other than pyart_aeqd but it is not &quot;</span>
-                <span class="s2">&quot;installed&quot;</span>
+                <span class="s2">"PyProj is required to use cartesian_to_geographic "</span>
+                <span class="s2">"with a projection other than pyart_aeqd but it is not "</span>
+                <span class="s2">"installed"</span>
             <span class="p">)</span>
         <span class="n">proj</span> <span class="o">=</span> <span class="n">pyproj</span><span class="o">.</span><span class="n">Proj</span><span class="p">(</span><span class="n">projparams</span><span class="p">)</span>
         <span class="n">lon</span><span class="p">,</span> <span class="n">lat</span> <span class="o">=</span> <span class="n">proj</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">inverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
@@ -1073,7 +1073,7 @@
 <div class="viewcode-block" id="cartesian_vectors_to_geographic">
 <a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_vectors_to_geographic.html#pyart.core.cartesian_vectors_to_geographic">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">cartesian_vectors_to_geographic</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">projparams</span><span class="p">,</span> <span class="n">edges</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Cartesian vectors to Geographic coordinate transform.</span>
 
 <span class="sd">    Transform a set of Cartesian/Cartographic coordinate vectors (x, y) to a</span>
@@ -1088,10 +1088,10 @@
 <span class="sd">        different units in the projparams parameter.</span>
 <span class="sd">    projparams : dict or str</span>
 <span class="sd">        Projection parameters passed to pyproj.Proj. If this parameter is a</span>
-<span class="sd">        dictionary with a &#39;proj&#39; key equal to &#39;pyart_aeqd&#39; then a azimuthal</span>
+<span class="sd">        dictionary with a 'proj' key equal to 'pyart_aeqd' then a azimuthal</span>
 <span class="sd">        equidistant projection will be used that is native to Py-ART and</span>
 <span class="sd">        does not require pyproj to be installed. In this case a</span>
-<span class="sd">        non-default value of R can be specified by setting the &#39;R&#39; key to the</span>
+<span class="sd">        non-default value of R can be specified by setting the 'R' key to the</span>
 <span class="sd">        desired value.</span>
 <span class="sd">    edges : bool, optional</span>
 <span class="sd">        True to calculate the coordinates of the geographic edges by</span>
@@ -1103,7 +1103,7 @@
 <span class="sd">    lon, lat : array</span>
 <span class="sd">        Longitude and latitude of the Cartesian coordinates in degrees.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">edges</span><span class="p">:</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
             <span class="n">x</span> <span class="o">=</span> <span class="n">_interpolate_axes_edges</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
@@ -1117,7 +1117,7 @@
 <div class="viewcode-block" id="cartesian_to_geographic_aeqd">
 <a class="viewcode-back" href="../../../API/generated/pyart.core.cartesian_to_geographic_aeqd.html#pyart.core.cartesian_to_geographic_aeqd">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">cartesian_to_geographic_aeqd</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">lon_0</span><span class="p">,</span> <span class="n">lat_0</span><span class="p">,</span> <span class="n">R</span><span class="o">=</span><span class="mf">6370997.0</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Azimuthal equidistant Cartesian to geographic coordinate transform.</span>
 
 <span class="sd">    Transform a set of Cartesian/Cartographic coordinates (x, y) to</span>
@@ -1168,7 +1168,7 @@
 <span class="sd">    .. [1] Snyder, J. P. Map Projections--A Working Manual. U. S. Geological</span>
 <span class="sd">        Survey Professional Paper 1395, 1987, pp. 191-202.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">x</span><span class="p">))</span>
     <span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">atleast_1d</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">y</span><span class="p">))</span>
 
@@ -1181,7 +1181,7 @@
     <span class="k">with</span> <span class="n">warnings</span><span class="o">.</span><span class="n">catch_warnings</span><span class="p">():</span>
         <span class="c1"># division by zero may occur here but is properly addressed below so</span>
         <span class="c1"># the warnings can be ignored</span>
-        <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">simplefilter</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">,</span> <span class="ne">RuntimeWarning</span><span class="p">)</span>
         <span class="n">lat_rad</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arcsin</span><span class="p">(</span>
             <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">lat_0_rad</span><span class="p">)</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">c</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">lat_0_rad</span><span class="p">)</span> <span class="o">/</span> <span class="n">rho</span>
         <span class="p">)</span>
@@ -1231,8 +1231,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1266,7 +1266,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,7 +486,7 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.testing.tmpdirs</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Classes for creating and cleaning temporary directories in unit tests.</span>
 
 <span class="sd">This module is taken from the nibable project.  The following license applies:</span>
@@ -503,7 +503,7 @@
 <span class="sd">  Copyright (c) 2011-2014 Yaroslav Halchenko &lt;debian@onerussian.com&gt;</span>
 
 <span class="sd">  Permission is hereby granted, free of charge, to any person obtaining a copy</span>
-<span class="sd">  of this software and associated documentation files (the &quot;Software&quot;), to deal</span>
+<span class="sd">  of this software and associated documentation files (the "Software"), to deal</span>
 <span class="sd">  in the Software without restriction, including without limitation the rights</span>
 <span class="sd">  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell</span>
 <span class="sd">  copies of the Software, and to permit persons to whom the Software is</span>
@@ -512,7 +512,7 @@
 <span class="sd">  The above copyright notice and this permission notice shall be included in</span>
 <span class="sd">  all copies or substantial portions of the Software.</span>
 
-<span class="sd">  THE SOFTWARE IS PROVIDED &quot;AS IS&quot;, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
+<span class="sd">  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR</span>
 <span class="sd">  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,</span>
 <span class="sd">  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE</span>
 <span class="sd">  AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER</span>
@@ -520,7 +520,7 @@
 <span class="sd">  OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN</span>
 <span class="sd">  THE SOFTWARE.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="c1"># emacs: -*- mode: python-mode; py-indent-offset: 4; indent-tabs-mode: nil -*-</span>
 <span class="c1"># vi: set ft=python sts=4 ts=4 sw=4 et:</span>
@@ -537,7 +537,7 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">TemporaryDirectory</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create and return a temporary directory. This has the same</span>
+<span class="w">    </span><span class="sd">"""Create and return a temporary directory. This has the same</span>
 <span class="sd">    behavior as mkdtemp but can be used as a context manager.</span>
 
 <span class="sd">    Upon exiting the context, the directory and everything contained</span>
@@ -547,14 +547,14 @@
 <span class="sd">    --------</span>
 <span class="sd">    import os</span>
 <span class="sd">    with TemporaryDirectory() as tmpdir:</span>
-<span class="sd">        fname = os.path.join(tmpdir, &#39;example_file.txt&#39;)</span>
-<span class="sd">        with open(fname, &#39;wt&#39;) as fobj:</span>
-<span class="sd">            _ = fobj.write(&#39;a string\\n&#39;)</span>
+<span class="sd">        fname = os.path.join(tmpdir, 'example_file.txt')</span>
+<span class="sd">        with open(fname, 'wt') as fobj:</span>
+<span class="sd">            _ = fobj.write('a string\\n')</span>
 <span class="sd">    os.path.exists(tmpdir)</span>
 <span class="sd">    False</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
-    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">template</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">suffix</span><span class="o">=</span><span class="s2">""</span><span class="p">,</span> <span class="n">prefix</span><span class="o">=</span><span class="n">template</span><span class="p">,</span> <span class="nb">dir</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="n">mkdtemp</span><span class="p">(</span><span class="n">suffix</span><span class="p">,</span> <span class="n">prefix</span><span class="p">,</span> <span class="nb">dir</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_closed</span> <span class="o">=</span> <span class="kc">False</span>
 
@@ -574,21 +574,21 @@
 <div class="viewcode-block" id="InTemporaryDirectory">
 <a class="viewcode-back" href="../../../API/generated/pyart.testing.InTemporaryDirectory.html#pyart.testing.InTemporaryDirectory">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">InTemporaryDirectory</span><span class="p">(</span><span class="n">TemporaryDirectory</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Create, return, and change directory to a temporary directory.</span>
+<span class="w">    </span><span class="sd">"""Create, return, and change directory to a temporary directory.</span>
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
 <span class="sd">    &gt;&gt;&gt; import os</span>
 <span class="sd">    &gt;&gt;&gt; my_cwd = os.getcwd()</span>
 <span class="sd">    &gt;&gt;&gt; with InTemporaryDirectory() as tmpdir:</span>
-<span class="sd">    ...     _ = open(&#39;test.txt&#39;, &#39;wt&#39;).write(&#39;some text&#39;)</span>
-<span class="sd">    ...     assert os.path.isfile(&#39;test.txt&#39;)</span>
-<span class="sd">    ...     assert os.path.isfile(os.path.join(tmpdir, &#39;test.txt&#39;))</span>
+<span class="sd">    ...     _ = open('test.txt', 'wt').write('some text')</span>
+<span class="sd">    ...     assert os.path.isfile('test.txt')</span>
+<span class="sd">    ...     assert os.path.isfile(os.path.join(tmpdir, 'test.txt'))</span>
 <span class="sd">    &gt;&gt;&gt; os.path.exists(tmpdir)</span>
 <span class="sd">    False</span>
 <span class="sd">    &gt;&gt;&gt; os.getcwd() == my_cwd</span>
 <span class="sd">    True</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__enter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_pwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
@@ -602,7 +602,7 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">InGivenDirectory</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Change directory to given directory for duration of ``with`` block.</span>
+<span class="w">    </span><span class="sd">"""Change directory to given directory for duration of ``with`` block.</span>
 <span class="sd">    Useful when you want to use `InTemporaryDirectory` for the final test, but</span>
 <span class="sd">    you are still debugging. For example, you may want to do this in the end:</span>
 
@@ -623,10 +623,10 @@
 <span class="sd">    fix, and finally replace ``InGivenDirectory`` with ``InTemporaryDirectory``</span>
 <span class="sd">    again.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">path</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Initialize directory context manager</span>
+<span class="w">        </span><span class="sd">"""Initialize directory context manager</span>
 
 <span class="sd">        Parameters</span>
 <span class="sd">        ----------</span>
@@ -634,7 +634,7 @@
 <span class="sd">            path to change directory to, for duration of ``with`` block.</span>
 <span class="sd">            Defaults to ``os.getcwd()`` if None.</span>
 
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="k">if</span> <span class="n">path</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getcwd</span><span class="p">()</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
@@ -680,8 +680,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -715,7 +715,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

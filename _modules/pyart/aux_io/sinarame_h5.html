@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,10 +486,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.aux_io.sinarame_h5</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Routines for reading sinarame_H5 files.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">glob</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
@@ -516,21 +516,21 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">..io.common</span><span class="w"> </span><span class="kn">import</span> <span class="n">_test_arguments</span><span class="p">,</span> <span class="n">make_time_unit_str</span>
 
 <span class="n">SINARAME_H5_FIELD_NAMES</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;TH&quot;</span><span class="p">:</span> <span class="s2">&quot;total_power&quot;</span><span class="p">,</span>  <span class="c1"># uncorrected reflectivity, horizontal</span>
-    <span class="s2">&quot;TV&quot;</span><span class="p">:</span> <span class="s2">&quot;total_power_vertical&quot;</span><span class="p">,</span>  <span class="c1"># uncorrected reflectivity, vertical</span>
-    <span class="s2">&quot;DBZH&quot;</span><span class="p">:</span> <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>  <span class="c1"># corrected reflectivity, horizontal</span>
-    <span class="s2">&quot;DBZV&quot;</span><span class="p">:</span> <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>  <span class="c1"># corrected reflectivity, vertical</span>
-    <span class="s2">&quot;CM&quot;</span><span class="p">:</span> <span class="s2">&quot;clutter mask&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;ZDR&quot;</span><span class="p">:</span> <span class="s2">&quot;differential_reflectivity&quot;</span><span class="p">,</span>  <span class="c1"># differential reflectivity</span>
-    <span class="s2">&quot;RHOHV&quot;</span><span class="p">:</span> <span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;LDR&quot;</span><span class="p">:</span> <span class="s2">&quot;linear_polarization_ratio&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;PHIDP&quot;</span><span class="p">:</span> <span class="s2">&quot;differential_phase&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;KDP&quot;</span><span class="p">:</span> <span class="s2">&quot;specific_differential_phase&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;SQI&quot;</span><span class="p">:</span> <span class="s2">&quot;normalized_coherent_power&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;SNR&quot;</span><span class="p">:</span> <span class="s2">&quot;signal_to_noise_ratio&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;VRAD&quot;</span><span class="p">:</span> <span class="s2">&quot;velocity&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;WRAD&quot;</span><span class="p">:</span> <span class="s2">&quot;spectrum_width&quot;</span><span class="p">,</span>
-    <span class="s2">&quot;QIND&quot;</span><span class="p">:</span> <span class="s2">&quot;quality_index&quot;</span><span class="p">,</span>
+    <span class="s2">"TH"</span><span class="p">:</span> <span class="s2">"total_power"</span><span class="p">,</span>  <span class="c1"># uncorrected reflectivity, horizontal</span>
+    <span class="s2">"TV"</span><span class="p">:</span> <span class="s2">"total_power_vertical"</span><span class="p">,</span>  <span class="c1"># uncorrected reflectivity, vertical</span>
+    <span class="s2">"DBZH"</span><span class="p">:</span> <span class="s2">"reflectivity"</span><span class="p">,</span>  <span class="c1"># corrected reflectivity, horizontal</span>
+    <span class="s2">"DBZV"</span><span class="p">:</span> <span class="s2">"reflectivity"</span><span class="p">,</span>  <span class="c1"># corrected reflectivity, vertical</span>
+    <span class="s2">"CM"</span><span class="p">:</span> <span class="s2">"clutter mask"</span><span class="p">,</span>
+    <span class="s2">"ZDR"</span><span class="p">:</span> <span class="s2">"differential_reflectivity"</span><span class="p">,</span>  <span class="c1"># differential reflectivity</span>
+    <span class="s2">"RHOHV"</span><span class="p">:</span> <span class="s2">"cross_correlation_ratio"</span><span class="p">,</span>
+    <span class="s2">"LDR"</span><span class="p">:</span> <span class="s2">"linear_polarization_ratio"</span><span class="p">,</span>
+    <span class="s2">"PHIDP"</span><span class="p">:</span> <span class="s2">"differential_phase"</span><span class="p">,</span>
+    <span class="s2">"KDP"</span><span class="p">:</span> <span class="s2">"specific_differential_phase"</span><span class="p">,</span>
+    <span class="s2">"SQI"</span><span class="p">:</span> <span class="s2">"normalized_coherent_power"</span><span class="p">,</span>
+    <span class="s2">"SNR"</span><span class="p">:</span> <span class="s2">"signal_to_noise_ratio"</span><span class="p">,</span>
+    <span class="s2">"VRAD"</span><span class="p">:</span> <span class="s2">"velocity"</span><span class="p">,</span>
+    <span class="s2">"WRAD"</span><span class="p">:</span> <span class="s2">"spectrum_width"</span><span class="p">,</span>
+    <span class="s2">"QIND"</span><span class="p">:</span> <span class="s2">"quality_index"</span><span class="p">,</span>
 <span class="p">}</span>
 
 
@@ -545,7 +545,7 @@
     <span class="n">include_fields</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Read a SINARAME_H5 file.</span>
 
 <span class="sd">    Parameters</span>
@@ -567,7 +567,7 @@
 <span class="sd">    file_field_names : bool, optional</span>
 <span class="sd">        True to use the MDV data type names for the field names. If this</span>
 <span class="sd">        case the field_names parameter is ignored. The field dictionary will</span>
-<span class="sd">        likely only have a &#39;data&#39; key, unless the fields are defined in</span>
+<span class="sd">        likely only have a 'data' key, unless the fields are defined in</span>
 <span class="sd">        `additional_metadata`.</span>
 <span class="sd">    exclude_fields : list or None, optional</span>
 <span class="sd">        List of fields to exclude from the radar object. This is applied</span>
@@ -584,7 +584,7 @@
 <span class="sd">    radar : Radar</span>
 <span class="sd">        Radar object containing data from SINARAME_H5 file.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># TODO before moving to pyart.io</span>
     <span class="c1"># * unit test</span>
     <span class="c1"># * add default field mapping, etc to default config</span>
@@ -596,7 +596,7 @@
     <span class="c1"># check that h5py is available</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="n">_H5PY_AVAILABLE</span><span class="p">:</span>
         <span class="k">raise</span> <span class="n">MissingOptionalDependency</span><span class="p">(</span>
-            <span class="s2">&quot;h5py is required to use read_sinarame_h5 but is not installed&quot;</span>
+            <span class="s2">"h5py is required to use read_sinarame_h5 but is not installed"</span>
         <span class="p">)</span>
 
     <span class="c1"># test for non empty kwargs</span>
@@ -606,7 +606,7 @@
     <span class="k">if</span> <span class="n">field_names</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">field_names</span> <span class="o">=</span> <span class="n">SINARAME_H5_FIELD_NAMES</span>
     <span class="n">filemetadata</span> <span class="o">=</span> <span class="n">FileMetadata</span><span class="p">(</span>
-        <span class="s2">&quot;SINARAME_h5&quot;</span><span class="p">,</span>
+        <span class="s2">"SINARAME_h5"</span><span class="p">,</span>
         <span class="n">field_names</span><span class="p">,</span>
         <span class="n">additional_metadata</span><span class="p">,</span>
         <span class="n">file_field_names</span><span class="p">,</span>
@@ -615,116 +615,116 @@
     <span class="p">)</span>
 
     <span class="c1"># open the file</span>
-    <span class="n">hfile</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
-    <span class="n">SINARAME_object</span> <span class="o">=</span> <span class="n">_to_str</span><span class="p">(</span><span class="n">hfile</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;object&quot;</span><span class="p">])</span>
-    <span class="k">if</span> <span class="n">SINARAME_object</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;PVOL&quot;</span><span class="p">,</span> <span class="s2">&quot;SCAN&quot;</span><span class="p">,</span> <span class="s2">&quot;ELEV&quot;</span><span class="p">,</span> <span class="s2">&quot;AZIM&quot;</span><span class="p">]:</span>
-        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;object: </span><span class="si">{</span><span class="n">SINARAME_object</span><span class="si">}</span><span class="s2"> not implemented.&quot;</span><span class="p">)</span>
+    <span class="n">hfile</span> <span class="o">=</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span>
+    <span class="n">SINARAME_object</span> <span class="o">=</span> <span class="n">_to_str</span><span class="p">(</span><span class="n">hfile</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"object"</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">SINARAME_object</span> <span class="ow">not</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"PVOL"</span><span class="p">,</span> <span class="s2">"SCAN"</span><span class="p">,</span> <span class="s2">"ELEV"</span><span class="p">,</span> <span class="s2">"AZIM"</span><span class="p">]:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"object: </span><span class="si">{</span><span class="n">SINARAME_object</span><span class="si">}</span><span class="s2"> not implemented."</span><span class="p">)</span>
 
     <span class="c1"># determine the number of sweeps by the number of groups which</span>
     <span class="c1"># begin with dataset</span>
-    <span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">hfile</span> <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;dataset&quot;</span><span class="p">)]</span>
+    <span class="n">datasets</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">hfile</span> <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"dataset"</span><span class="p">)]</span>
     <span class="n">datasets</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">7</span><span class="p">:]))</span>
     <span class="n">nsweeps</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">datasets</span><span class="p">)</span>
 
     <span class="c1"># latitude, longitude and altitude</span>
-    <span class="n">latitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;latitude&quot;</span><span class="p">)</span>
-    <span class="n">longitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;longitude&quot;</span><span class="p">)</span>
-    <span class="n">altitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;altitude&quot;</span><span class="p">)</span>
+    <span class="n">latitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"latitude"</span><span class="p">)</span>
+    <span class="n">longitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"longitude"</span><span class="p">)</span>
+    <span class="n">altitude</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"altitude"</span><span class="p">)</span>
 
-    <span class="n">h_where</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="s2">&quot;where&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span>
-    <span class="n">latitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">h_where</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
-    <span class="n">longitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">h_where</span><span class="p">[</span><span class="s2">&quot;lon&quot;</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
-    <span class="n">altitude</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">h_where</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float64&quot;</span><span class="p">)</span>
+    <span class="n">h_where</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="s2">"where"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span>
+    <span class="n">latitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">h_where</span><span class="p">[</span><span class="s2">"lat"</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">)</span>
+    <span class="n">longitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">h_where</span><span class="p">[</span><span class="s2">"lon"</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">)</span>
+    <span class="n">altitude</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">h_where</span><span class="p">[</span><span class="s2">"height"</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float64"</span><span class="p">)</span>
 
     <span class="c1"># metadata</span>
-    <span class="n">metadata</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;metadata&quot;</span><span class="p">)</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_to_str</span><span class="p">(</span><span class="n">hfile</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">])</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;original_container&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;SINARAME_h5&quot;</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;SINARAME_conventions&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_to_str</span><span class="p">(</span><span class="n">hfile</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;Conventions&quot;</span><span class="p">])</span>
+    <span class="n">metadata</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"metadata"</span><span class="p">)</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">"source"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_to_str</span><span class="p">(</span><span class="n">hfile</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"source"</span><span class="p">])</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">"original_container"</span><span class="p">]</span> <span class="o">=</span> <span class="s2">"SINARAME_h5"</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">"SINARAME_conventions"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_to_str</span><span class="p">(</span><span class="n">hfile</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"Conventions"</span><span class="p">])</span>
 
-    <span class="n">h_what</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_to_str</span><span class="p">(</span><span class="n">h_what</span><span class="p">[</span><span class="s2">&quot;version&quot;</span><span class="p">])</span>
-    <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">_to_str</span><span class="p">(</span><span class="n">h_what</span><span class="p">[</span><span class="s2">&quot;source&quot;</span><span class="p">])</span>
+    <span class="n">h_what</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">"version"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_to_str</span><span class="p">(</span><span class="n">h_what</span><span class="p">[</span><span class="s2">"version"</span><span class="p">])</span>
+    <span class="n">metadata</span><span class="p">[</span><span class="s2">"source"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_to_str</span><span class="p">(</span><span class="n">h_what</span><span class="p">[</span><span class="s2">"source"</span><span class="p">])</span>
 
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">ds1_how</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">&quot;how&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span>
+        <span class="n">ds1_how</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">datasets</span><span class="p">[</span><span class="mi">0</span><span class="p">]][</span><span class="s2">"how"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="c1"># if no how group exists mock it with an empty dictionary</span>
         <span class="n">ds1_how</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="k">if</span> <span class="s2">&quot;system&quot;</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">:</span>
-        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;system&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds1_how</span><span class="p">[</span><span class="s2">&quot;system&quot;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="s2">&quot;software&quot;</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">:</span>
-        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;software&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds1_how</span><span class="p">[</span><span class="s2">&quot;software&quot;</span><span class="p">]</span>
-    <span class="k">if</span> <span class="s2">&quot;sw_version&quot;</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">:</span>
-        <span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;sw_version&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds1_how</span><span class="p">[</span><span class="s2">&quot;sw_version&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">"system"</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">:</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">"system"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds1_how</span><span class="p">[</span><span class="s2">"system"</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">"software"</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">:</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">"software"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds1_how</span><span class="p">[</span><span class="s2">"software"</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">"sw_version"</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">:</span>
+        <span class="n">metadata</span><span class="p">[</span><span class="s2">"sw_version"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ds1_how</span><span class="p">[</span><span class="s2">"sw_version"</span><span class="p">]</span>
 
     <span class="c1"># sweep_start_ray_index, sweep_end_ray_index</span>
-    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_start_ray_index&quot;</span><span class="p">)</span>
-    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_end_ray_index&quot;</span><span class="p">)</span>
+    <span class="n">sweep_start_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"sweep_start_ray_index"</span><span class="p">)</span>
+    <span class="n">sweep_end_ray_index</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"sweep_end_ray_index"</span><span class="p">)</span>
 
-    <span class="k">if</span> <span class="n">SINARAME_object</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">&quot;AZIM&quot;</span><span class="p">,</span> <span class="s2">&quot;SCAN&quot;</span><span class="p">,</span> <span class="s2">&quot;PVOL&quot;</span><span class="p">]:</span>
-        <span class="n">rays_per_sweep</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">&quot;where&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;nrays&quot;</span><span class="p">])</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">]</span>
-    <span class="k">elif</span> <span class="n">SINARAME_object</span> <span class="o">==</span> <span class="s2">&quot;ELEV&quot;</span><span class="p">:</span>
-        <span class="n">rays_per_sweep</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">&quot;where&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;angles&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">SINARAME_object</span> <span class="ow">in</span> <span class="p">[</span><span class="s2">"AZIM"</span><span class="p">,</span> <span class="s2">"SCAN"</span><span class="p">,</span> <span class="s2">"PVOL"</span><span class="p">]:</span>
+        <span class="n">rays_per_sweep</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">"where"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"nrays"</span><span class="p">])</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">]</span>
+    <span class="k">elif</span> <span class="n">SINARAME_object</span> <span class="o">==</span> <span class="s2">"ELEV"</span><span class="p">:</span>
+        <span class="n">rays_per_sweep</span> <span class="o">=</span> <span class="p">[</span><span class="nb">int</span><span class="p">(</span><span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">"where"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"angles"</span><span class="p">]</span><span class="o">.</span><span class="n">size</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">]</span>
     <span class="n">total_rays</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">rays_per_sweep</span><span class="p">)</span>
-    <span class="n">ssri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">rays_per_sweep</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
-    <span class="n">seri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">rays_per_sweep</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
-    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ssri</span>
-    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">seri</span>
+    <span class="n">ssri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="n">rays_per_sweep</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]))</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"int32"</span><span class="p">)</span>
+    <span class="n">seri</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cumsum</span><span class="p">(</span><span class="n">rays_per_sweep</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"int32"</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span>
+    <span class="n">sweep_start_ray_index</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">ssri</span>
+    <span class="n">sweep_end_ray_index</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">seri</span>
 
     <span class="c1"># sweep_number</span>
-    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_number&quot;</span><span class="p">)</span>
-    <span class="n">sweep_number</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+    <span class="n">sweep_number</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"sweep_number"</span><span class="p">)</span>
+    <span class="n">sweep_number</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nsweeps</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">)</span>
 
     <span class="c1"># sweep_mode</span>
-    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;sweep_mode&quot;</span><span class="p">)</span>
-    <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s2">&quot;azimuth_surveillance&quot;</span><span class="p">])</span>
+    <span class="n">sweep_mode</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"sweep_mode"</span><span class="p">)</span>
+    <span class="n">sweep_mode</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nsweeps</span> <span class="o">*</span> <span class="p">[</span><span class="s2">"azimuth_surveillance"</span><span class="p">])</span>
 
     <span class="c1"># scan_type</span>
-    <span class="k">if</span> <span class="n">SINARAME_object</span> <span class="o">==</span> <span class="s2">&quot;ELEV&quot;</span><span class="p">:</span>
-        <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">&quot;rhi&quot;</span>
+    <span class="k">if</span> <span class="n">SINARAME_object</span> <span class="o">==</span> <span class="s2">"ELEV"</span><span class="p">:</span>
+        <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">"rhi"</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">&quot;ppi&quot;</span>
+        <span class="n">scan_type</span> <span class="o">=</span> <span class="s2">"ppi"</span>
 
     <span class="c1"># fixed_angle</span>
-    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;fixed_angle&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="n">SINARAME_object</span> <span class="o">==</span> <span class="s2">&quot;ELEV&quot;</span><span class="p">:</span>
-        <span class="n">sweep_el</span> <span class="o">=</span> <span class="p">[</span><span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">&quot;where&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;az_angle&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">]</span>
+    <span class="n">fixed_angle</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"fixed_angle"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">SINARAME_object</span> <span class="o">==</span> <span class="s2">"ELEV"</span><span class="p">:</span>
+        <span class="n">sweep_el</span> <span class="o">=</span> <span class="p">[</span><span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">"where"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"az_angle"</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">]</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">sweep_el</span> <span class="o">=</span> <span class="p">[</span><span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">&quot;where&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;elangle&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">]</span>
-    <span class="n">fixed_angle</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sweep_el</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+        <span class="n">sweep_el</span> <span class="o">=</span> <span class="p">[</span><span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">"where"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"elangle"</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">]</span>
+    <span class="n">fixed_angle</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">sweep_el</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
 
     <span class="c1"># elevation</span>
-    <span class="n">elevation</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;elevation&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="s2">&quot;elangles&quot;</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">:</span>
-        <span class="n">edata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">elevation</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"elevation"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">"elangles"</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">:</span>
+        <span class="n">edata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">ssri</span><span class="p">,</span> <span class="n">seri</span><span class="p">):</span>
-            <span class="n">edata</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">&quot;how&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;elangles&quot;</span><span class="p">][:]</span>
-        <span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">edata</span>
-    <span class="k">elif</span> <span class="n">SINARAME_object</span> <span class="o">==</span> <span class="s2">&quot;ELEV&quot;</span><span class="p">:</span>
-        <span class="n">edata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+            <span class="n">edata</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">"how"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"elangles"</span><span class="p">][:]</span>
+        <span class="n">elevation</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">edata</span>
+    <span class="k">elif</span> <span class="n">SINARAME_object</span> <span class="o">==</span> <span class="s2">"ELEV"</span><span class="p">:</span>
+        <span class="n">edata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">(</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">d</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">ssri</span><span class="p">,</span> <span class="n">seri</span><span class="p">):</span>
-            <span class="n">edata</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">&quot;where&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;angles&quot;</span><span class="p">][:]</span>
-        <span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">edata</span>
+            <span class="n">edata</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">"where"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"angles"</span><span class="p">][:]</span>
+        <span class="n">elevation</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">edata</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">elevation</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">sweep_el</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">)</span>
+        <span class="n">elevation</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">repeat</span><span class="p">(</span><span class="n">sweep_el</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">)</span>
 
     <span class="c1"># range</span>
-    <span class="n">_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;range&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="s2">&quot;rstart&quot;</span> <span class="ow">in</span> <span class="n">hfile</span><span class="p">[</span><span class="s2">&quot;dataset1/where&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">:</span>
+    <span class="n">_range</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"range"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">"rstart"</span> <span class="ow">in</span> <span class="n">hfile</span><span class="p">[</span><span class="s2">"dataset1/where"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">:</span>
         <span class="c1"># derive range from rstart and rscale attributes if available</span>
 
         <span class="c1"># check that the gate spacing is constant between sweeps</span>
-        <span class="n">rstart</span> <span class="o">=</span> <span class="p">[</span><span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">&quot;where&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;rstart&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">]</span>
+        <span class="n">rstart</span> <span class="o">=</span> <span class="p">[</span><span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">"where"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"rstart"</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">rstart</span> <span class="o">!=</span> <span class="n">rstart</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;range start changes between sweeps&quot;</span><span class="p">)</span>
-        <span class="n">rscale</span> <span class="o">=</span> <span class="p">[</span><span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">&quot;where&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;rscale&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">]</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"range start changes between sweeps"</span><span class="p">)</span>
+        <span class="n">rscale</span> <span class="o">=</span> <span class="p">[</span><span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">"where"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"rscale"</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">rscale</span> <span class="o">!=</span> <span class="n">rscale</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;range scale changes between sweeps&quot;</span><span class="p">)</span>
-        <span class="n">nbins</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">hfile</span><span class="p">[</span><span class="s2">&quot;dataset1&quot;</span><span class="p">][</span><span class="s2">&quot;where&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;nbins&quot;</span><span class="p">])</span>
-        <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbins</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span> <span class="o">*</span> <span class="n">rscale</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">rstart</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;meters_to_center_of_first_gate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">rstart</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;meters_between_gates&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rscale</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"range scale changes between sweeps"</span><span class="p">)</span>
+        <span class="n">nbins</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">hfile</span><span class="p">[</span><span class="s2">"dataset1"</span><span class="p">][</span><span class="s2">"where"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"nbins"</span><span class="p">])</span>
+        <span class="n">_range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nbins</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span> <span class="o">*</span> <span class="n">rscale</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">rstart</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">_range</span><span class="p">[</span><span class="s2">"meters_to_center_of_first_gate"</span><span class="p">]</span> <span class="o">=</span> <span class="n">rstart</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">_range</span><span class="p">[</span><span class="s2">"meters_between_gates"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rscale</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="c1"># if not defined use range attribute which defines the maximum range in</span>
         <span class="c1"># km.  There is no information on the starting location of the range</span>
@@ -732,34 +732,34 @@
         <span class="c1"># This most often occurs in RHI files, which technically do not meet</span>
         <span class="c1"># the ODIM 2.2 specs. Section 7.4 requires that these files include</span>
         <span class="c1"># the where/rstart, where/rscale and where/nbins attributes.</span>
-        <span class="n">max_range</span> <span class="o">=</span> <span class="p">[</span><span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">&quot;where&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;range&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">]</span>
+        <span class="n">max_range</span> <span class="o">=</span> <span class="p">[</span><span class="n">hfile</span><span class="p">[</span><span class="n">d</span><span class="p">][</span><span class="s2">"where"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"range"</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">datasets</span><span class="p">]</span>
         <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="n">max_range</span> <span class="o">!=</span> <span class="n">max_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]):</span>
-            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;maximum range changes between sweeps&quot;</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"maximum range changes between sweeps"</span><span class="p">)</span>
         <span class="c1"># nbins is required</span>
-        <span class="n">nbins</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="s2">&quot;dataset1/data1/data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-        <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="n">nbins</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
-        <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;meters_to_center_of_first_gate&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
-        <span class="n">_range</span><span class="p">[</span><span class="s2">&quot;meters_between_gates&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.0</span> <span class="o">/</span> <span class="n">nbins</span>
+        <span class="n">nbins</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="s2">"dataset1/data1/data"</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">_range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.0</span><span class="p">,</span> <span class="n">nbins</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
+        <span class="n">_range</span><span class="p">[</span><span class="s2">"meters_to_center_of_first_gate"</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">_range</span><span class="p">[</span><span class="s2">"meters_between_gates"</span><span class="p">]</span> <span class="o">=</span> <span class="n">max_range</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.0</span> <span class="o">/</span> <span class="n">nbins</span>
 
     <span class="c1"># azimuth</span>
-    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;azimuth&quot;</span><span class="p">)</span>
-    <span class="n">az_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">total_rays</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+    <span class="n">azimuth</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"azimuth"</span><span class="p">)</span>
+    <span class="n">az_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">((</span><span class="n">total_rays</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">dset</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">ssri</span><span class="p">,</span> <span class="n">seri</span><span class="p">):</span>
-        <span class="k">if</span> <span class="n">SINARAME_object</span> <span class="o">==</span> <span class="s2">&quot;ELEV&quot;</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">SINARAME_object</span> <span class="o">==</span> <span class="s2">"ELEV"</span><span class="p">:</span>
             <span class="c1"># all azimuth angles are the sweep azimuth angle</span>
-            <span class="n">sweep_az</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">&quot;where&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;az_angle&quot;</span><span class="p">]</span>
-        <span class="k">elif</span> <span class="n">SINARAME_object</span> <span class="o">==</span> <span class="s2">&quot;AZIM&quot;</span><span class="p">:</span>
+            <span class="n">sweep_az</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">"where"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"az_angle"</span><span class="p">]</span>
+        <span class="k">elif</span> <span class="n">SINARAME_object</span> <span class="o">==</span> <span class="s2">"AZIM"</span><span class="p">:</span>
             <span class="c1"># Sector azimuths are specified in the startaz and stopaz</span>
             <span class="c1"># attribute of dataset/where.</span>
             <span class="c1"># Assume that the azimuth angles do not pass through 0/360 degrees</span>
-            <span class="n">startaz</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">&quot;where&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;startaz&quot;</span><span class="p">]</span>
-            <span class="n">stopaz</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">&quot;where&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;stopaz&quot;</span><span class="p">]</span>
+            <span class="n">startaz</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">"where"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"startaz"</span><span class="p">]</span>
+            <span class="n">stopaz</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">"where"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"stopaz"</span><span class="p">]</span>
             <span class="n">nrays</span> <span class="o">=</span> <span class="n">stop</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="n">sweep_az</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">startaz</span><span class="p">,</span> <span class="n">stopaz</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="k">elif</span> <span class="p">(</span><span class="s2">&quot;startazA&quot;</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;stopazA&quot;</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">):</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="s2">"startazA"</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">"stopazA"</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">):</span>
             <span class="c1"># average between start and stop azimuth angles</span>
-            <span class="n">startaz</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">&quot;how&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;startazA&quot;</span><span class="p">]</span>
-            <span class="n">stopaz</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">&quot;how&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;stopazA&quot;</span><span class="p">]</span>
+            <span class="n">startaz</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">"how"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"startazA"</span><span class="p">]</span>
+            <span class="n">stopaz</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">"how"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"stopazA"</span><span class="p">]</span>
             <span class="n">sweep_az</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">angle</span><span class="p">(</span>
                 <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.0</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">startaz</span><span class="p">))</span> <span class="o">+</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="mf">1.0</span><span class="n">j</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">stopaz</span><span class="p">)))</span>
                 <span class="o">/</span> <span class="mf">2.0</span><span class="p">,</span>
@@ -771,30 +771,30 @@
             <span class="n">nrays</span> <span class="o">=</span> <span class="n">stop</span> <span class="o">-</span> <span class="n">start</span> <span class="o">+</span> <span class="mi">1</span>
             <span class="n">sweep_az</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">360</span><span class="p">,</span> <span class="n">nrays</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
         <span class="n">az_data</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">sweep_az</span>
-    <span class="n">azimuth</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">az_data</span>
+    <span class="n">azimuth</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">az_data</span>
 
     <span class="c1"># time</span>
-    <span class="n">_time</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="p">(</span><span class="s2">&quot;startazT&quot;</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">&quot;stopazT&quot;</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">):</span>
+    <span class="n">_time</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="s2">"time"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="p">(</span><span class="s2">"startazT"</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span><span class="s2">"stopazT"</span> <span class="ow">in</span> <span class="n">ds1_how</span><span class="p">):</span>
         <span class="c1"># average between startazT and stopazT</span>
-        <span class="n">t_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">total_rays</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+        <span class="n">t_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">total_rays</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">dset</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">ssri</span><span class="p">,</span> <span class="n">seri</span><span class="p">):</span>
-            <span class="n">t_start</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">&quot;how&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;startazT&quot;</span><span class="p">]</span>
-            <span class="n">t_stop</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">&quot;how&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;stopazT&quot;</span><span class="p">]</span>
+            <span class="n">t_start</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">"how"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"startazT"</span><span class="p">]</span>
+            <span class="n">t_stop</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">"how"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"stopazT"</span><span class="p">]</span>
             <span class="n">t_data</span><span class="p">[</span><span class="n">start</span> <span class="p">:</span> <span class="n">stop</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">t_start</span> <span class="o">+</span> <span class="n">t_stop</span><span class="p">)</span> <span class="o">/</span> <span class="mi">2</span>
         <span class="n">start_epoch</span> <span class="o">=</span> <span class="n">t_data</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">start_epoch</span><span class="p">)</span>
-        <span class="n">_time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_time_unit_str</span><span class="p">(</span><span class="n">start_time</span><span class="p">)</span>
-        <span class="n">_time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">t_data</span> <span class="o">-</span> <span class="n">start_epoch</span>
+        <span class="n">_time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_time_unit_str</span><span class="p">(</span><span class="n">start_time</span><span class="p">)</span>
+        <span class="n">_time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">t_data</span> <span class="o">-</span> <span class="n">start_epoch</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">t_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">total_rays</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+        <span class="n">t_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">total_rays</span><span class="p">,),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">)</span>
         <span class="c1"># interpolate between each sweep starting and ending time</span>
         <span class="k">for</span> <span class="n">dset</span><span class="p">,</span> <span class="n">start</span><span class="p">,</span> <span class="n">stop</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">ssri</span><span class="p">,</span> <span class="n">seri</span><span class="p">):</span>
-            <span class="n">dset_what</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">&quot;what&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span>
-            <span class="n">start_str</span> <span class="o">=</span> <span class="n">_to_str</span><span class="p">(</span><span class="n">dset_what</span><span class="p">[</span><span class="s2">&quot;startdate&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">dset_what</span><span class="p">[</span><span class="s2">&quot;starttime&quot;</span><span class="p">])</span>
-            <span class="n">end_str</span> <span class="o">=</span> <span class="n">_to_str</span><span class="p">(</span><span class="n">dset_what</span><span class="p">[</span><span class="s2">&quot;enddate&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="n">dset_what</span><span class="p">[</span><span class="s2">&quot;endtime&quot;</span><span class="p">])</span>
-            <span class="n">start_dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">start_str</span><span class="p">,</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
-            <span class="n">end_dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">end_str</span><span class="p">,</span> <span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S&quot;</span><span class="p">)</span>
+            <span class="n">dset_what</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="n">dset</span><span class="p">][</span><span class="s2">"what"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span>
+            <span class="n">start_str</span> <span class="o">=</span> <span class="n">_to_str</span><span class="p">(</span><span class="n">dset_what</span><span class="p">[</span><span class="s2">"startdate"</span><span class="p">]</span> <span class="o">+</span> <span class="n">dset_what</span><span class="p">[</span><span class="s2">"starttime"</span><span class="p">])</span>
+            <span class="n">end_str</span> <span class="o">=</span> <span class="n">_to_str</span><span class="p">(</span><span class="n">dset_what</span><span class="p">[</span><span class="s2">"enddate"</span><span class="p">]</span> <span class="o">+</span> <span class="n">dset_what</span><span class="p">[</span><span class="s2">"endtime"</span><span class="p">])</span>
+            <span class="n">start_dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">start_str</span><span class="p">,</span> <span class="s2">"%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S"</span><span class="p">)</span>
+            <span class="n">end_dt</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">strptime</span><span class="p">(</span><span class="n">end_str</span><span class="p">,</span> <span class="s2">"%Y%m</span><span class="si">%d</span><span class="s2">%H%M%S"</span><span class="p">)</span>
 
             <span class="n">time_delta</span> <span class="o">=</span> <span class="n">end_dt</span> <span class="o">-</span> <span class="n">start_dt</span>
             <span class="n">delta_seconds</span> <span class="o">=</span> <span class="n">time_delta</span><span class="o">.</span><span class="n">seconds</span> <span class="o">+</span> <span class="n">time_delta</span><span class="o">.</span><span class="n">days</span> <span class="o">*</span> <span class="mi">3600</span> <span class="o">*</span> <span class="mi">24</span>
@@ -805,20 +805,20 @@
             <span class="p">)</span>
         <span class="n">start_epoch</span> <span class="o">=</span> <span class="n">t_data</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
         <span class="n">start_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">utcfromtimestamp</span><span class="p">(</span><span class="n">start_epoch</span><span class="p">)</span>
-        <span class="n">_time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_time_unit_str</span><span class="p">(</span><span class="n">start_time</span><span class="p">)</span>
-        <span class="n">_time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">t_data</span> <span class="o">-</span> <span class="n">start_epoch</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+        <span class="n">_time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span> <span class="o">=</span> <span class="n">make_time_unit_str</span><span class="p">(</span><span class="n">start_time</span><span class="p">)</span>
+        <span class="n">_time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">t_data</span> <span class="o">-</span> <span class="n">start_epoch</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"float32"</span><span class="p">)</span>
 
     <span class="c1"># fields</span>
     <span class="n">fields</span> <span class="o">=</span> <span class="p">{}</span>
-    <span class="n">h_field_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">hfile</span><span class="p">[</span><span class="s2">&quot;dataset1&quot;</span><span class="p">]</span> <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot;data&quot;</span><span class="p">)]</span>
+    <span class="n">h_field_keys</span> <span class="o">=</span> <span class="p">[</span><span class="n">k</span> <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="n">hfile</span><span class="p">[</span><span class="s2">"dataset1"</span><span class="p">]</span> <span class="k">if</span> <span class="n">k</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">"data"</span><span class="p">)]</span>
     <span class="n">SINARAME_fields</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">hfile</span><span class="p">[</span><span class="s2">&quot;dataset1&quot;</span><span class="p">][</span><span class="n">d</span><span class="p">][</span><span class="s2">&quot;what&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">&quot;quantity&quot;</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">h_field_keys</span>
+        <span class="n">hfile</span><span class="p">[</span><span class="s2">"dataset1"</span><span class="p">][</span><span class="n">d</span><span class="p">][</span><span class="s2">"what"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="s2">"quantity"</span><span class="p">]</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">h_field_keys</span>
     <span class="p">]</span>
     <span class="k">for</span> <span class="n">SINARAME_field</span><span class="p">,</span> <span class="n">h_field_key</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">SINARAME_fields</span><span class="p">,</span> <span class="n">h_field_keys</span><span class="p">):</span>
         <span class="n">field_name</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="o">.</span><span class="n">get_field_name</span><span class="p">(</span><span class="n">_to_str</span><span class="p">(</span><span class="n">SINARAME_field</span><span class="p">))</span>
         <span class="k">if</span> <span class="n">field_name</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
             <span class="k">continue</span>
-        <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;float32&quot;</span><span class="p">)</span>
+        <span class="n">fdata</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">total_rays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span><span class="p">)</span>
         <span class="n">start</span> <span class="o">=</span> <span class="mi">0</span>
         <span class="c1"># loop over the sweeps, copy data into correct location in data array</span>
         <span class="k">for</span> <span class="n">dset</span><span class="p">,</span> <span class="n">rays_in_sweep</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">datasets</span><span class="p">,</span> <span class="n">rays_per_sweep</span><span class="p">):</span>
@@ -828,8 +828,8 @@
             <span class="n">start</span> <span class="o">+=</span> <span class="n">rays_in_sweep</span>
         <span class="c1"># create field dictionary</span>
         <span class="n">field_dic</span> <span class="o">=</span> <span class="n">filemetadata</span><span class="p">(</span><span class="n">field_name</span><span class="p">)</span>
-        <span class="n">field_dic</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fdata</span>
-        <span class="n">field_dic</span><span class="p">[</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
+        <span class="n">field_dic</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">fdata</span>
+        <span class="n">field_dic</span><span class="p">[</span><span class="s2">"_FillValue"</span><span class="p">]</span> <span class="o">=</span> <span class="n">get_fillvalue</span><span class="p">()</span>
         <span class="n">fields</span><span class="p">[</span><span class="n">field_name</span><span class="p">]</span> <span class="o">=</span> <span class="n">field_dic</span>
         <span class="c1"># Add missing metadata</span>
         <span class="k">if</span> <span class="n">file_field_names</span><span class="p">:</span>
@@ -841,8 +841,8 @@
     <span class="c1"># Grab each instrument parameter and its value for the hfile object.</span>
     <span class="k">try</span><span class="p">:</span>
         <span class="n">instrument_parameters</span> <span class="o">=</span> <span class="p">{}</span>
-        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hfile</span><span class="p">[</span><span class="s2">&quot;how&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
-            <span class="n">instrument_parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="s2">&quot;how&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">hfile</span><span class="p">[</span><span class="s2">"how"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">instrument_parameters</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">hfile</span><span class="p">[</span><span class="s2">"how"</span><span class="p">]</span><span class="o">.</span><span class="n">attrs</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
     <span class="c1"># Continue if there are no attributes for instrument parameters.</span>
     <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
         <span class="n">instrument_parameters</span> <span class="o">=</span> <span class="kc">None</span>
@@ -871,7 +871,7 @@
 <div class="viewcode-block" id="write_sinarame_cfradial">
 <a class="viewcode-back" href="../../../API/generated/pyart.aux_io.write_sinarame_cfradial.html#pyart.aux_io.write_sinarame_cfradial">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">write_sinarame_cfradial</span><span class="p">(</span><span class="n">path</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    This function takes SINARAME_H5 files (where every file has only one field</span>
 <span class="sd">    and one volume) from a folder and writes a CfRadial file for each volume</span>
 <span class="sd">    including all fields.</span>
@@ -881,40 +881,40 @@
 <span class="sd">    path : str</span>
 <span class="sd">        Where the SINARAME_H5 files are.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="n">path_user</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
 
-    <span class="n">TH_list</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path_user</span> <span class="o">+</span> <span class="s2">&quot;/*_TH_*.H5&quot;</span><span class="p">)</span>
+    <span class="n">TH_list</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path_user</span> <span class="o">+</span> <span class="s2">"/*_TH_*.H5"</span><span class="p">)</span>
 
-    <span class="n">file_date</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">9</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">TH_list</span><span class="p">]</span>
+    <span class="n">file_date</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">][</span><span class="mi">9</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">TH_list</span><span class="p">]</span>
     <span class="n">file_date</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>
 
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">file_date</span><span class="p">:</span>
-        <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path_user</span> <span class="o">+</span> <span class="s2">&quot;/*&quot;</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="s2">&quot;Z.H5&quot;</span><span class="p">)</span>
+        <span class="n">files</span> <span class="o">=</span> <span class="n">glob</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span><span class="n">path_user</span> <span class="o">+</span> <span class="s2">"/*"</span> <span class="o">+</span> <span class="n">i</span> <span class="o">+</span> <span class="s2">"Z.H5"</span><span class="p">)</span>
 
         <span class="c1"># I want it to start with TV or TH because of some range issue</span>
         <span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">reverse</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-        <span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]))</span>
+        <span class="n">files</span><span class="o">.</span><span class="n">sort</span><span class="p">(</span><span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)[</span><span class="o">-</span><span class="mi">2</span><span class="p">]))</span>
 
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">files</span><span class="p">)):</span>
             <span class="n">basename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
-            <span class="n">bs</span> <span class="o">=</span> <span class="n">basename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot;_&quot;</span><span class="p">)</span>
-            <span class="n">base1</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
-            <span class="n">file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">path_user</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">base1</span><span class="si">}</span><span class="s2">&quot;</span>
+            <span class="n">bs</span> <span class="o">=</span> <span class="n">basename</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">"_"</span><span class="p">)</span>
+            <span class="n">base1</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">4</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
+            <span class="n">file</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">path_user</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">base1</span><span class="si">}</span><span class="s2">"</span>
 
             <span class="k">if</span> <span class="n">j</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
                     <span class="n">radar</span> <span class="o">=</span> <span class="n">read_sinarame_h5</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">file_field_names</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-                    <span class="n">azi_shape</span><span class="p">,</span> <span class="n">range_shape</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;TV&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
+                    <span class="n">azi_shape</span><span class="p">,</span> <span class="n">range_shape</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">"TV"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span>
 
                 <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x - this Radar wasn&#39;t created&quot;</span><span class="p">,</span> <span class="n">base1</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">"x - this Radar wasn't created"</span><span class="p">,</span> <span class="n">base1</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">"</span><span class="se">\t</span><span class="s2">"</span><span class="p">)</span>
 
                 <span class="c1"># In case the H5 file was badly created with bbufr it</span>
                 <span class="c1"># throws a KeyError</span>
                 <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x - Wrong BUFR conversion&quot;</span><span class="p">,</span> <span class="n">base1</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">"x - Wrong BUFR conversion"</span><span class="p">,</span> <span class="n">base1</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">"</span><span class="se">\t</span><span class="s2">"</span><span class="p">)</span>
 
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">try</span><span class="p">:</span>
@@ -923,87 +923,87 @@
                     <span class="n">field</span> <span class="o">=</span> <span class="n">radar_tmp</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">keys</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
 
                     <span class="c1"># Add missing gates</span>
-                    <span class="k">if</span> <span class="n">radar_tmp</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">range_shape</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">radar_tmp</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">!=</span> <span class="n">range_shape</span><span class="p">:</span>
                         <span class="n">n_missing_gates</span> <span class="o">=</span> <span class="p">(</span>
-                            <span class="n">range_shape</span> <span class="o">-</span> <span class="n">radar_tmp</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+                            <span class="n">range_shape</span> <span class="o">-</span> <span class="n">radar_tmp</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
                         <span class="p">)</span>
                         <span class="n">fill</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_all</span><span class="p">((</span><span class="n">azi_shape</span><span class="p">,</span> <span class="n">n_missing_gates</span><span class="p">))</span>
                         <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span>
-                            <span class="p">[</span><span class="n">radar_tmp</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">],</span> <span class="n">fill</span><span class="p">],</span> <span class="mi">1</span>
+                            <span class="p">[</span><span class="n">radar_tmp</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">],</span> <span class="n">fill</span><span class="p">],</span> <span class="mi">1</span>
                         <span class="p">)</span>
-                        <span class="n">radar_tmp</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+                        <span class="n">radar_tmp</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
 
                     <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="o">.</span><span class="n">update</span><span class="p">(</span><span class="n">radar_tmp</span><span class="o">.</span><span class="n">fields</span><span class="p">)</span>
 
                 <span class="c1"># Same as above, bbufr conversion errors</span>
                 <span class="k">except</span> <span class="ne">KeyError</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x - Wrong BUFR conversion&quot;</span><span class="p">,</span> <span class="n">base1</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">"x - Wrong BUFR conversion"</span><span class="p">,</span> <span class="n">base1</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">"</span><span class="se">\t</span><span class="s2">"</span><span class="p">)</span>
 
                 <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;x - this Radar wasn&#39;t created&quot;</span><span class="p">,</span> <span class="n">base1</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">"x - this Radar wasn't created"</span><span class="p">,</span> <span class="n">base1</span><span class="p">,</span> <span class="n">sep</span><span class="o">=</span><span class="s2">"</span><span class="se">\t</span><span class="s2">"</span><span class="p">)</span>
 
-                <span class="c1"># In case the first file didn&#39;t create a Radar object</span>
+                <span class="c1"># In case the first file didn't create a Radar object</span>
                 <span class="k">except</span> <span class="ne">NameError</span><span class="p">:</span>
-                    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Radar didn&#39;t exist, creating&quot;</span><span class="p">)</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="s2">"Radar didn't exist, creating"</span><span class="p">)</span>
                     <span class="n">radar</span> <span class="o">=</span> <span class="n">read_sinarame_h5</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">file_field_names</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
         <span class="n">time1</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span>
-            <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
-            <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">],</span>
-            <span class="n">calendar</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span><span class="p">,</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">],</span>
+            <span class="n">calendar</span><span class="o">=</span><span class="s2">"standard"</span><span class="p">,</span>
             <span class="n">only_use_cftime_datetimes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">only_use_python_datetimes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">_%H%M%S&quot;</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y%m</span><span class="si">%d</span><span class="s2">_%H%M%S"</span><span class="p">)</span>
         <span class="n">time2</span> <span class="o">=</span> <span class="n">num2date</span><span class="p">(</span>
-            <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
-            <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">],</span>
-            <span class="n">calendar</span><span class="o">=</span><span class="s2">&quot;standard&quot;</span><span class="p">,</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+            <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">],</span>
+            <span class="n">calendar</span><span class="o">=</span><span class="s2">"standard"</span><span class="p">,</span>
             <span class="n">only_use_cftime_datetimes</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">only_use_python_datetimes</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-        <span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%Y%m</span><span class="si">%d</span><span class="s2">_%H%M%S&quot;</span><span class="p">)</span>
+        <span class="p">)</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">"%Y%m</span><span class="si">%d</span><span class="s2">_%H%M%S"</span><span class="p">)</span>
 
         <span class="n">radar</span><span class="o">.</span><span class="n">_DeflateLevel</span> <span class="o">=</span> <span class="mi">5</span>
 
         <span class="c1"># cfrad.TIME1_to_TIME2_NAME_VCP_RANGE.nc</span>
-        <span class="n">cffile</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;cfrad.</span><span class="si">{</span><span class="n">time1</span><span class="si">}</span><span class="s2">.0000_to_</span><span class="si">{</span><span class="n">time2</span><span class="si">}</span><span class="s2">.0000&quot;</span> <span class="sa">f</span><span class="s2">&quot;_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">cffile</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"cfrad.</span><span class="si">{</span><span class="n">time1</span><span class="si">}</span><span class="s2">.0000_to_</span><span class="si">{</span><span class="n">time2</span><span class="si">}</span><span class="s2">.0000"</span> <span class="sa">f</span><span class="s2">"_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">bs</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span><span class="si">}</span><span class="s2">"</span>
 
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Writing to </span><span class="si">{</span><span class="n">path_user</span><span class="si">}{</span><span class="n">cffile</span><span class="si">}</span><span class="s2">.nc&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">"Writing to </span><span class="si">{</span><span class="n">path_user</span><span class="si">}{</span><span class="n">cffile</span><span class="si">}</span><span class="s2">.nc"</span><span class="p">)</span>
         <span class="n">write_cfradial</span><span class="p">(</span>
-            <span class="n">path_user</span> <span class="o">+</span> <span class="s2">&quot;/&quot;</span> <span class="o">+</span> <span class="n">cffile</span> <span class="o">+</span> <span class="s2">&quot;.nc&quot;</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;NETCDF4_CLASSIC&quot;</span>
+            <span class="n">path_user</span> <span class="o">+</span> <span class="s2">"/"</span> <span class="o">+</span> <span class="n">cffile</span> <span class="o">+</span> <span class="s2">".nc"</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">"NETCDF4_CLASSIC"</span>
         <span class="p">)</span></div>
 
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_to_str</span><span class="p">(</span><span class="n">text</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Convert bytes to str if necessary.&quot;&quot;&quot;</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s2">&quot;decode&quot;</span><span class="p">):</span>
-        <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span>
+<span class="w">    </span><span class="sd">"""Convert bytes to str if necessary."""</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">text</span><span class="p">,</span> <span class="s2">"decode"</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">text</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">"utf-8"</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">text</span>
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_get_SINARAME_h5_sweep_data</span><span class="p">(</span><span class="n">group</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Get SINARAME_H5 sweet data from an HDF5 group.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Get SINARAME_H5 sweet data from an HDF5 group."""</span>
 
     <span class="c1"># mask raw data</span>
-    <span class="n">what</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="s2">&quot;what&quot;</span><span class="p">]</span>
-    <span class="n">raw_data</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][:]</span>
+    <span class="n">what</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="s2">"what"</span><span class="p">]</span>
+    <span class="n">raw_data</span> <span class="o">=</span> <span class="n">group</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][:]</span>
 
-    <span class="k">if</span> <span class="s2">&quot;nodata&quot;</span> <span class="ow">in</span> <span class="n">what</span><span class="o">.</span><span class="n">attrs</span><span class="p">:</span>
-        <span class="n">nodata</span> <span class="o">=</span> <span class="n">what</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;nodata&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">"nodata"</span> <span class="ow">in</span> <span class="n">what</span><span class="o">.</span><span class="n">attrs</span><span class="p">:</span>
+        <span class="n">nodata</span> <span class="o">=</span> <span class="n">what</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"nodata"</span><span class="p">)</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_equal</span><span class="p">(</span><span class="n">raw_data</span><span class="p">,</span> <span class="n">nodata</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
         <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_array</span><span class="p">(</span><span class="n">raw_data</span><span class="p">)</span>
-    <span class="k">if</span> <span class="s2">&quot;undetect&quot;</span> <span class="ow">in</span> <span class="n">what</span><span class="o">.</span><span class="n">attrs</span><span class="p">:</span>
-        <span class="n">undetect</span> <span class="o">=</span> <span class="n">what</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;undetect&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">"undetect"</span> <span class="ow">in</span> <span class="n">what</span><span class="o">.</span><span class="n">attrs</span><span class="p">:</span>
+        <span class="n">undetect</span> <span class="o">=</span> <span class="n">what</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"undetect"</span><span class="p">)</span>
         <span class="n">data</span><span class="p">[</span><span class="n">data</span> <span class="o">==</span> <span class="n">undetect</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked</span>
 
     <span class="n">offset</span> <span class="o">=</span> <span class="mf">0.0</span>
     <span class="n">gain</span> <span class="o">=</span> <span class="mf">1.0</span>
-    <span class="k">if</span> <span class="s2">&quot;offset&quot;</span> <span class="ow">in</span> <span class="n">what</span><span class="o">.</span><span class="n">attrs</span><span class="p">:</span>
-        <span class="n">offset</span> <span class="o">=</span> <span class="n">what</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;offset&quot;</span><span class="p">)</span>
-    <span class="k">if</span> <span class="s2">&quot;gain&quot;</span> <span class="ow">in</span> <span class="n">what</span><span class="o">.</span><span class="n">attrs</span><span class="p">:</span>
-        <span class="n">gain</span> <span class="o">=</span> <span class="n">what</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;gain&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">"offset"</span> <span class="ow">in</span> <span class="n">what</span><span class="o">.</span><span class="n">attrs</span><span class="p">:</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="n">what</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"offset"</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">"gain"</span> <span class="ow">in</span> <span class="n">what</span><span class="o">.</span><span class="n">attrs</span><span class="p">:</span>
+        <span class="n">gain</span> <span class="o">=</span> <span class="n">what</span><span class="o">.</span><span class="n">attrs</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"gain"</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">data</span> <span class="o">*</span> <span class="n">gain</span> <span class="o">+</span> <span class="n">offset</span>
 </pre></div>
 <div class="section ablog__blog_comments">
@@ -1037,8 +1037,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1072,7 +1072,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

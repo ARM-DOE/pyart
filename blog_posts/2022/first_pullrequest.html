@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -42,10 +42,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -648,7 +648,7 @@ to the source code for further collaboration.</p>
 <p>You will need to add the location of the library to your path. For me, this would be the ~/.kshrc file</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">PATH</span><span class="o">=</span><span class="s2">&quot;/opt/rsl-v1.50/:$PATH&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">export</span> <span class="n">PATH</span><span class="o">=</span><span class="s2">"/opt/rsl-v1.50/:$PATH"</span>
 </pre></div>
 </div>
 </div>
@@ -689,14 +689,14 @@ to the source code for further collaboration.</p>
 <p>Let’s first change the PPI image. The original code is located at: /pyart/examples/plotting/plot_ppi_mdv.py</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">"""</span>
 <span class="sd">=================================</span>
 <span class="sd">Create a PPI plot from a MDV file</span>
 <span class="sd">=================================</span>
 
 <span class="sd">An example which creates a PPI plot of a MDV file using a RadarDisplay object.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="c1"># Author: Jonathan J. Helmus (jhelmus@anl.gov)</span>
 <span class="c1"># License: BSD 3 clause</span>
@@ -705,7 +705,7 @@ to the source code for further collaboration.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyart.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_test_data</span>
 
-<span class="n">filename</span> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">&quot;110635.mdv&quot;</span><span class="p">)</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">"110635.mdv"</span><span class="p">)</span>
 
 <span class="c1"># create the plot using RadarDisplay</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_mdv</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
@@ -713,7 +713,7 @@ to the source code for further collaboration.</p>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">16.0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;PPI&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;jet&quot;</span><span class="p">)</span>
+    <span class="s2">"reflectivity"</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">16.0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">"PPI"</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">"jet"</span><span class="p">)</span>
 <span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">],</span> <span class="n">xlim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">])</span>
 </pre></div>
@@ -726,14 +726,14 @@ to the source code for further collaboration.</p>
 <p>Let’s now change the color scheme to one of Py-ART’s (<a class="reference external" href="https://arm-doe.github.io/pyart/API/generated/pyart.graph.html?highlight=homeyerrainbow">colorbind friendly schemes</a>)</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">"""</span>
 <span class="sd">=================================</span>
 <span class="sd">Create a PPI plot from a MDV file</span>
 <span class="sd">=================================</span>
 
 <span class="sd">An example which creates a PPI plot of a MDV file using a RadarDisplay object.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="c1"># Author: Jonathan J. Helmus (jhelmus@anl.gov)</span>
 <span class="c1"># License: BSD 3 clause</span>
@@ -742,7 +742,7 @@ to the source code for further collaboration.</p>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyart.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_test_data</span>
 
-<span class="n">filename</span> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">&quot;110635.mdv&quot;</span><span class="p">)</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">"110635.mdv"</span><span class="p">)</span>
 
 <span class="c1"># create the plot using RadarDisplay</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_mdv</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
@@ -750,7 +750,7 @@ to the source code for further collaboration.</p>
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">5</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">16.0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">&quot;PPI&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_HomeyerRainbow&quot;</span>
+    <span class="s2">"reflectivity"</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mf">16.0</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span> <span class="n">title</span><span class="o">=</span><span class="s2">"PPI"</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"pyart_HomeyerRainbow"</span>
 <span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">ylim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">],</span> <span class="n">xlim</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">150</span><span class="p">,</span> <span class="mi">150</span><span class="p">])</span>
 </pre></div>
@@ -764,7 +764,7 @@ to the source code for further collaboration.</p>
 <p>This new file is also located at: /pyart/examples/plotting/</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">"""</span>
 <span class="sd">======================================================</span>
 <span class="sd">Create a multiple panel RHI plot from a CF/Radial file</span>
 <span class="sd">======================================================</span>
@@ -772,14 +772,14 @@ to the source code for further collaboration.</p>
 <span class="sd">An example which creates a RHI plot of a CF/Radial file using</span>
 <span class="sd">a RadarDisplay object.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">netCDF4</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyart.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_test_data</span>
 
-<span class="n">filename</span> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">&quot;sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc&quot;</span><span class="p">)</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">"sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc"</span><span class="p">)</span>
 
 <span class="c1"># create the plot using RadarDisplay</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
@@ -787,20 +787,20 @@ to the source code for further collaboration.</p>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
-<span class="n">xlabel</span> <span class="o">=</span> <span class="s2">&quot;Distance from radar (km)&quot;</span>
-<span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;Distance above radar (km)&quot;</span>
-<span class="n">colorbar_label</span> <span class="o">=</span> <span class="s2">&quot;Equivalent reflectivity factor (dBZ)&quot;</span>
+<span class="n">xlabel</span> <span class="o">=</span> <span class="s2">"Distance from radar (km)"</span>
+<span class="n">ylabel</span> <span class="o">=</span> <span class="s2">"Distance above radar (km)"</span>
+<span class="n">colorbar_label</span> <span class="o">=</span> <span class="s2">"Equivalent reflectivity factor (dBZ)"</span>
 
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">,</span>
+    <span class="s2">"reflectivity_horizontal"</span><span class="p">,</span>
     <span class="mi">0</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span>
     <span class="n">vmax</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
     <span class="n">mask_outside</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;RHI&quot;</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">"RHI"</span><span class="p">,</span>
     <span class="n">axislabels</span><span class="o">=</span><span class="p">(</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">),</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">&quot;jet&quot;</span><span class="p">),</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="n">plt</span><span class="o">.</span><span class="n">get_cmap</span><span class="p">(</span><span class="s2">"jet"</span><span class="p">),</span>
     <span class="n">colorbar_label</span><span class="o">=</span><span class="n">colorbar_label</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
 <span class="p">)</span>
@@ -816,7 +816,7 @@ to the source code for further collaboration.</p>
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">&quot;&quot;&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="sd">"""</span>
 <span class="sd">======================================================</span>
 <span class="sd">Create a multiple panel RHI plot from a CF/Radial file</span>
 <span class="sd">======================================================</span>
@@ -824,14 +824,14 @@ to the source code for further collaboration.</p>
 <span class="sd">An example which creates a RHI plot of a CF/Radial file using</span>
 <span class="sd">a RadarDisplay object.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">netCDF4</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">pyart.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_test_data</span>
 
-<span class="n">filename</span> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">&quot;sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc&quot;</span><span class="p">)</span>
+<span class="n">filename</span> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">"sgpxsaprrhicmacI5.c0.20110524.015604_NC4.nc"</span><span class="p">)</span>
 
 <span class="c1"># create the plot using RadarDisplay</span>
 <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_cfradial</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
@@ -839,20 +839,20 @@ to the source code for further collaboration.</p>
 
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">15</span><span class="p">,</span> <span class="mi">5</span><span class="p">])</span>
 <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">hspace</span><span class="o">=</span><span class="mf">0.4</span><span class="p">)</span>
-<span class="n">xlabel</span> <span class="o">=</span> <span class="s2">&quot;Distance from radar (km)&quot;</span>
-<span class="n">ylabel</span> <span class="o">=</span> <span class="s2">&quot;Distance above radar (km)&quot;</span>
-<span class="n">colorbar_label</span> <span class="o">=</span> <span class="s2">&quot;Equivalent reflectivity factor (dBZ)&quot;</span>
+<span class="n">xlabel</span> <span class="o">=</span> <span class="s2">"Distance from radar (km)"</span>
+<span class="n">ylabel</span> <span class="o">=</span> <span class="s2">"Distance above radar (km)"</span>
+<span class="n">colorbar_label</span> <span class="o">=</span> <span class="s2">"Equivalent reflectivity factor (dBZ)"</span>
 
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity_horizontal&quot;</span><span class="p">,</span>
+    <span class="s2">"reflectivity_horizontal"</span><span class="p">,</span>
     <span class="mi">0</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span>
     <span class="n">vmax</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
     <span class="n">mask_outside</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">title</span><span class="o">=</span><span class="s2">&quot;RHI&quot;</span><span class="p">,</span>
+    <span class="n">title</span><span class="o">=</span><span class="s2">"RHI"</span><span class="p">,</span>
     <span class="n">axislabels</span><span class="o">=</span><span class="p">(</span><span class="n">xlabel</span><span class="p">,</span> <span class="n">ylabel</span><span class="p">),</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;pyart_HomeyerRainbow&quot;</span><span class="p">,</span>
+    <span class="n">cmap</span><span class="o">=</span><span class="s2">"pyart_HomeyerRainbow"</span><span class="p">,</span>
     <span class="n">colorbar_label</span><span class="o">=</span><span class="n">colorbar_label</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
 <span class="p">)</span>
@@ -877,17 +877,17 @@ to the source code for further collaboration.</p>
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># (pyart-docs) git status</span>
 <span class="n">On</span> <span class="n">branch</span> <span class="n">blog_PR</span>
 <span class="n">Changes</span> <span class="ow">not</span> <span class="n">staged</span> <span class="k">for</span> <span class="n">commit</span><span class="p">:</span>
-  <span class="p">(</span><span class="n">use</span> <span class="s2">&quot;git add &lt;file&gt;...&quot;</span> <span class="n">to</span> <span class="n">update</span> <span class="n">what</span> <span class="n">will</span> <span class="n">be</span> <span class="n">committed</span><span class="p">)</span>
-  <span class="p">(</span><span class="n">use</span> <span class="s2">&quot;git restore &lt;file&gt;...&quot;</span> <span class="n">to</span> <span class="n">discard</span> <span class="n">changes</span> <span class="ow">in</span> <span class="n">working</span> <span class="n">directory</span><span class="p">)</span>
+  <span class="p">(</span><span class="n">use</span> <span class="s2">"git add &lt;file&gt;..."</span> <span class="n">to</span> <span class="n">update</span> <span class="n">what</span> <span class="n">will</span> <span class="n">be</span> <span class="n">committed</span><span class="p">)</span>
+  <span class="p">(</span><span class="n">use</span> <span class="s2">"git restore &lt;file&gt;..."</span> <span class="n">to</span> <span class="n">discard</span> <span class="n">changes</span> <span class="ow">in</span> <span class="n">working</span> <span class="n">directory</span><span class="p">)</span>
 	<span class="n">modified</span><span class="p">:</span>   <span class="o">../../</span><span class="n">doc</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">_static</span><span class="o">/</span><span class="n">ppi</span><span class="o">.</span><span class="n">png</span>
 	<span class="n">modified</span><span class="p">:</span>   <span class="o">../../</span><span class="n">doc</span><span class="o">/</span><span class="n">source</span><span class="o">/</span><span class="n">_static</span><span class="o">/</span><span class="n">rhi</span><span class="o">.</span><span class="n">png</span>
 	<span class="n">modified</span><span class="p">:</span>   <span class="n">plot_ppi_mdv</span><span class="o">.</span><span class="n">py</span>
 
 <span class="n">Untracked</span> <span class="n">files</span><span class="p">:</span>
-  <span class="p">(</span><span class="n">use</span> <span class="s2">&quot;git add &lt;file&gt;...&quot;</span> <span class="n">to</span> <span class="n">include</span> <span class="ow">in</span> <span class="n">what</span> <span class="n">will</span> <span class="n">be</span> <span class="n">committed</span><span class="p">)</span>
+  <span class="p">(</span><span class="n">use</span> <span class="s2">"git add &lt;file&gt;..."</span> <span class="n">to</span> <span class="n">include</span> <span class="ow">in</span> <span class="n">what</span> <span class="n">will</span> <span class="n">be</span> <span class="n">committed</span><span class="p">)</span>
 	<span class="n">plot_rhi_cfradial_singlescan</span><span class="o">.</span><span class="n">py</span>
 
-<span class="n">no</span> <span class="n">changes</span> <span class="n">added</span> <span class="n">to</span> <span class="n">commit</span> <span class="p">(</span><span class="n">use</span> <span class="s2">&quot;git add&quot;</span> <span class="ow">and</span><span class="o">/</span><span class="ow">or</span> <span class="s2">&quot;git commit -a&quot;</span><span class="p">)</span>
+<span class="n">no</span> <span class="n">changes</span> <span class="n">added</span> <span class="n">to</span> <span class="n">commit</span> <span class="p">(</span><span class="n">use</span> <span class="s2">"git add"</span> <span class="ow">and</span><span class="o">/</span><span class="ow">or</span> <span class="s2">"git commit -a"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -903,7 +903,7 @@ After adding the new images for the docs and updated (and new) code, we need to 
    <span class="n">plot_ppi_mdv</span><span class="o">.</span><span class="n">py</span> <span class="n">modified</span> <span class="k">for</span> <span class="n">this</span> <span class="n">change</span><span class="o">.</span> 
    <span class="n">plot_rhi_cfradial_singlescan</span><span class="o">.</span><span class="n">py</span> <span class="n">created</span> <span class="n">to</span> <span class="n">create</span> <span class="n">one</span> <span class="n">rhi</span> <span class="n">cfradial</span> <span class="n">plot</span> <span class="k">for</span> <span class="n">the</span> <span class="n">docs</span><span class="o">.</span>
    <span class="c1"># Please enter the commit message for your changes. Lines starting</span>
-   <span class="c1"># with &#39;#&#39; will be ignored, and an empty message aborts the commit.</span>
+   <span class="c1"># with '#' will be ignored, and an empty message aborts the commit.</span>
    <span class="c1">#</span>
    <span class="c1"># On branch blog_PR</span>
    <span class="c1"># Changes to be committed:</span>
@@ -1025,8 +1025,8 @@ After adding the new images for the docs and updated (and new) code, we need to 
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1060,7 +1060,7 @@ After adding the new images for the docs and updated (and new) code, we need to 
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

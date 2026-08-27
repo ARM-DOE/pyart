@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -42,10 +42,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -617,7 +617,7 @@
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">IPython.display</span><span class="w"> </span><span class="kn">import</span> <span class="n">IFrame</span>
 
 <span class="n">IFrame</span><span class="p">(</span>
-    <span class="n">src</span><span class="o">=</span><span class="s2">&quot;https://www.spc.noaa.gov/climo/gmf.php?rpt=230331_rpts_filtered&quot;</span><span class="p">,</span>
+    <span class="n">src</span><span class="o">=</span><span class="s2">"https://www.spc.noaa.gov/climo/gmf.php?rpt=230331_rpts_filtered"</span><span class="p">,</span>
     <span class="n">width</span><span class="o">=</span><span class="mi">700</span><span class="p">,</span>
     <span class="n">height</span><span class="o">=</span><span class="mi">500</span><span class="p">,</span>
 <span class="p">)</span>
@@ -678,7 +678,7 @@ which includes the following radar imagery, which was produced using data from t
 <span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
 
-<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">&quot;ignore&quot;</span><span class="p">)</span>
+<span class="n">warnings</span><span class="o">.</span><span class="n">filterwarnings</span><span class="p">(</span><span class="s2">"ignore"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -738,19 +738,19 @@ Archive:  tl_2016_us_primaryroads.zip
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read shape file</span>
-<span class="n">reader</span> <span class="o">=</span> <span class="n">shpreader</span><span class="o">.</span><span class="n">Reader</span><span class="p">(</span><span class="s2">&quot;./tl_2016_us_primaryroads.shp&quot;</span><span class="p">)</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="n">shpreader</span><span class="o">.</span><span class="n">Reader</span><span class="p">(</span><span class="s2">"./tl_2016_us_primaryroads.shp"</span><span class="p">)</span>
 <span class="n">names</span> <span class="o">=</span> <span class="p">[]</span>
 <span class="n">geoms</span> <span class="o">=</span> <span class="p">[]</span>
 
 <span class="c1"># Loop through and find the interstates, looking for an I in the full name</span>
 <span class="k">for</span> <span class="n">rec</span> <span class="ow">in</span> <span class="n">reader</span><span class="o">.</span><span class="n">records</span><span class="p">():</span>
-    <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s2">&quot;FULLNAME&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;I&quot;</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">rec</span><span class="o">.</span><span class="n">attributes</span><span class="p">[</span><span class="s2">"FULLNAME"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">"I"</span><span class="p">:</span>
         <span class="n">names</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rec</span><span class="p">)</span>
         <span class="n">geoms</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">rec</span><span class="o">.</span><span class="n">geometry</span><span class="p">)</span>
 
 <span class="c1"># make interstate feature</span>
 <span class="n">interstate_feature</span> <span class="o">=</span> <span class="n">ShapelyFeature</span><span class="p">(</span>
-    <span class="n">geoms</span><span class="p">,</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;darkblue&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;none&quot;</span>
+    <span class="n">geoms</span><span class="p">,</span> <span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span> <span class="n">edgecolor</span><span class="o">=</span><span class="s2">"darkblue"</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mf">0.5</span><span class="p">,</span> <span class="n">facecolor</span><span class="o">=</span><span class="s2">"none"</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -762,15 +762,15 @@ Archive:  tl_2016_us_primaryroads.zip
 <p>The NEXRAD data is available through Amazon Web Services (AWS), and we are using the Level2 data, which has been quality controlled to an extent, but has not been fully cleaned (ex. velocity field may still be aliased).</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">filesystem</span><span class="p">(</span><span class="s2">&quot;s3&quot;</span><span class="p">,</span> <span class="n">anon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
-<span class="n">site</span> <span class="o">=</span> <span class="s2">&quot;KMKX&quot;</span>
-<span class="n">year</span> <span class="o">=</span> <span class="s2">&quot;2023&quot;</span>
-<span class="n">month</span> <span class="o">=</span> <span class="s2">&quot;04&quot;</span>
-<span class="n">day</span> <span class="o">=</span> <span class="s2">&quot;01&quot;</span>
-<span class="n">hour</span> <span class="o">=</span> <span class="s2">&quot;01&quot;</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fs</span> <span class="o">=</span> <span class="n">fsspec</span><span class="o">.</span><span class="n">filesystem</span><span class="p">(</span><span class="s2">"s3"</span><span class="p">,</span> <span class="n">anon</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="n">site</span> <span class="o">=</span> <span class="s2">"KMKX"</span>
+<span class="n">year</span> <span class="o">=</span> <span class="s2">"2023"</span>
+<span class="n">month</span> <span class="o">=</span> <span class="s2">"04"</span>
+<span class="n">day</span> <span class="o">=</span> <span class="s2">"01"</span>
+<span class="n">hour</span> <span class="o">=</span> <span class="s2">"01"</span>
 <span class="n">files</span> <span class="o">=</span> <span class="nb">sorted</span><span class="p">(</span>
     <span class="n">fs</span><span class="o">.</span><span class="n">glob</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;s3://noaa-nexrad-level2/</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">day</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">site</span><span class="si">}{</span><span class="n">year</span><span class="si">}{</span><span class="n">month</span><span class="si">}{</span><span class="n">day</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">hour</span><span class="si">}</span><span class="s2">*06&quot;</span>
+        <span class="sa">f</span><span class="s2">"s3://noaa-nexrad-level2/</span><span class="si">{</span><span class="n">year</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">month</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">day</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">site</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">site</span><span class="si">}{</span><span class="n">year</span><span class="si">}{</span><span class="n">month</span><span class="si">}{</span><span class="n">day</span><span class="si">}</span><span class="s2">_</span><span class="si">{</span><span class="n">hour</span><span class="si">}</span><span class="s2">*06"</span>
     <span class="p">)</span>
 <span class="p">)</span>
 <span class="n">files</span>
@@ -778,17 +778,17 @@ Archive:  tl_2016_us_primaryroads.zip
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_010517_V06&#39;,
- &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_011057_V06&#39;,
- &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_011638_V06&#39;,
- &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_012219_V06&#39;,
- &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_012759_V06&#39;,
- &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_013341_V06&#39;,
- &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_013922_V06&#39;,
- &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_014502_V06&#39;,
- &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_015042_V06&#39;,
- &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_015623_V06&#39;,
- &#39;noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_015928_V06&#39;]
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>['noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_010517_V06',
+ 'noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_011057_V06',
+ 'noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_011638_V06',
+ 'noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_012219_V06',
+ 'noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_012759_V06',
+ 'noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_013341_V06',
+ 'noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_013922_V06',
+ 'noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_014502_V06',
+ 'noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_015042_V06',
+ 'noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_015623_V06',
+ 'noaa-nexrad-level2/2023/04/01/KMKX/KMKX20230401_015928_V06']
 </pre></div>
 </div>
 </div>
@@ -809,23 +809,23 @@ Archive:  tl_2016_us_primaryroads.zip
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_configuration</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s2">&quot;reflectivity&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;vmin&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span>
-        <span class="s2">&quot;vmax&quot;</span><span class="p">:</span> <span class="mi">70</span><span class="p">,</span>
-        <span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="s2">&quot;pyart_ChaseSpectral&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Horizontal Reflectivity (dBZ)&quot;</span><span class="p">,</span>
+    <span class="s2">"reflectivity"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"vmin"</span><span class="p">:</span> <span class="o">-</span><span class="mi">20</span><span class="p">,</span>
+        <span class="s2">"vmax"</span><span class="p">:</span> <span class="mi">70</span><span class="p">,</span>
+        <span class="s2">"cmap"</span><span class="p">:</span> <span class="s2">"pyart_ChaseSpectral"</span><span class="p">,</span>
+        <span class="s2">"label"</span><span class="p">:</span> <span class="s2">"Horizontal Reflectivity (dBZ)"</span><span class="p">,</span>
     <span class="p">},</span>
-    <span class="s2">&quot;velocity&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;vmin&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">50</span><span class="p">,</span>
-        <span class="s2">&quot;vmax&quot;</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
-        <span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="s2">&quot;twilight_shifted&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Radial Velocity (m/s)&quot;</span><span class="p">,</span>
+    <span class="s2">"velocity"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"vmin"</span><span class="p">:</span> <span class="o">-</span><span class="mi">50</span><span class="p">,</span>
+        <span class="s2">"vmax"</span><span class="p">:</span> <span class="mi">50</span><span class="p">,</span>
+        <span class="s2">"cmap"</span><span class="p">:</span> <span class="s2">"twilight_shifted"</span><span class="p">,</span>
+        <span class="s2">"label"</span><span class="p">:</span> <span class="s2">"Radial Velocity (m/s)"</span><span class="p">,</span>
     <span class="p">},</span>
-    <span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">:</span> <span class="p">{</span>
-        <span class="s2">&quot;vmin&quot;</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
-        <span class="s2">&quot;vmax&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
-        <span class="s2">&quot;cmap&quot;</span><span class="p">:</span> <span class="s2">&quot;pyart_ChaseSpectral&quot;</span><span class="p">,</span>
-        <span class="s2">&quot;label&quot;</span><span class="p">:</span> <span class="s2">&quot;Cross Correlation Ratio&quot;</span><span class="p">,</span>
+    <span class="s2">"cross_correlation_ratio"</span><span class="p">:</span> <span class="p">{</span>
+        <span class="s2">"vmin"</span><span class="p">:</span> <span class="mf">0.7</span><span class="p">,</span>
+        <span class="s2">"vmax"</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">,</span>
+        <span class="s2">"cmap"</span><span class="p">:</span> <span class="s2">"pyart_ChaseSpectral"</span><span class="p">,</span>
+        <span class="s2">"label"</span><span class="p">:</span> <span class="s2">"Cross Correlation Ratio"</span><span class="p">,</span>
     <span class="p">},</span>
 <span class="p">}</span>
 </pre></div>
@@ -836,25 +836,25 @@ Archive:  tl_2016_us_primaryroads.zip
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">plot_radar_ppi</span><span class="p">(</span>
     <span class="n">file</span><span class="p">,</span>
-    <span class="n">left_field</span><span class="o">=</span><span class="s2">&quot;velocity&quot;</span><span class="p">,</span>
-    <span class="n">right_field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+    <span class="n">left_field</span><span class="o">=</span><span class="s2">"velocity"</span><span class="p">,</span>
+    <span class="n">right_field</span><span class="o">=</span><span class="s2">"reflectivity"</span><span class="p">,</span>
     <span class="n">plot_config</span><span class="o">=</span><span class="n">plot_configuration</span><span class="p">,</span>
 <span class="p">):</span>
     <span class="c1"># Read the radar data</span>
-    <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;s3://</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><span class="sa">f</span><span class="s2">"s3://</span><span class="si">{</span><span class="n">file</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
 
     <span class="c1"># Extract the lowest two sweeps - to help with speeding up the data cleaning</span>
     <span class="n">radar</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">extract_sweeps</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>
 
-    <span class="k">if</span> <span class="s2">&quot;velocity&quot;</span> <span class="ow">in</span> <span class="p">[</span><span class="n">left_field</span><span class="p">,</span> <span class="n">right_field</span><span class="p">]:</span>
+    <span class="k">if</span> <span class="s2">"velocity"</span> <span class="ow">in</span> <span class="p">[</span><span class="n">left_field</span><span class="p">,</span> <span class="n">right_field</span><span class="p">]:</span>
         <span class="c1"># Dealias the radial velocities, using a reflectivity threshold to only look at precip regions</span>
-        <span class="n">nyq</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">&quot;nyquist_velocity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">nyq</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">instrument_parameters</span><span class="p">[</span><span class="s2">"nyquist_velocity"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
         <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-        <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
         <span class="n">vel_dealias</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">dealias_region_based</span><span class="p">(</span>
             <span class="n">radar</span><span class="p">,</span> <span class="n">nyquist_vel</span><span class="o">=</span><span class="n">nyq</span><span class="p">,</span> <span class="n">centered</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="n">gatefilter</span>
         <span class="p">)</span>
-        <span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">&quot;corrected_velocity&quot;</span><span class="p">,</span> <span class="n">vel_dealias</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">radar</span><span class="o">.</span><span class="n">add_field</span><span class="p">(</span><span class="s2">"corrected_velocity"</span><span class="p">,</span> <span class="n">vel_dealias</span><span class="p">,</span> <span class="n">replace_existing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
     <span class="c1"># Add a subplot for the velocity</span>
     <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">14</span><span class="p">,</span> <span class="mi">8</span><span class="p">))</span>
@@ -870,8 +870,8 @@ Archive:  tl_2016_us_primaryroads.zip
         <span class="n">sweep</span> <span class="o">=</span> <span class="mi">0</span>
 
         <span class="c1"># User a new name for the corrected velocity, and use the next sweep</span>
-        <span class="k">if</span> <span class="p">(</span><span class="n">field</span> <span class="o">==</span> <span class="s2">&quot;velocity&quot;</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">vel_dealias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
-            <span class="n">field</span> <span class="o">=</span> <span class="s2">&quot;corrected_velocity&quot;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">field</span> <span class="o">==</span> <span class="s2">"velocity"</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">vel_dealias</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">):</span>
+            <span class="n">field</span> <span class="o">=</span> <span class="s2">"corrected_velocity"</span>
             <span class="n">sweep</span> <span class="o">=</span> <span class="mi">1</span>
 
         <span class="c1"># Plot the first field</span>
@@ -879,44 +879,44 @@ Archive:  tl_2016_us_primaryroads.zip
 
         <span class="c1"># Prepare the title</span>
         <span class="n">title</span> <span class="o">=</span> <span class="n">graph</span><span class="o">.</span><span class="n">generate_title</span><span class="p">(</span><span class="n">field</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-        <span class="n">time</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">][</span><span class="o">-</span><span class="mi">20</span><span class="p">:])</span>
-        <span class="n">time_steps</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">time</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">to_datetime</span><span class="p">(</span><span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">][</span><span class="o">-</span><span class="mi">20</span><span class="p">:])</span>
+        <span class="n">time_steps</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
         <span class="n">index</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">get_start_end</span><span class="p">(</span><span class="mi">0</span><span class="p">)[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
         <span class="n">time</span> <span class="o">+=</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span><span class="o">=</span><span class="n">time_steps</span><span class="p">[</span><span class="n">index</span><span class="p">])</span>
-        <span class="n">central_time</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="s2">&quot;US/Central&quot;</span><span class="p">))[:</span><span class="o">-</span><span class="mi">13</span><span class="p">]</span>
-        <span class="n">new_title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">title</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">13</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">central_time</span><span class="si">}</span><span class="s2"> CDT&quot;</span>
+        <span class="n">central_time</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">time</span><span class="o">.</span><span class="n">astimezone</span><span class="p">(</span><span class="s2">"US/Central"</span><span class="p">))[:</span><span class="o">-</span><span class="mi">13</span><span class="p">]</span>
+        <span class="n">new_title</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">title</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="mi">13</span><span class="p">]</span><span class="si">}</span><span class="s2"> </span><span class="se">\n</span><span class="s2"> </span><span class="si">{</span><span class="n">central_time</span><span class="si">}</span><span class="s2"> CDT"</span>
         <span class="n">graph</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
             <span class="n">field</span><span class="p">,</span>
-            <span class="n">cmap</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;cmap&quot;</span><span class="p">],</span>
+            <span class="n">cmap</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">"cmap"</span><span class="p">],</span>
             <span class="n">sweep</span><span class="o">=</span><span class="n">sweep</span><span class="p">,</span>
-            <span class="n">vmin</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;vmin&quot;</span><span class="p">],</span>
-            <span class="n">vmax</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;vmax&quot;</span><span class="p">],</span>
+            <span class="n">vmin</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">"vmin"</span><span class="p">],</span>
+            <span class="n">vmax</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">"vmax"</span><span class="p">],</span>
             <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-            <span class="n">colorbar_orient</span><span class="o">=</span><span class="s2">&quot;horizontal&quot;</span><span class="p">,</span>
-            <span class="n">colorbar_label</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">&quot;label&quot;</span><span class="p">],</span>
+            <span class="n">colorbar_orient</span><span class="o">=</span><span class="s2">"horizontal"</span><span class="p">,</span>
+            <span class="n">colorbar_label</span><span class="o">=</span><span class="n">config</span><span class="p">[</span><span class="s2">"label"</span><span class="p">],</span>
             <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
         <span class="p">)</span>
 
         <span class="c1"># Add a point near the start of the tornado in Sharon</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
-            <span class="o">-</span><span class="mf">88.7</span><span class="p">,</span> <span class="mf">42.53</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Sharon, Wisconsin (Near Start of Tornado)&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;k&quot;</span>
+            <span class="o">-</span><span class="mf">88.7</span><span class="p">,</span> <span class="mf">42.53</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Sharon, Wisconsin (Near Start of Tornado)"</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"k"</span>
         <span class="p">)</span>
 
         <span class="c1"># Add a point for Delavan Lake, Wisconsin</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span>
             <span class="o">-</span><span class="mf">88.6105</span><span class="p">,</span>
             <span class="mf">42.60666</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Delavan Lake, Wisconsin (Near End of Tornado)&quot;</span><span class="p">,</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;lightgrey&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">"Delavan Lake, Wisconsin (Near End of Tornado)"</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">"lightgrey"</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Add the interstates</span>
         <span class="n">ax</span><span class="o">.</span><span class="n">add_feature</span><span class="p">(</span>
             <span class="n">interstate_feature</span><span class="p">,</span>
-            <span class="n">edgecolor</span><span class="o">=</span><span class="s2">&quot;lavenderblush&quot;</span><span class="p">,</span>
-            <span class="n">facecolor</span><span class="o">=</span><span class="s2">&quot;None&quot;</span><span class="p">,</span>
+            <span class="n">edgecolor</span><span class="o">=</span><span class="s2">"lavenderblush"</span><span class="p">,</span>
+            <span class="n">facecolor</span><span class="o">=</span><span class="s2">"None"</span><span class="p">,</span>
             <span class="n">linewidth</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-            <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Interstate 43&quot;</span><span class="p">,</span>
+            <span class="n">label</span><span class="o">=</span><span class="s2">"Interstate 43"</span><span class="p">,</span>
         <span class="p">)</span>
 
         <span class="c1"># Add the counties</span>
@@ -927,24 +927,24 @@ Archive:  tl_2016_us_primaryroads.zip
             <span class="n">crs</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
             <span class="n">draw_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
             <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-            <span class="n">color</span><span class="o">=</span><span class="s2">&quot;gray&quot;</span><span class="p">,</span>
+            <span class="n">color</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">,</span>
             <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
-            <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;--&quot;</span><span class="p">,</span>
+            <span class="n">linestyle</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span>
         <span class="p">)</span>
         <span class="n">gl</span><span class="o">.</span><span class="n">right_labels</span> <span class="o">=</span> <span class="kc">False</span>
         <span class="n">gl</span><span class="o">.</span><span class="n">top_labels</span> <span class="o">=</span> <span class="kc">False</span>
 
         <span class="c1"># Add a label for the interstates</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;lavenderblush&quot;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;Interstate 43&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"lavenderblush"</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">"Interstate 43"</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">(</span><span class="o">-</span><span class="mf">88.8</span><span class="p">,</span> <span class="o">-</span><span class="mf">88.2</span><span class="p">)</span>
         <span class="n">plt</span><span class="o">.</span><span class="n">ylim</span><span class="p">(</span><span class="mf">42.3</span><span class="p">,</span> <span class="mf">42.9</span><span class="p">)</span>
-        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">&quot;upper right&quot;</span><span class="p">)</span>
+        <span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s2">"upper right"</span><span class="p">)</span>
 
         <span class="c1"># Add one to the plot number</span>
         <span class="n">plot_number</span> <span class="o">+=</span> <span class="mi">1</span>
 
     <span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="n">new_title</span><span class="p">)</span>
-    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ppi_velocity_reflectivity_</span><span class="si">{</span><span class="n">time</span><span class="si">}</span><span class="s2">.png&quot;</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">savefig</span><span class="p">(</span><span class="sa">f</span><span class="s2">"ppi_velocity_reflectivity_</span><span class="si">{</span><span class="n">time</span><span class="si">}</span><span class="s2">.png"</span><span class="p">,</span> <span class="n">dpi</span><span class="o">=</span><span class="mi">300</span><span class="p">)</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
     <span class="n">plt</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
@@ -968,7 +968,7 @@ Archive:  tl_2016_us_primaryroads.zip
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_radar_ppi</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">right_field</span><span class="o">=</span><span class="s2">&quot;cross_correlation_ratio&quot;</span><span class="p">)</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">plot_radar_ppi</span><span class="p">(</span><span class="n">files</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">right_field</span><span class="o">=</span><span class="s2">"cross_correlation_ratio"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1085,8 +1085,8 @@ Archive:  tl_2016_us_primaryroads.zip
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1120,7 +1120,7 @@ Archive:  tl_2016_us_primaryroads.zip
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

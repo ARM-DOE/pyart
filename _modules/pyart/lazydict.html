@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,10 +486,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.lazydict</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">A dictionary-like class supporting lazy loading of specified keys.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">collections.abc</span><span class="w"> </span><span class="kn">import</span> <span class="n">MutableMapping</span>
@@ -498,7 +498,7 @@
 <div class="viewcode-block" id="LazyLoadDict">
 <a class="viewcode-back" href="../../API/generated/pyart.lazydict.LazyLoadDict.html#pyart.lazydict.LazyLoadDict">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">LazyLoadDict</span><span class="p">(</span><span class="n">MutableMapping</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    A dictionary-like class supporting lazy loading of specified keys.</span>
 
 <span class="sd">    Keys which are lazy loaded are specified using the set_lazy method.</span>
@@ -508,8 +508,8 @@
 <span class="sd">    in the traditional dictionary which is used for supplemental access to</span>
 <span class="sd">    this key.</span>
 
-<span class="sd">    Testing for keys in this dictionary using the &quot;key in d&quot; syntax will</span>
-<span class="sd">    result in the loading of a lazy key, use &quot;key in d.keys()&quot; to prevent</span>
+<span class="sd">    Testing for keys in this dictionary using the "key in d" syntax will</span>
+<span class="sd">    result in the loading of a lazy key, use "key in d.keys()" to prevent</span>
 <span class="sd">    this evaluation.</span>
 
 <span class="sd">    The comparison methods, __cmp__, __ge__, __gt__, __le__, __lt__, __ne__,</span>
@@ -527,32 +527,32 @@
 
 <span class="sd">    Examples</span>
 <span class="sd">    --------</span>
-<span class="sd">    &gt;&gt;&gt; d = LazyLoadDict({&#39;key1&#39;: &#39;value1&#39;, &#39;key2&#39;: &#39;value2&#39;})</span>
+<span class="sd">    &gt;&gt;&gt; d = LazyLoadDict({'key1': 'value1', 'key2': 'value2'})</span>
 <span class="sd">    &gt;&gt;&gt; d.keys()</span>
-<span class="sd">    [&#39;key2&#39;, &#39;key1&#39;]</span>
+<span class="sd">    ['key2', 'key1']</span>
 <span class="sd">    &gt;&gt;&gt; lazy_func = lambda : 999</span>
-<span class="sd">    &gt;&gt;&gt; d.set_lazy(&#39;lazykey1&#39;, lazy_func)</span>
+<span class="sd">    &gt;&gt;&gt; d.set_lazy('lazykey1', lazy_func)</span>
 <span class="sd">    &gt;&gt;&gt; d.keys()</span>
-<span class="sd">    [&#39;key2&#39;, &#39;key1&#39;, &#39;lazykey1&#39;]</span>
-<span class="sd">    &gt;&gt;&gt; d[&#39;lazykey1&#39;]</span>
+<span class="sd">    ['key2', 'key1', 'lazykey1']</span>
+<span class="sd">    &gt;&gt;&gt; d['lazykey1']</span>
 <span class="sd">    999</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dic</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;initalize.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""initalize."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span> <span class="o">=</span> <span class="n">dic</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lazyload</span> <span class="o">=</span> <span class="p">{}</span>
 
     <span class="c1"># abstract methods</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__setitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set a key which will not be stored and evaluated traditionally.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Set a key which will not be stored and evaluated traditionally."""</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lazyload</span><span class="p">:</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lazyload</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__getitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Get the value of a key, evaluating a lazy key if needed.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Get the value of a key, evaluating a lazy key if needed."""</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lazyload</span><span class="p">:</span>
             <span class="n">value</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lazyload</span><span class="p">[</span><span class="n">key</span><span class="p">]()</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value</span>
@@ -560,47 +560,47 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__delitem__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Remove a lazy or traditional key from the dictionary.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Remove a lazy or traditional key from the dictionary."""</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lazyload</span><span class="p">:</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lazyload</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__iter__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Iterate over all lazy and traditional keys.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Iterate over all lazy and traditional keys."""</span>
         <span class="k">return</span> <span class="n">itertools</span><span class="o">.</span><span class="n">chain</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lazyload</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__len__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of traditional and lazy keys.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return the number of traditional and lazy keys."""</span>
         <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lazyload</span><span class="p">)</span>
 
     <span class="c1"># additional class to mimic dict behavior</span>
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return a string representation of the object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return a string representation of the object."""</span>
         <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_lazyload</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
-            <span class="n">seperator</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+            <span class="n">seperator</span> <span class="o">=</span> <span class="s2">""</span>
         <span class="k">else</span><span class="p">:</span>
-            <span class="n">seperator</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span>
+            <span class="n">seperator</span> <span class="o">=</span> <span class="s2">", "</span>
         <span class="n">lazy_reprs</span> <span class="o">=</span> <span class="p">[(</span><span class="nb">repr</span><span class="p">(</span><span class="n">k</span><span class="p">),</span> <span class="nb">repr</span><span class="p">(</span><span class="n">v</span><span class="p">))</span> <span class="k">for</span> <span class="n">k</span><span class="p">,</span> <span class="n">v</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lazyload</span><span class="o">.</span><span class="n">items</span><span class="p">()]</span>
-        <span class="n">lazy_strs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;</span><span class="si">{}</span><span class="s2">: LazyLoad(</span><span class="si">{}</span><span class="s2">)&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">lazy_reprs</span><span class="p">]</span>
-        <span class="n">lazy_str</span> <span class="o">=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lazy_strs</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;}&quot;</span>
+        <span class="n">lazy_strs</span> <span class="o">=</span> <span class="p">[</span><span class="s2">"</span><span class="si">{}</span><span class="s2">: LazyLoad(</span><span class="si">{}</span><span class="s2">)"</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="o">*</span><span class="n">r</span><span class="p">)</span> <span class="k">for</span> <span class="n">r</span> <span class="ow">in</span> <span class="n">lazy_reprs</span><span class="p">]</span>
+        <span class="n">lazy_str</span> <span class="o">=</span> <span class="s2">", "</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">lazy_strs</span><span class="p">)</span> <span class="o">+</span> <span class="s2">"}"</span>
         <span class="k">return</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">)[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">seperator</span> <span class="o">+</span> <span class="n">lazy_str</span>
 
 <div class="viewcode-block" id="LazyLoadDict.has_key">
 <a class="viewcode-back" href="../../API/generated/pyart.lazydict.LazyLoadDict.has_key.html#pyart.lazydict.LazyLoadDict.has_key">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">has_key</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;True if dictionary has key, else False.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""True if dictionary has key, else False."""</span>
         <span class="k">return</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span></div>
 
 
 <div class="viewcode-block" id="LazyLoadDict.copy">
 <a class="viewcode-back" href="../../API/generated/pyart.lazydict.LazyLoadDict.copy.html#pyart.lazydict.LazyLoadDict.copy">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">copy</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""</span>
 <span class="sd">        Return a copy of the dictionary.</span>
 
 <span class="sd">        Lazy keys are not evaluated in the original or copied dictionary.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
+<span class="sd">        """</span>
         <span class="n">dic</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="o">.</span><span class="n">copy</span><span class="p">())</span>
         <span class="c1"># load all lazy keys into the copy</span>
         <span class="k">for</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_callable</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_lazyload</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
@@ -612,7 +612,7 @@
 <div class="viewcode-block" id="LazyLoadDict.set_lazy">
 <a class="viewcode-back" href="../../API/generated/pyart.lazydict.LazyLoadDict.set_lazy.html#pyart.lazydict.LazyLoadDict.set_lazy">[docs]</a>
     <span class="k">def</span><span class="w"> </span><span class="nf">set_lazy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">value_callable</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Set a lazy key to load from a callable object.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Set a lazy key to load from a callable object."""</span>
         <span class="k">if</span> <span class="n">key</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">:</span>
             <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="n">_dic</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_lazyload</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">value_callable</span></div>
@@ -650,8 +650,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -685,7 +685,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

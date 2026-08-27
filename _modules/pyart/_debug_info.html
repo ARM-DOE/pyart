@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,13 +486,13 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart._debug_info</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Print out Py-ART version information.</span>
 
 <span class="sd">This file can also be run as a script to report on dependencies before a</span>
 <span class="sd">build: python pyart/_debug_info.py</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
@@ -501,7 +501,7 @@
 <div class="viewcode-block" id="_debug_info">
 <a class="viewcode-back" href="../../API/generated/pyart._debug_info.html#pyart._debug_info">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">_debug_info</span><span class="p">(</span><span class="n">stream</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Print out version and status information for debugging.</span>
 
 <span class="sd">    This file can be run as a script from the source directory to report on</span>
@@ -512,7 +512,7 @@
 <span class="sd">    stream : file-like object</span>
 <span class="sd">        Stream to print the information to, None prints to sys.stdout.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="k">if</span> <span class="n">stream</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">stream</span> <span class="o">=</span> <span class="n">sys</span><span class="o">.</span><span class="n">stdout</span>
 
@@ -527,91 +527,91 @@
 
         <span class="n">pyart_version</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">__version__</span>
     <span class="k">except</span><span class="p">:</span>
-        <span class="n">pyart_version</span> <span class="o">=</span> <span class="s2">&quot;MISSING&quot;</span>
+        <span class="n">pyart_version</span> <span class="o">=</span> <span class="s2">"MISSING"</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">platform</span>
 
         <span class="n">python_version</span> <span class="o">=</span> <span class="n">platform</span><span class="o">.</span><span class="n">python_version</span><span class="p">()</span>
     <span class="k">except</span><span class="p">:</span>
-        <span class="n">python_version</span> <span class="o">=</span> <span class="s2">&quot;MISSING&quot;</span>
+        <span class="n">python_version</span> <span class="o">=</span> <span class="s2">"MISSING"</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span>
 
         <span class="n">numpy_version</span> <span class="o">=</span> <span class="n">numpy</span><span class="o">.</span><span class="n">__version__</span>
     <span class="k">except</span><span class="p">:</span>
-        <span class="n">numpy_version</span> <span class="o">=</span> <span class="s2">&quot;MISSING&quot;</span>
+        <span class="n">numpy_version</span> <span class="o">=</span> <span class="s2">"MISSING"</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">scipy</span>
 
         <span class="n">scipy_version</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">__version__</span>
     <span class="k">except</span><span class="p">:</span>
-        <span class="n">scipy_version</span> <span class="o">=</span> <span class="s2">&quot;MISSING&quot;</span>
+        <span class="n">scipy_version</span> <span class="o">=</span> <span class="s2">"MISSING"</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span>
 
         <span class="n">matplotlib_version</span> <span class="o">=</span> <span class="n">matplotlib</span><span class="o">.</span><span class="n">__version__</span>
     <span class="k">except</span><span class="p">:</span>
-        <span class="n">matplotlib_version</span> <span class="o">=</span> <span class="s2">&quot;MISSING&quot;</span>
+        <span class="n">matplotlib_version</span> <span class="o">=</span> <span class="s2">"MISSING"</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">netCDF4</span>
 
         <span class="n">netCDF4_version</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">__version__</span>
     <span class="k">except</span><span class="p">:</span>
-        <span class="n">netCDF4_version</span> <span class="o">=</span> <span class="s2">&quot;MISSING&quot;</span>
+        <span class="n">netCDF4_version</span> <span class="o">=</span> <span class="s2">"MISSING"</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">cylp</span>  <span class="c1"># noqa</span>
 
-        <span class="n">cylp_available</span> <span class="o">=</span> <span class="s2">&quot;Available&quot;</span>
+        <span class="n">cylp_available</span> <span class="o">=</span> <span class="s2">"Available"</span>
     <span class="k">except</span><span class="p">:</span>
-        <span class="n">cylp_available</span> <span class="o">=</span> <span class="s2">&quot;MISSING&quot;</span>
+        <span class="n">cylp_available</span> <span class="o">=</span> <span class="s2">"MISSING"</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">cvxopt.info</span>
 
         <span class="n">cvxopt_version</span> <span class="o">=</span> <span class="n">cvxopt</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">version</span>
     <span class="k">except</span><span class="p">:</span>
-        <span class="n">cvxopt_version</span> <span class="o">=</span> <span class="s2">&quot;MISSING&quot;</span>
+        <span class="n">cvxopt_version</span> <span class="o">=</span> <span class="s2">"MISSING"</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">cartopy</span>
 
         <span class="n">cartopy_version</span> <span class="o">=</span> <span class="n">cartopy</span><span class="o">.</span><span class="n">__version__</span>
     <span class="k">except</span><span class="p">:</span>
-        <span class="n">cartopy_version</span> <span class="o">=</span> <span class="s2">&quot;MISSING&quot;</span>
+        <span class="n">cartopy_version</span> <span class="o">=</span> <span class="s2">"MISSING"</span>
 
     <span class="k">try</span><span class="p">:</span>
         <span class="kn">import</span><span class="w"> </span><span class="nn">pytest</span>
 
         <span class="n">pytest_version</span> <span class="o">=</span> <span class="n">pytest</span><span class="o">.</span><span class="n">__version__</span>
     <span class="k">except</span><span class="p">:</span>
-        <span class="n">pytest_version</span> <span class="o">=</span> <span class="s2">&quot;MISSING&quot;</span>
+        <span class="n">pytest_version</span> <span class="o">=</span> <span class="s2">"MISSING"</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Py-ART version:&quot;</span><span class="p">,</span> <span class="n">pyart_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Py-ART version:"</span><span class="p">,</span> <span class="n">pyart_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---- Dependencies ----&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Python version:&quot;</span><span class="p">,</span> <span class="n">python_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;NumPy version:&quot;</span><span class="p">,</span> <span class="n">numpy_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;SciPy version:&quot;</span><span class="p">,</span> <span class="n">scipy_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;matplotlib version:&quot;</span><span class="p">,</span> <span class="n">matplotlib_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;netCDF4 version:&quot;</span><span class="p">,</span> <span class="n">netCDF4_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"---- Dependencies ----"</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Python version:"</span><span class="p">,</span> <span class="n">python_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"NumPy version:"</span><span class="p">,</span> <span class="n">numpy_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"SciPy version:"</span><span class="p">,</span> <span class="n">scipy_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"matplotlib version:"</span><span class="p">,</span> <span class="n">matplotlib_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"netCDF4 version:"</span><span class="p">,</span> <span class="n">netCDF4_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">""</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
 
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;---- Optional dependencies ----&quot;</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CyLP:&quot;</span><span class="p">,</span> <span class="n">cylp_available</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;CVXOPT version:&quot;</span><span class="p">,</span> <span class="n">cvxopt_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cartopy version:&quot;</span><span class="p">,</span> <span class="n">cartopy_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;pytest version:&quot;</span><span class="p">,</span> <span class="n">pytest_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span></div>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"---- Optional dependencies ----"</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"CyLP:"</span><span class="p">,</span> <span class="n">cylp_available</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"CVXOPT version:"</span><span class="p">,</span> <span class="n">cvxopt_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"Cartopy version:"</span><span class="p">,</span> <span class="n">cartopy_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">"pytest version:"</span><span class="p">,</span> <span class="n">pytest_version</span><span class="p">,</span> <span class="n">file</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span></div>
 
 
 
-<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">"__main__"</span><span class="p">:</span>
     <span class="n">_debug_info</span><span class="p">()</span>
 </pre></div>
 <div class="section ablog__blog_comments">
@@ -645,8 +645,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -680,7 +680,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

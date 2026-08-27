@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,10 +486,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.io.arm_sonde</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Utilities for ARM sonde NetCDF files.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">netCDF4</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -500,7 +500,7 @@
 <div class="viewcode-block" id="read_arm_sonde">
 <a class="viewcode-back" href="../../../API/generated/pyart.io.read_arm_sonde.html#pyart.io.read_arm_sonde">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">read_arm_sonde</span><span class="p">(</span><span class="n">filename</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Read a ARM sonde file returning a wind profile.</span>
 
 <span class="sd">    Parameters</span>
@@ -516,18 +516,18 @@
 <span class="sd">    profile : HorizontalWindProfile</span>
 <span class="sd">        Profile of the horizontal winds</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="n">dset</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+<span class="sd">    """</span>
+    <span class="n">dset</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span>
 
     <span class="n">launch_datetime</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">num2date</span><span class="p">(</span>
-        <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>
+        <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"time"</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"time"</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>
     <span class="p">)</span>
 
-    <span class="n">height</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;alt&quot;</span><span class="p">][:]</span>  <span class="c1"># meters above mean sea level</span>
-    <span class="n">speed</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;wspd&quot;</span><span class="p">][:]</span>  <span class="c1"># m s-1</span>
-    <span class="n">direction</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;deg&quot;</span><span class="p">][:]</span>  <span class="c1"># degrees clockwise from north</span>
-    <span class="n">lat</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;lat&quot;</span><span class="p">][:]</span>  <span class="c1"># degrees north</span>
-    <span class="n">lon</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;lon&quot;</span><span class="p">][:]</span>  <span class="c1"># degrees east</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"alt"</span><span class="p">][:]</span>  <span class="c1"># meters above mean sea level</span>
+    <span class="n">speed</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"wspd"</span><span class="p">][:]</span>  <span class="c1"># m s-1</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"deg"</span><span class="p">][:]</span>  <span class="c1"># degrees clockwise from north</span>
+    <span class="n">lat</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"lat"</span><span class="p">][:]</span>  <span class="c1"># degrees north</span>
+    <span class="n">lon</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"lon"</span><span class="p">][:]</span>  <span class="c1"># degrees east</span>
     <span class="n">profile</span> <span class="o">=</span> <span class="n">HorizontalWindProfile</span><span class="p">(</span>
         <span class="n">height</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">direction</span><span class="p">,</span> <span class="n">latitude</span><span class="o">=</span><span class="n">lat</span><span class="p">,</span> <span class="n">longitude</span><span class="o">=</span><span class="n">lon</span>
     <span class="p">)</span>
@@ -541,7 +541,7 @@
 <div class="viewcode-block" id="read_arm_sonde_vap">
 <a class="viewcode-back" href="../../../API/generated/pyart.io.read_arm_sonde_vap.html#pyart.io.read_arm_sonde_vap">[docs]</a>
 <span class="k">def</span><span class="w"> </span><span class="nf">read_arm_sonde_vap</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="n">radar</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">target_datetime</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Read a ARM interpolated or merged sonde returning a wind profile.</span>
 
 <span class="sd">    Parameters</span>
@@ -563,33 +563,33 @@
 <span class="sd">    profile : HorizontalWindProfile</span>
 <span class="sd">        Profile of the horizontal winds.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># check parameters</span>
     <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">target_datetime</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Either radar or target_datetime must be specified.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Either radar or target_datetime must be specified."</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="n">target_datetime</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Either radar or target_datetime must be specified, not both.&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">"Either radar or target_datetime must be specified, not both."</span><span class="p">)</span>
 
     <span class="k">if</span> <span class="n">radar</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
-        <span class="n">time_0</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
-        <span class="n">time_units</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">&quot;units&quot;</span><span class="p">]</span>
+        <span class="n">time_0</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">time_units</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">time</span><span class="p">[</span><span class="s2">"units"</span><span class="p">]</span>
         <span class="n">target_datetime</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">num2date</span><span class="p">(</span><span class="n">time_0</span><span class="p">,</span> <span class="n">time_units</span><span class="p">)</span>
 
-    <span class="n">dset</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+    <span class="n">dset</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">Dataset</span><span class="p">(</span><span class="n">filename</span><span class="p">,</span> <span class="s2">"r"</span><span class="p">)</span>
 
     <span class="c1"># find index of time closest to target datetime</span>
     <span class="n">sonde_datetimes</span> <span class="o">=</span> <span class="n">netCDF4</span><span class="o">.</span><span class="n">num2date</span><span class="p">(</span>
-        <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">][:],</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;time&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>
+        <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"time"</span><span class="p">][:],</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"time"</span><span class="p">]</span><span class="o">.</span><span class="n">units</span>
     <span class="p">)</span>
     <span class="n">idx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">sonde_datetimes</span> <span class="o">-</span> <span class="n">target_datetime</span><span class="p">)</span><span class="o">.</span><span class="n">argmin</span><span class="p">()</span>
     <span class="n">profile_datetime</span> <span class="o">=</span> <span class="n">sonde_datetimes</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>
 
     <span class="c1"># extract wind profile</span>
-    <span class="n">height</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;height&quot;</span><span class="p">][:]</span> <span class="o">*</span> <span class="mi">1000</span>  <span class="c1"># km -&gt; m</span>
-    <span class="n">speed</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;wspd&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]</span>
-    <span class="n">direction</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">&quot;wdir&quot;</span><span class="p">][</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">height</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"height"</span><span class="p">][:]</span> <span class="o">*</span> <span class="mi">1000</span>  <span class="c1"># km -&gt; m</span>
+    <span class="n">speed</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"wspd"</span><span class="p">][</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="n">direction</span> <span class="o">=</span> <span class="n">dset</span><span class="o">.</span><span class="n">variables</span><span class="p">[</span><span class="s2">"wdir"</span><span class="p">][</span><span class="n">idx</span><span class="p">,</span> <span class="p">:]</span>
     <span class="n">profile</span> <span class="o">=</span> <span class="n">HorizontalWindProfile</span><span class="p">(</span><span class="n">height</span><span class="p">,</span> <span class="n">speed</span><span class="p">,</span> <span class="n">direction</span><span class="p">)</span>
 
     <span class="n">dset</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
@@ -628,8 +628,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -663,7 +663,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

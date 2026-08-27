@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,10 +486,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.retrieve.cfad</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Create CFAD from a radar or grid field</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 
@@ -500,11 +500,11 @@
     <span class="n">radar</span><span class="p">,</span>
     <span class="n">field_bins</span><span class="p">,</span>
     <span class="n">altitude_bins</span><span class="p">,</span>
-    <span class="n">field</span><span class="o">=</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+    <span class="n">field</span><span class="o">=</span><span class="s2">"reflectivity"</span><span class="p">,</span>
     <span class="n">field_mask</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="n">min_frac_thres</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    This function returns a Contoured Frequency by Altitude Diagram (CFAD; Yuter et al. 1995), a 2-dimensional</span>
 <span class="sd">    histogram that is normalized by the number of points at each altitude. Altitude bins are masked where the counts</span>
 <span class="sd">    are less than a minimum fraction of the largest number of counts for any altitude row.</span>
@@ -521,7 +521,7 @@
 <span class="sd">        List of bin edges for height values to use for CFAD creation.</span>
 <span class="sd">    field : str</span>
 <span class="sd">        Field name to use to look up reflectivity data. In the</span>
-<span class="sd">        radar object. Default field name is &#39;reflectivity&#39;.</span>
+<span class="sd">        radar object. Default field name is 'reflectivity'.</span>
 <span class="sd">    field_mask : array</span>
 <span class="sd">        An array the same size as the field array used to mask values.</span>
 <span class="sd">    min_frac_thres : float, optional</span>
@@ -546,21 +546,21 @@
 <span class="sd">    123, 1941-1963. https://doi.org/10.1175/1520-0493(1995)123%3C1941:TDKAME%3E2.0.CO;2</span>
 
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="c1"># get field data</span>
-    <span class="n">field_data</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][:]</span>
+    <span class="n">field_data</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][:]</span>
 
     <span class="c1"># get altitude data</span>
     <span class="c1"># first try to get altitude data from a radar object</span>
     <span class="k">try</span><span class="p">:</span>
-        <span class="n">altitude_data</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">altitude_data</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">gate_z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
     <span class="c1"># if it fails, try to get altitude data from a grid object</span>
     <span class="k">except</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">altitude_data</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">point_z</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+            <span class="n">altitude_data</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">point_z</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;No altitude data found&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">"No altitude data found"</span><span class="p">)</span>
             <span class="k">raise</span>
 
     <span class="c1"># option to mask data if a mask is given</span>
@@ -624,8 +624,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -659,7 +659,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

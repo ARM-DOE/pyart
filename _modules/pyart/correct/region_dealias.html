@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -486,10 +486,10 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <h1>Source code for pyart.correct.region_dealias</h1><div class="highlight"><pre>
-<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span></span><span class="sd">"""</span>
 <span class="sd">Region based dealiasing using a dynamic network reduction for region joining.</span>
 
-<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
@@ -518,7 +518,7 @@
 <span class="c1"># * Currently no attmpt is made to unfold gates which are included in the</span>
 <span class="c1">#   gatefilter.  One could add a second pass to the algorithms where gates</span>
 <span class="c1">#   excluded by the filter are unfolded using a more elemenary approach.  In</span>
-<span class="c1">#   this manner the filter could define only &quot;good&quot; gates which establish the</span>
+<span class="c1">#   this manner the filter could define only "good" gates which establish the</span>
 <span class="c1">#   folding pattern which is then applied to all gates.</span>
 <span class="c1"># * Improve perfornace by implementing a priority queue in the _EdgeTracker</span>
 <span class="c1">#   object. See comments in the class for details.</span>
@@ -544,7 +544,7 @@
     <span class="n">corr_vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
     <span class="o">**</span><span class="n">kwargs</span><span class="p">,</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Dealias Doppler velocities using a region based algorithm.</span>
 
 <span class="sd">    Performs Doppler velocity dealiasing by finding regions of similar</span>
@@ -585,7 +585,7 @@
 <span class="sd">        apply centering which may results in individual sweeps under or over</span>
 <span class="sd">        folded by the nyquist interval.</span>
 <span class="sd">    nyquist_velocity : array like or float, optional</span>
-<span class="sd">        Nyquist velocity in unit identical to those stored in the radar&#39;s</span>
+<span class="sd">        Nyquist velocity in unit identical to those stored in the radar's</span>
 <span class="sd">        velocity field, either for each sweep or a single value which will be</span>
 <span class="sd">        used for all sweeps. None will attempt to determine this value from</span>
 <span class="sd">        the Radar object.</span>
@@ -625,9 +625,9 @@
 <span class="sd">    -------</span>
 <span class="sd">    corr_vel : dict</span>
 <span class="sd">        Field dictionary containing dealiased Doppler velocities. Dealiased</span>
-<span class="sd">        array is stored under the &#39;data&#39; key.</span>
+<span class="sd">        array is stored under the 'data' key.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="c1"># parse function parameters</span>
     <span class="n">vel_field</span><span class="p">,</span> <span class="n">corr_vel_field</span> <span class="o">=</span> <span class="n">_parse_fields</span><span class="p">(</span><span class="n">vel_field</span><span class="p">,</span> <span class="n">corr_vel_field</span><span class="p">)</span>
     <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">_parse_gatefilter</span><span class="p">(</span><span class="n">gatefilter</span><span class="p">,</span> <span class="n">radar</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
@@ -638,7 +638,7 @@
     <span class="k">if</span> <span class="n">ref_vel_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
         <span class="n">ref_vdata</span> <span class="o">=</span> <span class="kc">None</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="n">ref_vdata</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">ref_vel_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+        <span class="n">ref_vdata</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">ref_vel_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
 
     <span class="c1"># exclude masked and invalid velocity gates</span>
     <span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_masked</span><span class="p">(</span><span class="n">vel_field</span><span class="p">)</span>
@@ -646,7 +646,7 @@
     <span class="n">gfilter</span> <span class="o">=</span> <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_excluded</span>
 
     <span class="c1"># perform dealiasing</span>
-    <span class="n">vdata</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
+    <span class="n">vdata</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span><span class="o">.</span><span class="n">view</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">)</span>
     <span class="n">data</span> <span class="o">=</span> <span class="n">vdata</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>  <span class="c1"># dealiased velocities</span>
 
     <span class="c1"># loop over sweeps</span>
@@ -770,7 +770,7 @@
                     <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
 
     <span class="c1"># fill_value from the velocity dictionary if present</span>
-    <span class="n">fill_value</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">())</span>
+    <span class="n">fill_value</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">]</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"_FillValue"</span><span class="p">,</span> <span class="n">get_fillvalue</span><span class="p">())</span>
 
     <span class="c1"># mask filtered gates</span>
     <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">any</span><span class="p">(</span><span class="n">gfilter</span><span class="p">):</span>
@@ -778,12 +778,12 @@
 
     <span class="c1"># restore original values where dealiasing not applied</span>
     <span class="k">if</span> <span class="n">keep_original</span><span class="p">:</span>
-        <span class="n">data</span><span class="p">[</span><span class="n">gfilter</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">gfilter</span><span class="p">]</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">gfilter</span><span class="p">]</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">vel_field</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="n">gfilter</span><span class="p">]</span>
 
     <span class="c1"># return field dictionary containing dealiased Doppler velocities</span>
     <span class="n">corr_vel</span> <span class="o">=</span> <span class="n">get_metadata</span><span class="p">(</span><span class="n">corr_vel_field</span><span class="p">)</span>
-    <span class="n">corr_vel</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
-    <span class="n">corr_vel</span><span class="p">[</span><span class="s2">&quot;_FillValue&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill_value</span>
+    <span class="n">corr_vel</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">data</span>
+    <span class="n">corr_vel</span><span class="p">[</span><span class="s2">"_FillValue"</span><span class="p">]</span> <span class="o">=</span> <span class="n">fill_value</span>
 
     <span class="k">if</span> <span class="n">set_limits</span><span class="p">:</span>
         <span class="c1"># set valid_min and valid_max in corr_vel</span>
@@ -794,7 +794,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_find_sweep_interval_splits</span><span class="p">(</span><span class="n">nyquist</span><span class="p">,</span> <span class="n">interval_splits</span><span class="p">,</span> <span class="n">velocities</span><span class="p">,</span> <span class="n">nsweep</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return the interval limits for a given sweep.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Return the interval limits for a given sweep."""</span>
     <span class="c1"># The Nyquist interval is split into interval_splits  equal sized areas.</span>
     <span class="c1"># If velocities outside the Nyquist are present the number and</span>
     <span class="c1"># limits of the interval splits must be adjusted so that theses</span>
@@ -806,7 +806,7 @@
         <span class="n">max_vel</span> <span class="o">=</span> <span class="n">velocities</span><span class="o">.</span><span class="n">max</span><span class="p">()</span>
         <span class="n">min_vel</span> <span class="o">=</span> <span class="n">velocities</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
         <span class="k">if</span> <span class="n">max_vel</span> <span class="o">&gt;</span> <span class="n">nyquist</span> <span class="ow">or</span> <span class="n">min_vel</span> <span class="o">&lt;</span> <span class="o">-</span><span class="n">nyquist</span><span class="p">:</span>
-            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Velocities outside of the Nyquist interval found in sweep </span><span class="si">{</span><span class="n">nsweep</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">"Velocities outside of the Nyquist interval found in sweep </span><span class="si">{</span><span class="n">nsweep</span><span class="si">}</span><span class="s2">."</span>
             <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="n">msg</span><span class="p">,</span> <span class="ne">UserWarning</span><span class="p">)</span>
             <span class="c1"># additional intervals must be added to capture the velocities</span>
             <span class="c1"># outside the nyquist limits</span>
@@ -820,7 +820,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_find_regions</span><span class="p">(</span><span class="n">vel</span><span class="p">,</span> <span class="n">gfilter</span><span class="p">,</span> <span class="n">limits</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Find regions of similar velocity.</span>
 
 <span class="sd">    For each pair of values in the limits array (or list) find all connected</span>
@@ -847,7 +847,7 @@
 <span class="sd">    nfeatures : int</span>
 <span class="sd">        Number of regions found.</span>
 
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">mask</span> <span class="o">=</span> <span class="o">~</span><span class="n">gfilter</span>
     <span class="n">label</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">vel</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int32</span><span class="p">)</span>
     <span class="n">nfeatures</span> <span class="o">=</span> <span class="mi">0</span>
@@ -867,18 +867,18 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_edge_sum_and_count</span><span class="p">(</span>
     <span class="n">labels</span><span class="p">,</span> <span class="n">num_masked_gates</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">rays_wrap_around</span><span class="p">,</span> <span class="n">max_gap_x</span><span class="p">,</span> <span class="n">max_gap_y</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Find all edges between labels regions.</span>
 
 <span class="sd">    Returns the indices, count and velocities of all edges.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
     <span class="n">total_nodes</span> <span class="o">=</span> <span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">num_masked_gates</span>
     <span class="k">if</span> <span class="n">rays_wrap_around</span><span class="p">:</span>
         <span class="n">total_nodes</span> <span class="o">+=</span> <span class="n">labels</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mi">2</span>
 
     <span class="n">indices</span><span class="p">,</span> <span class="n">velocities</span> <span class="o">=</span> <span class="n">_fast_edge_finder</span><span class="p">(</span>
-        <span class="n">labels</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;int32&quot;</span><span class="p">),</span>
-        <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">&quot;float32&quot;</span><span class="p">),</span>
+        <span class="n">labels</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"int32"</span><span class="p">),</span>
+        <span class="n">data</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="s2">"float32"</span><span class="p">),</span>
         <span class="n">rays_wrap_around</span><span class="p">,</span>
         <span class="n">max_gap_x</span><span class="p">,</span>
         <span class="n">max_gap_y</span><span class="p">,</span>
@@ -916,7 +916,7 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_combine_regions</span><span class="p">(</span><span class="n">region_tracker</span><span class="p">,</span> <span class="n">edge_tracker</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Returns True when done.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Returns True when done."""</span>
     <span class="c1"># Edge parameters from edge with largest weight</span>
     <span class="n">status</span><span class="p">,</span> <span class="n">extra</span> <span class="o">=</span> <span class="n">edge_tracker</span><span class="o">.</span><span class="n">pop_edge</span><span class="p">()</span>
     <span class="k">if</span> <span class="n">status</span><span class="p">:</span>
@@ -952,7 +952,7 @@
 <span class="k">def</span><span class="w"> </span><span class="nf">_cost_function</span><span class="p">(</span>
     <span class="n">nyq_vector</span><span class="p">,</span> <span class="n">vels_slice_means</span><span class="p">,</span> <span class="n">svels_slice_means</span><span class="p">,</span> <span class="n">v_nyq_vel</span><span class="p">,</span> <span class="n">nfeatures</span>
 <span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Cost function for minimization in region based algorithm.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Cost function for minimization in region based algorithm."""</span>
     <span class="n">cost</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
 
@@ -973,8 +973,8 @@
 
 
 <span class="k">def</span><span class="w"> </span><span class="nf">_gradient</span><span class="p">(</span><span class="n">nyq_vector</span><span class="p">,</span> <span class="n">vels_slice_means</span><span class="p">,</span> <span class="n">svels_slice_means</span><span class="p">,</span> <span class="n">v_nyq_vel</span><span class="p">,</span> <span class="n">nfeatures</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Gradient of cost function for minimization</span>
-<span class="sd">    in region based algorithm.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""Gradient of cost function for minimization</span>
+<span class="sd">    in region based algorithm."""</span>
     <span class="n">gradient_vector</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">nyq_vector</span><span class="p">))</span>
     <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span>
     <span class="k">for</span> <span class="n">reg</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nfeatures</span><span class="p">):</span>
@@ -1003,28 +1003,28 @@
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_RegionTracker</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Tracks the location of radar volume regions contained in each node</span>
 <span class="sd">    as the network is reduced.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
+<span class="sd">    """</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">region_sizes</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;initalize.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""initalize."""</span>
         <span class="c1"># number of gates in each node</span>
         <span class="n">nregions</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">region_sizes</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">node_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nregions</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">node_size</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nregions</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">node_size</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">=</span> <span class="n">region_sizes</span><span class="p">[:]</span>
 
         <span class="c1"># array of lists containing the regions in each node</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">regions_in_node</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nregions</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;object&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">regions_in_node</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nregions</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"object"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nregions</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">regions_in_node</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[</span><span class="n">i</span><span class="p">]</span>
 
         <span class="c1"># number of unwrappings to apply to dealias each region</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">unwrap_number</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nregions</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;int32&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">unwrap_number</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nregions</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"int32"</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">merge_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node_a</span><span class="p">,</span> <span class="n">node_b</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Merge node b into node a.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Merge node b into node a."""</span>
 
         <span class="c1"># move all regions from node_b to node_a</span>
         <span class="n">regions_to_merge</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">regions_in_node</span><span class="p">[</span><span class="n">node_b</span><span class="p">]</span>
@@ -1037,7 +1037,7 @@
         <span class="k">return</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">unwrap_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">nwrap</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unwrap all gates contained a node.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Unwrap all gates contained a node."""</span>
         <span class="k">if</span> <span class="n">nwrap</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="c1"># for each region in node add nwrap</span>
@@ -1046,15 +1046,15 @@
         <span class="k">return</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">get_node_size</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of gates in a node.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Return the number of gates in a node."""</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">node_size</span><span class="p">[</span><span class="n">node</span><span class="p">]</span>
 
 
 <span class="k">class</span><span class="w"> </span><span class="nc">_EdgeTracker</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;A class for tracking edges in a dynamic network.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">"""A class for tracking edges in a dynamic network."""</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">indices</span><span class="p">,</span> <span class="n">edge_count</span><span class="p">,</span> <span class="n">velocities</span><span class="p">,</span> <span class="n">nyquist_interval</span><span class="p">,</span> <span class="n">nnodes</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;initialize&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""initialize"""</span>
 
         <span class="n">nedges</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">indices</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">/</span> <span class="mi">2</span><span class="p">)</span>
 
@@ -1072,7 +1072,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">_last_base_node</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
 
         <span class="c1"># array of linked lists pointing to each node</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">edges_in_node</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nnodes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;object&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">edges_in_node</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">nnodes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"object"</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nnodes</span><span class="p">):</span>
             <span class="bp">self</span><span class="o">.</span><span class="n">edges_in_node</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
 
@@ -1097,7 +1097,7 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">priority_queue</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">merge_nodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_node</span><span class="p">,</span> <span class="n">merge_node</span><span class="p">,</span> <span class="n">foo_edge</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Merge nodes.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Merge nodes."""</span>
 
         <span class="c1"># remove edge between base and merge nodes</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">weight</span><span class="p">[</span><span class="n">foo_edge</span><span class="p">]</span> <span class="o">=</span> <span class="o">-</span><span class="mi">999</span>
@@ -1151,7 +1151,7 @@
         <span class="k">return</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_combine_edges</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">base_edge</span><span class="p">,</span> <span class="n">merge_edge</span><span class="p">,</span> <span class="n">merge_node</span><span class="p">,</span> <span class="n">neighbor_node</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Combine edges into a single edge.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Combine edges into a single edge."""</span>
         <span class="c1"># Merging nodes MUST be set to alpha prior to calling this function</span>
 
         <span class="c1"># combine edge weights</span>
@@ -1173,7 +1173,7 @@
         <span class="c1"># self.priority_queue.sort()</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">_reverse_edge_direction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">edge</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Reverse an edges direction, change alpha and beta.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Reverse an edges direction, change alpha and beta."""</span>
         <span class="c1"># swap nodes</span>
         <span class="n">old_alpha</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_alpha</span><span class="p">[</span><span class="n">edge</span><span class="p">])</span>
         <span class="n">old_beta</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">node_beta</span><span class="p">[</span><span class="n">edge</span><span class="p">])</span>
@@ -1184,7 +1184,7 @@
         <span class="k">return</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">unwrap_node</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">node</span><span class="p">,</span> <span class="n">nwrap</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Unwrap a node.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Unwrap a node."""</span>
         <span class="k">if</span> <span class="n">nwrap</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
             <span class="k">return</span>
         <span class="c1"># add weight * nwrap to each edge in node</span>
@@ -1198,7 +1198,7 @@
         <span class="k">return</span>
 
     <span class="k">def</span><span class="w"> </span><span class="nf">pop_edge</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Pop edge with largest weight. Return node numbers and diff.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">"""Pop edge with largest weight. Return node numbers and diff."""</span>
 
         <span class="c1"># if len(priority_queue) == 0:</span>
         <span class="c1">#     return True, None</span>
@@ -1245,8 +1245,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1280,7 +1280,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

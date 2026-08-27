@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
@@ -42,10 +42,10 @@
     <link rel="stylesheet" type="text/css" href="../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../_static/doctools.js?v=fd6eb6e6"></script>
@@ -552,7 +552,7 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read the radar file.</span>
-<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">&quot;sgpxsaprcmacsurI5.c1.20171004.203018.nc&quot;</span><span class="p">)</span>
+<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="s2">"sgpxsaprcmacsurI5.c1.20171004.203018.nc"</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -565,7 +565,7 @@
 </div>
 </div>
 <div class="cell_output docutils container">
-<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys([&#39;total_power&#39;, &#39;reflectivity&#39;, &#39;velocity&#39;, &#39;spectrum_width&#39;, &#39;differential_reflectivity&#39;, &#39;specific_differential_phase&#39;, &#39;cross_correlation_ratio&#39;, &#39;normalized_coherent_power&#39;, &#39;differential_phase&#39;, &#39;xsapr_clutter&#39;, &#39;sounding_temperature&#39;, &#39;height&#39;, &#39;signal_to_noise_ratio&#39;, &#39;velocity_texture&#39;, &#39;gate_id&#39;, &#39;simulated_velocity&#39;, &#39;corrected_velocity&#39;, &#39;unfolded_differential_phase&#39;, &#39;corrected_differential_phase&#39;, &#39;filtered_corrected_differential_phase&#39;, &#39;corrected_specific_diff_phase&#39;, &#39;filtered_corrected_specific_diff_phase&#39;, &#39;corrected_differential_reflectivity&#39;, &#39;corrected_reflectivity&#39;, &#39;height_over_iso0&#39;, &#39;specific_attenuation&#39;, &#39;path_integrated_attenuation&#39;, &#39;specific_differential_attenuation&#39;, &#39;path_integrated_differential_attenuation&#39;, &#39;rain_rate_A&#39;])
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>dict_keys(['total_power', 'reflectivity', 'velocity', 'spectrum_width', 'differential_reflectivity', 'specific_differential_phase', 'cross_correlation_ratio', 'normalized_coherent_power', 'differential_phase', 'xsapr_clutter', 'sounding_temperature', 'height', 'signal_to_noise_ratio', 'velocity_texture', 'gate_id', 'simulated_velocity', 'corrected_velocity', 'unfolded_differential_phase', 'corrected_differential_phase', 'filtered_corrected_differential_phase', 'corrected_specific_diff_phase', 'filtered_corrected_specific_diff_phase', 'corrected_differential_reflectivity', 'corrected_reflectivity', 'height_over_iso0', 'specific_attenuation', 'path_integrated_attenuation', 'specific_differential_attenuation', 'path_integrated_differential_attenuation', 'rain_rate_A'])
 </pre></div>
 </div>
 </div>
@@ -576,9 +576,9 @@
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+    <span class="s2">"reflectivity"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">resolution</span><span class="o">=</span><span class="s2">&quot;50m&quot;</span><span class="p">,</span>
+    <span class="n">resolution</span><span class="o">=</span><span class="s2">"50m"</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">8</span><span class="p">,</span>
     <span class="n">vmax</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
     <span class="n">min_lon</span><span class="o">=-</span><span class="mf">98.25</span><span class="p">,</span>
@@ -610,9 +610,9 @@
 <span class="c1"># equal to a certain value. (You can exclude values based on conditions from multiple</span>
 <span class="c1"># fields. In this example, we are excluding regions identified as second trip echoes</span>
 <span class="c1"># (gate_id = 0), nonhydrometeors (gate_id = 3), and clutter (gate_id = 5).</span>
-<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_equal</span><span class="p">(</span><span class="s2">&quot;gate_id&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_equal</span><span class="p">(</span><span class="s2">&quot;gate_id&quot;</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_equal</span><span class="p">(</span><span class="s2">&quot;gate_id&quot;</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
+<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_equal</span><span class="p">(</span><span class="s2">"gate_id"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_equal</span><span class="p">(</span><span class="s2">"gate_id"</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_equal</span><span class="p">(</span><span class="s2">"gate_id"</span><span class="p">,</span> <span class="mi">5</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -624,9 +624,9 @@
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+    <span class="s2">"reflectivity"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">resolution</span><span class="o">=</span><span class="s2">&quot;50m&quot;</span><span class="p">,</span>
+    <span class="n">resolution</span><span class="o">=</span><span class="s2">"50m"</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">8</span><span class="p">,</span>
     <span class="n">vmax</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
     <span class="n">min_lon</span><span class="o">=-</span><span class="mf">98.25</span><span class="p">,</span>
@@ -646,7 +646,7 @@
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let&#39;s reset the gatefilter and try another method.</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Let's reset the gatefilter and try another method.</span>
 <span class="n">gatefilter</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">filters</span><span class="o">.</span><span class="n">GateFilter</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -655,7 +655,7 @@
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Lets remove reflectivity values below a threshold.</span>
-<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">gatefilter</span><span class="o">.</span><span class="n">exclude_below</span><span class="p">(</span><span class="s2">"reflectivity"</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -666,9 +666,9 @@
 <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">[</span><span class="mi">8</span><span class="p">,</span> <span class="mi">8</span><span class="p">])</span>
 <span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
 <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+    <span class="s2">"reflectivity"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
-    <span class="n">resolution</span><span class="o">=</span><span class="s2">&quot;50m&quot;</span><span class="p">,</span>
+    <span class="n">resolution</span><span class="o">=</span><span class="s2">"50m"</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">8</span><span class="p">,</span>
     <span class="n">vmax</span><span class="o">=</span><span class="mi">64</span><span class="p">,</span>
     <span class="n">min_lon</span><span class="o">=-</span><span class="mf">98.25</span><span class="p">,</span>
@@ -693,11 +693,11 @@
 <span class="c1"># (gatefilter.gate_included). These can be used to do calculations on the data that</span>
 <span class="c1"># include the filter. For example, if we want to get the mean reflectivity of each sweep, we can do:</span>
 <span class="n">refl_array</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">masked_where</span><span class="p">(</span>
-    <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_included</span> <span class="o">==</span> <span class="kc">False</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">]</span>
+    <span class="n">gatefilter</span><span class="o">.</span><span class="n">gate_included</span> <span class="o">==</span> <span class="kc">False</span><span class="p">,</span> <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">"reflectivity"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span>
 <span class="p">)</span>
 <span class="n">reflectivity_w_mask</span> <span class="o">=</span> <span class="p">[</span><span class="n">refl_array</span><span class="p">[</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">()]</span>
 <span class="n">reflectivity</span> <span class="o">=</span> <span class="p">[</span>
-    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">&quot;reflectivity&quot;</span><span class="p">][</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">()</span>
+    <span class="n">radar</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="s2">"reflectivity"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span><span class="n">x</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">radar</span><span class="o">.</span><span class="n">iter_slice</span><span class="p">()</span>
 <span class="p">]</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">reflectivity</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="n">reflectivity_w_mask</span><span class="p">)</span>
@@ -777,8 +777,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -812,7 +812,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>

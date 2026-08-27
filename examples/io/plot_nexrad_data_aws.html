@@ -27,8 +27,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=90905a2f556bf617f1a9" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -42,10 +42,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
     <script src="../../_static/documentation_options.js?v=ea147abf"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -607,7 +607,7 @@ We will access data from the <strong>unidata-nexrad-level2</strong> bucket, with
 <p>Where in our case, we are using a sample data file from Houston, Texas (KHGX)
 on March 22, 2022, at 1201:25 UTC. This means our path would look like:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">aws_nexrad_level2_file</span></a> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;s3://unidata-nexrad-level2/2022/03/22/KHGX/KHGX20220322_120125_V06&quot;</span>
+    <span class="s2">"s3://unidata-nexrad-level2/2022/03/22/KHGX/KHGX20220322_120125_V06"</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -619,7 +619,7 @@ on March 22, 2022, at 1201:25 UTC. This means our path would look like:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">fields</span></a><span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;clutter_filter_power_removed&#39;, &#39;differential_reflectivity&#39;, &#39;spectrum_width&#39;, &#39;cross_correlation_ratio&#39;, &#39;reflectivity&#39;, &#39;differential_phase&#39;, &#39;velocity&#39;]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>['cross_correlation_ratio', 'spectrum_width', 'velocity', 'reflectivity', 'differential_reflectivity', 'clutter_filter_power_removed', 'differential_phase']
 </pre></div>
 </div>
 <p>Let’s plot the reflectivity/velocity fields as a first step to investigating our dataset.</p>
@@ -630,10 +630,10 @@ on March 22, 2022, at 1201:25 UTC. This means our path would look like:</p>
 <span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 
 <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+    <span class="s2">"reflectivity"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">&quot;Equivalent Relectivity ($Z_</span><span class="si">{e}</span><span class="s2">$) </span><span class="se">\n</span><span class="s2"> (dBZ)&quot;</span><span class="p">,</span>
+    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">"Equivalent Relectivity ($Z_</span><span class="si">{e}</span><span class="s2">$) </span><span class="se">\n</span><span class="s2"> (dBZ)"</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span>
     <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
 <span class="p">)</span>
@@ -641,10 +641,10 @@ on March 22, 2022, at 1201:25 UTC. This means our path would look like:</p>
 <span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 
 <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;velocity&quot;</span><span class="p">,</span>
+    <span class="s2">"velocity"</span><span class="p">,</span>
     <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">&quot;Radial Velocity ($V_</span><span class="si">{r}</span><span class="s2">$) </span><span class="se">\n</span><span class="s2"> (m/s)&quot;</span><span class="p">,</span>
+    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">"Radial Velocity ($V_</span><span class="si">{r}</span><span class="s2">$) </span><span class="se">\n</span><span class="s2"> (m/s)"</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">70</span><span class="p">,</span>
     <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
 <span class="p">)</span>
@@ -669,10 +669,10 @@ using the following naming convention:</p>
 </div></blockquote>
 <p>For example, we can look at data from that same time as the NEXRAD Level 2 data used previously (March 22, 2022 at 1201 UTC)</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">aws_nexrad_level3_velocity_file</span></a> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;s3://unidata-nexrad-level3/HGX_N0U_2022_03_22_12_01_25&quot;</span>
+    <span class="s2">"s3://unidata-nexrad-level3/HGX_N0U_2022_03_22_12_01_25"</span>
 <span class="p">)</span>
 <a href="https://docs.python.org/3/library/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">aws_nexrad_level3_reflectivity_file</span></a> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">&quot;s3://unidata-nexrad-level3/HGX_N0Q_2022_03_22_12_01_25&quot;</span>
+    <span class="s2">"s3://unidata-nexrad-level3/HGX_N0Q_2022_03_22_12_01_25"</span>
 <span class="p">)</span>
 </pre></div>
 </div>
@@ -685,14 +685,14 @@ using the following naming convention:</p>
 </div>
 <p>Let’s confirm that each radar object has a single field:</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span>
-    <span class="s2">&quot;velocity radar object: &quot;</span><span class="p">,</span>
+    <span class="s2">"velocity radar object: "</span><span class="p">,</span>
     <span class="nb">list</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar_level3_velocity</span><span class="o">.</span><span class="n">fields</span></a><span class="p">),</span>
-    <span class="s2">&quot;reflectivity radar object: &quot;</span><span class="p">,</span>
+    <span class="s2">"reflectivity radar object: "</span><span class="p">,</span>
     <span class="nb">list</span><span class="p">(</span><a href="https://docs.python.org/3/library/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar_level3_reflectivity</span><span class="o">.</span><span class="n">fields</span></a><span class="p">),</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>velocity radar object:  [&#39;velocity&#39;] reflectivity radar object:  [&#39;reflectivity&#39;]
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>velocity radar object:  ['velocity'] reflectivity radar object:  ['reflectivity']
 </pre></div>
 </div>
 <p>Plot a Quick Look of our NEXRAD Level 3 Data</p>
@@ -704,9 +704,9 @@ using the following naming convention:</p>
 <span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 
 <span class="n">reflectivity_display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;reflectivity&quot;</span><span class="p">,</span>
+    <span class="s2">"reflectivity"</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">&quot;Equivalent Relectivity ($Z_</span><span class="si">{e}</span><span class="s2">$) </span><span class="se">\n</span><span class="s2"> (dBZ)&quot;</span><span class="p">,</span>
+    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">"Equivalent Relectivity ($Z_</span><span class="si">{e}</span><span class="s2">$) </span><span class="se">\n</span><span class="s2"> (dBZ)"</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span>
     <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
 <span class="p">)</span>
@@ -716,15 +716,15 @@ using the following naming convention:</p>
 <span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
 
 <span class="n">velocity_display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">&quot;velocity&quot;</span><span class="p">,</span>
+    <span class="s2">"velocity"</span><span class="p">,</span>
     <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">&quot;Radial Velocity ($V_</span><span class="si">{r}</span><span class="s2">$) </span><span class="se">\n</span><span class="s2"> (m/s)&quot;</span><span class="p">,</span>
+    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">"Radial Velocity ($V_</span><span class="si">{r}</span><span class="s2">$) </span><span class="se">\n</span><span class="s2"> (m/s)"</span><span class="p">,</span>
     <span class="n">vmin</span><span class="o">=-</span><span class="mi">70</span><span class="p">,</span>
     <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
 <span class="p">)</span>
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" alt="0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor,  0.5 Deg. 2022-03-22T12:01:25Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 12.286 seconds)</p>
+<img src="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" alt="0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor,  0.5 Deg. 2022-03-22T12:01:25Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 15.215 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-io-plot-nexrad-data-aws-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/41122161573e84ed2249ac58c58fb5d5/plot_nexrad_data_aws.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_nexrad_data_aws.ipynb</span></code></a></p>
@@ -817,8 +817,8 @@ using the following naming convention:</p>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=90905a2f556bf617f1a9"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=90905a2f556bf617f1a9"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -852,7 +852,7 @@ using the following naming convention:</p>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.20.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
 </p></div>
       
     </div>
