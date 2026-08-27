@@ -9,7 +9,7 @@ except ImportError:
 
 import numpy as np
 import pytest
-from numpy.testing import assert_almost_equal, assert_warns
+from numpy.testing import assert_almost_equal
 
 import pyart
 from pyart.io.uffile import UFFile, UFRay
@@ -157,7 +157,7 @@ def test_frequency():
 
     # An invalid wavelength should throw a warning
     ufile.rays[0].field_headers[0]["wavelength_cm"] = 0
-    assert_warns(
+    pytest.warns(
         UserWarning, pyart.io.uf._get_instrument_parameters, ufile, filemetadata
     )
 
@@ -171,7 +171,7 @@ def test_scan_type_uf():
 
     # An invalid scan mode should throw a warning
     ufray.mandatory_header["sweep_mode"] = 99
-    assert_warns(UserWarning, pyart.io.uf._get_scan_type, ufray)
+    pytest.warns(UserWarning, pyart.io.uf._get_scan_type, ufray)
 
 
 def test_skip_field():

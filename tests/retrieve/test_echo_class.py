@@ -420,3 +420,85 @@ def test_conv_strat_raut_results_correct():
     masked_reclass = np.expand_dims(masked_reclass, axis=0)
 
     assert_allclose(masked_reclass, wtclass["wt_reclass"]["data"], atol=0.1)
+
+
+def test_conv_strat_raut_accepts_xgrid():
+    """
+    conv_strat_raut should accept a Grid-like ``pyart.xradar.Xgrid`` built from a
+    CF-compliant xarray Dataset (duck typing) and produce the same
+    classification as the native Grid path.
+    """
+    pytest.importorskip("xarray")
+    pytest.importorskip("xradar")
+
+    grid_len = 32
+    grid = pyart.testing.make_gaussian_storm_grid(
+        min_value=5,
+        max_value=45,
+        grid_len=grid_len,
+        sigma=0.2,
+        mu=0,
+        masked_boundary=3,
+    )
+
+    # Reference classification from the native Grid path.
+    grid_result = pyart.retrieve.conv_strat_raut(grid, "reflectivity", cappi_level=0)
+
+    # Build a Grid-like Xgrid from an in-memory Dataset. grid.to_xarray()
+    # decodes time (dropping its "units" attr), so re-add one to satisfy Xgrid's
+    # decode_times=False guard; conv_strat_raut never uses the time field. Using
+    # the in-memory Dataset keeps float64 precision so the comparison is exact
+    # (a netCDF round-trip would pack to float32 and flip threshold-adjacent
+    # pixels between classes).
+    ds = grid.to_xarray()
+    ds["time"].attrs["units"] = "seconds since 2000-01-01T00:00:00Z"
+    xgrid = pyart.xradar.Xgrid(ds)
+
+    xgrid_result = pyart.retrieve.conv_strat_raut(xgrid, "reflectivity", cappi_level=0)
+
+    # Same output contract as the Grid path.
+    assert isinstance(xgrid_result, dict)
+    assert "wt_reclass" in xgrid_result
+    assert xgrid_result["wt_reclass"]["data"].shape == (1, grid_len, grid_len)
+
+    # Identical classification where the input reflectivity (cappi level 0) is
+    # valid (unmasked). Masked boundaries are represented differently (masked vs.
+    # NaN) between the two paths and are excluded from the comparison.
+    valid = ~np.ma.getmaskarray(grid.fields["reflectivity"]["data"][0])
+    assert_allclose(
+        np.asarray(xgrid_result["wt_reclass"]["data"])[0][valid],
+        np.asarray(grid_result["wt_reclass"]["data"])[0][valid],
+    )
+
+
+def test_conv_strat_raut_rejects_non_grid():
+    """conv_strat_raut should reject objects lacking the Grid surface."""
+    # Non-grid objects (e.g. None) have no .fields/.x/.y -> TypeError.
+    pytest.raises(TypeError, pyart.retrieve.conv_strat_raut, None, "reflectivity")
+    pytest.raises(TypeError, pyart.retrieve.conv_strat_raut, object(), "reflectivity")
+
+
+def test_conv_strat_raut_always_core_thres_alias():
+    """
+    The renamed ``always_core_thres`` works, and the deprecated
+    ``conv_core_threshold`` alias still works but emits a DeprecationWarning and
+    yields the same result (backward compatibility).
+    """
+    grid = pyart.testing.make_gaussian_storm_grid(
+        min_value=5, max_value=45, grid_len=32, sigma=0.2, mu=0, masked_boundary=3
+    )
+
+    # New name: no warning, recorded in the output parameters.
+    new = pyart.retrieve.conv_strat_raut(grid, "reflectivity", always_core_thres=44)
+    assert new["wt_reclass"]["parameters"]["always_core_thres"] == 44
+
+    # Deprecated alias: emits DeprecationWarning and gives an identical result.
+    with pytest.warns(DeprecationWarning):
+        old = pyart.retrieve.conv_strat_raut(
+            grid, "reflectivity", conv_core_threshold=44
+        )
+    assert old["wt_reclass"]["parameters"]["always_core_thres"] == 44
+    assert_allclose(
+        np.asarray(old["wt_reclass"]["data"]),
+        np.asarray(new["wt_reclass"]["data"]),
+    )

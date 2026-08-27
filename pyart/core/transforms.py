@@ -531,6 +531,15 @@ def cartesian_to_geographic(x, y, projparams):
     lon, lat : array
         Longitude and latitude of the Cartesian coordinates in degrees.
 
+    Notes
+    -----
+    The default ``pyart_aeqd`` projection assumes a spherical Earth (no pyproj
+    required) and can differ from an ellipsoidal (WGS84) result by a few hundred
+    meters far from the origin. If pyproj is installed, pass an ellipsoidal
+    projection instead::
+
+        cartesian_to_geographic(x, y, {"proj": "aeqd", "ellps": "WGS84", "lon_0": lon_0, "lat_0": lat_0})
+
     """
     if isinstance(projparams, dict) and projparams.get("proj") == "pyart_aeqd":
         # Use Py-ART's Azimuthal equidistance projection
@@ -637,6 +646,11 @@ def cartesian_to_geographic_aeqd(x, y, lon_0, lat_0, R=6370997.0):
     -------
     lon, lat : array
         Longitude and latitude of Cartesian coordinates in degrees.
+
+    Notes
+    -----
+    Spherical Earth only. For ellipsoidal (WGS84) accuracy, use
+    :func:`cartesian_to_geographic` with an ellipsoidal projection (needs pyproj).
 
     References
     ----------

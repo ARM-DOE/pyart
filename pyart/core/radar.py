@@ -187,6 +187,15 @@ class Radar:
         drift=None,
         heading=None,
         pitch=None,
+        heading_change_rate=None,
+        pitch_change_rate=None,
+        roll_change_rate=None,
+        eastward_velocity=None,
+        northward_velocity=None,
+        vertical_velocity=None,
+        northward_wind=None,
+        eastward_wind=None,
+        vertical_wind=None,
         georefs_applied=None,
     ):
         if "calendar" not in time:
@@ -224,6 +233,15 @@ class Radar:
         self.heading = heading  # optional
         self.pitch = pitch  # optional
         self.georefs_applied = georefs_applied  # optional
+        self.heading_change_rate = heading_change_rate  # optional
+        self.pitch_change_rate = pitch_change_rate  # optional
+        self.roll_change_rate = roll_change_rate  # optional
+        self.eastward_velocity = eastward_velocity  # optional
+        self.northward_velocity = northward_velocity  # optional
+        self.vertical_velocity = vertical_velocity  # optional
+        self.northward_wind = northward_wind  # optional
+        self.eastward_wind = eastward_wind  # optional
+        self.vertical_wind = vertical_wind  # optional
 
         self.instrument_parameters = instrument_parameters  # optional
         self.radar_calibration = radar_calibration  # optional
@@ -721,6 +739,24 @@ class Radar:
             self._dic_info("heading", level, out)
         if self.pitch is not None:
             self._dic_info("pitch", level, out)
+        if self.heading_change_rate is not None:
+            self._dic_info("heading_change_rate", level, out)
+        if self.pitch_change_rate is not None:
+            self._dic_info("pitch_change_rate", level, out)
+        if self.roll_change_rate is not None:
+            self._dic_info("roll_change_rate", level, out)
+        if self.eastward_wind is not None:
+            self._dic_info("eastward_wind", level, out)
+        if self.northward_wind is not None:
+            self._dic_info("northward_wind", level, out)
+        if self.vertical_wind is not None:
+            self._dic_info("vertical_wind", level, out)
+        if self.eastward_velocity is not None:
+            self._dic_info("eastward_velocity", level, out)
+        if self.northward_velocity is not None:
+            self._dic_info("northward_velocity", level, out)
+        if self.vertical_velocity is not None:
+            self._dic_info("vertical_velocity", level, out)
         if self.georefs_applied is not None:
             self._dic_info("georefs_applied", level, out)
 

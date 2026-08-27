@@ -26,18 +26,18 @@ xradar vs. Legacy Radar Data Structures
 Py-ART represents a significant advancement over legacy radar data structures, particularly with its adoption of **xarray** through the `xradar` extension. Here's how Py-ART (with xradar) compares to older approaches:
 
 +----------------------------+----------------------------------+---------------------------------+
-| **Feature**                | **Legacy Radar Data Structures** | **Py-ART with xradar**         |
+| **Feature**                | **Legacy Radar Data Structures** | **Py-ART with xradar**          |
 +============================+==================================+=================================+
-| **Data Representation**    | Custom object with dictionaries  | xarray-based, standardized     |
+| **Data Representation**    | Custom object with dictionaries  | xarray-based, standardized      |
 +----------------------------+----------------------------------+---------------------------------+
-| **Metadata Handling**      | Based on cfradial1 standards.    | Based on cfradial2 standards   |
+| **Metadata Handling**      | Based on cfradial1 standards.    | Based on cfradial2 standards    |
 +----------------------------+----------------------------------+---------------------------------+
-| **Performance**            | Limited scalability              | Optimized for large datasets   |
+| **Performance**            | Limited scalability              | Optimized for large datasets    |
 +----------------------------+----------------------------------+---------------------------------+
-| **Multi-Dimensional Data** | Limited support                  | Native support via xarray      |
+| **Multi-Dimensional Data** | Limited support                  | Native support via xarray       |
 +----------------------------+----------------------------------+---------------------------------+
-| **Interoperability**       | Minimal, package-by-package      | Full integration with PyData   |
-|                            |                                  | ecosystem                      |
+| **Interoperability**       | Minimal, package-by-package      | Full integration with PyData    |
+|                            |                                  | ecosystem                       |
 +----------------------------+----------------------------------+---------------------------------+
 
 The adoption of xarray in Py-ART allows for more intuitive and efficient handling of radar data, especially for large-scale or multi-dimensional datasets. It also aligns Py-ART with modern data science practices, ensuring long-term sustainability and usability.
