@@ -59,10 +59,6 @@ __ https://docs.openradarscience.org/projects/xradar/en/stable/
 
 __ https://docs.xarray.dev/en/stable/
 
-* mda-xdrlib__
-
-__ https://github.com/MDAnalysis/mda-xdrlib
-
 * fsspec__
 
 __ https://filesystem-spec.readthedocs.io/en/latest/
