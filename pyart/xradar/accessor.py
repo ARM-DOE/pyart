@@ -4,6 +4,7 @@ Utilities for interfacing between xradar and Py-ART
 """
 
 import copy
+import sys
 
 import numpy as np
 import pandas as pd
@@ -28,15 +29,27 @@ from xradar.accessors import XradarAccessor
 from xradar.util import apply_to_sweeps, get_sweep_keys
 
 from ..config import get_metadata
+from ..core.radar import Radar
 from ..core.transforms import (
     antenna_vectors_to_cartesian,
     cartesian_to_geographic,
     cartesian_vectors_to_geographic,
 )
+from ..exceptions import MissingOptionalDependency
 from ..lazydict import LazyLoadDict
 
 
 class Xgrid:
+    """
+    Wraps a Cf-compliant xarray Dataset into a Py-ART Grid-like object.
+
+    Parameters
+    ----------
+    grid_ds : xarray.Dataset
+        The xarray Dataset to convert to a Py-ART grid. Times must not be
+        decoded (``decode_times=False``) when the Dataset is opened.
+    """
+
     def __init__(self, grid_ds):
         """
         Wraps a Cf-compliant xarray Dataset into a PyART Grid Object.
@@ -111,6 +124,63 @@ class Xgrid:
             projparams["lon_0"] = self.origin_longitude["data"][0]
             projparams["lat_0"] = self.origin_latitude["data"][0]
         return projparams
+
+    @property
+    def projection_proj(self):
+        """Return a pyproj.Proj instance as specified by the projection attribute.
+
+        Raises a ValueError if the pyart_aeqd projection is specified.
+        """
+        try:
+            import pyproj
+        except ImportError as err:
+            raise MissingOptionalDependency(
+                "PyProj is required to create a Proj instance but it "
+                "is not installed"
+            ) from err
+        projparams = self.get_projparams()
+
+        if isinstance(projparams, dict) and projparams["proj"] == "pyart_aeqd":
+            raise ValueError(
+                "Proj instance can not be made for the pyart_aeqd projection"
+            )
+        return pyproj.Proj(projparams)
+
+    def write(
+        self,
+        filename,
+        format="NETCDF4",
+        arm_time_variables=False,
+        arm_alt_lat_lon_variables=False,
+    ):
+        """
+        Write the Xgrid object to a NetCDF file.
+
+        Parameters
+        ----------
+        filename : str
+            Filename to save to.
+        format : str, optional
+            NetCDF format, one of 'NETCDF4', 'NETCDF4_CLASSIC',
+            'NETCDF3_CLASSIC' or 'NETCDF3_64BIT'.
+        arm_time_variables : bool, optional
+            True to write the ARM standard time variables base_time and
+            time_offset. False will not write these variables.
+        arm_alt_lat_lon_variables : bool, optional
+            True to write the ARM standard alt, lat, lon variables.
+            False will not write these variables.
+
+        """
+        # delayed import to avoid circular import
+        from ..io.grid_io import write_grid
+
+        write_grid(
+            filename,
+            self,
+            format=format,
+            arm_time_variables=arm_time_variables,
+            arm_alt_lat_lon_variables=arm_alt_lat_lon_variables,
+        )
 
     @property
     def metadata(self):
@@ -282,6 +352,19 @@ class Xgrid:
 
 
 class Xradar:
+    """
+    Wraps an xradar DataTree into a Py-ART Radar-like object.
+
+    Optional Radar attributes (None when absent in the source file):
+    ``antenna_transition``, ``rays_are_indexed``, ``ray_angle_res``,
+    ``target_scan_rate``, ``scan_rate``, ``altitude_agl``, ``rotation``,
+    ``tilt``, ``roll``, ``drift``, ``heading``, ``pitch``,
+    ``georefs_applied`` and ``radar_calibration`` are populated from the
+    DataTree when the corresponding variable/group is present, and are
+    ``None`` otherwise (never fabricated) -- matching how :class:`Radar`
+    treats these attributes for files that lack them.
+    """
+
     def __init__(self, xradar, default_sweep="sweep_0", scan_type=None):
         # Make sure that first dimension is azimuth
         self.xradar = apply_to_sweeps(xradar, ensure_dim)
@@ -332,7 +415,6 @@ class Xradar:
         )
         self.fixed_angle = dict(data=self.combined_sweeps.sweep_fixed_angle.values)
         self.fixed_angle.update(self.combined_sweeps.sweep_fixed_angle.attrs)
-        self.antenna_transition = None
         self.latitude = dict(
             data=np.expand_dims(self.xradar["latitude"].values, axis=0)
         )
@@ -365,11 +447,24 @@ class Xradar:
         self.init_gate_x_y_z()
         self.init_gate_longitude_latitude()
         self.init_gate_alt()
+        self.init_rays_per_sweep()
 
-        # Extra methods needed for compatibility
-        self.rays_are_indexed = None
-        self.ray_angle_res = None
-        self.target_scan_rate = None
+        # Optional Radar attrs: looked up from the DataTree when present,
+        # else None (never fabricated). See class docstring.
+        self.antenna_transition = self._find_optional_attr("antenna_transition")
+        self.rays_are_indexed = self._find_optional_attr("rays_are_indexed")
+        self.ray_angle_res = self._find_optional_attr("ray_angle_res")
+        self.target_scan_rate = self._find_optional_attr("target_scan_rate")
+        self.scan_rate = self._find_optional_attr("scan_rate")
+        self.altitude_agl = self._find_optional_attr("altitude_agl")
+        self.rotation = self._find_optional_attr("rotation")
+        self.tilt = self._find_optional_attr("tilt")
+        self.roll = self._find_optional_attr("roll")
+        self.drift = self._find_optional_attr("drift")
+        self.heading = self._find_optional_attr("heading")
+        self.pitch = self._find_optional_attr("pitch")
+        self.georefs_applied = self._find_optional_attr("georefs_applied")
+        self.radar_calibration = self._find_radar_calibration()
 
     def __repr__(self):
         return formatting.datatree_repr(self.xradar)
@@ -463,6 +558,62 @@ class Xradar:
 
         return instrument_parameters
 
+    def _find_optional_attr(self, name):
+        """
+        Look up an optional Radar-style attribute by variable name.
+
+        Checks the combined (per-ray) sweeps dataset first, then the
+        root of the DataTree, for a variable named ``name``. Returns a
+        Radar-style ``dict(data=..., **attrs)`` if found, else ``None``
+        -- values are never fabricated when absent from the source file.
+
+        Parameters
+        ----------
+        name : str
+            Name of the variable to look up.
+
+        Returns
+        -------
+        dict or None
+        """
+        if name in self.combined_sweeps.variables:
+            da = self.combined_sweeps[name]
+        elif name in self.xradar.ds.variables:
+            da = self.xradar.ds[name]
+        else:
+            return None
+        dic = dict(data=np.asarray(da.values))
+        dic.update(da.attrs)
+        return dic
+
+    def _find_radar_calibration(self):
+        """
+        Look up the optional ``radar_calibration`` subgroup.
+
+        Mirrors :py:func:`find_instrument_parameters`'s handling of the
+        ``radar_parameters`` subgroup. Returns ``None`` if no
+        ``radar_calibration`` child node is present in the DataTree.
+
+        Returns
+        -------
+        dict or None
+        """
+        if "radar_calibration" not in list(self.xradar.children):
+            return None
+        calib_dict = self.xradar["radar_calibration"].ds.to_dict(data="array")
+        radar_calibration = calib_dict["data_vars"]
+        if not radar_calibration:
+            return None
+        for field in radar_calibration:
+            field_dict = radar_calibration[field]
+            if "attrs" in field_dict:
+                for param in field_dict["attrs"]:
+                    field_dict[param] = field_dict["attrs"][param]
+                del field_dict["attrs"]
+            if "dims" in field_dict:
+                del field_dict["dims"]
+        return radar_calibration
+
     def iter_start(self):
         """Return an iterator over the sweep start indices."""
         return (s for s in self.sweep_start_ray_index["data"])
@@ -520,12 +671,19 @@ class Xradar:
             raise ValueError(err)
         # add the field
         self.fields[field_name] = dic
+        # The coordinate that uniquely identifies a ray within a sweep
+        # depends on the scan mode: azimuth for PPI-like sweeps, elevation
+        # for RHI sweeps (see _combine_sweeps for why "azimuth" cannot be
+        # used to drop_duplicates() on an RHI sweep).
+        ray_key = "elevation" if self.scan_type == "rhi" else "azimuth"
         for sweep in range(self.nsweeps):
-            sweep_ds = (
-                self.xradar[f"sweep_{sweep}"].to_dataset().drop_duplicates("azimuth")
-            )
+            sweep_ds = self.xradar[f"sweep_{sweep}"].to_dataset()
+            ray_dim = sweep_ds[ray_key].dims[0]
+            if ray_dim != ray_key:
+                sweep_ds = sweep_ds.swap_dims({ray_dim: ray_key})
+            sweep_ds = sweep_ds.drop_duplicates(ray_key)
             sweep_ds[field_name] = (
-                ("azimuth", "range"),
+                (ray_key, "range"),
                 self.fields[field_name]["data"][self.get_slice(sweep)],
             )
             attrs = dic.copy()
@@ -664,6 +822,25 @@ class Xradar:
         """
         # Check to see if the data needs to be georeferenced
         if "x" not in self.xradar[f"sweep_{sweep}"].coords:
+            # xradar.georeference() assigns x/y/z as coordinates, which
+            # would silently overwrite any data variable with the same
+            # name (e.g. a GAMIC 'z' reflectivity moment, see GH #1765).
+            # Georeference a version with any colliding moments dropped so
+            # that those moments are left untouched in combined_sweeps.
+            conflicts = [
+                var for var in ("x", "y", "z") if var in self.combined_sweeps.data_vars
+            ]
+            if conflicts:
+                # self.xradar is never mutated by this path (georeference()
+                # is only applied to the dropped-conflicts copy), so the
+                # result can be cached and reused across repeated calls
+                # instead of re-georeferencing the whole dataset every time.
+                if getattr(self, "_collision_georeferenced", None) is None:
+                    self._collision_georeferenced = self.combined_sweeps.drop_vars(
+                        conflicts
+                    ).xradar.georeference()
+                data = self._collision_georeferenced.sel(sweep_number=sweep)
+                return data["x"].values, data["y"].values, data["z"].values
             self.combined_sweeps = self.combined_sweeps.xradar.georeference()
 
         data = self.combined_sweeps.sel(sweep_number=sweep)
@@ -759,6 +936,9 @@ class Xradar:
                 data=np.mean(self.altitude["data"]) + self.gate_z["data"]
             )
 
+    # Alias matching pyart.core.Radar's attribute name.
+    init_gate_altitude = init_gate_alt
+
     def init_gate_longitude_latitude(self):
         """
         Initialize or reset the gate_longitude and gate_latitude attributes.
@@ -772,14 +952,25 @@ class Xradar:
         self.gate_latitude = gate_latitude
 
     def _combine_sweeps(self):
+        # The coordinate that uniquely identifies a ray within a sweep
+        # depends on the scan mode: azimuth varies per ray for
+        # azimuth-surveillance (PPI-like) sweeps, while elevation varies per
+        # ray for RHI sweeps (azimuth is instead (near-)constant across an
+        # RHI sweep). This coordinate is used below both to drop duplicate
+        # rays (e.g. from overlapping transition rays between sweeps) and as
+        # the dimension aligned/stacked across sweeps -- using "azimuth" for
+        # RHI sweeps would drop_duplicates() every ray in the sweep down to
+        # one, since they all share the same azimuth.
+        ray_key = "elevation" if self.scan_type == "rhi" else "azimuth"
+
         # Loop through and extract the different datasets
         ds_list = []
         for sweep in self.sweep_group_names:
-            ds_list.append(
-                self.xradar[sweep]
-                .ds.drop_duplicates("azimuth")
-                .set_coords("sweep_number")
-            )
+            sweep_ds = self.xradar[sweep].ds
+            ray_dim = sweep_ds[ray_key].dims[0]
+            if ray_dim != ray_key:
+                sweep_ds = sweep_ds.swap_dims({ray_dim: ray_key})
+            ds_list.append(sweep_ds.drop_duplicates(ray_key).set_coords("sweep_number"))
 
         # Merge based on the sweep number
         merged = concat(
@@ -790,10 +981,10 @@ class Xradar:
             dim="sweep_number",
         )
 
-        # Stack the sweep number and azimuth together
-        stacked = merged.stack(gates=["sweep_number", "azimuth"]).transpose()
+        # Stack the sweep number and per-ray coordinate together
+        stacked = merged.stack(gates=["sweep_number", ray_key]).transpose()
 
-        # Select the valid azimuths
+        # Select the valid rays
         good_azimuths = stacked.time.dropna("gates", how="all").gates
         stacked = stacked.sel(gates=good_azimuths)
 
@@ -916,10 +1107,19 @@ class Xradar:
 
     def _find_fields(self, ds):
         fields = {}
-        for field in self.combined_sweeps.variables:
+        # Only consider data variables, not coordinates (e.g. the x/y/z
+        # coordinates added by xradar.georeference()), so a moment named
+        # 'x', 'y' or 'z' is never shadowed by a same-named coordinate.
+        for field in self.combined_sweeps.data_vars:
             if self.combined_sweeps[field].dims == ("gates", "range"):
+                # Classic pyart.core.Radar fields are numpy.ma.MaskedArray,
+                # masked where a gate is missing. xarray/xradar decode a
+                # variable's _FillValue to NaN on load, so recover that mask
+                # here (masked_invalid also masks pre-existing NaNs/infs);
+                # dtype and attrs are preserved.
+                data = np.ma.masked_invalid(self.combined_sweeps[field].values)
                 fields[field] = {
-                    "data": self.combined_sweeps[field].values,
+                    "data": data,
                     **self.combined_sweeps[field].attrs,
                 }
         return fields
@@ -949,6 +1149,189 @@ class Xradar:
             return azimuths.copy()
         else:
             return azimuths
+
+    def get_elevation(self, sweep, copy=False):
+        """
+        Return an array of elevation angles for a given sweep.
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve data for, 0 based.
+        copy : bool, optional
+            True to return a copy of the elevations. False, the default,
+            returns a view of the elevations (when possible), changing this
+            data will change the data in the underlying Radar object.
+
+        Returns
+        -------
+        elevation : array
+            Array containing the elevation angles for a given sweep.
+
+        """
+        s = self.get_slice(sweep)
+        elevation = self.elevation["data"][s]
+        if copy:
+            return elevation.copy()
+        else:
+            return elevation
+
+    def get_gate_area(self, sweep):
+        """
+        Return the area of each gate in a sweep. Units of area will be the
+        same as those of the range variable, squared.
+
+        Assumptions:
+            1. Azimuth data is in degrees.
+
+        Parameters
+        ----------
+        sweep : int
+            Sweep number to retrieve gate locations from, 0 based.
+
+        Returns
+        -------
+        area : 2D array of size (nrays - 1, ngates - 1)
+            Array containing the area (in m * m) of each gate in the sweep.
+
+        """
+        s = self.get_slice(sweep)
+        azimuths = self.azimuth["data"][s]
+        ranges = self.range["data"]
+
+        circular_area = np.pi * ranges**2
+        annular_area = np.diff(circular_area)
+
+        az_diffs = np.diff(azimuths)
+        az_diffs[az_diffs < 0.0] += 360
+
+        d_azimuths = az_diffs / 360.0  # Fraction of a full circle
+
+        dca, daz = np.meshgrid(annular_area, d_azimuths)
+
+        area = np.abs(dca * daz)
+        return area
+
+    def init_rays_per_sweep(self):
+        """Initialize or reset the rays_per_sweep attribute."""
+        lazydic = LazyLoadDict(get_metadata("rays_per_sweep"))
+        lazydic.set_lazy("data", _rays_per_sweep_data_factory(self))
+        self.rays_per_sweep = lazydic
+
+    def info(self, level="standard", out=sys.stdout):
+        """
+        Print information on radar.
+
+        Parameters
+        ----------
+        level : {'compact', 'standard', 'full', 'c', 's', 'f'}, optional
+            Level of information on radar object to print, compact is
+            minimal information, standard more and full everything.
+        out : file-like, optional
+            Stream to direct output to, default is to print information
+            to standard out (the screen).
+
+        """
+        if level == "c":
+            level = "compact"
+        elif level == "s":
+            level = "standard"
+        elif level == "f":
+            level = "full"
+
+        if level not in ["standard", "compact", "full"]:
+            raise ValueError("invalid level parameter")
+
+        self._dic_info("altitude", level, out)
+        self._dic_info("antenna_transition", level, out)
+        self._dic_info("azimuth", level, out)
+        self._dic_info("elevation", level, out)
+
+        print("fields:", file=out)
+        for field_name, field_dic in self.fields.items():
+            self._dic_info(field_name, level, out, field_dic, 1)
+
+        self._dic_info("fixed_angle", level, out)
+
+        if self.instrument_parameters is None or not self.instrument_parameters:
+            print("instrument_parameters: None", file=out)
+        else:
+            print("instrument_parameters:", file=out)
+            for name, dic in self.instrument_parameters.items():
+                self._dic_info(name, level, out, dic, 1)
+
+        self._dic_info("latitude", level, out)
+        self._dic_info("longitude", level, out)
+
+        print("nsweeps:", self.nsweeps, file=out)
+        print("ngates:", self.ngates, file=out)
+        print("nrays:", self.nrays, file=out)
+
+        self._dic_info("range", level, out)
+        print("scan_type:", self.scan_type, file=out)
+        self._dic_info("sweep_end_ray_index", level, out)
+        self._dic_info("sweep_mode", level, out)
+        self._dic_info("sweep_number", level, out)
+        self._dic_info("sweep_start_ray_index", level, out)
+        self._dic_info("target_scan_rate", level, out)
+        self._dic_info("time", level, out)
+
+        # always print out all metadata last
+        self._dic_info("metadata", "full", out)
+
+    def _dic_info(self, attr, level, out, dic=None, ident_level=0):
+        """Print information on a dictionary attribute."""
+        if dic is None:
+            dic = getattr(self, attr, None)
+
+        ilvl0 = "\t" * ident_level
+        ilvl1 = "\t" * (ident_level + 1)
+
+        if dic is None:
+            print(str(attr) + ": None", file=out)
+            return
+
+        # some instrument_parameters entries (e.g. root dataset attrs
+        # picked up by find_instrument_parameters) are plain scalars
+        # rather than {'data': ..., ...} dictionaries.
+        if not hasattr(dic, "items"):
+            print(ilvl0 + str(attr) + ":", dic, file=out)
+            return
+
+        # make a string summary of the data key if it exists.
+        if "data" not in dic:
+            d_str = "Missing"
+        elif not isinstance(dic["data"], np.ndarray):
+            d_str = "<not a ndarray>"
+        else:
+            data = dic["data"]
+            t = (data.dtype, data.shape)
+            d_str = "<ndarray of type: {} and shape: {}>".format(*t)
+
+        # compact, only data summary
+        if level == "compact":
+            print(ilvl0 + str(attr) + ":", d_str, file=out)
+
+        # standard, all keys, only summary for data
+        elif level == "standard":
+            print(ilvl0 + str(attr) + ":", file=out)
+            print(ilvl1 + "data:", d_str, file=out)
+            for key, val in dic.items():
+                if key == "data":
+                    continue
+                print(ilvl1 + key + ":", val, file=out)
+
+        # full, all keys, full data
+        elif level == "full":
+            print(str(attr) + ":", file=out)
+            if "data" in dic:
+                print(ilvl1 + "data:", dic["data"], file=out)
+            for key, val in dic.items():
+                if key == "data":
+                    continue
+                print(ilvl1 + key + ":", val, file=out)
+
+        return
 
     def get_projparams(self):
         projparams = self.projection.copy()
@@ -1071,6 +1454,18 @@ def _point_altitude_data_factory(grid):
     return _point_altitude_data
 
 
+def _rays_per_sweep_data_factory(radar):
+    """Return a function which returns the number of rays per sweep."""
+
+    def _rays_per_sweep_data():
+        """The function which returns the number of rays per sweep."""
+        return (
+            radar.sweep_end_ray_index["data"] - radar.sweep_start_ray_index["data"] + 1
+        )
+
+    return _rays_per_sweep_data
+
+
 def _gate_lon_lat_data_factory(radar, coordinate):
     """Return a function which returns the geographic locations of gates."""
 
@@ -1124,6 +1519,38 @@ class XradarDataTreeAccessor(XradarAccessor):
         """
         dt = self.xarray_obj
         return Xradar(dt, scan_type=scan_type)
+
+
+def to_pyart_radar(radar):
+    """
+    Coerce a radar-like object into an object usable by Py-ART algorithms.
+
+    Parameters
+    ----------
+    radar : Radar, Xradar or xarray.DataTree
+        The object to coerce. `pyart.core.Radar` and `Xradar` instances are
+        returned unchanged (the latter duck-types `Radar`). An xradar
+        `xarray.DataTree` is wrapped into an `Xradar` instance.
+
+    Returns
+    -------
+    radar : Radar or Xradar
+        A Py-ART compatible radar object.
+
+    Raises
+    ------
+    TypeError
+        If `radar` is not a `Radar`, `Xradar`, or `xarray.DataTree` instance.
+
+    """
+    if isinstance(radar, (Radar, Xradar)):
+        return radar
+    if isinstance(radar, DataTree):
+        return Xradar(radar)
+    raise TypeError(
+        "radar must be a pyart.core.Radar, pyart.xradar.Xradar, or "
+        f"xarray.DataTree instance, got {type(radar)!r}"
+    )
 
 
 def ensure_dim(ds, dim="azimuth"):
