@@ -457,11 +457,6 @@
 <li class="toctree-l1"><a class="reference internal" href="masking_data_with_gatefilters.html">Masking Data With Py-ART Gatefilters</a></li>
 <li class="toctree-l1"><a class="reference internal" href="the_pyart_radar_object_and_indexing.html">The Py-ART Radar object and indexing</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Fast Wavelet-Based Classification of Radar Echoes into Convection Core, Mixed-Intermediate and Stratiform Classes</a></li>
-
-
-
-
-
 </ul>
 </div>
 </nav></div>
@@ -552,9 +547,8 @@ The next step is to sum up all these ‘n’ wavelet scales.</p></li>
 </li>
 </ol>
 </section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="test-examples">
-<h1>Test Examples<a class="headerlink" href="#test-examples" title="Link to this heading">#</a></h1>
+<section id="test-examples">
+<h2>Test Examples<a class="headerlink" href="#test-examples" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -578,10 +572,10 @@ The next step is to sum up all these ‘n’ wavelet scales.</p></li>
 </div>
 </div>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="case-1">
-<h1>Case 1<a class="headerlink" href="#case-1" title="Link to this heading">#</a></h1>
+<section id="case-1">
+<h2>Case 1<a class="headerlink" href="#case-1" title="Link to this heading">#</a></h2>
 <section id="reading-and-preparing-radar-data">
-<h2>Reading and Preparing Radar Data<a class="headerlink" href="#reading-and-preparing-radar-data" title="Link to this heading">#</a></h2>
+<h3>Reading and Preparing Radar Data<a class="headerlink" href="#reading-and-preparing-radar-data" title="Link to this heading">#</a></h3>
 <p>We load a sample radar data file using Py-ART, extracts the lowest sweep, and then interpolates this data onto a cartesian grid. The dx and dy variables represent the grid resolution in the x and y directions, respectively.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -608,7 +602,7 @@ The next step is to sum up all these ‘n’ wavelet scales.</p></li>
 </div>
 </div>
 <section id="using-peak-feature-detection">
-<h3>Using <code class="docutils literal notranslate"><span class="pre">Peak</span> <span class="pre">Feature</span> <span class="pre">Detection</span></code><a class="headerlink" href="#using-peak-feature-detection" title="Link to this heading">#</a></h3>
+<h4>Using <code class="docutils literal notranslate"><span class="pre">Peak</span> <span class="pre">Feature</span> <span class="pre">Detection</span></code><a class="headerlink" href="#using-peak-feature-detection" title="Link to this heading">#</a></h4>
 <p>Lets now performs convective-stratiform classification on the radar data using the Yuter method [4, 5], which is a part of Py-ART’s retrieve module. The result is added to the grid as a new field for further analysis or visualization.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -641,7 +635,7 @@ The next step is to sum up all these ‘n’ wavelet scales.</p></li>
 </div>
 </section>
 <section id="using-wavelet-scale-analysis">
-<h3>Using <code class="docutils literal notranslate"><span class="pre">Wavelet</span> <span class="pre">Scale</span> <span class="pre">Analysis</span></code><a class="headerlink" href="#using-wavelet-scale-analysis" title="Link to this heading">#</a></h3>
+<h4>Using <code class="docutils literal notranslate"><span class="pre">Wavelet</span> <span class="pre">Scale</span> <span class="pre">Analysis</span></code><a class="headerlink" href="#using-wavelet-scale-analysis" title="Link to this heading">#</a></h4>
 <p>The function processes radar data using a Py-ART Grid object and a specified reflectivity field (<code class="docutils literal notranslate"><span class="pre">refl_field</span></code>). It offers options to adjust the Z-R relationship coefficients (<code class="docutils literal notranslate"><span class="pre">zr_a</span></code> and <code class="docutils literal notranslate"><span class="pre">zr_b</span></code>) and various thresholds for tailored classification. The output is a dictionary, <code class="docutils literal notranslate"><span class="pre">reclass_dict</span></code>, ready for integration into a Py-ART Grid. This dictionary includes the classification results, a description of the categories, and a record of the used parameters for transparency and reference.</p>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
@@ -701,8 +695,8 @@ The next step is to sum up all these ‘n’ wavelet scales.</p></li>
 </section>
 </section>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="plotting">
-<h1>Plotting<a class="headerlink" href="#plotting" title="Link to this heading">#</a></h1>
+<section id="plotting">
+<h2>Plotting<a class="headerlink" href="#plotting" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Required imports</span>
@@ -775,8 +769,8 @@ The next step is to sum up all these ‘n’ wavelet scales.</p></li>
 </div>
 </div>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="case-2">
-<h1>Case 2<a class="headerlink" href="#case-2" title="Link to this heading">#</a></h1>
+<section id="case-2">
+<h2>Case 2<a class="headerlink" href="#case-2" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read in file</span>
@@ -954,11 +948,11 @@ The next step is to sum up all these ‘n’ wavelet scales.</p></li>
 </div>
 </div>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="remarks">
-<h1>Remarks:<a class="headerlink" href="#remarks" title="Link to this heading">#</a></h1>
+<section id="remarks">
+<h2>Remarks:<a class="headerlink" href="#remarks" title="Link to this heading">#</a></h2>
 <p>Both the methods primarily agree on the location of the convection; however, the wavelet transform reveals more intricate details in the shape of the identified convective regions. The further separation of convection into <code class="docutils literal notranslate"><span class="pre">cores</span></code> and <code class="docutils literal notranslate"><span class="pre">intermediate-mixed</span></code> category is particularly notable. The comparison of Drop Size Distributions (DSD) for these classes shows the WT method’s efficiency in segregating radar rainfall regions that are microphysically distinct [2]. The stratiform or non-convective precipitation, characterized by smaller drops and the lowest drop density, contrasts with convective core precipitation, which exhibits a high drop density and abundance of large drops. The intermediate or mixed rain category, marked by a high concentration of small and medium size drops and a lack of large drops, provides further insights into the microphysical processes and the convective-stratiform organization.</p>
 <section id="references">
-<h2>References:<a class="headerlink" href="#references" title="Link to this heading">#</a></h2>
+<h3>References:<a class="headerlink" href="#references" title="Link to this heading">#</a></h3>
 <ol class="arabic simple">
 <li><p>Raut, B. A., Karekar, R. N., &amp; Puranik, D. M. (2008). “Wavelet-based technique to extract convective clouds from infrared satellite images.” IEEE Geosci. Remote Sens. Lett., 5(3), 328–330. <a class="reference external" href="https://doi.org/10.1109/LGRS.2008.916072">DOI</a></p></li>
 <li><p>Raut, B. A., Louf, V., Gayatri, K., Murugavel, P., Konwar, M., &amp; Prabhakaran, T. (2020). “A Multiresolution Technique for the Classification of Precipitation Echoes in Radar Data.” IEEE Trans. Geosci. Remote Sens., 58(8), 5409. <a class="reference external" href="https://doi.org/10.1109/TGRS.2020.2965649">DOI</a></p></li>
@@ -970,6 +964,7 @@ The next step is to sum up all these ‘n’ wavelet scales.</p></li>
 <li><p>Shensa, M. J. (1992). “The discrete wavelet transform: Wedding the à trous and Mallat algorithms.” IEEE Trans. Signal Process., 40(10), 2464–2482. <a class="reference external" href="https://doi.org/10.1109/78.157290">DOI</a></p></li>
 <li><p>Raut, B. A., Seed, A. W., Reeder, M. J., &amp; Jakob, C. (2018). “A multiplicative cascade model for high-resolution space-time downscaling of rainfall.” J. Geophys. Res. Atmos., 123(4), 2050–2067. <a class="reference external" href="https://doi.org/10.1002/2017JD027148">DOI</a></p></li>
 </ol>
+</section>
 </section>
 </section>
 
@@ -1014,29 +1009,25 @@ The next step is to sum up all these ‘n’ wavelet scales.</p></li>
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#">Fast Wavelet-Based Classification of Radar Echoes into Convection Core, Mixed-Intermediate and Stratiform Classes</a><ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#introduction">Introduction:</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#the-a-trous-wavelet-transform">The Á Trous Wavelet Transform</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#classification-scheme">Classification Scheme</a></li>
-</ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#test-examples">Test Examples</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#case-1">Case 1</a><ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-and-preparing-radar-data">Reading and Preparing Radar Data</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-peak-feature-detection">Using <code class="docutils literal notranslate"><span class="pre">Peak</span> <span class="pre">Feature</span> <span class="pre">Detection</span></code></a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#using-wavelet-scale-analysis">Using <code class="docutils literal notranslate"><span class="pre">Wavelet</span> <span class="pre">Scale</span> <span class="pre">Analysis</span></code></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#test-examples">Test Examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#case-1">Case 1</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#reading-and-preparing-radar-data">Reading and Preparing Radar Data</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-peak-feature-detection">Using <code class="docutils literal notranslate"><span class="pre">Peak</span> <span class="pre">Feature</span> <span class="pre">Detection</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#using-wavelet-scale-analysis">Using <code class="docutils literal notranslate"><span class="pre">Wavelet</span> <span class="pre">Scale</span> <span class="pre">Analysis</span></code></a></li>
 </ul>
 </li>
 </ul>
 </li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting">Plotting</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#case-2">Case 2</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#remarks">Remarks:</a><ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting">Plotting</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#case-2">Case 2</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#remarks">Remarks:</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#references">References:</a></li>
 </ul>
 </li>
 </ul>
-
   </nav></div>
 
   <div class="sidebar-secondary-item">
