@@ -1,3 +1,5 @@
+.. _overview:
+
 Why Py-ART?
 ===========
 
@@ -25,20 +27,35 @@ xradar vs. Legacy Radar Data Structures
 
 Py-ART represents a significant advancement over legacy radar data structures, particularly with its adoption of **xarray** through the `xradar` extension. Here's how Py-ART (with xradar) compares to older approaches:
 
-+----------------------------+----------------------------------+---------------------------------+
-| **Feature**                | **Legacy Radar Data Structures** | **Py-ART with xradar**          |
-+============================+==================================+=================================+
-| **Data Representation**    | Custom object with dictionaries  | xarray-based, standardized      |
-+----------------------------+----------------------------------+---------------------------------+
-| **Metadata Handling**      | Based on cfradial1 standards.    | Based on cfradial2 standards    |
-+----------------------------+----------------------------------+---------------------------------+
-| **Performance**            | Limited scalability              | Optimized for large datasets    |
-+----------------------------+----------------------------------+---------------------------------+
-| **Multi-Dimensional Data** | Limited support                  | Native support via xarray       |
-+----------------------------+----------------------------------+---------------------------------+
-| **Interoperability**       | Minimal, package-by-package      | Full integration with PyData    |
-|                            |                                  | ecosystem                       |
-+----------------------------+----------------------------------+---------------------------------+
+.. list-table::
+   :header-rows: 1
+   :widths: 20 35 45
+
+   * - **Feature**
+     - **Legacy** (``pyart.io.read`` -> :class:`~pyart.core.Radar`)
+     - **xradar-first** (``xd.io.open_*_datatree`` ->
+       ``tree.pyart.to_radar()`` -> :class:`~pyart.xradar.Xradar`)
+   * - Data Representation
+     - Custom object with dictionaries
+     - xarray/xradar ``DataTree`` under the hood, wrapped to duck-type
+       ``Radar``
+   * - Metadata Handling
+     - Based on cfradial1 conventions
+     - Based on cfradial2/FM301 conventions (via xradar)
+   * - Format coverage
+     - Py-ART's own readers (CfRadial, NEXRAD, Sigmet, MDV, ...)
+     - Growing set of xradar readers; new format support is expected to
+       land in xradar first, see :ref:`xradar_integration`
+   * - Missing-data handling
+     - ``numpy.ma.MaskedArray`` fields
+     - Also ``numpy.ma.MaskedArray`` fields (NaN-masked on load)
+   * - Interoperability
+     - Minimal, package-by-package
+     - Full integration with the PyData/xarray ecosystem
+
+Not every :class:`~pyart.core.Radar` attribute/method has an
+:class:`~pyart.xradar.Xradar` equivalent yet -- see the supported-API table
+in :ref:`xradar_integration` for exactly what has been ported and verified.
 
 The adoption of xarray in Py-ART allows for more intuitive and efficient handling of radar data, especially for large-scale or multi-dimensional datasets. It also aligns Py-ART with modern data science practices, ensuring long-term sustainability and usability.
 
