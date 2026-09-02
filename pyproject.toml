@@ -46,7 +46,6 @@ dependencies = [
     "cftime>=1.5.2",
     "fsspec>=2021.11.0",
     "matplotlib>=3.5.0",
-    "mda-xdrlib>=0.2.0",
     "netcdf4>=1.7.2",
     "numpy>=1.21.2",
     "open-radar-data>=0.5.0",

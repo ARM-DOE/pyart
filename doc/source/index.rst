@@ -215,7 +215,6 @@ The required dependencies to install Py-ART in addition to Python are:
 * `cmweather <https://cmweather.readthedocs.io/en/latest/>`_
 * `xradar <https://docs.openradarscience.org/projects/xradar/en/stable/>`_
 * `xarray <https://docs.xarray.dev/en/stable/>`_
-* `mda-xdrlib <https://github.com/MDAnalysis/mda-xdrlib>`_
 * `fsspec <https://filesystem-spec.readthedocs.io/en/latest/>`_
 * `s3fs <https://s3fs.readthedocs.io/en/latest/>`_
 * `pandas <https://pandas.pydata.org/>`_
