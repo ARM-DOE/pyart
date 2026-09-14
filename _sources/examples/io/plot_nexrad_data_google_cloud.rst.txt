@@ -101,6 +101,16 @@ First we can create a file system and retrieve the tar file to our current direc
     Could not determine bucket type for bucket name gcp-public-data-nexrad-l2: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information., falling back to GCSFileSystem
     Could not determine bucket type for bucket name gcp-public-data-nexrad-l2: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information., falling back to GCSFileSystem
     Could not determine bucket type for bucket name gcp-public-data-nexrad-l2: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information., falling back to GCSFileSystem
+    Could not determine bucket type for bucket name gcp-public-data-nexrad-l2: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information., falling back to GCSFileSystem
+    Could not determine bucket type for bucket name gcp-public-data-nexrad-l2: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information., falling back to GCSFileSystem
+    Could not determine bucket type for bucket name gcp-public-data-nexrad-l2: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information., falling back to GCSFileSystem
+    Could not determine bucket type for bucket name gcp-public-data-nexrad-l2: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information., falling back to GCSFileSystem
+    Could not determine bucket type for bucket name gcp-public-data-nexrad-l2: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information., falling back to GCSFileSystem
+    Could not determine bucket type for bucket name gcp-public-data-nexrad-l2: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information., falling back to GCSFileSystem
+    Could not determine bucket type for bucket name gcp-public-data-nexrad-l2: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information., falling back to GCSFileSystem
+    Could not determine bucket type for bucket name gcp-public-data-nexrad-l2: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information., falling back to GCSFileSystem
+    Could not determine bucket type for bucket name gcp-public-data-nexrad-l2: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information., falling back to GCSFileSystem
+    Could not determine bucket type for bucket name gcp-public-data-nexrad-l2: Your default credentials were not found. To set up Application Default Credentials, see https://cloud.google.com/docs/authentication/external/set-up-adc for more information., falling back to GCSFileSystem
 
     [None]
 
@@ -166,7 +176,7 @@ Let's take a look at a summary of what fields are available.
 
  .. code-block:: none
 
-    ['differential_reflectivity', 'reflectivity', 'cross_correlation_ratio', 'spectrum_width', 'differential_phase', 'velocity']
+    ['velocity', 'differential_phase', 'spectrum_width', 'reflectivity', 'differential_reflectivity', 'cross_correlation_ratio']
 
 
 
@@ -200,7 +210,7 @@ Let's plot the reflectivity field as a first step to investigating our dataset.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 26.308 seconds)
+   **Total running time of the script:** (0 minutes 28.259 seconds)
 
 
 .. _sphx_glr_download_examples_io_plot_nexrad_data_google_cloud.py:
