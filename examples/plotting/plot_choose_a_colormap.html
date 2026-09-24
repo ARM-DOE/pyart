@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Choose a Colormap for your Plot &#8212; Py-ART 2.2.5 documentation</title>
+    <title>Choose a Colormap for your Plot &#8212; Py-ART 2.3.0 documentation</title>
   
   
   
@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -47,7 +47,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../_static/documentation_options.js?v=ea147abf"></script>
+    <script src="../../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -80,7 +80,7 @@
     <link rel="prev" title="Create an RHI plot with reflectivity contour lines from an MDV file" href="plot_rhi_contours_differential_reflectivity.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.2" />
+  <meta name="docsearch:version" content="2.3" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -155,7 +155,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 2.2.5 documentation</p>
+    <p class="title logo__title">Py-ART 2.3.0 documentation</p>
   
 </a></div>
     
@@ -584,153 +584,145 @@ to download the full example code.</p>
 <span id="sphx-glr-examples-plotting-plot-choose-a-colormap-py"></span><h1>Choose a Colormap for your Plot<a class="headerlink" href="#choose-a-colormap-for-your-plot" title="Link to this heading">#</a></h1>
 <p>This is an example of what colormaps are available in Py-ART,
 and how to add them to your own plots.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
-
-<span class="c1"># Author: Max Grover (mgrover@anl.gov)</span>
-<span class="c1"># License: BSD 3 clause</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_test_data</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="vm">__doc__</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Author: Max Grover (mgrover&#64;anl.gov)</span><span class="w">
+</span><span class="c1"># License: BSD 3 clause</span><span class="w">
+</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="nn">.</span><span class="nn">pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span><span class="w">
+</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">pyart</span><span class="nn">.</span><span class="nn">testing</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-pyart-testing sphx-glr-backref-type-py-function reference internal" href="../../API/generated/pyart.testing.get_test_data.html#pyart.testing.get_test_data" title="pyart.testing.get_test_data"><span class="n">get_test_data</span></a><span class="w">
+</span></pre></div></div>
 <p><strong>Plot the available colormaps</strong></p>
 <p>Let’s see which colormaps are available in Py-ART from the colormap package cmweather!
 We use a helper function from matplotlib to plot this.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Setup some helper functions and ranges to visualize our colormaps, from matplotlib</span>
-<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gradient</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span>
-<a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gradient</span></a> <span class="o">=</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.vstack.html#numpy.vstack" title="numpy.vstack" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">vstack</span></a><span class="p">((</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gradient</span></a><span class="p">,</span> <a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gradient</span></a><span class="p">))</span>
-
-
-<span class="k">def</span><span class="w"> </span><span class="nf">plot_color_gradients</span><span class="p">(</span><span class="n">cmap_category</span><span class="p">,</span> <span class="n">cmap_list</span><span class="p">):</span>
-    <span class="c1"># Create figure and adjust figure height to number of colormaps</span>
-    <span class="n">nrows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cmap_list</span><span class="p">)</span>
-    <span class="n">figh</span> <span class="o">=</span> <span class="mf">0.35</span> <span class="o">+</span> <span class="mf">0.15</span> <span class="o">+</span> <span class="p">(</span><span class="n">nrows</span> <span class="o">+</span> <span class="p">(</span><span class="n">nrows</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.22</span>
-    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">nrows</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">6.4</span><span class="p">,</span> <span class="n">figh</span><span class="p">))</span>
-    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span> <span class="mf">0.35</span> <span class="o">/</span> <span class="n">figh</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.15</span> <span class="o">/</span> <span class="n">figh</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">0.99</span><span class="p">)</span>
-
-    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">cmap_category</span> <span class="o">+</span> <span class="s2">" Colormaps"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
-
-    <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">cmap_name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span> <span class="n">cmap_list</span><span class="p">):</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gradient</span></a><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">"auto"</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">cmap_name</span><span class="si">}</span><span class="s2">"</span><span class="p">)</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span>
-            <span class="o">-</span><span class="mf">0.01</span><span class="p">,</span>
-            <span class="mf">0.5</span><span class="p">,</span>
-            <span class="sa">f</span><span class="s2">"</span><span class="si">{</span><span class="n">cmap_name</span><span class="si">}</span><span class="s2">"</span><span class="p">,</span>
-            <span class="n">va</span><span class="o">=</span><span class="s2">"center"</span><span class="p">,</span>
-            <span class="n">ha</span><span class="o">=</span><span class="s2">"right"</span><span class="p">,</span>
-            <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
-            <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span>
-        <span class="p">)</span>
-
-    <span class="c1"># Turn off *all* ticks &amp; spines, not just the ones with colormaps.</span>
-    <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axs</span><span class="p">:</span>
-        <span class="n">ax</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">()</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="c1"># Setup some helper functions and ranges to visualize our colormaps, from matplotlib</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">gradient</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.linspace.html#numpy.linspace" title="numpy.linspace"><span class="n">np</span><span class="o">.</span><span class="n">linspace</span></a><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">256</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">gradient</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.vstack.html#numpy.vstack" title="numpy.vstack"><span class="n">np</span><span class="o">.</span><span class="n">vstack</span></a><span class="p">(</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">gradient</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">gradient</span></a><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="w">
+</span><span class="k">def</span><span class="w"> </span><span class="nf">plot_color_gradients</span><span class="p">(</span><span class="n">cmap_category</span><span class="p">,</span> <span class="n">cmap_list</span><span class="p">)</span><span class="p">:</span><span class="w">
+</span>    <span class="c1"># Create figure and adjust figure height to number of colormaps</span><span class="w">
+</span>    <span class="n">nrows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">cmap_list</span><span class="p">)</span><span class="w">
+</span>    <span class="n">figh</span> <span class="o">=</span> <span class="mf">0.35</span> <span class="o">+</span> <span class="mf">0.15</span> <span class="o">+</span> <span class="p">(</span><span class="n">nrows</span> <span class="o">+</span> <span class="p">(</span><span class="n">nrows</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.1</span><span class="p">)</span> <span class="o">*</span> <span class="mf">0.22</span><span class="w">
+</span>    <span class="n">fig</span><span class="p">,</span> <span class="n">axs</span> <span class="o">=</span> <a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplots.html#matplotlib.pyplot.subplots" title="matplotlib.pyplot.subplots"><span class="n">plt</span><span class="o">.</span><span class="n">subplots</span></a><span class="p">(</span><span class="n">nrows</span><span class="o">=</span><span class="n">nrows</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">6.4</span><span class="p">,</span> <span class="n">figh</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span>    <span class="n">fig</span><span class="o">.</span><span class="n">subplots_adjust</span><span class="p">(</span><span class="n">top</span><span class="o">=</span><span class="mi">1</span> <span class="o">-</span> <span class="mf">0.35</span> <span class="o">/</span> <span class="n">figh</span><span class="p">,</span> <span class="n">bottom</span><span class="o">=</span><span class="mf">0.15</span> <span class="o">/</span> <span class="n">figh</span><span class="p">,</span> <span class="n">left</span><span class="o">=</span><span class="mf">0.4</span><span class="p">,</span> <span class="n">right</span><span class="o">=</span><span class="mf">0.99</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="n">axs</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="n">cmap_category</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="s2"> Colormaps</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="k">for</span> <span class="n">ax</span><span class="p">,</span> <span class="n">cmap_name</span> <span class="ow">in</span> <span class="nb">zip</span><span class="p">(</span><span class="n">axs</span><span class="p">,</span> <span class="n">cmap_list</span><span class="p">)</span><span class="p">:</span><span class="w">
+</span>        <span class="n">ax</span><span class="o">.</span><span class="n">imshow</span><span class="p">(</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.ndarray.html#numpy.ndarray" title="numpy.ndarray"><span class="n">gradient</span></a><span class="p">,</span> <span class="n">aspect</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">auto</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cmap_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span>        <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="w">
+</span>            <span class="o">-</span><span class="mf">0.01</span><span class="p">,</span><span class="w">
+</span>            <span class="mf">0.5</span><span class="p">,</span><span class="w">
+</span>            <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">cmap_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>            <span class="n">va</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">center</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>            <span class="n">ha</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">right</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>            <span class="n">fontsize</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span><span class="w">
+</span>            <span class="n">transform</span><span class="o">=</span><span class="n">ax</span><span class="o">.</span><span class="n">transAxes</span><span class="p">,</span><span class="w">
+</span>        <span class="p">)</span><span class="w">
+</span><span class="w">
+</span>    <span class="c1"># Turn off *all* ticks &amp; spines, not just the ones with colormaps.</span><span class="w">
+</span>    <span class="k">for</span> <span class="n">ax</span> <span class="ow">in</span> <span class="n">axs</span><span class="p">:</span><span class="w">
+</span>        <span class="n">ax</span><span class="o">.</span><span class="n">set_axis_off</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p><strong>Colorblind Friendly Colormaps</strong></p>
 <p>We recommend starting with these colorblind friendly colormaps.
 These colormaps are the most inclusive, and should be used where
 possible.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_color_gradients</span><span class="p">(</span>
-    <span class="s2">"Colorblind Friendly"</span><span class="p">,</span>
-    <span class="p">[</span><span class="s2">"LangRainbow12"</span><span class="p">,</span> <span class="s2">"HomeyerRainbow"</span><span class="p">,</span> <span class="s2">"balance"</span><span class="p">,</span> <span class="s2">"ChaseSpectral"</span><span class="p">,</span> <span class="s2">"SpectralExtended"</span><span class="p">],</span>
-<span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">plot_color_gradients</span><span class="p">(</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">Colorblind Friendly</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="p">[</span><span class="s2">&quot;</span><span class="s2">LangRainbow12</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s2">HomeyerRainbow</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s2">balance</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s2">ChaseSpectral</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s2">SpectralExtended</span><span class="s2">&quot;</span><span class="p">]</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <img src="../../_images/sphx_glr_plot_choose_a_colormap_001.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_001.png" alt="Colorblind Friendly Colormaps" class = "sphx-glr-single-img"/><p><strong>Perceptually Uniform Colormaps</strong></p>
 <p>More generally, perceptually uniform colormaps are colormaps where
 the lightness value increases monotonically through the colormaps.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_color_gradients</span><span class="p">(</span>
-    <span class="s2">"Sequential"</span><span class="p">,</span>
-    <span class="p">[</span>
-        <span class="s2">"Bu10"</span><span class="p">,</span>
-        <span class="s2">"Bu7"</span><span class="p">,</span>
-        <span class="s2">"Gray5"</span><span class="p">,</span>
-        <span class="s2">"Gray9"</span><span class="p">,</span>
-    <span class="p">],</span>
-<span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">plot_color_gradients</span><span class="p">(</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">Sequential</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="p">[</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">Bu10</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">Bu7</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">Gray5</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">Gray9</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="p">]</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <img src="../../_images/sphx_glr_plot_choose_a_colormap_002.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_002.png" alt="Sequential Colormaps" class = "sphx-glr-single-img"/><p><strong>Diverging Colormaps</strong></p>
 <p>Diverging colormaps are helpful when showing positive and negative
 values. This is when the 0 value is meaningful (ex. velocity)</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_color_gradients</span><span class="p">(</span>
-    <span class="s2">"Diverging"</span><span class="p">,</span>
-    <span class="p">[</span>
-        <span class="s2">"BlueBrown11"</span><span class="p">,</span>
-        <span class="s2">"BrBu10"</span><span class="p">,</span>
-        <span class="s2">"BrBu12"</span><span class="p">,</span>
-        <span class="s2">"BuDOr12"</span><span class="p">,</span>
-        <span class="s2">"BuDOr18"</span><span class="p">,</span>
-        <span class="s2">"BuDRd12"</span><span class="p">,</span>
-        <span class="s2">"BuDRd18"</span><span class="p">,</span>
-        <span class="s2">"BuGr14"</span><span class="p">,</span>
-        <span class="s2">"BuGy8"</span><span class="p">,</span>
-        <span class="s2">"BuOr10"</span><span class="p">,</span>
-        <span class="s2">"BuOr12"</span><span class="p">,</span>
-        <span class="s2">"BuOr8"</span><span class="p">,</span>
-        <span class="s2">"BuOrR14"</span><span class="p">,</span>
-        <span class="s2">"GrMg16"</span><span class="p">,</span>
-        <span class="s2">"RdYlBu11b"</span><span class="p">,</span>
-    <span class="p">],</span>
-<span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">plot_color_gradients</span><span class="p">(</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">Diverging</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="p">[</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">BlueBrown11</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">BrBu10</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">BrBu12</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">BuDOr12</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">BuDOr18</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">BuDRd12</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">BuDRd18</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">BuGr14</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">BuGy8</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">BuOr10</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">BuOr12</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">BuOr8</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">BuOrR14</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">GrMg16</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">RdYlBu11b</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="p">]</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <img src="../../_images/sphx_glr_plot_choose_a_colormap_003.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_003.png" alt="Diverging Colormaps" class = "sphx-glr-single-img"/><p><strong>Field-Specific Colormaps</strong></p>
 <p>There are some colormaps that useful for specific fields, such as
 “BlueBrown10” for terrain, or NWSRef for the National Weather Service
 reflectivity field</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">plot_color_gradients</span><span class="p">(</span>
-    <span class="s2">"Field-specific "</span><span class="p">,</span>
-    <span class="p">[</span>
-        <span class="s2">"BlueBrown10"</span><span class="p">,</span>
-        <span class="s2">"Carbone11"</span><span class="p">,</span>
-        <span class="s2">"Carbone17"</span><span class="p">,</span>
-        <span class="s2">"Carbone42"</span><span class="p">,</span>
-        <span class="s2">"Cat12"</span><span class="p">,</span>
-        <span class="s2">"EWilson17"</span><span class="p">,</span>
-        <span class="s2">"NWSRef"</span><span class="p">,</span>
-        <span class="s2">"NWSVel"</span><span class="p">,</span>
-        <span class="s2">"NWS_SPW"</span><span class="p">,</span>
-        <span class="s2">"PD17"</span><span class="p">,</span>
-        <span class="s2">"RRate11"</span><span class="p">,</span>
-        <span class="s2">"RefDiff"</span><span class="p">,</span>
-        <span class="s2">"SCook18"</span><span class="p">,</span>
-        <span class="s2">"StepSeq25"</span><span class="p">,</span>
-        <span class="s2">"SymGray12"</span><span class="p">,</span>
-        <span class="s2">"Theodore16"</span><span class="p">,</span>
-        <span class="s2">"Wild25"</span><span class="p">,</span>
-    <span class="p">],</span>
-<span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">plot_color_gradients</span><span class="p">(</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">Field-specific </span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="p">[</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">BlueBrown10</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">Carbone11</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">Carbone17</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">Carbone42</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">Cat12</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">EWilson17</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">NWSRef</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">NWSVel</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">NWS_SPW</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">PD17</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">RRate11</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">RefDiff</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">SCook18</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">StepSeq25</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">SymGray12</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">Theodore16</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>        <span class="s2">&quot;</span><span class="s2">Wild25</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="p">]</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <img src="../../_images/sphx_glr_plot_choose_a_colormap_004.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_004.png" alt="Field-specific  Colormaps" class = "sphx-glr-single-img"/><p><strong>Plot Using a Colormap from Matplotlib</strong></p>
 <p>Now, we can apply one of these colorbars to plot and
 compare to a colormap from matplotlib, starting with the matplotlib example.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Read in a sample cfradial file</span>
-<a href="https://docs.python.org/3/builtins/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar_file</span></a> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">"swx_20120520_0641.nc"</span><span class="p">)</span>
-<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><a href="https://docs.python.org/3/builtins/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar_file</span></a><span class="p">)</span>
-
-<span class="c1"># Setup a display to plot the data</span>
-<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-
-<span class="c1"># Start by plotting a regular matplotlib colormap (Spectral_r)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">"reflectivity_horizontal"</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">64.0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"Spectral_r"</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="c1"># Read in a sample cfradial file</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">radar_file</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-testing sphx-glr-backref-type-py-function reference internal" href="../../API/generated/pyart.testing.get_test_data.html#pyart.testing.get_test_data" title="pyart.testing.get_test_data"><span class="n">get_test_data</span></a><span class="p">(</span><span class="s2">&quot;</span><span class="s2">swx_20120520_0641.nc</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-io sphx-glr-backref-type-py-function reference internal" href="../../API/generated/pyart.io.read.html#pyart.io.read" title="pyart.io.read"><span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">radar_file</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Setup a display to plot the data</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.graph.RadarDisplay.html#pyart.graph.RadarDisplay" title="pyart.graph.RadarDisplay"><span class="n">display</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class reference internal" href="../../API/generated/pyart.graph.RadarDisplay.html#pyart.graph.RadarDisplay" title="pyart.graph.RadarDisplay"><span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span></a><span class="p">(</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Start by plotting a regular matplotlib colormap (Spectral_r)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-method reference internal" href="../../API/generated/pyart.graph.RadarDisplay.plot.html#pyart.graph.RadarDisplay.plot" title="pyart.graph.RadarDisplay.plot"><span class="n">display</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="s2">&quot;</span><span class="s2">reflectivity_horizontal</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="o">-</span><span class="mi">32</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">64.0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">Spectral_r</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <img src="../../_images/sphx_glr_plot_choose_a_colormap_005.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_005.png" alt="xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p><strong>Plot Using a Colormap from Py-ART</strong></p>
 <p>Let’s use one of our cmweather’s colorbars now!
 Setup a display to plot the data</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-
-<span class="c1"># Now let's plot with a CVD-friendly colormap (HomeyerRainbow)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">"reflectivity_horizontal"</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">64.0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">"HomeyerRainbow"</span><span class="p">)</span>
-</pre></div>
-</div>
-<img src="../../_images/sphx_glr_plot_choose_a_colormap_006.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_006.png" alt="xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.996 seconds)</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.graph.RadarDisplay.html#pyart.graph.RadarDisplay" title="pyart.graph.RadarDisplay"><span class="n">display</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class reference internal" href="../../API/generated/pyart.graph.RadarDisplay.html#pyart.graph.RadarDisplay" title="pyart.graph.RadarDisplay"><span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span></a><span class="p">(</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Now let's plot with a CVD-friendly colormap (HomeyerRainbow)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-method reference internal" href="../../API/generated/pyart.graph.RadarDisplay.plot.html#pyart.graph.RadarDisplay.plot" title="pyart.graph.RadarDisplay.plot"><span class="n">display</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="s2">&quot;</span><span class="s2">reflectivity_horizontal</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="o">-</span><span class="mi">32</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mf">64.0</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">HomeyerRainbow</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<img src="../../_images/sphx_glr_plot_choose_a_colormap_006.png" srcset="../../_images/sphx_glr_plot_choose_a_colormap_006.png" alt="xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.621 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plotting-plot-choose-a-colormap-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/653fe2324a2591f4300a944b1759293c/plot_choose_a_colormap.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_choose_a_colormap.ipynb</span></code></a></p>

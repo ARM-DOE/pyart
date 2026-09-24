@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Calculating and Plotting a Cloud Mask &#8212; Py-ART 2.2.5 documentation</title>
+    <title>Calculating and Plotting a Cloud Mask &#8212; Py-ART 2.3.0 documentation</title>
   
   
   
@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -47,7 +47,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../_static/documentation_options.js?v=ea147abf"></script>
+    <script src="../../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -80,7 +80,7 @@
     <link rel="prev" title="ZDR Bias Calculation" href="plot_zdr_check.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.2" />
+  <meta name="docsearch:version" content="2.3" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -155,7 +155,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 2.2.5 documentation</p>
+    <p class="title logo__title">Py-ART 2.3.0 documentation</p>
   
 </a></div>
     
@@ -584,61 +584,58 @@ to download the full example code.</p>
 <span id="sphx-glr-examples-correct-plot-cloud-mask-py"></span><h1>Calculating and Plotting a Cloud Mask<a class="headerlink" href="#calculating-and-plotting-a-cloud-mask" title="Link to this heading">#</a></h1>
 <p>This example shows how to correct and plot reflectivity from an ARM
 KAZR using a noise floor cloud mask.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
-
-<span class="c1"># Author: Adam Theisen and Zach Sherman</span>
-<span class="c1"># License: BSD 3 clause</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">open_radar_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATASETS</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="vm">__doc__</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Author: Adam Theisen and Zach Sherman</span><span class="w">
+</span><span class="c1"># License: BSD 3 clause</span><span class="w">
+</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="nn">.</span><span class="nn">pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">open_radar_data</span><span class="w"> </span><span class="kn">import</span> <span class="n">DATASETS</span><span class="w">
+</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span><span class="w">
+</span></pre></div></div>
 <p><strong>Read and plot raw data</strong></p>
 <p>First let’s read and plot our dataset without any mask.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Fetch and read in the ARM KAZR file.</span>
-<a href="https://docs.python.org/3/builtins/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">DATASETS</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">"sgpkazrgeC1.a1.20190529.000002.cdf"</span><span class="p">)</span>
-<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">aux_io</span><span class="o">.</span><span class="n">read_kazr</span><span class="p">(</span><a href="https://docs.python.org/3/builtins/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
-
-<span class="c1"># Let's now take a look at reflectivity data prior to any corrections.</span>
-<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">"reflectivity_copol"</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">55</span><span class="p">))</span>
-<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="c1"># Fetch and read in the ARM KAZR file.</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">DATASETS</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="s2">&quot;</span><span class="s2">sgpkazrgeC1.a1.20190529.000002.cdf</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-aux_io sphx-glr-backref-type-py-function reference internal" href="../../API/generated/pyart.aux_io.read_kazr.html#pyart.aux_io.read_kazr" title="pyart.aux_io.read_kazr"><span class="n">pyart</span><span class="o">.</span><span class="n">aux_io</span><span class="o">.</span><span class="n">read_kazr</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">filename</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Let's now take a look at reflectivity data prior to any corrections.</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.graph.RadarDisplay.html#pyart.graph.RadarDisplay" title="pyart.graph.RadarDisplay"><span class="n">display</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class reference internal" href="../../API/generated/pyart.graph.RadarDisplay.html#pyart.graph.RadarDisplay" title="pyart.graph.RadarDisplay"><span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span></a><span class="p">(</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar</span></a><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-method reference internal" href="../../API/generated/pyart.graph.RadarDisplay.plot.html#pyart.graph.RadarDisplay.plot" title="pyart.graph.RadarDisplay.plot"><span class="n">display</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="s2">&quot;</span><span class="s2">reflectivity_copol</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.graph.RadarDisplay.html#pyart.graph.RadarDisplay" title="pyart.graph.RadarDisplay"><span class="n">display</span></a><span class="o">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">55</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">(</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <img src="../../_images/sphx_glr_plot_cloud_mask_001.png" srcset="../../_images/sphx_glr_plot_cloud_mask_001.png" alt="2019-05-29T15:00:00Z  Reflectivity, copolar" class = "sphx-glr-single-img"/><p><strong>Calculate cloud mask and plot corrected data</strong></p>
 <p>Now lets apply a mask by using the calc_cloud_mask function
 that will use a noise floor calculation from range and more
 to calculate the mask.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># First lets correct the data by calculating the mask.</span>
-<span class="n">cloud_mask_radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">calc_cloud_mask</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="s2">"reflectivity_copol"</span><span class="p">,</span> <span class="s2">"range"</span><span class="p">)</span>
-
-<span class="c1"># In this new radar object we should now have a new cloud mask field.</span>
-<span class="nb">print</span><span class="p">(</span><a href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cloud_mask_radar</span><span class="o">.</span><span class="n">fields</span></a><span class="p">[</span><span class="s2">"cloud_mask_2"</span><span class="p">])</span>
-
-<span class="c1"># Next we'll create a copy of the reflectivity field so we are not</span>
-<span class="c1"># overwriting the original data.</span>
-<span class="n">cloud_mask_radar</span><span class="o">.</span><span class="n">add_field_like</span><span class="p">(</span>
-    <span class="s2">"reflectivity_copol"</span><span class="p">,</span>
-    <span class="s2">"reflectivity_cloud_mask"</span><span class="p">,</span>
-    <a href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cloud_mask_radar</span><span class="o">.</span><span class="n">fields</span></a><span class="p">[</span><span class="s2">"reflectivity_copol"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(),</span>
-<span class="p">)</span>
-
-<span class="c1"># Now let's apply the mask to the copied reflectivity data.</span>
-<a href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cloud_mask_radar</span><span class="o">.</span><span class="n">fields</span></a><span class="p">[</span><span class="s2">"reflectivity_cloud_mask"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">][</span>
-    <a href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cloud_mask_radar</span><span class="o">.</span><span class="n">fields</span></a><span class="p">[</span><span class="s2">"cloud_mask_2"</span><span class="p">][</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span>
-<span class="p">]</span> <span class="o">=</span> <a href="https://docs.python.org/3/builtins/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">np</span><span class="o">.</span><span class="n">nan</span></a>
-
-<span class="c1"># And now we can plot the masked reflectivity field.</span>
-<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span><span class="p">(</span><span class="n">cloud_mask_radar</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="s2">"reflectivity_cloud_mask"</span><span class="p">)</span>
-<span class="n">display</span><span class="o">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">55</span><span class="p">))</span>
-<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">()</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="c1"># First lets correct the data by calculating the mask.</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">cloud_mask_radar</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-correct sphx-glr-backref-type-py-function reference internal" href="../../API/generated/pyart.correct.calc_cloud_mask.html#pyart.correct.calc_cloud_mask" title="pyart.correct.calc_cloud_mask"><span class="n">pyart</span><span class="o">.</span><span class="n">correct</span><span class="o">.</span><span class="n">calc_cloud_mask</span></a><span class="p">(</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar</span></a><span class="p">,</span> <span class="s2">&quot;</span><span class="s2">reflectivity_copol</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="s2">range</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># In this new radar object we should now have a new cloud mask field.</span><span class="w">
+</span><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">cloud_mask_radar</span><span class="o">.</span><span class="n">fields</span></a><span class="p">[</span><span class="s2">&quot;</span><span class="s2">cloud_mask_2</span><span class="s2">&quot;</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Next we'll create a copy of the reflectivity field so we are not</span><span class="w">
+</span><span class="c1"># overwriting the original data.</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-method reference internal" href="../../API/generated/pyart.core.Radar.add_field_like.html#pyart.core.Radar.add_field_like" title="pyart.core.Radar.add_field_like"><span class="n">cloud_mask_radar</span><span class="o">.</span><span class="n">add_field_like</span></a><span class="p">(</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">reflectivity_copol</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">reflectivity_cloud_mask</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">cloud_mask_radar</span><span class="o">.</span><span class="n">fields</span></a><span class="p">[</span><span class="s2">&quot;</span><span class="s2">reflectivity_copol</span><span class="s2">&quot;</span><span class="p">]</span><span class="p">[</span><span class="s2">&quot;</span><span class="s2">data</span><span class="s2">&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">(</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Now let's apply the mask to the copied reflectivity data.</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">cloud_mask_radar</span><span class="o">.</span><span class="n">fields</span></a><span class="p">[</span><span class="s2">&quot;</span><span class="s2">reflectivity_cloud_mask</span><span class="s2">&quot;</span><span class="p">]</span><span class="p">[</span><span class="s2">&quot;</span><span class="s2">data</span><span class="s2">&quot;</span><span class="p">]</span><span class="p">[</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">cloud_mask_radar</span><span class="o">.</span><span class="n">fields</span></a><span class="p">[</span><span class="s2">&quot;</span><span class="s2">cloud_mask_2</span><span class="s2">&quot;</span><span class="p">]</span><span class="p">[</span><span class="s2">&quot;</span><span class="s2">data</span><span class="s2">&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="w">
+</span><span class="p">]</span> <span class="o">=</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">np</span><span class="o">.</span><span class="n">nan</span></a><span class="w">
+</span><span class="w">
+</span><span class="c1"># And now we can plot the masked reflectivity field.</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.graph.RadarDisplay.html#pyart.graph.RadarDisplay" title="pyart.graph.RadarDisplay"><span class="n">display</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class reference internal" href="../../API/generated/pyart.graph.RadarDisplay.html#pyart.graph.RadarDisplay" title="pyart.graph.RadarDisplay"><span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarDisplay</span></a><span class="p">(</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">cloud_mask_radar</span></a><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-method reference internal" href="../../API/generated/pyart.graph.RadarDisplay.plot.html#pyart.graph.RadarDisplay.plot" title="pyart.graph.RadarDisplay.plot"><span class="n">display</span><span class="o">.</span><span class="n">plot</span></a><span class="p">(</span><span class="s2">&quot;</span><span class="s2">reflectivity_cloud_mask</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.graph.RadarDisplay.html#pyart.graph.RadarDisplay" title="pyart.graph.RadarDisplay"><span class="n">display</span></a><span class="o">.</span><span class="n">set_limits</span><span class="p">(</span><span class="n">xlim</span><span class="o">=</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">55</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.show.html#matplotlib.pyplot.show" title="matplotlib.pyplot.show"><span class="n">plt</span><span class="o">.</span><span class="n">show</span></a><span class="p">(</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <img src="../../_images/sphx_glr_plot_cloud_mask_002.png" srcset="../../_images/sphx_glr_plot_cloud_mask_002.png" alt="2019-05-29T15:00:00Z  Reflectivity, copolar" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>{'long_name': 'Cloud mask 2 (2D box)', 'units': '1', 'comment': 'The mask uses a 2D box to filter out noise.', 'flag_values': [0, 1], 'flag_meanings': ['no_cloud', 'cloud'], 'data': masked_array(
   data=[[0, 0, 0, ..., 0, 0, 0],
         [0, 0, 1, ..., 0, 0, 0],
@@ -658,7 +655,7 @@ to calculate the mask.</p>
   dtype=int16)}
 </pre></div>
 </div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.560 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 0.597 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-correct-plot-cloud-mask-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/e417eb06d7ddaf7b02425f979fd10ab4/plot_cloud_mask.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_cloud_mask.ipynb</span></code></a></p>

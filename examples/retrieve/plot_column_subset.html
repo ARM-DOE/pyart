@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Extract a radar column above a point &#8212; Py-ART 2.2.5 documentation</title>
+    <title>Extract a radar column above a point &#8212; Py-ART 2.3.0 documentation</title>
   
   
   
@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -47,7 +47,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../_static/documentation_options.js?v=ea147abf"></script>
+    <script src="../../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -80,7 +80,7 @@
     <link rel="prev" title="Retrieval Examples" href="index.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.2" />
+  <meta name="docsearch:version" content="2.3" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -155,7 +155,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 2.2.5 documentation</p>
+    <p class="title logo__title">Py-ART 2.3.0 documentation</p>
   
 </a></div>
     
@@ -584,61 +584,57 @@ to download the full example code.</p>
 <span id="sphx-glr-examples-retrieve-plot-column-subset-py"></span><h1>Extract a radar column above a point<a class="headerlink" href="#extract-a-radar-column-above-a-point" title="Link to this heading">#</a></h1>
 <p>Given a radar and a point, extract the column of radar data values above
 a point</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Author: Maxwell Grover (mgrover@anl.gov)</span>
-<span class="c1"># License: BSD 3 clause</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">cartopy.crs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ccrs</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_test_data</span>
-
-<span class="c1"># Read in some test data</span>
-<a href="https://docs.python.org/3/builtins/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">"swx_20120520_0641.nc"</span><span class="p">)</span>
-<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><a href="https://docs.python.org/3/builtins/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">filename</span></a><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="c1"># Author: Maxwell Grover (mgrover&#64;anl.gov)</span><span class="w">
+</span><span class="c1"># License: BSD 3 clause</span><span class="w">
+</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">cartopy</span><span class="nn">.</span><span class="nn">crs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ccrs</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="nn">.</span><span class="nn">pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span><span class="w">
+</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">pyart</span><span class="nn">.</span><span class="nn">testing</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-pyart-testing sphx-glr-backref-type-py-function reference internal" href="../../API/generated/pyart.testing.get_test_data.html#pyart.testing.get_test_data" title="pyart.testing.get_test_data"><span class="n">get_test_data</span></a><span class="w">
+</span><span class="w">
+</span><span class="c1"># Read in some test data</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">filename</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-testing sphx-glr-backref-type-py-function reference internal" href="../../API/generated/pyart.testing.get_test_data.html#pyart.testing.get_test_data" title="pyart.testing.get_test_data"><span class="n">get_test_data</span></a><span class="p">(</span><span class="s2">&quot;</span><span class="s2">swx_20120520_0641.nc</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-io sphx-glr-backref-type-py-function reference internal" href="../../API/generated/pyart.io.read.html#pyart.io.read" title="pyart.io.read"><span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">filename</span></a><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p><strong>Plot the first sweep and our desired point</strong></p>
 <p>Let’s visualize our radar data from a single sweep, and plot
 the location of our desired point on a map.
 This will provide some context as to where we are extracting our
 column of values.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/builtins/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site_lon</span></a> <span class="o">=</span> <span class="o">-</span><span class="mf">97.73</span>  <span class="c1"># longitude in degrees</span>
-<a href="https://docs.python.org/3/builtins/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site_lat</span></a> <span class="o">=</span> <span class="mf">36.41</span>  <span class="c1"># latitdue in degrees</span>
-
-<span class="c1"># Setup the RadarMapDisplay and add our projection</span>
-<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-<span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
-
-<span class="c1"># Visualize the reflectivity field, using the lowest sweep with</span>
-<span class="c1"># latitude and longitude lines</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">"reflectivity_horizontal"</span><span class="p">,</span>
-    <span class="mi">0</span><span class="p">,</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-    <span class="n">vmin</span><span class="o">=-</span><span class="mi">32</span><span class="p">,</span>
-    <span class="n">vmax</span><span class="o">=</span><span class="mf">64.0</span><span class="p">,</span>
-    <span class="n">lon_lines</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html#numpy.arange" title="numpy.arange" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="o">-</span><span class="mi">98</span><span class="p">,</span> <span class="o">-</span><span class="mi">97</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span>
-    <span class="n">lat_lines</span><span class="o">=</span><a href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html#numpy.arange" title="numpy.arange" class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="mi">36</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">),</span>
-<span class="p">)</span>
-
-<span class="c1"># Plot our site location on top of the radar image</span>
-<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.scatter.html#matplotlib.axes.Axes.scatter" title="matplotlib.axes.Axes.scatter" class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method"><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span></a><span class="p">(</span><a href="https://docs.python.org/3/builtins/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site_lon</span></a><span class="p">,</span> <a href="https://docs.python.org/3/builtins/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site_lat</span></a><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">"black"</span><span class="p">)</span>
-</pre></div>
-</div>
-<img src="../../_images/sphx_glr_plot_column_subset_001.png" srcset="../../_images/sphx_glr_plot_column_subset_001.png" alt="xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection object at 0x7fa11d5e1bd0&gt;
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">site_lon</span></a> <span class="o">=</span> <span class="o">-</span><span class="mf">97.73</span>  <span class="c1"># longitude in degrees</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">site_lat</span></a> <span class="o">=</span> <span class="mf">36.41</span>  <span class="c1"># latitdue in degrees</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Setup the RadarMapDisplay and add our projection</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.html#pyart.graph.RadarMapDisplay" title="pyart.graph.RadarMapDisplay"><span class="n">display</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.html#pyart.graph.RadarMapDisplay" title="pyart.graph.RadarMapDisplay"><span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span></a><span class="p">(</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar</span></a><span class="p">)</span><span class="w">
+</span><span class="n">ax</span> <span class="o">=</span> <a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Visualize the reflectivity field, using the lowest sweep with</span><span class="w">
+</span><span class="c1"># latitude and longitude lines</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-method reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.plot_ppi_map.html#pyart.graph.RadarMapDisplay.plot_ppi_map" title="pyart.graph.RadarMapDisplay.plot_ppi_map"><span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span></a><span class="p">(</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">reflectivity_horizontal</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="mi">0</span><span class="p">,</span><span class="w">
+</span>    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="w">
+</span>    <span class="n">vmin</span><span class="o">=</span><span class="o">-</span><span class="mi">32</span><span class="p">,</span><span class="w">
+</span>    <span class="n">vmax</span><span class="o">=</span><span class="mf">64.0</span><span class="p">,</span><span class="w">
+</span>    <span class="n">lon_lines</span><span class="o">=</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html#numpy.arange" title="numpy.arange"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="o">-</span><span class="mi">98</span><span class="p">,</span> <span class="o">-</span><span class="mi">97</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>    <span class="n">lat_lines</span><span class="o">=</span><a class="sphx-glr-backref-module-numpy sphx-glr-backref-type-py-function reference external" href="https://numpy.org/doc/stable/reference/generated/numpy.arange.html#numpy.arange" title="numpy.arange"><span class="n">np</span><span class="o">.</span><span class="n">arange</span></a><span class="p">(</span><span class="mi">36</span><span class="p">,</span> <span class="mi">37</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Plot our site location on top of the radar image</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-axes sphx-glr-backref-type-py-method reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.axes.Axes.scatter.html#matplotlib.axes.Axes.scatter" title="matplotlib.axes.Axes.scatter"><span class="n">ax</span><span class="o">.</span><span class="n">scatter</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">site_lon</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">site_lat</span></a><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">black</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<img src="../../_images/sphx_glr_plot_column_subset_001.png" srcset="../../_images/sphx_glr_plot_column_subset_001.png" alt="xsapr-sg 0.5 Deg. 2011-05-20T06:42:11Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.collections.PathCollection object at 0x7f0c274c8410&gt;
 </pre></div>
 </div>
 <p>Now that we have our point defined, and our radar object, we can use the following
 utility function in Py-ART to subset a column</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">columnsect</span><span class="o">.</span><span class="n">get_field_location</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <a href="https://docs.python.org/3/builtins/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site_lat</span></a><span class="p">,</span> <a href="https://docs.python.org/3/builtins/functions.html#float" title="builtins.float" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">site_lon</span></a><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">ds</span> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-util sphx-glr-backref-type-py-function reference internal" href="../../API/generated/pyart.util.get_field_location.html#pyart.util.get_field_location" title="pyart.util.get_field_location"><span class="n">pyart</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">columnsect</span><span class="o">.</span><span class="n">get_field_location</span></a><span class="p">(</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">site_lat</span></a><span class="p">,</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#float" title="float"><span class="n">site_lon</span></a><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p>This function returns an xarray dataset, with all of our data fields!</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><span class="n">ds</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;xarray.Dataset&gt; Size: 2kB
 Dimensions:                            (height: 22)
 Coordinates:
@@ -667,13 +663,12 @@ Attributes:
 <p><strong>Visualize the Reflectivity Values in the Column</strong></p>
 <p>Let’s visualize the reflectivity values in the column
 above our point, which is stored in our new dataset</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">ds</span><span class="o">.</span><span class="n">corrected_reflectivity_horizontal</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s2">"height"</span><span class="p">)</span>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="n">ds</span><span class="o">.</span><span class="n">corrected_reflectivity_horizontal</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">y</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">height</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<img src="../../_images/sphx_glr_plot_column_subset_002.png" srcset="../../_images/sphx_glr_plot_column_subset_002.png" alt="plot column subset" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D object at 0x7f0c4b58e3c0&gt;]
 </pre></div>
 </div>
-<img src="../../_images/sphx_glr_plot_column_subset_002.png" srcset="../../_images/sphx_glr_plot_column_subset_002.png" alt="plot column subset" class = "sphx-glr-single-img"/><div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D object at 0x7fa0ee494590&gt;]
-</pre></div>
-</div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.144 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 1.766 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-retrieve-plot-column-subset-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/29e917515f98fa59b8a108483891105d/plot_column_subset.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_column_subset.ipynb</span></code></a></p>

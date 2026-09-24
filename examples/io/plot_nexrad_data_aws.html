@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Reading NEXRAD Data from the AWS Cloud &#8212; Py-ART 2.2.5 documentation</title>
+    <title>Reading NEXRAD Data from the AWS Cloud &#8212; Py-ART 2.3.0 documentation</title>
   
   
   
@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -47,7 +47,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../_static/documentation_options.js?v=ea147abf"></script>
+    <script src="../../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -80,7 +80,7 @@
     <link rel="prev" title="Reading Older NEXRAD Data and Fixing Latitude and Longitude Issues" href="plot_older_nexrad_data_aws.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.2" />
+  <meta name="docsearch:version" content="2.3" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -155,7 +155,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 2.2.5 documentation</p>
+    <p class="title logo__title">Py-ART 2.3.0 documentation</p>
   
 </a></div>
     
@@ -584,17 +584,16 @@ to download the full example code.</p>
 <span id="sphx-glr-examples-io-plot-nexrad-data-aws-py"></span><h1>Reading NEXRAD Data from the AWS Cloud<a class="headerlink" href="#reading-nexrad-data-from-the-aws-cloud" title="Link to this heading">#</a></h1>
 <p>Within this example, we show how you can remotely access Next Generation Weather Radar (NEXRAD) Data from Amazon Web Services
 and plot quick looks of the datasets.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
-
-<span class="c1"># Author: Max Grover (mgrover@anl.gov)</span>
-<span class="c1"># License: BSD 3 clause</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">cartopy.crs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ccrs</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="vm">__doc__</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Author: Max Grover (mgrover&#64;anl.gov)</span><span class="w">
+</span><span class="c1"># License: BSD 3 clause</span><span class="w">
+</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">cartopy</span><span class="nn">.</span><span class="nn">crs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ccrs</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="nn">.</span><span class="nn">pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span><span class="w">
+</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span><span class="w">
+</span></pre></div></div>
 <section id="read-nexrad-level-2-data">
 <h2>Read NEXRAD Level 2 Data<a class="headerlink" href="#read-nexrad-level-2-data" title="Link to this heading">#</a></h2>
 <p>Let’s start first with NEXRAD Level 2 data, which is ground-based radar data collected
@@ -606,50 +605,46 @@ We will access data from the <strong>unidata-nexrad-level2</strong> bucket, with
 </div></blockquote>
 <p>Where in our case, we are using a sample data file from Houston, Texas (KHGX)
 on March 22, 2022, at 1201:25 UTC. This means our path would look like:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/builtins/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">aws_nexrad_level2_file</span></a> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">"s3://unidata-nexrad-level2/2022/03/22/KHGX/KHGX20220322_120125_V06"</span>
-<span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">aws_nexrad_level2_file</span></a> <span class="o">=</span> <span class="p">(</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">s3://unidata-nexrad-level2/2022/03/22/KHGX/KHGX20220322_120125_V06</span><span class="s2">&quot;</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p>We can use the <strong>pyart.io.read_nexrad_archive</strong> module to access our data, passing in the filepath.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span><span class="p">(</span><a href="https://docs.python.org/3/builtins/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">aws_nexrad_level2_file</span></a><span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-io sphx-glr-backref-type-py-function reference internal" href="../../API/generated/pyart.io.read_nexrad_archive.html#pyart.io.read_nexrad_archive" title="pyart.io.read_nexrad_archive"><span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_archive</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">aws_nexrad_level2_file</span></a><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p>Let’s take a look at a summary of what fields are available.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">list</span><span class="p">(</span><a href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar</span><span class="o">.</span><span class="n">fields</span></a><span class="p">)</span>
-</pre></div>
-</div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>['spectrum_width', 'cross_correlation_ratio', 'differential_phase', 'reflectivity', 'clutter_filter_power_removed', 'differential_reflectivity', 'velocity']
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">list</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">radar</span><span class="o">.</span><span class="n">fields</span></a><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>['reflectivity', 'differential_reflectivity', 'spectrum_width', 'differential_phase', 'cross_correlation_ratio', 'velocity', 'clutter_filter_power_removed']
 </pre></div>
 </div>
 <p>Let’s plot the reflectivity/velocity fields as a first step to investigating our dataset.</p>
 <p>Note: the reflectivity and velocity fields are in different sweeps, so we will need to specify which sweep to plot in each plot.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-
-<span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
-
-<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">"reflectivity"</span><span class="p">,</span>
-    <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">"Equivalent Relectivity ($Z_</span><span class="si">{e}</span><span class="s2">$) </span><span class="se">\n</span><span class="s2"> (dBZ)"</span><span class="p">,</span>
-    <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span>
-    <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
-
-<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">"velocity"</span><span class="p">,</span>
-    <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">"Radial Velocity ($V_</span><span class="si">{r}</span><span class="s2">$) </span><span class="se">\n</span><span class="s2"> (m/s)"</span><span class="p">,</span>
-    <span class="n">vmin</span><span class="o">=-</span><span class="mi">70</span><span class="p">,</span>
-    <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure"><span class="n">fig</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.html#pyart.graph.RadarMapDisplay" title="pyart.graph.RadarMapDisplay"><span class="n">display</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.html#pyart.graph.RadarMapDisplay" title="pyart.graph.RadarMapDisplay"><span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span></a><span class="p">(</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="n">ax</span> <span class="o">=</span> <a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-method reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.plot_ppi_map.html#pyart.graph.RadarMapDisplay.plot_ppi_map" title="pyart.graph.RadarMapDisplay.plot_ppi_map"><span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span></a><span class="p">(</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">reflectivity</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="n">sweep</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span><span class="w">
+</span>    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="w">
+</span>    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">Equivalent Relectivity ($Z_</span><span class="si">{e}</span><span class="s2">$) </span><span class="se">\n</span><span class="s2"> (dBZ)</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="n">vmin</span><span class="o">=</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="w">
+</span>    <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="n">ax</span> <span class="o">=</span> <a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-method reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.plot_ppi_map.html#pyart.graph.RadarMapDisplay.plot_ppi_map" title="pyart.graph.RadarMapDisplay.plot_ppi_map"><span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span></a><span class="p">(</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">velocity</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="n">sweep</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w">
+</span>    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="w">
+</span>    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">Radial Velocity ($V_</span><span class="si">{r}</span><span class="s2">$) </span><span class="se">\n</span><span class="s2"> (m/s)</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="n">vmin</span><span class="o">=</span><span class="o">-</span><span class="mi">70</span><span class="p">,</span><span class="w">
+</span>    <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <img src="../../_images/sphx_glr_plot_nexrad_data_aws_001.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_001.png" alt="KHGX 0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor, KHGX 0.5 Deg. 2022-03-22T12:01:43Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p>Within this plot, we see that the velocity data still has regions that are folded, indicating the dataset has not yet been dealiased.</p>
 </section>
 <section id="read-nexrad-level-3-data">
@@ -668,63 +663,59 @@ using the following naming convention:</p>
 <div><p><code class="docutils literal notranslate"><span class="pre">s3://unidata-nexrad-level3/{radarsite}_{field}_{year}_{month}_{date}_{hour}_{minute}_{second}</span></code></p>
 </div></blockquote>
 <p>For example, we can look at data from that same time as the NEXRAD Level 2 data used previously (March 22, 2022 at 1201 UTC)</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://docs.python.org/3/builtins/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">aws_nexrad_level3_velocity_file</span></a> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">"s3://unidata-nexrad-level3/HGX_N0U_2022_03_22_12_01_25"</span>
-<span class="p">)</span>
-<a href="https://docs.python.org/3/builtins/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">aws_nexrad_level3_reflectivity_file</span></a> <span class="o">=</span> <span class="p">(</span>
-    <span class="s2">"s3://unidata-nexrad-level3/HGX_N0Q_2022_03_22_12_01_25"</span>
-<span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">aws_nexrad_level3_velocity_file</span></a> <span class="o">=</span> <span class="p">(</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">s3://unidata-nexrad-level3/HGX_N0U_2022_03_22_12_01_25</span><span class="s2">&quot;</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">aws_nexrad_level3_reflectivity_file</span></a> <span class="o">=</span> <span class="p">(</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">s3://unidata-nexrad-level3/HGX_N0Q_2022_03_22_12_01_25</span><span class="s2">&quot;</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p>Read our Data using <strong>pyart.io.read_nexrad_level3</strong></p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="n">radar_level3_velocity</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_level3</span><span class="p">(</span><a href="https://docs.python.org/3/builtins/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">aws_nexrad_level3_velocity_file</span></a><span class="p">)</span>
-<span class="n">radar_level3_reflectivity</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_level3</span><span class="p">(</span>
-    <a href="https://docs.python.org/3/builtins/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">aws_nexrad_level3_reflectivity_file</span></a>
-<span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar_level3_velocity</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-io sphx-glr-backref-type-py-function reference internal" href="../../API/generated/pyart.io.read_nexrad_level3.html#pyart.io.read_nexrad_level3" title="pyart.io.read_nexrad_level3"><span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_level3</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">aws_nexrad_level3_velocity_file</span></a><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar_level3_reflectivity</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-io sphx-glr-backref-type-py-function reference internal" href="../../API/generated/pyart.io.read_nexrad_level3.html#pyart.io.read_nexrad_level3" title="pyart.io.read_nexrad_level3"><span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read_nexrad_level3</span></a><span class="p">(</span><span class="w">
+</span>    <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">aws_nexrad_level3_reflectivity_file</span></a><span class="w">
+</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <p>Let’s confirm that each radar object has a single field:</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span>
-    <span class="s2">"velocity radar object: "</span><span class="p">,</span>
-    <span class="nb">list</span><span class="p">(</span><a href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar_level3_velocity</span><span class="o">.</span><span class="n">fields</span></a><span class="p">),</span>
-    <span class="s2">"reflectivity radar object: "</span><span class="p">,</span>
-    <span class="nb">list</span><span class="p">(</span><a href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar_level3_reflectivity</span><span class="o">.</span><span class="n">fields</span></a><span class="p">),</span>
-<span class="p">)</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">velocity radar object: </span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="nb">list</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">radar_level3_velocity</span><span class="o">.</span><span class="n">fields</span></a><span class="p">)</span><span class="p">,</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">reflectivity radar object: </span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="nb">list</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">radar_level3_reflectivity</span><span class="o">.</span><span class="n">fields</span></a><span class="p">)</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
 <div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>velocity radar object:  ['velocity'] reflectivity radar object:  ['reflectivity']
 </pre></div>
 </div>
 <p>Plot a Quick Look of our NEXRAD Level 3 Data</p>
 <p>Let’s plot the reflectivity/velocity fields as a first step to investigating our dataset.</p>
 <p>Note: the reflectivity and velocity fields are in different radars, so we need to setup different displays.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
-<span class="n">reflectivity_display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar_level3_reflectivity</span><span class="p">)</span>
-
-<span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
-
-<span class="n">reflectivity_display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">"reflectivity"</span><span class="p">,</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">"Equivalent Relectivity ($Z_</span><span class="si">{e}</span><span class="s2">$) </span><span class="se">\n</span><span class="s2"> (dBZ)"</span><span class="p">,</span>
-    <span class="n">vmin</span><span class="o">=-</span><span class="mi">20</span><span class="p">,</span>
-    <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="n">velocity_display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar_level3_velocity</span><span class="p">)</span>
-
-<span class="n">ax</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
-
-<span class="n">velocity_display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">"velocity"</span><span class="p">,</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span>
-    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">"Radial Velocity ($V_</span><span class="si">{r}</span><span class="s2">$) </span><span class="se">\n</span><span class="s2"> (m/s)"</span><span class="p">,</span>
-    <span class="n">vmin</span><span class="o">=-</span><span class="mi">70</span><span class="p">,</span>
-    <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span>
-<span class="p">)</span>
-</pre></div>
-</div>
-<img src="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" alt="0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor,  0.5 Deg. 2022-03-22T12:01:25Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 12.739 seconds)</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><a class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure"><span class="n">fig</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.html#pyart.graph.RadarMapDisplay" title="pyart.graph.RadarMapDisplay"><span class="n">reflectivity_display</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.html#pyart.graph.RadarMapDisplay" title="pyart.graph.RadarMapDisplay"><span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span></a><span class="p">(</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar_level3_reflectivity</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="n">ax</span> <span class="o">=</span> <a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">121</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-method reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.plot_ppi_map.html#pyart.graph.RadarMapDisplay.plot_ppi_map" title="pyart.graph.RadarMapDisplay.plot_ppi_map"><span class="n">reflectivity_display</span><span class="o">.</span><span class="n">plot_ppi_map</span></a><span class="p">(</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">reflectivity</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="w">
+</span>    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">Equivalent Relectivity ($Z_</span><span class="si">{e}</span><span class="s2">$) </span><span class="se">\n</span><span class="s2"> (dBZ)</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="n">vmin</span><span class="o">=</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span><span class="w">
+</span>    <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.html#pyart.graph.RadarMapDisplay" title="pyart.graph.RadarMapDisplay"><span class="n">velocity_display</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.html#pyart.graph.RadarMapDisplay" title="pyart.graph.RadarMapDisplay"><span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span></a><span class="p">(</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar_level3_velocity</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="n">ax</span> <span class="o">=</span> <a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">122</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-method reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.plot_ppi_map.html#pyart.graph.RadarMapDisplay.plot_ppi_map" title="pyart.graph.RadarMapDisplay.plot_ppi_map"><span class="n">velocity_display</span><span class="o">.</span><span class="n">plot_ppi_map</span></a><span class="p">(</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">velocity</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span><span class="w">
+</span>    <span class="n">colorbar_label</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">Radial Velocity ($V_</span><span class="si">{r}</span><span class="s2">$) </span><span class="se">\n</span><span class="s2"> (m/s)</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="n">vmin</span><span class="o">=</span><span class="o">-</span><span class="mi">70</span><span class="p">,</span><span class="w">
+</span>    <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<img src="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" alt="0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor,  0.5 Deg. 2022-03-22T12:01:25Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 10.333 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-io-plot-nexrad-data-aws-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/41122161573e84ed2249ac58c58fb5d5/plot_nexrad_data_aws.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_nexrad_data_aws.ipynb</span></code></a></p>

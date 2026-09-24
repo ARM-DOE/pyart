@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Modify a Colorbar for your Plot &#8212; Py-ART 2.2.5 documentation</title>
+    <title>Modify a Colorbar for your Plot &#8212; Py-ART 2.3.0 documentation</title>
   
   
   
@@ -34,7 +34,7 @@
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=fd6457a4" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery.css?v=c83e6b79" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-binder.css?v=f4aeca0c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-dataframe.css?v=2082cf3c" />
     <link rel="stylesheet" type="text/css" href="../../_static/sg_gallery-rendered-html.css?v=1277b6f3" />
@@ -47,7 +47,7 @@
   <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
 <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
 
-    <script src="../../_static/documentation_options.js?v=ea147abf"></script>
+    <script src="../../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
     <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
     <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
@@ -80,7 +80,7 @@
     <link rel="prev" title="Plot a Cross Section from a Grid" href="plot_cross_section.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-  <meta name="docsearch:version" content="2.2" />
+  <meta name="docsearch:version" content="2.3" />
   
     
     <script src="../../_static/searchtools.js"></script>
@@ -155,7 +155,7 @@
   
   
   
-    <p class="title logo__title">Py-ART 2.2.5 documentation</p>
+    <p class="title logo__title">Py-ART 2.3.0 documentation</p>
   
 </a></div>
     
@@ -584,128 +584,125 @@ to download the full example code.</p>
 <span id="sphx-glr-examples-plotting-plot-modify-colorbar-py"></span><h1>Modify a Colorbar for your Plot<a class="headerlink" href="#modify-a-colorbar-for-your-plot" title="Link to this heading">#</a></h1>
 <p>This is an example of how to modify a colobar
 within a Py-ART display object.</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="vm">__doc__</span><span class="p">)</span>
-
-<span class="c1"># Author: Joe O'Brien (obrienj@anl.gov)</span>
-<span class="c1"># License: BSD 3 clause</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">cartopy.crs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ccrs</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
-
-<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
-<span class="kn">from</span><span class="w"> </span><span class="nn">pyart.testing</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_test_data</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">print</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="vm">__doc__</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Author: Joe O'Brien (obrienj&#64;anl.gov)</span><span class="w">
+</span><span class="c1"># License: BSD 3 clause</span><span class="w">
+</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">cartopy</span><span class="nn">.</span><span class="nn">crs</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">ccrs</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="nn">.</span><span class="nn">pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span><span class="w">
+</span><span class="w">
+</span><span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span><span class="w">
+</span><span class="kn">from</span><span class="w"> </span><span class="nn">pyart</span><span class="nn">.</span><span class="nn">testing</span><span class="w"> </span><span class="kn">import</span> <a class="sphx-glr-backref-module-pyart-testing sphx-glr-backref-type-py-function reference internal" href="../../API/generated/pyart.testing.get_test_data.html#pyart.testing.get_test_data" title="pyart.testing.get_test_data"><span class="n">get_test_data</span></a><span class="w">
+</span></pre></div></div>
 <section id="initial-ppi-map-display">
 <h2>Initial PPI Map Display<a class="headerlink" href="#initial-ppi-map-display" title="Link to this heading">#</a></h2>
 <p>Let’s plot a PPI Map Display
 and take a look at the colorbar</p>
 <p>Notice: the colorbar is not perfect
 and slightly overlaps the PPI display</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define figure</span>
-<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">()</span>
-
-<span class="c1"># Create a subplot with correct cartopy projection</span>
-<span class="n">axs</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
-
-<span class="c1"># Define and Read in the test data</span>
-<a href="https://docs.python.org/3/builtins/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar_file</span></a> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">"swx_20120520_0641.nc"</span><span class="p">)</span>
-<span class="n">radar</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><a href="https://docs.python.org/3/builtins/stdtypes.html#str" title="builtins.str" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">radar_file</span></a><span class="p">)</span>
-
-<span class="c1"># Create the Radar Map Display (defines x,y as lat/lons)</span>
-<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-
-<span class="c1"># Display the horizontal equivalent reflectivity factor</span>
-<span class="c1"># Note: embellish = False will remove initial lat/lon coords</span>
-<span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">"reflectivity_horizontal"</span><span class="p">,</span>
-    <span class="mi">2</span><span class="p">,</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">,</span>
-    <span class="n">vmin</span><span class="o">=-</span><span class="mi">30</span><span class="p">,</span>
-    <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-    <span class="n">embellish</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s2">"HomeyerRainbow"</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="c1"># Add gridlines</span>
-<span class="n">gl</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">gridlines</span><span class="p">(</span>
-    <span class="n">crs</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
-    <span class="n">draw_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">color</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">,</span>
-    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
-    <span class="n">linestyle</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span>
-<span class="p">)</span>
-
-<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.gca.html#matplotlib.pyplot.gca" title="matplotlib.pyplot.gca" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">gca</span></a><span class="p">()</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><a href="https://matplotlib.org/stable/api/ticker_api.html#matplotlib.ticker.NullLocator" title="matplotlib.ticker.NullLocator" class="sphx-glr-backref-module-matplotlib-ticker sphx-glr-backref-type-py-class"><span class="n">plt</span><span class="o">.</span><span class="n">NullLocator</span></a><span class="p">())</span>
-
-<span class="c1"># Make sure labels are only plotted on the left and bottom</span>
-<a href="https://docs.python.org/3/builtins/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gl</span><span class="o">.</span><span class="n">top_labels</span></a> <span class="o">=</span> <span class="kc">False</span>
-<a href="https://docs.python.org/3/builtins/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gl</span><span class="o">.</span><span class="n">right_labels</span></a> <span class="o">=</span> <span class="kc">False</span>
-
-<a href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gl</span><span class="o">.</span><span class="n">xlabel_style</span></a> <span class="o">=</span> <span class="p">{</span><span class="s2">"size"</span><span class="p">:</span> <span class="mi">14</span><span class="p">}</span>
-<a href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gl</span><span class="o">.</span><span class="n">ylabel_style</span></a> <span class="o">=</span> <span class="p">{</span><span class="s2">"size"</span><span class="p">:</span> <span class="mi">14</span><span class="p">}</span>
-
-<span class="c1"># delete the display object</span>
-<span class="k">del</span> <span class="n">display</span>
-</pre></div>
-</div>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="c1"># Define figure</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure"><span class="n">fig</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Create a subplot with correct cartopy projection</span><span class="w">
+</span><span class="n">axs</span> <span class="o">=</span> <a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Define and Read in the test data</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">radar_file</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-testing sphx-glr-backref-type-py-function reference internal" href="../../API/generated/pyart.testing.get_test_data.html#pyart.testing.get_test_data" title="pyart.testing.get_test_data"><span class="n">get_test_data</span></a><span class="p">(</span><span class="s2">&quot;</span><span class="s2">swx_20120520_0641.nc</span><span class="s2">&quot;</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-io sphx-glr-backref-type-py-function reference internal" href="../../API/generated/pyart.io.read.html#pyart.io.read" title="pyart.io.read"><span class="n">pyart</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">read</span></a><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">radar_file</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Create the Radar Map Display (defines x,y as lat/lons)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.html#pyart.graph.RadarMapDisplay" title="pyart.graph.RadarMapDisplay"><span class="n">display</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.html#pyart.graph.RadarMapDisplay" title="pyart.graph.RadarMapDisplay"><span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span></a><span class="p">(</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Display the horizontal equivalent reflectivity factor</span><span class="w">
+</span><span class="c1"># Note: embellish = False will remove initial lat/lon coords</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-method reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.plot_ppi_map.html#pyart.graph.RadarMapDisplay.plot_ppi_map" title="pyart.graph.RadarMapDisplay.plot_ppi_map"><span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span></a><span class="p">(</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">reflectivity_horizontal</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="mi">2</span><span class="p">,</span><span class="w">
+</span>    <span class="n">ax</span><span class="o">=</span><span class="n">axs</span><span class="p">,</span><span class="w">
+</span>    <span class="n">vmin</span><span class="o">=</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span><span class="w">
+</span>    <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span><span class="w">
+</span>    <span class="n">embellish</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="w">
+</span>    <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="w">
+</span>    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">HomeyerRainbow</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Add gridlines</span><span class="w">
+</span><span class="n">gl</span> <span class="o">=</span> <span class="n">axs</span><span class="o">.</span><span class="n">gridlines</span><span class="p">(</span><span class="w">
+</span>    <span class="n">crs</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>    <span class="n">draw_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="w">
+</span>    <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w">
+</span>    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">gray</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span><span class="w">
+</span>    <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">--</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.gca.html#matplotlib.pyplot.gca" title="matplotlib.pyplot.gca"><span class="n">plt</span><span class="o">.</span><span class="n">gca</span></a><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><a class="sphx-glr-backref-module-matplotlib-ticker sphx-glr-backref-type-py-class reference external" href="https://matplotlib.org/stable/api/ticker_api.html#matplotlib.ticker.NullLocator" title="matplotlib.ticker.NullLocator"><span class="n">plt</span><span class="o">.</span><span class="n">NullLocator</span></a><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Make sure labels are only plotted on the left and bottom</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">gl</span><span class="o">.</span><span class="n">top_labels</span></a> <span class="o">=</span> <span class="kc">False</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">gl</span><span class="o">.</span><span class="n">right_labels</span></a> <span class="o">=</span> <span class="kc">False</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">gl</span><span class="o">.</span><span class="n">xlabel_style</span></a> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;</span><span class="s2">size</span><span class="s2">&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">}</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">gl</span><span class="o">.</span><span class="n">ylabel_style</span></a> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;</span><span class="s2">size</span><span class="s2">&quot;</span><span class="p">:</span> <span class="mi">14</span><span class="p">}</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># delete the display object</span><span class="w">
+</span><span class="k">del</span> <a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.html#pyart.graph.RadarMapDisplay" title="pyart.graph.RadarMapDisplay"><span class="n">display</span></a><span class="w">
+</span></pre></div></div>
 <img src="../../_images/sphx_glr_plot_modify_colorbar_001.png" srcset="../../_images/sphx_glr_plot_modify_colorbar_001.png" alt="xsapr-sg 2.5 Deg. 2011-05-20T06:42:42Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/></section>
 <section id="colorbar-position-title-manipulation">
 <h2>Colorbar Position / Title Manipulation<a class="headerlink" href="#colorbar-position-title-manipulation" title="Link to this heading">#</a></h2>
 <p>Now, let’s update the colorbar position
 to match the display</p>
-<div class="highlight-Python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Define figure</span>
-<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure" class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">fig</span></a> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">()</span>
-
-<span class="c1"># Create a subplot with correct cartopy projection</span>
-<span class="n">axsB</span> <span class="o">=</span> <a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">())</span>
-
-<span class="c1"># Create the Radar Map Display (defines x,y as lat/lons)</span>
-<span class="n">display</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span><span class="p">(</span><span class="n">radar</span><span class="p">)</span>
-
-<span class="c1"># Create the display again</span>
-<span class="n">ppi_map</span> <span class="o">=</span> <span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span><span class="p">(</span>
-    <span class="s2">"reflectivity_horizontal"</span><span class="p">,</span>
-    <span class="mi">2</span><span class="p">,</span>
-    <span class="n">ax</span><span class="o">=</span><span class="n">axsB</span><span class="p">,</span>
-    <span class="n">vmin</span><span class="o">=-</span><span class="mi">30</span><span class="p">,</span>
-    <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span>
-    <span class="n">embellish</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
-    <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
-    <span class="n">cmap</span><span class="o">=</span><span class="s2">"HomeyerRainbow"</span><span class="p">,</span>
-<span class="p">)</span>
-
-<span class="c1"># Add gridlines</span>
-<span class="n">gl</span> <span class="o">=</span> <span class="n">axsB</span><span class="o">.</span><span class="n">gridlines</span><span class="p">(</span>
-    <span class="n">crs</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(),</span>
-    <span class="n">draw_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
-    <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">color</span><span class="o">=</span><span class="s2">"gray"</span><span class="p">,</span>
-    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
-    <span class="n">linestyle</span><span class="o">=</span><span class="s2">"--"</span><span class="p">,</span>
-<span class="p">)</span>
-
-<a href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.gca.html#matplotlib.pyplot.gca" title="matplotlib.pyplot.gca" class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function"><span class="n">plt</span><span class="o">.</span><span class="n">gca</span></a><span class="p">()</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><a href="https://matplotlib.org/stable/api/ticker_api.html#matplotlib.ticker.NullLocator" title="matplotlib.ticker.NullLocator" class="sphx-glr-backref-module-matplotlib-ticker sphx-glr-backref-type-py-class"><span class="n">plt</span><span class="o">.</span><span class="n">NullLocator</span></a><span class="p">())</span>
-
-<span class="c1"># Make sure labels are only plotted on the left and bottom</span>
-<a href="https://docs.python.org/3/builtins/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gl</span><span class="o">.</span><span class="n">top_labels</span></a> <span class="o">=</span> <span class="kc">False</span>
-<a href="https://docs.python.org/3/builtins/functions.html#bool" title="builtins.bool" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gl</span><span class="o">.</span><span class="n">right_labels</span></a> <span class="o">=</span> <span class="kc">False</span>
-
-<span class="c1"># Define the size of the grid labels</span>
-<a href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gl</span><span class="o">.</span><span class="n">xlabel_style</span></a> <span class="o">=</span> <span class="p">{</span><span class="s2">"size"</span><span class="p">:</span> <span class="mi">12</span><span class="p">}</span>
-<a href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="builtins.dict" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">gl</span><span class="o">.</span><span class="n">ylabel_style</span></a> <span class="o">=</span> <span class="p">{</span><span class="s2">"size"</span><span class="p">:</span> <span class="mi">12</span><span class="p">}</span>
-
-<span class="c1"># Define the colorbar from the RadarMapDisplay object</span>
-<a href="https://matplotlib.org/stable/api/colorbar_api.html#matplotlib.colorbar.Colorbar" title="matplotlib.colorbar.Colorbar" class="sphx-glr-backref-module-matplotlib-colorbar sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">cbar</span></a> <span class="o">=</span> <a href="https://docs.python.org/3/builtins/stdtypes.html#list" title="builtins.list" class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance"><span class="n">display</span><span class="o">.</span><span class="n">cbs</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
-<span class="c1"># Modify the colorbar label and size</span>
-<a href="https://matplotlib.org/stable/api/colorbar_api.html#matplotlib.colorbar.Colorbar.set_label" title="matplotlib.colorbar.Colorbar.set_label" class="sphx-glr-backref-module-matplotlib-colorbar sphx-glr-backref-type-py-method"><span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span></a><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">"Horizontal Reflectivity Factor ($Z_</span><span class="si">{H}</span><span class="s2">$) (dBZ)"</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span>
-<span class="c1"># Modify the number of colorbar ticks</span>
-<a href="https://matplotlib.org/stable/api/colorbar_api.html#matplotlib.colorbar.Colorbar.set_ticks" title="matplotlib.colorbar.Colorbar.set_ticks" class="sphx-glr-backref-module-matplotlib-colorbar sphx-glr-backref-type-py-method"><span class="n">cbar</span><span class="o">.</span><span class="n">set_ticks</span></a><span class="p">([</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">60</span><span class="p">])</span>
-</pre></div>
-</div>
-<img src="../../_images/sphx_glr_plot_modify_colorbar_002.png" srcset="../../_images/sphx_glr_plot_modify_colorbar_002.png" alt="xsapr-sg 2.5 Deg. 2011-05-20T06:42:42Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 3.057 seconds)</p>
+<div class="highlight-Python notranslate"><div class="highlight"><pre><span class="c1"># Define figure</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-figure sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.figure.Figure.html#matplotlib.figure.Figure" title="matplotlib.figure.Figure"><span class="n">fig</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html#matplotlib.pyplot.figure" title="matplotlib.pyplot.figure"><span class="n">plt</span><span class="o">.</span><span class="n">figure</span></a><span class="p">(</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Create a subplot with correct cartopy projection</span><span class="w">
+</span><span class="n">axsB</span> <span class="o">=</span> <a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.subplot.html#matplotlib.pyplot.subplot" title="matplotlib.pyplot.subplot"><span class="n">plt</span><span class="o">.</span><span class="n">subplot</span></a><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Create the Radar Map Display (defines x,y as lat/lons)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.html#pyart.graph.RadarMapDisplay" title="pyart.graph.RadarMapDisplay"><span class="n">display</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-class reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.html#pyart.graph.RadarMapDisplay" title="pyart.graph.RadarMapDisplay"><span class="n">pyart</span><span class="o">.</span><span class="n">graph</span><span class="o">.</span><span class="n">RadarMapDisplay</span></a><span class="p">(</span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><span class="n">radar</span></a><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Create the display again</span><span class="w">
+</span><span class="n">ppi_map</span> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-graph sphx-glr-backref-type-py-method reference internal" href="../../API/generated/pyart.graph.RadarMapDisplay.plot_ppi_map.html#pyart.graph.RadarMapDisplay.plot_ppi_map" title="pyart.graph.RadarMapDisplay.plot_ppi_map"><span class="n">display</span><span class="o">.</span><span class="n">plot_ppi_map</span></a><span class="p">(</span><span class="w">
+</span>    <span class="s2">&quot;</span><span class="s2">reflectivity_horizontal</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="mi">2</span><span class="p">,</span><span class="w">
+</span>    <span class="n">ax</span><span class="o">=</span><span class="n">axsB</span><span class="p">,</span><span class="w">
+</span>    <span class="n">vmin</span><span class="o">=</span><span class="o">-</span><span class="mi">30</span><span class="p">,</span><span class="w">
+</span>    <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span><span class="w">
+</span>    <span class="n">embellish</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="w">
+</span>    <span class="n">norm</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span><span class="w">
+</span>    <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">HomeyerRainbow</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Add gridlines</span><span class="w">
+</span><span class="n">gl</span> <span class="o">=</span> <span class="n">axsB</span><span class="o">.</span><span class="n">gridlines</span><span class="p">(</span><span class="w">
+</span>    <span class="n">crs</span><span class="o">=</span><span class="n">ccrs</span><span class="o">.</span><span class="n">PlateCarree</span><span class="p">(</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>    <span class="n">draw_labels</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span><span class="w">
+</span>    <span class="n">linewidth</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span><span class="w">
+</span>    <span class="n">color</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">gray</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span>    <span class="n">alpha</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span><span class="w">
+</span>    <span class="n">linestyle</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">--</span><span class="s2">&quot;</span><span class="p">,</span><span class="w">
+</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-pyplot sphx-glr-backref-type-py-function reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.gca.html#matplotlib.pyplot.gca" title="matplotlib.pyplot.gca"><span class="n">plt</span><span class="o">.</span><span class="n">gca</span></a><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="n">xaxis</span><span class="o">.</span><span class="n">set_major_locator</span><span class="p">(</span><a class="sphx-glr-backref-module-matplotlib-ticker sphx-glr-backref-type-py-class reference external" href="https://matplotlib.org/stable/api/ticker_api.html#matplotlib.ticker.NullLocator" title="matplotlib.ticker.NullLocator"><span class="n">plt</span><span class="o">.</span><span class="n">NullLocator</span></a><span class="p">(</span><span class="p">)</span><span class="p">)</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Make sure labels are only plotted on the left and bottom</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">gl</span><span class="o">.</span><span class="n">top_labels</span></a> <span class="o">=</span> <span class="kc">False</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/functions.html#bool" title="bool"><span class="n">gl</span><span class="o">.</span><span class="n">right_labels</span></a> <span class="o">=</span> <span class="kc">False</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Define the size of the grid labels</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">gl</span><span class="o">.</span><span class="n">xlabel_style</span></a> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;</span><span class="s2">size</span><span class="s2">&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}</span><span class="w">
+</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">gl</span><span class="o">.</span><span class="n">ylabel_style</span></a> <span class="o">=</span> <span class="p">{</span><span class="s2">&quot;</span><span class="s2">size</span><span class="s2">&quot;</span><span class="p">:</span> <span class="mi">12</span><span class="p">}</span><span class="w">
+</span><span class="w">
+</span><span class="c1"># Define the colorbar from the RadarMapDisplay object</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-colorbar sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://matplotlib.org/stable/api/colorbar_api.html#matplotlib.colorbar.Colorbar" title="matplotlib.colorbar.Colorbar"><span class="n">cbar</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#list" title="list"><span class="n">display</span><span class="o">.</span><span class="n">cbs</span></a><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="w">
+</span><span class="c1"># Modify the colorbar label and size</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-colorbar sphx-glr-backref-type-py-method reference external" href="https://matplotlib.org/stable/api/colorbar_api.html#matplotlib.colorbar.Colorbar.set_label" title="matplotlib.colorbar.Colorbar.set_label"><span class="n">cbar</span><span class="o">.</span><span class="n">set_label</span></a><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">Horizontal Reflectivity Factor ($Z_</span><span class="si">{H}</span><span class="s2">$) (dBZ)</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">12</span><span class="p">)</span><span class="w">
+</span><span class="c1"># Modify the number of colorbar ticks</span><span class="w">
+</span><a class="sphx-glr-backref-module-matplotlib-colorbar sphx-glr-backref-type-py-method reference external" href="https://matplotlib.org/stable/api/colorbar_api.html#matplotlib.colorbar.Colorbar.set_ticks" title="matplotlib.colorbar.Colorbar.set_ticks"><span class="n">cbar</span><span class="o">.</span><span class="n">set_ticks</span></a><span class="p">(</span><span class="p">[</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">20</span><span class="p">,</span> <span class="mi">40</span><span class="p">,</span> <span class="mi">60</span><span class="p">]</span><span class="p">)</span><span class="w">
+</span></pre></div></div>
+<img src="../../_images/sphx_glr_plot_modify_colorbar_002.png" srcset="../../_images/sphx_glr_plot_modify_colorbar_002.png" alt="xsapr-sg 2.5 Deg. 2011-05-20T06:42:42Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 2.466 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-plotting-plot-modify-colorbar-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/7a53e0b4b57f5dc98cf0294dea4c561e/plot_modify_colorbar.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_modify_colorbar.ipynb</span></code></a></p>
