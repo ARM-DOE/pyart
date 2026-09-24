@@ -1,7 +1,7 @@
 """
 ===============================================
 Compare VAD Wind Profiles from Two Methods
-===============================================
+==========================================
 
 Retrieves a wind profile from a NEXRAD volume with both VAD methods in
 Py-ART, ``vad_michelson`` and ``vad_browning``, and plots them together.
