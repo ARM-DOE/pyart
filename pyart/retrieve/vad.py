@@ -9,7 +9,9 @@ from ..config import get_field_name
 from ..core import HorizontalWindProfile
 
 
-def vad_michelson(radar, vel_field=None, z_want=None, gatefilter=None):
+def vad_michelson(
+    radar, vel_field=None, z_want=None, gatefilter=None, valid_ray_min=16
+):
     """
     Velocity azimuth display.
 
@@ -28,6 +30,11 @@ def vad_michelson(radar, vel_field=None, z_want=None, gatefilter=None):
     gatefilter : GateFilter, optional
         A GateFilter indicating radar gates that should be excluded
         from the import vad calculation.
+    valid_ray_min : int, optional
+        Minimum number of rays with valid velocity a gate needs to be used.
+        Gates with fewer rays give noisy fits and are left out. Raising it
+        smooths the profile but leaves more heights empty. Default is 16,
+        the same as vad_browning.
 
     Returns
     -------
@@ -80,7 +87,9 @@ def vad_michelson(radar, vel_field=None, z_want=None, gatefilter=None):
         elevation = radar.fixed_angle["data"][i]
 
         # Calculating speed and angle
-        speed, angle = _vad_calculation_m(used_velocities, azimuth, elevation)
+        speed, angle = _vad_calculation_m(
+            used_velocities, azimuth, elevation, valid_ray_min
+        )
 
         print("max height", z_gate_data[index_start, :].max(), "meters")
 
@@ -106,7 +115,7 @@ def vad_michelson(radar, vel_field=None, z_want=None, gatefilter=None):
     return vad
 
 
-def _vad_calculation_m(velocity_field, azimuth, elevation):
+def _vad_calculation_m(velocity_field, azimuth, elevation, valid_ray_min=0):
     """Calculates VAD for a scan, returns speed and angle
     outdic = vad_algorithm(velocity_field, azimuth, elevation)
     velocity_field is a 2D array, azimuth is a 1D array,
@@ -161,6 +170,11 @@ def _vad_calculation_m(velocity_field, azimuth, elevation):
     a_value = (sumcminu_msin - b_value * sumsincos) / sumsin2
     speed = np.sqrt(a_value**2 + b_value**2) / np.cos(np.deg2rad(elevation))
     angle = np.arctan2(a_value, b_value)
+
+    # Leave out gates with too few valid rays for a stable fit
+    too_few_valid_rays = np.sum(~vals2, axis=0) < valid_ray_min
+    speed[too_few_valid_rays] = np.nan
+    angle[too_few_valid_rays] = np.nan
     return speed, angle
 
 
