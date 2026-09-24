@@ -47,7 +47,7 @@ def _make_odim_file(path, conventions, rstart):
 
 
 @pytest.mark.filterwarnings("ignore:Py-ART's ODIM module is deprecated")
-def test_read_odim_h5_v24_rstart_metres(tmp_path):
+def test_read_odim_h5_v24_rstart_meters(tmp_path):
     # ODIM_H5 2.4 specifies rstart in metres (CfRadial2 / SI alignment)
     filename = str(tmp_path / "odim_v24.h5")
     _make_odim_file(filename, "ODIM_H5/V2_4", rstart=125.0)
