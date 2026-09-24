@@ -209,7 +209,7 @@ averaged into height bins, weighted by their confidence.
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 3.181 seconds)
+   **Total running time of the script:** (0 minutes 3.770 seconds)
 
 
 .. _sphx_glr_download_examples_retrieve_plot_vad_michelson.py:

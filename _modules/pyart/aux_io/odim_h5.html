@@ -492,6 +492,7 @@
 <span class="sd">"""</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">datetime</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
@@ -753,11 +754,23 @@
             <span class="k">else</span><span class="p">:</span>
                 <span class="n">max_nbins</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">all_sweeps_nbins</span><span class="p">)</span>
 
-            <span class="n">rscenter</span> <span class="o">=</span> <span class="mf">1e3</span> <span class="o">*</span> <span class="n">rstart</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">rscale</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span>
+            <span class="c1"># ODIM_H5 &lt;= 2.3 specifies rstart in km, 2.4 and later align</span>
+            <span class="c1"># with the CfRadial2 conventions and specify rstart in meters</span>
+            <span class="n">rstart_scale</span> <span class="o">=</span> <span class="mf">1e3</span>
+            <span class="n">version_match</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span>
+                <span class="sa">r</span><span class="s2">"ODIM_H5/V(\d+)_(\d+)"</span><span class="p">,</span> <span class="n">metadata</span><span class="p">[</span><span class="s2">"odim_conventions"</span><span class="p">]</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">version_match</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">version</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="k">for</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">version_match</span><span class="o">.</span><span class="n">groups</span><span class="p">())</span>
+                <span class="k">if</span> <span class="n">version</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">):</span>
+                    <span class="n">rstart_scale</span> <span class="o">=</span> <span class="mf">1.0</span>
+            <span class="n">rstart_m</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rstart</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">*</span> <span class="n">rstart_scale</span>
+
+            <span class="n">rscenter</span> <span class="o">=</span> <span class="n">rstart_m</span> <span class="o">+</span> <span class="n">rscale</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">/</span> <span class="mi">2</span>
             <span class="n">_range</span><span class="p">[</span><span class="s2">"data"</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span>
                 <span class="n">rscenter</span><span class="p">,</span> <span class="n">rscenter</span> <span class="o">+</span> <span class="n">max_nbins</span> <span class="o">*</span> <span class="n">rscale</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">rscale</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">"float32"</span>
             <span class="p">)</span>
-            <span class="n">_range</span><span class="p">[</span><span class="s2">"meters_to_center_of_first_gate"</span><span class="p">]</span> <span class="o">=</span> <span class="n">rstart</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">*</span> <span class="mf">1000.0</span>
+            <span class="n">_range</span><span class="p">[</span><span class="s2">"meters_to_center_of_first_gate"</span><span class="p">]</span> <span class="o">=</span> <span class="n">rstart_m</span>
             <span class="n">_range</span><span class="p">[</span><span class="s2">"meters_between_gates"</span><span class="p">]</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="n">rscale</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
         <span class="k">else</span><span class="p">:</span>
             <span class="c1"># if not defined use range attribute which defines the maximum range</span>
