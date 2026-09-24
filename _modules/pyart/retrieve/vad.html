@@ -499,7 +499,14 @@
 
 <div class="viewcode-block" id="vad_michelson">
 <a class="viewcode-back" href="../../../API/generated/pyart.retrieve.vad_michelson.html#pyart.retrieve.vad_michelson">[docs]</a>
-<span class="k">def</span><span class="w"> </span><span class="nf">vad_michelson</span><span class="p">(</span><span class="n">radar</span><span class="p">,</span> <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">z_want</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">vad_michelson</span><span class="p">(</span>
+    <span class="n">radar</span><span class="p">,</span>
+    <span class="n">vel_field</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">z_want</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">gatefilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">valid_ray_min</span><span class="o">=</span><span class="mi">16</span><span class="p">,</span>
+    <span class="n">max_speed_error</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span>
+<span class="p">):</span>
 <span class="w">    </span><span class="sd">"""</span>
 <span class="sd">    Velocity azimuth display.</span>
 
@@ -518,12 +525,36 @@
 <span class="sd">    gatefilter : GateFilter, optional</span>
 <span class="sd">        A GateFilter indicating radar gates that should be excluded</span>
 <span class="sd">        from the import vad calculation.</span>
+<span class="sd">    valid_ray_min : int, optional</span>
+<span class="sd">        Minimum number of rays with valid velocity a gate needs to be used.</span>
+<span class="sd">        Gates with fewer rays give noisy fits and are left out. Raising it</span>
+<span class="sd">        smooths the profile but leaves more heights empty. Default is 16,</span>
+<span class="sd">        the same as vad_browning.</span>
+<span class="sd">    max_speed_error : float, optional</span>
+<span class="sd">        Largest standard error of the fitted wind speed, in m/s, for a gate</span>
+<span class="sd">        to be used. The error grows when valid rays are few, bunched in one</span>
+<span class="sd">        part of the circle, or noisy, so this rejects unreliable fits.</span>
+<span class="sd">        Gates are then averaged into height bins weighted by 1 / error**2.</span>
+<span class="sd">        None turns the check off. Default is 2.0.</span>
 
 <span class="sd">    Returns</span>
 <span class="sd">    -------</span>
 <span class="sd">    vad : HorizontalWindProfile</span>
 <span class="sd">        A velocity azimuth display object containing height, speed, direction,</span>
 <span class="sd">        u_wind, v_wind from a radar object.</span>
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+<span class="sd">    At each gate, the radial velocities of the valid rays are fitted by</span>
+<span class="sd">    least squares to v = c + a sin(az) + b cos(az), where az is the</span>
+<span class="sd">    azimuth. The horizontal wind speed is sqrt(a**2 + b**2) / cos(elevation).</span>
+<span class="sd">    Masked gates are left out of the fit.</span>
+
+<span class="sd">    The fit also gives the standard error of the speed. It is large when a</span>
+<span class="sd">    gate has few valid rays, when they are bunched in one part of the circle,</span>
+<span class="sd">    or when the data are noisy. Gates above max_speed_error are left out, and</span>
+<span class="sd">    the rest are averaged into the z_want height bins weighted by</span>
+<span class="sd">    1 / error**2.</span>
 
 <span class="sd">    References</span>
 <span class="sd">    ----------</span>
@@ -536,6 +567,7 @@
 <span class="sd">    """</span>
     <span class="n">speeds</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">angles</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">errors</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="n">heights</span> <span class="o">=</span> <span class="p">[]</span>
 
     <span class="c1"># Pulling z data from radar</span>
@@ -570,13 +602,16 @@
         <span class="n">elevation</span> <span class="o">=</span> <span class="n">radar</span><span class="o">.</span><span class="n">fixed_angle</span><span class="p">[</span><span class="s2">"data"</span><span class="p">][</span><span class="n">i</span><span class="p">]</span>
 
         <span class="c1"># Calculating speed and angle</span>
-        <span class="n">speed</span><span class="p">,</span> <span class="n">angle</span> <span class="o">=</span> <span class="n">_vad_calculation_m</span><span class="p">(</span><span class="n">used_velocities</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">)</span>
+        <span class="n">speed</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">speed_error</span> <span class="o">=</span> <span class="n">_vad_calculation_m</span><span class="p">(</span>
+            <span class="n">used_velocities</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span> <span class="n">valid_ray_min</span><span class="p">,</span> <span class="n">max_speed_error</span>
+        <span class="p">)</span>
 
         <span class="nb">print</span><span class="p">(</span><span class="s2">"max height"</span><span class="p">,</span> <span class="n">z_gate_data</span><span class="p">[</span><span class="n">index_start</span><span class="p">,</span> <span class="p">:]</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="s2">"meters"</span><span class="p">)</span>
 
         <span class="c1"># Filling empty arrays with data</span>
         <span class="n">speeds</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">speed</span><span class="p">)</span>
         <span class="n">angles</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">angle</span><span class="p">)</span>
+        <span class="n">errors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">speed_error</span><span class="p">)</span>
         <span class="n">heights</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">z_gate_data</span><span class="p">[</span><span class="n">index_start</span><span class="p">,</span> <span class="p">:])</span>
 
     <span class="c1"># Combining arrays and sorting</span>
@@ -587,96 +622,102 @@
     <span class="n">speed_ordered</span> <span class="o">=</span> <span class="n">speed_array</span><span class="p">[</span><span class="n">arg_order</span><span class="p">]</span>
     <span class="n">height_ordered</span> <span class="o">=</span> <span class="n">height_array</span><span class="p">[</span><span class="n">arg_order</span><span class="p">]</span>
     <span class="n">angle_ordered</span> <span class="o">=</span> <span class="n">angle_array</span><span class="p">[</span><span class="n">arg_order</span><span class="p">]</span>
+    <span class="c1"># Weight each gate by its confidence; a floor keeps exact fits finite</span>
+    <span class="n">error_ordered</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">concatenate</span><span class="p">(</span><span class="n">errors</span><span class="p">)[</span><span class="n">arg_order</span><span class="p">]</span>
+    <span class="n">weight_ordered</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">error_ordered</span><span class="p">,</span> <span class="mf">0.01</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span>
 
     <span class="c1"># Calculating U and V wind</span>
     <span class="n">u_ordered</span><span class="p">,</span> <span class="n">v_ordered</span> <span class="o">=</span> <span class="n">_sd_to_uv</span><span class="p">(</span><span class="n">speed_ordered</span><span class="p">,</span> <span class="n">angle_ordered</span><span class="p">)</span>
-    <span class="n">u_mean</span> <span class="o">=</span> <span class="n">_interval_mean</span><span class="p">(</span><span class="n">u_ordered</span><span class="p">,</span> <span class="n">height_ordered</span><span class="p">,</span> <span class="n">z_want</span><span class="p">)</span>
-    <span class="n">v_mean</span> <span class="o">=</span> <span class="n">_interval_mean</span><span class="p">(</span><span class="n">v_ordered</span><span class="p">,</span> <span class="n">height_ordered</span><span class="p">,</span> <span class="n">z_want</span><span class="p">)</span>
+    <span class="n">u_mean</span> <span class="o">=</span> <span class="n">_interval_mean</span><span class="p">(</span><span class="n">u_ordered</span><span class="p">,</span> <span class="n">height_ordered</span><span class="p">,</span> <span class="n">z_want</span><span class="p">,</span> <span class="n">weight_ordered</span><span class="p">)</span>
+    <span class="n">v_mean</span> <span class="o">=</span> <span class="n">_interval_mean</span><span class="p">(</span><span class="n">v_ordered</span><span class="p">,</span> <span class="n">height_ordered</span><span class="p">,</span> <span class="n">z_want</span><span class="p">,</span> <span class="n">weight_ordered</span><span class="p">)</span>
     <span class="n">vad</span> <span class="o">=</span> <span class="n">HorizontalWindProfile</span><span class="o">.</span><span class="n">from_u_and_v</span><span class="p">(</span><span class="n">z_want</span><span class="p">,</span> <span class="n">u_mean</span><span class="p">,</span> <span class="n">v_mean</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">vad</span></div>
 
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_vad_calculation_m</span><span class="p">(</span><span class="n">velocity_field</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">"""Calculates VAD for a scan, returns speed and angle</span>
-<span class="sd">    outdic = vad_algorithm(velocity_field, azimuth, elevation)</span>
-<span class="sd">    velocity_field is a 2D array, azimuth is a 1D array,</span>
-<span class="sd">    elevation is a number. All in degrees, m outdic contains</span>
-<span class="sd">    speed and angle."""</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_vad_calculation_m</span><span class="p">(</span>
+    <span class="n">velocity_field</span><span class="p">,</span> <span class="n">azimuth</span><span class="p">,</span> <span class="n">elevation</span><span class="p">,</span> <span class="n">valid_ray_min</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">max_speed_error</span><span class="o">=</span><span class="kc">None</span>
+<span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Fit v = c + a sin(az) + b cos(az) at each gate by least squares.</span>
 
-    <span class="c1"># Creating array with radar velocity data</span>
-    <span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span> <span class="o">=</span> <span class="n">velocity_field</span><span class="o">.</span><span class="n">shape</span>
-    <span class="n">nrays2</span> <span class="o">=</span> <span class="n">nrays</span> <span class="o">//</span> <span class="mi">2</span>
-    <span class="n">velocity_count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">empty</span><span class="p">((</span><span class="n">nrays2</span><span class="p">,</span> <span class="n">nbins</span><span class="p">,</span> <span class="mi">2</span><span class="p">))</span>
-    <span class="n">velocity_count</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">0</span><span class="p">]</span> <span class="o">=</span> <span class="n">velocity_field</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">nrays2</span><span class="p">,</span> <span class="p">:]</span>
-    <span class="n">velocity_count</span><span class="p">[:,</span> <span class="p">:,</span> <span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">velocity_field</span><span class="p">[</span><span class="n">nrays2</span><span class="p">:,</span> <span class="p">:]</span>
-
-    <span class="c1"># Converting from degress to radians</span>
-    <span class="n">sinaz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">azimuth</span><span class="p">))</span>
-    <span class="n">cosaz</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">azimuth</span><span class="p">))</span>
-
-    <span class="c1"># Masking array and testing for nan values</span>
-    <span class="n">sumv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">velocity_count</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span>
-    <span class="n">vals</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">sumv</span><span class="p">)</span>
-    <span class="n">vals2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">((</span><span class="n">vals</span><span class="p">,</span> <span class="n">vals</span><span class="p">))</span>
-
-    <span class="c1"># Summing non-nan data and creating new array with summed data</span>
-    <span class="n">count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">sumv</span><span class="p">),</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">count</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">(</span><span class="n">count</span><span class="p">)</span>
-    <span class="n">u_m</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">sumv</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">//</span> <span class="p">(</span><span class="mi">2</span> <span class="o">*</span> <span class="n">count</span><span class="p">)])</span>
-
-    <span class="c1"># Creating 0 value arrays</span>
-    <span class="n">cminusu_mcos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">))</span>
-    <span class="n">cminusu_msin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">))</span>
-    <span class="n">sincos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">))</span>
-    <span class="n">sin2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">))</span>
-    <span class="n">cos2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">nrays</span><span class="p">,</span> <span class="n">nbins</span><span class="p">))</span>
-
-    <span class="c1"># Summing all sin and cos and setting select entires to nan</span>
-    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">nbins</span><span class="p">):</span>
-        <span class="n">cminusu_mcos</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">cosaz</span> <span class="o">*</span> <span class="p">(</span><span class="n">velocity_field</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">u_m</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
-        <span class="n">cminusu_msin</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sinaz</span> <span class="o">*</span> <span class="p">(</span><span class="n">velocity_field</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">u_m</span><span class="p">[:,</span> <span class="n">i</span><span class="p">])</span>
-        <span class="n">sincos</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sinaz</span> <span class="o">*</span> <span class="n">cosaz</span>
-        <span class="n">sin2</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">sinaz</span><span class="o">**</span><span class="mi">2</span>
-        <span class="n">cos2</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">cosaz</span><span class="o">**</span><span class="mi">2</span>
-
-    <span class="n">cminusu_mcos</span><span class="p">[</span><span class="n">vals2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">cminusu_msin</span><span class="p">[</span><span class="n">vals2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">sincos</span><span class="p">[</span><span class="n">vals2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">sin2</span><span class="p">[</span><span class="n">vals2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">cos2</span><span class="p">[</span><span class="n">vals2</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
-    <span class="n">sumcminu_mcos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">cminusu_mcos</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">sumcminu_msin</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">cminusu_msin</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">sumsincos</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">sincos</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">sumsin2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">sin2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-    <span class="n">sumcos2</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nansum</span><span class="p">(</span><span class="n">cos2</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
-
-    <span class="c1"># Calculating speed and angle values</span>
-    <span class="n">b_value</span> <span class="o">=</span> <span class="p">(</span><span class="n">sumcminu_mcos</span> <span class="o">-</span> <span class="p">(</span><span class="n">sumsincos</span> <span class="o">*</span> <span class="n">sumcminu_msin</span> <span class="o">/</span> <span class="n">sumsin2</span><span class="p">))</span> <span class="o">/</span> <span class="p">(</span>
-        <span class="n">sumcos2</span> <span class="o">-</span> <span class="p">(</span><span class="n">sumsincos</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">sumsin2</span>
+<span class="sd">    Returns the horizontal speed, the angle and the standard error of the</span>
+<span class="sd">    speed. Gates with fewer than valid_ray_min valid rays, or a speed error</span>
+<span class="sd">    above max_speed_error, are set to nan.</span>
+<span class="sd">    """</span>
+    <span class="c1"># Masked gates become nan so they are left out of the fit</span>
+    <span class="n">velocity_field</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">filled</span><span class="p">(</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">ma</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">velocity_field</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
     <span class="p">)</span>
-    <span class="n">a_value</span> <span class="o">=</span> <span class="p">(</span><span class="n">sumcminu_msin</span> <span class="o">-</span> <span class="n">b_value</span> <span class="o">*</span> <span class="n">sumsincos</span><span class="p">)</span> <span class="o">/</span> <span class="n">sumsin2</span>
-    <span class="n">speed</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">a_value</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">b_value</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">elevation</span><span class="p">))</span>
+    <span class="n">valid</span> <span class="o">=</span> <span class="o">~</span><span class="n">np</span><span class="o">.</span><span class="n">isnan</span><span class="p">(</span><span class="n">velocity_field</span><span class="p">)</span>
+    <span class="n">velocity</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">valid</span><span class="p">,</span> <span class="n">velocity_field</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">n_valid</span> <span class="o">=</span> <span class="n">valid</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+
+    <span class="c1"># Design matrix, one row per ray: [1, sin(az), cos(az)]</span>
+    <span class="n">az</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">azimuth</span><span class="p">)</span>
+    <span class="n">design</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">stack</span><span class="p">([</span><span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">az</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">az</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">az</span><span class="p">)],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="c1"># Normal equations for every gate at once, using valid rays only</span>
+    <span class="n">normal</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">"ij,ik,il-&gt;jkl"</span><span class="p">,</span> <span class="n">valid</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">),</span> <span class="n">design</span><span class="p">,</span> <span class="n">design</span><span class="p">)</span>
+    <span class="n">rhs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">"ij,ik-&gt;jk"</span><span class="p">,</span> <span class="n">velocity</span><span class="p">,</span> <span class="n">design</span><span class="p">)</span>
+    <span class="n">solvable</span> <span class="o">=</span> <span class="p">(</span><span class="n">n_valid</span> <span class="o">&gt;</span> <span class="mi">3</span><span class="p">)</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">normal</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mf">1e-9</span><span class="p">)</span>
+    <span class="n">normal</span><span class="p">[</span><span class="o">~</span><span class="n">solvable</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
+    <span class="n">normal_inv</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">normal</span><span class="p">)</span>
+    <span class="n">params</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">einsum</span><span class="p">(</span><span class="s2">"jkl,jl-&gt;jk"</span><span class="p">,</span> <span class="n">normal_inv</span><span class="p">,</span> <span class="n">rhs</span><span class="p">)</span>
+
+    <span class="c1"># Standard errors from the scatter left after the fit</span>
+    <span class="n">residual</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">valid</span><span class="p">,</span> <span class="n">velocity</span> <span class="o">-</span> <span class="n">design</span> <span class="o">@</span> <span class="n">params</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    <span class="n">variance</span> <span class="o">=</span> <span class="p">(</span><span class="n">residual</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">n_valid</span> <span class="o">-</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="n">cov</span> <span class="o">=</span> <span class="n">variance</span><span class="p">[:,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">newaxis</span><span class="p">]</span> <span class="o">*</span> <span class="n">normal_inv</span>
+
+    <span class="n">a_value</span> <span class="o">=</span> <span class="n">params</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span>
+    <span class="n">b_value</span> <span class="o">=</span> <span class="n">params</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="n">amplitude</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">hypot</span><span class="p">(</span><span class="n">a_value</span><span class="p">,</span> <span class="n">b_value</span><span class="p">)</span>
+    <span class="n">amplitude_var</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="n">a_value</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">cov</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">]</span>
+        <span class="o">+</span> <span class="n">b_value</span><span class="o">**</span><span class="mi">2</span> <span class="o">*</span> <span class="n">cov</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+        <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">a_value</span> <span class="o">*</span> <span class="n">b_value</span> <span class="o">*</span> <span class="n">cov</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]</span>
+    <span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">maximum</span><span class="p">(</span><span class="n">amplitude</span><span class="o">**</span><span class="mi">2</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">finfo</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span><span class="o">.</span><span class="n">tiny</span><span class="p">)</span>
+
+    <span class="n">cos_elevation</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">cos</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">deg2rad</span><span class="p">(</span><span class="n">elevation</span><span class="p">))</span>
+    <span class="n">speed</span> <span class="o">=</span> <span class="n">amplitude</span> <span class="o">/</span> <span class="n">cos_elevation</span>
+    <span class="n">speed_error</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">amplitude_var</span><span class="p">)</span> <span class="o">/</span> <span class="n">cos_elevation</span>
     <span class="n">angle</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arctan2</span><span class="p">(</span><span class="n">a_value</span><span class="p">,</span> <span class="n">b_value</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">speed</span><span class="p">,</span> <span class="n">angle</span>
+
+    <span class="c1"># Leave out gates without enough valid rays or with an unreliable fit</span>
+    <span class="n">rejected</span> <span class="o">=</span> <span class="o">~</span><span class="n">solvable</span> <span class="o">|</span> <span class="p">(</span><span class="n">n_valid</span> <span class="o">&lt;</span> <span class="n">valid_ray_min</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">max_speed_error</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">rejected</span> <span class="o">|=</span> <span class="n">speed_error</span> <span class="o">&gt;</span> <span class="n">max_speed_error</span>
+    <span class="n">speed</span><span class="p">[</span><span class="n">rejected</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">angle</span><span class="p">[</span><span class="n">rejected</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="n">speed_error</span><span class="p">[</span><span class="n">rejected</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span>
+    <span class="k">return</span> <span class="n">speed</span><span class="p">,</span> <span class="n">angle</span><span class="p">,</span> <span class="n">speed_error</span>
 
 
-<span class="k">def</span><span class="w"> </span><span class="nf">_interval_mean</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">current_z</span><span class="p">,</span> <span class="n">wanted_z</span><span class="p">):</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">_interval_mean</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">current_z</span><span class="p">,</span> <span class="n">wanted_z</span><span class="p">,</span> <span class="n">weights</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""Find the mean of data indexed by current_z</span>
 <span class="sd">    at wanted_z on intervals wanted_z+/- delta</span>
-<span class="sd">    wanted_z."""</span>
+<span class="sd">    wanted_z. Nan values are skipped, and weights, when given,</span>
+<span class="sd">    make it a weighted mean."""</span>
     <span class="n">delta</span> <span class="o">=</span> <span class="n">wanted_z</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">wanted_z</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">weights</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">weights</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones_like</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="c1"># argmin returns the first of tied gate heights on every platform,</span>
+    <span class="c1"># unlike argsort, whose tie order depends on the sort implementation</span>
     <span class="n">pos_lower</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">((</span><span class="n">current_z</span> <span class="o">-</span> <span class="p">(</span><span class="n">wanted_z</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">delta</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">((</span><span class="n">current_z</span> <span class="o">-</span> <span class="p">(</span><span class="n">wanted_z</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">-</span> <span class="n">delta</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">wanted_z</span><span class="p">))</span>
     <span class="p">]</span>
     <span class="n">pos_upper</span> <span class="o">=</span> <span class="p">[</span>
-        <span class="n">np</span><span class="o">.</span><span class="n">argsort</span><span class="p">((</span><span class="n">current_z</span> <span class="o">-</span> <span class="p">(</span><span class="n">wanted_z</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">delta</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">np</span><span class="o">.</span><span class="n">argmin</span><span class="p">((</span><span class="n">current_z</span> <span class="o">-</span> <span class="p">(</span><span class="n">wanted_z</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">+</span> <span class="n">delta</span> <span class="o">/</span> <span class="mf">2.0</span><span class="p">))</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">wanted_z</span><span class="p">))</span>
     <span class="p">]</span>
-    <span class="n">mean_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span>
-        <span class="p">[(</span><span class="n">data</span><span class="p">[</span><span class="n">pos_lower</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">:</span> <span class="n">pos_upper</span><span class="p">[</span><span class="n">i</span><span class="p">]])</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">pos_upper</span><span class="p">))]</span>
-    <span class="p">)</span>
+    <span class="n">mean_values</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">full</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">wanted_z</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">wanted_z</span><span class="p">)):</span>
+        <span class="n">values</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="n">pos_lower</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">:</span> <span class="n">pos_upper</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+        <span class="n">value_weights</span> <span class="o">=</span> <span class="n">weights</span><span class="p">[</span><span class="n">pos_lower</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="p">:</span> <span class="n">pos_upper</span><span class="p">[</span><span class="n">i</span><span class="p">]]</span>
+        <span class="n">use</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">values</span><span class="p">)</span> <span class="o">&amp;</span> <span class="n">np</span><span class="o">.</span><span class="n">isfinite</span><span class="p">(</span><span class="n">value_weights</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">use</span><span class="o">.</span><span class="n">any</span><span class="p">():</span>
+            <span class="n">mean_values</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">average</span><span class="p">(</span><span class="n">values</span><span class="p">[</span><span class="n">use</span><span class="p">],</span> <span class="n">weights</span><span class="o">=</span><span class="n">value_weights</span><span class="p">[</span><span class="n">use</span><span class="p">])</span>
     <span class="k">return</span> <span class="n">mean_values</span>
 
 

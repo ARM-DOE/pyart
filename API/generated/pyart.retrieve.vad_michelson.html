@@ -1249,7 +1249,7 @@
 <h1>pyart.retrieve.vad_michelson<a class="headerlink" href="#pyart-retrieve-vad-michelson" title="Link to this heading">#</a></h1>
 <dl class="py function">
 <dt class="sig sig-object py" id="pyart.retrieve.vad_michelson">
-<span class="sig-prename descclassname"><span class="pre">pyart.retrieve.</span></span><span class="sig-name descname"><span class="pre">vad_michelson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_want</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gatefilter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/retrieve/vad.html#vad_michelson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.retrieve.vad_michelson" title="Link to this definition">#</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pyart.retrieve.</span></span><span class="sig-name descname"><span class="pre">vad_michelson</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">radar</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">vel_field</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">z_want</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">gatefilter</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">valid_ray_min</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">16</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_speed_error</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">2.0</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../../_modules/pyart/retrieve/vad.html#vad_michelson"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#pyart.retrieve.vad_michelson" title="Link to this definition">#</a></dt>
 <dd><p>Velocity azimuth display.</p>
 <p>Creates a VAD object containing U Wind, V Wind and height that
 can then be used to plot and produce the velocity azimuth display.</p>
@@ -1262,6 +1262,15 @@ can then be used to plot and produce the velocity azimuth display.</p>
 None will result in np.linespace(0, 10000, 100).</p></li>
 <li><p><strong>gatefilter</strong> (<em>GateFilter, optional</em>) – A GateFilter indicating radar gates that should be excluded
 from the import vad calculation.</p></li>
+<li><p><strong>valid_ray_min</strong> (<em>int, optional</em>) – Minimum number of rays with valid velocity a gate needs to be used.
+Gates with fewer rays give noisy fits and are left out. Raising it
+smooths the profile but leaves more heights empty. Default is 16,
+the same as vad_browning.</p></li>
+<li><p><strong>max_speed_error</strong> (<em>float, optional</em>) – Largest standard error of the fitted wind speed, in m/s, for a gate
+to be used. The error grows when valid rays are few, bunched in one
+part of the circle, or noisy, so this rejects unreliable fits.
+Gates are then averaged into height bins weighted by 1 / error**2.
+None turns the check off. Default is 2.0.</p></li>
 </ul>
 </dd>
 <dt class="field-even">Returns<span class="colon">:</span></dt>
@@ -1269,6 +1278,16 @@ from the import vad calculation.</p></li>
 u_wind, v_wind from a radar object.</p>
 </dd>
 </dl>
+<p class="rubric">Notes</p>
+<p>At each gate, the radial velocities of the valid rays are fitted by
+least squares to v = c + a sin(az) + b cos(az), where az is the
+azimuth. The horizontal wind speed is sqrt(a**2 + b**2) / cos(elevation).
+Masked gates are left out of the fit.</p>
+<p>The fit also gives the standard error of the speed. It is large when a
+gate has few valid rays, when they are bunched in one part of the circle,
+or when the data are noisy. Gates above max_speed_error are left out, and
+the rest are averaged into the z_want height bins weighted by
+1 / error**2.</p>
 <p class="rubric">References</p>
 <p>Michelson, D. B., Andersson, T., Koistinen, J., Collier, C. G., Riedl, J.,
 Szturc, J., Gjertsen, U., Nielsen, A. and Overgaard, S. (2000) BALTEX Radar

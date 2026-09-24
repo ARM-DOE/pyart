@@ -753,6 +753,23 @@ Retrievals from various radars, such as additional fields or subsets of the data
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="Retrieves a wind profile from a NEXRAD volume with both VAD methods in Py-ART, vad_michelson and vad_browning, and plots them together.">
+
+.. only:: html
+
+  .. image:: /examples/retrieve/images/thumb/sphx_glr_plot_vad_michelson_thumb.png
+    :alt:
+
+  :doc:`/examples/retrieve/plot_vad_michelson`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Compare VAD Wind Profiles from Two Methods</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="Calculates a hydrometeor classification and displays the results">
 
 .. only:: html
