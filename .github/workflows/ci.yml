@@ -1,5 +1,8 @@
 name: CI
 
+permissions:
+  contents: read
+
 on:
   schedule:
   # Runs at 09Z (2am CDT)
