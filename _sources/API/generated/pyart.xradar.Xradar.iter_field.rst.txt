@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.iter\_field
+===============================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.iter_field

@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.get\_field
+==============================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.get_field

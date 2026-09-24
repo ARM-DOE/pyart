@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.init\_gate\_altitude
+========================================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.init_gate_altitude

@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.get\_gate\_area
+===================================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.get_gate_area

@@ -1,0 +1,6 @@
+pyart.xradar.Xgrid.get\_projparams
+==================================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xgrid.get_projparams

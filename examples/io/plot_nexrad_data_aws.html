@@ -508,8 +508,9 @@
 </ul>
 </details></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="../xradar/index.html">Xradar Examples</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../xradar/plot_xradar.html">Plot a PPI Using Xradar and Py-ART</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../xradar/plot_grid_xradar.html">Grid Data Using Xradar and Py-ART</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../xradar/plot_xradar.html">Plot a PPI Using Xradar and Py-ART</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../xradar/plot_rhi_xradar.html">Plot an RHI Using Xradar and Py-ART</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../xradar/plot_dealias_xradar.html">Dealias Radial Velocities Using Xradar and Py-ART</a></li>
 </ul>
 </details></li>
@@ -615,7 +616,7 @@ on March 22, 2022, at 1201:25 UTC. This means our path would look like:</p>
 <p>Let’s take a look at a summary of what fields are available.</p>
 <div class="highlight-Python notranslate"><div class="highlight"><pre><span class="nb">list</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="dict"><span class="n">radar</span><span class="o">.</span><span class="n">fields</span></a><span class="p">)</span><span class="w">
 </span></pre></div></div>
-<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>['reflectivity', 'differential_reflectivity', 'spectrum_width', 'differential_phase', 'cross_correlation_ratio', 'velocity', 'clutter_filter_power_removed']
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>['differential_phase', 'reflectivity', 'velocity', 'clutter_filter_power_removed', 'differential_reflectivity', 'cross_correlation_ratio', 'spectrum_width']
 </pre></div>
 </div>
 <p>Let’s plot the reflectivity/velocity fields as a first step to investigating our dataset.</p>
@@ -715,7 +716,7 @@ using the following naming convention:</p>
 </span>    <span class="n">vmax</span><span class="o">=</span><span class="mi">70</span><span class="p">,</span><span class="w">
 </span><span class="p">)</span><span class="w">
 </span></pre></div></div>
-<img src="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" alt="0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor,  0.5 Deg. 2022-03-22T12:01:25Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 10.333 seconds)</p>
+<img src="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" srcset="../../_images/sphx_glr_plot_nexrad_data_aws_002.png" alt="0.5 Deg. 2022-03-22T12:01:25Z  Equivalent reflectivity factor,  0.5 Deg. 2022-03-22T12:01:25Z  Radial velocity of scatterers away from instrument" class = "sphx-glr-single-img"/><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 12.664 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-io-plot-nexrad-data-aws-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/41122161573e84ed2249ac58c58fb5d5/plot_nexrad_data_aws.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_nexrad_data_aws.ipynb</span></code></a></p>

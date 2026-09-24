@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.get\_slice
+==============================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.get_slice

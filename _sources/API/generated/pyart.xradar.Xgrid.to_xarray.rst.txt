@@ -1,0 +1,6 @@
+pyart.xradar.Xgrid.to\_xarray
+=============================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xgrid.to_xarray

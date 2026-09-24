@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.iter\_start
+===============================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.iter_start

@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.init\_gate\_longitude\_latitude
+===================================================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.init_gate_longitude_latitude

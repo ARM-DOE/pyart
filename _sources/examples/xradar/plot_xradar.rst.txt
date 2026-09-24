@@ -24,7 +24,7 @@ Plot a PPI Using Xradar and Py-ART
 
 An example which uses xradar and Py-ART to create a PPI plot of a Cfradial file.
 
-.. GENERATED FROM PYTHON SOURCE LINES 9-31
+.. GENERATED FROM PYTHON SOURCE LINES 9-37
 
 
 
@@ -43,7 +43,6 @@ An example which uses xradar and Py-ART to create a PPI plot of a Cfradial file.
     # Author: Max Grover (mgrover@anl.gov)
     # License: BSD 3 clause
 
-
     import xradar as xd
 
     import pyart
@@ -56,16 +55,23 @@ An example which uses xradar and Py-ART to create a PPI plot of a Cfradial file.
     # Give the tree Py-ART radar methods
     radar = tree.pyart.to_radar()
 
+    # Inspect the resulting object -- it behaves like a Py-ART Radar, and its
+    # fields are numpy masked arrays just like a Radar read directly from disk
+    radar.info("compact")
+
     # Plot the Reflectivity Field (corrected_reflectivity_horizontal)
     display = pyart.graph.RadarMapDisplay(radar)
     display.plot_ppi(
         "corrected_reflectivity_horizontal", cmap="ChaseSpectral", vmin=-20, vmax=70
     )
 
+    # If a function needs a "plain" pyart.core.Radar instead of this Xradar
+    # wrapper, use pyart.xradar.to_pyart_radar to coerce it explicitly.
+
 
 .. rst-class:: sphx-glr-timing
 
-   **Total running time of the script:** (0 minutes 2.909 seconds)
+   **Total running time of the script:** (0 minutes 3.557 seconds)
 
 
 .. _sphx_glr_download_examples_xradar_plot_xradar.py:

@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.get\_start\_end
+===================================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.get_start_end

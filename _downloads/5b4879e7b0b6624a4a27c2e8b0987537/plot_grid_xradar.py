@@ -10,7 +10,6 @@ An example which uses xradar and Py-ART to grid a PPI file.
 # Author: Max Grover (mgrover@anl.gov)
 # License: BSD 3 clause
 
-
 import xradar as xd
 
 import pyart

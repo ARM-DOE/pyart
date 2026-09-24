@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.add\_field\_like
+====================================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.add_field_like

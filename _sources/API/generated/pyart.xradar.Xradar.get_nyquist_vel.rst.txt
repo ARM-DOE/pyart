@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.get\_nyquist\_vel
+=====================================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.get_nyquist_vel

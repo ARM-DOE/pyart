@@ -76,7 +76,7 @@
     <script src="../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Py-ART 2.0" href="pyart_2_0.html" />
+    <link rel="next" title="Reading Data: xradar and Py-ART" href="xradar_integration.html" />
     <link rel="prev" title="User Guide" href="index.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -446,6 +446,7 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Why Py-ART?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xradar_integration.html">Reading Data: xradar and Py-ART</a></li>
 <li class="toctree-l1"><a class="reference internal" href="pyart_2_0.html">Py-ART 2.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="INSTALL.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setting_up_an_environment.html">Setting up an Environment</a></li>
@@ -510,7 +511,7 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <section id="why-py-art">
-<h1>Why Py-ART?<a class="headerlink" href="#why-py-art" title="Link to this heading">#</a></h1>
+<span id="overview"></span><h1>Why Py-ART?<a class="headerlink" href="#why-py-art" title="Link to this heading">#</a></h1>
 <p>The <strong>Python ARM Radar Toolkit (Py-ART)</strong> is a powerful and flexible open-source library designed for working with weather radar data. Whether you’re a researcher, operational meteorologist, or data scientist, Py-ART provides the tools you need to analyze, visualize, and process radar data efficiently. Here’s why Py-ART stands out:</p>
 <p>—</p>
 <section id="a-common-data-model-the-radar-object">
@@ -528,37 +529,47 @@
 <h2>xradar vs. Legacy Radar Data Structures<a class="headerlink" href="#xradar-vs-legacy-radar-data-structures" title="Link to this heading">#</a></h2>
 <p>Py-ART represents a significant advancement over legacy radar data structures, particularly with its adoption of <strong>xarray</strong> through the <cite>xradar</cite> extension. Here’s how Py-ART (with xradar) compares to older approaches:</p>
 <div class="pst-scrollable-table-container"><table class="table">
+<colgroup>
+<col style="width: 20.0%" />
+<col style="width: 35.0%" />
+<col style="width: 45.0%" />
+</colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p><strong>Feature</strong></p></th>
-<th class="head"><p><strong>Legacy Radar Data Structures</strong></p></th>
-<th class="head"><p><strong>Py-ART with xradar</strong></p></th>
+<th class="head"><p><strong>Legacy</strong> (<code class="docutils literal notranslate"><span class="pre">pyart.io.read</span></code> -&gt; <a class="reference internal" href="../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><code class="xref py py-class docutils literal notranslate"><span class="pre">Radar</span></code></a>)</p></th>
+<th class="head"><p><strong>xradar-first</strong> (<code class="docutils literal notranslate"><span class="pre">xd.io.open_*_datatree</span></code> -&gt;
+<code class="docutils literal notranslate"><span class="pre">tree.pyart.to_radar()</span></code> -&gt; <a class="reference internal" href="../API/generated/pyart.xradar.Xradar.html#pyart.xradar.Xradar" title="pyart.xradar.Xradar"><code class="xref py py-class docutils literal notranslate"><span class="pre">Xradar</span></code></a>)</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><strong>Data Representation</strong></p></td>
+<tr class="row-even"><td><p>Data Representation</p></td>
 <td><p>Custom object with dictionaries</p></td>
-<td><p>xarray-based, standardized</p></td>
+<td><p>xarray/xradar <code class="docutils literal notranslate"><span class="pre">DataTree</span></code> under the hood, wrapped to duck-type
+<code class="docutils literal notranslate"><span class="pre">Radar</span></code></p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>Metadata Handling</strong></p></td>
-<td><p>Based on cfradial1 standards.</p></td>
-<td><p>Based on cfradial2 standards</p></td>
+<tr class="row-odd"><td><p>Metadata Handling</p></td>
+<td><p>Based on cfradial1 conventions</p></td>
+<td><p>Based on cfradial2/FM301 conventions (via xradar)</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>Performance</strong></p></td>
-<td><p>Limited scalability</p></td>
-<td><p>Optimized for large datasets</p></td>
+<tr class="row-even"><td><p>Format coverage</p></td>
+<td><p>Py-ART’s own readers (CfRadial, NEXRAD, Sigmet, MDV, …)</p></td>
+<td><p>Growing set of xradar readers; new format support is expected to
+land in xradar first, see <a class="reference internal" href="xradar_integration.html#xradar-integration"><span class="std std-ref">Reading Data: xradar and Py-ART</span></a></p></td>
 </tr>
-<tr class="row-odd"><td><p><strong>Multi-Dimensional Data</strong></p></td>
-<td><p>Limited support</p></td>
-<td><p>Native support via xarray</p></td>
+<tr class="row-odd"><td><p>Missing-data handling</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">numpy.ma.MaskedArray</span></code> fields</p></td>
+<td><p>Also <code class="docutils literal notranslate"><span class="pre">numpy.ma.MaskedArray</span></code> fields (NaN-masked on load)</p></td>
 </tr>
-<tr class="row-even"><td><p><strong>Interoperability</strong></p></td>
+<tr class="row-even"><td><p>Interoperability</p></td>
 <td><p>Minimal, package-by-package</p></td>
-<td><p>Full integration with PyData
-ecosystem</p></td>
+<td><p>Full integration with the PyData/xarray ecosystem</p></td>
 </tr>
 </tbody>
 </table>
 </div>
+<p>Not every <a class="reference internal" href="../API/generated/pyart.core.Radar.html#pyart.core.Radar" title="pyart.core.Radar"><code class="xref py py-class docutils literal notranslate"><span class="pre">Radar</span></code></a> attribute/method has an
+<a class="reference internal" href="../API/generated/pyart.xradar.Xradar.html#pyart.xradar.Xradar" title="pyart.xradar.Xradar"><code class="xref py py-class docutils literal notranslate"><span class="pre">Xradar</span></code></a> equivalent yet – see the supported-API table
+in <a class="reference internal" href="xradar_integration.html#xradar-integration"><span class="std std-ref">Reading Data: xradar and Py-ART</span></a> for exactly what has been ported and verified.</p>
 <p>The adoption of xarray in Py-ART allows for more intuitive and efficient handling of radar data, especially for large-scale or multi-dimensional datasets. It also aligns Py-ART with modern data science practices, ensuring long-term sustainability and usability.</p>
 <p>—</p>
 </section>
@@ -601,11 +612,11 @@ ecosystem</p></td>
       </div>
     </a>
     <a class="right-next"
-       href="pyart_2_0.html"
+       href="xradar_integration.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Py-ART 2.0</p>
+        <p class="prev-next-title">Reading Data: xradar and Py-ART</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

@@ -1,0 +1,6 @@
+pyart.xradar.Xgrid.init\_point\_longitude\_latitude
+===================================================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xgrid.init_point_longitude_latitude

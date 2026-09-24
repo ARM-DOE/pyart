@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.add\_filter
+===============================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.add_filter

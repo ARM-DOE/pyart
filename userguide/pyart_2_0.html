@@ -77,7 +77,7 @@
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="Installation" href="INSTALL.html" />
-    <link rel="prev" title="Why Py-ART?" href="overview.html" /> 
+    <link rel="prev" title="Reading Data: xradar and Py-ART" href="xradar_integration.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="2.3" />
@@ -446,6 +446,7 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="overview.html">Why Py-ART?</a></li>
+<li class="toctree-l1"><a class="reference internal" href="xradar_integration.html">Reading Data: xradar and Py-ART</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Py-ART 2.0</a></li>
 <li class="toctree-l1"><a class="reference internal" href="INSTALL.html">Installation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="setting_up_an_environment.html">Setting up an Environment</a></li>
@@ -510,7 +511,7 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                    <section id="py-art-2-0">
-<h1>Py-ART 2.0<a class="headerlink" href="#py-art-2-0" title="Link to this heading">#</a></h1>
+<span id="pyart-2-0"></span><h1>Py-ART 2.0<a class="headerlink" href="#py-art-2-0" title="Link to this heading">#</a></h1>
 <p>In preparation for version 2.0.0 of Py-ART, codes were standardized for consistency purposes as further defined in the <a class="reference external" href="https://arm-doe.github.io/pyart/userguide/CONTRIBUTING.html">Contributor’s Guide</a>.  These changes will break some users code as the API has changed.  This guide will detail the changes for each module.</p>
 <section id="how-to-try-py-art-2-0">
 <h2>How to Try Py-ART 2.0<a class="headerlink" href="#how-to-try-py-art-2-0" title="Link to this heading">#</a></h2>
@@ -521,29 +522,10 @@
 </section>
 <section id="input-output-io">
 <h2>Input/Output (IO)<a class="headerlink" href="#input-output-io" title="Link to this heading">#</a></h2>
-<p>We now offer the option to use xradar for IO, with the following interface (a typical gridding workflow is shown below):</p>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">xradar</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xd</span>
-<span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span>
-
-<span class="c1"># Access sample cfradial1 data from Py-ART and read using xradar</span>
-<span class="n">filename</span> <span class="o">=</span> <span class="n">get_test_data</span><span class="p">(</span><span class="s2">"swx_20120520_0641.nc"</span><span class="p">)</span>
-<span class="n">tree</span> <span class="o">=</span> <span class="n">xd</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">open_cfradial1_datatree</span><span class="p">(</span><span class="n">filename</span><span class="p">)</span>
-
-<span class="c1"># Add the associated pyart methods - ensuring compatibility with Py-ART functionality</span>
-<span class="n">radar</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">pyart</span><span class="o">.</span><span class="n">to_radar</span><span class="p">()</span>
-
-<span class="c1"># Grid using 11 vertical levels, and 101 horizontal grid cells at a resolution on 1 km</span>
-<span class="n">grid</span> <span class="o">=</span> <span class="n">pyart</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">grid_from_radars</span><span class="p">(</span>
-    <span class="p">(</span><span class="n">radar</span><span class="p">,),</span>
-    <span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">101</span><span class="p">),</span>
-    <span class="n">grid_limits</span><span class="o">=</span><span class="p">(</span>
-        <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">10_000</span><span class="p">),</span>
-        <span class="p">(</span><span class="o">-</span><span class="mf">50_000.0</span><span class="p">,</span> <span class="mf">50_000.0</span><span class="p">),</span>
-        <span class="p">(</span><span class="o">-</span><span class="mi">50_000</span><span class="p">,</span> <span class="mf">50_000.0</span><span class="p">),</span>
-    <span class="p">),</span>
-<span class="p">)</span>
-</pre></div>
-</div>
+<p>We now offer the option to use xradar for IO. See <a class="reference internal" href="xradar_integration.html#xradar-integration"><span class="std std-ref">Reading Data: xradar and Py-ART</span></a>
+for the full xradar-first reading guide, the supported-API table for
+<a class="reference internal" href="../API/generated/pyart.xradar.Xradar.html#pyart.xradar.Xradar" title="pyart.xradar.Xradar"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyart.xradar.Xradar</span></code></a>/<a class="reference internal" href="../API/generated/pyart.xradar.Xgrid.html#pyart.xradar.Xgrid" title="pyart.xradar.Xgrid"><code class="xref py py-class docutils literal notranslate"><span class="pre">pyart.xradar.Xgrid</span></code></a>, and a worked
+gridding example.</p>
 </section>
 <section id="correct">
 <h2>Correct<a class="headerlink" href="#correct" title="Link to this heading">#</a></h2>
@@ -579,12 +561,12 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="overview.html"
+       href="xradar_integration.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Why Py-ART?</p>
+        <p class="prev-next-title">Reading Data: xradar and Py-ART</p>
       </div>
     </a>
     <a class="right-next"

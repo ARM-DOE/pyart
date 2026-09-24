@@ -1,0 +1,6 @@
+pyart.xradar.Xgrid.nz
+=====================
+
+.. currentmodule:: pyart.xradar
+
+.. autoproperty:: Xgrid.nz

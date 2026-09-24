@@ -1,0 +1,6 @@
+pyart.xradar.to\_pyart\_radar
+=============================
+
+.. currentmodule:: pyart.xradar
+
+.. autofunction:: to_pyart_radar

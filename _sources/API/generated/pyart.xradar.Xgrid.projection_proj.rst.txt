@@ -1,0 +1,6 @@
+pyart.xradar.Xgrid.projection\_proj
+===================================
+
+.. currentmodule:: pyart.xradar
+
+.. autoproperty:: Xgrid.projection_proj

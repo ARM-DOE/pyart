@@ -1,0 +1,41 @@
+pyart.xradar.Xgrid
+==================
+
+.. currentmodule:: pyart.xradar
+
+.. autoclass:: Xgrid
+
+   
+
+.. HACK -- the point here is that we don't want this to appear in the output, but the autosummary should still generate the pages.
+
+.. autosummary::
+   :toctree:
+
+
+   ~Xgrid.add_field
+   ~Xgrid.get_point_longitude_latitude
+   ~Xgrid.get_projparams
+   ~Xgrid.init_point_altitude
+   ~Xgrid.init_point_longitude_latitude
+   ~Xgrid.init_point_x_y_z
+   ~Xgrid.to_xarray
+   ~Xgrid.write
+
+
+
+
+   
+
+.. HACK -- the point here is that we don't want this to appear in the output, but the autosummary should still generate the pages.
+
+.. autosummary::
+   :toctree:
+
+
+   ~Xgrid.metadata
+   ~Xgrid.nx
+   ~Xgrid.ny
+   ~Xgrid.nz
+   ~Xgrid.projection_proj
+

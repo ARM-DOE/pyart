@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.get\_azimuth
+================================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.get_azimuth

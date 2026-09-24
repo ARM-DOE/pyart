@@ -76,8 +76,8 @@
     <script src="../../_static/doc_shared.js?v=6c7402a7"></script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Dealias Radial Velocities Using Xradar and Py-ART" href="plot_dealias_xradar.html" />
-    <link rel="prev" title="Plot a PPI Using Xradar and Py-ART" href="plot_xradar.html" /> 
+    <link rel="next" title="Plot a PPI Using Xradar and Py-ART" href="plot_xradar.html" />
+    <link rel="prev" title="Xradar Examples" href="index.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="2.3" />
@@ -508,8 +508,9 @@
 </ul>
 </details></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Xradar Examples</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2"><a class="reference internal" href="plot_xradar.html">Plot a PPI Using Xradar and Py-ART</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Grid Data Using Xradar and Py-ART</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_xradar.html">Plot a PPI Using Xradar and Py-ART</a></li>
+<li class="toctree-l2"><a class="reference internal" href="plot_rhi_xradar.html">Plot an RHI Using Xradar and Py-ART</a></li>
 <li class="toctree-l2"><a class="reference internal" href="plot_dealias_xradar.html">Dealias Radial Velocities Using Xradar and Py-ART</a></li>
 </ul>
 </details></li>
@@ -586,7 +587,6 @@ to download the full example code.</p>
 <img src="../../_images/sphx_glr_plot_grid_xradar_001.png" srcset="../../_images/sphx_glr_plot_grid_xradar_001.png" alt="xsapr-sg 0.0 km 2011-05-20T06:42:11Z  Equivalent reflectivity factor" class = "sphx-glr-single-img"/><div class="highlight-Python notranslate"><div class="highlight"><pre><span class="c1"># Author: Max Grover (mgrover&#64;anl.gov)</span><span class="w">
 </span><span class="c1"># License: BSD 3 clause</span><span class="w">
 </span><span class="w">
-</span><span class="w">
 </span><span class="kn">import</span><span class="w"> </span><span class="nn">xradar</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">xd</span><span class="w">
 </span><span class="w">
 </span><span class="kn">import</span><span class="w"> </span><span class="nn">pyart</span><span class="w">
@@ -597,11 +597,11 @@ to download the full example code.</p>
 </span><span class="n">tree</span> <span class="o">=</span> <span class="n">xd</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">open_cfradial1_datatree</span><span class="p">(</span><a class="sphx-glr-backref-module-builtins sphx-glr-backref-type-py-class sphx-glr-backref-instance reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="str"><span class="n">filename</span></a><span class="p">)</span><span class="w">
 </span><span class="w">
 </span><span class="c1"># Give the tree Py-ART radar methods</span><span class="w">
-</span><span class="n">radar</span> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">pyart</span><span class="o">.</span><span class="n">to_radar</span><span class="p">(</span><span class="p">)</span><span class="w">
+</span><a class="sphx-glr-backref-module-pyart-xradar sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.xradar.Xradar.html#pyart.xradar.Xradar" title="pyart.xradar.Xradar"><span class="n">radar</span></a> <span class="o">=</span> <span class="n">tree</span><span class="o">.</span><span class="n">pyart</span><span class="o">.</span><span class="n">to_radar</span><span class="p">(</span><span class="p">)</span><span class="w">
 </span><span class="w">
 </span><span class="c1"># Grid using 11 vertical levels, and 101 horizontal grid cells at a resolution on 1 km</span><span class="w">
 </span><a class="sphx-glr-backref-module-pyart-core sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.core.Grid.html#pyart.core.Grid" title="pyart.core.Grid"><span class="n">grid</span></a> <span class="o">=</span> <a class="sphx-glr-backref-module-pyart-map sphx-glr-backref-type-py-function reference internal" href="../../API/generated/pyart.map.grid_from_radars.html#pyart.map.grid_from_radars" title="pyart.map.grid_from_radars"><span class="n">pyart</span><span class="o">.</span><span class="n">map</span><span class="o">.</span><span class="n">grid_from_radars</span></a><span class="p">(</span><span class="w">
-</span>    <span class="p">(</span><span class="n">radar</span><span class="p">,</span><span class="p">)</span><span class="p">,</span><span class="w">
+</span>    <span class="p">(</span><a class="sphx-glr-backref-module-pyart-xradar sphx-glr-backref-type-py-class sphx-glr-backref-instance reference internal" href="../../API/generated/pyart.xradar.Xradar.html#pyart.xradar.Xradar" title="pyart.xradar.Xradar"><span class="n">radar</span></a><span class="p">,</span><span class="p">)</span><span class="p">,</span><span class="w">
 </span>    <span class="n">grid_shape</span><span class="o">=</span><span class="p">(</span><span class="mi">11</span><span class="p">,</span> <span class="mi">101</span><span class="p">,</span> <span class="mi">101</span><span class="p">)</span><span class="p">,</span><span class="w">
 </span>    <span class="n">grid_limits</span><span class="o">=</span><span class="p">(</span><span class="w">
 </span>        <span class="p">(</span><span class="mf">0.0</span><span class="p">,</span> <span class="mi">10_000</span><span class="p">)</span><span class="p">,</span><span class="w">
@@ -615,7 +615,7 @@ to download the full example code.</p>
 </span>    <span class="s2">&quot;</span><span class="s2">reflectivity_horizontal</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">vmin</span><span class="o">=</span><span class="o">-</span><span class="mi">20</span><span class="p">,</span> <span class="n">vmax</span><span class="o">=</span><span class="mi">60</span><span class="p">,</span> <span class="n">cmap</span><span class="o">=</span><span class="s2">&quot;</span><span class="s2">ChaseSpectral</span><span class="s2">&quot;</span><span class="w">
 </span><span class="p">)</span><span class="w">
 </span></pre></div></div>
-<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 3.631 seconds)</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> (0 minutes 4.441 seconds)</p>
 <div class="sphx-glr-footer sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-xradar-plot-grid-xradar-py">
 <div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
 <p><a class="reference download internal" download="" href="../../_downloads/e2d7e294f061d1e389276de09d175d10/plot_grid_xradar.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">plot_grid_xradar.ipynb</span></code></a></p>
@@ -644,20 +644,20 @@ to download the full example code.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="plot_xradar.html"
+       href="index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Plot a PPI Using Xradar and Py-ART</p>
+        <p class="prev-next-title">Xradar Examples</p>
       </div>
     </a>
     <a class="right-next"
-       href="plot_dealias_xradar.html"
+       href="plot_xradar.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Dealias Radial Velocities Using Xradar and Py-ART</p>
+        <p class="prev-next-title">Plot a PPI Using Xradar and Py-ART</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

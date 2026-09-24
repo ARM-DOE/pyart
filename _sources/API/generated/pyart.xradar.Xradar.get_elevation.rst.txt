@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.get\_elevation
+==================================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.get_elevation

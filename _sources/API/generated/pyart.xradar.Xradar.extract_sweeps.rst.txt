@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.extract\_sweeps
+===================================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.extract_sweeps

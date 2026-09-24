@@ -1,0 +1,6 @@
+pyart.xradar.Xgrid.add\_field
+=============================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xgrid.add_field

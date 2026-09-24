@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.find\_instrument\_parameters
+================================================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.find_instrument_parameters

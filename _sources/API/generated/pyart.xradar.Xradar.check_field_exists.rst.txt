@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.check\_field\_exists
+========================================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.check_field_exists

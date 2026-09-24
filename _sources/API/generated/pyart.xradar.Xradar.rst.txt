@@ -1,0 +1,52 @@
+pyart.xradar.Xradar
+===================
+
+.. currentmodule:: pyart.xradar
+
+.. autoclass:: Xradar
+
+   
+
+.. HACK -- the point here is that we don't want this to appear in the output, but the autosummary should still generate the pages.
+
+.. autosummary::
+   :toctree:
+
+
+   ~Xradar.add_field
+   ~Xradar.add_field_like
+   ~Xradar.add_filter
+   ~Xradar.check_field_exists
+   ~Xradar.extract_sweeps
+   ~Xradar.find_instrument_parameters
+   ~Xradar.get_azimuth
+   ~Xradar.get_elevation
+   ~Xradar.get_end
+   ~Xradar.get_field
+   ~Xradar.get_gate_area
+   ~Xradar.get_gate_lat_lon_alt
+   ~Xradar.get_gate_x_y_z
+   ~Xradar.get_nyquist_vel
+   ~Xradar.get_projparams
+   ~Xradar.get_slice
+   ~Xradar.get_start
+   ~Xradar.get_start_end
+   ~Xradar.info
+   ~Xradar.init_gate_alt
+   ~Xradar.init_gate_altitude
+   ~Xradar.init_gate_longitude_latitude
+   ~Xradar.init_gate_x_y_z
+   ~Xradar.init_rays_per_sweep
+   ~Xradar.iter_azimuth
+   ~Xradar.iter_elevation
+   ~Xradar.iter_end
+   ~Xradar.iter_field
+   ~Xradar.iter_slice
+   ~Xradar.iter_start
+   ~Xradar.iter_start_end
+
+
+
+
+   
+

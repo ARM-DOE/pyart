@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.get\_projparams
+===================================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.get_projparams

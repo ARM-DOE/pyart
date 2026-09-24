@@ -1,0 +1,6 @@
+pyart.xradar.Xgrid.metadata
+===========================
+
+.. currentmodule:: pyart.xradar
+
+.. autoproperty:: Xgrid.metadata

@@ -1,0 +1,6 @@
+pyart.xradar.Xradar.get\_gate\_lat\_lon\_alt
+============================================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xradar.get_gate_lat_lon_alt

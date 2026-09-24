@@ -23,6 +23,23 @@ Examples of using Xradar with Py-ART to accomplish different tasks.
 
 .. raw:: html
 
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which uses xradar and Py-ART to grid a PPI file.">
+
+.. only:: html
+
+  .. image:: /examples/xradar/images/thumb/sphx_glr_plot_grid_xradar_thumb.png
+    :alt:
+
+  :doc:`/examples/xradar/plot_grid_xradar`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Grid Data Using Xradar and Py-ART</div>
+    </div>
+
+
+.. raw:: html
+
     <div class="sphx-glr-thumbcontainer" tooltip="An example which uses xradar and Py-ART to create a PPI plot of a Cfradial file.">
 
 .. only:: html
@@ -40,18 +57,18 @@ Examples of using Xradar with Py-ART to accomplish different tasks.
 
 .. raw:: html
 
-    <div class="sphx-glr-thumbcontainer" tooltip="An example which uses xradar and Py-ART to grid a PPI file.">
+    <div class="sphx-glr-thumbcontainer" tooltip="An example which uses xradar and Py-ART to create a range height indicator (RHI) plot and run a Py-ART algorithm on an RHI volume wrapped by Xradar.">
 
 .. only:: html
 
-  .. image:: /examples/xradar/images/thumb/sphx_glr_plot_grid_xradar_thumb.png
+  .. image:: /examples/xradar/images/thumb/sphx_glr_plot_rhi_xradar_thumb.png
     :alt:
 
-  :doc:`/examples/xradar/plot_grid_xradar`
+  :doc:`/examples/xradar/plot_rhi_xradar`
 
 .. raw:: html
 
-      <div class="sphx-glr-thumbnail-title">Grid Data Using Xradar and Py-ART</div>
+      <div class="sphx-glr-thumbnail-title">Plot an RHI Using Xradar and Py-ART</div>
     </div>
 
 
@@ -82,7 +99,8 @@ Examples of using Xradar with Py-ART to accomplish different tasks.
 .. toctree::
    :hidden:
 
-   /examples/xradar/plot_xradar
    /examples/xradar/plot_grid_xradar
+   /examples/xradar/plot_xradar
+   /examples/xradar/plot_rhi_xradar
    /examples/xradar/plot_dealias_xradar
 

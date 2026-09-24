@@ -1,0 +1,6 @@
+pyart.xradar.Xgrid.init\_point\_altitude
+========================================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xgrid.init_point_altitude

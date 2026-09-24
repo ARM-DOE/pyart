@@ -1,0 +1,6 @@
+pyart.xradar.Xgrid.write
+========================
+
+.. currentmodule:: pyart.xradar
+
+.. automethod:: Xgrid.write
