@@ -33,7 +33,6 @@ dependencies:
   - sphinx-copybutton
   - pre_commit
   - cmweather
-  - mda-xdrlib
   - xradar
   - dask
   - ablog

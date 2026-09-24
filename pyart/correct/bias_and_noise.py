@@ -11,7 +11,7 @@ import pint
 from scipy import signal
 
 from ..config import get_field_name, get_metadata
-from ..core.radar import Radar
+from ..xradar import to_pyart_radar
 
 
 def correct_noise_rhohv(
@@ -243,8 +243,7 @@ def calc_cloud_mask(
 
     """
 
-    if not isinstance(radar, Radar):
-        raise ValueError("Please use a valid Py-ART Radar object")
+    radar = to_pyart_radar(radar)
 
     if not isinstance(field, str):
         raise ValueError("Please specify a valid field name.")
@@ -330,8 +329,7 @@ def calc_noise_floor(radar, field, height):
 
     """
 
-    if not isinstance(radar, Radar):
-        raise ValueError("Please use a valid Py-ART Radar object.")
+    radar = to_pyart_radar(radar)
 
     # Range correct data and return the array from the Radar object
     data = range_correction(radar, field, height=height)
@@ -440,8 +438,7 @@ def range_correction(radar, field, height):
 
     """
 
-    if not isinstance(radar, Radar):
-        raise ValueError("Please use a valid Py-ART Radar object.")
+    radar = to_pyart_radar(radar)
 
     try:
         height_units = getattr(radar, height)["units"]
