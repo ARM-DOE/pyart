@@ -113,26 +113,20 @@ def _vad_calculation_m(velocity_field, azimuth, elevation):
     elevation is a number. All in degrees, m outdic contains
     speed and angle."""
 
-    # Creating array with radar velocity data
+    # Masked gates become nan so they are excluded from all sums below,
+    # rather than contributing their underlying data values
+    velocity_field = np.ma.filled(
+        np.ma.asarray(velocity_field, dtype=np.float64), np.nan
+    )
     nrays, nbins = velocity_field.shape
-    nrays2 = nrays // 2
-    velocity_count = np.ma.empty((nrays2, nbins, 2))
-    velocity_count[:, :, 0] = velocity_field[0:nrays2, :]
-    velocity_count[:, :, 1] = velocity_field[nrays2:, :]
 
     # Converting from degress to radians
     sinaz = np.sin(np.deg2rad(azimuth))
     cosaz = np.cos(np.deg2rad(azimuth))
 
-    # Masking array and testing for nan values
-    sumv = np.ma.sum(velocity_count, 2)
-    vals = np.isnan(sumv)
-    vals2 = np.vstack((vals, vals))
-
-    # Summing non-nan data and creating new array with summed data
-    count = np.sum(~np.isnan(sumv), 0)
-    count = np.float64(count)
-    u_m = np.array([np.nansum(sumv, 0) // (2 * count)])
+    # Mean radial velocity of the valid gates at each range
+    vals2 = np.isnan(velocity_field)
+    u_m = np.nanmean(velocity_field, axis=0, keepdims=True)
 
     # Creating 0 value arrays
     cminusu_mcos = np.zeros((nrays, nbins))

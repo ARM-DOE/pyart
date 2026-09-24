@@ -33,6 +33,27 @@ def test_vad_michelson():
     assert_allclose(vad.v_wind, v_wind, rtol=1e-3, atol=1e-1)
 
 
+def test_vad_michelson_masked_gates():
+    # Masked gates must be excluded, not treated as zero velocity (#1488)
+    test_radar = pyart.testing.make_target_radar()
+    height = np.arange(0.0, 1000.0, 200.0)
+    speed = np.ones_like(height) * 5.0
+    direction = np.ones_like(height) * 90.0
+    profile = pyart.core.HorizontalWindProfile(height, speed, direction)
+    sim_vel = pyart.util.simulated_vel_from_profile(test_radar, profile)
+    rng = np.random.default_rng(1488)
+    mask = rng.random(sim_vel["data"].shape) < 0.3
+    sim_vel["data"] = np.ma.masked_array(sim_vel["data"], mask)
+    test_radar.add_field("velocity", sim_vel, replace_existing=True)
+
+    z_want = np.linspace(0.0, 10.0, 5)
+    vad = pyart.retrieve.vad_michelson(test_radar, "velocity", z_want)
+
+    assert_allclose(vad.speed, 5.0, atol=0.05)
+    assert_allclose(vad.u_wind, -5.0, atol=0.05)
+    assert_allclose(vad.v_wind, 0.0, atol=0.05)
+
+
 def test_vad_browning():
     test_radar = pyart.testing.make_target_radar()
     height = np.arange(0.0, 1000.0, 200.0)
