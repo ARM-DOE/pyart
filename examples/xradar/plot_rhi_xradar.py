@@ -47,12 +47,6 @@ with tempfile.TemporaryDirectory() as tmp_dir:
 # Give the tree Py-ART radar methods
 rhi = tree.pyart.to_radar(scan_type="rhi")
 
-# Fields on an Xradar-wrapped radar are numpy masked arrays, just like Radar
-print(type(rhi.fields["reflectivity"]["data"]))
-
-# ``info`` works the same as it does on a Radar object
-rhi.info("compact")
-
 ##########################################
 # **Run an algorithm on the RHI volume**
 # Despeckle the reflectivity field to remove small, isolated regions of data.

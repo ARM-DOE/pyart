@@ -22,10 +22,6 @@ tree = xd.io.open_cfradial1_datatree(filename)
 # Give the tree Py-ART radar methods
 radar = tree.pyart.to_radar()
 
-# Inspect the resulting object -- fields on an Xradar-wrapped radar are
-# numpy masked arrays, same as a Radar object
-radar.info("compact")
-
 # Grid using 11 vertical levels, and 101 horizontal grid cells at a resolution on 1 km
 grid = pyart.map.grid_from_radars(
     (radar,),

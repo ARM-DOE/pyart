@@ -24,11 +24,6 @@ tree = xd.io.open_cfradial1_datatree(filename)
 # Give the tree Py-ART radar methods
 radar = tree.pyart.to_radar()
 
-# Inspect the resulting object -- it behaves like a Py-ART Radar object, and
-# its fields are numpy masked arrays, so algorithms like the region-based
-# dealiasing routine below work with it directly
-radar.info("compact")
-
 # Determine the nyquist velocity using the maximum radial velocity from the first sweep
 nyq = radar["sweep_0"]["mean_doppler_velocity"].max().values
 
