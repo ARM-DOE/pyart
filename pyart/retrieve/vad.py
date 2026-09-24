@@ -169,12 +169,14 @@ def _interval_mean(data, current_z, wanted_z):
     at wanted_z on intervals wanted_z+/- delta
     wanted_z."""
     delta = wanted_z[1] - wanted_z[0]
+    # argmin returns the first of tied gate heights on every platform,
+    # unlike argsort, whose tie order depends on the sort implementation
     pos_lower = [
-        np.argsort((current_z - (wanted_z[i] - delta / 2.0)) ** 2)[0]
+        np.argmin((current_z - (wanted_z[i] - delta / 2.0)) ** 2)
         for i in range(len(wanted_z))
     ]
     pos_upper = [
-        np.argsort((current_z - (wanted_z[i] + delta / 2.0)) ** 2)[0]
+        np.argmin((current_z - (wanted_z[i] + delta / 2.0)) ** 2)
         for i in range(len(wanted_z))
     ]
     mean_values = np.array(
