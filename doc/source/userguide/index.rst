@@ -10,6 +10,7 @@ We also have a collection of installation, and contribution instructions listed 
    :maxdepth: 1
 
    overview
+   xradar_integration
    pyart_2_0
    INSTALL
    setting_up_an_environment
