@@ -1,13 +1,16 @@
 on:
   pull_request:
-    types: [assigned, opened, synchronize, reopened, closed]
+    types: [opened, synchronize, reopened]
+
+permissions:
+  contents: read
 
 jobs:
   gitavscan:
     runs-on: ubuntu-latest
     name: AV scan
     steps:
-    - uses: actions/checkout@v7
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
     - name: Git AV Scan
       uses: djdefi/gitavscan@main
       with:
