@@ -53,6 +53,19 @@ def vad_michelson(
         A velocity azimuth display object containing height, speed, direction,
         u_wind, v_wind from a radar object.
 
+    Notes
+    -----
+    At each gate, the radial velocities of the valid rays are fitted by
+    least squares to v = c + a sin(az) + b cos(az), where az is the
+    azimuth. The horizontal wind speed is sqrt(a**2 + b**2) / cos(elevation).
+    Masked gates are left out of the fit.
+
+    The fit also gives the standard error of the speed. It is large when a
+    gate has few valid rays, when they are bunched in one part of the circle,
+    or when the data are noisy. Gates above max_speed_error are left out, and
+    the rest are averaged into the z_want height bins weighted by
+    1 / error**2.
+
     References
     ----------
     Michelson, D. B., Andersson, T., Koistinen, J., Collier, C. G., Riedl, J.,
