@@ -4,6 +4,7 @@ Routines for reading ODIM_H5 files.
 """
 
 import datetime
+import re
 import warnings
 
 import numpy as np
@@ -263,11 +264,23 @@ def read_odim_h5(
             else:
                 max_nbins = max(all_sweeps_nbins)
 
-            rscenter = 1e3 * rstart[0] + rscale[0] / 2
+            # ODIM_H5 <= 2.3 specifies rstart in km, 2.4 and later align
+            # with the CfRadial2 conventions and specify rstart in meters
+            rstart_scale = 1e3
+            version_match = re.match(
+                r"ODIM_H5/V(\d+)_(\d+)", metadata["odim_conventions"]
+            )
+            if version_match is not None:
+                version = tuple(int(v) for v in version_match.groups())
+                if version >= (2, 4):
+                    rstart_scale = 1.0
+            rstart_m = float(rstart[0]) * rstart_scale
+
+            rscenter = rstart_m + rscale[0] / 2
             _range["data"] = np.arange(
                 rscenter, rscenter + max_nbins * rscale[0], rscale[0], dtype="float32"
             )
-            _range["meters_to_center_of_first_gate"] = rstart[0] * 1000.0
+            _range["meters_to_center_of_first_gate"] = rstart_m
             _range["meters_between_gates"] = float(rscale[0])
         else:
             # if not defined use range attribute which defines the maximum range

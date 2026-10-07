@@ -1,3 +1,5 @@
+.. _pyart_2_0:
+
 ==========
 Py-ART 2.0
 ==========
@@ -13,30 +15,10 @@ The Py-ART 2.0 release candidate can be installed directly from github - this is
 
 Input/Output (IO)
 =================
-We now offer the option to use xradar for IO, with the following interface (a typical gridding workflow is shown below):
-
-.. code-block:: python
-
-    import xradar as xd
-    import pyart
-
-    # Access sample cfradial1 data from Py-ART and read using xradar
-    filename = get_test_data("swx_20120520_0641.nc")
-    tree = xd.io.open_cfradial1_datatree(filename)
-
-    # Add the associated pyart methods - ensuring compatibility with Py-ART functionality
-    radar = tree.pyart.to_radar()
-
-    # Grid using 11 vertical levels, and 101 horizontal grid cells at a resolution on 1 km
-    grid = pyart.map.grid_from_radars(
-        (radar,),
-        grid_shape=(11, 101, 101),
-        grid_limits=(
-            (0.0, 10_000),
-            (-50_000.0, 50_000.0),
-            (-50_000, 50_000.0),
-        ),
-    )
+We now offer the option to use xradar for IO. See :ref:`xradar_integration`
+for the full xradar-first reading guide, the supported-API table for
+:class:`pyart.xradar.Xradar`/:class:`pyart.xradar.Xgrid`, and a worked
+gridding example.
 
 Correct
 =======
