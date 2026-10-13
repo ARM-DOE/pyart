@@ -26,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../_static/styles/theme.css?digest=64cc4de3f052d77215f0" rel="stylesheet" />
-<link href="../../_static/styles/pydata-sphinx-theme.css?digest=64cc4de3f052d77215f0" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
     <link rel="stylesheet" type="text/css" href="../../_static/plot_directive.css" />
@@ -41,10 +41,10 @@
     <link rel="stylesheet" type="text/css" href="../../_static/pyart-theme.css?v=40b48845" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../_static/scripts/fontawesome.js?digest=64cc4de3f052d77215f0"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0" />
-<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
     <script src="../../_static/documentation_options.js?v=c3c8ae58"></script>
     <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
@@ -78,6 +78,7 @@
     <link rel="next" title="pyart.core.Grid.add_field" href="pyart.core.Grid.add_field.html" />
     <link rel="prev" title="pyart.core" href="pyart.core.html" /> 
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="2.3" />
   
@@ -1257,15 +1258,15 @@ grid = Grid.from_legacy_parameters(fields, axes, metadata).</p>
 <dl class="field-list simple">
 <dt class="field-odd">Variables<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>time</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Time of the grid.</p></li>
-<li><p><strong>fields</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> of </em><em>dicts</em>) – Moments from radars or other variables.</p></li>
-<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a>) – Metadata describing the grid.</p></li>
+<li><p><strong>time</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><em>dict</em></a>) – Time of the grid.</p></li>
+<li><p><strong>fields</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><em>dict</em></a><em> of </em><em>dicts</em>) – Moments from radars or other variables.</p></li>
+<li><p><strong>metadata</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><em>dict</em></a>) – Metadata describing the grid.</p></li>
 <li><p><strong>origin_altitude</strong> (<em>origin_longitude</em><em>, </em><em>origin_latitude</em><em>,</em>) – Geographic coordinate of the origin of the grid.</p></li>
 <li><p><strong>z</strong> (<em>x</em><em>, </em><em>y</em><em>,</em>) – Distance from the grid origin for each Cartesian coordinate axis in a
 one dimensional array. Defines the spacing along the three grid axes
 which is repeated throughout the grid, making a rectilinear grid.</p></li>
 <li><p><strong>nz</strong> (<a class="reference internal" href="pyart.xradar.Xgrid.nx.html#pyart.xradar.Xgrid.nx" title="pyart.xradar.Xgrid.nx"><em>nx</em></a><em>, </em><a class="reference internal" href="pyart.xradar.Xgrid.ny.html#pyart.xradar.Xgrid.ny" title="pyart.xradar.Xgrid.ny"><em>ny</em></a><em>,</em>) – Number of grid points along the given Cartesian dimension.</p></li>
-<li><p><strong>projection</strong> (<em>dic</em><em> or </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.14)"><em>str</em></a>) – Projection parameters defining the map projection used to transform
+<li><p><strong>projection</strong> (<em>dic</em><em> or </em><a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#str" title="(in Python v3.15)"><em>str</em></a>) – Projection parameters defining the map projection used to transform
 from Cartesian to geographic coordinates. None will use the default
 dictionary with the ‘proj’ key set to ‘pyart_aeqd’ indicating that
 the native Py-ART azimuthal equidistant projection is used. Other
@@ -1277,9 +1278,9 @@ latitude will be added to the dictionary as ‘lon_0’ and ‘lat_0’.
 Use the <a class="reference internal" href="pyart.core.Grid.get_projparams.html#pyart.core.Grid.get_projparams" title="pyart.core.Grid.get_projparams"><code class="xref py py-func docutils literal notranslate"><span class="pre">get_projparams()</span></code></a> method to retrieve a copy of this
 attribute dictionary with this special key evaluated.</p></li>
 <li><p><strong>radar_altitude</strong> (<em>radar_longitude</em><em>, </em><em>radar_latitude</em><em>,</em>) – Geographic location of the radars which make up the grid.</p></li>
-<li><p><strong>radar_time</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Start of collection for the radar which make up the grid.</p></li>
-<li><p><strong>radar_name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.14)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Names of the radars which make up the grid.</p></li>
-<li><p><strong>nradar</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.14)"><em>int</em></a>) – Number of radars whose data was used to make the grid.</p></li>
+<li><p><strong>radar_time</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Start of collection for the radar which make up the grid.</p></li>
+<li><p><strong>radar_name</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/stdtypes.html#dict" title="(in Python v3.15)"><em>dict</em></a><em> or </em><em>None</em><em>, </em><em>optional</em>) – Names of the radars which make up the grid.</p></li>
+<li><p><strong>nradar</strong> (<a class="reference external" href="https://docs.python.org/3/builtins/functions.html#int" title="(in Python v3.15)"><em>int</em></a>) – Number of radars whose data was used to make the grid.</p></li>
 <li><p><strong>projection_proj</strong> (<em>Proj</em>) – pyproj.Proj instance for the projection specified by the projection
 attribute. If the ‘pyart_aeqd’ projection is specified accessing this
 attribute will raise a ValueError.</p></li>
@@ -1418,8 +1419,8 @@ attribute.</p></li>
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../_static/scripts/bootstrap.js?digest=64cc4de3f052d77215f0"></script>
-<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=64cc4de3f052d77215f0"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -1452,7 +1453,7 @@ attribute.</p></li>
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.22.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
 </p></div>
       
     </div>
