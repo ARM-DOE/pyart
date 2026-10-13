@@ -63,6 +63,13 @@ Contributors should ensure that the submitted code, commits, pull
 request messages and more should not contain any private data,
 proprietary code, or restricted information.
 
+### Company Policy
+
+Many AI tools train or retain data that is submitted to the prompt. Many employers
+only approve tools that do not train or retrain on such data. Contributors should
+validate that the tool they use is acceptable to use under their employer's
+policy before feeding in the code or data.
+
 ## Code and Tests
 
 ### Review Every Line
