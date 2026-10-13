@@ -10,7 +10,6 @@ An example which uses xradar and Py-ART to dealias radial velocities.
 # Author: Max Grover (mgrover@anl.gov)
 # License: BSD 3 clause
 
-
 import cartopy.crs as ccrs
 import matplotlib.pyplot as plt
 import xradar as xd

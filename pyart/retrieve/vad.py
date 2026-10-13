@@ -9,7 +9,14 @@ from ..config import get_field_name
 from ..core import HorizontalWindProfile
 
 
-def vad_michelson(radar, vel_field=None, z_want=None, gatefilter=None):
+def vad_michelson(
+    radar,
+    vel_field=None,
+    z_want=None,
+    gatefilter=None,
+    valid_ray_min=16,
+    max_speed_error=2.0,
+):
     """
     Velocity azimuth display.
 
@@ -28,12 +35,36 @@ def vad_michelson(radar, vel_field=None, z_want=None, gatefilter=None):
     gatefilter : GateFilter, optional
         A GateFilter indicating radar gates that should be excluded
         from the import vad calculation.
+    valid_ray_min : int, optional
+        Minimum number of rays with valid velocity a gate needs to be used.
+        Gates with fewer rays give noisy fits and are left out. Raising it
+        smooths the profile but leaves more heights empty. Default is 16,
+        the same as vad_browning.
+    max_speed_error : float, optional
+        Largest standard error of the fitted wind speed, in m/s, for a gate
+        to be used. The error grows when valid rays are few, bunched in one
+        part of the circle, or noisy, so this rejects unreliable fits.
+        Gates are then averaged into height bins weighted by 1 / error**2.
+        None turns the check off. Default is 2.0.
 
     Returns
     -------
     vad : HorizontalWindProfile
         A velocity azimuth display object containing height, speed, direction,
         u_wind, v_wind from a radar object.
+
+    Notes
+    -----
+    At each gate, the radial velocities of the valid rays are fitted by
+    least squares to v = c + a sin(az) + b cos(az), where az is the
+    azimuth. The horizontal wind speed is sqrt(a**2 + b**2) / cos(elevation).
+    Masked gates are left out of the fit.
+
+    The fit also gives the standard error of the speed. It is large when a
+    gate has few valid rays, when they are bunched in one part of the circle,
+    or when the data are noisy. Gates above max_speed_error are left out, and
+    the rest are averaged into the z_want height bins weighted by
+    1 / error**2.
 
     References
     ----------
@@ -46,6 +77,7 @@ def vad_michelson(radar, vel_field=None, z_want=None, gatefilter=None):
     """
     speeds = []
     angles = []
+    errors = []
     heights = []
 
     # Pulling z data from radar
@@ -80,13 +112,16 @@ def vad_michelson(radar, vel_field=None, z_want=None, gatefilter=None):
         elevation = radar.fixed_angle["data"][i]
 
         # Calculating speed and angle
-        speed, angle = _vad_calculation_m(used_velocities, azimuth, elevation)
+        speed, angle, speed_error = _vad_calculation_m(
+            used_velocities, azimuth, elevation, valid_ray_min, max_speed_error
+        )
 
         print("max height", z_gate_data[index_start, :].max(), "meters")
 
         # Filling empty arrays with data
         speeds.append(speed)
         angles.append(angle)
+        errors.append(speed_error)
         heights.append(z_gate_data[index_start, :])
 
     # Combining arrays and sorting
@@ -97,95 +132,101 @@ def vad_michelson(radar, vel_field=None, z_want=None, gatefilter=None):
     speed_ordered = speed_array[arg_order]
     height_ordered = height_array[arg_order]
     angle_ordered = angle_array[arg_order]
+    # Weight each gate by its confidence; a floor keeps exact fits finite
+    error_ordered = np.concatenate(errors)[arg_order]
+    weight_ordered = 1.0 / np.maximum(error_ordered, 0.01) ** 2
 
     # Calculating U and V wind
     u_ordered, v_ordered = _sd_to_uv(speed_ordered, angle_ordered)
-    u_mean = _interval_mean(u_ordered, height_ordered, z_want)
-    v_mean = _interval_mean(v_ordered, height_ordered, z_want)
+    u_mean = _interval_mean(u_ordered, height_ordered, z_want, weight_ordered)
+    v_mean = _interval_mean(v_ordered, height_ordered, z_want, weight_ordered)
     vad = HorizontalWindProfile.from_u_and_v(z_want, u_mean, v_mean)
     return vad
 
 
-def _vad_calculation_m(velocity_field, azimuth, elevation):
-    """Calculates VAD for a scan, returns speed and angle
-    outdic = vad_algorithm(velocity_field, azimuth, elevation)
-    velocity_field is a 2D array, azimuth is a 1D array,
-    elevation is a number. All in degrees, m outdic contains
-    speed and angle."""
+def _vad_calculation_m(
+    velocity_field, azimuth, elevation, valid_ray_min=0, max_speed_error=None
+):
+    """Fit v = c + a sin(az) + b cos(az) at each gate by least squares.
 
-    # Creating array with radar velocity data
-    nrays, nbins = velocity_field.shape
-    nrays2 = nrays // 2
-    velocity_count = np.ma.empty((nrays2, nbins, 2))
-    velocity_count[:, :, 0] = velocity_field[0:nrays2, :]
-    velocity_count[:, :, 1] = velocity_field[nrays2:, :]
-
-    # Converting from degress to radians
-    sinaz = np.sin(np.deg2rad(azimuth))
-    cosaz = np.cos(np.deg2rad(azimuth))
-
-    # Masking array and testing for nan values
-    sumv = np.ma.sum(velocity_count, 2)
-    vals = np.isnan(sumv)
-    vals2 = np.vstack((vals, vals))
-
-    # Summing non-nan data and creating new array with summed data
-    count = np.sum(~np.isnan(sumv), 0)
-    count = np.float64(count)
-    u_m = np.array([np.nansum(sumv, 0) // (2 * count)])
-
-    # Creating 0 value arrays
-    cminusu_mcos = np.zeros((nrays, nbins))
-    cminusu_msin = np.zeros((nrays, nbins))
-    sincos = np.zeros((nrays, nbins))
-    sin2 = np.zeros((nrays, nbins))
-    cos2 = np.zeros((nrays, nbins))
-
-    # Summing all sin and cos and setting select entires to nan
-    for i in range(nbins):
-        cminusu_mcos[:, i] = cosaz * (velocity_field[:, i] - u_m[:, i])
-        cminusu_msin[:, i] = sinaz * (velocity_field[:, i] - u_m[:, i])
-        sincos[:, i] = sinaz * cosaz
-        sin2[:, i] = sinaz**2
-        cos2[:, i] = cosaz**2
-
-    cminusu_mcos[vals2] = np.nan
-    cminusu_msin[vals2] = np.nan
-    sincos[vals2] = np.nan
-    sin2[vals2] = np.nan
-    cos2[vals2] = np.nan
-    sumcminu_mcos = np.nansum(cminusu_mcos, 0)
-    sumcminu_msin = np.nansum(cminusu_msin, 0)
-    sumsincos = np.nansum(sincos, 0)
-    sumsin2 = np.nansum(sin2, 0)
-    sumcos2 = np.nansum(cos2, 0)
-
-    # Calculating speed and angle values
-    b_value = (sumcminu_mcos - (sumsincos * sumcminu_msin / sumsin2)) / (
-        sumcos2 - (sumsincos**2) / sumsin2
+    Returns the horizontal speed, the angle and the standard error of the
+    speed. Gates with fewer than valid_ray_min valid rays, or a speed error
+    above max_speed_error, are set to nan.
+    """
+    # Masked gates become nan so they are left out of the fit
+    velocity_field = np.ma.filled(
+        np.ma.asarray(velocity_field, dtype=np.float64), np.nan
     )
-    a_value = (sumcminu_msin - b_value * sumsincos) / sumsin2
-    speed = np.sqrt(a_value**2 + b_value**2) / np.cos(np.deg2rad(elevation))
+    valid = ~np.isnan(velocity_field)
+    velocity = np.where(valid, velocity_field, 0.0)
+    n_valid = valid.sum(axis=0)
+
+    # Design matrix, one row per ray: [1, sin(az), cos(az)]
+    az = np.deg2rad(azimuth)
+    design = np.stack([np.ones_like(az), np.sin(az), np.cos(az)], axis=1)
+
+    # Normal equations for every gate at once, using valid rays only
+    normal = np.einsum("ij,ik,il->jkl", valid.astype(np.float64), design, design)
+    rhs = np.einsum("ij,ik->jk", velocity, design)
+    solvable = (n_valid > 3) & (np.abs(np.linalg.det(normal)) > 1e-9)
+    normal[~solvable] = np.eye(3)
+    normal_inv = np.linalg.inv(normal)
+    params = np.einsum("jkl,jl->jk", normal_inv, rhs)
+
+    # Standard errors from the scatter left after the fit
+    residual = np.where(valid, velocity - design @ params.T, 0.0)
+    variance = (residual**2).sum(axis=0) / np.maximum(n_valid - 3, 1)
+    cov = variance[:, np.newaxis, np.newaxis] * normal_inv
+
+    a_value = params[:, 1]
+    b_value = params[:, 2]
+    amplitude = np.hypot(a_value, b_value)
+    amplitude_var = (
+        a_value**2 * cov[:, 1, 1]
+        + b_value**2 * cov[:, 2, 2]
+        + 2 * a_value * b_value * cov[:, 1, 2]
+    ) / np.maximum(amplitude**2, np.finfo(np.float64).tiny)
+
+    cos_elevation = np.cos(np.deg2rad(elevation))
+    speed = amplitude / cos_elevation
+    speed_error = np.sqrt(amplitude_var) / cos_elevation
     angle = np.arctan2(a_value, b_value)
-    return speed, angle
+
+    # Leave out gates without enough valid rays or with an unreliable fit
+    rejected = ~solvable | (n_valid < valid_ray_min)
+    if max_speed_error is not None:
+        rejected |= speed_error > max_speed_error
+    speed[rejected] = np.nan
+    angle[rejected] = np.nan
+    speed_error[rejected] = np.nan
+    return speed, angle, speed_error
 
 
-def _interval_mean(data, current_z, wanted_z):
+def _interval_mean(data, current_z, wanted_z, weights=None):
     """Find the mean of data indexed by current_z
     at wanted_z on intervals wanted_z+/- delta
-    wanted_z."""
+    wanted_z. Nan values are skipped, and weights, when given,
+    make it a weighted mean."""
     delta = wanted_z[1] - wanted_z[0]
+    if weights is None:
+        weights = np.ones_like(data)
+    # argmin returns the first of tied gate heights on every platform,
+    # unlike argsort, whose tie order depends on the sort implementation
     pos_lower = [
-        np.argsort((current_z - (wanted_z[i] - delta / 2.0)) ** 2)[0]
+        np.argmin((current_z - (wanted_z[i] - delta / 2.0)) ** 2)
         for i in range(len(wanted_z))
     ]
     pos_upper = [
-        np.argsort((current_z - (wanted_z[i] + delta / 2.0)) ** 2)[0]
+        np.argmin((current_z - (wanted_z[i] + delta / 2.0)) ** 2)
         for i in range(len(wanted_z))
     ]
-    mean_values = np.array(
-        [(data[pos_lower[i] : pos_upper[i]]).mean() for i in range(len(pos_upper))]
-    )
+    mean_values = np.full(len(wanted_z), np.nan)
+    for i in range(len(wanted_z)):
+        values = data[pos_lower[i] : pos_upper[i]]
+        value_weights = weights[pos_lower[i] : pos_upper[i]]
+        use = np.isfinite(values) & np.isfinite(value_weights)
+        if use.any():
+            mean_values[i] = np.average(values[use], weights=value_weights[use])
     return mean_values
 
 
