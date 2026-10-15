@@ -8,17 +8,19 @@ on:
     branches:
       - main
 
-# This job installs dependencies, build the website, and pushes it to `gh-pages`
 jobs:
-  deploy-website:
+  build-site:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     defaults:
       run:
         shell: bash -l {0}
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
 
-      # Create environment using micromamba
       - name: Install Conda environment with Micromamba
         uses: mamba-org/setup-micromamba@f457c30a868e4760d3a6fcea5f25dc655b8edf39 # v3.2.1
         with:
@@ -35,15 +37,32 @@ jobs:
         run: |
           pip install -e .
 
-      # Build the website
       - name: Build the site
         run: |
           cd doc
           make html
-      # Push the book's HTML to github-pages
+
+      - name: Upload site artifact
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: site-html
+          path: doc/build/html
+
+  deploy-site:
+    needs: build-site
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: write
+    steps:
+      - name: Download site artifact
+        uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: site-html
+          path: doc/build/html
+
       - name: GitHub Pages action
         uses: peaceiris/actions-gh-pages@84c30a85c19949d7eee79c4ff27748b70285e453 # v4.1.0
-        if: github.ref == 'refs/heads/main'
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: doc/build/html
