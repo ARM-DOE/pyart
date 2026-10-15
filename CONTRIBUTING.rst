@@ -217,6 +217,11 @@ An example:
 Testing
 -------
 
+Upstream breakage (e.g. new releases of ``xarray``, ``xradar``, or other
+dependencies) is watched by a nightly job defined in
+``.github/workflows/upstream-ci.yml``; it can also be triggered on a pull
+request by applying the ``run-upstream-ci`` label.
+
 When adding a new function to pyart it is important to add your function to
 the __init__.py file under the corresponding pyart folder.
 
