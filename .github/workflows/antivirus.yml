@@ -11,6 +11,8 @@ jobs:
     name: AV scan
     steps:
     - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      with:
+        persist-credentials: false
     - name: Git AV Scan
       uses: djdefi/gitavscan@66a83ba98eca422f37322bc9851fa56195b252f3 # v23
       with:
