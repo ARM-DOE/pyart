@@ -10,7 +10,6 @@ An example which uses xradar and Py-ART to create a PPI plot of a Cfradial file.
 # Author: Max Grover (mgrover@anl.gov)
 # License: BSD 3 clause
 
-
 import xradar as xd
 
 import pyart
@@ -23,8 +22,15 @@ tree = xd.io.open_cfradial1_datatree(filename)
 # Give the tree Py-ART radar methods
 radar = tree.pyart.to_radar()
 
+# Inspect the resulting object -- it behaves like a Py-ART Radar, and its
+# fields are numpy masked arrays just like a Radar read directly from disk
+radar.info("compact")
+
 # Plot the Reflectivity Field (corrected_reflectivity_horizontal)
 display = pyart.graph.RadarMapDisplay(radar)
 display.plot_ppi(
     "corrected_reflectivity_horizontal", cmap="ChaseSpectral", vmin=-20, vmax=70
 )
+
+# If a function needs a "plain" pyart.core.Radar instead of this Xradar
+# wrapper, use pyart.xradar.to_pyart_radar to coerce it explicitly.
