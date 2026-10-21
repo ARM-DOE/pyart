@@ -22,7 +22,7 @@ Important Links
 - Official source code repository: https://github.com/ARM-DOE/pyart
 - HTML documentation: https://arm-doe.github.io/pyart
 - Examples: https://arm-doe.github.io/pyart/examples/
-- Mailing List: http://groups.google.com/group/pyart-users/
+- Discussions: https://github.com/ARM-DOE/pyart/discussions
 - Issue Tracker: https://github.com/ARM-DOE/pyart/issues
 
 
@@ -67,7 +67,7 @@ If you are using mamba::
 Resources
 ---------
 
-Pyart:
+Py-ART:
 
 - https://github.com/openradar/AMS-Short-Course-on-Open-Source-Radar-Software
 - https://github.com/EVS-ATMOS/pyart_short_course
@@ -79,6 +79,17 @@ Git:
 
 - https://git-scm.com/book/en/v2
 
+
+
+
+AI Policy
+---------
+
+Py-ART contributors may use AI tools as part of their workflow. Please read the
+[AI Policy](https://github.com/pyart/AI_POLICY.md)
+before submitting any pull requests that had code changes assisted by AI.
+Pull requests can not be opened by an agent and pull requests and dicussions
+must contain your own words.
 
 Code Style
 ----------
