@@ -15,7 +15,7 @@ ensuring that:
 
 This policy applies regardless of whether the code was written by hand, with AI
 assistance, or generated entirely by an AI tool. It is adapted from the
-[xarray AI Usage Policy](https://github.com/pydata/xarray/blob/main/doc/contribute/ai-policy.md) and [xradar AI Usage Policy]()
+[xarray AI Usage Policy](https://github.com/pydata/xarray/blob/main/doc/contribute/ai-policy.md) and [xradar AI Usage Policy](https://github.com/openradar/xradar/blob/main/docs/ai_policy.md)
 and aligns with similar efforts across the scientific Python ecosystem, with
 pyart-specific additions for CI, packaging, and dependency changes.
 
