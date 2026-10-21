@@ -120,7 +120,6 @@ select = [
 build-verbosity = 1
 skip = [
     "cp3*t-*", # free-threading is not supported
-    "cp315*", # blocked by cftime
     "*musllinux*", # missing support from netCDF4
 ]
 test-requires = [
