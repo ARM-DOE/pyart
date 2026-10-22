@@ -367,7 +367,8 @@ class Xradar:
 
     def __init__(self, xradar, default_sweep="sweep_0", scan_type=None):
         # Make sure that first dimension is azimuth
-        self.xradar = apply_to_sweeps(xradar, ensure_dim)
+        ray_dim = "elevation" if scan_type == "rhi" else "azimuth"
+        self.xradar = apply_to_sweeps(xradar, ensure_dim, dim=ray_dim)
         # Run through the sanity check for latitude/longitude/altitude
         for coord in ["latitude", "longitude", "altitude"]:
             if coord not in self.xradar:
@@ -1555,16 +1556,20 @@ def to_pyart_radar(radar):
 
 def ensure_dim(ds, dim="azimuth"):
     """
-    Ensure the first dimension is a certain coordinate (ex. azimuth)
+    Ensure the first (ray) dimension is a certain coordinate (ex. azimuth
+    for PPI, elevation for RHI).
     """
     core_dims = ds.dims
-    if dim not in core_dims:
-        if "time" in core_dims:
-            ds = ds.swap_dims({"time": dim})
-        else:
-            return ValueError(
-                "Poorly formatted data: time/azimuth not included as core dimension."
-            )
+    if dim in core_dims:
+        return ds
+    if "time" in core_dims:
+        return ds.swap_dims({"time": dim})
+    # Some xradar versions already expose the natural ray dimension
+    # (e.g. "elevation" for RHI) under its own name rather than "time".
+    if dim != "azimuth" or "elevation" not in core_dims:
+        raise ValueError(
+            "Poorly formatted data: " f"time/{dim} not included as core dimension."
+        )
     return ds
 
 
