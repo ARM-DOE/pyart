@@ -367,8 +367,7 @@ class Xradar:
 
     def __init__(self, xradar, default_sweep="sweep_0", scan_type=None):
         # Make sure that first dimension is azimuth
-        ray_dim = "elevation" if scan_type == "rhi" else "azimuth"
-        self.xradar = apply_to_sweeps(xradar, ensure_dim, dim=ray_dim)
+        self.xradar = apply_to_sweeps(xradar, ensure_dim)
         # Run through the sanity check for latitude/longitude/altitude
         for coord in ["latitude", "longitude", "altitude"]:
             if coord not in self.xradar:
@@ -1556,20 +1555,41 @@ def to_pyart_radar(radar):
 
 def ensure_dim(ds, dim="azimuth"):
     """
-    Ensure the first (ray) dimension is a certain coordinate (ex. azimuth
-    for PPI, elevation for RHI).
+    Ensure the sweep dataset has a usable ray dimension.
+
+    Different xradar versions/layouts represent the per-ray dimension
+    differently:
+      - older layouts always call it "azimuth" (even for RHI, where the
+        varying angle "elevation" is instead a coordinate *on* that
+        "azimuth" dimension);
+      - newer layouts may name the dimension after whichever angle
+        actually varies per ray (e.g. "elevation" for RHI);
+      - cfradial1-style layouts may use "time" as the ray dimension.
+
+    This only needs to guarantee *some* ray dimension is present and,
+    when possible, aligned with `dim`; downstream code (_combine_sweeps,
+    add_field) independently looks up the dimension backing whichever
+    ray coordinate it actually needs and swaps dims itself, so this
+    function must not *require* a literal dimension named `dim` to
+    exist.
     """
     core_dims = ds.dims
     if dim in core_dims:
         return ds
     if "time" in core_dims:
         return ds.swap_dims({"time": dim})
-    # Some xradar versions already expose the natural ray dimension
-    # (e.g. "elevation" for RHI) under its own name rather than "time".
-    if dim != "azimuth" or "elevation" not in core_dims:
-        raise ValueError(
-            "Poorly formatted data: " f"time/{dim} not included as core dimension."
-        )
+    # Fall back to accepting any other recognized ray-like dimension
+    # (e.g. "azimuth" generically used even for RHI in older xradar
+    # layouts, or "elevation" directly in newer RHI layouts);
+    # downstream code resolves/swaps to the specific coordinate it
+    # needs on demand.
+    if {"azimuth", "elevation"} & set(core_dims):
+        return ds
+    raise ValueError(
+        "Poorly formatted data: no recognized ray dimension "
+        f"(looked for {dim!r}, 'time', 'azimuth', 'elevation') found; "
+        f"got {list(core_dims)}."
+    )
     return ds
 
 
