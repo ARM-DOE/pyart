@@ -409,10 +409,13 @@ class Xradar:
         for attrs in self.combined_sweeps.elevation.attrs:
             self.elevation[attrs] = self.combined_sweeps.elevation.attrs[attrs]
         # Check to see if the time is multidimensional - if it is, collapse it
-        self.combined_sweeps["sweep_fixed_angle"] = (
+        ds = self.combined_sweeps.ds.copy()
+        ds["sweep_fixed_angle"] = (
             "sweep_number",
-            np.unique(self.combined_sweeps.sweep_fixed_angle),
+            np.unique(ds["sweep_fixed_angle"]),
         )
+        self.combined_sweeps.ds = ds
+
         self.fixed_angle = dict(data=self.combined_sweeps.sweep_fixed_angle.values)
         self.fixed_angle.update(self.combined_sweeps.sweep_fixed_angle.attrs)
         self.latitude = dict(
@@ -677,19 +680,24 @@ class Xradar:
         # used to drop_duplicates() on an RHI sweep).
         ray_key = "elevation" if self.scan_type == "rhi" else "azimuth"
         for sweep in range(self.nsweeps):
-            sweep_ds = self.xradar[f"sweep_{sweep}"].to_dataset()
-            ray_dim = sweep_ds[ray_key].dims[0]
+            sweep_name = f"sweep_{sweep}"
+            child = self.xradar[sweep_name]
+            ds = child.ds.copy()
+            ray_dim = ds[ray_key].dims[0]
             if ray_dim != ray_key:
-                sweep_ds = sweep_ds.swap_dims({ray_dim: ray_key})
-            sweep_ds = sweep_ds.drop_duplicates(ray_key)
-            sweep_ds[field_name] = (
+                ds = ds.swap_dims({ray_dim: ray_key})
+            ds = ds.drop_duplicates(ray_key)
+            ds[field_name] = (
                 (ray_key, "range"),
                 self.fields[field_name]["data"][self.get_slice(sweep)],
             )
             attrs = dic.copy()
-            del attrs["data"]
-            sweep_ds[field_name].attrs = attrs
-            self.xradar[f"sweep_{sweep}"].ds = sweep_ds
+            attrs.pop("data", None)
+            ds[field_name].attrs = attrs
+
+            new_child = child.copy()
+            new_child.ds = ds
+            self.xradar.children[sweep_name] = new_child
         return
 
     def add_field_like(
