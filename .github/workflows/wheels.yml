@@ -28,7 +28,7 @@ jobs:
         with:
           persist-credentials: false
       - name: Install python
-        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7.1.0
 
       - name: Fetch all history for all tags and branches
         run: |
@@ -36,6 +36,8 @@ jobs:
 
       - name: Build wheels for CPython
         uses: pypa/cibuildwheel@b9e566a2b284570af229f6c2a33673410d0389a3 # v4.3.4
+        env:
+          CIBW_BEFORE_ALL: "python -m pip install --upgrade 'pip>=26.2.2' 'certifi>=2026.10.19'"
         with:
           output-dir: dist
 
@@ -53,6 +55,8 @@ jobs:
         with:
           persist-credentials: false
       - name: Build sdist
+        env:
+          PIPX_DEFAULT_PIP_FLAGS: "--upgrade pip>=26.2.2 certifi>=2026.10.19"
         run: pipx run build --sdist
 
       - name: Upload sdist
@@ -84,4 +88,4 @@ jobs:
           merge-multiple: true
 
       - name: Publish to PyPI
-        uses: pypa/gh-action-pypi-publish@dc37677b2e1c63e2034f94d8a5b11f265b73ba33 # v1.14.2
+        uses: pypa/gh-action-pypi-publish@7245906fb61fa33a13554f9d5fb856fe61758086 # v1.14.3
