@@ -537,7 +537,7 @@
            <span class="s2">"Mapping"</span><span class="p">,</span> <span class="s2">"MutableMapping"</span><span class="p">,</span>
            <span class="s2">"MappingView"</span><span class="p">,</span> <span class="s2">"KeysView"</span><span class="p">,</span> <span class="s2">"ItemsView"</span><span class="p">,</span> <span class="s2">"ValuesView"</span><span class="p">,</span>
            <span class="s2">"Sequence"</span><span class="p">,</span> <span class="s2">"MutableSequence"</span><span class="p">,</span>
-           <span class="s2">"ByteString"</span><span class="p">,</span> <span class="s2">"Buffer"</span><span class="p">,</span>
+           <span class="s2">"Buffer"</span><span class="p">,</span>
            <span class="p">]</span>
 
 <span class="c1"># This module has been renamed from collections.abc to _collections_abc to</span>
@@ -1311,6 +1311,7 @@
 
     <span class="fm">__reversed__</span> <span class="o">=</span> <span class="kc">None</span>
 
+<span class="n">Mapping</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">frozendict</span><span class="p">)</span>
 <span class="n">Mapping</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">mappingproxy</span><span class="p">)</span>
 <span class="n">Mapping</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">framelocalsproxy</span><span class="p">)</span>
 
@@ -1676,6 +1677,16 @@
 
 <span class="n">MutableSequence</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">list</span><span class="p">)</span>
 <span class="n">MutableSequence</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="nb">bytearray</span><span class="p">)</span>
+
+<span class="n">_deprecated_ByteString</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="s2">"ByteString"</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="fm">__getattr__</span><span class="p">(</span><span class="n">attr</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">attr</span> <span class="o">==</span> <span class="s2">"ByteString"</span><span class="p">:</span>
+        <span class="kn">import</span><span class="w"> </span><span class="nn">warnings</span>
+        <span class="n">warnings</span><span class="o">.</span><span class="n">_deprecated</span><span class="p">(</span><span class="s2">"collections.abc.ByteString"</span><span class="p">,</span> <span class="n">remove</span><span class="o">=</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">17</span><span class="p">))</span>
+        <span class="nb">globals</span><span class="p">()[</span><span class="s2">"ByteString"</span><span class="p">]</span> <span class="o">=</span> <span class="n">_deprecated_ByteString</span>
+        <span class="k">return</span> <span class="n">_deprecated_ByteString</span>
+    <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">"module 'collections.abc' has no attribute </span><span class="si">{</span><span class="n">attr</span><span class="si">!r}</span><span class="s2">"</span><span class="p">)</span>
 </pre></div>
 <div class="section ablog__blog_comments">
    

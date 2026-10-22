@@ -2166,16 +2166,41 @@
 
 <span class="k">def</span><span class="w"> </span><span class="nf">ensure_dim</span><span class="p">(</span><span class="n">ds</span><span class="p">,</span> <span class="n">dim</span><span class="o">=</span><span class="s2">"azimuth"</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">"""</span>
-<span class="sd">    Ensure the first dimension is a certain coordinate (ex. azimuth)</span>
+<span class="sd">    Ensure the sweep dataset has a usable ray dimension.</span>
+
+<span class="sd">    Different xradar versions/layouts represent the per-ray dimension</span>
+<span class="sd">    differently:</span>
+<span class="sd">      - older layouts always call it "azimuth" (even for RHI, where the</span>
+<span class="sd">        varying angle "elevation" is instead a coordinate *on* that</span>
+<span class="sd">        "azimuth" dimension);</span>
+<span class="sd">      - newer layouts may name the dimension after whichever angle</span>
+<span class="sd">        actually varies per ray (e.g. "elevation" for RHI);</span>
+<span class="sd">      - cfradial1-style layouts may use "time" as the ray dimension.</span>
+
+<span class="sd">    This only needs to guarantee *some* ray dimension is present and,</span>
+<span class="sd">    when possible, aligned with `dim`; downstream code (_combine_sweeps,</span>
+<span class="sd">    add_field) independently looks up the dimension backing whichever</span>
+<span class="sd">    ray coordinate it actually needs and swaps dims itself, so this</span>
+<span class="sd">    function must not *require* a literal dimension named `dim` to</span>
+<span class="sd">    exist.</span>
 <span class="sd">    """</span>
     <span class="n">core_dims</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">dims</span>
-    <span class="k">if</span> <span class="n">dim</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">core_dims</span><span class="p">:</span>
-        <span class="k">if</span> <span class="s2">"time"</span> <span class="ow">in</span> <span class="n">core_dims</span><span class="p">:</span>
-            <span class="n">ds</span> <span class="o">=</span> <span class="n">ds</span><span class="o">.</span><span class="n">swap_dims</span><span class="p">({</span><span class="s2">"time"</span><span class="p">:</span> <span class="n">dim</span><span class="p">})</span>
-        <span class="k">else</span><span class="p">:</span>
-            <span class="k">return</span> <span class="ne">ValueError</span><span class="p">(</span>
-                <span class="s2">"Poorly formatted data: time/azimuth not included as core dimension."</span>
-            <span class="p">)</span>
+    <span class="k">if</span> <span class="n">dim</span> <span class="ow">in</span> <span class="n">core_dims</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ds</span>
+    <span class="k">if</span> <span class="s2">"time"</span> <span class="ow">in</span> <span class="n">core_dims</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">ds</span><span class="o">.</span><span class="n">swap_dims</span><span class="p">({</span><span class="s2">"time"</span><span class="p">:</span> <span class="n">dim</span><span class="p">})</span>
+    <span class="c1"># Fall back to accepting any other recognized ray-like dimension</span>
+    <span class="c1"># (e.g. "azimuth" generically used even for RHI in older xradar</span>
+    <span class="c1"># layouts, or "elevation" directly in newer RHI layouts);</span>
+    <span class="c1"># downstream code resolves/swaps to the specific coordinate it</span>
+    <span class="c1"># needs on demand.</span>
+    <span class="k">if</span> <span class="p">{</span><span class="s2">"azimuth"</span><span class="p">,</span> <span class="s2">"elevation"</span><span class="p">}</span> <span class="o">&amp;</span> <span class="nb">set</span><span class="p">(</span><span class="n">core_dims</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">ds</span>
+    <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="s2">"Poorly formatted data: no recognized ray dimension "</span>
+        <span class="sa">f</span><span class="s2">"(looked for </span><span class="si">{</span><span class="n">dim</span><span class="si">!r}</span><span class="s2">, 'time', 'azimuth', 'elevation') found; "</span>
+        <span class="sa">f</span><span class="s2">"got </span><span class="si">{</span><span class="nb">list</span><span class="p">(</span><span class="n">core_dims</span><span class="p">)</span><span class="si">}</span><span class="s2">."</span>
+    <span class="p">)</span>
     <span class="k">return</span> <span class="n">ds</span>
 
 
