@@ -597,3 +597,70 @@ def test_calculate_scale_and_offset():
             {"data": data}, np.dtype("u1"), 100, 100
         )
         assert len(w) == 1
+
+
+def _make_radar(nsweeps, ngates=50):
+    radar = pyart.testing.make_empty_ppi_radar(ngates, 10, nsweeps)
+    radar.add_field(
+        "reflectivity",
+        {"data": np.arange(radar.nrays * ngates, dtype="float32").reshape(-1, ngates)},
+    )
+    return radar
+
+
+def _write_with_range_per_sweep(path, radar, ranges):
+    """Write a Radar as CfRadial and rewrite its ``range`` as ``range(sweep, range)``,
+    one row of ``ranges`` per sweep (CfRadial 1.4, section 2.5)."""
+    pyart.io.write_cfradial(path, radar)
+    out = str(path) + ".2d.nc"
+    with netCDF4.Dataset(path) as src, netCDF4.Dataset(out, "w") as dst:
+        dst.setncatts({k: src.getncattr(k) for k in src.ncattrs()})
+        for name, dim in src.dimensions.items():
+            dst.createDimension(name, None if dim.isunlimited() else len(dim))
+        for name, var in src.variables.items():
+            if name == "range":
+                new = dst.createVariable("range", var.dtype, ("sweep", "range"))
+                new[:] = np.array(ranges, dtype=var.dtype)
+                new.setncatts(
+                    {k: var.getncattr(k) for k in var.ncattrs() if k != "_FillValue"}
+                )
+                new.meters_to_center_of_first_gate = np.array(
+                    [r[0] for r in ranges], dtype="f4"
+                )
+                new.meters_between_gates = np.array(
+                    [r[1] - r[0] for r in ranges], dtype="f4"
+                )
+                continue
+            kw = {"fill_value": var._FillValue} if "_FillValue" in var.ncattrs() else {}
+            new = dst.createVariable(name, var.dtype, var.dimensions, **kw)
+            new.setncatts(
+                {k: var.getncattr(k) for k in var.ncattrs() if k != "_FillValue"}
+            )
+            new[:] = var[:]
+    return out
+
+
+def test_read_range_per_sweep_same_for_all_sweeps(tmp_path):
+    # a 2-D range(sweep, range) with the same range in every sweep is read as the
+    # range of the Radar, not as a range with as many gates as sweeps (#1900)
+    expected = _make_radar(3)
+    rows = [expected.range["data"]] * 3
+    path = _write_with_range_per_sweep(tmp_path / "r.nc", expected, rows)
+    radar = pyart.io.read_cfradial(path)
+    assert radar.nsweeps == 3
+    assert radar.ngates == expected.ngates
+    assert_array_equal(radar.range["data"], expected.range["data"])
+    assert radar.range["meters_to_center_of_first_gate"] == rows[0][0]
+    assert np.ndim(radar.range["meters_between_gates"]) == 0
+    assert_array_equal(
+        radar.fields["reflectivity"]["data"], expected.fields["reflectivity"]["data"]
+    )
+
+
+def test_read_range_per_sweep_differs_between_sweeps(tmp_path):
+    # a Radar has one range: a range which differs between the sweeps is an error
+    radar = _make_radar(2)
+    base = radar.range["data"]
+    path = _write_with_range_per_sweep(tmp_path / "r.nc", radar, [base, base * 1.5])
+    with pytest.raises(ValueError, match="differs between the sweeps"):
+        pyart.io.read_cfradial(path)
