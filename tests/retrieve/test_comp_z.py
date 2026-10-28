@@ -53,7 +53,7 @@ def test_composite_z():
     z_new["data"] = z.astype("float32")
     radar.add_field("reflectivity", z_new, replace_existing=True)
     compz = pyart.retrieve.composite_reflectivity(
-        radar, field=ref_field, gatefilter=gatefilter
+        radar, field=ref_field, gatefilter=gatefilter, same_nyquist=False
     )
     assert_equal(compz.fields["composite_reflectivity"]["data"].max(), 40)
 
@@ -80,7 +80,7 @@ def test_composite_z():
     z_new["data"] = z.astype("float32")
     radar.add_field("reflectivity", z_new, replace_existing=True)
     compz = pyart.retrieve.composite_reflectivity(
-        radar, field=ref_field, gatefilter=gatefilter
+        radar, field=ref_field, gatefilter=gatefilter, same_nyquist=False
     )
 
     # choose a random az
@@ -89,3 +89,38 @@ def test_composite_z():
         compz.fields["composite_reflectivity"]["data"][random_az, :],
         np.arange(0, z.shape[1]),
     )
+
+
+def test_composite_z_same_nyquist():
+    # NEXRAD VCPs mix Nyquist velocities across sweeps; same_nyquist keeps only
+    # the sweeps whose Nyquist matches the reference sweep (nyquist_vector_idx).
+    radar = pyart.io.read(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
+    ref_field = "reflectivity"
+
+    ny0 = np.round(radar.get_nyquist_vel(sweep=0))
+    # pick a sweep whose Nyquist does NOT match sweep 0 (the default reference)
+    target = next(
+        sweep
+        for sweep in radar.sweep_number["data"]
+        if abs(np.round(radar.get_nyquist_vel(sweep=sweep)) - ny0) > 1
+    )
+
+    z = np.zeros(radar.fields[ref_field]["data"].shape)
+    s_idx = radar.sweep_start_ray_index["data"][target]
+    e_idx = radar.sweep_end_ray_index["data"][target] + 1
+    z[s_idx:e_idx, :] = 40
+    z_new = copy.deepcopy(radar.fields[ref_field])
+    z_new["data"] = z.astype("float32")
+    radar.add_field(ref_field, z_new, replace_existing=True)
+
+    # same_nyquist=False uses every sweep, so the 40 dBZ layer is included
+    compz_all = pyart.retrieve.composite_reflectivity(
+        radar, field=ref_field, same_nyquist=False
+    )
+    assert_equal(compz_all.fields["composite_reflectivity"]["data"].max(), 40)
+
+    # same_nyquist=True drops the mismatched sweep, so the layer is excluded
+    compz_matched = pyart.retrieve.composite_reflectivity(
+        radar, field=ref_field, same_nyquist=True
+    )
+    assert_equal(compz_matched.fields["composite_reflectivity"]["data"].max(), 0)
