@@ -255,7 +255,7 @@ def read_odim_h5(
             rscale = [hfile[d]["where"].attrs["rscale"] for d in datasets]
             if any(rscale != rscale[0]):
                 raise ValueError("range scale changes between sweeps")
-            all_sweeps_nbins = [hfile[d]["where"].attrs["nbins"] for d in datasets]
+            all_sweeps_nbins = [int(hfile[d]["where"].attrs["nbins"]) for d in datasets]
             # check for max range off all sweeps
             max_nbins = max(all_sweeps_nbins)
 
