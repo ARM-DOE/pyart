@@ -86,7 +86,7 @@ AI Policy
 ---------
 
 Py-ART contributors may use AI tools as part of their workflow. Please read the
-[AI Policy](https://github.com/pyart/AI_POLICY.md)
+[AI Policy](https://github.com/ARM-DOE/pyart/blob/main/AI_POLICY.md)
 before submitting any pull requests that had code changes assisted by AI.
 Pull requests can not be opened by an agent and pull requests and dicussions
 must contain your own words.
