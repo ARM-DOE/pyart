@@ -58,7 +58,7 @@ jobs:
   deploy-site:
     needs: build-site
     runs-on: ubuntu-latest
-    if: github.repository == 'ARM-DOR/pyart' && github.ref == 'refs/heads/main' && github.event_name == 'push'
+    if: github.repository == 'ARM-DOE/pyart' && github.ref == 'refs/heads/main' && github.event_name == 'push'
     permissions:
       pages: write
       id-token: write
