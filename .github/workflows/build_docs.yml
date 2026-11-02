@@ -18,6 +18,7 @@ concurrency:
 jobs:
   build-site:
     runs-on: ubuntu-latest
+    if: github.repository == 'ARM-DOE/pyart'
     permissions:
       contents: read
     defaults:
