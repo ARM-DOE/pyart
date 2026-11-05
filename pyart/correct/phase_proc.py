@@ -496,8 +496,6 @@ def get_phidp_unf(
     else:
         system_zero = det_sys_phase(
             radar,
-            ncp_lev=ncp_lev,
-            rhohv_lev=rhohv_lev,
             ncp_field=ncp_field,
             rhv_field=rhv_field,
             phidp_field=phidp_field,
