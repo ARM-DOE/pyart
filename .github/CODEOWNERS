@@ -3,8 +3,8 @@
 # These owners will be the default owners for everything in
 # the repo. Unless a later match takes precedence,
 
-* @mgrover1
 * @zssherman
+* @RBhupi
 
 # any files in the intake_esm directory at the root of the
 # repository and any of its subdirectories.
