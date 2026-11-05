@@ -21,7 +21,13 @@ from ..util import rolling_window
 
 
 def det_sys_phase(
-    radar, ncp_lev=0.4, rhohv_lev=0.6, ncp_field=None, rhv_field=None, phidp_field=None
+    radar,
+    ncp_lev=0.4,
+    rhohv_lev=0.6,
+    ncp_field=None,
+    rhv_field=None,
+    phidp_field=None,
+    sweep=0,
 ):
     """
     Determine the system phase.
@@ -41,11 +47,16 @@ def det_sys_phase(
         coherent power, the copolar coefficient, and the differential phase
         shift. A value of None for any of these parameters will use the
         default field name as defined in the Py-ART configuration file.
+    sweep : int, optional
+        Sweep index (0 indexed) of the radar object used to determine the
+        system phase. Defaults to the first sweep. Useful for volumes whose
+        lowest sweep is not first (e.g. top-down scanning strategies).
 
     Returns
     -------
     sys_phase : float or None
-        Estimate of the system phase. None is not estimate can be made.
+        Estimate of the system phase. None is returned if no estimate can be
+        made.
 
     """
     # parse the field parameters
@@ -59,15 +70,20 @@ def det_sys_phase(
     ncp = radar.fields[ncp_field]["data"][:, 30:]
     rhv = radar.fields[rhv_field]["data"][:, 30:]
     phidp = radar.fields[phidp_field]["data"][:, 30:]
-    last_ray_idx = radar.sweep_end_ray_index["data"][0]
-    return _det_sys_phase(ncp, rhv, phidp, last_ray_idx, ncp_lev, rhohv_lev)
+    first_ray_idx = radar.sweep_start_ray_index["data"][sweep]
+    last_ray_idx = radar.sweep_end_ray_index["data"][sweep]
+    return _det_sys_phase(
+        ncp, rhv, phidp, first_ray_idx, last_ray_idx, ncp_lev, rhohv_lev
+    )
 
 
-def _det_sys_phase(ncp, rhv, phidp, last_ray_idx, ncp_lev=0.4, rhv_lev=0.6):
+def _det_sys_phase(
+    ncp, rhv, phidp, first_ray_idx, last_ray_idx, ncp_lev=0.4, rhv_lev=0.6
+):
     """Determine the system phase, see :py:func:`det_sys_phase`."""
     good = False
     phases = []
-    for radial in range(last_ray_idx + 1):
+    for radial in range(first_ray_idx, last_ray_idx + 1):
         meteo = np.logical_and(ncp[radial, :] > ncp_lev, rhv[radial, :] > rhv_lev)
         mpts = np.where(meteo)
         if len(mpts[0]) > 25:
@@ -407,6 +423,7 @@ def get_phidp_unf(
     ncp_field=None,
     rhv_field=None,
     phidp_field=None,
+    sys_phase_sweep=0,
 ):
     """
     Get Unfolded Phi differential phase
@@ -443,6 +460,9 @@ def get_phidp_unf(
         differential phase shift. A value of None for any of these parameters
         will use the default field name as defined in the Py-ART
         configuration file.
+    sys_phase_sweep : int, optional
+        Sweep index (0 indexed) used to determine the system phase. Not used
+        if `overide_sys_phase` is True. Defaults to the first sweep.
 
     Returns
     -------
@@ -475,7 +495,13 @@ def get_phidp_unf(
         system_zero = sys_phase
     else:
         system_zero = det_sys_phase(
-            radar, ncp_field=ncp_field, rhv_field=rhv_field, phidp_field=phidp_field
+            radar,
+            ncp_lev=ncp_lev,
+            rhohv_lev=rhohv_lev,
+            ncp_field=ncp_field,
+            rhv_field=rhv_field,
+            phidp_field=phidp_field,
+            sweep=sys_phase_sweep,
         )
         if system_zero is None:
             system_zero = sys_phase
@@ -1037,6 +1063,7 @@ def phase_proc_lp(
     window_len=35,
     proc=1,
     coef=0.914,
+    sys_phase_sweep=0,
 ):
     """
     Phase process using a LP method [Giangrande2013]_.
@@ -1094,6 +1121,9 @@ def phase_proc_lp(
         Number of worker processes, only used when `LP_solver` is 'cylp_mp'.
     coef : float, optional
         Exponent linking Z to KDP in self consistency. kdp=(10**(0.1z))*coef
+    sys_phase_sweep : int, optional
+        Sweep index (0 indexed) used to determine the system phase. Not used
+        if `overide_sys_phase` is True. Defaults to the first sweep.
 
     Returns
     -------
@@ -1148,6 +1178,7 @@ def phase_proc_lp(
         ncp_field=ncp_field,
         rhv_field=rhv_field,
         phidp_field=phidp_field,
+        sys_phase_sweep=sys_phase_sweep,
     )
     my_new_ph = copy.deepcopy(radar.fields[phidp_field])
     my_unf[:, -1] = my_unf[:, -2]
@@ -1253,6 +1284,7 @@ def phase_proc_lp_gf(
     first_gate_sysp=None,
     offset=0.0,
     doc=0,
+    sys_phase_sweep=0,
 ):
     """
     Phase process using a LP method [Giangrande2013]_ using Py-ART's Gatefilter.
@@ -1305,10 +1337,16 @@ def phase_proc_lp_gf(
     ncpts : int, optional
         Minimum number of points in a ray. Regions within a ray smaller than
         this or beginning before this gate number are excluded from unfolding.
+    first_gate_sysp : int, optional
+        Gate index from which to begin the system phase calculation. None
+        uses the default of 30.
     offset : float, optional
         Reflectivity offset to add in dBz.
     doc : int, optional
         Number of gates to "doc" off the end of a ray.
+    sys_phase_sweep : int, optional
+        Sweep index (0 indexed) used to determine the system phase. Not used
+        if `system_phase` is provided. Defaults to the first sweep.
 
     Returns
     -------
@@ -1361,6 +1399,7 @@ def phase_proc_lp_gf(
         nowrap=nowrap,
         phidp_field=phidp_field,
         first_gate_sysp=first_gate_sysp,
+        sys_phase_sweep=sys_phase_sweep,
     )
 
     my_new_ph = copy.deepcopy(radar.fields[phidp_field])
@@ -1462,6 +1501,7 @@ def get_phidp_unf_gf(
     nowrap=None,
     phidp_field=None,
     first_gate_sysp=None,
+    sys_phase_sweep=0,
 ):
     """
     Get Unfolded Phi differential phase in areas not gatefiltered.
@@ -1489,6 +1529,12 @@ def get_phidp_unf_gf(
         differential phase shift. A value of None for any of these parameters
         will use the default field name as defined in the Py-ART
         configuration file.
+    first_gate_sysp : int, optional
+        Gate index from which to begin the system phase calculation. None
+        uses the default of 30.
+    sys_phase_sweep : int, optional
+        Sweep index (0 indexed) used to determine the system phase. Not used
+        if `sys_phase` is provided. Defaults to the first sweep.
 
     Returns
     -------
@@ -1506,7 +1552,11 @@ def get_phidp_unf_gf(
         system_zero = sys_phase
     else:
         system_zero = det_sys_phase_gf(
-            radar, gatefilter, phidp_field=phidp_field, first_gate=first_gate_sysp
+            radar,
+            gatefilter,
+            phidp_field=phidp_field,
+            first_gate=first_gate_sysp,
+            sweep=sys_phase_sweep,
         )
         if system_zero is None:
             system_zero = -135
@@ -1573,7 +1623,7 @@ def get_phidp_unf_gf(
     return cordata
 
 
-def det_sys_phase_gf(radar, gatefilter, phidp_field=None, first_gate=30.0):
+def det_sys_phase_gf(radar, gatefilter, phidp_field=None, first_gate=30, sweep=0):
     """
     Determine the system phase.
 
@@ -1588,28 +1638,37 @@ def det_sys_phase_gf(radar, gatefilter, phidp_field=None, first_gate=30.0):
         differential phase shift. A value of None will use the default
         field name as defined in the Py-ART configuration file.
     first_gate : int, optional
-        Gate index for where to being applying the gatefilter.
+        Gate index for where to being applying the gatefilter. None uses
+        the default of 30.
+    sweep : int, optional
+        Sweep index (0 indexed) used to determine the system phase.
+        Defaults to the first sweep.
 
     Returns
     -------
     sys_phase : float or None
-        Estimate of the system phase. None is not estimate can be made.
+        Estimate of the system phase. None is returned if no estimate can be
+        made.
 
     """
     # parse the field parameters
     if phidp_field is None:
         phidp_field = get_field_name("differential_phase")
+    if first_gate is None:
+        first_gate = 30
+    first_gate = int(first_gate)
     phidp = radar.fields[phidp_field]["data"][:, first_gate:]
-    last_ray_idx = radar.sweep_end_ray_index["data"][0]
+    first_ray_idx = radar.sweep_start_ray_index["data"][sweep]
+    last_ray_idx = radar.sweep_end_ray_index["data"][sweep]
     is_meteo = gatefilter.gate_included[:, first_gate:]
-    return _det_sys_phase_gf(phidp, last_ray_idx, is_meteo)
+    return _det_sys_phase_gf(phidp, first_ray_idx, last_ray_idx, is_meteo)
 
 
-def _det_sys_phase_gf(phidp, last_ray_idx, radar_meteo):
+def _det_sys_phase_gf(phidp, first_ray_idx, last_ray_idx, radar_meteo):
     """Determine the system phase, see :py:func:`det_sys_phase`."""
     good = False
     phases = []
-    for radial in range(last_ray_idx + 1):
+    for radial in range(first_ray_idx, last_ray_idx + 1):
         meteo = radar_meteo[radial, :]
         mpts = np.where(meteo)
         if len(mpts[0]) > 25:

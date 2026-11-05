@@ -160,3 +160,72 @@ def test_perform_phase_processing_gf(LP_solver="cvxopt"):
     )
     assert phidp["data"].max() < 360.0
     assert kdp["data"].max() < 6.0
+
+
+def _make_two_sweep_radar(ngates=100, rays_per_sweep=10):
+    """Radar with PhiDP = 50 deg in sweep 0 and 80 deg in sweep 1."""
+    radar = pyart.testing.make_empty_ppi_radar(ngates, rays_per_sweep, 2)
+    shape = (2 * rays_per_sweep, ngates)
+
+    phidp = np.full(shape, 50.0)
+    phidp[rays_per_sweep:, :] = 80.0
+
+    radar.add_field("differential_phase", {"data": phidp})
+    radar.add_field("normalized_coherent_power", {"data": np.ones(shape)})
+    radar.add_field("cross_correlation_ratio", {"data": np.ones(shape)})
+    return radar
+
+
+def test_det_sys_phase_default_is_first_sweep():
+    radar = _make_two_sweep_radar()
+    assert pyart.correct.phase_proc.det_sys_phase(radar) == pytest.approx(50.0)
+
+
+def test_det_sys_phase_sweep_selection():
+    radar = _make_two_sweep_radar()
+    sys_phase = pyart.correct.phase_proc.det_sys_phase
+    assert sys_phase(radar, sweep=0) == pytest.approx(50.0)
+    assert sys_phase(radar, sweep=1) == pytest.approx(80.0)
+    # negative index selects the last sweep (lowest sweep in top-down volumes)
+    assert sys_phase(radar, sweep=-1) == pytest.approx(80.0)
+
+
+def test_det_sys_phase_sweep_ignores_other_sweeps():
+    """Invalid data in sweep 0 must not affect the estimate from sweep 1."""
+    radar = _make_two_sweep_radar()
+    radar.fields["normalized_coherent_power"]["data"][:10, :] = 0.0
+    sys_phase = pyart.correct.phase_proc.det_sys_phase
+    assert sys_phase(radar, sweep=0) is None
+    assert sys_phase(radar, sweep=1) == pytest.approx(80.0)
+
+
+def test_det_sys_phase_gf_sweep_selection():
+    radar = _make_two_sweep_radar()
+    gatefilter = pyart.filters.GateFilter(radar)
+    gatefilter.exclude_below("normalized_coherent_power", 0.5)
+    gatefilter.exclude_below("cross_correlation_ratio", 0.8)
+    sys_phase_gf = pyart.correct.phase_proc.det_sys_phase_gf
+    assert sys_phase_gf(radar, gatefilter) == pytest.approx(50.0)
+    assert sys_phase_gf(radar, gatefilter, sweep=0) == pytest.approx(50.0)
+    assert sys_phase_gf(radar, gatefilter, sweep=1) == pytest.approx(80.0)
+    assert sys_phase_gf(radar, gatefilter, sweep=-1) == pytest.approx(80.0)
+
+
+def test_det_sys_phase_gf_sweep_ignores_other_sweeps():
+    radar = _make_two_sweep_radar()
+    radar.fields["normalized_coherent_power"]["data"][:10, :] = 0.0
+    gatefilter = pyart.filters.GateFilter(radar)
+    gatefilter.exclude_below("normalized_coherent_power", 0.5)
+    sys_phase_gf = pyart.correct.phase_proc.det_sys_phase_gf
+    assert sys_phase_gf(radar, gatefilter, sweep=0) is None
+    assert sys_phase_gf(radar, gatefilter, sweep=1) == pytest.approx(80.0)
+
+
+def test_det_sys_phase_gf_first_gate_none_and_float():
+    """first_gate=None and a float (the old default) must both work."""
+    radar = _make_two_sweep_radar()
+    gatefilter = pyart.filters.GateFilter(radar)
+    gatefilter.include_all()
+    sys_phase_gf = pyart.correct.phase_proc.det_sys_phase_gf
+    assert sys_phase_gf(radar, gatefilter, first_gate=None) == pytest.approx(50.0)
+    assert sys_phase_gf(radar, gatefilter, first_gate=30.0) == pytest.approx(50.0)
