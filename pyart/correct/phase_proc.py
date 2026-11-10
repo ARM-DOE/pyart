@@ -18,6 +18,7 @@ from numpy import ma
 from ..config import get_field_name, get_fillvalue, get_metadata
 from ..filters import GateFilter
 from ..util import rolling_window
+from .unwrap import unwrap_masked
 
 
 def det_sys_phase(
@@ -292,56 +293,6 @@ def smooth_masked(raw_data, wind_len=11, min_valid=6, wind_type="median"):
         )[ind_valid]
 
     return data_smooth
-
-
-def unwrap_masked(lon, centered=False, copy=True):
-    """
-    Unwrap a sequence of longitudes or headings in degrees.
-
-    Parameters
-    ----------
-    lon : array
-        Longtiudes or heading in degress. If masked output will also be
-        masked.
-    centered : bool, optional
-        Center the unwrapping as close to zero as possible.
-    copy : bool, optional.
-        True to return a copy, False will avoid a copy when possible.
-
-    Returns
-    -------
-    unwrap : array
-        Array of unwrapped longtitudes or headings, in degrees.
-
-    """
-    masked_input = ma.isMaskedArray(lon)
-    if masked_input:
-        fill_value = lon.fill_value
-        # masked_invalid loses the original fill_value (ma bug, 2011/01/20)
-    lon = np.ma.masked_invalid(lon).astype(float)
-    if lon.ndim != 1:
-        raise ValueError("Only 1-D sequences are supported")
-    if lon.shape[0] < 2:
-        return lon
-    x = lon.compressed()
-    if len(x) < 2:
-        return lon
-    w = np.zeros(x.shape[0] - 1, int)
-    ld = np.diff(x)
-    np.putmask(w, ld > 180, -1)
-    np.putmask(w, ld < -180, 1)
-    x[1:] += w.cumsum() * 360.0
-    if centered:
-        x -= 360 * np.round(x.mean() / 360.0)
-    if lon.mask is ma.nomask:
-        lon[:] = x
-    else:
-        lon[~lon.mask] = x
-    if masked_input:
-        lon.fill_value = fill_value
-        return lon
-    else:
-        return lon.filled(np.nan)
 
 
 # this function adapted from the Scipy Cookbook:

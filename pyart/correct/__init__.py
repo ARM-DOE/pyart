@@ -19,6 +19,6 @@ from .dealias import dealias_fourdd  # noqa
 from .despeckle import despeckle_field, find_objects  # noqa
 from .phase_proc import phase_proc_lp, phase_proc_lp_gf  # noqa
 from .region_dealias import dealias_region_based  # noqa
-from .unwrap import dealias_unwrap_phase  # noqa
+from .unwrap import dealias_unwrap_phase, unwrap_masked  # noqa
 
 __all__ = [s for s in dir() if not s.startswith("_")]
