@@ -113,7 +113,8 @@ def fzl_index(fzl, ranges, elevation, radar_height):
     Returns
     -------
     idx : int
-        Index of last gate which has an altitude below `fzl`.
+        Index of last gate which has an altitude below `fzl`. Returns 0 if
+        no gate is below `fzl` (e.g. the freezing level is under the radar).
 
     Notes
     -----
@@ -124,16 +125,14 @@ def fzl_index(fzl, ranges, elevation, radar_height):
     p_r = 4.0 * Re / 3.0
     z = (
         radar_height
-        + (ranges**2 + p_r**2 + 2.0 * ranges * p_r * np.sin(elevation * np.pi / 180.0))
+        + (ranges**2 + p_r**2 + 2.0 * ranges * p_r * np.sin(np.deg2rad(elevation)))
         ** 0.5
         - p_r
     )
-    # Make sure the freezing level isn't under the radar!
-    # Return the minimum window size for the 5-pt filter
-    if np.all(z > fzl):
-        return 6
-    else:
-        return np.where(z < fzl)[0].max()
+    below = np.where(z < fzl)[0]
+    if below.size == 0:
+        return 0
+    return below.max()
 
 
 def det_process_range(radar, sweep, fzl, doc=10):
@@ -143,6 +142,10 @@ def det_process_range(radar, sweep, fzl, doc=10):
     Queues the radar and returns the indices which can be used to slice
     the radar fields and select the desired sweep with gates which are
     below a given altitude.
+
+    For RHI sweeps the elevation changes from ray to ray, so the returned
+    `gate_end` is the minimum over all rays in the sweep. Use
+    :py:func:`det_process_range_rays` for per-ray limits.
 
     Parameters
     ----------
@@ -167,19 +170,62 @@ def det_process_range(radar, sweep, fzl, doc=10):
         Ray index which defined the end of the region.
 
     """
-    # determine the index of the last valid gate
     ranges = radar.range["data"]
-    elevation = radar.fixed_angle["data"][sweep]
     radar_height = radar.altitude["data"]
-    gate_end = fzl_index(fzl, ranges, elevation, radar_height)
-    if doc is not None:
-        gate_end = min(gate_end, len(ranges) - doc)
-    else:
-        gate_end = min(gate_end, len(ranges))
-
     ray_start = radar.sweep_start_ray_index["data"][sweep]
     ray_end = radar.sweep_end_ray_index["data"][sweep] + 1
-    return gate_end, ray_start, ray_end
+
+    if radar.scan_type == "rhi":
+        gate_end = min(
+            fzl_index(fzl, ranges, el, radar_height)
+            for el in radar.elevation["data"][ray_start:ray_end]
+        )
+    else:
+        elevation = radar.fixed_angle["data"][sweep]
+        gate_end = fzl_index(fzl, ranges, elevation, radar_height)
+
+    limit = len(ranges) - doc if doc is not None else len(ranges)
+    return min(gate_end, limit), ray_start, ray_end
+
+
+def det_process_range_rays(radar, sweep, fzl, doc=10):
+    """
+    Per-ray version of :py:func:`det_process_range`.
+
+    Parameters
+    ----------
+    radar : Radar
+        Radar object from which ranges will be determined.
+    sweep : int
+        Sweep (0 indexed) for which to determine processing ranges.
+    fzl : float
+        Maximum altitude in meters.
+    doc : int, optional
+        Minimum number of gates which will be excluded from the range.
+
+    Returns
+    -------
+    gate_ends : int array
+        Index of last gate below `fzl` for each ray in the sweep.
+    ray_start : int
+        Ray index which defines the start of the region.
+    ray_end : int
+        Ray index which defined the end of the region.
+
+    """
+    ranges = radar.range["data"]
+    radar_height = radar.altitude["data"]
+    ray_start = radar.sweep_start_ray_index["data"][sweep]
+    ray_end = radar.sweep_end_ray_index["data"][sweep] + 1
+
+    gate_ends = np.array(
+        [
+            fzl_index(fzl, ranges, el, radar_height)
+            for el in radar.elevation["data"][ray_start:ray_end]
+        ]
+    )
+    limit = len(ranges) - doc if doc is not None else len(ranges)
+    return np.minimum(gate_ends, limit), ray_start, ray_end
 
 
 def snr(line, wl=11):
@@ -409,6 +455,77 @@ def noise(line, wl=11):
     return _noise
 
 
+def _unfold_ray(phidp_ray, notmeteo, ncpts, nowrap, system_zero):
+    """
+    Unfold a single ray.
+
+    Parameters
+    ----------
+    phidp_ray : array
+        Differential phase for one ray.
+    notmeteo : bool array
+        True where a gate should be excluded. This array is copied, so the
+        caller's array (e.g. a gatefilter's internal mask) is never modified.
+    ncpts : int
+        Minimum number of points in a contiguous region.
+    nowrap : int or None
+        Gate number where unwrapping should begin.
+    system_zero : float
+        System phase.
+
+    Returns
+    -------
+    out : array or None
+        Unfolded phase for the ray, or None if the ray has no usable gates.
+
+    """
+    notmeteo = np.array(notmeteo, dtype=bool)  # copy
+    # shrink=False keeps a full mask array, so x_ma.mask[...] = True is safe
+    x_ma = ma.masked_array(phidp_ray, mask=notmeteo.copy(), shrink=False)
+    if x_ma.count() == 0:
+        return None
+
+    # get rid of clutter and small regions that should not add to phidp
+    for slc in ma.notmasked_contiguous(x_ma) or []:
+        if slc.stop - slc.start < ncpts or slc.start < ncpts:
+            x_ma.mask[slc.start - 1 : slc.stop + 1] = True
+
+    if x_ma.count() == 0:
+        return None
+
+    if nowrap is not None:
+        # Start the unfolding a bit later in order to avoid false
+        # jumps based on clutter
+        unwrapped = copy.deepcopy(x_ma)
+        unwrapped[nowrap:] = unwrap_masked(x_ma[nowrap:], centered=False)
+    else:
+        unwrapped = unwrap_masked(x_ma, centered=False)
+
+    # end so no clutter expected
+    valid_vals = unwrapped[~notmeteo].compressed()
+    if valid_vals.size == 0:
+        return None
+    tail = valid_vals[-10:-1] if valid_vals.size > 1 else valid_vals
+    system_max = tail.mean() - system_zero
+
+    based = unwrapped - system_zero
+    based[0] = 0.0
+    based[-1] = system_max
+
+    mask = ma.getmaskarray(based)
+    good = np.where(~mask)[0]
+    bad = np.where(mask)[0]
+    vals = np.asarray(based[good], dtype=float)
+
+    out = np.zeros(len(x_ma), dtype=float)
+    out[good] = vals
+    if good.size > 11:
+        out[bad] = np.interp(bad, good, smooth_and_trim(vals))
+    else:
+        out[bad] = np.interp(bad, good, vals)
+    return out
+
+
 def get_phidp_unf(
     radar,
     ncp_lev=0.4,
@@ -506,66 +623,18 @@ def get_phidp_unf(
     cordata = np.zeros(my_rhv.shape, dtype=float)
     for radial in range(my_rhv.shape[0]):
         my_snr = snr(my_z[radial, :])
-        notmeteo = np.logical_or(
-            np.logical_or(my_ncp[radial, :] < ncp_lev, my_rhv[radial, :] < rhohv_lev),
-            my_snr < 10.0,
+        notmeteo = ma.filled(
+            np.logical_or(
+                np.logical_or(
+                    my_ncp[radial, :] < ncp_lev, my_rhv[radial, :] < rhohv_lev
+                ),
+                my_snr < 10.0,
+            ),
+            True,
         )
-        x_ma = ma.masked_where(notmeteo, my_phidp[radial, :])
-        try:
-            ma.notmasked_contiguous(x_ma)
-            for slc in ma.notmasked_contiguous(x_ma):
-                # so trying to get rid of clutter and small things that
-                # should not add to phidp anyway
-                if slc.stop - slc.start < ncpts or slc.start < ncpts:
-                    x_ma.mask[slc.start - 1 : slc.stop + 1] = True
-            c = 0
-        except TypeError:  # non sequence, no valid regions
-            c = 1  # ie do nothing
-            x_ma.mask = True
-        except AttributeError:
-            # sys.stderr.write('No Valid Regions, ATTERR \n ')
-            # sys.stderr.write(myfile.times['time_end'].strftime('%Y-%m-%dT%H:%M:%SZ') + '\n')
-            # print x_ma
-            # print x_ma.mask
-            c = 1  # also do nothing
-            x_ma.mask = True
-        if nowrap is not None:
-            # Start the unfolding a bit later in order to avoid false
-            # jumps based on clutter
-            unwrapped = copy.deepcopy(x_ma)
-            end_unwrap = unwrap_masked(x_ma[nowrap::], centered=False)
-            unwrapped[nowrap::] = end_unwrap
-        else:
-            unwrapped = unwrap_masked(x_ma, centered=False)
-        # end so no clutter expected
-        system_max = (
-            unwrapped[np.where(np.logical_not(notmeteo))][-10:-1].mean() - system_zero
-        )
-        unwrapped_fixed = np.zeros(len(x_ma), dtype=float)
-        based = unwrapped - system_zero
-        based[0] = 0.0
-        notmeteo[0] = False
-        based[-1] = system_max
-        notmeteo[-1] = False
-        unwrapped_fixed[np.where(np.logical_not(based.mask))[0]] = based[
-            np.where(np.logical_not(based.mask))[0]
-        ]
-        if len(based[np.where(np.logical_not(based.mask))[0]]) > 11:
-            unwrapped_fixed[np.where(based.mask)[0]] = np.interp(
-                np.where(based.mask)[0],
-                np.where(np.logical_not(based.mask))[0],
-                smooth_and_trim(based[np.where(np.logical_not(based.mask))[0]]),
-            )
-        else:
-            unwrapped_fixed[np.where(based.mask)[0]] = np.interp(
-                np.where(based.mask)[0],
-                np.where(np.logical_not(based.mask))[0],
-                based[np.where(np.logical_not(based.mask))[0]],
-            )
-        if c != 1:
-            cordata[radial, :] = unwrapped_fixed
-        else:
-            cordata[radial, :] = np.zeros(my_rhv.shape[1])
+        out = _unfold_ray(my_phidp[radial, :], notmeteo, ncpts, nowrap, system_zero)
+        if out is not None:
+            cordata[radial, :] = out
     if debug:
         print("Exec time: ", time() - t)
     return cordata
@@ -1036,6 +1105,95 @@ def LP_solver_cylp(A_Matrix, B_vectors, weights, really_verbose=False):
     return soln
 
 
+def _solve_lp(LP_solver, A_Matrix, B_vectors, nw, really_verbose, proc):
+    """Dispatch to the requested LP solver."""
+    if LP_solver == "pyglpk":
+        return LP_solver_pyglpk(A_Matrix, B_vectors, nw, really_verbose=really_verbose)
+    elif LP_solver == "cvxopt":
+        return LP_solver_cvxopt(A_Matrix, B_vectors, nw)
+    elif LP_solver == "cylp":
+        return LP_solver_cylp(A_Matrix, B_vectors, nw, really_verbose=really_verbose)
+    elif LP_solver == "cylp_mp":
+        return LP_solver_cylp_mp(
+            A_Matrix, B_vectors, nw, really_verbose=really_verbose, proc=proc
+        )
+    raise ValueError("unknown LP_solver:" + LP_solver)
+
+
+def _lp_process_sweeps(
+    radar,
+    phidp_mod,
+    z_mod,
+    proc_ph,
+    fzl,
+    doc,
+    self_const,
+    coef,
+    LP_solver,
+    really_verbose,
+    proc,
+    debug,
+):
+    """
+    Run the LP phase processing sweep by sweep (and group by group for RHIs).
+
+    For RHI scans, rays are grouped by their freezing-level gate cutoff and
+    each group is solved with its own A matrix.
+
+    `proc_ph["data"]` is modified in place. Returns a boolean array flagging
+    gates that were not processed.
+    """
+    filt = [-0.2, -0.1, 0, 0.1, 0.2]
+    unprocessed = np.zeros(phidp_mod.shape, dtype=bool)
+
+    for sweep in range(len(radar.sweep_start_ray_index["data"])):
+        if debug:
+            print("Doing ", sweep)
+
+        if radar.scan_type == "rhi":
+            gate_ends, start_ray, end_ray = det_process_range_rays(
+                radar, sweep, fzl, doc=doc
+            )
+            groups = [
+                (int(ge), start_ray + np.where(gate_ends == ge)[0])
+                for ge in np.unique(gate_ends)
+            ]
+        else:
+            end_gate, start_ray, end_ray = det_process_range(radar, sweep, fzl, doc=doc)
+            groups = [(int(end_gate), np.arange(start_ray, end_ray))]
+
+        for end_gate, rays in groups:
+            start_gate = 0
+            n_gates = end_gate - start_gate
+
+            if n_gates <= 5:
+                proc_ph["data"][rays, :] = 0.0
+                unprocessed[rays, :] = True
+                continue
+
+            A_Matrix = construct_A_matrix(n_gates, filt)
+            B_vectors = construct_B_vectors(
+                phidp_mod[rays, start_gate:end_gate],
+                z_mod[rays, start_gate:end_gate],
+                filt,
+                dweight=self_const,
+                coef=coef,
+            )
+            weights = np.ones((len(rays), n_gates))
+            nw = np.bmat([weights, np.zeros(weights.shape)])
+
+            mysoln = _solve_lp(LP_solver, A_Matrix, B_vectors, nw, really_verbose, proc)
+
+            proc_ph["data"][rays, start_gate:end_gate] = mysoln
+            # hold last processed value past the cutoff and flag it
+            proc_ph["data"][rays, end_gate:] = proc_ph["data"][rays, end_gate - 1][
+                :, None
+            ]
+            unprocessed[rays, end_gate:] = True
+
+    return unprocessed
+
+
 def phase_proc_lp(
     radar,
     offset,
@@ -1127,8 +1285,10 @@ def phase_proc_lp(
     -------
     reproc_phase : dict
         Field dictionary containing processed differential phase shifts.
+        Gates which were not processed are masked.
     sob_kdp : dict
         Field dictionary containing recalculated differential phases.
+        Gates which were not processed are masked.
 
     References
     ----------
@@ -1190,50 +1350,25 @@ def phase_proc_lp(
     # process
     proc_ph = copy.deepcopy(radar.fields[phidp_field])
     proc_ph["data"] = phidp_mod
-    St_Gorlv_differential_5pts = [-0.2, -0.1, 0, 0.1, 0.2]
-    for sweep in range(len(radar.sweep_start_ray_index["data"])):
-        if debug:
-            print("Doing ", sweep)
-        end_gate, start_ray, end_ray = det_process_range(radar, sweep, fzl, doc=15)
-        start_gate = 0
 
-        A_Matrix = construct_A_matrix(
-            len(radar.range["data"][start_gate:end_gate]), St_Gorlv_differential_5pts
-        )
+    unprocessed = _lp_process_sweeps(
+        radar,
+        phidp_mod,
+        z_mod,
+        proc_ph,
+        fzl,
+        15,
+        self_const,
+        coef,
+        LP_solver,
+        really_verbose,
+        proc,
+        debug,
+    )
 
-        B_vectors = construct_B_vectors(
-            phidp_mod[start_ray:end_ray, start_gate:end_gate],
-            z_mod[start_ray:end_ray, start_gate:end_gate],
-            St_Gorlv_differential_5pts,
-            dweight=self_const,
-            coef=coef,
-        )
-
-        weights = np.ones(phidp_mod[start_ray:end_ray, start_gate:end_gate].shape)
-
-        nw = np.bmat([weights, np.zeros(weights.shape)])
-
-        if LP_solver == "pyglpk":
-            mysoln = LP_solver_pyglpk(
-                A_Matrix, B_vectors, nw, really_verbose=really_verbose
-            )
-        elif LP_solver == "cvxopt":
-            mysoln = LP_solver_cvxopt(A_Matrix, B_vectors, nw)
-        elif LP_solver == "cylp":
-            mysoln = LP_solver_cylp(
-                A_Matrix, B_vectors, nw, really_verbose=really_verbose
-            )
-        elif LP_solver == "cylp_mp":
-            mysoln = LP_solver_cylp_mp(
-                A_Matrix, B_vectors, nw, really_verbose=really_verbose, proc=proc
-            )
-        else:
-            raise ValueError("unknown LP_solver:" + LP_solver)
-
-        proc_ph["data"][start_ray:end_ray, start_gate:end_gate] = mysoln
-
-    last_gates = proc_ph["data"][start_ray:end_ray, -16]
-    proc_ph["data"][start_ray:end_ray, -16:] = np.meshgrid(np.ones([16]), last_gates)[1]
+    # hold the final 16 gates constant, for ALL rays
+    last_gates = proc_ph["data"][:, -16]
+    proc_ph["data"][:, -16:] = np.repeat(last_gates[:, None], 16, axis=1)
     proc_ph["valid_min"] = 0.0  # XXX is this correct?
     proc_ph["valid_max"] = 400.0  # XXX is this correct?
 
@@ -1245,6 +1380,11 @@ def phase_proc_lp(
     kdp = scipy.ndimage.convolve1d(proc_ph["data"], sobel, axis=1) / (
         (window_len / 3.0) * 2.0 * gate_spacing
     )
+
+    # mask gates that were never processed (convolve1d ignores masks,
+    # so this must happen after the convolution)
+    kdp = np.ma.masked_array(kdp, mask=unprocessed)
+    proc_ph["data"] = np.ma.masked_array(proc_ph["data"], mask=unprocessed)
 
     # copy the KDP metadata from existing field or create anew
     if kdp_field in radar.fields:
@@ -1335,6 +1475,7 @@ def phase_proc_lp_gf(
     ncpts : int, optional
         Minimum number of points in a ray. Regions within a ray smaller than
         this or beginning before this gate number are excluded from unfolding.
+        None uses a default of 2.
     first_gate_sysp : int, optional
         Gate index from which to begin the system phase calculation. None
         uses the default of 30.
@@ -1350,8 +1491,10 @@ def phase_proc_lp_gf(
     -------
     reproc_phase : dict
         Field dictionary containing processed differential phase shifts.
+        Gates which were not processed are masked.
     sob_kdp : dict
         Field dictionary containing recalculated differential phases.
+        Gates which were not processed are masked.
 
     References
     ----------
@@ -1412,60 +1555,25 @@ def phase_proc_lp_gf(
     # process
     proc_ph = copy.deepcopy(radar.fields[phidp_field])
     proc_ph["data"] = phidp_mod
-    St_Gorlv_differential_5pts = [-0.2, -0.1, 0, 0.1, 0.2]
 
-    for sweep in range(len(radar.sweep_start_ray_index["data"])):
-        if debug:
-            print("Doing ", sweep)
+    unprocessed = _lp_process_sweeps(
+        radar,
+        phidp_mod,
+        z_mod,
+        proc_ph,
+        fzl,
+        doc,
+        self_const,
+        coef,
+        LP_solver,
+        really_verbose,
+        proc,
+        debug,
+    )
 
-        end_gate, start_ray, end_ray = det_process_range(radar, sweep, fzl, doc=doc)
-
-        start_gate = 0
-
-        if len(radar.range["data"][start_gate:end_gate]) <= 5:
-            mysoln = np.zeros_like(
-                proc_ph["data"][start_ray:end_ray, start_gate:end_gate]
-            )
-            proc_ph["data"][start_ray:end_ray, start_gate:end_gate] = mysoln
-            continue
-
-        A_Matrix = construct_A_matrix(
-            len(radar.range["data"][start_gate:end_gate]), St_Gorlv_differential_5pts
-        )
-
-        B_vectors = construct_B_vectors(
-            phidp_mod[start_ray:end_ray, start_gate:end_gate],
-            z_mod[start_ray:end_ray, start_gate:end_gate],
-            St_Gorlv_differential_5pts,
-            dweight=self_const,
-            coef=coef,
-        )
-
-        weights = np.ones(phidp_mod[start_ray:end_ray, start_gate:end_gate].shape)
-
-        nw = np.bmat([weights, np.zeros(weights.shape)])
-
-        if LP_solver == "pyglpk":
-            mysoln = LP_solver_pyglpk(
-                A_Matrix, B_vectors, nw, really_verbose=really_verbose
-            )
-        elif LP_solver == "cvxopt":
-            mysoln = LP_solver_cvxopt(A_Matrix, B_vectors, nw)
-        elif LP_solver == "cylp":
-            mysoln = LP_solver_cylp(
-                A_Matrix, B_vectors, nw, really_verbose=really_verbose
-            )
-        elif LP_solver == "cylp_mp":
-            mysoln = LP_solver_cylp_mp(
-                A_Matrix, B_vectors, nw, really_verbose=really_verbose, proc=proc
-            )
-        else:
-            raise ValueError("unknown LP_solver:" + LP_solver)
-
-        proc_ph["data"][start_ray:end_ray, start_gate:end_gate] = mysoln
-
-    last_gates = proc_ph["data"][start_ray:end_ray, -16]
-    proc_ph["data"][start_ray:end_ray, -16:] = np.meshgrid(np.ones([16]), last_gates)[1]
+    # hold the final 16 gates constant, for ALL rays
+    last_gates = proc_ph["data"][:, -16]
+    proc_ph["data"][:, -16:] = np.repeat(last_gates[:, None], 16, axis=1)
     proc_ph["valid_min"] = 0.0  # XXX is this correct?
     proc_ph["valid_max"] = 400.0  # XXX is this correct?
 
@@ -1477,6 +1585,11 @@ def phase_proc_lp_gf(
     kdp = scipy.ndimage.convolve1d(proc_ph["data"], sobel, axis=1) / (
         (window_len / 3.0) * 2.0 * gate_spacing
     )
+
+    # mask gates that were never processed (convolve1d ignores masks,
+    # so this must happen after the convolution)
+    kdp = np.ma.masked_array(kdp, mask=unprocessed)
+    proc_ph["data"] = np.ma.masked_array(proc_ph["data"], mask=unprocessed)
 
     # copy the KDP metadata from existing field or create anew
     if kdp_field in radar.fields:
@@ -1515,7 +1628,7 @@ def get_phidp_unf_gf(
     ncpts : int, optional
         Minimum number of points in a ray. Regions within a ray smaller than
         this or beginning before this gate number are excluded from
-        calculations.
+        calculations. None uses a default of 2.
     sys_phase : float, optional
         System phase overide.
     nowrap : int or None, optional
@@ -1543,6 +1656,8 @@ def get_phidp_unf_gf(
     # parse the field parameters
     if phidp_field is None:
         phidp_field = get_field_name("differential_phase")
+    if ncpts is None:
+        ncpts = 2
 
     t = time()
     my_phidp = radar.fields[phidp_field]["data"]
@@ -1559,63 +1674,13 @@ def get_phidp_unf_gf(
         if system_zero is None:
             system_zero = -135
     cordata = np.zeros(my_phidp.shape, dtype=float)
-    all_non_meteo = gatefilter.gate_excluded
+    all_non_meteo = gatefilter.gate_excluded  # read-only use
     for radial in range(my_phidp.shape[0]):
-        # deterimine non meteo from gatefilter CHANGED
-        notmeteo = all_non_meteo[radial, :]
-        x_ma = ma.masked_where(notmeteo, my_phidp[radial, :])
-        try:
-            ma.notmasked_contiguous(x_ma)
-            for slc in ma.notmasked_contiguous(x_ma):
-                # so trying to get rid of clutter and small things that
-                # should not add to phidp anyway
-                if slc.stop - slc.start < ncpts or slc.start < ncpts:
-                    x_ma.mask[slc.start - 1 : slc.stop + 1] = True
-            c = 0
-        except TypeError:  # non sequence, no valid regions
-            c = 1  # ie do nothing
-            x_ma.mask = True
-        except AttributeError:
-            c = 1  # also do nothing
-            x_ma.mask = True
-        if nowrap is not None:
-            # Start the unfolding a bit later in order to avoid false
-            # jumps based on clutter
-            unwrapped = copy.deepcopy(x_ma)
-            end_unwrap = unwrap_masked(x_ma[nowrap::], centered=False)
-            unwrapped[nowrap::] = end_unwrap
-        else:
-            unwrapped = unwrap_masked(x_ma, centered=False)
-
-        # end so no clutter expected
-        system_max = (
-            unwrapped[np.where(np.logical_not(notmeteo))][-10:-1].mean() - system_zero
+        out = _unfold_ray(
+            my_phidp[radial, :], all_non_meteo[radial, :], ncpts, nowrap, system_zero
         )
-        unwrapped_fixed = np.zeros(len(x_ma), dtype=float)
-        based = unwrapped - system_zero
-        based[0] = 0.0
-        notmeteo[0] = False
-        based[-1] = system_max
-        notmeteo[-1] = False
-        unwrapped_fixed[np.where(np.logical_not(based.mask))[0]] = based[
-            np.where(np.logical_not(based.mask))[0]
-        ]
-        if len(based[np.where(np.logical_not(based.mask))[0]]) > 11:
-            unwrapped_fixed[np.where(based.mask)[0]] = np.interp(
-                np.where(based.mask)[0],
-                np.where(np.logical_not(based.mask))[0],
-                smooth_and_trim(based[np.where(np.logical_not(based.mask))[0]]),
-            )
-        else:
-            unwrapped_fixed[np.where(based.mask)[0]] = np.interp(
-                np.where(based.mask)[0],
-                np.where(np.logical_not(based.mask))[0],
-                based[np.where(np.logical_not(based.mask))[0]],
-            )
-        if c != 1:
-            cordata[radial, :] = unwrapped_fixed
-        else:
-            cordata[radial, :] = np.zeros(my_phidp.shape[1])
+        if out is not None:
+            cordata[radial, :] = out
     if debug:
         print("Exec time: ", time() - t)
     return cordata
