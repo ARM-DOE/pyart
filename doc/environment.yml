@@ -36,6 +36,9 @@ dependencies:
   - xradar
   - dask
   - ablog
+  - certifi>=2026.10.19
+  - ca-certificates>=2026.10.19
+  - pip>=26.2.2
   - pip
   - pip:
       - pooch

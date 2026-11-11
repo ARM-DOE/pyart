@@ -158,7 +158,7 @@ def read_cfradial(
 
     # 4.4 coordinate variables -> create attribute dictionaries
     time = _ncvar_to_dict(ncvars["time"])
-    _range = _ncvar_to_dict(ncvars["range"])
+    _range = _range_to_dict(ncvars["range"])
 
     # 4.5 Ray dimension variables
 
@@ -370,7 +370,7 @@ def read_cfradial(
         fields[field_name] = _ncvar_to_dict(ncvars[key], delay_field_loading)
 
     if "ray_n_gates" in ncvars:
-        shape = (len(ncvars["time"]), len(ncvars["range"]))
+        shape = (len(ncvars["time"]), len(_range["data"]))
         ray_n_gates = ncvars["ray_n_gates"][:]
         ray_start_index = ncvars["ray_start_index"][:]
         for dic in fields.values():
@@ -446,6 +446,32 @@ def _find_all_meta_group_vars(ncvars, meta_group_name):
         for k, v in ncvars.items()
         if "meta_group" in v.ncattrs() and v.meta_group == meta_group_name
     ]
+
+
+def _range_to_dict(ncvar):
+    """Convert the NetCDF range variable to a dictionary.
+
+    CfRadial 1.4 allows a range per sweep, ``range(sweep, range)``, with
+    ``meters_to_center_of_first_gate`` and ``meters_between_gates`` per sweep.
+    A Radar has one range for all sweeps, so such a variable is read if all
+    sweeps have the same range, and a ValueError is raised otherwise.
+    """
+    d = _ncvar_to_dict(ncvar)
+    if ncvar.ndim < 2:
+        return d
+    data = np.ma.filled(np.ma.asarray(d["data"], dtype="float64"), np.nan)
+    data = data.reshape(data.shape[0], -1)
+    if not all(np.array_equal(row, data[0], equal_nan=True) for row in data[1:]):
+        raise ValueError(
+            "The range of the file differs between the sweeps, range"
+            f"{ncvar.dimensions}. A Radar has one range for all sweeps: "
+            "reindex the sweeps onto one range before writing the file."
+        )
+    d["data"] = d["data"][0]
+    for key in ("meters_to_center_of_first_gate", "meters_between_gates"):
+        if key in d and np.ndim(d[key]) > 0:
+            d[key] = np.ravel(d[key])[0]
+    return d
 
 
 def _ncvar_to_dict(ncvar, lazydict=False):
