@@ -1,9 +1,10 @@
 """
-Dealias using multidimensional phase unwrapping algorithms.
+Dealias and unwrap using multidimensional phase unwrapping algorithms.
 
 """
 
 import numpy as np
+from numpy import ma
 
 from ..config import get_fillvalue, get_metadata
 from ._common_dealias import (
@@ -16,6 +17,60 @@ from ._common_dealias import (
 from ._unwrap_1d import unwrap_1d
 from ._unwrap_2d import unwrap_2d
 from ._unwrap_3d import unwrap_3d
+
+
+def unwrap_masked(lon, centered=False, copy=True):
+    """
+    Unwrap a sequence of longitudes, headings or phases in degrees.
+
+    Only valid (unmasked) values are unwrapped, so gaps in the data do not
+    affect the result. Jumps larger than 180 degrees between consecutive
+    valid values are treated as wraps of 360 degrees.
+
+    Parameters
+    ----------
+    lon : array
+        Longitudes, headings or phases in degrees. If masked, the output will
+        also be masked.
+    centered : bool, optional
+        Center the unwrapping as close to zero as possible.
+    copy : bool, optional.
+        True to return a copy, False will avoid a copy when possible.
+
+    Returns
+    -------
+    unwrap : array
+        Array of unwrapped values, in degrees.
+
+    """
+    masked_input = ma.isMaskedArray(lon)
+    if masked_input:
+        fill_value = lon.fill_value
+        # masked_invalid loses the original fill_value (ma bug, 2011/01/20)
+    lon = np.ma.masked_invalid(lon).astype(float)
+    if lon.ndim != 1:
+        raise ValueError("Only 1-D sequences are supported")
+    if lon.shape[0] < 2:
+        return lon
+    x = lon.compressed()
+    if len(x) < 2:
+        return lon
+    w = np.zeros(x.shape[0] - 1, int)
+    ld = np.diff(x)
+    np.putmask(w, ld > 180, -1)
+    np.putmask(w, ld < -180, 1)
+    x[1:] += w.cumsum() * 360.0
+    if centered:
+        x -= 360 * np.round(x.mean() / 360.0)
+    if lon.mask is ma.nomask:
+        lon[:] = x
+    else:
+        lon[~lon.mask] = x
+    if masked_input:
+        lon.fill_value = fill_value
+        return lon
+    else:
+        return lon.filled(np.nan)
 
 
 def dealias_unwrap_phase(
