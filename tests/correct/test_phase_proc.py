@@ -151,6 +151,14 @@ def test_phase_proc_lp_highspy():
     )
 
 
+@pytest.mark.skipif(not highspy_available, reason="HiGHS is not installed.")
+def test_phase_proc_lp_highspy_max_kdp():
+    _, _, kdp = perform_phase_processing("highspy", max_kdp=5.0)
+    assert kdp["valid_max"] == 5.0
+    assert np.ma.count_masked(kdp["data"]) == 0
+    assert kdp["data"].max() <= 5.0 + 1e-10
+
+
 def _ratio(a1, a2):
     """Ratio the sum of the abs difference vs sum abs of two vectors."""
     abs_residues = np.abs(a1 - a2).sum()
@@ -158,10 +166,12 @@ def _ratio(a1, a2):
     return abs_residues / avg_abs_sum
 
 
-def perform_phase_processing(LP_solver="cvxopt"):
+def perform_phase_processing(LP_solver="cvxopt", **kwargs):
     """Perform LP phase processing on a single ray radar."""
     radar = pyart.testing.make_single_ray_radar()
-    phidp, kdp = pyart.correct.phase_proc_lp(radar, 0.0, LP_solver=LP_solver)
+    phidp, kdp = pyart.correct.phase_proc_lp(
+        radar, 0.0, LP_solver=LP_solver, **kwargs
+    )
     return radar, phidp, kdp
 
 
@@ -200,3 +210,23 @@ def test_phase_proc_lp_gf_highspy():
     )
     assert phidp["data"].max() < 360.0
     assert kdp["data"].max() < 6.0
+
+
+@pytest.mark.skipif(not highspy_available, reason="HiGHS is not installed.")
+def test_phase_proc_lp_gf_highspy_max_kdp():
+    radar = pyart.testing.make_single_ray_radar()
+    my_gatefilter = pyart.filters.GateFilter(radar)
+    my_gatefilter.exclude_below("normalized_coherent_power", 0.5)
+    my_gatefilter.exclude_below("cross_correlation_ratio", 0.8)
+    _, kdp = pyart.correct.phase_proc_lp_gf(
+        radar,
+        gatefilter=my_gatefilter,
+        LP_solver="highspy",
+        doc=15,
+        ncpts=20,
+        system_phase=-140.1,
+        max_kdp=5.0,
+    )
+    assert kdp["valid_max"] == 5.0
+    assert np.ma.count_masked(kdp["data"]) == 0
+    assert kdp["data"].max() <= 5.0 + 1e-10

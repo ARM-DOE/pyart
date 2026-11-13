@@ -702,13 +702,14 @@ def LP_solver_cvxopt(A_Matrix, B_vectors, weights, solver="glpk"):
 
     n_gates = weights.shape[1] // 2
     n_rays = B_vectors.shape[0]
+    n_constraints = A_Matrix.shape[0]
     mysoln = np.zeros([n_rays, n_gates])
 
     G = matrix(np.bmat([[-A_Matrix], [-np.eye(2 * n_gates)]]))
-    h_array = np.zeros(5 * n_gates - 4)
+    h_array = np.zeros(n_constraints + 2 * n_gates)
     for raynum in range(n_rays):
         c = matrix(weights[raynum]).T
-        h_array[: 3 * n_gates - 4] = -B_vectors[raynum]
+        h_array[:n_constraints] = -B_vectors[raynum]
         h = matrix(h_array)
         sol = solvers.lp(c, G, h, solver=solver)
         # XXX when a solution is not found sol is None, need to check and
@@ -767,20 +768,21 @@ def LP_solver_pyglpk(
         message_state = glpk.LPX.MSG_OFF
     n_gates = weights.shape[1] // 2
     n_rays = B_vectors.shape[0]
+    n_constraints = A_Matrix.shape[0]
     mysoln = np.zeros([n_rays, n_gates])
     lp = glpk.LPX()  # Create empty problem instance
     lp.name = "LP_MIN"  # Assign symbolic name to problem
     lp.obj.maximize = False  # Set this as a maximization problem
-    lp.rows.add(2 * n_gates + n_gates - 4)  # Append rows
+    lp.rows.add(n_constraints)  # Append rows
     lp.cols.add(2 * n_gates)
     glpk.env.term_on = True
-    for cur_row in range(2 * n_gates + n_gates - 4):
+    for cur_row in range(n_constraints):
         lp.rows[cur_row].matrix = list(np.squeeze(np.asarray(A_Matrix[cur_row, :])))
     for i in range(2 * n_gates):
         lp.cols[i].bounds = 0.0, None
     for raynum in range(n_rays):
         this_soln = np.zeros(n_gates)
-        for i in range(2 * n_gates + n_gates - 4):
+        for i in range(n_constraints):
             lp.rows[i].bounds = B_vectors[raynum, i], None
         for i in range(2 * n_gates):
             lp.obj[i] = weights[raynum, i]
@@ -1123,6 +1125,40 @@ def LP_solver_highspy(A_Matrix, B_vectors, weights, really_verbose=False):
     return soln
 
 
+def _add_kdp_upper_bound(A_Matrix, B_vectors, max_kdp, window_len, gate_spacing):
+    """Add a hard upper-bound constraint for the processed KDP."""
+    if max_kdp is None:
+        return A_Matrix, B_vectors
+    if not np.isscalar(max_kdp) or not np.isfinite(max_kdp) or max_kdp < 0:
+        raise ValueError("max_kdp must be a finite, non-negative scalar or None")
+
+    n_gates = A_Matrix.shape[1] // 2
+    n_rays = B_vectors.shape[0]
+    smooth_filter = np.array([0.1, 0.25, 0.3, 0.25, 0.1])
+    sobel = 2.0 * np.arange(window_len) / (window_len - 1.0) - 1.0
+    sobel = sobel / abs(sobel).sum()
+    sobel = sobel[::-1]
+    denom = (window_len / 3.0) * 2.0 * gate_spacing
+
+    # Build the linear operator applied to the phase variables by the
+    # smoothing and KDP calculations below. Each row of the convolved
+    # identity is the output for one phase basis vector, so transpose it to
+    # obtain the column-vector operator used by the LP constraints.
+    basis = np.eye(n_gates)
+    basis = scipy.ndimage.convolve1d(basis, smooth_filter, axis=1)
+    basis = scipy.ndimage.convolve1d(basis, sobel, axis=1) / denom
+    kdp_operator = basis.T
+
+    # The LP stores the phase solution in the second half of its variables.
+    # Express KDP <= max_kdp as -KDP >= -max_kdp.
+    upper_rows = np.hstack([np.zeros_like(kdp_operator), -kdp_operator])
+    upper_bounds = -np.full((n_rays, n_gates), float(max_kdp))
+    return (
+        np.vstack([np.asarray(A_Matrix), upper_rows]),
+        np.hstack([np.asarray(B_vectors), upper_bounds]),
+    )
+
+
 def phase_proc_lp(
     radar,
     offset,
@@ -1148,6 +1184,7 @@ def phase_proc_lp(
     window_len=35,
     proc=1,
     coef=0.914,
+    max_kdp=None,
 ):
     """
     Phase process using a LP method [1].
@@ -1205,6 +1242,9 @@ def phase_proc_lp(
         Number of worker processes, only used when `LP_solver` is 'cylp_mp'.
     coef : float, optional
         Exponent linking Z to KDP in self consistency. kdp=(10**(0.1z))*coef
+    max_kdp : float or None, optional
+        Hard upper bound for the returned specific differential phase,
+        enforced as an LP constraint. If None, no upper bound is applied.
 
     Returns
     -------
@@ -1273,6 +1313,7 @@ def phase_proc_lp(
     proc_ph = copy.deepcopy(radar.fields[phidp_field])
     proc_ph["data"] = phidp_mod
     St_Gorlv_differential_5pts = [-0.2, -0.1, 0, 0.1, 0.2]
+    gate_spacing = (radar.range["data"][1] - radar.range["data"][0]) / 1000.0
     for sweep in range(len(radar.sweep_start_ray_index["data"])):
         if debug:
             print("Doing ", sweep)
@@ -1289,6 +1330,9 @@ def phase_proc_lp(
             St_Gorlv_differential_5pts,
             dweight=self_const,
             coef=coef,
+        )
+        A_Matrix, B_vectors = _add_kdp_upper_bound(
+            A_Matrix, B_vectors, max_kdp, window_len, gate_spacing
         )
 
         weights = np.ones(phidp_mod[start_ray:end_ray, start_gate:end_gate].shape)
@@ -1327,7 +1371,6 @@ def phase_proc_lp(
     sobel = 2.0 * np.arange(window_len) / (window_len - 1.0) - 1.0
     sobel = sobel / (abs(sobel).sum())
     sobel = sobel[::-1]
-    gate_spacing = (radar.range["data"][1] - radar.range["data"][0]) / 1000.0
     kdp = scipy.ndimage.convolve1d(proc_ph["data"], sobel, axis=1) / (
         (window_len / 3.0) * 2.0 * gate_spacing
     )
@@ -1339,6 +1382,8 @@ def phase_proc_lp(
         sob_kdp = get_metadata(kdp_field)
 
     sob_kdp["data"] = kdp
+    if max_kdp is not None:
+        sob_kdp["valid_max"] = float(max_kdp)
     sob_kdp["_FillValue"] = get_fillvalue()
 
     return proc_ph, sob_kdp
@@ -1368,6 +1413,7 @@ def phase_proc_lp_gf(
     first_gate_sysp=None,
     offset=0.0,
     doc=0,
+    max_kdp=None,
 ):
     """
     Phase process using a LP method [1] using Py-ART's Gatefilter.
@@ -1417,6 +1463,9 @@ def phase_proc_lp_gf(
         Number of worker processes, only used when `LP_solver` is 'cylp_mp'.
     coef : float, optional
         Exponent linking Z to KDP in self consistency. kdp=(10**(0.1z))*coef
+    max_kdp : float or None, optional
+        Hard upper bound for the returned specific differential phase,
+        enforced as an LP constraint. If None, no upper bound is applied.
     ncpts : int, optional
         Minimum number of points in a ray. Regions within a ray smaller than
         this or beginning before this gate number are excluded from unfolding.
@@ -1491,6 +1540,7 @@ def phase_proc_lp_gf(
     proc_ph = copy.deepcopy(radar.fields[phidp_field])
     proc_ph["data"] = phidp_mod
     St_Gorlv_differential_5pts = [-0.2, -0.1, 0, 0.1, 0.2]
+    gate_spacing = (radar.range["data"][1] - radar.range["data"][0]) / 1000.0
 
     for sweep in range(len(radar.sweep_start_ray_index["data"])):
         if debug:
@@ -1517,6 +1567,9 @@ def phase_proc_lp_gf(
             St_Gorlv_differential_5pts,
             dweight=self_const,
             coef=coef,
+        )
+        A_Matrix, B_vectors = _add_kdp_upper_bound(
+            A_Matrix, B_vectors, max_kdp, window_len, gate_spacing
         )
 
         weights = np.ones(phidp_mod[start_ray:end_ray, start_gate:end_gate].shape)
@@ -1555,7 +1608,6 @@ def phase_proc_lp_gf(
     sobel = 2.0 * np.arange(window_len) / (window_len - 1.0) - 1.0
     sobel = sobel / (abs(sobel).sum())
     sobel = sobel[::-1]
-    gate_spacing = (radar.range["data"][1] - radar.range["data"][0]) / 1000.0
     kdp = scipy.ndimage.convolve1d(proc_ph["data"], sobel, axis=1) / (
         (window_len / 3.0) * 2.0 * gate_spacing
     )
@@ -1567,6 +1619,8 @@ def phase_proc_lp_gf(
         sob_kdp = get_metadata(kdp_field)
 
     sob_kdp["data"] = kdp
+    if max_kdp is not None:
+        sob_kdp["valid_max"] = float(max_kdp)
     sob_kdp["_FillValue"] = get_fillvalue()
 
     return proc_ph, sob_kdp
