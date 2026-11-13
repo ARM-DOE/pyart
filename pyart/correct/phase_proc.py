@@ -1398,6 +1398,8 @@ def phase_proc_lp(
         kdp_field = get_field_name("specific_differential_phase")
     if unf_field is None:
         unf_field = get_field_name("unfolded_differential_phase")
+    if not isinstance(window_len, (int, np.integer)) or window_len < 3:
+        raise ValueError("window_len must be an integer >= 3")
 
     # prepare reflectivity field
     refl = copy.deepcopy(radar.fields[refl_field]["data"]) + offset
@@ -1609,6 +1611,8 @@ def phase_proc_lp_gf(
         kdp_field = get_field_name("specific_differential_phase")
     if unf_field is None:
         unf_field = get_field_name("unfolded_differential_phase")
+    if not isinstance(window_len, (int, np.integer)) or window_len < 3:
+        raise ValueError("window_len must be an integer >= 3")
 
     # if there is no gatefilter included, include all
 
