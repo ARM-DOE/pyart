@@ -6,7 +6,8 @@ Developer's Guide
    :maxdepth: 3
    :hidden:
 
-   CONTRIBUTING
+   contributing
+   ai_policy
    ci_setup
    how_to_release
 

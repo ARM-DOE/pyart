@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's core/wind_profile.py module. """
+"""Unit Tests for Py-ART's core/wind_profile.py module."""
 
 import numpy as np
 import pytest

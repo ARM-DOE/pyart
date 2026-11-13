@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/nexrad_level3.py module. """
+"""Unit Tests for Py-ART's io/nexrad_level3.py module."""
 
 import numpy as np
 from numpy.ma.core import MaskedArray

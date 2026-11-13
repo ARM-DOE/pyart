@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's graph/gridmapdisplay_basemap.py module. """
+"""Unit Tests for Py-ART's graph/gridmapdisplay_basemap.py module."""
 
 # execute this script to create figure_gridmapdisplay_*.png files.
 

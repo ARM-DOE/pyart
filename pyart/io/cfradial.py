@@ -158,7 +158,7 @@ def read_cfradial(
 
     # 4.4 coordinate variables -> create attribute dictionaries
     time = _ncvar_to_dict(ncvars["time"])
-    _range = _ncvar_to_dict(ncvars["range"])
+    _range = _range_to_dict(ncvars["range"])
 
     # 4.5 Ray dimension variables
 
@@ -296,6 +296,51 @@ def read_cfradial(
     else:
         pitch = None
 
+    if "heading_change_rate" in ncvars:
+        heading_change_rate = _ncvar_to_dict(ncvars["heading_change_rate"])
+    else:
+        heading_change_rate = None
+
+    if "pitch_change_rate" in ncvars:
+        pitch_change_rate = _ncvar_to_dict(ncvars["pitch_change_rate"])
+    else:
+        pitch_change_rate = None
+
+    if "roll_change_rate" in ncvars:
+        roll_change_rate = _ncvar_to_dict(ncvars["roll_change_rate"])
+    else:
+        roll_change_rate = None
+
+    if "eastward_velocity" in ncvars:
+        eastward_velocity = _ncvar_to_dict(ncvars["eastward_velocity"])
+    else:
+        eastward_velocity = None
+
+    if "northward_velocity" in ncvars:
+        northward_velocity = _ncvar_to_dict(ncvars["northward_velocity"])
+    else:
+        northward_velocity = None
+
+    if "vertical_velocity" in ncvars:
+        vertical_velocity = _ncvar_to_dict(ncvars["vertical_velocity"])
+    else:
+        vertical_velocity = None
+
+    if "eastward_wind" in ncvars:
+        eastward_wind = _ncvar_to_dict(ncvars["eastward_wind"])
+    else:
+        eastward_wind = None
+
+    if "northward_wind" in ncvars:
+        northward_wind = _ncvar_to_dict(ncvars["northward_wind"])
+    else:
+        northward_wind = None
+
+    if "vertical_wind" in ncvars:
+        vertical_wind = _ncvar_to_dict(ncvars["vertical_wind"])
+    else:
+        vertical_wind = None
+
     if "georefs_applied" in ncvars:
         georefs_applied = _ncvar_to_dict(ncvars["georefs_applied"])
     else:
@@ -314,6 +359,8 @@ def read_cfradial(
         field_name = filemetadata.get_field_name(key)
         if field_name is None:
             if exclude_fields is not None and key in exclude_fields:
+                if include_fields is None:
+                    continue
                 if key not in include_fields:
                     continue
             if include_fields is None or key in include_fields:
@@ -323,7 +370,7 @@ def read_cfradial(
         fields[field_name] = _ncvar_to_dict(ncvars[key], delay_field_loading)
 
     if "ray_n_gates" in ncvars:
-        shape = (len(ncvars["time"]), len(ncvars["range"]))
+        shape = (len(ncvars["time"]), len(_range["data"]))
         ray_n_gates = ncvars["ray_n_gates"][:]
         ray_start_index = ncvars["ray_start_index"][:]
         for dic in fields.values():
@@ -377,6 +424,15 @@ def read_cfradial(
         drift=drift,
         heading=heading,
         pitch=pitch,
+        heading_change_rate=heading_change_rate,
+        pitch_change_rate=pitch_change_rate,
+        roll_change_rate=roll_change_rate,
+        eastward_velocity=eastward_velocity,
+        northward_velocity=northward_velocity,
+        vertical_velocity=vertical_velocity,
+        eastward_wind=eastward_wind,
+        northward_wind=northward_wind,
+        vertical_wind=vertical_wind,
         georefs_applied=georefs_applied,
     )
 
@@ -390,6 +446,32 @@ def _find_all_meta_group_vars(ncvars, meta_group_name):
         for k, v in ncvars.items()
         if "meta_group" in v.ncattrs() and v.meta_group == meta_group_name
     ]
+
+
+def _range_to_dict(ncvar):
+    """Convert the NetCDF range variable to a dictionary.
+
+    CfRadial 1.4 allows a range per sweep, ``range(sweep, range)``, with
+    ``meters_to_center_of_first_gate`` and ``meters_between_gates`` per sweep.
+    A Radar has one range for all sweeps, so such a variable is read if all
+    sweeps have the same range, and a ValueError is raised otherwise.
+    """
+    d = _ncvar_to_dict(ncvar)
+    if ncvar.ndim < 2:
+        return d
+    data = np.ma.filled(np.ma.asarray(d["data"], dtype="float64"), np.nan)
+    data = data.reshape(data.shape[0], -1)
+    if not all(np.array_equal(row, data[0], equal_nan=True) for row in data[1:]):
+        raise ValueError(
+            "The range of the file differs between the sweeps, range"
+            f"{ncvar.dimensions}. A Radar has one range for all sweeps: "
+            "reindex the sweeps onto one range before writing the file."
+        )
+    d["data"] = d["data"][0]
+    for key in ("meters_to_center_of_first_gate", "meters_between_gates"):
+        if key in d and np.ndim(d[key]) > 0:
+            d[key] = np.ravel(d[key])[0]
+    return d
 
 
 def _ncvar_to_dict(ncvar, lazydict=False):
@@ -803,6 +885,37 @@ def write_cfradial(
 
     if radar.pitch is not None:
         _create_ncvar(radar.pitch, dataset, "pitch", ("time",))
+
+    if radar.heading_change_rate is not None:
+        _create_ncvar(
+            radar.heading_change_rate, dataset, "heading_change_rate", ("time",)
+        )
+
+    if radar.pitch_change_rate is not None:
+        _create_ncvar(radar.pitch_change_rate, dataset, "pitch_change_rate", ("time",))
+
+    if radar.roll_change_rate is not None:
+        _create_ncvar(radar.roll_change_rate, dataset, "roll_change_rate", ("time",))
+
+    if radar.eastward_velocity is not None:
+        _create_ncvar(radar.eastward_velocity, dataset, "eastward_velocity", ("time",))
+
+    if radar.northward_velocity is not None:
+        _create_ncvar(
+            radar.northward_velocity, dataset, "northward_velocity", ("time",)
+        )
+
+    if radar.vertical_velocity is not None:
+        _create_ncvar(radar.vertical_velocity, dataset, "vertical_velocity", ("time",))
+
+    if radar.eastward_wind is not None:
+        _create_ncvar(radar.eastward_wind, dataset, "eastward_wind", ("time",))
+
+    if radar.northward_wind is not None:
+        _create_ncvar(radar.northward_wind, dataset, "northward_wind", ("time",))
+
+    if radar.vertical_wind is not None:
+        _create_ncvar(radar.vertical_wind, dataset, "vertical_wind", ("time",))
 
     if radar.georefs_applied is not None:
         _create_ncvar(radar.georefs_applied, dataset, "georefs_applied", ("time",))

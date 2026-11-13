@@ -5,20 +5,12 @@ Routines for Ridgeline Instruments RXM-25 formatted NetCDF files.
 
 import datetime
 
-try:
-    import pytz
-
-    _PYTZ_AVAILABLE = True
-except ImportError:
-    _PYTZ_AVAILABLE = False
-
 import netCDF4
 import numpy as np
 
 import pyart
 
 from ..config import get_metadata
-from ..exceptions import MissingOptionalDependency
 from ..testing import make_empty_ppi_radar
 
 
@@ -43,11 +35,6 @@ def read_rxm25(filename, cfradial_outfile=None, heading=None):
         Radar object.
 
     """
-    if not _PYTZ_AVAILABLE:
-        raise MissingOptionalDependency(
-            "Pytz is required to use read_rxm25 but is " + "not installed"
-        )
-
     data = netCDF4.Dataset(filename, "r")
 
     ngates = data.dimensions["Gate"].size
@@ -56,10 +43,10 @@ def read_rxm25(filename, cfradial_outfile=None, heading=None):
 
     # Time needs to be converted from nss1970 to nss1989 and added to
     # Radar object.
-    nineteen89 = datetime.datetime(1989, 1, 1, 0, 0, 1, tzinfo=pytz.utc)
+    nineteen89 = datetime.datetime(1989, 1, 1, 0, 0, 1, tzinfo=datetime.timezone.utc)
     baseTime = np.array(
         [
-            datetime.datetime.fromtimestamp(t, tz=pytz.UTC)
+            datetime.datetime.fromtimestamp(t, tz=datetime.timezone.utc)
             for t in data.variables["Time"][:]
         ]
     )

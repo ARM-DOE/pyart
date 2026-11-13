@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's map/gates_to_grid.py. """
+"""Unit Tests for Py-ART's map/gates_to_grid.py."""
 
 import numpy as np
 import pytest

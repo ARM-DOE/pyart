@@ -14,7 +14,6 @@ dependencies:
   - arm_pyart
   - xarray
   - xradar
-  - mda-xdrlib
   - pip
   - cmweather
   - pip:

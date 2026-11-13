@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's config.py module. """
+"""Unit Tests for Py-ART's config.py module."""
 
 import os
 import warnings

@@ -1,17 +1,24 @@
-""" Unit Tests for Py-ART's graph/gridmapdisplay.py module. """
+"""Unit Tests for Py-ART's graph/gridmapdisplay.py module."""
 
 # execute this script to create figure_gridmapdisplay_*.png files.
 
 # TODO use matplotlib's @image_comparison decorator to compare to file
 # in baseline_images directory. Currently this test only determines if files
 # can be created, not that they are correct.
+import sys
 
 import matplotlib.pyplot as plt
 import pytest
 
 import pyart
 
+skip_cartopy_py314 = pytest.mark.skipif(
+    sys.version_info >= (3, 14),
+    reason="Cartopy-based plotting skipped on Python 3.14",
+)
 
+
+@skip_cartopy_py314
 def test_gridmapdisplay_simple(outfile=None):
     # test basic GridMapDisplat functionally.
     grid = pyart.testing.make_target_grid()
@@ -23,6 +30,7 @@ def test_gridmapdisplay_simple(outfile=None):
         fig.savefig(outfile)
 
 
+@skip_cartopy_py314
 def test_gridmapdisplay_fancy(outfile=None):
     import cartopy.crs as ccrs
 

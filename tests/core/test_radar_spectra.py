@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's core/radar_spectra.py module. """
+"""Unit Tests for Py-ART's core/radar_spectra.py module."""
 
 import inspect
 

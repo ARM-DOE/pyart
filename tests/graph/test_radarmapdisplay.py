@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's graph/radarmapdisplay.py module. """
+"""Unit Tests for Py-ART's graph/radarmapdisplay.py module."""
 
 # execute this script to create figure_plot_radar_display_*.png files.
 
@@ -6,6 +6,10 @@
 # in baseline_images directory. Currently this test only determines if files
 # can be created, not that they are correct.
 
+
+import matplotlib
+
+matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
 import pytest

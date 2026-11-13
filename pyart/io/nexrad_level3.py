@@ -72,7 +72,66 @@ from collections import namedtuple
 from datetime import datetime, timedelta, timezone
 
 import numpy as np
-from mda_xdrlib.xdrlib import Unpacker
+
+
+class _XDRUnpacker:
+    """Minimal XDR unpacker used by Level 3 generic packet parsing."""
+
+    def __init__(self, data):
+        self._buf = data
+        self._pos = 0
+
+    def done(self):
+        if self._pos < len(self._buf):
+            raise ValueError("unextracted data remains")
+
+    def unpack_uint(self):
+        i = self._pos
+        j = i + 4
+        data = self._buf[i:j]
+        if len(data) < 4:
+            raise EOFError
+        self._pos = j
+        return struct.unpack(">L", data)[0]
+
+    def unpack_int(self):
+        i = self._pos
+        j = i + 4
+        data = self._buf[i:j]
+        if len(data) < 4:
+            raise EOFError
+        self._pos = j
+        return struct.unpack(">l", data)[0]
+
+    def unpack_float(self):
+        i = self._pos
+        j = i + 4
+        data = self._buf[i:j]
+        if len(data) < 4:
+            raise EOFError
+        self._pos = j
+        return struct.unpack(">f", data)[0]
+
+    def unpack_fstring(self, n):
+        if n < 0:
+            raise ValueError("fstring size must be nonnegative")
+        i = self._pos
+        j = i + ((n + 3) // 4) * 4
+        if j > len(self._buf):
+            raise EOFError
+        self._pos = j
+        return self._buf[i : i + n]
+
+    def unpack_string(self):
+        n = self.unpack_uint()
+        return self.unpack_fstring(n)
+
+    def unpack_farray(self, n, unpack_item):
+        return [unpack_item() for _ in range(n)]
+
+    def unpack_array(self, unpack_item):
+        n = self.unpack_uint()
+        return self.unpack_farray(n, unpack_item)
 
 
 class NEXRADLevel3File:
@@ -408,7 +467,7 @@ def nexrad_level3_message_code(filename):
 # Tables and page number refer to those in this document.
 
 
-class Level3XDRParser(Unpacker):
+class Level3XDRParser(_XDRUnpacker):
     """Handle XDR-formatted Level 3 NEXRAD products.
 
     This class is virtually identical to the Metpy implementation. It has been
@@ -463,7 +522,7 @@ class Level3XDRParser(Unpacker):
 
     def unpack_string(self):
         """Unpack the internal data as a string."""
-        return Unpacker.unpack_string(self).decode("ascii")
+        return _XDRUnpacker.unpack_string(self).decode("ascii")
 
     def _unpack_prod_desc(self):
         xdr = {}

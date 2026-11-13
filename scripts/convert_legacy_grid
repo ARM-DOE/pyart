@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-""" Convert a legacy Py-ART grid NetCDF file to a modern NetCDF file. """
+"""Convert a legacy Py-ART grid NetCDF file to a modern NetCDF file."""
 
 import argparse
 import warnings

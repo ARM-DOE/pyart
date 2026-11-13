@@ -9,7 +9,7 @@ The Python ARM Radar Toolkit, Py-ART, is an open source Python module
 containing a growing collection of weather radar algorithms and utilities
 build on top of the Scientific Python stack and distributed under the
 3-Clause BSD license. Py-ART is used by the
-`Atmospheric Radiation Measurement (ARM) Climate Research Facility
+`Atmospheric Radiation Measurement (ARM) User Facility
 <http://www.arm.gov>`_ for working with data from a number of precipitation
 and cloud radars, but has been designed so that it can be used by others in
 the radar and atmospheric communities to examine, processes, and analyze
@@ -22,7 +22,7 @@ Important Links
 - Official source code repository: https://github.com/ARM-DOE/pyart
 - HTML documentation: https://arm-doe.github.io/pyart
 - Examples: https://arm-doe.github.io/pyart/examples/
-- Mailing List: http://groups.google.com/group/pyart-users/
+- Discussions: https://github.com/ARM-DOE/pyart/discussions
 - Issue Tracker: https://github.com/ARM-DOE/pyart/issues
 
 
@@ -67,7 +67,7 @@ If you are using mamba::
 Resources
 ---------
 
-Pyart:
+Py-ART:
 
 - https://github.com/openradar/AMS-Short-Course-on-Open-Source-Radar-Software
 - https://github.com/EVS-ATMOS/pyart_short_course
@@ -79,6 +79,17 @@ Git:
 
 - https://git-scm.com/book/en/v2
 
+
+
+
+AI Policy
+---------
+
+Py-ART contributors may use AI tools as part of their workflow. Please read the
+`AI Policy <https://github.com/ARM-DOE/pyart/blob/main/AI_POLICY.md>`_
+before submitting any pull requests that had code changes assisted by AI.
+Pull requests can not be opened by an agent and pull requests and dicussions
+must contain your own words.
 
 Code Style
 ----------
@@ -216,6 +227,11 @@ An example:
 
 Testing
 -------
+
+Upstream breakage (e.g. new releases of ``xarray``, ``xradar``, or other
+dependencies) is watched by a nightly job defined in
+``.github/workflows/upstream-ci.yml``; it can also be triggered on a pull
+request by applying the ``run-upstream-ci`` label.
 
 When adding a new function to pyart it is important to add your function to
 the __init__.py file under the corresponding pyart folder.
@@ -369,6 +385,7 @@ but you would like to start a new branch with a different task in mind. It
 is recommended that your new branch is based on your main. First::
 
                 git checkout main
+
 Then::
 
                 git checkout -b <branch_name>

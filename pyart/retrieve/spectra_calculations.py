@@ -1,4 +1,4 @@
-""" Module containing calculations for spectra moments. """
+"""Module containing calculations for spectra moments."""
 
 import numpy as np
 

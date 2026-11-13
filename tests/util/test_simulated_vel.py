@@ -1,4 +1,4 @@
-""" Unit tests for Py-ART's util/simulated_vel.py module. """
+"""Unit tests for Py-ART's util/simulated_vel.py module."""
 
 import numpy as np
 from numpy.testing import assert_almost_equal

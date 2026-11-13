@@ -100,7 +100,7 @@ def column_vertical_profile(
         # For the ray(s) directly over the target, extract and average fields
         for ray in center:
             # Convert gates from antenna or cartesian coordinates
-            (rhi_x, rhi_y, rhi_z) = antenna_vectors_to_cartesian(
+            rhi_x, rhi_y, rhi_z = antenna_vectors_to_cartesian(
                 radar.range["data"],
                 radar.azimuth["data"][ray],
                 radar.elevation["data"][ray],
@@ -125,7 +125,7 @@ def column_vertical_profile(
         # Convert to Cartesian Coordinates
         # Determine the center of each gate for the subsetted rays.
         for ray in spread:
-            (rhi_x, rhi_y, rhi_z) = antenna_vectors_to_cartesian(
+            rhi_x, rhi_y, rhi_z = antenna_vectors_to_cartesian(
                 radar.range["data"],
                 radar.azimuth["data"][ray],
                 radar.elevation["data"][ray],
@@ -330,7 +330,7 @@ def get_field_location(radar, latitude, longitude):
     ray = get_column_rays(radar, azim)
 
     # Determine the center of each gate for the subsetted rays.
-    (rhi_x, rhi_y, rhi_z) = antenna_vectors_to_cartesian(
+    rhi_x, rhi_y, rhi_z = antenna_vectors_to_cartesian(
         radar.range["data"],
         radar.azimuth["data"][ray],
         radar.elevation["data"][ray],

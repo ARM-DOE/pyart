@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's graph/common.py module. """
+"""Unit Tests for Py-ART's graph/common.py module."""
 
 import datetime
 

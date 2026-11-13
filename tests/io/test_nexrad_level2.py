@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/nexrad_level2.py module. """
+"""Unit Tests for Py-ART's io/nexrad_level2.py module."""
 
 import bz2
 import datetime

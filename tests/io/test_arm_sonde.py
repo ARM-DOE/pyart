@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/arm_sonde.py module. """
+"""Unit Tests for Py-ART's io/arm_sonde.py module."""
 
 import datetime
 

@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's map/grid_mapper.py module. """
+"""Unit Tests for Py-ART's map/grid_mapper.py module."""
 
 import numpy as np
 import pytest

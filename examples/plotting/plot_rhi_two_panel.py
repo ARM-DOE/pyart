@@ -49,6 +49,6 @@ time = radar.time["units"][13:]
 
 # Add the metadata to the title
 plt.suptitle(
-    f"Reflectivity and Velocity \n Azimuth: {np.around(fixed_angle, 3)}\u00B0 {time} UTC"
+    f"Reflectivity and Velocity \n Azimuth: {np.around(fixed_angle, 3)}\u00b0 {time} UTC"
 )
 plt.show()

@@ -2,5 +2,5 @@
 # intermediates
 rm -r build
 rm source/API/generated/*
-rm -r source/source/auto_examples/*
+rm -r source/examples/*
 BUILD_PYART_EXAMPLES=1 make html

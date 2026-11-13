@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's retrieve/srv.py module. """
+"""Unit Tests for Py-ART's retrieve/srv.py module."""
 
 import numpy as np
 import pytest

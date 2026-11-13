@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's output_to_geotiff.py module. """
+"""Unit Tests for Py-ART's output_to_geotiff.py module."""
 
 import warnings
 

@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's io/mdv_grid.py module. """
+"""Unit Tests for Py-ART's io/mdv_grid.py module."""
 
 import datetime
 from io import BytesIO

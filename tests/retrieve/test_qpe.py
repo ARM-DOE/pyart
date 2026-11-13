@@ -1,4 +1,4 @@
-""" Unit tests for rainfall rate estimation module. """
+"""Unit tests for rainfall rate estimation module."""
 
 from numpy.testing import assert_allclose
 

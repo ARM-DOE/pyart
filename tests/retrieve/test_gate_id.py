@@ -1,4 +1,4 @@
-""" Unit Tests for Py-ART's retrieve/gate_id.py module. """
+"""Unit Tests for Py-ART's retrieve/gate_id.py module."""
 
 import netCDF4
 import numpy as np
