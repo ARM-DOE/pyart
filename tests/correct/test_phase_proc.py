@@ -36,6 +36,13 @@ try:
 except ImportError:
     cylp_available = False
 
+try:
+    import highspy  # noqa
+
+    highspy_available = True
+except ImportError:
+    highspy_available = False
+
 import pyart
 
 PATH = os.path.dirname(__file__)
@@ -129,6 +136,21 @@ def test_phase_proc_lp_cylp_mp():
     )
 
 
+@pytest.mark.skipif(not highspy_available, reason="HiGHS is not installed.")
+def test_phase_proc_lp_highspy():
+    radar, phidp, kdp = perform_phase_processing("highspy")
+    ref = np.load(REFERENCE_RAYS_FILE)
+    assert _ratio(ref["reference_phidp"], phidp["data"]) <= 0.01
+    assert _ratio(ref["reference_kdp"], kdp["data"]) <= 0.01
+    assert (
+        _ratio(
+            ref["reference_unfolded_phidp"],
+            radar.fields["unfolded_differential_phase"]["data"],
+        )
+        <= 0.01
+    )
+
+
 def _ratio(a1, a2):
     """Ratio the sum of the abs difference vs sum abs of two vectors."""
     abs_residues = np.abs(a1 - a2).sum()
@@ -154,6 +176,24 @@ def test_perform_phase_processing_gf(LP_solver="cvxopt"):
         radar,
         gatefilter=my_gatefilter,
         LP_solver=LP_solver,
+        doc=15,
+        ncpts=20,
+        system_phase=-140.1,
+    )
+    assert phidp["data"].max() < 360.0
+    assert kdp["data"].max() < 6.0
+
+
+@pytest.mark.skipif(not highspy_available, reason="HiGHS is not installed.")
+def test_phase_proc_lp_gf_highspy():
+    radar = pyart.testing.make_single_ray_radar()
+    my_gatefilter = pyart.filters.GateFilter(radar)
+    my_gatefilter.exclude_below("normalized_coherent_power", 0.5)
+    my_gatefilter.exclude_below("cross_correlation_ratio", 0.8)
+    phidp, kdp = pyart.correct.phase_proc_lp_gf(
+        radar,
+        gatefilter=my_gatefilter,
+        LP_solver="highspy",
         doc=15,
         ncpts=20,
         system_phase=-140.1,

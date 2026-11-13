@@ -124,6 +124,14 @@ to install the CyLP version we want::
 
 This will install a Python 3 compatible version of CyLP found on GitHub.
 
+The `highspy <https://pypi.org/project/highspy/>`_ package is an alternative
+LP backend using the HiGHS solver. It is generally simpler to install because
+binary wheels are available. Install it with::
+
+        pip install highspy
+
+Then pass ``LP_solver="highspy"`` to the LP phase processing functions.
+
 More Information
 ----------------
 

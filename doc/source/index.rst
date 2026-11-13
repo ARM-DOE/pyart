@@ -251,11 +251,13 @@ functionality is available of the following modules are installed.
   installed.
 
 * A linear programming solver and Python wrapper to use the LP phase
-  processing method. `CyLP <https://github.com/mpy/CyLP>`_ is recommended as
-  it gives the fastest results, but
+  processing method. `CyLP <https://github.com/mpy/CyLP>`_ and
+  `highspy <https://pypi.org/project/highspy/>`_ are supported. ``highspy``
+  provides the HiGHS solver and can be installed with ``pip install highspy``.
   `PyGLPK <https://tfinley.net/software/pyglpk/>`_ and
   `CVXOPT <https://cvxopt.org/>`_ are also supported. The underlying LP
-  solvers `CBC <https://projects.coin-or.org/Cbc>`_ or
+  solvers `HiGHS <https://highs.dev/>`_,
+  `CBC <https://projects.coin-or.org/Cbc>`_ or
   `GLPK <https://www.gnu.org/software/glpk/>`_ will also be required depending
   on which wrapper is used. When using `CyLP <https://github.com/mpy/CyLP>`_
   a path to coincbc is needed by setting the `COIN_INSTALL_DIR` path, such as

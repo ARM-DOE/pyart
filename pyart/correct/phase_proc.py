@@ -1016,6 +1016,113 @@ def LP_solver_cylp(A_Matrix, B_vectors, weights, really_verbose=False):
     return soln
 
 
+def LP_solver_highspy(A_Matrix, B_vectors, weights, really_verbose=False):
+    """
+    Solve the linear programming problem using the HiGHS solver.
+
+    The constraint matrix is built once and reused while the row lower bounds
+    and objective coefficients are changed for each ray. HiGHS retains the
+    current simplex basis between solves, which is important for this
+    repeated-LP workload.
+
+    Parameters
+    ----------
+    A_Matrix : matrix
+        Row augmented A matrix, see :py:func:`construct_A_matrix`
+    B_vectors : matrix
+        Matrix containing B vectors, see :py:func:`construct_B_vectors`
+    weights : array
+        Weights.
+    really_verbose : bool, optional
+        True to print HiGHS solver output. False to suppress.
+
+    Returns
+    -------
+    soln : array
+        Solution to LP problem.
+
+    Notes
+    -----
+    This function requires the optional ``highspy`` package.
+
+    See Also
+    --------
+    LP_solver_cvxopt : Solve LP problem using the CVXOPT module.
+    LP_solver_pyglpk : Solve LP problem using the PyGLPK module.
+    LP_solver_cylp : Solve LP problem using the cylp module.
+    """
+    from highspy import Highs, HighsModelStatus
+    from scipy.sparse import csr_matrix
+
+    n_gates = weights.shape[1] // 2
+    n_rays = B_vectors.shape[0]
+    n_rows = B_vectors.shape[1]
+    n_cols = weights.shape[1]
+    soln = np.zeros([n_rays, n_gates])
+
+    # HiGHS expects the constraint matrix in compressed sparse row format.
+    matrix = csr_matrix(np.asarray(A_Matrix, dtype=np.float64))
+    row_indices = np.arange(n_rows, dtype=np.int32)
+    col_indices = np.arange(n_cols, dtype=np.int32)
+    row_upper = np.full(n_rows, np.inf)
+    col_lower = np.zeros(n_cols)
+    col_upper = np.full(n_cols, np.inf)
+
+    model = Highs()
+    model.setOptionValue("output_flag", really_verbose)
+    model.setOptionValue("solver", "simplex")
+
+    # Add the variables without column-wise matrix coefficients, then add the
+    # complete constraint matrix by rows.
+    model.addCols(
+        n_cols,
+        np.asarray(weights[0], dtype=np.float64).ravel(),
+        col_lower,
+        col_upper,
+        0,
+        np.zeros(n_cols + 1, dtype=np.int32),
+        np.empty(0, dtype=np.int32),
+        np.empty(0, dtype=np.float64),
+    )
+    model.addRows(
+        n_rows,
+        np.asarray(B_vectors[0], dtype=np.float64).ravel(),
+        row_upper,
+        matrix.nnz,
+        matrix.indptr.astype(np.int32, copy=False),
+        matrix.indices.astype(np.int32, copy=False),
+        matrix.data,
+    )
+
+    for raynum in range(n_rays):
+        if raynum > 0:
+            model.changeRowsBounds(
+                n_rows,
+                row_indices,
+                np.asarray(B_vectors[raynum], dtype=np.float64).ravel(),
+                row_upper,
+            )
+            model.changeColsCost(
+                n_cols,
+                col_indices,
+                np.asarray(weights[raynum], dtype=np.float64).ravel(),
+            )
+
+        model.run()
+        if model.getModelStatus() != HighsModelStatus.kOptimal:
+            raise RuntimeError(
+                "HiGHS failed to solve LP for ray "
+                f"{raynum}: {model.getModelStatus()}"
+            )
+
+        model_solution = np.asarray(model.getSolution().col_value)
+        soln[raynum, :] = model_solution[n_gates : 2 * n_gates]
+
+    # Apply smoothing filter on a per scan basis.
+    soln = smooth_and_trim_scan(soln, window_len=5, window="sg_smooth")
+    return soln
+
+
 def phase_proc_lp(
     radar,
     offset,
@@ -1078,7 +1185,7 @@ def phase_proc_lp(
         Gate number to begin phase unwrapping. None will unwrap all phases.
     really_verbose : bool, optional
         True to print LPX messaging. False to suppress.
-    LP_solver : 'pyglpk' or 'cvxopt', 'cylp', or 'cylp_mp', optional
+    LP_solver : 'pyglpk', 'cvxopt', 'cylp', 'cylp_mp', or 'highspy', optional
         Module to use to solve LP problem. Default is 'pyglpk'.
     refl_field, ncp_field, rhv_field, phidp_field, kdp_field : str, optional
         Name of field in radar which contains the horizonal reflectivity,
@@ -1202,6 +1309,10 @@ def phase_proc_lp(
             mysoln = LP_solver_cylp_mp(
                 A_Matrix, B_vectors, nw, really_verbose=really_verbose, proc=proc
             )
+        elif LP_solver == "highspy":
+            mysoln = LP_solver_highspy(
+                A_Matrix, B_vectors, nw, really_verbose=really_verbose
+            )
         else:
             raise ValueError("unknown LP_solver:" + LP_solver)
 
@@ -1286,7 +1397,7 @@ def phase_proc_lp_gf(
         Gate number to begin phase unwrapping. None will unwrap all phases.
     really_verbose : bool, optional
         True to print LPX messaging. False to suppress.
-    LP_solver : 'pyglpk' or 'cvxopt', 'cylp', or 'cylp_mp', optional
+    LP_solver : 'pyglpk', 'cvxopt', 'cylp', 'cylp_mp', or 'highspy', optional
         Module to use to solve LP problem. Default is 'pyglpk'.
     refl_field, ncp_field, rhv_field, phidp_field, kdp_field : str, optional
         Name of field in radar which contains the horizonal reflectivity,
@@ -1425,6 +1536,10 @@ def phase_proc_lp_gf(
         elif LP_solver == "cylp_mp":
             mysoln = LP_solver_cylp_mp(
                 A_Matrix, B_vectors, nw, really_verbose=really_verbose, proc=proc
+            )
+        elif LP_solver == "highspy":
+            mysoln = LP_solver_highspy(
+                A_Matrix, B_vectors, nw, really_verbose=really_verbose
             )
         else:
             raise ValueError("unknown LP_solver:" + LP_solver)
