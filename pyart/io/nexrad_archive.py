@@ -125,6 +125,31 @@ def read_nexrad_archive(
     nfile = NEXRADLevel2File(
         prepare_for_read(filename, storage_options=storage_options)
     )
+    # Use the same scan list for metadata, rays, fields, and target angles.
+    requested_scans = (
+        list(range(len(nfile.scan_msgs))) if scans is None else list(scans)
+    )
+
+    for scan in requested_scans:
+        if not isinstance(scan, (int, np.integer)):
+            nfile.close()
+            raise TypeError(f"Scan index must be an integer: {scan!r}")
+        if scan < 0 or scan >= len(nfile.scan_msgs):
+            nfile.close()
+            raise IndexError(f"Scan index out of range: {scan}")
+
+    scans = [scan for scan in requested_scans if nfile.get_nrays(scan) >= 2]
+
+    if len(scans) != len(requested_scans):
+        warnings.warn(
+            "Skipping scans with fewer than two rays.",
+            UserWarning,
+        )
+
+    if not scans:
+        nfile.close()
+        raise ValueError("No requested scans contain at least two rays")
+
     scan_info = nfile.scan_info(scans)
 
     # time
@@ -177,10 +202,7 @@ def read_nexrad_archive(
     sweep_start_ray_index = filemetadata("sweep_start_ray_index")
     sweep_end_ray_index = filemetadata("sweep_end_ray_index")
 
-    if scans is None:
-        nsweeps = int(nfile.nscans)
-    else:
-        nsweeps = len(scans)
+    nsweeps = len(scans)
     sweep_number["data"] = np.arange(nsweeps, dtype="int32")
     sweep_mode["data"] = np.array(nsweeps * ["azimuth_surveillance"], dtype="S")
 

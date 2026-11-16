@@ -2,8 +2,10 @@
 
 import bz2
 import datetime
+import shutil
 from io import BytesIO
 
+import fsspec
 import numpy as np
 import pytest
 from numpy.testing import assert_almost_equal, assert_array_equal
@@ -400,3 +402,113 @@ def test_1ms_vel_message():
     # check the velocity scale
     new_pos, dic = nexrad_level2._get_record_from_buf(fake_buf, 0)
     assert dic["VEL"]["scale"] == 1.0
+
+
+# KLZK20230331_192732_V06 reference values:
+# Raw MSG 5 inspection found HW 10 = 0x0003 and E15 = 0x0003
+# for cuts 10 and 11. Under ICD 2620002AA Table XI, notes 16–18,
+# these indicate one SAILS sequence with two flagged cuts in sequence 1.
+# Their E2 waveform codes are 1 (CS) and 2 (CD/W).
+# The reader reports radial elevation numbers 10 and 11 for scans 9 and 10.
+# This file is from 2023; the cited ICD is Build 24.0 from 2025.
+EXPECTED_KLZK = {
+    "pattern_number": 212,
+    "num_sails_cuts": 1,
+    "sails_scans": [9, 10],
+    "cuts": {
+        0: {
+            "elevation_number": 1,
+            "elevation": 0.527,
+            "waveform_code": 1,  # CS
+            "sails_cut": False,
+            "sails_sequence_number": 0,
+            "moments": ["REF", "ZDR", "PHI", "RHO"],
+        },
+        1: {
+            "elevation_number": 2,
+            "elevation": 0.527,
+            "waveform_code": 2,  # CD/W
+            "sails_cut": False,
+            "sails_sequence_number": 0,
+            "moments": ["REF", "VEL", "SW"],
+        },
+        6: {
+            "elevation_number": 7,
+            "elevation": 1.802,
+            "waveform_code": 4,  # Batch
+            "sails_cut": False,
+            "sails_sequence_number": 0,
+            "moments": ["REF", "VEL", "SW", "ZDR", "PHI", "RHO"],
+        },
+        9: {
+            "elevation_number": 10,
+            "elevation": 0.461,
+            "waveform_code": 1,  # SAILS CS
+            "sails_cut": True,
+            "sails_sequence_number": 1,
+            "moments": ["REF", "ZDR", "PHI", "RHO"],
+        },
+        10: {
+            "elevation_number": 11,
+            "elevation": 0.527,
+            "waveform_code": 2,  # SAILS CD/W
+            "sails_cut": True,
+            "sails_sequence_number": 1,
+            "moments": ["REF", "VEL", "SW"],
+        },
+    },
+}
+
+
+def test_klzk_sails_volume(tmp_path):
+    local_file = tmp_path / "KLZK20230331_192732_V06"
+
+    with fsspec.open(
+        "s3://unidata-nexrad-level2/2023/03/31/KLZK/" "KLZK20230331_192732_V06",
+        mode="rb",
+        anon=True,
+    ) as source:
+        with local_file.open("wb") as destination:
+            shutil.copyfileobj(source, destination)
+
+    nf = nexrad_level2.NEXRADLevel2File(str(local_file))
+    try:
+        # Keep the assertions from the previous test here.
+        assert nf.get_vcp_pattern() == EXPECTED_KLZK["pattern_number"]
+        flags = nf.get_vcp_flags()["supplemental"]
+        assert flags["sails_vcp"] is True
+        assert flags["num_sails_cuts"] == EXPECTED_KLZK["num_sails_cuts"]
+        assert flags["mrle_vcp"] is False
+
+        scan_types = nf.get_scan_types()
+        assert len(scan_types) == 19
+        assert all(scan["waveform_code"] is not None for scan in scan_types)
+        by_scan = {scan["scan"]: scan for scan in scan_types}
+
+        for scan_number, expected in EXPECTED_KLZK["cuts"].items():
+            actual = by_scan[scan_number]
+
+            assert actual["elevation_number"] == expected["elevation_number"]
+            assert actual["elevation"] == pytest.approx(
+                expected["elevation"], abs=0.001
+            )
+            assert actual["waveform_code"] == expected["waveform_code"]
+            assert actual["sails_cut"] is expected["sails_cut"]
+            assert actual["sails_sequence_number"] == (
+                expected["sails_sequence_number"]
+            )
+
+            first_radial = nf.radial_records[nf.scan_msgs[scan_number][0]]
+            for moment in expected["moments"]:
+                assert moment in first_radial
+
+        assert nf.get_scans_by_type(sails_cut=True) == EXPECTED_KLZK["sails_scans"]
+        assert nf.get_scans_by_type(
+            elevation=0.5, waveform="contiguous_surveillance"
+        ) == [0, 9]
+        assert nf.get_scans_by_type(
+            elevation=0.5,
+            waveform="contiguous_doppler_with_ambiguity_resolution",
+        ) == [1, 10]
+    finally:
+        nf.close()

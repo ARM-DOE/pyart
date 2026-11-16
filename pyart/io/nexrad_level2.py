@@ -62,6 +62,76 @@ from datetime import datetime, timedelta
 
 import numpy as np
 
+# Waveform type codes, MSG_5 per-cut data (E2 lower byte).
+# ICD 2620002AA (Build 24.0), Table XI and Table XVIII, footnote (1) on
+# Table XVIII: type 3 uses the PRFs of type 2, type 4 (Batch) uses the
+# type 1 PRFs for its surveillance part and the type 2 PRFs for its Doppler part.
+_WAVEFORM_TYPES = {
+    0: "not_applicable",
+    1: "contiguous_surveillance",  # CS
+    2: "contiguous_doppler_with_ambiguity_resolution",  # CD/W
+    3: "contiguous_doppler_without_ambiguity_resolution",  # CD/WO
+    4: "batch",  # B
+    5: "staggered_pulse_pair",
+}
+
+
+# Decoders for the SAILS/MRLE/MPDA/base-tilt bit fields.
+# ICD 2620002AA, Table XI and notes (14)-(17). Bit 0 is the least significant
+# bit (note (4) of Table XI).
+def _decode_vcp_sequencing(value):
+    """
+    Decode the VCP sequencing halfword (MSG_5 HW 9, Table XI note 15).
+
+    This field is reserved for RPG use (note 14). It is zero unless the VCP is
+    part of an active VCP sequence, so it is zero in most files. Do not rely on
+    it for the number of cuts in a volume, use MSG_5 HW 4 (num_cuts) instead.
+    """
+    return {
+        "num_elevations": value & 0x1F,  # bits 0-4 (truncated VCPs)
+        "max_sails_cuts": (value >> 5) & 0x03,  # bits 5-6
+        "sequence_active": bool(value & 0x2000),  # bit 13
+        "truncated_vcp": bool(value & 0x4000),  # bit 14
+    }
+
+
+def _decode_vcp_supplemental(value):
+    """
+    Decode the VCP supplemental halfword (MSG_5 HW 10, Table XI note 16).
+
+    Bits 8-10 are spares according to note 16 (the table labels bit 10 as
+    "MPDA Cuts Added"), so they are deliberately not decoded.
+    SAILS and MRLE cannot be active at the same time.
+    """
+    return {
+        "sails_vcp": bool(value & 0x0001),  # bit 0
+        "num_sails_cuts": (value >> 1) & 0x07,  # bits 1-3 (max 3)
+        "mrle_vcp": bool(value & 0x0010),  # bit 4
+        "num_mrle_cuts": (value >> 5) & 0x07,  # bits 5-7 (max 4)
+        "mpda_vcp": bool(value & 0x0800),  # bit 11
+        "base_tilt_vcp": bool(value & 0x1000),  # bit 12
+        "num_base_tilts": (value >> 13) & 0x07,  # bits 13-15
+    }
+
+
+def _decode_elevation_supplemental(value):
+    """
+    Decode the per-cut supplemental halfword (MSG_5 E15, Table XI note 17).
+
+    A cut cannot be both a SAILS and an MRLE cut. For a SAILS cut, bits 1-3 are
+    the SAILS sequence number; split (CS/CD) cuts share one number. For an MRLE
+    cut, bits 5-7 equal the RPG elevation index of the cut, which is not a
+    1..N counter.
+    """
+    return {
+        "sails_cut": bool(value & 0x0001),  # bit 0
+        "sails_sequence_number": (value >> 1) & 0x07,  # bits 1-3
+        "mrle_cut": bool(value & 0x0010),  # bit 4
+        "mrle_sequence_number": (value >> 5) & 0x07,  # bits 5-7
+        "mpda_cut": bool(value & 0x0200),  # bit 9 (bit 8 is a spare)
+        "base_tilt_cut": bool(value & 0x0400),  # bit 10
+    }
+
 
 class NEXRADLevel2File:
     """
@@ -230,6 +300,9 @@ class NEXRADLevel2File:
         for scan in scans:
             nrays = self.get_nrays(scan)
             if nrays < 2:
+                # NOTE: this mutates self.nscans but not scan_msgs. It is left
+                # unchanged because existing readers may depend on it; the new
+                # get_scan_types() deliberately does not use self.nscans.
                 self.nscans -= 1
                 continue
             msg31_number = self.scan_msgs[scan][0]
@@ -258,6 +331,172 @@ class NEXRADLevel2File:
             return None
         else:
             return self.vcp["msg5_header"]["pattern_number"]
+
+    def get_vcp_flags(self):
+        """
+        Return decoded VCP-level SAILS/MRLE/MPDA/base-tilt information.
+
+        Returns
+        -------
+        flags : dict or None
+            Dictionary with keys 'sequencing' and 'supplemental', each a dict
+            of decoded values (see _decode_vcp_sequencing and
+            _decode_vcp_supplemental). None if no MSG_5 header is available.
+
+        """
+        if self.vcp is None or "msg5_header" not in self.vcp:
+            return None
+        hdr = self.vcp["msg5_header"]
+        return {
+            "sequencing": _decode_vcp_sequencing(hdr["vcp_sequencing"]),
+            "supplemental": _decode_vcp_supplemental(hdr["vcp_supplemental"]),
+        }
+
+    def get_scan_types(self, scans=None, elevation_tolerance=1.0):
+        """
+        Return per-scan metadata: waveform type and SAILS/MRLE flags.
+
+        Scans are matched to MSG_5 cuts by the radial's elevation_number (not
+        by list position). If the MSG_5 nominal elevation differs from the
+        measured elevation by more than ``elevation_tolerance`` degrees, the
+        MSG_5 information is not attached for that scan (waveform_type and
+        waveform_code stay None) and a RuntimeWarning is issued.
+
+        Parameters
+        ----------
+        scans : list or None
+            Scans (0 based) to describe. None (the default) uses all scans in
+            the volume, including scans that scan_info() may have skipped.
+        elevation_tolerance : float
+            Maximum allowed difference in degrees between the MSG_5 nominal
+            elevation and the measured median elevation.
+
+        Returns
+        -------
+        scan_types : list of dict
+            One entry per scan with keys 'scan', 'elevation_number',
+            'elevation', 'waveform_type', 'waveform_code', 'sails_cut',
+            'sails_sequence_number', 'mrle_cut', 'mrle_sequence_number',
+            'mpda_cut' and 'base_tilt_cut'. 'waveform_type' is a name from
+            _WAVEFORM_TYPES and 'waveform_code' the raw ICD code (1 = CS,
+            2 = CD/W, 3 = CD/WO, 4 = Batch, 5 = Staggered Pulse Pair).
+            Scans with no radials (gaps in the elevation numbers) are skipped.
+
+        """
+        if scans is None:
+            scans = range(len(self.scan_msgs))  # not self.nscans
+        cuts = []
+        if self.vcp is not None:
+            cuts = self.vcp.get("cut_parameters", [])
+        angle_scale = 1.0 if self._msg_type == "31" else 180 / (4096 * 8.0)
+
+        out = []
+        for scan in scans:
+            msg_idx = self.scan_msgs[scan]
+            if len(msg_idx) == 0:  # gap in elevation numbers
+                continue
+            hdr = self.radial_records[msg_idx[0]]["msg_header"]
+            elev_num = int(hdr["elevation_number"])
+            measured = float(
+                np.median(
+                    [
+                        self.radial_records[i]["msg_header"]["elevation_angle"]
+                        for i in msg_idx
+                    ]
+                )
+                * angle_scale
+            )
+
+            entry = {
+                "scan": scan,
+                "elevation_number": elev_num,
+                "elevation": measured,
+                "waveform_type": None,
+                "waveform_code": None,
+                "sails_cut": None,
+                "sails_sequence_number": None,
+                "mrle_cut": None,
+                "mrle_sequence_number": None,
+                "mpda_cut": None,
+                "base_tilt_cut": None,
+            }
+
+            # MSG_5 cut data only exists for MSG31 files
+            cut_idx = elev_num - 1
+            if self._msg_type == "31" and 0 <= cut_idx < len(cuts):
+                cut = cuts[cut_idx]
+                nominal = cut["elevation_angle"] * 360.0 / 65536.0
+                if abs(nominal - measured) <= elevation_tolerance:
+                    wf = cut["waveform_type"]
+                    entry["waveform_code"] = int(wf)
+                    entry["waveform_type"] = _WAVEFORM_TYPES.get(wf, str(wf))
+                    supplemental = cut.get("supplemental_data")
+                    if supplemental is not None:
+                        entry.update(_decode_elevation_supplemental(supplemental))
+                else:
+                    warnings.warn(
+                        f"Scan {scan}: MSG_5 cut {elev_num} nominal elevation "
+                        f"{nominal:.2f} deg does not match measured "
+                        f"{measured:.2f} deg; cut metadata not attached.",
+                        RuntimeWarning,
+                    )
+            out.append(entry)
+        return out
+
+    def get_scans_by_type(self, elevation=None, waveform=None, atol=0.25, **flags):
+        """
+        Return indices of scans matching elevation, waveform type and/or flags.
+
+        Parameters
+        ----------
+        elevation : float or None
+            Elevation in degrees to match within ``atol``. None matches all.
+            Some sites have a supplemental low elevation (e.g. 0.3 or 0.4
+            degrees, ICD 2620002AA Appendix C), adjust ``atol`` if needed.
+        waveform : str, iterable of str, or None
+            One or several values of _WAVEFORM_TYPES, e.g.
+            'contiguous_surveillance'. Contiguous Doppler is two types
+            (with and without ambiguity resolution), pass both to match
+            either. None matches all.
+        atol : float
+            Elevation tolerance in degrees.
+        **flags
+            Additional exact matches on get_scan_types() keys, e.g.
+            ``sails_cut=False``.
+
+        Returns
+        -------
+        scans : list of int
+            Scan indices (0 based), usable as the ``scans`` argument of
+            get_data, get_elevation_angles, etc.
+
+        Examples
+        --------
+        >>> nf.get_scans_by_type(0.5, "contiguous_surveillance")
+        >>> nf.get_scans_by_type(0.5, sails_cut=True)
+        >>> nf.get_scans_by_type(
+        ...     0.5,
+        ...     [
+        ...         "contiguous_doppler_with_ambiguity_resolution",
+        ...         "contiguous_doppler_without_ambiguity_resolution",
+        ...     ],
+        ... )
+
+        """
+        allowed = None
+        if waveform is not None:
+            allowed = {waveform} if isinstance(waveform, str) else set(waveform)
+
+        result = []
+        for entry in self.get_scan_types():
+            if elevation is not None and abs(entry["elevation"] - elevation) > atol:
+                continue
+            if allowed is not None and entry["waveform_type"] not in allowed:
+                continue
+            if any(entry.get(k) != v for k, v in flags.items()):
+                continue
+            result.append(entry["scan"])
+        return result
 
     def get_nrays(self, scan):
         """
@@ -739,7 +978,7 @@ def _get_msg1_from_buf(buf, pos, dic):
 
 
 def _get_msg5_from_buf(buf, pos, dic):
-    """Retrieve and unpack a MSG1 record from a buffer."""
+    """Retrieve and unpack a MSG5 record from a buffer."""
     msg_header_size = _structure_size(MSG_HEADER)
     msg5_header_size = _structure_size(MSG_5)
     msg5_elev_size = _structure_size(MSG_5_ELEV)
@@ -771,12 +1010,12 @@ def _unpack_structure(string, structure):
 
 
 # NEXRAD Level II file structures and sizes
-# The deails on these structures are documented in:
-# "Interface Control Document for the Achive II/User" RPG Build 12.0
-# Document Number 2620010E
+# The details on these structures are documented in:
+# "Interface Control Document for the Archive II/User", RDA Build 23.0
+# Document Number 2620010J
 # and
-# "Interface Control Document for the RDA/RPG" Open Build 13.0
-# Document Number 2620002M
+# "Interface Control Document for the RDA/RPG", Build 24.0
+# Document Number 2620002AA
 # Tables and page number refer to those in the second document unless
 # otherwise noted.
 RECORD_SIZE = 2432
@@ -820,7 +1059,7 @@ MSG_HEADER = (
 )
 
 # Table XVII Digital Radar Generic Format Blocks (Message Type 31)
-# pages 3-87 to 3-89
+# Table XVII-A, pages 3-81 to 3-84
 MSG_31 = (
     ("id", "4s"),  # 0-3
     ("collect_ms", INT4),  # 4-7
@@ -830,9 +1069,12 @@ MSG_31 = (
     ("compress_flag", CODE1),  # 16
     ("spare_0", INT1),  # 17
     ("radial_length", INT2),  # 18-19
-    ("azimuth_resolution", CODE1),  # 20
-    ("radial_spacing", CODE1),  # 21
-    ("elevation_number", INT1),  # 22
+    ("azimuth_resolution", CODE1),  # 20  1 = 0.5 deg, 2 = 1.0 deg
+    # 21  Table III-C: 0 new elevation, 1 intermediate, 2 end of elevation,
+    #     3 start of volume, 4 end of volume, 5 new elevation (last in VCP);
+    #     add 0x80 for bad data. (Formerly named "radial_spacing".)
+    ("radial_status", CODE1),
+    ("elevation_number", INT1),  # 22  1 to 32, elevation number within volume
     ("cut_sector", INT1),  # 23
     ("elevation_angle", REAL4),  # 24-27
     ("radial_blanking", CODE1),  # 28
@@ -847,7 +1089,7 @@ MSG_31 = (
     ("block_pointer_7", INT4),  # 56-59  Moment "ZDR"
     ("block_pointer_8", INT4),  # 60-63  Moment "PHI"
     ("block_pointer_9", INT4),  # 64-67  Moment "RHO"
-    ("block_pointer_10", INT4),  # Moment "CFP"
+    ("block_pointer_10", INT4),  # 68-71  Moment "CFP"
 )
 
 
@@ -887,49 +1129,58 @@ MSG_1 = (
     # 100+  reflectivity, velocity and/or spectral width data, CODE1
 )
 
-# Table XI Volume Coverage Pattern Data (Message Type 5 & 7)
-# pages 3-51 to 3-54
+# Table XI Volume Coverage Pattern Data (Message Types 5 & 7)
+# pages 3-45 to 3-49 of ICD 2620002AA (halfword locations in comments).
+# The former ("spare", "10s") is split into reserved halfwords and the VCP
+# sequencing / supplemental halfwords. Total size is unchanged (22 bytes).
 MSG_5 = (
-    ("msg_size", INT2),
-    ("pattern_type", CODE2),
-    ("pattern_number", INT2),
-    ("num_cuts", INT2),
+    ("msg_size", INT2),  # HW 1
+    ("pattern_type", CODE2),  # HW 2
+    ("pattern_number", INT2),  # HW 3
+    ("num_cuts", INT2),  # HW 4, 1 to 32
+    # HW 5: VCP version in the upper byte, clutter map group in the lower byte
     ("clutter_map_group", INT2),
-    ("doppler_vel_res", CODE1),  # 2: 0.5 degrees, 4: 1.0 degrees
-    ("pulse_width", CODE1),  # 2: short, 4: long
-    ("spare", "10s"),  # halfwords 7-11 (10 bytes, 5 halfwords)
+    ("doppler_vel_res", CODE1),  # HW 6 upper: 2 = 0.5 m/s, 4 = 1.0 m/s
+    ("pulse_width", CODE1),  # HW 6 lower: 2 = short, 4 = long
+    ("spare_7_8", "4s"),  # HW 7-8: reserved
+    ("vcp_sequencing", CODE2),  # HW 9: RPG use, see _decode_vcp_sequencing
+    ("vcp_supplemental", CODE2),  # HW 10: SAILS/MRLE/MPDA/base tilt flags
+    ("spare_11", "2s"),  # HW 11: reserved
 )
 
+# Per-cut data, 23 halfwords (E1-E23) repeated for every elevation cut
 MSG_5_ELEV = (
-    ("elevation_angle", CODE2),  # scaled by 360/65536 for value in degrees.
-    ("channel_config", CODE1),
-    ("waveform_type", CODE1),
-    ("super_resolution", CODE1),
-    ("prf_number", INT1),
-    ("prf_pulse_count", INT2),
-    ("azimuth_rate", CODE2),
-    ("ref_thresh", SINT2),
-    ("vel_thresh", SINT2),
-    ("sw_thresh", SINT2),
-    ("zdr_thres", SINT2),
-    ("phi_thres", SINT2),
-    ("rho_thres", SINT2),
-    ("edge_angle_1", CODE2),
-    ("dop_prf_num_1", INT2),
-    ("dop_prf_pulse_count_1", INT2),
-    ("spare_1", "2s"),
-    ("edge_angle_2", CODE2),
-    ("dop_prf_num_2", INT2),
-    ("dop_prf_pulse_count_2", INT2),
-    ("spare_2", "2s"),
-    ("edge_angle_3", CODE2),
-    ("dop_prf_num_3", INT2),
-    ("dop_prf_pulse_count_3", INT2),
-    ("spare_3", "2s"),
+    ("elevation_angle", CODE2),  # E1, scaled by 360/65536 for value in degrees.
+    ("channel_config", CODE1),  # E2 upper: 0 constant, 1 random, 2 SZ-2 phase
+    ("waveform_type", CODE1),  # E2 lower: see _WAVEFORM_TYPES
+    ("super_resolution", CODE1),  # E3 upper: bit field (bits 0-3)
+    ("prf_number", INT1),  # E3 lower
+    ("prf_pulse_count", INT2),  # E4
+    ("azimuth_rate", CODE2),  # E5
+    ("ref_thresh", SINT2),  # E6
+    ("vel_thresh", SINT2),  # E7
+    ("sw_thresh", SINT2),  # E8
+    ("zdr_thres", SINT2),  # E9
+    ("phi_thres", SINT2),  # E10
+    ("rho_thres", SINT2),  # E11
+    ("edge_angle_1", CODE2),  # E12
+    ("dop_prf_num_1", INT2),  # E13
+    ("dop_prf_pulse_count_1", INT2),  # E14
+    # E15, formerly ("spare_1", "2s"). Same size, now per-cut SAILS/MRLE flags,
+    # see _decode_elevation_supplemental.
+    ("supplemental_data", CODE2),
+    ("edge_angle_2", CODE2),  # E16
+    ("dop_prf_num_2", INT2),  # E17
+    ("dop_prf_pulse_count_2", INT2),  # E18
+    ("spare_2", "2s"),  # E19 (EBC angle)
+    ("edge_angle_3", CODE2),  # E20
+    ("dop_prf_num_3", INT2),  # E21
+    ("dop_prf_pulse_count_3", INT2),  # E22
+    ("spare_3", "2s"),  # E23 (reserved)
 )
 
 # Table XVII-B Data Block (Descriptor of Generic Data Moment Type)
-# pages 3-90 and 3-91
+# pages 3-84 and 3-85
 GENERIC_DATA_BLOCK = (
     ("block_type", "1s"),
     ("data_name", "3s"),  # VEL, REF, SW, RHO, PHI, ZDR
@@ -947,7 +1198,7 @@ GENERIC_DATA_BLOCK = (
 )
 
 # Table XVII-E Data Block (Volume Data Constant Type)
-# page 3-92
+# page 3-86
 VOLUME_DATA_BLOCK = (
     ("block_type", "1s"),
     ("data_name", "3s"),
@@ -968,7 +1219,7 @@ VOLUME_DATA_BLOCK = (
 )
 
 # Table XVII-F Data Block (Elevation Data Constant Type)
-# page 3-93
+# page 3-87
 ELEVATION_DATA_BLOCK = (
     ("block_type", "1s"),
     ("data_name", "3s"),
@@ -978,7 +1229,7 @@ ELEVATION_DATA_BLOCK = (
 )
 
 # Table XVII-H Data Block (Radial Data Constant Type)
-# pages 3-93
+# page 3-87
 RADIAL_DATA_BLOCK = (
     ("block_type", "1s"),
     ("data_name", "3s"),
