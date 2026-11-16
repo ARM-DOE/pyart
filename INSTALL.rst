@@ -79,6 +79,7 @@ installation, but the package will install and work with reduced functionality
 without these packages.
 
 * `CyLP <https://github.com/mpy/CyLP>`_ or
+  `highspy <https://pypi.org/project/highspy/>`_ or
   `PyGLPK <https://tfinley.net/software/pyglpk/>`_ or
   `CVXOPT <https://cvxopt.org/>`_ and their dependencies.
 

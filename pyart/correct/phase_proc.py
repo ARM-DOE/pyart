@@ -1056,6 +1056,131 @@ def LP_solver_cylp(A_Matrix, B_vectors, weights, really_verbose=False):
     return soln
 
 
+def LP_solver_highspy(A_Matrix, B_vectors, weights, really_verbose=False):
+    """
+    Solve the linear programming problem using the HiGHS solver.
+
+    The constraint matrix is built once and reused while the row lower bounds
+    and objective coefficients are changed for each ray. HiGHS retains the
+    current simplex basis between solves, which is important for this
+    repeated-LP workload.
+
+    Parameters
+    ----------
+    A_Matrix : matrix
+        Row augmented A matrix, see :py:func:`construct_A_matrix`
+    B_vectors : matrix
+        Matrix containing B vectors, see :py:func:`construct_B_vectors`
+    weights : array
+        Weights.
+    really_verbose : bool, optional
+        True to print HiGHS solver output. False to suppress.
+
+    Returns
+    -------
+    soln : array
+        Solution to LP problem.
+
+    Notes
+    -----
+    This function requires the optional ``highspy`` package.
+    """
+    from highspy import Highs, HighsModelStatus
+    from scipy.sparse import csr_matrix
+
+    n_gates = weights.shape[1] // 2
+    n_rays = B_vectors.shape[0]
+    n_rows = B_vectors.shape[1]
+    n_cols = weights.shape[1]
+    soln = np.zeros([n_rays, n_gates])
+
+    matrix = csr_matrix(np.asarray(A_Matrix, dtype=np.float64))
+    row_indices = np.arange(n_rows, dtype=np.int32)
+    col_indices = np.arange(n_cols, dtype=np.int32)
+    row_upper = np.full(n_rows, np.inf)
+    col_lower = np.zeros(n_cols)
+    col_upper = np.full(n_cols, np.inf)
+
+    model = Highs()
+    model.setOptionValue("output_flag", really_verbose)
+    model.setOptionValue("solver", "simplex")
+    model.addCols(
+        n_cols,
+        np.asarray(weights[0], dtype=np.float64).ravel(),
+        col_lower,
+        col_upper,
+        0,
+        np.zeros(n_cols + 1, dtype=np.int32),
+        np.empty(0, dtype=np.int32),
+        np.empty(0, dtype=np.float64),
+    )
+    model.addRows(
+        n_rows,
+        np.asarray(B_vectors[0], dtype=np.float64).ravel(),
+        row_upper,
+        matrix.nnz,
+        matrix.indptr.astype(np.int32, copy=False),
+        matrix.indices.astype(np.int32, copy=False),
+        matrix.data,
+    )
+
+    for raynum in range(n_rays):
+        if raynum > 0:
+            model.changeRowsBounds(
+                n_rows,
+                row_indices,
+                np.asarray(B_vectors[raynum], dtype=np.float64).ravel(),
+                row_upper,
+            )
+            model.changeColsCost(
+                n_cols,
+                col_indices,
+                np.asarray(weights[raynum], dtype=np.float64).ravel(),
+            )
+
+        model.run()
+        if model.getModelStatus() != HighsModelStatus.kOptimal:
+            raise RuntimeError(
+                "HiGHS failed to solve LP for ray "
+                f"{raynum}: {model.getModelStatus()}"
+            )
+
+        model_solution = np.asarray(model.getSolution().col_value)
+        soln[raynum, :] = model_solution[n_gates : 2 * n_gates]
+
+    soln = smooth_and_trim_scan(soln, window_len=5, window="sg_smooth")
+    return soln
+
+
+def _add_kdp_upper_bound(A_Matrix, B_vectors, max_kdp, window_len, gate_spacing):
+    """Add a hard upper-bound constraint for the processed KDP."""
+    if max_kdp is None:
+        return A_Matrix, B_vectors
+    if not np.isscalar(max_kdp) or not np.isfinite(max_kdp) or max_kdp < 0:
+        raise ValueError("max_kdp must be a finite, non-negative scalar or None")
+
+    n_gates = A_Matrix.shape[1] // 2
+    n_rays = B_vectors.shape[0]
+    smooth_filter = np.array([0.1, 0.25, 0.3, 0.25, 0.1])
+    sobel = 2.0 * np.arange(window_len) / (window_len - 1.0) - 1.0
+    sobel = sobel / abs(sobel).sum()
+    sobel = sobel[::-1]
+    denom = (window_len / 3.0) * 2.0 * gate_spacing
+
+    basis = np.eye(n_gates)
+    basis = scipy.ndimage.convolve1d(basis, smooth_filter, axis=1)
+    basis = scipy.ndimage.convolve1d(basis, sobel, axis=1) / denom
+    kdp_operator = basis.T
+
+    # Express KDP <= max_kdp as -KDP >= -max_kdp.
+    upper_rows = np.hstack([np.zeros_like(kdp_operator), -kdp_operator])
+    upper_bounds = -np.full((n_rays, n_gates), float(max_kdp))
+    return (
+        np.vstack([np.asarray(A_Matrix), upper_rows]),
+        np.hstack([np.asarray(B_vectors), upper_bounds]),
+    )
+
+
 def _solve_lp(LP_solver, A_Matrix, B_vectors, nw, really_verbose, proc):
     """Dispatch to the requested LP solver."""
     if LP_solver == "pyglpk":
@@ -1068,6 +1193,8 @@ def _solve_lp(LP_solver, A_Matrix, B_vectors, nw, really_verbose, proc):
         return LP_solver_cylp_mp(
             A_Matrix, B_vectors, nw, really_verbose=really_verbose, proc=proc
         )
+    elif LP_solver == "highspy":
+        return LP_solver_highspy(A_Matrix, B_vectors, nw, really_verbose=really_verbose)
     raise ValueError("unknown LP_solver:" + LP_solver)
 
 
@@ -1084,6 +1211,9 @@ def _lp_process_sweeps(
     really_verbose,
     proc,
     debug,
+    window_len,
+    gate_spacing,
+    max_kdp,
 ):
     """
     Run the LP phase processing sweep by sweep (and group by group for RHIs).
@@ -1130,6 +1260,9 @@ def _lp_process_sweeps(
                 dweight=self_const,
                 coef=coef,
             )
+            A_Matrix, B_vectors = _add_kdp_upper_bound(
+                A_Matrix, B_vectors, max_kdp, window_len, gate_spacing
+            )
             weights = np.ones((len(rays), n_gates))
             nw = np.bmat([weights, np.zeros(weights.shape)])
 
@@ -1171,6 +1304,7 @@ def phase_proc_lp(
     proc=1,
     coef=0.914,
     sys_phase_sweep=0,
+    max_kdp=None,
 ):
     """
     Phase process using a LP method [Giangrande2013]_.
@@ -1208,7 +1342,7 @@ def phase_proc_lp(
         Gate number to begin phase unwrapping. None will unwrap all phases.
     really_verbose : bool, optional
         True to print LPX messaging. False to suppress.
-    LP_solver : 'pyglpk' or 'cvxopt', 'cylp', or 'cylp_mp', optional
+    LP_solver : 'pyglpk', 'cvxopt', 'cylp', 'cylp_mp', or 'highspy', optional
         Module to use to solve LP problem. Default is 'pyglpk'.
     refl_field, ncp_field, rhv_field, phidp_field, kdp_field : str, optional
         Name of field in radar which contains the horizonal reflectivity,
@@ -1231,6 +1365,9 @@ def phase_proc_lp(
     sys_phase_sweep : int, optional
         Sweep index (0 indexed) used to determine the system phase. Not used
         if `overide_sys_phase` is True. Defaults to the first sweep.
+    max_kdp : float or None, optional
+        Hard upper bound for the returned specific differential phase,
+        enforced as an LP constraint. If None, no upper bound is applied.
 
     Returns
     -------
@@ -1261,6 +1398,8 @@ def phase_proc_lp(
         kdp_field = get_field_name("specific_differential_phase")
     if unf_field is None:
         unf_field = get_field_name("unfolded_differential_phase")
+    if not isinstance(window_len, (int, np.integer)) or window_len < 3:
+        raise ValueError("window_len must be an integer >= 3")
 
     # prepare reflectivity field
     refl = copy.deepcopy(radar.fields[refl_field]["data"]) + offset
@@ -1301,6 +1440,7 @@ def phase_proc_lp(
     # process
     proc_ph = copy.deepcopy(radar.fields[phidp_field])
     proc_ph["data"] = phidp_mod
+    gate_spacing = (radar.range["data"][1] - radar.range["data"][0]) / 1000.0
 
     unprocessed = _lp_process_sweeps(
         radar,
@@ -1315,6 +1455,9 @@ def phase_proc_lp(
         really_verbose,
         proc,
         debug,
+        window_len,
+        gate_spacing,
+        max_kdp,
     )
 
     # hold the final 16 gates constant, for ALL rays
@@ -1327,7 +1470,6 @@ def phase_proc_lp(
     sobel = 2.0 * np.arange(window_len) / (window_len - 1.0) - 1.0
     sobel = sobel / (abs(sobel).sum())
     sobel = sobel[::-1]
-    gate_spacing = (radar.range["data"][1] - radar.range["data"][0]) / 1000.0
     kdp = scipy.ndimage.convolve1d(proc_ph["data"], sobel, axis=1) / (
         (window_len / 3.0) * 2.0 * gate_spacing
     )
@@ -1344,6 +1486,8 @@ def phase_proc_lp(
         sob_kdp = get_metadata(kdp_field)
 
     sob_kdp["data"] = kdp
+    if max_kdp is not None:
+        sob_kdp["valid_max"] = float(max_kdp)
     sob_kdp["_FillValue"] = get_fillvalue()
 
     return proc_ph, sob_kdp
@@ -1374,6 +1518,7 @@ def phase_proc_lp_gf(
     offset=0.0,
     doc=0,
     sys_phase_sweep=0,
+    max_kdp=None,
 ):
     """
     Phase process using a LP method [Giangrande2013]_ using Py-ART's Gatefilter.
@@ -1403,7 +1548,7 @@ def phase_proc_lp_gf(
         Gate number to begin phase unwrapping. None will unwrap all phases.
     really_verbose : bool, optional
         True to print LPX messaging. False to suppress.
-    LP_solver : 'pyglpk' or 'cvxopt', 'cylp', or 'cylp_mp', optional
+    LP_solver : 'pyglpk', 'cvxopt', 'cylp', 'cylp_mp', or 'highspy', optional
         Module to use to solve LP problem. Default is 'pyglpk'.
     refl_field, ncp_field, rhv_field, phidp_field, kdp_field : str, optional
         Name of field in radar which contains the horizonal reflectivity,
@@ -1437,6 +1582,9 @@ def phase_proc_lp_gf(
     sys_phase_sweep : int, optional
         Sweep index (0 indexed) used to determine the system phase. Not used
         if `system_phase` is provided. Defaults to the first sweep.
+    max_kdp : float or None, optional
+        Hard upper bound for the returned specific differential phase,
+        enforced as an LP constraint. If None, no upper bound is applied.
 
     Returns
     -------
@@ -1463,6 +1611,8 @@ def phase_proc_lp_gf(
         kdp_field = get_field_name("specific_differential_phase")
     if unf_field is None:
         unf_field = get_field_name("unfolded_differential_phase")
+    if not isinstance(window_len, (int, np.integer)) or window_len < 3:
+        raise ValueError("window_len must be an integer >= 3")
 
     # if there is no gatefilter included, include all
 
@@ -1506,6 +1656,7 @@ def phase_proc_lp_gf(
     # process
     proc_ph = copy.deepcopy(radar.fields[phidp_field])
     proc_ph["data"] = phidp_mod
+    gate_spacing = (radar.range["data"][1] - radar.range["data"][0]) / 1000.0
 
     unprocessed = _lp_process_sweeps(
         radar,
@@ -1520,6 +1671,9 @@ def phase_proc_lp_gf(
         really_verbose,
         proc,
         debug,
+        window_len,
+        gate_spacing,
+        max_kdp,
     )
 
     # hold the final 16 gates constant, for ALL rays
@@ -1532,7 +1686,6 @@ def phase_proc_lp_gf(
     sobel = 2.0 * np.arange(window_len) / (window_len - 1.0) - 1.0
     sobel = sobel / (abs(sobel).sum())
     sobel = sobel[::-1]
-    gate_spacing = (radar.range["data"][1] - radar.range["data"][0]) / 1000.0
     kdp = scipy.ndimage.convolve1d(proc_ph["data"], sobel, axis=1) / (
         (window_len / 3.0) * 2.0 * gate_spacing
     )
@@ -1549,6 +1702,8 @@ def phase_proc_lp_gf(
         sob_kdp = get_metadata(kdp_field)
 
     sob_kdp["data"] = kdp
+    if max_kdp is not None:
+        sob_kdp["valid_max"] = float(max_kdp)
     sob_kdp["_FillValue"] = get_fillvalue()
 
     return proc_ph, sob_kdp

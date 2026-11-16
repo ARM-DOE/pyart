@@ -82,6 +82,13 @@ def _debug_info(stream=None):
         cylp_available = "MISSING"
 
     try:
+        import highspy  # noqa
+
+        highspy_available = "Available"
+    except:
+        highspy_available = "MISSING"
+
+    try:
         import cvxopt.info
 
         cvxopt_version = cvxopt.info.version
@@ -115,6 +122,7 @@ def _debug_info(stream=None):
 
     print("---- Optional dependencies ----", file=stream)
     print("CyLP:", cylp_available, file=stream)
+    print("HiGHS:", highspy_available, file=stream)
     print("CVXOPT version:", cvxopt_version, file=stream)
     print("Cartopy version:", cartopy_version, file=stream)
     print("pytest version:", pytest_version, file=stream)

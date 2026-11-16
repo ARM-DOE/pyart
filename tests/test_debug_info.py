@@ -42,6 +42,7 @@ def test_debug_info_all_disabled():
         "matplotlib",
         "netCDF4",
         "cylp",
+        "highspy",
         "glpk",
         "cvxopt",
         "mpl_toolkits",

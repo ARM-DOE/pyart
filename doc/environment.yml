@@ -13,7 +13,8 @@ dependencies:
   - metpy
   - cartopy
   - cvxopt
-  - xarray
+  - highspy
+  - xarray>=2024.10.0
   - sphinx
   - ipython
   - pandoc

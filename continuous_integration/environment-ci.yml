@@ -12,6 +12,7 @@ dependencies:
   - wradlib
   - cartopy
   - cvxopt
+  - highspy
   - xarray>=2024.10.0
   - metpy
   - pytest-cov
