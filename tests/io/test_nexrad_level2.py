@@ -512,3 +512,70 @@ def test_klzk_sails_volume(tmp_path):
         ) == [1, 10]
     finally:
         nf.close()
+
+
+# KILX20230331_224812_V06 reference values:
+# Raw MSG 5 inspection found HW 10 = 0x0070. E15 values for the
+# three split MRLE pairs are 0x0030, 0x0050, and 0x0070.
+# See ICD 2620002AA, Table XI, notes 16–18.
+EXPECTED_KILX_MRLE = {
+    "pattern_number": 212,
+    "num_mrle_cuts": 3,
+    "mrle_scans": [11, 12, 13, 14, 15, 16],
+    # scan: (elevation number, measured elevation, waveform, MRLE sequence)
+    "cuts": {
+        11: (12, 0.527, 1, 1),
+        12: (13, 0.527, 2, 1),
+        13: (14, 0.923, 1, 2),
+        14: (15, 0.923, 2, 2),
+        15: (16, 1.362, 1, 3),
+        16: (17, 1.362, 2, 3),
+    },
+}
+
+
+def test_kilx_mrle_volume(tmp_path):
+    url = "s3://unidata-nexrad-level2/2023/03/31/KILX/" "KILX20230331_224812_V06"
+    local_file = tmp_path / "KILX20230331_224812_V06"
+
+    with fsspec.open(url, mode="rb", anon=True) as source:
+        with local_file.open("wb") as destination:
+            shutil.copyfileobj(source, destination)
+
+    nf = nexrad_level2.NEXRADLevel2File(str(local_file))
+    try:
+        assert nf.get_vcp_pattern() == EXPECTED_KILX_MRLE["pattern_number"]
+
+        flags = nf.get_vcp_flags()
+        assert flags is not None
+        supplemental = flags["supplemental"]
+        assert supplemental["mrle_vcp"] is True
+        assert supplemental["num_mrle_cuts"] == EXPECTED_KILX_MRLE["num_mrle_cuts"]
+        assert supplemental["sails_vcp"] is False
+
+        scan_types = nf.get_scan_types()
+        assert scan_types
+
+        # Do not silently count scans with unattached metadata as non-MRLE.
+        assert all(entry["waveform_code"] is not None for entry in scan_types)
+        by_scan = {entry["scan"]: entry for entry in scan_types}
+
+        for scan, expected in EXPECTED_KILX_MRLE["cuts"].items():
+            elev_num, elevation, waveform, sequence = expected
+            assert scan in by_scan
+            actual = by_scan[scan]
+
+            assert actual["elevation_number"] == elev_num
+            # The reference values were printed to three decimal places.
+            assert actual["elevation"] == pytest.approx(elevation, abs=0.001)
+            assert actual["waveform_code"] == waveform
+            assert actual["mrle_cut"] is True
+            assert actual["mrle_sequence_number"] == sequence
+            assert actual["sails_cut"] is False
+
+        # Check the complete set, including that there are no extra matches.
+        assert nf.get_scans_by_type(mrle_cut=True) == EXPECTED_KILX_MRLE["mrle_scans"]
+        assert nf.get_scans_by_type(sails_cut=True) == []
+
+    finally:
+        nf.close()
