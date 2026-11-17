@@ -294,3 +294,135 @@ def test_compressed_archive():
     assert_almost_equal(rdata[2, 0], 9.5, 1)
     assert "velocity" not in radar.fields.keys()
     assert "spectrum_width" not in radar.fields.keys()
+
+
+def test_sweep_metadata_exists():
+    assert radar.sweep_metadata is not None
+    assert "elevation" in radar.sweep_metadata
+    assert "waveform_type" in radar.sweep_metadata
+    assert "waveform_code" in radar.sweep_metadata
+    assert "sails_cut" in radar.sweep_metadata
+    assert "mrle_cut" in radar.sweep_metadata
+
+
+def test_sweep_metadata_shapes():
+    for metadata in radar.sweep_metadata.values():
+        assert metadata["data"].shape == (radar.nsweeps,)
+
+
+def test_sweep_metadata_elevations():
+    expected = np.array(
+        [
+            0.52734375,
+            0.52734375,
+            1.4941406,
+            1.4941406,
+            2.4609375,
+            3.383789,
+            4.350586,
+            5.317383,
+            6.2402344,
+            7.5146484,
+            8.701172,
+            10.019531,
+            11.99707,
+            14.018555,
+            16.699219,
+            19.511719,
+        ],
+        dtype="float32",
+    )
+    np.testing.assert_allclose(
+        radar.sweep_metadata["elevation"]["data"],
+        expected,
+        atol=1e-5,
+    )
+
+
+def test_sweep_metadata_waveform_codes():
+    expected = np.array(
+        [1, 2, 1, 2, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3],
+        dtype="int8",
+    )
+    np.testing.assert_array_equal(
+        radar.sweep_metadata["waveform_code"]["data"],
+        expected,
+    )
+
+
+def test_sweep_metadata_waveform_types():
+    expected = np.array(
+        [
+            "contiguous_surveillance",
+            "contiguous_doppler_with_ambiguity_resolution",
+            "contiguous_surveillance",
+            "contiguous_doppler_with_ambiguity_resolution",
+            "batch",
+            "batch",
+            "batch",
+            "batch",
+            "batch",
+            "contiguous_doppler_without_ambiguity_resolution",
+            "contiguous_doppler_without_ambiguity_resolution",
+            "contiguous_doppler_without_ambiguity_resolution",
+            "contiguous_doppler_without_ambiguity_resolution",
+            "contiguous_doppler_without_ambiguity_resolution",
+            "contiguous_doppler_without_ambiguity_resolution",
+            "contiguous_doppler_without_ambiguity_resolution",
+        ]
+    )
+    np.testing.assert_array_equal(
+        radar.sweep_metadata["waveform_type"]["data"],
+        expected,
+    )
+
+
+def test_sweep_metadata_sails_mrle_flags():
+    # This test file has no cuts marked as SAILS or MRLE.
+    np.testing.assert_array_equal(
+        radar.sweep_metadata["sails_cut"]["data"],
+        np.zeros(radar.nsweeps, dtype="int8"),
+    )
+    np.testing.assert_array_equal(
+        radar.sweep_metadata["mrle_cut"]["data"],
+        np.zeros(radar.nsweeps, dtype="int8"),
+    )
+
+
+def test_extract_sweeps_preserves_sweep_metadata_alligned():
+    selected = np.array([1, 4, 9])
+    extracted = radar.extract_sweeps(selected)
+
+    for key, metadata in radar.sweep_metadata.items():
+        np.testing.assert_array_equal(
+            extracted.sweep_metadata[key]["data"],
+            metadata["data"][selected],
+        )
+
+
+def test_extract_sweeps_preserves_sweep_metadata():
+    selected = np.array([9, 1, 4])
+    extracted = radar.extract_sweeps(selected)
+
+    assert extracted.sweep_metadata is not None
+    assert extracted.nsweeps == len(selected)
+
+    for key, metadata in radar.sweep_metadata.items():
+        np.testing.assert_array_equal(
+            extracted.sweep_metadata[key]["data"],
+            metadata["data"][selected],
+        )
+        # Non-data metadata should also be retained.
+        for attr, value in metadata.items():
+            if attr != "data":
+                assert extracted.sweep_metadata[key][attr] == value
+
+
+def test_extract_sweeps_waveform_metadata():
+    selected = np.array([9, 1, 4])
+    extracted = radar.extract_sweeps(selected)
+
+    np.testing.assert_array_equal(
+        extracted.sweep_metadata["waveform_code"]["data"],
+        np.array([3, 2, 4], dtype="int8"),
+    )

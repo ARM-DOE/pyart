@@ -152,6 +152,64 @@ def read_nexrad_archive(
 
     scan_info = nfile.scan_info(scans)
 
+    # Retrieve sweeep metadata info if it exists
+    sweep_types = nfile.get_scan_types(scans=scans)
+
+    def _values(key, unknown=-1):
+        return np.array(
+            [unknown if item[key] is None else item[key] for item in sweep_types]
+        )
+
+    sweep_metadata = {
+        # Original scan index in the NEXRAD volume. Useful when reading
+        # only a subset of scans.
+        "nexrad_scan_index": {
+            "data": np.array(scans, dtype="int32"),
+            "long_name": "Original NEXRAD scan index",
+        },
+        "elevation": {
+            "data": np.array(
+                [item["elevation"] for item in sweep_types],
+                dtype="float32",
+            ),
+            "long_name": "Measured median elevation for each sweep",
+            "units": "degrees",
+        },
+        "waveform_code": {
+            "data": np.array(
+                [
+                    -1 if item["waveform_code"] is None else item["waveform_code"]
+                    for item in sweep_types
+                ],
+                dtype="int8",
+            ),
+            "long_name": "NEXRAD waveform type code; -1 means unknown",
+        },
+        "waveform_type": {
+            "data": np.array(
+                [item["waveform_type"] or "unknown" for item in sweep_types],
+                dtype="U48",
+            ),
+            "long_name": "NEXRAD waveform type",
+        },
+        "sails_cut": {
+            "data": _values("sails_cut").astype("int8"),
+            "long_name": "SAILS cut flag; -1 means unknown, 0 false, 1 true",
+        },
+        "sails_sequence_number": {
+            "data": _values("sails_sequence_number").astype("int8"),
+            "long_name": "SAILS sequence number; -1 means unknown",
+        },
+        "mrle_cut": {
+            "data": _values("mrle_cut").astype("int8"),
+            "long_name": "MRLE cut flag; -1 means unknown, 0 false, 1 true",
+        },
+        "mrle_sequence_number": {
+            "data": _values("mrle_sequence_number").astype("int8"),
+            "long_name": "MRLE sequence number; -1 means unknown",
+        },
+    }
+
     # time
     time = filemetadata("time")
     time_start, _time = nfile.get_times(scans)
@@ -303,6 +361,7 @@ def read_nexrad_archive(
         sweep_end_ray_index,
         azimuth,
         elevation,
+        sweep_metadata=sweep_metadata,
         instrument_parameters=instrument_parameters,
     )
 
