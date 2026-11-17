@@ -59,17 +59,22 @@ def write_grid_mdv(filename, grid, mdv_field_names=None, field_write_order=None)
           it has had the scaling applied.
 
     """
-    # first of all firm field list
+    # First, build the field list. Copy a caller-supplied list so filtering
+    # does not modify it.
     if field_write_order is None:
         field_write_order = list(grid.fields.keys())
+    else:
+        field_write_order = list(field_write_order)
 
-    # remove fields not in mdv_field_names
+    # Remove fields not in mdv_field_names.
     if mdv_field_names is not None:
-        for ifield, field in enumerate(field_write_order):
-            if field not in mdv_field_names or mdv_field_names[field] is None:
-                field_write_order.pop(ifield)
+        field_write_order = [
+            field
+            for field in field_write_order
+            if field in mdv_field_names and mdv_field_names[field] is not None
+        ]
 
-    # mount empty mdv file
+    # Mount empty MDV file.
     grid_shape = grid.fields[field_write_order[0]]["data"].shape
     nz, ny, nx = grid_shape
     nfields = len(field_write_order)
@@ -88,7 +93,7 @@ def write_grid_mdv(filename, grid, mdv_field_names=None, field_write_order=None)
     mdv.fields_data = [None] * nfields
     mdv.projection = "flat"
 
-    # fill headers
+    # Fill headers.
     d = mdv.master_header
     grid_datetime = _time_dic_to_datetime(grid.time)
     mdv.times["time_centroid"] = grid_datetime
@@ -96,8 +101,8 @@ def write_grid_mdv(filename, grid, mdv_field_names=None, field_write_order=None)
     mdv.times["time_end"] = grid_datetime
     mdv._time_dict_into_header()
 
-    d["data_dimension"] = 3  # XXX are grid's always 3d?
-    # =DATA_SYNTHESIS, I don't realy know, so miscellaneous!
+    d["data_dimension"] = 3  # XXX are grids always 3d?
+    # =DATA_SYNTHESIS, I don't really know, so miscellaneous!
     d["data_collection_type"] = 3
     if grid.z["units"] == "m" or grid.z["units"] == "meters":
         d["native_vlevel_type"] = 4
@@ -115,21 +120,12 @@ def write_grid_mdv(filename, grid, mdv_field_names=None, field_write_order=None)
         round(td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
     )
 
-    # sensor location using radar_ attribute or origin_ if not available
-    if grid.radar_longitude is not None and grid.nradar != 0:
-        d["sensor_lon"] = grid.radar_longitude["data"][0]
-    else:
-        d["sensor_lon"] = grid.origin_longitude["data"][0]
-
-    if grid.radar_latitude is not None and grid.nradar != 0:
-        d["sensor_lat"] = grid.radar_latitude["data"][0]
-    else:
-        d["sensor_lat"] = grid.origin_latitude["data"][0]
-
-    if grid.radar_altitude is not None and grid.nradar != 0:
-        d["sensor_alt"] = grid.radar_altitude["data"][0] / 1000.0
-    else:
-        d["sensor_alt"] = grid.origin_altitude["data"][0] / 1000.0
+    # MDV has one master-header sensor location. The reader uses sensor_*
+    # as the Grid origin, so write the Grid origin here to preserve it on
+    # a write/read round trip.
+    d["sensor_lon"] = grid.origin_longitude["data"][0]
+    d["sensor_lat"] = grid.origin_latitude["data"][0]
+    d["sensor_alt"] = grid.origin_altitude["data"][0] / 1000.0
 
     for meta_key, mdv_key in mdv_common.MDV_METADATA_MAP.items():
         if meta_key in grid.metadata:
@@ -139,7 +135,7 @@ def write_grid_mdv(filename, grid, mdv_field_names=None, field_write_order=None)
         d = mdv.field_headers[ifield]
         v = mdv.vlevel_headers[ifield]
 
-        # fill fields_header
+        # Fill field header.
         d["nx"] = nx
         d["ny"] = ny
         d["nz"] = nz
@@ -173,8 +169,8 @@ def write_grid_mdv(filename, grid, mdv_field_names=None, field_write_order=None)
         d["proj_origin_lon"] = grid.origin_longitude["data"][0]
         d["grid_dx"] = (grid.x["data"][1] - grid.x["data"][0]) / 1000.0
         d["grid_dy"] = (grid.y["data"][1] - grid.y["data"][0]) / 1000.0
-        d["grid_minx"] = (grid.x["data"][0]) / 1000.0
-        d["grid_miny"] = (grid.y["data"][0]) / 1000.0
+        d["grid_minx"] = grid.x["data"][0] / 1000.0
+        d["grid_miny"] = grid.y["data"][0] / 1000.0
         if "scale_factor" in grid.fields[field].keys():
             d["scale"] = grid.fields[field]["scale_factor"]
         if "add_offset" in grid.fields[field].keys():
@@ -187,6 +183,7 @@ def write_grid_mdv(filename, grid, mdv_field_names=None, field_write_order=None)
             d["bad_data_value"] = grid.fields[field]["missing_value"]
         else:
             d["bad_data_value"] = get_fillvalue()
+
         # missing_data prioritise missing_value
         if "missing_value" in grid.fields[field].keys():
             d["missing_data_value"] = grid.fields[field]["missing_value"]
@@ -195,8 +192,8 @@ def write_grid_mdv(filename, grid, mdv_field_names=None, field_write_order=None)
         else:
             d["missing_data_value"] = get_fillvalue()
 
-        d["min_value"] = np.amax(grid.fields[field]["data"])
-        d["max_value"] = np.amin(grid.fields[field]["data"])
+        d["min_value"] = np.amin(grid.fields[field]["data"])
+        d["max_value"] = np.amax(grid.fields[field]["data"])
         if "standard_name" in grid.fields[field].keys():
             d["field_name_long"] = grid.fields[field]["standard_name"].encode("ASCII")
         elif "long_name" in grid.fields[field].keys():
@@ -209,7 +206,7 @@ def write_grid_mdv(filename, grid, mdv_field_names=None, field_write_order=None)
             d["units"] = grid.fields[field]["units"].encode("ASCII")
         d["transform"] = b"none"  # XXX not implemented
 
-        # fill vlevels_header
+        # Fill vlevels header.
         typ = [0] * 122
         level = [0] * 122
         for iz in range(nz):
@@ -218,10 +215,10 @@ def write_grid_mdv(filename, grid, mdv_field_names=None, field_write_order=None)
         v["type"] = typ
         v["level"] = level
 
-        # put data to field
+        # Put data to field.
         mdv.fields_data[ifield] = grid.fields[field]["data"]
 
-    # write the file
+    # Write the file.
     mdv.write(filename)
 
 
@@ -293,23 +290,23 @@ def read_grid_mdv(
           fail.
 
     """
-    # test for non empty kwargs
+    # Test for non-empty kwargs.
     _test_arguments(kwargs)
 
     # XXX add tests for conversion limitations
-    # create metadata retrieval object
+    # Create metadata retrieval object.
     filemetadata = FileMetadata(
         "mdv", field_names, additional_metadata, file_field_names, exclude_fields
     )
     mdv = mdv_common.MdvFile(prepare_for_read(filename))
 
-    # time dictionaries
+    # Time dictionaries.
     units = make_time_unit_str(mdv.times["time_begin"])
     time = get_metadata("grid_time")
     time["data"] = np.array([date2num(mdv.times["time_centroid"], units)])
     time["units"] = units
 
-    # origin dictionaries
+    # Origin dictionaries.
     origin_altitude = get_metadata("origin_altitude")
     origin_altitude["data"] = np.array(
         [mdv.master_header["sensor_alt"] * 1000.0], dtype="float64"
@@ -325,7 +322,7 @@ def read_grid_mdv(
         [mdv.master_header["sensor_lon"]], dtype="float64"
     )
 
-    # grid coordinate dictionaries
+    # Grid coordinate dictionaries.
     nz = mdv.master_header["max_nz"]
     ny = mdv.master_header["max_ny"]
     nx = mdv.master_header["max_nx"]
@@ -336,7 +333,7 @@ def read_grid_mdv(
     x_step = mdv.field_headers[0]["grid_dx"] * 1000.0
 
     if mdv.field_headers[0]["proj_type"] == mdv_common.PROJ_LATLON:
-        # x and y dimensions have units of degrees
+        # x and y dimensions have units of degrees.
         xunits = "degree_E"
         yunits = "degree_N"
         y_start = mdv.field_headers[0]["grid_miny"]
@@ -383,15 +380,15 @@ def read_grid_mdv(
     z["data"] = np.array(z_line, dtype="float64")
     z["units"] = zunits
 
-    # metadata
+    # Metadata.
     metadata = filemetadata("metadata")
     for meta_key, mdv_key in mdv_common.MDV_METADATA_MAP.items():
         metadata[meta_key] = mdv.master_header[mdv_key]
 
-    # fields
+    # Fields.
     fields = {}
     mdv_fields = mdv._make_fields_list()
-    for mdv_field in set(mdv_fields):
+    for mdv_field in dict.fromkeys(mdv_fields):
         field_name = filemetadata.get_field_name(mdv_field)
         if field_name is None:
             continue
@@ -423,7 +420,7 @@ def read_grid_mdv(
     )
 
 
-# This function may be helpful in other cases and could be moved in common
+# This function may be helpful in other cases and could be moved in common.
 def _time_dic_to_datetime(dic):
     """Return a datetime for the first element in a time dictionary."""
     if "calendar" in dic:
