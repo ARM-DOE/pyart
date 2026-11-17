@@ -719,3 +719,89 @@ def ma_broadcast_to(array, tup):
         )
 
     return broadcasted_array
+
+
+def select_unique_elevation_sweeps(
+    radar,
+    atol=0.05,
+    waveform_type=None,
+    include_rescans=False,
+    strategy="first",
+):
+    """Return a Radar containing one representative sweep per elevation.
+
+    Parameters
+    ----------
+    radar : Radar
+        Input radar.
+    atol : float
+        Elevation tolerance in degrees.
+    waveform_type : str, iterable of str, or None
+        Optional waveform type(s) to keep, such as
+        "contiguous_surveillance". Filter before grouping so CS and CD
+        sweeps at the same elevation are not merged together.
+    include_rescans : bool
+        If False, exclude sweeps explicitly marked as SAILS or MRLE.
+        Unknown flags are retained.
+    strategy : {"first", "last"}
+        Which sweep to keep from each elevation group.
+
+    Returns
+    -------
+    Radar
+        A new Radar containing the selected sweeps.
+    """
+    if atol < 0:
+        raise ValueError("atol must be non-negative")
+    if strategy not in ("first", "last"):
+        raise ValueError("strategy must be 'first' or 'last'")
+
+    metadata = getattr(radar, "sweep_metadata", None)
+
+    if metadata is not None and "elevation" in metadata:
+        elevations = np.asarray(metadata["elevation"]["data"])
+    else:
+        elevations = np.asarray(radar.fixed_angle["data"])
+
+    candidates = np.arange(radar.nsweeps)
+
+    if waveform_type is not None:
+        if metadata is None or "waveform_type" not in metadata:
+            raise ValueError("Waveform metadata is unavailable on this Radar")
+
+        allowed = (
+            {waveform_type} if isinstance(waveform_type, str) else set(waveform_type)
+        )
+        waveforms = np.asarray(metadata["waveform_type"]["data"])
+        candidates = candidates[np.isin(waveforms, list(allowed))]
+
+    if not include_rescans and metadata is not None:
+        for key in ("sails_cut", "mrle_cut"):
+            if key in metadata:
+                flags = np.asarray(metadata[key]["data"])
+                # Exclude known rescans; retain false and unknown values.
+                candidates = candidates[flags[candidates] != 1]
+
+    # Group candidates by elevation, including repeated elevations that are
+    # separated by other sweeps in the volume.
+    groups = []
+    for sweep in candidates:
+        elevation = elevations[sweep]
+        for group in groups:
+            if abs(elevation - group["reference"]) <= atol:
+                group["sweeps"].append(sweep)
+                break
+        else:
+            groups.append({"reference": elevation, "sweeps": [sweep]})
+
+    if not groups:
+        raise ValueError("No sweeps remain after applying the selection criteria")
+
+    selected = [
+        group["sweeps"][0] if strategy == "first" else group["sweeps"][-1]
+        for group in groups
+    ]
+
+    # Keep the selected sweeps in their original volume order.
+    selected.sort()
+    return radar.extract_sweeps(selected)

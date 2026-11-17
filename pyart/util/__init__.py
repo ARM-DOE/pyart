@@ -34,6 +34,7 @@ from .radar_utils import (  # noqa
     subset_radar,
     to_vpt,
     ma_broadcast_to,
+    select_unique_elevation_sweeps,
 )
 from .sigmath import (  # noqa
     angular_texture_2d,
