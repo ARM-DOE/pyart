@@ -306,8 +306,8 @@ class GridMapDisplay:
 
                 # Label the end-points of the gridlines using the custom
                 # tick makers:
-                ax.xaxis.set_major_formatter(cartopy.mpl.gridliner.LONGITUDE_FORMATTER)
-                ax.yaxis.set_major_formatter(cartopy.mpl.gridliner.LATITUDE_FORMATTER)
+                ax.xaxis.set_major_formatter(cartopy.mpl.gridliner.LongitudeFormatter)
+                ax.yaxis.set_major_formatter(cartopy.mpl.gridliner.LatitudeFormatter)
                 if _LAMBERT_GRIDLINES:
                     lambert_xticks(ax, lon_lines)
                     lambert_yticks(ax, lat_lines)
