@@ -315,3 +315,80 @@ def test_only_ref():
     assert radar.nrays == 367 + 368 + 366 + 366 + 366
     assert radar.ngates == 460
     assert radar.nsweeps == 5
+
+
+def test_msg1_sweep_metadata_shapes():
+    assert radar.sweep_metadata is not None
+
+    for metadata in radar.sweep_metadata.values():
+        assert metadata["data"].shape == (radar.nsweeps,)
+
+
+def test_msg1_sweep_metadata_elevations():
+    expected = np.array(
+        [
+            0.48339844,
+            0.48339844,
+            1.4941406,
+            1.4941406,
+            2.4609375,
+            3.4716797,
+            4.482422,
+        ],
+        dtype="float32",
+    )
+
+    np.testing.assert_allclose(
+        radar.sweep_metadata["elevation"]["data"],
+        expected,
+        atol=1e-5,
+    )
+
+
+def test_msg1_sweep_metadata_waveform_unknown():
+    np.testing.assert_array_equal(
+        radar.sweep_metadata["waveform_type"]["data"],
+        np.array(["unknown"] * 7),
+    )
+    np.testing.assert_array_equal(
+        radar.sweep_metadata["waveform_code"]["data"],
+        np.full(7, -1, dtype="int8"),
+    )
+
+
+def test_msg1_sweep_metadata_sails_mrle_unknown():
+    # These flags are unavailable for this Message 1 file.
+    expected = np.full(7, -1, dtype="int8")
+
+    np.testing.assert_array_equal(
+        radar.sweep_metadata["sails_cut"]["data"],
+        expected,
+    )
+    np.testing.assert_array_equal(
+        radar.sweep_metadata["mrle_cut"]["data"],
+        expected,
+    )
+
+
+def test_msg1_extract_sweeps_preserves_sweep_metadata():
+    selected = np.array([5, 1, 4])
+    extracted = radar.extract_sweeps(selected)
+
+    assert extracted.nsweeps == len(selected)
+    assert extracted.sweep_metadata is not None
+
+    for key, metadata in radar.sweep_metadata.items():
+        np.testing.assert_array_equal(
+            extracted.sweep_metadata[key]["data"],
+            metadata["data"][selected],
+        )
+
+    np.testing.assert_allclose(
+        extracted.sweep_metadata["elevation"]["data"],
+        np.array([3.4716797, 0.48339844, 2.4609375], dtype="float32"),
+        atol=1e-5,
+    )
+    np.testing.assert_array_equal(
+        extracted.sweep_metadata["waveform_code"]["data"],
+        np.full(3, -1, dtype="int8"),
+    )

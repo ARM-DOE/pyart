@@ -119,6 +119,11 @@ class Radar:
     scan_rate : dict or None
         Actual antenna scan rate. If not provided this attribute is set to
         None, indicating this parameter is not available.
+    sweep_metadata : dict or None
+        Optional metadata associated with each sweep. Each entry is a
+        dictionary containing a "data" array with one value per sweep.
+        Useful for NEXRAD datasets that contain Contiguous Surveillance
+        (CS) scans or with a Contiguous Doppler (CD) scans.
     antenna_transition : dict or None
         Flag indicating if the antenna is in transition, 1 = yes, 0 = no.
         If not provided this attribute is set to None, indicating this
@@ -178,6 +183,7 @@ class Radar:
         rays_are_indexed=None,
         ray_angle_res=None,
         scan_rate=None,
+        sweep_metadata=None,
         antenna_transition=None,
         instrument_parameters=None,
         radar_calibration=None,
@@ -225,6 +231,7 @@ class Radar:
         self.azimuth = azimuth
         self.elevation = elevation
         self.scan_rate = scan_rate  # optional
+        self.sweep_metadata = sweep_metadata  # optional
         self.antenna_transition = antenna_transition  # optional
         self.rotation = rotation  # optional
         self.tilt = tilt  # optional
@@ -1051,6 +1058,13 @@ class Radar:
                 else:
                     radar_calibration[key] = mkdic(dic, None)
 
+        if self.sweep_metadata is None:
+            sweep_metadata = None
+        else:
+            sweep_metadata = {
+                key: mkdic(dic, sweeps) for key, dic in self.sweep_metadata.items()
+            }
+
         return Radar(
             time,
             _range,
@@ -1070,6 +1084,7 @@ class Radar:
             altitude_agl=altitude_agl,
             target_scan_rate=target_scan_rate,
             scan_rate=scan_rate,
+            sweep_metadata=sweep_metadata,
             antenna_transition=antenna_transition,
             instrument_parameters=instrument_parameters,
             radar_calibration=radar_calibration,
