@@ -16,7 +16,13 @@ from . import mdv_common
 from .common import _test_arguments, make_time_unit_str, prepare_for_read
 
 
-def write_grid_mdv(filename, grid, mdv_field_names=None, field_write_order=None):
+def write_grid_mdv(
+    filename,
+    grid,
+    mdv_field_names=None,
+    field_write_order=None,
+    use_origin_as_sensor=False,
+):
     """
     Write grid object to MDV file.
 
@@ -44,6 +50,14 @@ def write_grid_mdv(filename, grid, mdv_field_names=None, field_write_order=None)
     field_write_order : list or None, optional
         Order in which grid fields should be written out in the MDV file.
         None, the default, will determine a valid order automatically.
+    use_origin_as_sensor : bool, optional
+        If True, the MDV master header sensor location (sensor_lat,
+        sensor_lon, sensor_alt) is written from the Grid origin_* attributes
+        instead of the radar_* attributes. This guarantees that the grid
+        origin is identical to the MDV sensor location, which is useful for
+        downstream tools that assume this, but the stored sensor location
+        may then differ from the true radar location. False, the default,
+        writes the radar location when available, falling back to the origin.
 
     Notes
     -----
@@ -63,11 +77,16 @@ def write_grid_mdv(filename, grid, mdv_field_names=None, field_write_order=None)
     if field_write_order is None:
         field_write_order = list(grid.fields.keys())
 
-    # remove fields not in mdv_field_names
+    # remove fields not in mdv_field_names (build a new list, don't mutate)
     if mdv_field_names is not None:
-        for ifield, field in enumerate(field_write_order):
-            if field not in mdv_field_names or mdv_field_names[field] is None:
-                field_write_order.pop(ifield)
+        field_write_order = [
+            field
+            for field in field_write_order
+            if mdv_field_names.get(field) is not None
+        ]
+
+    if len(field_write_order) == 0:
+        raise ValueError("No fields available to write to the MDV file.")
 
     # mount empty mdv file
     grid_shape = grid.fields[field_write_order[0]]["data"].shape
@@ -115,18 +134,21 @@ def write_grid_mdv(filename, grid, mdv_field_names=None, field_write_order=None)
         round(td.microseconds + (td.seconds + td.days * 24 * 3600) * 10**6) / 10**6
     )
 
-    # sensor location using radar_ attribute or origin_ if not available
-    if grid.radar_longitude is not None and grid.nradar != 0:
+    # sensor location: use radar_* if available (unless overridden),
+    # otherwise fall back to origin_*
+    use_radar = (not use_origin_as_sensor) and grid.nradar != 0
+
+    if use_radar and grid.radar_longitude is not None:
         d["sensor_lon"] = grid.radar_longitude["data"][0]
     else:
         d["sensor_lon"] = grid.origin_longitude["data"][0]
 
-    if grid.radar_latitude is not None and grid.nradar != 0:
+    if use_radar and grid.radar_latitude is not None:
         d["sensor_lat"] = grid.radar_latitude["data"][0]
     else:
         d["sensor_lat"] = grid.origin_latitude["data"][0]
 
-    if grid.radar_altitude is not None and grid.nradar != 0:
+    if use_radar and grid.radar_altitude is not None:
         d["sensor_alt"] = grid.radar_altitude["data"][0] / 1000.0
     else:
         d["sensor_alt"] = grid.origin_altitude["data"][0] / 1000.0
@@ -195,8 +217,8 @@ def write_grid_mdv(filename, grid, mdv_field_names=None, field_write_order=None)
         else:
             d["missing_data_value"] = get_fillvalue()
 
-        d["min_value"] = np.amax(grid.fields[field]["data"])
-        d["max_value"] = np.amin(grid.fields[field]["data"])
+        d["min_value"] = np.amin(grid.fields[field]["data"])
+        d["max_value"] = np.amax(grid.fields[field]["data"])
         if "standard_name" in grid.fields[field].keys():
             d["field_name_long"] = grid.fields[field]["standard_name"].encode("ASCII")
         elif "long_name" in grid.fields[field].keys():
@@ -291,6 +313,9 @@ def read_grid_mdv(
           VERT_TYPE_PRESSURE(3) and VERT_TYPE_THETA(7).
         * The behavior in cases of 2D data is unknown but most likely will not
           fail.
+        * The Grid origin latitude and longitude are taken from the field
+          header projection origin for flat projections. The origin altitude
+          is taken from the master header sensor altitude.
 
     """
     # test for non empty kwargs
@@ -310,20 +335,29 @@ def read_grid_mdv(
     time["units"] = units
 
     # origin dictionaries
+    # For flat projections the projection origin is stored per field in the
+    # field header. Use it so the Grid origin survives a write/read round
+    # trip even when the sensor location differs from the origin. For other
+    # projections fall back to the master header sensor location.
+    fh = mdv.field_headers[0]
+    if fh["proj_type"] == mdv_common.PROJ_FLAT:
+        lat0 = fh["proj_origin_lat"]
+        lon0 = fh["proj_origin_lon"]
+    else:
+        lat0 = mdv.master_header["sensor_lat"]
+        lon0 = mdv.master_header["sensor_lon"]
+
+    # MDV has no projection-origin altitude, so sensor_alt is the best source
     origin_altitude = get_metadata("origin_altitude")
     origin_altitude["data"] = np.array(
         [mdv.master_header["sensor_alt"] * 1000.0], dtype="float64"
     )
 
     origin_latitude = get_metadata("origin_latitude")
-    origin_latitude["data"] = np.array(
-        [mdv.master_header["sensor_lat"]], dtype="float64"
-    )
+    origin_latitude["data"] = np.array([lat0], dtype="float64")
 
     origin_longitude = get_metadata("origin_longitude")
-    origin_longitude["data"] = np.array(
-        [mdv.master_header["sensor_lon"]], dtype="float64"
-    )
+    origin_longitude["data"] = np.array([lon0], dtype="float64")
 
     # grid coordinate dictionaries
     nz = mdv.master_header["max_nz"]
