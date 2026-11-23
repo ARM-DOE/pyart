@@ -17,7 +17,7 @@ import cartopy.crs as ccrs
 import cartopy.feature as feat
 import matplotlib.pyplot as plt
 import numpy as np
-from cartopy.mpl.gridliner import LATITUDE_FORMATTER, LONGITUDE_FORMATTER
+from cartopy.mpl.gridliner import LatitudeFormatter, LongitudeFormatter
 from matplotlib.ticker import NullFormatter
 
 warnings.filterwarnings("ignore")
@@ -450,8 +450,8 @@ def map_features(ax, lat_lines, lon_lines):
             feat.STATES.with_scale("10m"), alpha=0.6, lw=0.5, ls=":", ec=color
         )
         # Label the end-points of the gridlines using custom tick makers
-        ax.xaxis.set_major_formatter(LONGITUDE_FORMATTER)
-        ax.yaxis.set_major_formatter(LATITUDE_FORMATTER)
+        ax.xaxis.set_major_formatter(LongitudeFormatter)
+        ax.yaxis.set_major_formatter(LatitudeFormatter)
         from pyart.graph.gridmapdisplay import lambert_xticks, lambert_yticks
 
         lambert_xticks(ax, lon_lines)
