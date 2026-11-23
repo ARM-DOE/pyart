@@ -125,7 +125,90 @@ def read_nexrad_archive(
     nfile = NEXRADLevel2File(
         prepare_for_read(filename, storage_options=storage_options)
     )
+    # Use the same scan list for metadata, rays, fields, and target angles.
+    requested_scans = (
+        list(range(len(nfile.scan_msgs))) if scans is None else list(scans)
+    )
+
+    for scan in requested_scans:
+        if not isinstance(scan, (int, np.integer)):
+            nfile.close()
+            raise TypeError(f"Scan index must be an integer: {scan!r}")
+        if scan < 0 or scan >= len(nfile.scan_msgs):
+            nfile.close()
+            raise IndexError(f"Scan index out of range: {scan}")
+
+    scans = [scan for scan in requested_scans if nfile.get_nrays(scan) >= 2]
+
+    if len(scans) != len(requested_scans):
+        warnings.warn(
+            "Skipping scans with fewer than two rays.",
+            UserWarning,
+        )
+
+    if not scans:
+        nfile.close()
+        raise ValueError("No requested scans contain at least two rays")
+
     scan_info = nfile.scan_info(scans)
+
+    # Retrieve sweeep metadata info if it exists
+    sweep_types = nfile.get_scan_types(scans=scans)
+
+    def _values(key, unknown=-1):
+        return np.array(
+            [unknown if item[key] is None else item[key] for item in sweep_types]
+        )
+
+    sweep_metadata = {
+        # Original scan index in the NEXRAD volume. Useful when reading
+        # only a subset of scans.
+        "nexrad_scan_index": {
+            "data": np.array(scans, dtype="int32"),
+            "long_name": "Original NEXRAD scan index",
+        },
+        "elevation": {
+            "data": np.array(
+                [item["elevation"] for item in sweep_types],
+                dtype="float32",
+            ),
+            "long_name": "Measured median elevation for each sweep",
+            "units": "degrees",
+        },
+        "waveform_code": {
+            "data": np.array(
+                [
+                    -1 if item["waveform_code"] is None else item["waveform_code"]
+                    for item in sweep_types
+                ],
+                dtype="int8",
+            ),
+            "long_name": "NEXRAD waveform type code; -1 means unknown",
+        },
+        "waveform_type": {
+            "data": np.array(
+                [item["waveform_type"] or "unknown" for item in sweep_types],
+                dtype="U48",
+            ),
+            "long_name": "NEXRAD waveform type",
+        },
+        "sails_cut": {
+            "data": _values("sails_cut").astype("int8"),
+            "long_name": "SAILS cut flag; -1 means unknown, 0 false, 1 true",
+        },
+        "sails_sequence_number": {
+            "data": _values("sails_sequence_number").astype("int8"),
+            "long_name": "SAILS sequence number; -1 means unknown",
+        },
+        "mrle_cut": {
+            "data": _values("mrle_cut").astype("int8"),
+            "long_name": "MRLE cut flag; -1 means unknown, 0 false, 1 true",
+        },
+        "mrle_sequence_number": {
+            "data": _values("mrle_sequence_number").astype("int8"),
+            "long_name": "MRLE sequence number; -1 means unknown",
+        },
+    }
 
     # time
     time = filemetadata("time")
@@ -177,10 +260,7 @@ def read_nexrad_archive(
     sweep_start_ray_index = filemetadata("sweep_start_ray_index")
     sweep_end_ray_index = filemetadata("sweep_end_ray_index")
 
-    if scans is None:
-        nsweeps = int(nfile.nscans)
-    else:
-        nsweeps = len(scans)
+    nsweeps = len(scans)
     sweep_number["data"] = np.arange(nsweeps, dtype="int32")
     sweep_mode["data"] = np.array(nsweeps * ["azimuth_surveillance"], dtype="S")
 
@@ -281,6 +361,7 @@ def read_nexrad_archive(
         sweep_end_ray_index,
         azimuth,
         elevation,
+        sweep_metadata=sweep_metadata,
         instrument_parameters=instrument_parameters,
     )
 

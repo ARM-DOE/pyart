@@ -1,6 +1,7 @@
 """Unit Tests for Py-ART's util/radar_utils.py module."""
 
 import numpy as np
+import pytest
 
 import pyart
 
@@ -139,3 +140,123 @@ def test_image_mute_radar():
     n_nonmutez = np.sum(~mute_radar.fields["nonmuted_reflectivity"]["data"].mask)
 
     assert n_mutez + n_nonmutez == n_rhohv
+
+
+@pytest.fixture(scope="module")
+def msg31_radar():
+    return pyart.io.read_nexrad_archive(pyart.testing.NEXRAD_ARCHIVE_MSG31_FILE)
+
+
+def _original_sweep_indices(radar, selected_radar):
+    """Return source sweep indices retained in the extracted Radar."""
+    return selected_radar.sweep_number["data"]
+
+
+def test_select_unique_elevation_sweeps_returns_radar(msg31_radar):
+    selected = pyart.util.select_unique_elevation_sweeps(msg31_radar)
+
+    assert selected is not msg31_radar
+    assert selected.nsweeps == 14
+    np.testing.assert_array_equal(
+        _original_sweep_indices(msg31_radar, selected),
+        [0, 2, *range(4, 16)],
+    )
+
+
+def test_select_unique_elevation_sweeps_keeps_first_representative(msg31_radar):
+    selected = pyart.util.select_unique_elevation_sweeps(
+        msg31_radar,
+        strategy="first",
+    )
+
+    np.testing.assert_array_equal(
+        _original_sweep_indices(msg31_radar, selected),
+        [0, 2, *range(4, 16)],
+    )
+
+
+def test_select_unique_elevation_sweeps_keeps_last_representative(msg31_radar):
+    selected = pyart.util.select_unique_elevation_sweeps(
+        msg31_radar,
+        strategy="last",
+    )
+
+    np.testing.assert_array_equal(
+        _original_sweep_indices(msg31_radar, selected),
+        [1, 3, *range(4, 16)],
+    )
+
+
+@pytest.mark.parametrize(
+    "waveform_type, expected_sweeps",
+    [
+        ("contiguous_surveillance", [0, 2]),
+        ("contiguous_doppler_with_ambiguity_resolution", [1, 3]),
+        ("batch", [4, 5, 6, 7, 8]),
+        ("contiguous_doppler_without_ambiguity_resolution", list(range(9, 16))),
+    ],
+)
+def test_select_unique_elevation_sweeps_filters_waveform(
+    msg31_radar, waveform_type, expected_sweeps
+):
+    selected = pyart.util.select_unique_elevation_sweeps(
+        msg31_radar,
+        waveform_type=waveform_type,
+    )
+
+    np.testing.assert_array_equal(
+        _original_sweep_indices(msg31_radar, selected),
+        expected_sweeps,
+    )
+
+
+def test_select_unique_elevation_sweeps_filters_both_cd_variants(msg31_radar):
+    selected = pyart.util.select_unique_elevation_sweeps(
+        msg31_radar,
+        waveform_type=[
+            "contiguous_doppler_with_ambiguity_resolution",
+            "contiguous_doppler_without_ambiguity_resolution",
+        ],
+    )
+
+    np.testing.assert_array_equal(
+        _original_sweep_indices(msg31_radar, selected),
+        [1, 3, *range(9, 16)],
+    )
+
+
+def test_select_unique_elevation_sweeps_preserves_sweep_metadata(msg31_radar):
+    selected = pyart.util.select_unique_elevation_sweeps(
+        msg31_radar,
+        waveform_type=[
+            "contiguous_doppler_without_ambiguity_resolution",
+            "contiguous_doppler_with_ambiguity_resolution",
+            "batch",
+        ],
+    )
+
+    expected_indices = np.array([1, 3, *range(4, 16)])
+    np.testing.assert_array_equal(
+        selected.sweep_number["data"],
+        expected_indices,
+    )
+
+    for key, metadata in msg31_radar.sweep_metadata.items():
+        np.testing.assert_array_equal(
+            selected.sweep_metadata[key]["data"],
+            metadata["data"][expected_indices],
+        )
+
+
+@pytest.mark.parametrize(
+    "kwargs, message",
+    [
+        ({"atol": -0.1}, "atol must be non-negative"),
+        ({"strategy": "middle"}, "strategy must be"),
+    ],
+)
+def test_select_unique_elevation_sweeps_rejects_invalid_options(
+    msg31_radar, kwargs, message
+):
+    with pytest.raises(ValueError, match=message):
+        pyart.util.select_unique_elevation_sweeps(msg31_radar, **kwargs)
